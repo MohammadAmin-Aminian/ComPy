@@ -14,17 +14,15 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
     # Data = scipy.signal.savgol_filter(Data,12,2)
     
     #Data uncertainty 
-    # s = np.sqrt(np.cov(Data))
-    s = np.sqrt(np.var(Data))
+    s = np.sqrt(np.cov(Data))*2
+    # s = np.sqrt(np.var(Data))
     starting_model,vs0,vsi = model_exp(iteration)
     #Constrains
-    const_vs_lower = 20 # +-20% of the vs for model constrains
-    const_vs_higher = 20 # +-20% of the vs for model constrains
+    const_vs_lower = 0.2 # +-20% of the vs for model constrains
+    const_vs_higher = 0.2 # +-20% of the vs for model constrains
 
-    const_th_lower = 20 # +-20% of the vs for model constrains
-    const_th_higher = 20 # +-20% of the vs for model constrains
-
- 
+    const_th_lower = 0.2 # +-20% of the vs for model constrains
+    const_th_higher = 0.2 # +-20% of the vs for model constrains
 
     likelihood_Model = np.zeros([1, iteration])
 
@@ -126,7 +124,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
         mis_fit[0, i] = misfit(Data, ncompl[i, :],s=s)  # Misfit Data
         # mis_fit_l1[0, i] = misfit(Data, ncompl[i, :],s=s, l=1)  # Misfit Data L^1
     
-        # s = np.sqrt(np.sum((Data - ncompl[i, :])**2)/ len(Data))  
+        s = np.sqrt(np.sum((Data - ncompl[i, :])**2)/ len(Data))
         # Updating S based on Thomas Bodin 
         # print(s)
 
@@ -165,7 +163,7 @@ def model_exp(iteration):
     starting_model = np.zeros([14, 4, iteration])
     dep = 0
     for i in range(0,len(starting_model)):
-        starting_model[i][0][0] = np.float16(200*(1.3)**i) # Thickness
+        starting_model[i][0][0] = np.float16(200*(1.2)**i) # Thickness
     
         print(starting_model[i][0][0])
     
@@ -577,7 +575,7 @@ def calc_norm_compliance(depth,freq,model):
 #%%
 var_tresh = 800e6
 burnin = 15000
-depth = np.arange(0, -int(np.sum(inpModel[:, 0, 0])), -1)
+depth = np.arange(0, -int(np.sum(starting_model[:, 0, 0])), -1)
 
 var_vs = np.zeros([1,vs.shape[0]])
 for i in range(0, vs.shape[0]):
@@ -672,12 +670,13 @@ plt.subplot(224)
 
 for i in range(burnin, vs.shape[0], nn):
     if var_vs[0,i] < var_tresh:
-        plt.plot(vs[i], depth, color='red', linewidth=0.5)
+        plt.plot(vs[i], depth, color='grey', linewidth=0.5)
 
-plt.plot(vs[0], depth, color='green', label='Start Model')
 # plt.plot(np.mean(vs[burnin:iteration],axis=0), depth, color='blue', 
 #          label='Median of Burn-in ')
-plt.plot(Vs_final, depth, color='blue', label='Final Result')
+plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
+plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=3,linestyle='dashed')
+
 # plt.plot(vs1, depth, color='green', label='Actual Model')
 
 plt.grid(True)
@@ -688,7 +687,3 @@ plt.ylabel('Depth [m]')
 # plt.ylim([-int(np.sum(inpModel[:, 0, 0]))+2000, 0])
 vs_burnin = np.zeros([iteration, int(np.sum(inpModel[:, 0, 0])), 1])
 plt.legend(loc='lower left')
-
-
-
-
