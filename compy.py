@@ -145,7 +145,6 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
             High_Com_Stream.append(split_streams[i])
          
             # print(i)
-         
 
     plt.rcParams.update({'font.size': 25})
     plt.figure(dpi=300,figsize=(14,16))
