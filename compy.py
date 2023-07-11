@@ -14,7 +14,7 @@ import tiskit
 from obspy.clients.fdsn import Client
 import scipy 
 
-def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=0.65,time_window=2):
+def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=0.66,time_window=2):
     nseg = 2**12
     TP = 5
     server="RESIF"
@@ -37,11 +37,14 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
         location="*",
         level="response")
 #Split the data into pieces    
+    print("Splitting The stream into "+ str(time_window)+"-Hour" + ' Windows')
+    print("...")
     split_streams = split_stream(stream, duration = time_window*60*60)
 
     azimuth = np.zeros([len(split_streams)])
     angle = np.zeros([len(split_streams)])
     
+    print("Reducing Tilt Effect")
     for i in range(0,len(split_streams)):
         try:
             print(len(split_streams) - i)
@@ -63,7 +66,8 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
         except Exception as e:
                 print(f"Error occurred while processing item: {i}")
     
-
+    print("Removing Instrument Response")
+    print('...')
     for i in range(0,len(split_streams)):
     
         split_streams[i].select(channel="*Z").remove_response(inventory=invz,
@@ -86,7 +90,9 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     Dzp = np.zeros([len(split_streams),int(nseg / 2 + 1)])
     Com = np.zeros([len(split_streams),int(nseg / 2 + 1)])
     Com_Admitance = np.zeros([len(split_streams),int(nseg / 2 + 1)])
-
+    
+    print('Calculating Compliance Funtion')
+    
     for i in range(0,len(split_streams)):
 
         f, Dp[i] = scipy.signal.welch(split_streams[i].select(component='H')[0], fs=split_streams[i][0].stats.sampling_rate,
@@ -130,7 +136,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
 
     for i in range(0,len(Czp)):
     
-        if np.mean(Czp[i][coherence_mask]) > 0.85 and np.median(Dz[i][coherence_mask]) >  10e-17:
+        if np.mean(Czp[i][coherence_mask]) > 0.78 and np.median(Dz[i][coherence_mask]) >  10e-17:
          
             High_Czp.append(Czp[i])
     
@@ -144,7 +150,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
          
             High_Com_Stream.append(split_streams[i])
          
-            # print(i)
+            print(i)
 
     plt.rcParams.update({'font.size': 25})
     plt.figure(dpi=300,figsize=(14,16))
@@ -203,8 +209,9 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     High_Com_c = []
 
     for i in range(0,len(High_Com)):
-        High_Com_c.append(High_Com[i][indices])      
-    return(High_Com_c,f_c)
+        High_Com_c.append(High_Com[i][indices])
+    
+    return(High_Com_c,f_c,angle,azimuth)
 #%%
 def split_stream(stream, duration):
     split_streams = []
