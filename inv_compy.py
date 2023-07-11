@@ -8,7 +8,7 @@ Created on Tue Jul 11 14:04:23 2023
 
 import numpy as np
 
-def invert_compliace(Data,f,depth,starting_model = None,iteration = 100000,perturbation = 1e-2):
+def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,perturbation = 1e-2):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
     # Data = scipy.signal.savgol_filter(Data,12,2)
@@ -16,13 +16,13 @@ def invert_compliace(Data,f,depth,starting_model = None,iteration = 100000,pertu
     #Data uncertainty 
     # s = np.sqrt(np.cov(Data))
     s = np.sqrt(np.var(Data))
-
+    starting_model,vs0,vsi = model_exp(iteration)
     #Constrains
-    const_vs_lower = 0.2 # +-20% of the vs for model constrains
-    const_vs_higher = 0.2 # +-20% of the vs for model constrains
+    const_vs_lower = 20 # +-20% of the vs for model constrains
+    const_vs_higher = 20 # +-20% of the vs for model constrains
 
-    const_th_lower = 0.2 # +-20% of the vs for model constrains
-    const_th_higher = 0.2 # +-20% of the vs for model constrains
+    const_th_lower = 20 # +-20% of the vs for model constrains
+    const_th_higher = 20 # +-20% of the vs for model constrains
 
  
 
@@ -49,7 +49,7 @@ def invert_compliace(Data,f,depth,starting_model = None,iteration = 100000,pertu
         starting_model[:, :, i] = starting_model[:, :, i-1]
         layer = np.random.randint(0, starting_model.shape[0])
 
-        if np.random.randint(0,2) == 0: # Choosing between layer thickness or layer VS
+        if np.random.randint(0,1) == 0: # Choosing between layer thickness or layer VS
     
             # Vs Changes based on perturbation
             starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
@@ -103,7 +103,7 @@ def invert_compliace(Data,f,depth,starting_model = None,iteration = 100000,pertu
                     
                     # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
                  print("Upper limit of thickness")
-        ncompl[i, :] = calc_norm_compliance(depth, f, starting_model[:, :, i])
+        ncompl[i, :] = calc_norm_compliance(depth_s, f, starting_model[:, :, i])
 
         for ii in range(0, len(starting_model)):
             vsi[0, int(np.sum(starting_model[:, :, i][:, 0][0:ii])):int(np.sum(
@@ -140,7 +140,7 @@ def invert_compliace(Data,f,depth,starting_model = None,iteration = 100000,pertu
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]):
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])/300:
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
@@ -162,11 +162,10 @@ def invert_compliace(Data,f,depth,starting_model = None,iteration = 100000,pertu
 #%%
 
 def model_exp(iteration):
-
     starting_model = np.zeros([14, 4, iteration])
     dep = 0
     for i in range(0,len(starting_model)):
-        starting_model[i][0][0] = np.float16(200*(1.2)**i) # Thickness
+        starting_model[i][0][0] = np.float16(200*(1.3)**i) # Thickness
     
         print(starting_model[i][0][0])
     
@@ -217,7 +216,7 @@ def model_exp(iteration):
             starting_model[:, :, 0][:, 0][0:i+1])), 0] = starting_model[:, 3][i][0]
 
     vsi = np.zeros([1, int(np.sum(starting_model[:, 0, 0])), 1])
-    
+    return(starting_model,vs0,vsi)
 #%%
 def velp(vs , p = 0.25):
     """
@@ -239,7 +238,6 @@ def velp(vs , p = 0.25):
     
     return(vp)
     
-
 #%%
 
 def density(vs, p = 0.25):
@@ -312,7 +310,7 @@ def density(vs, p = 0.25):
      likilihood
      '''
      # L =   k * np.exp(-0.5*np.sum((d-m)**2/(s**2)))
-     L =   k * np.exp(-0.5*scipy.linalg.norm(d-m)**2/(s**2))
+     L =   k * np.exp(-0.5*np.linalg.norm(d-m)**2/(s**2))
 
      return(L)
 #%%
@@ -578,7 +576,8 @@ def calc_norm_compliance(depth,freq,model):
 
 #%%
 var_tresh = 800e6
-burnin = 50000
+burnin = 15000
+depth = np.arange(0, -int(np.sum(inpModel[:, 0, 0])), -1)
 
 var_vs = np.zeros([1,vs.shape[0]])
 for i in range(0, vs.shape[0]):
@@ -686,7 +685,7 @@ plt.xlabel('Shear Velocity [m/s]')
 plt.ylabel('Depth [m]')
 # plt.legend(loc='upper right')
 # plt.xlim([0,10000])
-plt.ylim([-int(np.sum(inpModel[:, 0, 0]))+2000, 0])
+# plt.ylim([-int(np.sum(inpModel[:, 0, 0]))+2000, 0])
 vs_burnin = np.zeros([iteration, int(np.sum(inpModel[:, 0, 0])), 1])
 plt.legend(loc='lower left')
 
