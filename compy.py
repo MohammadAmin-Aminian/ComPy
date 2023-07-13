@@ -14,14 +14,14 @@ import tiskit
 from obspy.clients.fdsn import Client
 import scipy 
 
-def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=0.66,time_window=2):
+def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_factor=0.66,time_window=2):
     nseg = 2**12
     TP = 5
     server="RESIF"
     client = Client(server)
 
-    net = stream[0].stats.network
-    sta = stream[0].stats.station
+    net = split_streams[0][0].stats.network
+    sta = split_streams[0][0].stats.station
     
     invz = client.get_stations(
         network=net,
@@ -29,57 +29,12 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
         channel="BHZ",
         location="*",
         level="response")
-    
-    invp = client.get_stations(
-        network=net,
-        station=sta,
-        channel="BDH",
-        location="*",
-        level="response")
-#Split the data into pieces    
-    print("Splitting The stream into "+ str(time_window)+"-Hour" + ' Windows')
-    print("...")
-    split_streams = split_stream(stream, duration = time_window*60*60)
 
-    azimuth = np.zeros([len(split_streams)])
-    angle = np.zeros([len(split_streams)])
-    
-    print("Reducing Tilt Effect")
-    for i in range(0,len(split_streams)):
-        try:
-            print(len(split_streams) - i)
-            D = tiskit.CleanRotator(split_streams[i], remove_eq=False)
-    
-            azimuth[i] = D.azimuth
-            angle[i] =  D.angle
-    
-            split_streams[i] = D.apply(split_streams[i])
-
-    # Transfer Function
-            F = tiskit.DataCleaner(split_streams[i], ["*1","*2"], n_to_reject=0)
-            split_streams[i] = F.clean_stream(split_streams[i])
-            
-            split_streams[i][0].stats.location = '00'
-            split_streams[i][1].stats.location = '00'
-            split_streams[i][2].stats.location = '00'
-            split_streams[i][3].stats.location = '00'
-        except Exception as e:
-                print(f"Error occurred while processing item: {i}")
-    
-    print("Removing Instrument Response")
-    print('...')
-    for i in range(0,len(split_streams)):
-    
-        split_streams[i].select(channel="*Z").remove_response(inventory=invz,
-                                                              output="DISP", plot=False)
-
-        split_streams[i].select(channel="*H").remove_response(inventory=invp,
-                                                              output="DEF", plot=False)
         
     f, Dp = scipy.signal.welch(split_streams[0].select(component='H')[0], fs=split_streams[0][0].stats.sampling_rate,
                                           nperseg=nseg, noverlap=(nseg*0.9),
                                           window=scipy.signal.windows.tukey(nseg,
-                                                                            (TP*60*split_streams[i][0].stats.sampling_rate)/nseg),
+                                                                            (TP*60*split_streams[0][0].stats.sampling_rate)/nseg),
                                           average='median')    
     k = wavenumber((2*np.pi*f), -invz[0][0][0].elevation)
 
@@ -212,6 +167,69 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
         High_Com_c.append(High_Com[i][indices])
     
     return(High_Com_c,f_c,angle,azimuth)
+#%%
+def Rotate(stream,time_window = 2):
+    nseg = 2**12
+    TP = 5
+    server="RESIF"
+    client = Client(server)
+
+    net = stream[0].stats.network
+    sta = stream[0].stats.station
+    
+    invz = client.get_stations(
+        network=net,
+        station=sta,
+        channel="BHZ",
+        location="*",
+        level="response")
+    
+    invp = client.get_stations(
+        network=net,
+        station=sta,
+        channel="BDH",
+        location="*",
+        level="response")
+#Split the data into pieces    
+    print("Splitting The stream into "+ str(time_window)+"-Hour" + ' Windows')
+    print("...")
+    split_streams = split_stream(stream, duration = time_window*60*60)
+
+    azimuth = np.zeros([len(split_streams)])
+    angle = np.zeros([len(split_streams)])
+    
+    print("Reducing Tilt Effect")
+    for i in range(0,len(split_streams)):
+        try:
+            print(len(split_streams) - i)
+            D = tiskit.CleanRotator(split_streams[i], remove_eq=False)
+    
+            azimuth[i] = D.azimuth
+            angle[i] =  D.angle
+    
+            split_streams[i] = D.apply(split_streams[i])
+
+    # Transfer Function
+            F = tiskit.DataCleaner(split_streams[i], ["*1","*2"], n_to_reject=0)
+            split_streams[i] = F.clean_stream(split_streams[i])
+            
+            split_streams[i][0].stats.location = '00'
+            split_streams[i][1].stats.location = '00'
+            split_streams[i][2].stats.location = '00'
+            split_streams[i][3].stats.location = '00'
+        except Exception as e:
+                print(f"Error occurred while processing item: {i}")
+    
+    print("Removing Instrument Response")
+    print('...')
+    for i in range(0,len(split_streams)):
+    
+        split_streams[i].select(channel="*Z").remove_response(inventory=invz,
+                                                              output="DISP", plot=False)
+
+        split_streams[i].select(channel="*H").remove_response(inventory=invp,
+                                                              output="DEF", plot=False)
+    return(split_streams,azimuth,angle)
 #%%
 def split_stream(stream, duration):
     split_streams = []
