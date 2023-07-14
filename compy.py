@@ -78,7 +78,9 @@ def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_
                                                                  (TP*60*split_streams[i][0].stats.sampling_rate)/nseg))
         Com[i] = (k * Czp[i]* np.sqrt(np.abs(Dz[i]) / np.abs(Dp[i]))) / gain_factor
         Com_Admitance[i] = k * (Dzp[i]/Dp[i]) / gain_factor
-
+        
+        print( len( split_streams ) - i )
+        
     High_Czp = [] 
     High_Dz = []
     High_Dp = [] 
@@ -91,7 +93,7 @@ def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_
 
     for i in range(0,len(Czp)):
     
-        if np.mean(Czp[i][coherence_mask]) > 0.78 and np.median(Dz[i][coherence_mask]) >  10e-17:
+        if np.mean(Czp[i][coherence_mask]) > 0.85 and np.median(Dz[i][coherence_mask]) <  10e-16 :
          
             High_Czp.append(Czp[i])
     
@@ -147,17 +149,17 @@ def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_
         plt.vlines(x = f_min_com, ymin=0, ymax=1,color='black',linestyles="dashed",label="Frequency limits")
         plt.vlines(x = f_max_com, ymin=0, ymax=1,color='black',linestyles="dashed")
                 
-        plt.subplot(414)                                   
-        for i in range(0,len(High_Com)):
-            plt.semilogx(f,High_Com[i],linewidth = 0.5,color='r')
-            plt.loglog(f,np.median(High_Com,axis=0),linewidth = 2,color='b')
-            plt.xlabel('Frequency [Hz]')
-            plt.ylabel('Compliance')
-            plt.text(0.01, 0.8, 'd)', transform=plt.gca().transAxes, fontsize=25, fontweight='bold')
-            plt.grid(True)        
-            plt.xlim([f_min_com,f_max_com])
-            plt.ylim([10e-13,10e-10])
-            plt.tight_layout()
+    plt.subplot(414)                                   
+    for i in range(0,len(High_Com)):
+        plt.semilogx(f,High_Com[i],linewidth = 0.5,color='r')
+        plt.loglog(f,np.median(High_Com,axis=0),linewidth = 2,color='b')
+        plt.xlabel('Frequency [Hz]')
+        plt.ylabel('Compliance')
+        plt.text(0.01, 0.8, 'd)', transform=plt.gca().transAxes, fontsize=25, fontweight='bold')
+        plt.grid(True)        
+        plt.xlim([f_min_com,f_max_com])
+        plt.ylim([10e-13,10e-10])
+        plt.tight_layout()
             
     indices = np.where((f >= f_min_com) & (f <= f_max_com))
     f_c = f[indices]
@@ -166,11 +168,16 @@ def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_
     for i in range(0,len(High_Com)):
         High_Com_c.append(High_Com[i][indices])
     
-    return(High_Com_c,f_c,angle,azimuth)
+    uncertainty = f_c.copy()
+    High_Com_c = np.array(High_Com_c)
+    
+
+    for i in range(0,len(f_c)):
+        uncertainty[i] = np.max(High_Com_c[:,i]) - np.min(High_Com_c[:,i])
+    
+    return(High_Com_c,f_c,uncertainty)
 #%%
 def Rotate(stream,time_window = 2):
-    nseg = 2**12
-    TP = 5
     server="RESIF"
     client = Client(server)
 
@@ -229,6 +236,21 @@ def Rotate(stream,time_window = 2):
 
         split_streams[i].select(channel="*H").remove_response(inventory=invp,
                                                               output="DEF", plot=False)
+    plt.rcParams.update({'font.size': 25})
+    plt.figure(dpi=300,figsize=(14,16))
+    plt.title("Tilt Correction Every " +time_window+"H [" +invz[0].station+']')
+    plt.subplot(211)
+    plt.plot(azimuth,color = 'b',linewidth = 3 , label = 'Azimuth')
+    plt.xlabel("Time [Hour]")
+    plt.ylabel("Degree")
+    plt.grid(True)
+    
+    plt.subplot(212)
+    plt.plot(angle,color = 'b',linewidth = 3 , label = 'Angle')
+    plt.xlabel("Time [Hour]")
+    plt.ylabel("Degree ["u"\u00b0]")
+    plt.grid(True)
+    
     return(split_streams,azimuth,angle)
 #%%
 def split_stream(stream, duration):
