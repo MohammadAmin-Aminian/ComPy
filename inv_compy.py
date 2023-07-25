@@ -46,7 +46,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
         starting_model[:, :, i] = starting_model[:, :, i-1]
         layer = np.random.randint(0, starting_model.shape[0])
 
-        if np.random.randint(0,2) == 0: # Choosing between layer thickness or layer VS
+        if np.random.randint(0,1) == 0: # Choosing between layer thickness or layer VS
     
             # Vs Changes based on perturbation
             starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
@@ -135,7 +135,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]):
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])/3.14:
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
