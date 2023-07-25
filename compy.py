@@ -14,14 +14,14 @@ import tiskit
 from obspy.clients.fdsn import Client
 import scipy 
 
-def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_factor=0.66,time_window=2):
+def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=0.66,time_window=1):
     nseg = 2**12
     TP = 5
     server="RESIF"
     client = Client(server)
 
-    net = split_streams[0][0].stats.network
-    sta = split_streams[0][0].stats.station
+    net = stream[0].stats.network
+    sta = stream[0].stats.station
     
     invz = client.get_stations(
         network=net,
@@ -30,7 +30,11 @@ def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_
         location="*",
         level="response")
 
-        
+    print("Splitting The stream into "+ str(time_window)+"-Hour" + ' Windows')
+    print("...")
+    # split_streams = split_stream(stream, duration = time_window*60*60)
+    split_streams = cut_stream_with_overlap(stream, time_window*60*60, overlap = ((time_window*60)-1)*60)
+    
     f, Dp = scipy.signal.welch(split_streams[0].select(component='H')[0], fs=split_streams[0][0].stats.sampling_rate,
                                           nperseg=nseg, noverlap=(nseg*0.9),
                                           window=scipy.signal.windows.tukey(nseg,
@@ -91,12 +95,15 @@ def Calculate_Compliance(split_streams,f_min_com = 0.008,f_max_com = 0.015,gain_
 
     coherence_mask = (f >= f_min_com) & (f <= f_max_com)
     
+    coherence_mask_dp = (f >= 0.03) & (f <= 0.08)
+
     # Treshhold to remove exclude those compiance function that are lesser or greater than median of all funtion +- percentage
-    percentage = 0.2
+    percentage = 0.1
     
     for i in range(0,len(Czp)):
-    
-        if np.mean(Czp[i][coherence_mask]) > 0.85 and np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) and np.mean(Com_Admitance[i][coherence_mask] > (1-percentage)*np.mean(Com_Admitance[:,coherence_mask])):
+        
+        # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
+        if np.mean(Czp[i][coherence_mask]) > 0.96 and np.mean(Dp[i][coherence_mask_dp]) < 1 :
          
             High_Czp.append(Czp[i])
     
@@ -275,7 +282,7 @@ def Rotate(stream,time_window = 2):
     plt.legend(loc="upper right")
     plt.tight_layout()
     
-    print("Merging Stream ")
+    print("Merging Stream ...")
     rotated_stream = stream.copy()
     rotated_stream.clear()
     for i in range(0,len(split_streams)) : 
@@ -296,6 +303,39 @@ def split_stream(stream, duration):
         end_time += duration
 
     return split_streams
+#%%
+from obspy import read, Stream
+
+def cut_stream_with_overlap(stream, window_length, overlap):
+    """
+    Cut an ObsPy stream with a given window length and overlap.
+
+    Parameters:
+        stream (obspy.Stream): ObsPy Stream object containing seismic data.
+        window_length (float): Length of the window in seconds.
+        overlap (float): Overlap between consecutive windows in seconds.
+
+    Returns:
+        list of obspy.Stream: List of overlapping segments.
+    """
+    # Calculate the step size based on window length and overlap
+    step_size = window_length - overlap
+
+    # Initialize an empty list to store the overlapping segments
+    segments = []
+
+    # Start at the beginning of the stream
+    start_time = stream[0].stats.starttime
+
+    # Loop through the stream with the specified step size
+    while start_time + window_length <= stream[-1].stats.endtime:
+        end_time = start_time + window_length
+        segment = stream.slice(start_time, end_time)
+        segments.append(segment)
+        start_time += step_size
+
+    return segments
+
 #%%
 def wavenumber(omega, H):
       """
@@ -359,3 +399,19 @@ def wavenumber(omega, H):
               k[i] = k_deep[i]
 
       return k
+#%%
+def rms(arr):
+    """
+    Calculate the Root Mean Square (RMS) of an array.
+
+    Parameters:
+        arr (numpy.ndarray): The input array.
+
+    Returns:
+        float: The RMS value of the array.
+    """
+    squared_values = np.square(arr)
+    mean_squared = np.mean(squared_values)
+    rms = np.sqrt(mean_squared)
+    return rms
+
