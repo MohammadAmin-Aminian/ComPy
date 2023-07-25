@@ -275,7 +275,13 @@ def Rotate(stream,time_window = 2):
     plt.legend(loc="upper right")
     plt.tight_layout()
     
-    return(split_streams,azimuth,angle)
+    print("Merging Stream ")
+    rotated_stream = stream.copy()
+    rotated_stream.clear()
+    for i in range(0,len(split_streams)) : 
+        rotated_stream = rotated_stream + split_streams[i]
+    rotated_stream.merge(fill_value='interpolate')
+    return(rotated_stream,azimuth,angle)
 #%%
 def split_stream(stream, duration):
     split_streams = []
