@@ -43,6 +43,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     k = wavenumber((2*np.pi*f), -invz[0][0][0].elevation)
 
 
+
     Dp = np.zeros([len(split_streams),int(nseg / 2 + 1)])
     Dz = np.zeros([len(split_streams),int(nseg / 2 + 1)])
     Czp = np.zeros([len(split_streams),int(nseg / 2 + 1)])
