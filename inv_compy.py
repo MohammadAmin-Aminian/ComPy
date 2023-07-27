@@ -8,19 +8,19 @@ Created on Tue Jul 11 14:04:23 2023
 
 import numpy as np
 import matplotlib.pyplot as plt
-def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,perturbation = 1e-2):
+def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration = 100000,perturbation = 1e-2):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
     # Data = scipy.signal.savgol_filter(Data,12,2)
     
     #Data uncertainty 
+    # s = np.sqrt(np.var(Data))
     # s = np.sqrt(np.cov(Data))
-    # s = np.mean(uncertainty) 
-    s = np.sqrt(np.var(Data))
-    starting_model,vs0,vsi = model_exp(iteration,n_layer=40,power_factor=1.015)
+    s = np.mean(uncertainty) 
+    starting_model,vs0,vsi = model_exp(iteration,first_layer=8,n_layer=9,power_factor=2)
     #Constrains
-    const_vs_lower = 1 # +-20% of the vs for model constrains
-    const_vs_higher = 1 # +-20% of the vs for model constrains
+    const_vs_lower = 10 # +-20% of the vs for model constrains
+    const_vs_higher = 0.1 # +-20% of the vs for model constrains
 
     const_th_lower = 0.2 # +-20% of the vs for model constrains
     const_th_higher = 0.2 # +-20% of the vs for model constrains
@@ -135,7 +135,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])/2:
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])  :
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
@@ -154,7 +154,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
                 starting_model[:, :, j][:, 0][0:i+1])), 0] = starting_model[:, 3,j][i]
             
             accept/iteration
-
+    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likelihood_data,freq=f,iteration=iteration,s=s,burnin = 50000)
             
 #%%
 
@@ -170,7 +170,7 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     
         starting_model[i][3][0] = 1700 + ((i/len(starting_model))*3000) # VS
     
-        starting_model[i][3][0] = 2000
+        # starting_model[i][3][0] = 2000
 
         starting_model[i][2][0] = velp(starting_model[i][3][0]) # Vp
     
@@ -571,7 +571,7 @@ def calc_norm_compliance(depth,freq,model):
     return ncomp
 
 #%%
-def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likeli_hood,likelihood_Model,likelihood_data,freq,iteration,s,burnin = 50000):
+def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,iteration,s,burnin = 50000):
 
     depth = np.arange(0, -int(np.sum(starting_model[:, 0, 0])), -1)
 
