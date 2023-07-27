@@ -104,7 +104,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
-        if np.mean(Czp[i][coherence_mask]) > 0.96 and np.mean(Dp[i][coherence_mask_dp]) < 1 :
+        if np.mean(Czp[i][coherence_mask]) > 0.95 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
          
             High_Czp.append(Czp[i])
     
@@ -128,10 +128,10 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     for i in range(0,len(High_Dz)):
         plt.semilogx(f,10*np.log10(High_Dz[i]*(2*np.pi*f)**4),linewidth = 0.5,color='r')
     plt.semilogx(f,10*np.log10(np.median(High_Dz*(2*np.pi*f)**4,axis=0)),linewidth = 2,color='b',label='Median')
-    plt.vlines(x = f_min_com, ymin=-180, ymax=-80,color='black',linestyles="dashed",label="High Coherence Band")
-    plt.vlines(x = f_max_com, ymin=-180, ymax=-80,color='black',linestyles="dashed")
-    plt.vlines(x = Fc1, ymin=-180, ymax=80,color='green',linestyles="solid",label="Maximum Frequency of IG")
-    plt.vlines(x = Fc2 , ymin=-180, ymax=80,color='green',linestyles="solid")
+    plt.vlines(x = f_min_com, ymin=-200, ymax=-80,color='black',linestyles="dashed",label="High Coherence Band")
+    plt.vlines(x = f_max_com, ymin=-200, ymax=-80,color='black',linestyles="dashed")
+    plt.vlines(x = Fc1, ymin=-200, ymax=80,color='green',linestyles="solid",label="Maximum Frequency of IG")
+    plt.vlines(x = Fc2 , ymin=-200, ymax=80,color='green',linestyles="solid")
     
     plt.xlabel('Frequency [Hz]')
     plt.ylabel('Vertical Acc [m/s^2] dB')
@@ -139,16 +139,16 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     plt.grid(True)
     plt.legend(loc='upper right',fontsize=17)
     plt.xlim([0.001,1])
-    plt.ylim([-170,-95])
+    plt.ylim([-200,-80])
   
     plt.subplot(412)                                   
     for i in range(0,len(High_Dp)):
         plt.semilogx(f,10*np.log10(High_Dp[i]),linewidth = 0.5,color='r')
     plt.semilogx(f,10*np.log10(np.median(High_Dp,axis=0)),linewidth = 2,color='b',label='Median')
-    plt.vlines(x = f_min_com, ymin=-20, ymax=100,color='black',linestyles="dashed",label="High Coherence Band")
-    plt.vlines(x = f_max_com, ymin=-20, ymax=100,color='black',linestyles="dashed")
-    plt.vlines(x = Fc1, ymin=-20, ymax=100,color='green',linestyles="solid",label="Maximum Frequency of IG")
-    plt.vlines(x = Fc2 , ymin=-20, ymax=100,color='green',linestyles="solid")
+    plt.vlines(x = f_min_com, ymin=-40, ymax=100,color='black',linestyles="dashed",label="High Coherence Band")
+    plt.vlines(x = f_max_com, ymin=-40, ymax=100,color='black',linestyles="dashed")
+    plt.vlines(x = Fc1, ymin=-40, ymax=100,color='green',linestyles="solid",label="Maximum Frequency of IG")
+    plt.vlines(x = Fc2 , ymin=-40, ymax=100,color='green',linestyles="solid")
     
     
     plt.xlabel('Frequency [Hz]')
@@ -157,7 +157,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     plt.grid(True)
     plt.legend(loc='upper right',fontsize=17)
     plt.xlim([0.001,1])
-    plt.ylim([-20,80])
+    plt.ylim([-40,80])
 
     plt.subplot(413)                                   
     for i in range(0,len(High_Czp)):
