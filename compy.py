@@ -81,7 +81,11 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
                                nperseg=nseg, noverlap=(nseg*0.9),
                                window=scipy.signal.windows.tukey(nseg,
                                                                  (TP*60*split_streams[i][0].stats.sampling_rate)/nseg))
-        Com[i] = (k * Czp[i]* np.sqrt(np.abs(Dz[i]) / np.abs(Dp[i]))) / gain_factor
+
+        aw = gravitational_attraction(Dp[i],-invz[0][0][0].elevation,f,pw=1025)
+
+        Com[i] = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw) / np.abs(Dp[i]))) / gain_factor
+        
         Com_Admitance[i] = k * (Dzp[i]/Dp[i]) / gain_factor
         
         print( len( split_streams ) - i )
@@ -99,7 +103,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     coherence_mask_dp = (f >= 0.03) & (f <= 0.08)
 
     # Treshhold to remove exclude those compiance function that are lesser or greater than median of all funtion +- percentage
-    percentage = 0.1
+    # percentage = 0.1
     
     for i in range(0,len(Czp)):
         
@@ -199,11 +203,39 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     uncertainty = f_c.copy()
     High_Com_c = np.array(High_Com_c)
     
+    overlap_points = int(nseg * 0.9)
 
-    for i in range(0,len(f_c)):
-        uncertainty[i] = np.max(High_Com_c[:,i]) - np.min(High_Com_c[:,i])
+    # Calculate the number of non-overlapping data points per window
+    non_overlap_points = nseg - overlap_points
+
+    # Determine the number of windows that can be obtained from the data
+    number_of_window = int((split_streams[i][0].stats.npts - overlap_points) / non_overlap_points)
+
+    # for i in range(0,len(f_c)):
+    #     uncertainty[i] = np.max(High_Com_c[:,i]) - np.min(High_Com_c[:,i])
+    uncertainty = Comliance_uncertainty(High_Com_c[0],High_Czp[0][indices],number_of_window)
     
     return(High_Com_c,f_c,uncertainty)
+#%%
+def gravitational_attraction(High_Dp,depth_s,f,pw=1025):
+
+    G =  6.6743e-11 # Gravitational constant
+    H = depth_s
+    kw = wavenumber((2*np.pi*f), depth_s)
+    g = 9.8
+    psf = High_Dp
+    
+    hw = (psf * np.cosh(kw * H)) / (pw*g)      
+          
+    aw = 2 * np.pi * G * pw * np.exp(-2 * np.pi * kw * H) * hw
+    
+    return(aw)
+
+#%%
+def Comliance_uncertainty(compliance_function,coherence_function,number_of_window):
+    sigma = compliance_function *((np.sqrt(1-coherence_function))/
+                                  (np.abs(coherence_function)*np.sqrt(number_of_window)))
+    return(sigma)
 #%%
 def Rotate(stream,time_window = 2):
     server="RESIF"
