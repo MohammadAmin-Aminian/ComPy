@@ -14,13 +14,13 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
     # Data = scipy.signal.savgol_filter(Data,12,2)
     
     #Data uncertainty 
-    s = np.sqrt(np.cov(Data))
+    # s = np.sqrt(np.cov(Data))
     # s = np.mean(uncertainty) 
-    # s = np.sqrt(np.var(Data))
-    starting_model,vs0,vsi = model_exp(iteration)
+    s = np.sqrt(np.var(Data))
+    starting_model,vs0,vsi = model_exp(iteration,n_layer=40,power_factor=1.015)
     #Constrains
-    const_vs_lower = 0.2 # +-20% of the vs for model constrains
-    const_vs_higher = 0.2 # +-20% of the vs for model constrains
+    const_vs_lower = 1 # +-20% of the vs for model constrains
+    const_vs_higher = 1 # +-20% of the vs for model constrains
 
     const_th_lower = 0.2 # +-20% of the vs for model constrains
     const_th_higher = 0.2 # +-20% of the vs for model constrains
@@ -135,7 +135,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])/3.14:
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])/2:
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
@@ -158,11 +158,11 @@ def invert_compliace(Data,f,depth_s,starting_model = None,iteration = 100000,per
             
 #%%
 
-def model_exp(iteration):
-    starting_model = np.zeros([14, 4, iteration])
+def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
+    starting_model = np.zeros([n_layer, 4, iteration])
     dep = 0
     for i in range(0,len(starting_model)):
-        starting_model[i][0][0] = np.float16(200*(1.2)**i) # Thickness
+        starting_model[i][0][0] = np.float16(first_layer*(power_factor)**i) # Thickness
     
         print(starting_model[i][0][0])
     
@@ -170,7 +170,7 @@ def model_exp(iteration):
     
         starting_model[i][3][0] = 1700 + ((i/len(starting_model))*3000) # VS
     
-        # starting_model[i][3][0] = 2000
+        starting_model[i][3][0] = 2000
 
         starting_model[i][2][0] = velp(starting_model[i][3][0]) # Vp
     
@@ -184,28 +184,28 @@ def model_exp(iteration):
     # # starting_model[:,:,0] = DD
     # starting_model[:,:,0] = model4
 
-    starting_model[0][3][0] = 2700
-    starting_model[1][3][0] = 2700
-    starting_model[2][3][0] = 2700
+    # starting_model[0][3][0] = 2700
+    # starting_model[1][3][0] = 2700
+    # starting_model[2][3][0] = 2700
 
 
-    starting_model[3][3][0] = 3700
-    starting_model[4][3][0] = 3700
-    starting_model[5][3][0] = 3700
+    # starting_model[3][3][0] = 3700
+    # starting_model[4][3][0] = 3700
+    # starting_model[5][3][0] = 3700
 
 
-    starting_model[6][3][0] = 4050
-    starting_model[7][3][0] = 4050
-    starting_model[8][3][0] = 4050
-    starting_model[9][3][0] = 4050
-    starting_model[10][3][0] = 4050
+    # starting_model[6][3][0] = 4050
+    # starting_model[7][3][0] = 4050
+    # starting_model[8][3][0] = 4050
+    # starting_model[9][3][0] = 4050
+    # starting_model[10][3][0] = 4050
 
-    starting_model[11][3][0] = 4370
-    starting_model[12][3][0] = 4370
-    starting_model[13][3][0] = 4370
-    # starting_model[24][3][0] = 4190
+    # starting_model[11][3][0] = 4370
+    # # starting_model[12][3][0] = 4370
+    # # starting_model[13][3][0] = 4370
+    # # starting_model[24][3][0] = 4190
 
-    # starting_model[9][0][0] = 10000
+    # # starting_model[9][0][0] = 10000
     
     vs0 = np.zeros([1, int(np.sum(starting_model[:, 0, 0])), 1])
     for i in range(0, len(starting_model)):
@@ -213,6 +213,7 @@ def model_exp(iteration):
             starting_model[:, :, 0][:, 0][0:i+1])), 0] = starting_model[:, 3][i][0]
 
     vsi = np.zeros([1, int(np.sum(starting_model[:, 0, 0])), 1])
+    print(dep)
     return(starting_model,vs0,vsi)
 #%%
 def velp(vs , p = 0.25):
@@ -570,8 +571,8 @@ def calc_norm_compliance(depth,freq,model):
     return ncomp
 
 #%%
-def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likeli_hood,likelihood_Model,likelihood_data,freq,iteration,s,burnin = 15000):
-    var_tresh = 800e6
+def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likeli_hood,likelihood_Model,likelihood_data,freq,iteration,s,burnin = 50000):
+
     depth = np.arange(0, -int(np.sum(starting_model[:, 0, 0])), -1)
 
     var_vs = np.zeros([1,vs.shape[0]])
@@ -579,19 +580,14 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likeli_hood,likelihood_
     for i in range(0, vs.shape[0]):
         var_vs[0,i] = np.var(vs[i])
     
-    # grad_vs = np.zeros([1,vs.shape[0]])
-    # for i in range(0, vs.shape[0]):
-        #     grad_vs[0,i] = np.gradient(vs[i])
-    
     Vs_final = np.zeros(vs[0].shape)
     N = 0
     for i in range(burnin,iteration):
-        if var_vs[0,i] < var_tresh:
-            # if grad_vs[0,i] < 10e10:
-                Vs_final = Vs_final + vs[i]
-                N = N + 1
-                Vs_final = Vs_final/N
-                print(N)
+        Vs_final = Vs_final + vs[i]
+        N = N + 1
+    
+    Vs_final = Vs_final/N
+    print(N)
 
     plt.rcParams.update({'font.size': 30})
 
@@ -599,14 +595,11 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likeli_hood,likelihood_
 
     plt.figure(dpi=300, figsize=(30, 35))
     plt.subplot(221)
-    
-    plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
-    plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
-    plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
-    
-    plt.xscale('log')
-    # plt.yscale('log')
 
+    # plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
+    # plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
+    plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
+    plt.xscale('log')
     plt.vlines(x=burnin, ymin=0, ymax=1, color='r',
                label='Burn-in Region', linestyles='dashed')
     plt.legend(loc='upper left')
@@ -615,26 +608,11 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likeli_hood,likelihood_
     plt.xlabel('Iteration')
     plt.ylabel('Liklihood')
     plt.grid(True)
-    
-    # plt.subplot(222)
-    # plt.plot(mis_fit_Model[0,1:iteration-1])
-    # plt.xlabel('Iteration')
-    # plt.title('Model Misfit (L^2)')
-    # plt.ylabel('Error')
-    # plt.grid(True)
-    # plt.vlines(x=burnin, ymin=0, ymax=np.max(var_vs[0,:]), color='r',
-    #             label='Burn-in Region', linestyles='dashed')
-    # plt.legend(loc='upper left')
-    # plt.xscale('log')
-    # plt.yscale('log')
-    
-    
+
     plt.subplot(222)
     plt.plot(mis_fit[0,1:iteration-1])
     plt.xscale('log')
     plt.yscale('log')
-    
-    # plt.yscale('log')
     
     plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
                label='Burn-in Region', linestyles='dashed')
@@ -647,158 +625,35 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likeli_hood,likelihood_
     
     plt.subplot(223)
     for i in range(burnin, ncompl.shape[0], nn):
-        if var_vs[0,i] < var_tresh:
-            plt.plot(freq, ncompl[i], color='red', linewidth=0.25)
-            
-            plt.xlabel('Frequency [Hz]')
-            plt.ylabel('Normalized Compliance')
-            
-            # plt.plot(freq, Data, color='black', label='Measured Compliance')
-            plt.errorbar(freq, Data, yerr=s, ecolor=('r'), color='black',
-                         linewidth=3, label='Measured Compliance')
-            
-            plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
-                     label='Median of Brun-in')
-            plt.plot(freq, ncompl[1],color='green', label='Start Compliance',linewidth= 3)
-            
-            plt.grid(True)
-            plt.legend(loc='upper left')
-            # plt.ylim([10e-16,2e-13])
-            plt.subplot(224)
-            
-            for i in range(burnin, vs.shape[0], nn):
-                if var_vs[0,i] < var_tresh:
-                    plt.plot(vs[i], depth, color='grey', linewidth=0.5)
-                    
-                    # plt.plot(np.mean(vs[burnin:iteration],axis=0), depth, color='blue', 
-                    #          label='Median of Burn-in ')
-                    plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
-                    plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=3,linestyle='dashed')
-                    
-                    # plt.plot(vs1, depth, color='green', label='Actual Model')
-                    
-                    plt.grid(True)
-                    plt.xlabel('Shear Velocity [m/s]')
-                    plt.ylabel('Depth [m]')
-                    # plt.legend(loc='upper right')
-                    # plt.xlim([0,10000])
-                    # plt.ylim([-int(np.sum(inpModel[:, 0, 0]))+2000, 0])
-                    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
-                    plt.legend(loc='lower left')
-                    
-#%%
-var_tresh = 800e6
-burnin = 25000
-depth = np.arange(0, -int(np.sum(starting_model[:, 0, 0])), -1)
-
-var_vs = np.zeros([1,vs.shape[0]])
-
-for i in range(0, vs.shape[0]):
-    var_vs[0,i] = np.var(vs[i])
-
-# grad_vs = np.zeros([1,vs.shape[0]])
-# for i in range(0, vs.shape[0]):
-#     grad_vs[0,i] = np.gradient(vs[i])
-    
-Vs_final = np.zeros(vs[0].shape)
-N = 0
-for i in range(burnin,iteration):
-    if var_vs[0,i] < var_tresh:
-        # if grad_vs[0,i] < 10e10:
-        Vs_final = Vs_final + vs[i]
-        N = N + 1
-Vs_final = Vs_final/N
-print(N)
-
-plt.rcParams.update({'font.size': 30})
-
-nn = int((iteration - burnin)/500) # I want to see just 1000 points of the data
-
-plt.figure(dpi=300, figsize=(30, 35))
-plt.subplot(221)
-
-plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
-plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
-plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
-
-plt.xscale('log')
-# plt.yscale('log')
-
-plt.vlines(x=burnin, ymin=0, ymax=1, color='r',
-           label='Burn-in Region', linestyles='dashed')
-plt.legend(loc='upper left')
-
-plt.title('Likelihood')
-plt.xlabel('Iteration')
-plt.ylabel('Liklihood')
-plt.grid(True)
-
-# plt.subplot(222)
-# plt.plot(mis_fit_Model[0,1:iteration-1])
-# plt.xlabel('Iteration')
-# plt.title('Model Misfit (L^2)')
-# plt.ylabel('Error')
-# plt.grid(True)
-# plt.vlines(x=burnin, ymin=0, ymax=np.max(var_vs[0,:]), color='r',
-#             label='Burn-in Region', linestyles='dashed')
-# plt.legend(loc='upper left')
-# plt.xscale('log')
-# plt.yscale('log')
-
-
-plt.subplot(222)
-plt.plot(mis_fit[0,1:iteration-1])
-plt.xscale('log')
-plt.yscale('log')
-
-# plt.yscale('log')
-
-plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
-            label='Burn-in Region', linestyles='dashed')
-plt.legend(loc='upper left')
-
-plt.title('Data Misfit (L^2)')
-plt.xlabel('Iteration')
-plt.ylabel('Error')
-plt.grid(True)
-
-plt.subplot(223)
-for i in range(burnin, ncompl.shape[0], nn):
-    if var_vs[0,i] < var_tresh:
         plt.plot(freq, ncompl[i], color='red', linewidth=0.25)
-
-plt.xlabel('Frequency [Hz]')
-plt.ylabel('Normalized Compliance')
-
-# plt.plot(freq, Data, color='black', label='Measured Compliance')
-plt.errorbar(freq, Data, yerr=s, ecolor=('r'), color='black',
-                 linewidth=3, label='Measured Compliance')
-
-plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
-         label='Median of Brun-in')
-plt.plot(freq, ncompl[1],color='green', label='Start Compliance',linewidth= 3)
-
-plt.grid(True)
-plt.legend(loc='upper left')
-# plt.ylim([10e-16,2e-13])
-plt.subplot(224)
-
-for i in range(burnin, vs.shape[0], nn):
-    if var_vs[0,i] < var_tresh:
+        
+        plt.xlabel('Frequency [Hz]')
+        plt.ylabel('Normalized Compliance')
+        
+        # plt.plot(freq, Data, color='black', label='Measured Compliance')
+    plt.errorbar(freq, Data, yerr=s, ecolor=('r'), color='black',
+                    linewidth=3, label='Measured Compliance')
+        
+    plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
+                label='Median of Brun-in')
+    plt.plot(freq, ncompl[1],color='green', label='Start Compliance',linewidth= 3)
+        
+    plt.grid(True)
+    plt.legend(loc='upper left')
+        # plt.ylim([10e-16,2e-13])
+        
+    plt.subplot(224)     
+    for i in range(burnin, vs.shape[0], nn):
         plt.plot(vs[i], depth, color='grey', linewidth=0.5)
-
-# plt.plot(np.mean(vs[burnin:iteration],axis=0), depth, color='blue', 
-#          label='Median of Burn-in ')
-plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
-plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=3,linestyle='dashed')
-
-# plt.plot(vs1, depth, color='green', label='Actual Model')
-
-plt.grid(True)
-plt.xlabel('Shear Velocity [m/s]')
-plt.ylabel('Depth [m]')
-# plt.legend(loc='upper right')
-# plt.xlim([0,10000])
-plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
-vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
-plt.legend(loc='lower left')
+            
+        # plt.plot(np.mean(vs[burnin:iteration],axis=0), depth, color='blue', 
+        #          label='Median of Burn-in ')
+    plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
+    plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=3,linestyle='dashed')
+    
+    plt.grid(True)
+    plt.xlabel('Shear Velocity [m/s]')
+    plt.ylabel('Depth [m]')
+    # plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
+    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
+    plt.legend(loc='lower left')
