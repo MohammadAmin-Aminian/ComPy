@@ -48,10 +48,10 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     Dz = np.zeros([len(split_streams),int(nseg / 2 + 1)])
     Czp = np.zeros([len(split_streams),int(nseg / 2 + 1)])
     Dzp = np.zeros([len(split_streams),int(nseg / 2 + 1)])
-    Com = np.zeros([len(split_streams),int(nseg / 2 + 1)])
-    Com_Admitance = np.zeros([len(split_streams),int(nseg / 2 + 1)])
+    # Com = np.zeros([len(split_streams),int(nseg / 2 + 1)])
+    # Com_Admitance = np.zeros([len(split_streams),int(nseg / 2 + 1)])
     
-    print('Calculating Compliance Funtion')
+    print('Calculating Coherence and power spectrum density funtions')
     
     for i in range(0,len(split_streams)):
 
@@ -81,13 +81,6 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
                                nperseg=nseg, noverlap=(nseg*0.9),
                                window=scipy.signal.windows.tukey(nseg,
                                                                  (TP*60*split_streams[i][0].stats.sampling_rate)/nseg))
-
-        aw = gravitational_attraction(Dp[i],-invz[0][0][0].elevation,f,pw=1025)
-
-        Com[i] = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw) / np.abs(Dp[i]))) / gain_factor
-        
-        Com_Admitance[i] = k * (Dzp[i]/Dp[i]) / gain_factor
-        
         print( len( split_streams ) - i )
         
     High_Czp = [] 
@@ -105,29 +98,41 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     # Treshhold to remove exclude those compiance function that are lesser or greater than median of all funtion +- percentage
     # percentage = 0.1
     
+    print("Data optipization ...")
+    print("Removing gravitatinal Attraction of ocean surface waves...")
+    print("Computing Compliance funtion and admittance funtion ")
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
         if np.mean(Czp[i][coherence_mask]) > 0.95 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
-         
+        # if np.mean(Czp[i][coherence_mask]) > 0.99:
+            
+            aw = gravitational_attraction(Dp[i],-invz[0][0][0].elevation,f,pw=1025)
+
+            Com = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw) / np.abs(Dp[i]))) / gain_factor
+            
+            Com_Admitance = k * (Dzp[i]/Dp[i]) / gain_factor
+            
+            
             High_Czp.append(Czp[i])
     
             High_Dz.append(Dz[i])
          
             High_Dp.append(Dp[i]*(gain_factor**2))
             
-            High_Com.append(Com[i])
+            High_Com.append(Com)
 
-            High_Com_Admitance.append(Com_Admitance[i])
+            High_Com_Admitance.append(Com_Admitance)
          
             High_Com_Stream.append(split_streams[i])
         
             print(i)
+            
     Fc1 = np.sqrt(9.8/(2*np.pi*0.5*-invz[0][0][0].elevation))
     Fc2 = np.sqrt(9.8/(2*np.pi*2*-invz[0][0][0].elevation))
     
     plt.rcParams.update({'font.size': 25})
-    plt.figure(dpi=300,figsize=(14,16))
+    plt.figure(dpi=300,figsize=(14,20))
     plt.subplot(411)                                   
     for i in range(0,len(High_Dz)):
         plt.semilogx(f,10*np.log10(High_Dz[i]*(2*np.pi*f)**4),linewidth = 0.5,color='r')
@@ -196,6 +201,9 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     indices = np.where((f >= f_min_com) & (f <= f_max_com))
     f_c = f[indices]
     High_Com_c = []
+    
+    print("Filtering ...")
+    print("Computing uncertainty of Compliance measurments ...")
 
     for i in range(0,len(High_Com)):
         High_Com_c.append(High_Com[i][indices])
