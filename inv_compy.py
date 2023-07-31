@@ -17,10 +17,10 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
     # s = np.sqrt(np.var(Data))
     # s = np.sqrt(np.cov(Data))
     s = np.mean(uncertainty) 
-    starting_model,vs0,vsi = model_exp(iteration,first_layer=8,n_layer=9,power_factor=2)
+    starting_model,vs0,vsi = model_exp(iteration,first_layer=50,n_layer=15,power_factor=1.35)
     #Constrains
-    const_vs_lower = 10 # +-20% of the vs for model constrains
-    const_vs_higher = 10 # +-20% of the vs for model constrains
+    const_vs_lower = 0.2 # +-20% of the vs for model constrains
+    const_vs_higher = 0.2 # +-20% of the vs for model constrains
 
     const_th_lower = 0.2 # +-20% of the vs for model constrains
     const_th_higher = 0.2 # +-20% of the vs for model constrains
@@ -135,7 +135,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])/10  :
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]) :
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
@@ -168,7 +168,7 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     
         dep = starting_model[i][0][0] + dep
     
-        starting_model[i][3][0] = 1700 + ((i/len(starting_model))*3000) # VS
+        starting_model[i][3][0] = 1200 + ((i/len(starting_model))*3000) # VS
     
         # starting_model[i][3][0] = 2000
 
