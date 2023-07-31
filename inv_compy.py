@@ -8,7 +8,7 @@ Created on Tue Jul 11 14:04:23 2023
 
 import numpy as np
 import matplotlib.pyplot as plt
-def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration = 100000,perturbation = 1e-2):
+def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration = 20000,perturbation = 1e-2):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
     # Data = scipy.signal.savgol_filter(Data,12,2)
@@ -19,8 +19,8 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
     s = np.mean(uncertainty) 
     starting_model,vs0,vsi = model_exp(iteration,first_layer=50,n_layer=15,power_factor=1.35)
     #Constrains
-    const_vs_lower = 0.2 # +-20% of the vs for model constrains
-    const_vs_higher = 0.2 # +-20% of the vs for model constrains
+    const_vs_lower = 0.5 # +-20% of the vs for model constrains
+    const_vs_higher = 0.5 # +-20% of the vs for model constrains
 
     const_th_lower = 0.2 # +-20% of the vs for model constrains
     const_th_higher = 0.2 # +-20% of the vs for model constrains
@@ -44,7 +44,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
         print(iteration - i)
         r = np.random.uniform(-1, 1)*perturbation  # 1 % perturbation
         starting_model[:, :, i] = starting_model[:, :, i-1]
-        layer = np.random.randint(0, starting_model.shape[0])
+        layer = np.random.randint(0, starting_model.shape[0] -1)
 
         if np.random.randint(0,1) == 0: # Choosing between layer thickness or layer VS
     
@@ -114,6 +114,9 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
         # Likelihood Model+Data Based on Adreas Fischner
 
         likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
+        
+        # likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s)  # Liklihood Data + Roughness
+
         # Likelihood Based on Mariano 
         print(likeli_hood[0, i])
 
@@ -135,7 +138,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]) :
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]) / 3 :
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
@@ -145,7 +148,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
                   likelihood_Model[0, i] = likelihood_Model[0, i-1]
                   likelihood_data[0, i] = likelihood_data[0, i-1]
 
-    vs = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
+    vs = np.zeros([iteration, int(np.sum(starting_model[0:-1, 0, 0])), 1])
 
     for j in range(0, iteration):
         print(iteration - j)
@@ -154,7 +157,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
                 starting_model[:, :, j][:, 0][0:i+1])), 0] = starting_model[:, 3,j][i]
             
             accept/iteration
-    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likelihood_data,freq=f,iteration=iteration,s=s,burnin = 50000)
+    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,iteration=iteration,s=s,burnin = 10000)
             
 #%%
 
@@ -176,6 +179,12 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     
         starting_model[i][1][0] = density(starting_model[i][3][0]) # Density
         #RR38
+    
+    #Half space
+    starting_model[len(starting_model)-1][0][0] = 6000000 # Thickness
+
+    
+    
     #     model4 =   np.array([[700, 2550, 5000, 2700]
     #               ,[1540, 2850, 6500, 3700]
     #               ,[4750, 3050, 7100, 4050]
@@ -309,6 +318,36 @@ def liklihood(d,m,k=1,s=1):
      L =   k * np.exp(-0.5*np.linalg.norm(d-m)**2/(s**2))
 
      return(L)
+ #%%
+def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1):
+      '''
+      Calculate Linkihood by using gaussian misfit
+      Tarantola paper-monte carlo
+      Parameters
+      ----------
+      d : Measured Data
+      
+      m : Modeled Data
+      
+      k : I don'y know what is it! 
+          The default is 1.
+          
+      s : Estimated uncertainty
+          The default is 1.
+      Returns
+      -------
+      likilihood
+      '''
+      # L =   k * np.exp(-0.5*np.sum((d-m)**2/(s**2)))
+      R_m = Roughness(vs.flatten(),alpha)
+      L =   k * np.exp((-0.5*np.linalg.norm(d-m)**2/(s**2))+R_m)
+
+      return(L)
+  
+#%%
+def Roughness(vs,alhpa=1):
+    R_m = np.sqrt(np.sum(np.gradient(vs,2)))
+    return(R_m)
 #%%
 # stable hyperbolic tangent
 def dtanh(x):
@@ -573,12 +612,12 @@ def calc_norm_compliance(depth,freq,model):
 #%%
 def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,iteration,s,burnin = 50000):
 
-    depth = np.arange(0, -int(np.sum(starting_model[:, 0, 0])), -1)
+    depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
 
-    var_vs = np.zeros([1,vs.shape[0]])
+    # var_vs = np.zeros([1,vs.shape[0]])
 
-    for i in range(0, vs.shape[0]):
-        var_vs[0,i] = np.var(vs[i])
+    # for i in range(0, vs.shape[0]):
+    #     var_vs[0,i] = np.var(vs[i])
     
     Vs_final = np.zeros(vs[0].shape)
     N = 0
