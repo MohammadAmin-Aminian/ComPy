@@ -107,10 +107,13 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
         if np.mean(Czp[i][coherence_mask]) > 0.95 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
         # if np.mean(Czp[i][coherence_mask]) > 0.99:
             
-            aw = gravitational_attraction(Dp[i],-invz[0][0][0].elevation,f,pw=1025)
-
-            Com = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw) / np.abs(Dp[i]))) / gain_factor
+            aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
+            dw = aw / (2 *np.pi * f)**2
+            # Com = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw**2) / np.abs(Dp[i]))) / gain_factor
             
+            Com = (k * Czp[i]* (dw+np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) / gain_factor)
+            
+
             Com_Admitance = k * (Dzp[i]/Dp[i]) / gain_factor
             
             
@@ -237,7 +240,7 @@ def gravitational_attraction(High_Dp,depth_s,f,pw=1025):
           
     aw = 2 * np.pi * G * pw * np.exp(-2 * np.pi * kw * H) * hw
     
-    return(aw)
+    return(aw,hw)
 
 #%%
 def Comliance_uncertainty(compliance_function,coherence_function,number_of_window):
