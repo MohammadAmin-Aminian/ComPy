@@ -14,16 +14,16 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
     # Data = scipy.signal.savgol_filter(Data,12,2)
     
     #Data uncertainty 
-    # s = np.sqrt(np.var(Data))
-    # s = np.sqrt(np.cov(Data))
-    s = np.mean(uncertainty) 
-    starting_model,vs0,vsi = model_exp(iteration,first_layer=50,n_layer=15,power_factor=1.35)
+    s = np.sqrt(np.var(Data))
+    # s = np.std(Data)
+    # s = np.mean(uncertainty) 
+    starting_model,vs0,vsi = model_exp(iteration,first_layer=100,n_layer=7,power_factor=2)
     #Constrains
-    const_vs_lower = 0.5 # +-20% of the vs for model constrains
-    const_vs_higher = 0.5 # +-20% of the vs for model constrains
+    const_vs_lower = 10 # +-20% of the vs for model constrains
+    const_vs_higher = 10 # +-20% of the vs for model constrains
 
-    const_th_lower = 0.2 # +-20% of the vs for model constrains
-    const_th_higher = 0.2 # +-20% of the vs for model constrains
+    const_th_lower = 1 # +-20% of the vs for model constrains
+    const_th_higher = 10 # +-20% of the vs for model constrains
 
     likelihood_Model = np.zeros([1, iteration])
 
@@ -46,7 +46,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
         starting_model[:, :, i] = starting_model[:, :, i-1]
         layer = np.random.randint(0, starting_model.shape[0] -1)
 
-        if np.random.randint(0,1) == 0: # Choosing between layer thickness or layer VS
+        if np.random.randint(0,2) == 0: # Choosing between layer thickness or layer VS
     
             # Vs Changes based on perturbation
             starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
@@ -75,10 +75,14 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
             
             layer = np.random.randint(0, starting_model.shape[0])
             
+            layer = 0 # Just sediment layer can change in thickness
+            starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+(1*r)) # added to rectified the bug cause by model issue
+
             # layer1 = starting_model.shape[0]-1
 
-            starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+(1*r))
-         
+            starting_model[starting_model.shape[0] -2, 0, i] = starting_model[starting_model.shape[0] -2, 0, i] + starting_model[layer, 0, i-1]*((1*-r))
+            
+
 
              # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
          
@@ -115,10 +119,9 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
 
         likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
         
-        # likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s)  # Liklihood Data + Roughness
+        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha=2)  # Liklihood Data + Roughness
 
         # Likelihood Based on Mariano 
-        print(likeli_hood[0, i])
 
 
         mis_fit[0, i] = misfit(Data, ncompl[i, :],s=s)  # Misfit Data
@@ -127,7 +130,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
         # s = np.sqrt(np.sum((Data - ncompl[i, :])**2)/ len(Data))
         # Updating S based on Thomas Bodin 
         # print(s)
-
+        print(mis_fit[0, i])
     
         if likeli_hood[0, i] >= likeli_hood[0, i-1]:
             # starting_model[:, :, i] = starting_model[:, :, i]
@@ -138,7 +141,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]) / 3 :
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])  :
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
@@ -157,8 +160,9 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
                 starting_model[:, :, j][:, 0][0:i+1])), 0] = starting_model[:, 3,j][i]
             
             accept/iteration
-    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,iteration=iteration,s=s,burnin = 10000)
-            
+    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,
+                   iteration=iteration,s=s,burnin = 50000)
+
 #%%
 
 def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
@@ -166,6 +170,9 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     dep = 0
     for i in range(0,len(starting_model)):
         starting_model[i][0][0] = np.float16(first_layer*(power_factor)**i) # Thickness
+    
+        starting_model[0][3][0] = 350 # VS
+        # starting_model[1][3][0] = 350 # VS
     
         print(starting_model[i][0][0])
     
@@ -183,7 +190,8 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     #Half space
     starting_model[len(starting_model)-1][0][0] = 6000000 # Thickness
 
-    
+
+
     
     #     model4 =   np.array([[700, 2550, 5000, 2700]
     #               ,[1540, 2850, 6500, 3700]
@@ -339,13 +347,13 @@ def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1):
       likilihood
       '''
       # L =   k * np.exp(-0.5*np.sum((d-m)**2/(s**2)))
-      R_m = Roughness(vs.flatten(),alpha)
-      L =   k * np.exp((-0.5*np.linalg.norm(d-m)**2/(s**2))+R_m)
+      R_m = alpha*Roughness(vs.flatten())
+      L =   k * np.exp(-0.5*(np.linalg.norm(d-m)**2/(s**2)+R_m))
 
       return(L)
   
 #%%
-def Roughness(vs,alhpa=1):
+def Roughness(vs):
     R_m = np.sqrt(np.sum(np.gradient(vs,2)))
     return(R_m)
 #%%
@@ -632,37 +640,23 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
 
     nn = int((iteration - burnin)/500) # I want to see just 1000 points of the data
 
-    plt.figure(dpi=300, figsize=(30, 35))
+    plt.figure(dpi=300, figsize=(25, 20))
+    # plt.subplot(221)
+
+    # # plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
+    # # plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
+    # plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
+    # plt.xscale('log')
+    # plt.vlines(x=burnin, ymin=0, ymax=1, color='r',
+    #            label='Burn-in Region', linestyles='dashed')
+    # plt.legend(loc='upper left')
+    
+    # plt.title('Likelihood')
+    # plt.xlabel('Iteration')
+    # plt.ylabel('Liklihood')
+    # plt.grid(True)
+    
     plt.subplot(221)
-
-    # plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
-    # plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
-    plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
-    plt.xscale('log')
-    plt.vlines(x=burnin, ymin=0, ymax=1, color='r',
-               label='Burn-in Region', linestyles='dashed')
-    plt.legend(loc='upper left')
-    
-    plt.title('Likelihood')
-    plt.xlabel('Iteration')
-    plt.ylabel('Liklihood')
-    plt.grid(True)
-
-    plt.subplot(222)
-    plt.plot(mis_fit[0,1:iteration-1])
-    plt.xscale('log')
-    plt.yscale('log')
-    
-    plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
-               label='Burn-in Region', linestyles='dashed')
-    plt.legend(loc='upper left')
-    
-    plt.title('Data Misfit (L^2)')
-    plt.xlabel('Iteration')
-    plt.ylabel('Error')
-    plt.grid(True)
-    
-    plt.subplot(223)
     for i in range(burnin, ncompl.shape[0], nn):
         plt.plot(freq, ncompl[i], color='red', linewidth=0.25)
         
@@ -679,9 +673,25 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
         
     plt.grid(True)
     plt.legend(loc='upper left')
-        # plt.ylim([10e-16,2e-13])
+    # plt.ylim([1e-11,6e-11])
         
-    plt.subplot(224)     
+    plt.subplot(223)
+    plt.plot(mis_fit[0,1:iteration-1])
+    plt.xscale('log')
+    # plt.yscale('log')
+    
+    plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
+               label='Burn-in Region', linestyles='dashed')
+    plt.legend(loc='upper left')
+    
+    plt.title('Data Misfit (L^2)')
+    plt.xlabel('Iteration')
+    plt.ylabel('Error')
+    plt.grid(True)
+    
+
+        
+    plt.subplot(122)     
     for i in range(burnin, vs.shape[0], nn):
         plt.plot(vs[i], depth, color='grey', linewidth=0.5)
             
@@ -694,5 +704,27 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
     plt.xlabel('Shear Velocity [m/s]')
     plt.ylabel('Depth [m]')
     # plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
+    
+    plt.ylim([-7000, 0])
+    # plt.xlim([0,4500])
+    
     vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc='lower left')
+    plt.tight_layout()
+    
+    plt.rcParams.update({'font.size': 30})
+    plt.figure(dpi=300, figsize=(10, 10))
+    plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
+    plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=3,linestyle='dashed')
+    
+    plt.grid(True)
+    plt.xlabel('Shear Velocity [m/s]')
+    plt.ylabel('Depth [m]')
+    # plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
+    
+    plt.ylim([-10000, 0])
+    # plt.xlim([0,4500])
+    
+    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
+    plt.legend(loc='lower left')
+    plt.tight_layout()

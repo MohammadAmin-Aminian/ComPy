@@ -104,14 +104,15 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
-        if np.mean(Czp[i][coherence_mask]) > 0.95 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
+        if np.mean(Czp[i][coherence_mask]) > 0.98 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
         # if np.mean(Czp[i][coherence_mask]) > 0.99:
             
             aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
             dw = aw / (2 *np.pi * f)**2
             # Com = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw**2) / np.abs(Dp[i]))) / gain_factor
             
-            Com = (k * Czp[i]* (dw+np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) / gain_factor)
+            Com = (k * Czp[i]* (np.sqrt(Dz[i]))+dw) / (np.sqrt(Dp[i]) / gain_factor)
+            # Com1 = (k * Czp[i]* (np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) / gain_factor)
             
 
             Com_Admitance = k * (Dzp[i]/Dp[i]) / gain_factor
@@ -192,6 +193,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     for i in range(0,len(High_Com)):
         plt.loglog(f,High_Com[i],linewidth = 0.5,color='r')
     plt.loglog(f,np.median(High_Com,axis=0),linewidth = 2,color='b',label='Median')
+    # plt.loglog(f,np.mean(High_Com,axis=0),linewidth = 2,color='r',label='Median')
     plt.xlabel('Frequency [Hz]')
     plt.ylabel('Compliance')
     plt.text(0.01, 0.8, 'd)', transform=plt.gca().transAxes, fontsize=25, fontweight='bold')
@@ -227,6 +229,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     uncertainty = Comliance_uncertainty(High_Com_c[0],High_Czp[0][indices],number_of_window)
     
     return(High_Com_c,f_c,uncertainty)
+
 #%%
 def gravitational_attraction(High_Dp,depth_s,f,pw=1025):
 
