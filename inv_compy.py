@@ -9,7 +9,7 @@ Created on Tue Jul 11 14:04:23 2023
 
 import numpy as np
 import matplotlib.pyplot as plt
-def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration = 20000,perturbation = 1e-2):
+def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 10,sigma_h = 1,iteration = 20000):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
     # Data = scipy.signal.savgol_filter(Data,12,2)
@@ -18,7 +18,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
     s = np.sqrt(np.var(Data))
     # s = np.std(Data)
     # s = np.mean(uncertainty) 
-    starting_model,vs0,vsi = model_exp(iteration,first_layer=100,n_layer=7,power_factor=2)
+    starting_model,vs0,vsi = model_exp(iteration,first_layer=100,n_layer=10,power_factor=1.6)
     #Constrains
     const_vs_lower = 10 # +-20% of the vs for model constrains
     const_vs_higher = 10 # +-20% of the vs for model constrains
@@ -43,25 +43,29 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
 
     for i in range(1, iteration):
         print(iteration - i)
-        r = np.random.uniform(-1, 1)*perturbation  # 1 % perturbation
+        r = np.random.uniform(-1, 1)
+        # r = np.random.randn()
+        
         starting_model[:, :, i] = starting_model[:, :, i-1]
         layer = np.random.randint(0, starting_model.shape[0] -1)
 
-        if np.random.randint(0,2) == 0: # Choosing between layer thickness or layer VS
-    
+        if np.random.randint(0,1) == 0: # Choosing between layer thickness or layer VS
+            step_vs = r * sigma_v
             # Vs Changes based on perturbation
-            starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
+            # starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
+            
+            starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs
     
             #Constrains VS
-            if starting_model[layer, 3, i-1]*(1+r) < starting_model[layer, 3, 0]* (1-const_vs_lower):
-                print("Lower limit of Velocity")
-                r = -r/10
-                starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
+            # if starting_model[layer, 3, i-1]*(1+r) < starting_model[layer, 3, 0]* (1-const_vs_lower):
+            #     print("Lower limit of Velocity")
+            #     r = -r/10
+            #     starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
      
-            if starting_model[layer, 3, i-1]*(1+r) > starting_model[layer, 3, 0]* (1+const_vs_higher):
-                print("Upper limit of Velocity")
-                r = -r/10
-                starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)        
+            # if starting_model[layer, 3, i-1]*(1+r) > starting_model[layer, 3, 0]* (1+const_vs_higher):
+            #     print("Upper limit of Velocity")
+            #     r = -r/10
+            #     starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)        
 
             # Vp changes based on Vs perturbation (poisson ratio)
             starting_model[layer, 2, i] = velp(starting_model[layer, 3, i])
@@ -75,36 +79,36 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
             # r = np.random.randint(0, 10)/100
             
             layer = np.random.randint(0, starting_model.shape[0])
-            
+            step_th = r * sigma_h
             layer = 0 # Just sediment layer can change in thickness
-            starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+(1*r)) # added to rectified the bug cause by model issue
+            starting_model[layer, 0, i] = starting_model[layer, 0, i-1] + step_th # added to rectified the bug cause by model issue
 
             # layer1 = starting_model.shape[0]-1
 
-            starting_model[starting_model.shape[0] -2, 0, i] = starting_model[starting_model.shape[0] -2, 0, i] + starting_model[layer, 0, i-1]*((1*-r))
+            starting_model[starting_model.shape[0] -2, 0, i] = starting_model[starting_model.shape[0] -2, 0, i] + step_th
             
 
 
              # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
          
-            if starting_model[layer, 0, i-1]*(1+1*r) < starting_model[layer, 0, 0]* (1-const_th_lower):
+            # if starting_model[layer, 0, i-1]*(1+1*r) < starting_model[layer, 0, 0]* (1-const_th_lower):
              
-                    r = -r/10  # 1 % perturbation
+            #         r = -r/10  # 1 % perturbation
              
-                    starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+1*r)
+            #         starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+1*r)
              
 
-                    # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
-                    print("Lower limit of thickness")
+            #         # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
+            #         print("Lower limit of thickness")
 
-            if starting_model[layer, 0, i-1]*(1+1*r) > starting_model[layer, 0, 0]* (1+const_th_higher):
+            # if starting_model[layer, 0, i-1]*(1+1*r) > starting_model[layer, 0, 0]* (1+const_th_higher):
                  
-                 r = -r/10  # 1 % perturbation
+            #      r = -r/10  # 1 % perturbation
                  
-                 starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+1*r)
+            #      starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+1*r)
                     
-                    # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
-                 print("Upper limit of thickness")
+            #         # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
+            #      print("Upper limit of thickness")
         ncompl[i, :] = calc_norm_compliance(depth_s, f, starting_model[:, :, i])
 
         for ii in range(0, len(starting_model)):
@@ -120,7 +124,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,iteration 
 
         likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
         
-        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha=2)  # Liklihood Data + Roughness
+        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha=3)  # Liklihood Data + Roughness
 
         # Likelihood Based on Mariano 
 
@@ -172,7 +176,10 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     for i in range(0,len(starting_model)):
         starting_model[i][0][0] = np.float16(first_layer*(power_factor)**i) # Thickness
     
-        starting_model[0][3][0] = 350 # VS
+        starting_model[0][3][0] = 350 # VS Sediment layer
+        
+        starting_model[1][3][0] = 750 # VS second Sediment layer
+        
         # starting_model[1][3][0] = 350 # VS
     
         print(starting_model[i][0][0])
@@ -189,9 +196,10 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
         #RR38
     
     #Half space
-    starting_model[len(starting_model)-1][0][0] = 6000000 # Thickness
-
-
+    starting_model[len(starting_model)-1][0][0] = 50000 # Thickness
+    starting_model[len(starting_model)-1][1][0] = 3340
+    starting_model[len(starting_model)-1][2][0] = 8120
+    starting_model[len(starting_model)-1][3][0] =  4510
 
     
     #     model4 =   np.array([[700, 2550, 5000, 2700]
@@ -679,7 +687,7 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
     plt.subplot(223)
     plt.plot(mis_fit[0,1:iteration-1])
     plt.xscale('log')
-    # plt.yscale('log')
+    plt.yscale('log')
     
     plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
                label='Burn-in Region', linestyles='dashed')
