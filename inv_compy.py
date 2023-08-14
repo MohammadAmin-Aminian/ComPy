@@ -9,35 +9,22 @@ Created on Tue Jul 11 14:04:23 2023
 
 import numpy as np
 import matplotlib.pyplot as plt
-def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 10,sigma_h = 1,iteration = 20000):
+def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_h = 1,iteration = 100000):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
-    # Data = scipy.signal.savgol_filter(Data,12,2)
     
     #Data uncertainty 
-    s = np.sqrt(np.var(Data))
-    # s = np.std(Data)
+    # s = np.sqrt(np.var(Data))
+    s = np.std(Data)
     # s = np.mean(uncertainty) 
-    starting_model,vs0,vsi = model_exp(iteration,first_layer=100,n_layer=10,power_factor=1.6)
+    starting_model,vs0,vsi = model_exp(iteration,first_layer=100,n_layer=7,power_factor=2)
     #Constrains
-    const_vs_lower = 10 # +-20% of the vs for model constrains
-    const_vs_higher = 10 # +-20% of the vs for model constrains
-
-    const_th_lower = 1 # +-20% of the vs for model constrains
-    const_th_higher = 10 # +-20% of the vs for model constrains
 
     likelihood_Model = np.zeros([1, iteration])
-
     likeli_hood = np.zeros([1, iteration])
     likelihood_data = np.zeros([1, iteration])
-    likeli_hood[0] = 0
-    mis_fit_Model = np.zeros([1, iteration])
     mis_fit = np.zeros([1, iteration])
     accept = 0
-
-
-# s = np.sqrt(np.sum((Data - calc_norm_compliance(
-    # depth, f, starting_model[:, :, 0]))**2) / len(Data))
 
     ncompl = np.zeros([iteration, np.shape(f)[0]])
 
@@ -51,21 +38,8 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
 
         if np.random.randint(0,1) == 0: # Choosing between layer thickness or layer VS
             step_vs = r * sigma_v
-            # Vs Changes based on perturbation
-            # starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
             
-            starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs
-    
-            #Constrains VS
-            # if starting_model[layer, 3, i-1]*(1+r) < starting_model[layer, 3, 0]* (1-const_vs_lower):
-            #     print("Lower limit of Velocity")
-            #     r = -r/10
-            #     starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)
-     
-            # if starting_model[layer, 3, i-1]*(1+r) > starting_model[layer, 3, 0]* (1+const_vs_higher):
-            #     print("Upper limit of Velocity")
-            #     r = -r/10
-            #     starting_model[layer, 3, i] = starting_model[layer, 3, i-1]*(1+r)        
+            starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs     
 
             # Vp changes based on Vs perturbation (poisson ratio)
             starting_model[layer, 2, i] = velp(starting_model[layer, 3, i])
@@ -80,7 +54,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
             
             layer = np.random.randint(0, starting_model.shape[0])
             step_th = r * sigma_h
-            layer = 0 # Just sediment layer can change in thickness
+            # layer = np.random.randint(0, 2) # Just sediment layer can change in thickness
             starting_model[layer, 0, i] = starting_model[layer, 0, i-1] + step_th # added to rectified the bug cause by model issue
 
             # layer1 = starting_model.shape[0]-1
@@ -88,27 +62,6 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
             starting_model[starting_model.shape[0] -2, 0, i] = starting_model[starting_model.shape[0] -2, 0, i] + step_th
             
 
-
-             # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
-         
-            # if starting_model[layer, 0, i-1]*(1+1*r) < starting_model[layer, 0, 0]* (1-const_th_lower):
-             
-            #         r = -r/10  # 1 % perturbation
-             
-            #         starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+1*r)
-             
-
-            #         # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
-            #         print("Lower limit of thickness")
-
-            # if starting_model[layer, 0, i-1]*(1+1*r) > starting_model[layer, 0, 0]* (1+const_th_higher):
-                 
-            #      r = -r/10  # 1 % perturbation
-                 
-            #      starting_model[layer, 0, i] = starting_model[layer, 0, i-1]*(1+1*r)
-                    
-            #         # starting_model[layer1, 0, i] = starting_model[layer1, 0, i-1]*(1+(1*r))
-            #      print("Upper limit of thickness")
         ncompl[i, :] = calc_norm_compliance(depth_s, f, starting_model[:, :, i])
 
         for ii in range(0, len(starting_model)):
@@ -119,22 +72,14 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
     
         likelihood_data[0, i] = liklihood(Data, ncompl[i, :], s=s)
     
-        # likeli_hood[0, i] = likelihood_data[0, i]/2 + (likelihood_Model[0, i])  # Likihood Data + Model
-        # Likelihood Model+Data Based on Adreas Fischner
-
-        likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
+        # likeli_hood[0, i] = likelihood_data[0, i]/2 + (likelihood_Model[0, i])/2  # Likihood Data + Model
         
-        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha=3)  # Liklihood Data + Roughness
-
-        # Likelihood Based on Mariano 
-
+        # likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
+        
+        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha=1)  # Liklihood Data + Roughness
 
         mis_fit[0, i] = misfit(Data, ncompl[i, :],s=s)  # Misfit Data
-        # mis_fit_l1[0, i] = misfit(Data, ncompl[i, :],s=s, l=1)  # Misfit Data L^1
-    
-        # s = np.sqrt(np.sum((Data - ncompl[i, :])**2)/ len(Data))
-        # Updating S based on Thomas Bodin 
-        # print(s)
+        
         print(mis_fit[0, i])
     
         if likeli_hood[0, i] >= likeli_hood[0, i-1]:
@@ -146,7 +91,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
             p_candidate = np.random.rand(1)[0]
             # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
 
-            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1])  :
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]):
                 accept+=1
                 # starting_model[:, :, i] = starting_model[:, :, i]
             else:                                   #New Line
@@ -155,7 +100,8 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
                   mis_fit[0, i] = mis_fit[0, i-1]
                   likelihood_Model[0, i] = likelihood_Model[0, i-1]
                   likelihood_data[0, i] = likelihood_data[0, i-1]
-
+                  ncompl[i, :] = ncompl[i-1, :] 
+                  
     vs = np.zeros([iteration, int(np.sum(starting_model[0:-1, 0, 0])), 1])
 
     for j in range(0, iteration):
@@ -165,13 +111,15 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
                 starting_model[:, :, j][:, 0][0:i+1])), 0] = starting_model[:, 3,j][i]
             
             accept/iteration
-    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,
-                   iteration=iteration,s=s,burnin = 50000)
-
+    burnin = 480000
+    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,sta="RR28",
+                   iteration=iteration,s=s,burnin = burnin)
+    plot_hist(starting_model,burnin=burnin)
+    autocorreletion(starting_model,iteration)
 #%%
 
 def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
-    starting_model = np.zeros([n_layer, 4, iteration])
+    starting_model = np.zeros([n_layer+1, 4, iteration])
     dep = 0
     for i in range(0,len(starting_model)):
         starting_model[i][0][0] = np.float16(first_layer*(power_factor)**i) # Thickness
@@ -181,8 +129,12 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
         starting_model[1][3][0] = 750 # VS second Sediment layer
         
         # starting_model[1][3][0] = 350 # VS
-    
-        print(starting_model[i][0][0])
+        starting_model[len(starting_model)-1][0][0] = 100000 # Thickness
+        starting_model[len(starting_model)-1][1][0] = 3340
+        starting_model[len(starting_model)-1][2][0] = 8120
+        starting_model[len(starting_model)-1][3][0] =  4510
+        
+        print("Thickness of layer " + str(i+1) + " is " + str(starting_model[i][0][0]) + " m")
     
         dep = starting_model[i][0][0] + dep
     
@@ -196,10 +148,7 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
         #RR38
     
     #Half space
-    starting_model[len(starting_model)-1][0][0] = 50000 # Thickness
-    starting_model[len(starting_model)-1][1][0] = 3340
-    starting_model[len(starting_model)-1][2][0] = 8120
-    starting_model[len(starting_model)-1][3][0] =  4510
+
 
     
     #     model4 =   np.array([[700, 2550, 5000, 2700]
@@ -239,7 +188,7 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
             starting_model[:, :, 0][:, 0][0:i+1])), 0] = starting_model[:, 3][i][0]
 
     vsi = np.zeros([1, int(np.sum(starting_model[:, 0, 0])), 1])
-    print(dep)
+    print("Depth above half-space is "+ str(dep - starting_model[len(starting_model)-1][0][0]) + " m")
     return(starting_model,vs0,vsi)
 #%%
 def velp(vs , p = 0.25):
@@ -627,7 +576,7 @@ def calc_norm_compliance(depth,freq,model):
     return ncomp
 
 #%%
-def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,iteration,s,burnin = 50000):
+def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,sta,iteration,s,burnin = 50000):
 
     depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
 
@@ -666,6 +615,7 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
     # plt.grid(True)
     
     plt.subplot(221)
+
     for i in range(burnin, ncompl.shape[0], nn):
         plt.plot(freq, ncompl[i], color='red', linewidth=0.25)
         
@@ -700,7 +650,8 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
     
 
         
-    plt.subplot(122)     
+    plt.subplot(122)
+    plt.title(sta)
     for i in range(burnin, vs.shape[0], nn):
         plt.plot(vs[i], depth, color='grey', linewidth=0.5)
             
@@ -714,7 +665,7 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
     plt.ylabel('Depth [m]')
     # plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
     
-    plt.ylim([-7000, 0])
+    plt.ylim([-10000, 0])
     # plt.xlim([0,4500])
     
     vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
@@ -737,3 +688,73 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,it
     vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc='lower left')
     plt.tight_layout()
+
+#%%
+def plot_hist(starting_model,burnin): 
+    plt.figure(dpi=300, figsize=(25, 40))
+    for i in range(1, (len(starting_model) )):
+        plt.subplot((len(starting_model) - 1),1,i)
+        plt.hist(starting_model[i-1,3,burnin:-1], 100, density=True, facecolor='k', alpha=1)
+        plt.title('Disturbution of Vs of Layer ' + str(i+1))
+        plt.tight_layout()
+
+#%%
+def autocorreletion(starting_model,N):
+    
+    cc = np.zeros([len(starting_model),len(starting_model[0,3,:])])
+    
+    for i in range(0,len(cc)-1):
+        s = starting_model[i,3,:]
+        dd = np.correlate(s-np.mean(s),s-np.mean(s),'full')/np.sum((s-np.mean(s))**2)
+        # Auto-correlations.
+        cc[i] = dd[N-1:]
+        
+
+# Estimate of the effective sample size (Gelman et al., 2013).
+    Neff = np.zeros([len(starting_model)])
+    for i in range(0,len(cc)):
+        for j in range(N-1):
+            if (cc[i][j]+cc[i][j+1]>0.0):
+                Neff[i]+=cc[i][j]
+        
+    Neff=N/(1.0+2.0*Neff)
+    # for i in range(0,len(cc)):
+    #     print('Effective Sample Size (parameter 1): %f' % Neff[i])
+
+# Plot autocorrelation function.
+    plt.figure(dpi = 300,figsize=(20,40))
+    plt.rcParams.update({'font.size': 30})
+    for i in range(0,len(cc)-1):
+        plt.subplot(len(cc)-1,1,i+1)
+        plt.plot(cc[i][0:N],'k',linewidth=3,label='Neff = : %f' % Neff[i])
+        plt.xlabel('samples',labelpad=15)
+        plt.xlim([0,N])
+        plt.title('Auto-Correlation Vs of Layer ' + str(i+1))
+        plt.legend(loc ="upper right")
+        plt.grid()
+        plt.tight_layout()
+
+    plt.figure(dpi = 300,figsize=(20,40))
+    plt.rcParams.update({'font.size': 30})
+    for i in range(0,len(cc)-1):
+        plt.subplot(len(cc)-1,1,i+1)
+        plt.plot(starting_model[i,3,:],'k',linewidth=2)
+        plt.xlabel('samples',labelpad=15)
+        plt.xlim([0,N])
+        plt.title('Vs of Layer ' + str(i+1))
+        plt.grid()
+        plt.tight_layout()
+    
+    return(Neff)
+
+#%%
+
+
+
+
+    
+    
+    
+    
+    
+    
