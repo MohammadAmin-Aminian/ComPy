@@ -25,19 +25,18 @@ import inv_compy
 freq = np.arange(0.008, 0.015, 0.0005)
 plt.rcParams.update({'font.size': 20})
 
-model1 = inv_compy.model_exp(1,50,50,1.05)[0]
-model2 = inv_compy.model_exp(1,50,50,1.05)[0]
+model1 = inv_compy.model_exp(1,100,8,2)[0]
+model2 = inv_compy.model_exp(1,100,8,2.0)[0]
 
-layer = 49
+layer = 0
 
-model2[:, 0][layer] = 6000*10e3 # Thicknes
+# model2[:, 0][layer] = 5000 # Thicknes
 
+# model2[:, 1][layer] = 100 # rho
 
-model2[:, 1][layer] = 4200 # Vs
+# model2[:, 2][layer] = 6800 # Vp
 
-model2[:, 2][layer] = 6800 # Vp
-
-model2[:, 3][layer] = 4200 #Density
+model2[:, 3][layer] = 2000 # Vs
 
 ncomp1 = cm.calc_norm_compliance(4560, freq, model1)
 ncomp2 = cm.calc_norm_compliance(4560, freq, model2)
@@ -48,6 +47,8 @@ vs2 = np.zeros([int(np.sum(model2[:, 0])), 1])
 for i in range(0, len(model1)):
     vs1[int(np.sum(model1[:, 0][0:i])):int(
         np.sum(model1[:, 0][0:i+1]))] = model1[:, 3][i]
+    
+for i in range(0, len(model2)):    
     vs2[int(np.sum(model2[:, 0][0:i])):int(
         np.sum(model2[:, 0][0:i+1]))] = model2[:, 3][i]
 
@@ -69,7 +70,7 @@ plt.subplot(211)
 plt.plot(vs1, depth, '-', label="VS ", color='blue')
 plt.plot(vs2, depth2, ':', label="VS ", color='red')
 # plt.plot(vp1, depth, ':', label="VP ", color='blue')
-# plt.ylim([-20000,0])
+plt.ylim([-15000,0])
 plt.grid(True)
 plt.legend(loc='upper left')
 plt.title("Earth Model- CRUST LASKE MODEL(changed)")
@@ -93,4 +94,5 @@ plt.xlabel("Frequency (Hz)")
 plt.ylabel("Normalized Compliance")
 plt.tight_layout()
 
-(ncomp2 - ncomp1) / np.sqrt(np.cov(ncomp1))
+(ncomp2 - ncomp1) / np.std(ncomp1)
+np.mean((ncomp2 - ncomp1) / np.std(ncomp1))
