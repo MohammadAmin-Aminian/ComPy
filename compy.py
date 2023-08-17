@@ -104,7 +104,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
-        if np.mean(Czp[i][coherence_mask]) > 0.98 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
+        if np.mean(Czp[i][coherence_mask]) > 0.95 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
         # if np.mean(Czp[i][coherence_mask]) > 0.99:
             
             aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
@@ -228,7 +228,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     #     uncertainty[i] = np.max(High_Com_c[:,i]) - np.min(High_Com_c[:,i])
     uncertainty = Comliance_uncertainty(High_Com_c[0],High_Czp[0][indices],number_of_window)
     
-    return(High_Com_c,f_c,uncertainty)
+    return(High_Com_c,High_Czp,High_Com_Stream,f_c,f,uncertainty)
 
 #%%
 def gravitational_attraction(High_Dp,depth_s,f,pw=1025):
@@ -462,3 +462,84 @@ def rms(arr):
     rms = np.sqrt(mean_squared)
     return rms
 
+#%%
+def split_and_save_stream(stream, interval_minutes, output_dir):
+    start_time = stream[0].stats.starttime
+    end_time = stream[0].stats.endtime
+    station_name = stream[0].stats.station
+    current_time = start_time
+    while current_time <= end_time:
+        interval_start = current_time
+        interval_end = current_time + interval_minutes * 60  # Convert minutes to seconds
+
+        if interval_end > end_time:
+            interval_end = end_time
+        
+        interval_stream = stream.slice(interval_start, interval_end)
+        
+        # Save the interval stream to a file
+        filename = f"{station_name}_{interval_start.date}.{interval_start.time}-{interval_end.time}.mseed"
+        filepath = output_dir + '/' + filename
+        interval_stream.write(filepath, format="MSEED")
+        
+        current_time = interval_end + 1  # Move to the next interval
+    
+    print("Splitting and saving complete.")
+#%%
+def optimizer(Com,Czp,Stream,f,alpha=0.95,f_min_com=0.008,f_max_com=0.015):
+    coherence_mask = (f >= f_min_com) & (f <= f_max_com)
+    High_Czp = [] 
+    High_Com = []
+    High_Com_Stream = []
+ 
+    for i in range(0,len(Czp)):
+        
+        if np.mean(Czp[i][coherence_mask]) > alpha:
+
+            # Com1 = (k * Czp[i]* (np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) / gain_factor)
+                        
+            High_Czp.append(Czp[i])
+     
+            High_Com.append(Com[i])
+
+            High_Com_Stream.append(Stream[i])
+            
+            print(i)
+            
+    # plt.rcParams.update({'font.size': 25})
+    # plt.figure(dpi=300,figsize=(12,8))
+    # for i in range(0,len(Czp)):
+    #     plt.semilogx(f,Czp[i],linewidth = 0.5,color='r')
+    # for i in range(0,len(High_Czp)):
+    #     plt.semilogx(f,High_Czp[i],linewidth = 0.5,color='g')
+    # plt.semilogx(f,np.median(High_Czp,axis=0),linewidth = 2,color='b',label='Median of optimized')    
+    # plt.xlabel('Frequency [Hz]')
+    # plt.ylabel('Coherence')
+    # plt.grid(True)        
+    # plt.xlim([0.001,1])
+    # plt.vlines(x = f_min_com, ymin=0, ymax=1,color='black',linestyles="dashed",label="High Coherence Band")
+    # plt.vlines(x = f_max_com, ymin=0, ymax=1,color='black',linestyles="dashed")
+    
+    
+    plt.legend(loc='upper right',fontsize=17)
+
+    return(High_Com,High_Czp,High_Com_Stream)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
