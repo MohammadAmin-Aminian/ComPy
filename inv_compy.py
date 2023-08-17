@@ -9,7 +9,7 @@ Created on Tue Jul 11 14:04:23 2023
 
 import numpy as np
 import matplotlib.pyplot as plt
-def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_h = 1,iteration = 100000):
+def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_h = 1,iteration = 100000,alpha=1):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
     
@@ -76,7 +76,7 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
         
         # likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
         
-        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha=1)  # Liklihood Data + Roughness
+        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha= 0.5)  # Liklihood Data + Roughness
 
         mis_fit[0, i] = misfit(Data, ncompl[i, :],s=s)  # Misfit Data
         
@@ -111,11 +111,43 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
                 starting_model[:, :, j][:, 0][0:i+1])), 0] = starting_model[:, 3,j][i]
             
             accept/iteration
-    burnin = 480000
+    burnin = 90000
     plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,sta="RR28",
                    iteration=iteration,s=s,burnin = burnin)
     plot_hist(starting_model,burnin=burnin)
-    autocorreletion(starting_model,iteration)
+    # autocorreletion(starting_model,iteration)
+    return(starting_model,vs,mis_fit,ncompl,likeli_hood)
+#%%
+def Lcurve(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_h = 1,iteration = 100000):
+
+    # Define the parameters for the logarithmic array
+    start = 0.01  
+    stop = 1  # Stop value
+    num_points = 10  # Number of points in the array
+    base = 10  # Logarithm base
+
+    # Create a logarithmic array using numpy's logspace function
+    alpha = np.logspace(np.log10(start), np.log10(stop), num=num_points, base=base)
+    
+    alpha = np.linspace(start, stop, num=num_points)
+    
+    l_curve = []
+    for i in range(0,len(alpha)):
+        
+        starting_model,vs,mis_fit,ncompl,likeli_hood = invert_compliace(Data
+                                                                   ,f
+                                                                   ,depth_s
+                                                                   ,uncertainty
+                                                                   ,starting_model = None
+                                                                   ,sigma_v = sigma_v
+                                                                   ,sigma_h = sigma_h
+                                                                   ,iteration = iteration
+                                                                   ,alpha = alpha[i])
+        l_curve.append(mis_fit)
+        
+    return(l_curve,alpha)
+
+
 #%%
 
 def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
@@ -692,8 +724,8 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
 #%%
 def plot_hist(starting_model,burnin): 
     plt.figure(dpi=300, figsize=(25, 40))
-    for i in range(1, (len(starting_model) )):
-        plt.subplot((len(starting_model) - 1),1,i)
+    for i in range(0, (len(starting_model) )):
+        plt.subplot((len(starting_model) - 1),1,i+1)
         plt.hist(starting_model[i-1,3,burnin:-1], 100, density=True, facecolor='k', alpha=1)
         plt.title('Disturbution of Vs of Layer ' + str(i+1))
         plt.tight_layout()
