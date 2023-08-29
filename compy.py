@@ -14,7 +14,7 @@ import tiskit
 from obspy.clients.fdsn import Client
 import scipy 
 
-def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=0.66,time_window=1):
+def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=0.66,time_window=1):
     nseg = 2**12
     TP = 5
     server="RESIF"
@@ -35,7 +35,7 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     # split_streams = split_stream(stream, duration = time_window*60*60)
     split_streams = cut_stream_with_overlap(stream, time_window*60*60, overlap = ((time_window*60)-1)*60)
     
-    f, Dp = scipy.signal.welch(split_streams[0].select(component='H')[0], fs=split_streams[0][0].stats.sampling_rate,
+    f, Dpp = scipy.signal.welch(split_streams[0].select(component='H')[0], fs=split_streams[0][0].stats.sampling_rate,
                                           nperseg=nseg, noverlap=(nseg*0.9),
                                           window=scipy.signal.windows.tukey(nseg,
                                                                             (TP*60*split_streams[0][0].stats.sampling_rate)/nseg),
@@ -86,7 +86,13 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     High_Czp = [] 
     High_Dz = []
     High_Dp = [] 
+    
     High_Com = []
+    High_Com_ae = []
+    High_Com_aw = []
+    High_Com_gf = []
+    High_Com_nothing = []
+    
     High_Com_Admitance = []
     High_Com_Stream = []
 
@@ -104,18 +110,29 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
-        if np.mean(Czp[i][coherence_mask]) > 0.95 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
+        if np.mean(Czp[i][coherence_mask]) > 0.90 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
         # if np.mean(Czp[i][coherence_mask]) > 0.99:
             
-            aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
-            dw = aw / (2 *np.pi * f)**2
+            pa_ratio,aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
+            
+            #This term cause by change in distance of the sensor from the earth's center of mass Crawford report
+            omega = 2* np.pi * f
+            
+            ad = (omega**2) /(omega**2 + 3.07* 10e-6)
             # Com = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw**2) / np.abs(Dp[i]))) / gain_factor
             
-            Com = (k * Czp[i]* (np.sqrt(Dz[i]))+dw) / (np.sqrt(Dp[i]) / gain_factor)
-            # Com1 = (k * Czp[i]* (np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) / gain_factor)
-            
+            Com = (k * Czp[i])* ad*(pa_ratio + (np.sqrt(Dz[i])) / (np.sqrt(Dp[i]) * gain_factor))
 
-            Com_Admitance = k * (Dzp[i]/Dp[i]) / gain_factor
+            Com_ae = ad*((k * Czp[i]* (np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) * gain_factor))
+            
+            Com_aw = (k * Czp[i])* (pa_ratio + (np.sqrt(Dz[i])) / (np.sqrt(Dp[i]) * gain_factor))
+
+            Com_gf = (k * Czp[i]* (np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) * gain_factor)
+            
+            Com_nothing = (k * Czp[i]* (np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) )
+
+
+            Com_Admitance = k * (Dzp[i]/Dp[i]) * gain_factor
             
             
             High_Czp.append(Czp[i])
@@ -125,7 +142,11 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
             High_Dp.append(Dp[i]*(gain_factor**2))
             
             High_Com.append(Com)
-
+            High_Com_ae.append(Com_ae)
+            High_Com_aw.append(Com_aw)
+            High_Com_gf.append(Com_gf)
+            High_Com_nothing.append(Com_nothing)
+            
             High_Com_Admitance.append(Com_Admitance)
          
             High_Com_Stream.append(split_streams[i])
@@ -206,15 +227,27 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
     indices = np.where((f >= f_min_com) & (f <= f_max_com))
     f_c = f[indices]
     High_Com_c = []
+    High_Com_ae1 = []
+    High_Com_aw1 = []
+    High_Com_gf1 = []
+    High_Com_nothing1 = []
     
     print("Filtering ...")
     print("Computing uncertainty of Compliance measurments ...")
 
     for i in range(0,len(High_Com)):
         High_Com_c.append(High_Com[i][indices])
-    
+        High_Com_ae1.append(High_Com_ae[i][indices])
+        High_Com_aw1.append(High_Com_aw[i][indices])
+        High_Com_gf1.append(High_Com_gf[i][indices])
+        High_Com_nothing1.append(High_Com_nothing[i][indices])
+            
     uncertainty = f_c.copy()
     High_Com_c = np.array(High_Com_c)
+    High_Com_ae1 = np.array(High_Com_ae1)
+    High_Com_aw1 = np.array(High_Com_aw1)
+    High_Com_gf1 = np.array(High_Com_gf1)
+    High_Com_nothing1 = np.array(High_Com_nothing1)
     
     overlap_points = int(nseg * 0.9)
 
@@ -226,7 +259,44 @@ def Calculate_Compliance(stream,f_min_com = 0.008,f_max_com = 0.015,gain_factor=
 
     # for i in range(0,len(f_c)):
     #     uncertainty[i] = np.max(High_Com_c[:,i]) - np.min(High_Com_c[:,i])
-    uncertainty = Comliance_uncertainty(High_Com_c[0],High_Czp[0][indices],number_of_window)
+    plt.rcParams.update({'font.size': 25})
+    plt.figure(dpi=300,figsize=(12,12))
+    plt.subplot(211)
+    plt.plot(f_c,np.median(High_Com_aw1,axis=0),linewidth=3,color='green',label="aw Correction")
+    plt.plot(f_c,np.median(High_Com_ae1,axis=0),linewidth=3,color='blue',label="ae Correction")
+
+    plt.plot(f_c,np.median(High_Com_gf1,axis=0),linewidth=3,color='red',label="Gain Factor Correction",linestyle="dashed")
+    plt.plot(f_c,np.median(High_Com_nothing1,axis=0),linewidth=3,color='black',label="Before Correction",linestyle="dashed")
+
+    plt.yscale('log')
+    # plt.loglog(f,np.mean(High_Com,axis=0),linewidth = 2,color='r',label='Median')
+    plt.xlabel('Frequency [Hz]')
+    plt.ylabel('Compliance')
+    plt.grid(True)        
+    plt.xlim([f_min_com,f_max_com])
+    plt.xlim([f_min_com,0.02])
+    plt.ylim([10e-13,10e-11])
+    plt.tight_layout()
+    plt.legend(loc='lower right',fontsize=17)
+
+    plt.subplot(212)
+    plt.plot(f_c,np.median(High_Com_aw1,axis=0) - np.median(High_Com_ae1,axis=0),linewidth=3,color='green',label="aw effect")
+    plt.plot(f_c, np.median(High_Com_gf1,axis=0)-np.median(High_Com_ae1,axis=0),linewidth=3,color='blue',label="ae effect")
+
+    plt.yscale('log')
+    # plt.loglog(f,np.mean(High_Com,axis=0),linewidth = 2,color='r',label='Median')
+    plt.xlabel('Frequency [Hz]')
+    plt.ylabel('Compliance')
+    plt.grid(True)        
+    plt.xlim([f_min_com,f_max_com])
+    plt.xlim([f_min_com,0.02])
+    # plt.ylim([10e-13,10e-11])
+    plt.tight_layout()
+    plt.legend(loc='upper right',fontsize=17)
+    
+    # uncertainty_theory = Comliance_uncertainty(High_Com_c[0],High_Czp[0][indices],number_of_window)
+  
+    uncertainty = np.max(High_Com_c,axis=0) - np.min(High_Com_c,axis=0)
     
     return(High_Com_c,High_Czp,High_Com_Stream,f_c,f,uncertainty)
 
@@ -241,14 +311,24 @@ def gravitational_attraction(High_Dp,depth_s,f,pw=1025):
     
     hw = (psf * np.cosh(kw * H)) / (pw*g)      
           
-    aw = 2 * np.pi * G * pw * np.exp(-2 * np.pi * kw * H) * hw
+    # aw = 2 * np.pi * G * pw * np.exp(-2 * np.pi * kw * H) * hw
+    aw = 2 * np.pi * G * pw * np.exp( - kw * H) * hw
     
-    return(aw,hw)
+    pa_ratio = 2 * np.pi * ( G / g ) * np.exp( -kw * H ) * np.cosh( kw * H)
+    
+    # plt.figure(dpi=300,figsize=(16,12))
+    # plt.loglog(f,aw/hw,linewidth=3,color='blue')
+    # plt.ylim([10e-9,10e-7])
+    # plt.xlabel('Frequency [Hz]')
+    # plt.ylabel('Acceleration / sea surface displacement(m/s^2 / m)')
+    # plt.tight_layout()
+    
+    return(pa_ratio,aw,hw)
 
 #%%
 def Comliance_uncertainty(compliance_function,coherence_function,number_of_window):
-    sigma = compliance_function *((np.sqrt(1-coherence_function))/
-                                  (np.abs(coherence_function)*np.sqrt(number_of_window)))
+    sigma = compliance_function *((np.sqrt(1-coherence_function**2))/
+                                  (np.abs(coherence_function)*np.sqrt(2*number_of_window)))
     return(sigma)
 #%%
 def Rotate(stream,time_window = 2):
@@ -521,16 +601,43 @@ def optimizer(Com,Czp,Stream,f,alpha=0.95,f_min_com=0.008,f_max_com=0.015):
     # plt.vlines(x = f_max_com, ymin=0, ymax=1,color='black',linestyles="dashed")
     
     
-    plt.legend(loc='upper right',fontsize=17)
+    # plt.legend(loc='upper right',fontsize=17)
 
     return(High_Com,High_Czp,High_Com_Stream)
 
+#%%
+def overlap_checker(stream_splitted):
+    start_times = np.zeros(len(stream_splitted))
+    end_times = np.zeros(len(stream_splitted))
+    
+    for i in range(0,len(stream_splitted)):
+        start_times[i] = stream_splitted[i][0].stats.starttime
+        end_times[i] = stream_splitted[i][0].stats.endtime
+    
+    start_x_labels = []
+    start_x_positions =[]
+    start_x_labels.append(str(stream_splitted[0][0].stats.starttime)[0:10])
+    start_x_labels.append(str(stream_splitted[20][0].stats.starttime)[0:10])
+    start_x_labels.append(str(stream_splitted[-20][0].stats.starttime)[0:10])    
+    start_x_labels.append(str(stream_splitted[-1][0].stats.starttime)[0:10])
+    
+    start_x_positions.append(start_times[0])
+    start_x_positions.append(start_times[20])
+    start_x_positions.append(start_times[-20])    
+    start_x_positions.append(start_times[-1])
+    
+    
+    plt.rcParams.update({'font.size': 25})
+    plt.figure(dpi=300,figsize=(16,12))
+    # plt.subplot(211)
+    plt.hist(start_times,bins=len(stream_splitted))
+    plt.xticks(start_x_positions, start_x_labels, rotation=90)  # You can adjust the rotation angle as needed
 
-
-
-
-
-
+    plt.xlabel('Time')
+    plt.ylabel("Number of Windows That Overlaped")
+    plt.legend(loc="upper right")
+    plt.grid(True)
+    plt.tight_layout()
 
 
 
