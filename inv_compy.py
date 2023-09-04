@@ -6,18 +6,18 @@ Created on Tue Jul 11 14:04:23 2023
 @author: mohammadamin
 
 """
-
+import random
 import numpy as np
 import matplotlib.pyplot as plt
-def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_h = 1,iteration = 100000,alpha=1):
+def invert_compliace(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 5,iteration = 100000,alpha=0.5):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
-    
+    np.random.seed(0)
     #Data uncertainty 
     # s = np.sqrt(np.var(Data))
-    s = np.std(Data)
-    # s = np.mean(uncertainty) 
-    starting_model,vs0,vsi = model_exp(iteration,first_layer=100,n_layer=7,power_factor=2)
+    # s = np.std(Data)
+    # s = uncertainty
+    starting_model,vs0,vsi = model_exp(iteration,first_layer=50,n_layer = 10,power_factor=1.7)
     #Constrains
 
     likelihood_Model = np.zeros([1, iteration])
@@ -30,13 +30,13 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
 
     for i in range(1, iteration):
         print(iteration - i)
-        r = np.random.uniform(-1, 1)
-        # r = np.random.randn()
+        # r = np.random.uniform(-1, 1)
+        r = np.random.randn()
         
         starting_model[:, :, i] = starting_model[:, :, i-1]
         layer = np.random.randint(0, starting_model.shape[0] -1)
 
-        if np.random.randint(0,1) == 0: # Choosing between layer thickness or layer VS
+        if np.random.randint(0,2) == 0: # Choosing between layer thickness or layer VS
             step_vs = r * sigma_v
             
             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs     
@@ -50,7 +50,6 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
             #updating the S with every iteration
         
         else:
-            # r = np.random.randint(0, 10)/100
             
             layer = np.random.randint(0, starting_model.shape[0])
             step_th = r * sigma_h
@@ -72,13 +71,13 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
     
         likelihood_data[0, i] = liklihood(Data, ncompl[i, :], s=s)
     
-        # likeli_hood[0, i] = likelihood_data[0, i]/2 + (likelihood_Model[0, i])/2  # Likihood Data + Model
+        # likeli_hood[0, i] = likelihood_data[0, i] + (likelihood_Model[0, i])  # Likihood Data + Model
         
         # likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
         
-        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha= 0.5)  # Liklihood Data + Roughness
+        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha= alpha,order=1)    # Liklihood Data + Roughness
 
-        mis_fit[0, i] = misfit(Data, ncompl[i, :],s=s)  # Misfit Data
+        mis_fit[0, i] = misfit(Data,ncompl[i, :],l=2,s=s)  # Misfit Data
         
         print(mis_fit[0, i])
     
@@ -111,17 +110,23 @@ def invert_compliace(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 
                 starting_model[:, :, j][:, 0][0:i+1])), 0] = starting_model[:, 3,j][i]
             
             accept/iteration
-    burnin = 90000
-    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,sta="RR28",
-                   iteration=iteration,s=s,burnin = burnin)
-    plot_hist(starting_model,burnin=burnin)
-    # autocorreletion(starting_model,iteration)
+    burnin = int(0.9 * iteration)
+    # burnin = 10000
+    plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,sta=sta,
+                   iteration=iteration,s=s,burnin = burnin,mis_fit_trsh = 1)
+    
+    plot_hist(starting_model,burnin=burnin,mis_fit=mis_fit,mis_fit_trsh = 1)
+    
+    autocorreletion(starting_model,iteration)
+    
     return(starting_model,vs,mis_fit,ncompl,likeli_hood)
 #%%
-def Lcurve(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_h = 1,iteration = 100000):
-
+def Lcurve(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 1,iteration = 100000):
+    
+    burnin = int(0.9 * iteration)
+    
     # Define the parameters for the logarithmic array
-    start = 0.01  
+    start = 0.0001  
     stop = 1  # Stop value
     num_points = 10  # Number of points in the array
     base = 10  # Logarithm base
@@ -129,7 +134,7 @@ def Lcurve(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_
     # Create a logarithmic array using numpy's logspace function
     alpha = np.logspace(np.log10(start), np.log10(stop), num=num_points, base=base)
     
-    alpha = np.linspace(start, stop, num=num_points)
+    # alpha = np.linspace(start, stop, num=num_points)
     
     l_curve = []
     for i in range(0,len(alpha)):
@@ -137,7 +142,6 @@ def Lcurve(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_
         starting_model,vs,mis_fit,ncompl,likeli_hood = invert_compliace(Data
                                                                    ,f
                                                                    ,depth_s
-                                                                   ,uncertainty
                                                                    ,starting_model = None
                                                                    ,sigma_v = sigma_v
                                                                    ,sigma_h = sigma_h
@@ -145,6 +149,14 @@ def Lcurve(Data,f,depth_s,uncertainty,starting_model = None,sigma_v = 3.8,sigma_
                                                                    ,alpha = alpha[i])
         l_curve.append(mis_fit)
         
+    l_curve_burnin = np.zeros([len(l_curve),1])
+    
+    for i in range(0,len(l_curve)):
+        l_curve_burnin[i] = np.median(l_curve[i][0][burnin:iteration])
+    
+    
+    plt.loglog(alpha,l_curve_burnin)
+    
     return(l_curve,alpha)
 
 
@@ -156,9 +168,10 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     for i in range(0,len(starting_model)):
         starting_model[i][0][0] = np.float16(first_layer*(power_factor)**i) # Thickness
     
-        starting_model[0][3][0] = 350 # VS Sediment layer
-        
-        starting_model[1][3][0] = 750 # VS second Sediment layer
+        starting_model[0][3][0] = 150 # VS First Sediment layer
+        starting_model[1][3][0] = 250 # VS Second Sediment layer
+        starting_model[2][3][0] = 350 # VS Third Sediment layer    
+        starting_model[3][3][0] = 500 # VS Forth Sediment layer    
         
         # starting_model[1][3][0] = 350 # VS
         starting_model[len(starting_model)-1][0][0] = 100000 # Thickness
@@ -289,7 +302,7 @@ def misfit(d,m,l=2,s=1):
      misfit
      '''
      # misfit = np.sum(((d-m)/s)**l)
-     misfit = np.sum(((d-m)**l)/(s**2))
+     misfit = np.sum(((d-m)**l)/(s**l))
      return(misfit)
 
  #%%
@@ -313,11 +326,13 @@ def liklihood(d,m,k=1,s=1):
      likilihood
      '''
      # L =   k * np.exp(-0.5*np.sum((d-m)**2/(s**2)))
-     L =   k * np.exp(-0.5*np.linalg.norm(d-m)**2/(s**2))
+     # L =   k * np.exp(-0.5*np.linalg.norm(d-m)**2/(s**2))
+     
+     L =   k * np.exp(-0.5*np.linalg.norm((d-m)/s)**2)
 
      return(L)
  #%%
-def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1):
+def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1,order=2):
       '''
       Calculate Linkihood by using gaussian misfit
       Tarantola paper-monte carlo
@@ -337,14 +352,16 @@ def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1):
       likilihood
       '''
       # L =   k * np.exp(-0.5*np.sum((d-m)**2/(s**2)))
-      R_m = alpha*Roughness(vs.flatten())
-      L =   k * np.exp(-0.5*(np.linalg.norm(d-m)**2/(s**2)+R_m))
+      R_m = alpha*Roughness(vs.flatten(),order)
+      # L =   k * np.exp ( -0.5 * ( ( np.linalg.norm(d - m)**2 / (s**2)) + R_m) )
+      
+      L =   k * np.exp ( -0.5 * ( ( np.linalg.norm((d - m)/s)**2  + R_m) ))
 
       return(L)
   
 #%%
-def Roughness(vs):
-    R_m = np.sqrt(np.sum(np.gradient(vs,2)))
+def Roughness(vs,order):
+    R_m = np.sqrt(np.sum(np.gradient(vs,order)))
     return(R_m)
 #%%
 # stable hyperbolic tangent
@@ -608,7 +625,7 @@ def calc_norm_compliance(depth,freq,model):
     return ncomp
 
 #%%
-def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,sta,iteration,s,burnin = 50000):
+def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,sta,iteration,s,burnin = 50000,mis_fit_trsh = 1):
 
     depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
 
@@ -620,8 +637,9 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     Vs_final = np.zeros(vs[0].shape)
     N = 0
     for i in range(burnin,iteration):
-        Vs_final = Vs_final + vs[i]
-        N = N + 1
+        if mis_fit[0][i] < mis_fit_trsh:
+            Vs_final = Vs_final + vs[i]
+            N = N + 1
     
     Vs_final = Vs_final/N
     print(N)
@@ -649,7 +667,8 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     plt.subplot(221)
 
     for i in range(burnin, ncompl.shape[0], nn):
-        plt.plot(freq, ncompl[i], color='red', linewidth=0.25)
+        if mis_fit[0][i] < mis_fit_trsh:
+            plt.plot(freq, ncompl[i], color='red', linewidth=0.5)
         
         plt.xlabel('Frequency [Hz]')
         plt.ylabel('Normalized Compliance')
@@ -668,8 +687,8 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
         
     plt.subplot(223)
     plt.plot(mis_fit[0,1:iteration-1])
-    plt.xscale('log')
-    plt.yscale('log')
+    # plt.xscale('log')
+    # plt.yscale('log')
     
     plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
                label='Burn-in Region', linestyles='dashed')
@@ -685,19 +704,20 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     plt.subplot(122)
     plt.title(sta)
     for i in range(burnin, vs.shape[0], nn):
-        plt.plot(vs[i], depth, color='grey', linewidth=0.5)
+        if mis_fit[0][i] < mis_fit_trsh:
+            plt.plot(vs[i], depth, color='grey', linewidth= 1)
             
         # plt.plot(np.mean(vs[burnin:iteration],axis=0), depth, color='blue', 
         #          label='Median of Burn-in ')
     plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
-    plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=3,linestyle='dashed')
+    plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=7,linestyle='dashed')
     
     plt.grid(True)
     plt.xlabel('Shear Velocity [m/s]')
     plt.ylabel('Depth [m]')
     # plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
     
-    plt.ylim([-10000, 0])
+    plt.ylim([-8000, 0])
     # plt.xlim([0,4500])
     
     vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
@@ -706,29 +726,43 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     
     plt.rcParams.update({'font.size': 30})
     plt.figure(dpi=300, figsize=(10, 10))
+    for i in range(burnin, vs.shape[0], nn):
+        if mis_fit[0][i] < mis_fit_trsh:
+            plt.plot(vs[i], depth, color='grey', linewidth= 1)
+            
     plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
-    plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=3,linestyle='dashed')
+    plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=5,linestyle='dashed')
     
     plt.grid(True)
     plt.xlabel('Shear Velocity [m/s]')
     plt.ylabel('Depth [m]')
     # plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
     
-    plt.ylim([-10000, 0])
+    # plt.ylim([-10000, 0])
     # plt.xlim([0,4500])
     
     vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc='lower left')
     plt.tight_layout()
-
+    print(N)
 #%%
-def plot_hist(starting_model,burnin): 
+def plot_hist(starting_model,burnin,mis_fit,mis_fit_trsh): 
+    
+    starting_model_opt =[]
+    for i in range(burnin,len(starting_model[0][0][:])-1):
+        if mis_fit[0][i] < mis_fit_trsh:
+            starting_model_opt.append(starting_model[:,:,i])    
+    starting_model_opt = np.array(starting_model_opt)
     plt.figure(dpi=300, figsize=(25, 40))
-    for i in range(0, (len(starting_model) )):
-        plt.subplot((len(starting_model) - 1),1,i+1)
-        plt.hist(starting_model[i-1,3,burnin:-1], 100, density=True, facecolor='k', alpha=1)
-        plt.title('Disturbution of Vs of Layer ' + str(i+1))
-        plt.tight_layout()
+    for i in range(0, (len(starting_model_opt[0]) -1)):
+        
+            plt.subplot((len(starting_model_opt[0]) - 1),1,i+1)
+            
+            # plt.hist(starting_model_opt[i-1,3,burnin:-1], 100, density=True, facecolor='k', alpha=1)
+            plt.hist(starting_model_opt[:,i,3], 100, density=True, facecolor='k', alpha=1)
+
+            plt.title('Disturbution of Vs of Layer ' + str(i+1))
+            plt.tight_layout()
 
 #%%
 def autocorreletion(starting_model,N):
@@ -780,13 +814,3 @@ def autocorreletion(starting_model,N):
     return(Neff)
 
 #%%
-
-
-
-
-    
-    
-    
-    
-    
-    

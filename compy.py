@@ -110,7 +110,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
-        if np.mean(Czp[i][coherence_mask]) > 0.90 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
+        if np.median(Czp[i][coherence_mask]) > 0.90 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
         # if np.mean(Czp[i][coherence_mask]) > 0.99:
             
             pa_ratio,aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
@@ -158,6 +158,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     
     plt.rcParams.update({'font.size': 25})
     plt.figure(dpi=300,figsize=(14,20))
+    plt.title(stream[0].stats.network+"."+stream[0].stats.station)
     plt.subplot(411)                                   
     for i in range(0,len(High_Dz)):
         plt.semilogx(f,10*np.log10(High_Dz[i]*(2*np.pi*f)**4),linewidth = 0.5,color='r')
@@ -275,7 +276,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     plt.grid(True)        
     plt.xlim([f_min_com,f_max_com])
     plt.xlim([f_min_com,0.02])
-    plt.ylim([10e-13,10e-11])
+    # plt.ylim([10e-13,10e-11])
     plt.tight_layout()
     plt.legend(loc='lower right',fontsize=17)
 
@@ -294,11 +295,11 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     plt.tight_layout()
     plt.legend(loc='upper right',fontsize=17)
     
-    # uncertainty_theory = Comliance_uncertainty(High_Com_c[0],High_Czp[0][indices],number_of_window)
+    uncertainty_theory = Comliance_uncertainty(High_Com_c[0],High_Czp[0][indices],number_of_window)
   
     uncertainty = np.max(High_Com_c,axis=0) - np.min(High_Com_c,axis=0)
     
-    return(High_Com_c,High_Czp,High_Com_Stream,f_c,f,uncertainty)
+    return(High_Com_c,High_Czp,High_Com_Stream,f_c,f,uncertainty,uncertainty_theory)
 
 #%%
 def gravitational_attraction(High_Dp,depth_s,f,pw=1025):
