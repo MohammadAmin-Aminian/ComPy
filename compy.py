@@ -110,7 +110,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
-        if np.median(Czp[i][coherence_mask]) > 0.90 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
+        if np.median(Czp[i][coherence_mask]) > 0.9 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
         # if np.mean(Czp[i][coherence_mask]) > 0.99:
             
             pa_ratio,aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
