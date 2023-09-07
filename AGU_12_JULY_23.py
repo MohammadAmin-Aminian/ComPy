@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 client = Client("RESIF")
 # start =UTCDateTime("2012-10-12")
 net = "YV"
-sta = "RR28"
+sta = "RR38"
 
 inv = client.get_stations(
     network=net,
@@ -77,7 +77,7 @@ import compy
 
 rotated_stream,azimuth,angle = compy.Rotate(stream,time_window = 6)
 
-High_Com_c,High_Czp,High_Com_Stream,f_c,f,uncertainty = compy.Calculate_Compliance(rotated_stream,gain_factor=gain_factor)
+High_Com_c,High_Czp,High_Com_Stream,f_c,f,uncertainty,uncertainty_theory = compy.Calculate_Compliance(rotated_stream,gain_factor=gain_factor)
 
 High_Com1,High_Czp1,High_Com_Stream1 = compy.optimizer(High_Com_c,High_Czp,High_Com_Stream,f=f,alpha=0.97)
 
@@ -126,6 +126,7 @@ com_container = {
     'Compliance': High_Com_c,
     'Frequency of Compliance': f_c,
     'Uncertainty':uncertainty,
+    'Uncertainty Theory':uncertainty_theory,
     'Coherence': High_Czp,
     'Frequency of Coherence': f,
     'Stream': High_Com_Stream

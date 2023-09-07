@@ -15,9 +15,10 @@ def invert_compliace(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 
     np.random.seed(0)
     #Data uncertainty 
     # s = np.sqrt(np.var(Data))
-    # s = np.std(Data)
+    s = np.std(Data)/2
     # s = uncertainty
-    starting_model,vs0,vsi = model_exp(iteration,first_layer=50,n_layer = 10,power_factor=1.7)
+    starting_model,vs0,vsi = model_exp(iteration,first_layer=100,n_layer = 30,power_factor=1.03)
+    starting_model,vs0,vsi = model_crust2(iteration)
     #Constrains
 
     likelihood_Model = np.zeros([1, iteration])
@@ -67,7 +68,6 @@ def invert_compliace(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 
             vsi[0, int(np.sum(starting_model[:, :, i][:, 0][0:ii])):int(np.sum(
                 starting_model[:, :, i][:, 0][0:ii+1])), 0] = starting_model[:, 3][ii][i]
 
-        likelihood_Model[0, i] = liklihood(vs0, vsi,s = np.std(vs0[0]))  # Model Likelihood 
     
         likelihood_data[0, i] = liklihood(Data, ncompl[i, :], s=s)
     
@@ -75,8 +75,10 @@ def invert_compliace(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 
         
         # likeli_hood[0, i] = liklihood(Data, ncompl[i, :], s=s)  # Liklihood Data
         
-        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vs0, s=s,alpha= alpha,order=1)    # Liklihood Data + Roughness
-
+        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vsi, s=s,alpha= alpha,order=2)    # Liklihood Data + Roughness
+        # likeli_hood[0, i] = liklihood_all(Data, ncompl[i, :],vs = vsi,vs_prior=vs0 ,s=s,alpha= 0,beta=0.01,lamda=0,order=2)    # Liklihood Data + Roughness
+    
+    
         mis_fit[0, i] = misfit(Data,ncompl[i, :],l=2,s=s)  # Misfit Data
         
         print(mis_fit[0, i])
@@ -113,7 +115,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 
     burnin = int(0.9 * iteration)
     # burnin = 10000
     plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data=likeli_hood,freq=f,sta=sta,
-                   iteration=iteration,s=s,burnin = burnin,mis_fit_trsh = 1)
+                   iteration=iteration,s=s,burnin = burnin,mis_fit_trsh = 20)
     
     plot_hist(starting_model,burnin=burnin,mis_fit=mis_fit,mis_fit_trsh = 1)
     
@@ -161,7 +163,6 @@ def Lcurve(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 1,iteratio
 
 
 #%%
-
 def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     starting_model = np.zeros([n_layer+1, 4, iteration])
     dep = 0
@@ -236,6 +237,62 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     print("Depth above half-space is "+ str(dep - starting_model[len(starting_model)-1][0][0]) + " m")
     return(starting_model,vs0,vsi)
 #%%
+def model_crust2(iteration):
+    starting_model = np.zeros([13, 4, iteration])
+    dep = 0
+
+    # #RR38
+    # starting_model[:,:,0] =   np.array([[700, 2550, 5000, 2700]
+    #                                     ,[1540, 2850, 6500, 3700]
+    #                                     ,[4750, 3050, 7100, 4050]
+    #                                     ,[13010, 3100, 7530, 4190]])
+    
+    # starting_model[:,:,0] =   np.array([[350, 2550, 5000, 2700]
+    #                                     ,[350, 2550, 5000, 2700]
+    #                                     ,[770, 2850, 6500, 3700]
+    #                                     ,[770, 2850, 6500, 3700]
+    #                                     ,[2375, 3050, 7100, 4050]
+    #                                     ,[2375, 3050, 7100, 4050]
+    #                                     ,[13010, 3100, 7530, 4190]])
+    
+    starting_model[:,:,0] =   np.array([[175, 2550, 5000, 2700]
+                                        ,[175, 2550, 5000, 2700]
+                                        ,[175, 2550, 5000, 2700]
+                                        ,[175, 2550, 5000, 2700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[1187, 3050, 7100, 4050]
+                                        ,[1187, 3050, 7100, 4050]
+                                        ,[1187, 3050, 7100, 4050]
+                                        ,[1187, 3050, 7100, 4050]
+                                        ,[13010, 3100, 7530, 4190]])
+    starting_model[:,:,0] =   np.array([[175, 2550, 5000, 2700]
+                                        ,[175, 2550, 5000, 2700]
+                                        ,[175, 2550, 5000, 2700]
+                                        ,[175, 2550, 5000, 2700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[385, 2850, 6500, 3700]
+                                        ,[2000, 3050, 7100, 4050]
+                                        ,[2000, 3050, 7100, 4050]
+                                        ,[2000, 3050, 7100, 4050]
+                                        ,[2000, 3050, 7100, 4050]
+                                        ,[13010, 3100, 7530, 4190]])
+    
+    
+    vs0 = np.zeros([1, int(np.sum(starting_model[:, 0, 0])), 1])
+    for i in range(0, len(starting_model)):
+        vs0[0, int(np.sum(starting_model[:, :, 0][:, 0][0:i])):int(np.sum(
+            starting_model[:, :, 0][:, 0][0:i+1])), 0] = starting_model[:, 3][i][0]
+
+    vsi = np.zeros([1, int(np.sum(starting_model[:, 0, 0])), 1])
+    print("Depth above half-space is "+ str(dep - starting_model[len(starting_model)-1][0][0]) + " m")
+    return(starting_model,vs0,vsi)
+
+#%%
 def velp(vs , p = 0.25):
     """
     Caclculate Primary Velocity from possion ratio and Shear Velocity
@@ -301,8 +358,8 @@ def misfit(d,m,l=2,s=1):
      -------
      misfit
      '''
-     # misfit = np.sum(((d-m)/s)**l)
-     misfit = np.sum(((d-m)**l)/(s**l))
+     # misfit = np.sqrt(np.sum(((d-m)**l)/(s**l)))
+     misfit = np.linalg.norm((d-m)/s,ord = l)
      return(misfit)
 
  #%%
@@ -328,9 +385,22 @@ def liklihood(d,m,k=1,s=1):
      # L =   k * np.exp(-0.5*np.sum((d-m)**2/(s**2)))
      # L =   k * np.exp(-0.5*np.linalg.norm(d-m)**2/(s**2))
      
-     L =   k * np.exp(-0.5*np.linalg.norm((d-m)/s)**2)
+     L =   k * np.exp(-0.5*np.linalg.norm((d-m)/s,ord = 2))
 
      return(L)
+#%%
+def liklihood_all(d,m,vs,vs_prior,k=1,s=1,sm=1,alpha=1,beta=1,lamda=1,order=2):
+
+      R_m = alpha*Roughness(vs.flatten(),order)
+      L2_data = np.linalg.norm((d - m)/s,ord=2)
+      # L2_Model = beta*np.linalg.norm((vs_prior - vs)/sm)
+      
+      L2_Model = beta*np.sqrt(np.sum(((vs_prior - vs)**2)/(sm**2)))
+      
+      Damping = lamda * np.sqrt(np.linalg.norm(m/s)**2)
+      L =   k * np.exp ( -0.5 * ( ( L2_data + L2_Model + R_m + Damping) ))
+
+      return(L)
  #%%
 def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1,order=2):
       '''
@@ -355,7 +425,7 @@ def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1,order=2):
       R_m = alpha*Roughness(vs.flatten(),order)
       # L =   k * np.exp ( -0.5 * ( ( np.linalg.norm(d - m)**2 / (s**2)) + R_m) )
       
-      L =   k * np.exp ( -0.5 * ( ( np.linalg.norm((d - m)/s)**2  + R_m) ))
+      L =   k * np.exp ( -0.5 * ( ( np.linalg.norm((d - m)/s,ord=2)  + R_m) ))
 
       return(L)
   
@@ -687,7 +757,7 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
         
     plt.subplot(223)
     plt.plot(mis_fit[0,1:iteration-1])
-    # plt.xscale('log')
+    plt.xscale('log')
     # plt.yscale('log')
     
     plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
