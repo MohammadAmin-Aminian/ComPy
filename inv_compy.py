@@ -39,18 +39,19 @@ def invert_compliace(Data,f,depth_s,starting_model = None,n_layer = 3,sediment_t
         # r = np.random.uniform(-1, 1)
         r = np.random.randn()
         
-        if mis_fit[0, i] < 3:
-            # adaptive_step = 1 - (i / iteration)
-            adaptive_step = 0.75
-        elif mis_fit[0, i] < 2:
-            # adaptive_step = 1 - (i / iteration)
-            adaptive_step = 0.5
-        elif mis_fit[0, i] < 2:
-            # adaptive_step = 1 - (i / iteration)
-            adaptive_step = 0.25
+        # if mis_fit[0, i] < 3:
+        #     # adaptive_step = 1 - (i / iteration)
+        #     adaptive_step = 0.75
+        # elif mis_fit[0, i] < 2:
+        #     # adaptive_step = 1 - (i / iteration)
+        #     adaptive_step = 0.5
+        # elif mis_fit[0, i] < 2:
+        #     # adaptive_step = 1 - (i / iteration)
+        #     adaptive_step = 0.25
                 
-        else :
-            adaptive_step = 1
+        # else :
+        #     adaptive_step = 1
+        adaptive_step = 1
 
         starting_model[:, :, i] = starting_model[:, :, i-1]
         layer = np.random.randint(0, starting_model.shape[0] -1)

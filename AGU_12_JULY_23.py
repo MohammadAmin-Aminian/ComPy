@@ -113,8 +113,8 @@ Coherence_all_smoothed = scipy.signal.savgol_filter(Coherence_all,5,1)
 
 Data = np.median(compliance_high,axis=0)
 
-a1= 5
-a2= -8
+a1= 2
+a2= -18
 plt.rcParams.update({'font.size': 35})
 plt.figure(dpi=300,figsize=(20,12))
 
