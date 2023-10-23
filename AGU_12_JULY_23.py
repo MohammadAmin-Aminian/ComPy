@@ -40,7 +40,7 @@ inv = client.get_stations(
     level="response")
 
 A = os.listdir("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Transients/')
-A = os.listdir("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Decimated/')
+#A = os.listdir("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Decimated/')
 
 A.sort()
 
@@ -50,7 +50,7 @@ stream.clear()
 
 for i in range(0,len(A)):
     stream = stream + read("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Transients/'+A[i])
-    stream = stream+ read("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Decimated/'+A[i])
+    #stream = stream+ read("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Decimated/'+A[i])
 stream.merge(fill_value='interpolate')
 
 #%% Reading rotated stream
