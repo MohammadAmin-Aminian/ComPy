@@ -14,7 +14,7 @@ import tiskit
 from obspy.clients.fdsn import Client
 import scipy 
 
-def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=0.66,time_window=1):
+def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.02,gain_factor=0.66,time_window=1):
     nseg = 2**12
     TP = 5
     server="RESIF"
@@ -96,10 +96,15 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     High_Com_Admitance = []
     High_Com_Stream = []
 
-
+    Fc1 = np.sqrt(9.8/(2*np.pi*0.5*-invz[0][0][0].elevation))
+    Fc2 = np.sqrt(9.8/(2*np.pi*2*-invz[0][0][0].elevation))
+    
     coherence_mask = (f >= f_min_com) & (f <= f_max_com)
+    coherence_mask = (f >= 0.007) & (f <= 0.017)
     
     coherence_mask_dp = (f >= 0.03) & (f <= 0.08)
+    
+    mask_dz = (f >= Fc2) & (f <= Fc1)
 
     # Treshhold to remove exclude those compiance function that are lesser or greater than median of all funtion +- percentage
     # percentage = 0.1
@@ -110,7 +115,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     for i in range(0,len(Czp)):
         
         # if np.mean(Czp[i][coherence_mask]) > 0.95 and (1-percentage)*np.mean(Com_Admitance[:,coherence_mask]) < np.mean(Com_Admitance[i][coherence_mask] < (1+percentage)*np.mean(Com_Admitance[:,coherence_mask])) :
-        if np.median(Czp[i][coherence_mask]) > 0.9 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 :
+        if np.median(Czp[i][coherence_mask]) > 0.95 and np.mean(Czp[i][coherence_mask_dp]) < 0.8 and np.mean(Dp[i][coherence_mask_dp]) < 1  and np.mean(Dz[i][coherence_mask_dp]) > 10e-17 and np.mean(Dz[i][mask_dz]) < 10e-12 :
         # if np.mean(Czp[i][coherence_mask]) > 0.99:
             
             pa_ratio,aw,hw = gravitational_attraction(np.sqrt((Dp[i])),-invz[0][0][0].elevation,f,pw=1025)
@@ -153,8 +158,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
         
             print(i)
             
-    Fc1 = np.sqrt(9.8/(2*np.pi*0.5*-invz[0][0][0].elevation))
-    Fc2 = np.sqrt(9.8/(2*np.pi*2*-invz[0][0][0].elevation))
+
     
     plt.rcParams.update({'font.size': 25})
     plt.figure(dpi=300,figsize=(14,20))
@@ -225,7 +229,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     plt.tight_layout()
     plt.legend(loc='upper right',fontsize=17)
 
-    indices = np.where((f >= f_min_com) & (f <= f_max_com))
+    indices = np.where((f >= 0.005) & (f <= 0.025))
     f_c = f[indices]
     High_Com_c = []
     High_Com_ae1 = []
@@ -275,7 +279,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     plt.ylabel('Compliance')
     plt.grid(True)        
     plt.xlim([f_min_com,f_max_com])
-    plt.xlim([f_min_com,0.02])
+    plt.xlim([f_min_com,0.025])
     # plt.ylim([10e-13,10e-11])
     plt.tight_layout()
     plt.legend(loc='lower right',fontsize=17)
@@ -290,7 +294,7 @@ def Calculate_Compliance(stream,f_min_com = 0.005,f_max_com = 0.025,gain_factor=
     plt.ylabel('Compliance')
     plt.grid(True)        
     plt.xlim([f_min_com,f_max_com])
-    plt.xlim([f_min_com,0.02])
+    plt.xlim([f_min_com,0.025])
     # plt.ylim([10e-13,10e-11])
     plt.tight_layout()
     plt.legend(loc='upper right',fontsize=17)
@@ -391,23 +395,35 @@ def Rotate(stream,time_window = 2):
 
         split_streams[i].select(channel="*H").remove_response(inventory=invp,
                                                               output="DEF", plot=False)
-    plt.rcParams.update({'font.size': 25})
-    plt.figure(dpi=300,figsize=(25,10))
+    st = stream
+    dates = [str(st[0].stats.starttime + (st[0].stats.endtime -st[0].stats.starttime) * 0)[0:10],
+             str(st[0].stats.starttime + (st[0].stats.endtime -st[0].stats.starttime) * 0.2)[0:10],
+             str(st[0].stats.starttime + (st[0].stats.endtime -st[0].stats.starttime) * 0.4)[0:10],
+             str(st[0].stats.starttime + (st[0].stats.endtime -st[0].stats.starttime) * 0.6)[0:10],
+             str(st[0].stats.starttime + (st[0].stats.endtime -st[0].stats.starttime) * 0.8)[0:10],
+             str(st[0].stats.starttime + (st[0].stats.endtime -st[0].stats.starttime) * 1)[0:10]]
+    t1 = np.arange(0,len(angle))
+
+    # plt.yticks(np.arange(0,len(t1),int(len(t1)/4)), dates, rotation=45)  # Set x-axis names with rotation
+
+    plt.rcParams.update({'font.size': 35})
+    plt.figure(dpi=300,figsize=(30,14))
     plt.subplot(211)
     plt.title("Tilt Correction Every " +str(time_window)+"H [" +str(stream[0].stats.station)+']')
-
-    plt.plot(azimuth,color = 'b',linewidth = 3 , label = 'Azimuth')
-    plt.xlabel("Time [Hour]")
+    plt.plot(azimuth,'.',color = 'black', label = 'Azimuth')
+    plt.xlabel("Time [Sample]")
     plt.ylabel("Degree ["u"\u00b0]")
-    plt.legend(loc="upper right")
+    plt.legend(loc="lower left")
     plt.grid(True)
     
     plt.subplot(212)
-    plt.plot(angle,color = 'b',linewidth = 3 , label = 'Angle')
-    plt.xlabel("Time [Hour]")
+    plt.plot(angle,'.',color = 'black', label = 'Angle')
+    plt.xlabel("Time [Date]")
     plt.ylabel("Degree ["u"\u00b0]")
     plt.grid(True)
-    plt.legend(loc="upper right")
+    plt.legend(loc="lower left")
+    plt.xticks(np.array([0,t1[int(0.2*len(t1))],t1[int(0.4*len(t1))],t1[int(0.6*len(t1))],t1[int(0.8*len(t1))],t1[int(1*len(t1)-1)]]), dates, rotation=45)  # Set x-axis names with rotation
+    plt.ylim([-3,3])
     plt.tight_layout()
     
     print("Merging Stream ...")
@@ -417,6 +433,13 @@ def Rotate(stream,time_window = 2):
         rotated_stream = rotated_stream + split_streams[i]
     rotated_stream.merge(fill_value='interpolate')
     return(rotated_stream,azimuth,angle)
+
+
+
+
+
+
+
 #%%
 def split_stream(stream, duration):
     split_streams = []
@@ -567,25 +590,26 @@ def split_and_save_stream(stream, interval_minutes, output_dir):
     
     print("Splitting and saving complete.")
 #%%
-def optimizer(Com,Czp,Stream,f,alpha=0.95,f_min_com=0.008,f_max_com=0.015):
+def optimizer(Com,Czp,Stream,f,alpha=0.95,beta = 0.70,f_min_com=0.008,f_max_com=0.015):
     coherence_mask = (f >= f_min_com) & (f <= f_max_com)
+    coherence_mask2 = (f >= 0.02) & (f <= 0.025)
     High_Czp = [] 
     High_Com = []
     High_Com_Stream = []
- 
     for i in range(0,len(Czp)):
         
         if np.mean(Czp[i][coherence_mask]) > alpha:
+            if np.mean(Czp[i][coherence_mask2]) < beta:
 
             # Com1 = (k * Czp[i]* (np.sqrt(Dz[i]))) / (np.sqrt(Dp[i]) / gain_factor)
                         
-            High_Czp.append(Czp[i])
+                High_Czp.append(Czp[i])
      
-            High_Com.append(Com[i])
+                High_Com.append(Com[i])
 
-            High_Com_Stream.append(Stream[i])
+                High_Com_Stream.append(Stream[i])
             
-            print(i)
+                print(i)
             
     # plt.rcParams.update({'font.size': 25})
     # plt.figure(dpi=300,figsize=(12,8))
