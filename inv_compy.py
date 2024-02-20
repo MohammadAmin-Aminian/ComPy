@@ -9,19 +9,21 @@ Created on Tue Jul 11 14:04:23 2023
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-def invert_compliace(Data,f,depth_s,starting_model = None,n_layer = 3,sediment_thickness = 80 ,n_sediment_layer=3,sigma_v = 5,sigma_h = 5,iteration = 100000,alpha = 0,sta="RR29"):
+def invert_compliace(Data,f,depth_s,starting_model = None,s=None,n_layer = 3,sediment_thickness = 80 ,n_sediment_layer=3,sigma_v = 5,sigma_h = 5,iteration = 100000,alpha = 0.25,sta="RR38"):
 # With Liklihood thickness changing + Constrain for thickness
 # Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
+    borders = np.array([0.5,0.1])
+    
     np.random.seed(0)
     #Data uncertainty 
-    # s = np.sqrt(np.var(Data))
-    s = np.std(Data) / 2
+    if s == None:
+        s = np.sqrt(np.var(Data))/20
     # s = uncertainty
     # starting_model,vs0,vsi = model_exp(iteration,first_layer=50,n_layer = 10,power_factor=1.7)
     starting_model,vs0,vsi = Model(iteration, first_layer = 200, n_layer = 13,
                                    power_factor = 1.17,sediment_thickness = sediment_thickness ,n_sediment_layer = n_sediment_layer)
     
-    starting_model,vs0,vsi = Model_V2(iteration,n_layer = n_layer)
+    starting_model,vs0,vsi = Model_V2(iteration,n_layer = n_layer,sta=sta)
     
     #starting_model,vs0,vsi = model_crust2(iteration)
     #Constrains
@@ -38,19 +40,13 @@ def invert_compliace(Data,f,depth_s,starting_model = None,n_layer = 3,sediment_t
         print(iteration - i)
         # r = np.random.uniform(-1, 1)
         r = np.random.randn()
-        
-        # if mis_fit[0, i] < 3:
-        #     # adaptive_step = 1 - (i / iteration)
-        #     adaptive_step = 0.75
-        # elif mis_fit[0, i] < 2:
-        #     # adaptive_step = 1 - (i / iteration)
-        #     adaptive_step = 0.5
-        # elif mis_fit[0, i] < 2:
-        #     # adaptive_step = 1 - (i / iteration)
-        #     adaptive_step = 0.25
-                
-        # else :
-        #     adaptive_step = 1
+
+
+        if mis_fit[0, i]/(np.sqrt(np.var(Data)) / s) < 1:
+            # adaptive_step = 1 - (i / iteration)
+            adaptive_step = 0.5 
+        else :
+            adaptive_step = 1
         adaptive_step = 1
 
         starting_model[:, :, i] = starting_model[:, :, i-1]
@@ -61,23 +57,70 @@ def invert_compliace(Data,f,depth_s,starting_model = None,n_layer = 3,sediment_t
             
             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs
             
-            #These lines are for keeping inversion in a band
-            #it works line model misfit ...
-            # if np.sum(starting_model[0:layer,0,i]) < 2000:
-            #         if starting_model[layer, 3, i] > 4000:
+            
+            
+            if starting_model[layer, 3, i] < starting_model[layer, 3, 0] * (1 - borders[0]) or starting_model[layer, 3, i] > starting_model[layer, 3, 0] * (1 + borders[1]) :
+                step_vs = - r * sigma_v * adaptive_step       
+                starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+                           
+            
+            # These lines are for keeping inversion in a band
+            # it works like model misfit ...
+            # if 0 < np.sum(starting_model[0:layer,0,i]) < 500:
+            #         if starting_model[layer, 3, i] < 300 or starting_model[layer, 3, i] > 3000 :
             #             step_vs = - r * sigma_v * adaptive_step       
             #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
                         
-            # if np.sum(starting_model[0:layer,0,i]) < 6000:
-            #         if starting_model[layer, 3, i] > 4300:
-            #             step_vs = - r * sigma_v * adaptive_step 
+                        
+            # if 500 < np.sum(starting_model[0:layer,0,i]) < 2200:
+            #         if starting_model[layer, 3, i] < 3300 or starting_model[layer, 3, i] > 4070:
+            #             step_vs = - r * sigma_v * adaptive_step       
+            #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+                                                
+            # if 2200 < np.sum(starting_model[0:layer,0,i]) < 7000:
+            #         if starting_model[layer, 3, i] < 3600 or starting_model[layer, 3, i] > 4400:
+            #             step_vs = - r * sigma_v * adaptive_step       
+            #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+                        
+            # if 7000 < np.sum(starting_model[0:layer,0,i]) < 17500:
+            #         if starting_model[layer, 3, i] < 4000 or starting_model[layer, 3, i] > 4400:
+            #             step_vs = - r * sigma_v * adaptive_step       
             #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
 
-            # if np.sum(starting_model[0:layer,0,i]) > 8000:
-            #         if starting_model[layer, 3, i] < 3800:
-            #             step_vs = np.abs(r) * sigma_v * adaptive_step 
+    
+                        
+            # if 0 < np.sum(starting_model[0:layer,0,i]) < 710:
+            #         while starting_model[layer, 3, i] < 300 or starting_model[layer, 3, i] > 3000 :
+            #             step_vs = np.random.randn() * sigma_v * adaptive_step       
             #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
-                
+            #             print(1)
+            #             print(starting_model[layer, 3, i])
+                        
+            # if 710 < np.sum(starting_model[0:layer,0,i]) < 2250:
+            #         while starting_model[layer, 3, i] < 3300 or starting_model[layer, 3, i] > 4070:
+            #             step_vs = np.random.randn() * sigma_v * adaptive_step       
+            #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+            #             print(2)
+            #             print(starting_model[layer, 3, i])
+                                                
+            # if 2250 < np.sum(starting_model[0:layer,0,i]) < 7000:
+            #         while starting_model[layer, 3, i] < 3600 or starting_model[layer, 3, i] > 4400:
+            #             step_vs = np.random.randn() * sigma_v * adaptive_step       
+            #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+            #             print(3)
+            #             print(starting_model[layer, 3, i])
+                      
+            # if 7000 < np.sum(starting_model[0:layer,0,i]) < 15000:
+            #         while starting_model[layer, 3, i] < 4000 or starting_model[layer, 3, i] > 4400:
+            #             step_vs = np.random.randn() * sigma_v * adaptive_step       
+            #             starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs
+            #             print(4)
+            #             print(starting_model[layer, 3, i])
+                        
+
+                                         
+                        
+                                
             # Vp changes based on Vs perturbation (poisson ratio)
             starting_model[layer, 2, i] = velp(starting_model[layer, 3, i])
             
@@ -133,7 +176,7 @@ def invert_compliace(Data,f,depth_s,starting_model = None,n_layer = 3,sediment_t
         
 
 
-        print(mis_fit[0, i])
+        print(mis_fit[0, i] / (np.sqrt(np.var(Data)) / s))
     
         if likeli_hood[0, i] >= likeli_hood[0, i-1]:
             # starting_model[:, :, i] = starting_model[:, :, i]
@@ -175,6 +218,149 @@ def invert_compliace(Data,f,depth_s,starting_model = None,n_layer = 3,sediment_t
     # autocorreletion(starting_model,iteration)
     
     return(starting_model,vs,mis_fit,ncompl,likelihood_data,accept_rate)
+#%%
+def invert_compliace_beta(Data,f,depth_s,starting_model = None,s=None,n_layer = 3,sediment_thickness = 80 ,n_sediment_layer=3,sigma_v = 5,sigma_h = 5,iteration = 100000,alpha = 0.25,sta="RR38"):
+# With Liklihood thickness changing + Constrain for thickness
+# Accept Probablity = delta s / s ^ 2 (L[i]/L[i+1])
+    borders = np.array([0.85,0.20])
+    borders_deep = np.array([0.1,0.1])
+    
+    # borders = np.array([5,5])
+    # borders_deep = np.array([5,5])
+    
+    np.random.seed(0)
+    #Data uncertainty 
+    # if s == None:
+    #     s = np.sqrt(np.var(Data))/20
+    # s = uncertainty
+    # starting_model,vs0,vsi = model_exp(iteration,first_layer=50,n_layer = 10,power_factor=1.7)
+    # starting_model,vs0,vsi = Model(iteration, first_layer = 200, n_layer = 13,
+    #                                power_factor = 1.17,sediment_thickness = sediment_thickness ,n_sediment_layer = n_sediment_layer)
+    
+    starting_model,vs0,vsi = Model_V2(iteration,n_layer = n_layer,sta=sta)
+    
+    # starting_model,vs0,vsi = model_crust2(iteration)
+    
+    #Constrains
+    likelihood_Model = np.zeros([1, iteration])
+    likeli_hood = np.zeros([1, iteration])
+    likelihood_data = np.zeros([1, iteration])
+    mis_fit = np.zeros([1, iteration])
+    accept = 0
+
+    ncompl = np.zeros([iteration, np.shape(f)[0]])
+
+            
+    for i in range(1, iteration):
+        print(iteration - i)
+        # r = np.random.uniform(-1, 1)
+        r = np.random.randn()
+
+        adaptive_step = 1
+
+        starting_model[:, :, i] = starting_model[:, :, i-1]
+        layer = np.random.randint(0, starting_model.shape[0] -1)
+
+        if np.random.randint(0,2) == 0: # Choosing between layer thickness or layer VS
+            step_vs = r * sigma_v * adaptive_step  
+            
+            starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs
+            
+            
+            if layer < int(starting_model.shape[0]-2) :    
+                
+                # if starting_model[layer, 3, i] < starting_model[layer, 3, 0] * (1 - borders[0]) or starting_model[layer, 3, i] > starting_model[layer, 3, 0] * (1 + borders[1]) :
+                #     step_vs = - r * sigma_v * adaptive_step       
+                #     starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+                
+                while starting_model[layer, 3, i] < starting_model[layer, 3, 0] * (1 - borders[0]) or starting_model[layer, 3, i] > starting_model[layer, 3, 0] * (1 + borders[1]) :
+                    r = np.random.randn()
+                    step_vs =  r * sigma_v * adaptive_step   
+                    
+                    print("Shallow Borders")
+                    
+                    starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+
+
+            if layer == int(starting_model.shape[0]-2) :    
+                if starting_model[layer, 3, i] < starting_model[layer, 3, 0] * (1 - borders_deep[0]) or starting_model[layer, 3, i] > starting_model[layer, 3, 0] * (1 + borders_deep[1]) :
+                    step_vs = - r * sigma_v * adaptive_step       
+                    starting_model[layer, 3, i] = starting_model[layer, 3, i-1] + step_vs 
+                    print("Deep Borders")
+                        
+            # Vp changes based on Vs perturbation (poisson ratio)
+            starting_model[layer, 2, i] = velp(starting_model[layer, 3, i])
+            
+            # Density Changes based on Vs perturbation(Gardner's Eq)
+            starting_model[layer, 1, i] = density(starting_model[layer, 3, i])
+            
+            #updating the S with every iteration
+        
+        else: 
+                
+            layer = np.random.randint(0, starting_model.shape[0])
+            step_th = r * sigma_h * adaptive_step  
+            # layer = np.random.randint(0, 2) # Just sediment layer can change in thickness
+            starting_model[layer, 0, i] = starting_model[layer, 0, i-1] + step_th # added to rectified the bug cause by model issue
+
+            if starting_model[layer, 0, i] < 0 :
+                step_th =  np.abs(r) * sigma_h * adaptive_step 
+                starting_model[layer, 0, i] = starting_model[layer, 0, i-1] + step_th 
+
+            # layer1 = starting_model.shape[0]-1
+
+            starting_model[starting_model.shape[0] -2, 0, i] = starting_model[starting_model.shape[0] -2, 0, i] + step_th
+            
+
+        ncompl[i, :] = calc_norm_compliance(depth_s, f, starting_model[:, :, i])
+
+        for ii in range(0, len(starting_model)):
+            vsi[0, int(np.sum(starting_model[:, :, i][:, 0][0:ii])):int(np.sum(
+                starting_model[:, :, i][:, 0][0:ii+1])), 0] = starting_model[:, 3][ii][i]
+
+        s_variable = 1
+        
+        likelihood_data[0, i] = liklihood(Data, ncompl[i, :], s = s )
+
+        likeli_hood[0, i] = liklihood_roughness(Data, ncompl[i, :],vsi, s = (s * s_variable),alpha= alpha,order=2)    # Liklihood Data + Roughness
+    
+        mis_fit[0, i] = misfit(Data,ncompl[i, :],l=2,s=s)  # Misfit Data
+
+        print(mis_fit[0, i])
+    
+        if likeli_hood[0, i] >= likeli_hood[0, i-1]:
+            # starting_model[:, :, i] = starting_model[:, :, i]
+            accept+=1
+
+        else:
+            # Probablity of Acceptance
+            p_candidate = np.random.rand(1)[0]
+            # print((likeli_hood[0,i]/likeli_hood[0,i-1]))
+
+            if p_candidate < (likeli_hood[0,i]/likeli_hood[0,i-1]):
+                accept+=1
+                # starting_model[:, :, i] = starting_model[:, :, i]
+            else:                                   #New Line
+                  starting_model[:, :, i] = starting_model[:, :, i-1]
+                  likeli_hood[0, i] = likeli_hood[0, i-1]
+                  mis_fit[0, i] = mis_fit[0, i-1]
+                  likelihood_Model[0, i] = likelihood_Model[0, i-1]
+                  likelihood_data[0, i] = likelihood_data[0, i-1]
+                  ncompl[i, :] = ncompl[i-1, :] 
+                  
+    vs = np.zeros([iteration, int(np.sum(starting_model[0:-1, 0, 0])), 1])
+
+    for j in range(0, iteration):
+        print(iteration - j)
+        for i in range(0, len(starting_model)):
+            vs[j, int(np.sum(starting_model[:, :, j][:, 0][0:i])):int(np.sum(
+                starting_model[:, :, j][:, 0][0:i+1])), 0] = starting_model[:, 3,j][i]
+            
+    print("Accept Rate Is " + str(accept/iteration) +"%")
+    accept_rate = accept/iteration
+    
+    return(starting_model,vs,vs0,mis_fit,ncompl,likelihood_data,accept_rate)
+
 #%%
 def Lcurve(Data,f,depth_s,starting_model = None,sigma_v = 5,sigma_h = 1,iteration = 100000):
     
@@ -236,7 +422,7 @@ def model_exp(iteration, first_layer = 200, n_layer = 15,power_factor = 1.15):
     
         dep = starting_model[i][0][0] + dep
     
-        starting_model[i][3][0] = 1200 + ((i/len(starting_model))*3000) # VS
+        starting_model[i][3][0] = 3000 + ((i/len(starting_model))*3000) # VS
     
         # starting_model[i][3][0] = 2000
 
@@ -410,248 +596,522 @@ def Model(iteration, first_layer = 200, n_layer = 10,power_factor = 1.17,sedimen
     # print("Depth above half-space is "+ str(dep - starting_model[len(starting_model)-1][0][0]) + " m")
     return(starting_model,vs0,vsi)
 #%%
-
-def Model_V2(iteration,n_layer=4):
+def Model_V2(iteration,n_layer=3,sta = "RR38"):
     dep = 0
+    if sta == "RR28":
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+        # Thickness, Density, Vp, Vs 
+            starting_model[:,:,0]= np.array([[   260.,  1820.,  1750.,   340.],
+                                             [  700.,  2550.,  5000.,  2700.],
+                                             [ 1540.,  2850.,  6500.,  3700.],
+                                             [ 4750.,  3050.,  7100.,  4050.],
+                                             [10000.,  3100.,  7530.,  4190.],
+                                             [10000.,  3100.,  7530.,  4190.]])
+       
+        
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[   260.,  1820.,  1750.,   340.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
 
-    if n_layer == 3:
-        starting_model = np.zeros([n_layer+3, 4, iteration])
-    
-        #RR38
-        starting_model[0][3][0] =  340 # VS
-        starting_model[0][2][0] =  1500 # Vp
-        starting_model[0][1][0] =  1820 # Density
-        starting_model[0][0][0] =  10 #Thickness
-    
-        starting_model[1][3][0] =  2700 # VS
-        starting_model[1][2][0] =  5000 # Vp
-        starting_model[1][1][0] =  2550 # Density
-        starting_model[1][0][0] =  700 #Thickness
         
-        starting_model[2][3][0] =  3700 # VS
-        starting_model[2][2][0] =  6500 # Vp
-        starting_model[2][1][0] =  2850 # Density
-        starting_model[2][0][0] =  1540 #Thickness
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   260.,  1820.,  1750.,   340.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
         
-        starting_model[3][3][0] =  4050 # VS
-        starting_model[3][2][0] =  7100 # Vp
-        starting_model[3][1][0] =  3050 # Density
-        starting_model[3][0][0] =  4750 #Thickness
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   260.,  1820.,  1750.,   340.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
+
+    elif sta == "RR29":
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
         
-        starting_model[4][3][0] =  4190 # VS
-        starting_model[4][2][0] =  7530 # Vp
-        starting_model[4][1][0] =  3100 # Density
-        starting_model[4][0][0] =  10000 #Thickness
+            starting_model[:,:,0]= np.array([[   10.,  1820.,  1750.,   340.],
+                                             [  700.,  2550.,  5000.,  2700.],
+                                             [ 1540.,  2850.,  6500.,  3700.],
+                                             [ 4750.,  3050.,  7100.,  4050.],
+                                             [10000.,  3100.,  7530.,  4190.],
+                                             [10000.,  3100.,  7530.,  4190.]])
+       
         
-        starting_model[5][3][0] =  4190 # VS
-        starting_model[5][2][0] =  7530 # Vp
-        starting_model[5][1][0] =  3100 # Density
-        starting_model[5][0][0] =  10000 #Thickness
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
+
         
-    elif n_layer == 6:
-        starting_model = np.zeros([n_layer+3, 4, iteration])
-    
-        #RR38
-        starting_model[0][3][0] =  340 # VS
-        starting_model[0][2][0] =  1500 # Vp
-        starting_model[0][1][0] =  1820 # Density
-        starting_model[0][0][0] =  10 #Thickness
-    
-        starting_model[1][3][0] =  2700 # VS
-        starting_model[1][2][0] =  5000 # Vp
-        starting_model[1][1][0] =  2550 # Density
-        starting_model[1][0][0] =  350 #Thickness
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
         
-        starting_model[2][3][0] =  2700 # VS
-        starting_model[2][2][0] =  5000 # Vp
-        starting_model[2][1][0] =  2550 # Density
-        starting_model[2][0][0] =  350 #Thickness
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
+            
+    elif sta == "RR34":
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
         
-        starting_model[3][3][0] =  3700 # VS
-        starting_model[3][2][0] =  6500 # Vp
-        starting_model[3][1][0] =  2850 # Density
-        starting_model[3][0][0] =  770 #Thickness
+            starting_model[:,:,0]= np.array([[   10.,  1820.,  1750.,   340.],
+                                         [  700.,  2550.,  5000.,  2700.],
+                                         [ 1540.,  2850.,  6500.,  3700.],
+                                         [ 4750.,  3050.,  7100.,  4050.],
+                                         [10000.,  3100.,  7530.,  4190.],
+                                         [10000.,  3100.,  7530.,  4190.]])
+       
         
-        starting_model[4][3][0] =  3700 # VS
-        starting_model[4][2][0] =  6500 # Vp
-        starting_model[4][1][0] =  2850 # Density
-        starting_model[4][0][0] =  770 #Thickness
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
+
+        
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [10000.,  3230.,  7530.,  4370.],
+                                              [10000.,  3230.,  7530.,  4370.]])
+        
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [10000.,  3230.,  7530.,  4370.],
+                                              [10000.,  3230.,  7530.,  4370.]])
+            
+    elif sta == "RR36":
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+        
+            starting_model[:,:,0]= np.array([[  700.,  2550.,  5000.,  2700.],
+                                             [ 1540.,  2850.,  6500.,  3700.],
+                                             [ 4750.,  3050.,  7100.,  4050.],
+                                             [10000.,  3230.,  7830.,  4370.],
+                                             [10000.,  3230.,  7830.,  4370.],
+                                             [10000.,  3230.,  7830.,  4370.]])
+       
+        
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[  350.,  2550.,  5000.,  2700.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [10000.,  3230.,  7830.,  4370.],
+                                              [10000.,  3230.,  7830.,  4370.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+
+        
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [10000.,  3230.,  7830.,  4370.],
+                                              [10000.,  3230.,  7830.,  4370.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+        
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [10000.,  3230.,  7830.,  4370.],
+                                              [10000.,  3230.,  7830.,  4370.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+                        
+    elif sta == "RR38":
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+        
+            starting_model[:,:,0]= np.array([[  700.,  2550.,  5000.,  2700.],
+                                             [ 1540.,  2850.,  6500.,  3700.],
+                                             [ 4750.,  3050.,  7100.,  4050.],
+                                             [10000.,  3100.,  7530.,  4190.],
+                                             [10000.,  3100.,  7530.,  4190.],
+                                             [10000.,  3230.,  7830.,  4370.]])
+       
+        
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[  350.,  2550.,  5000.,  2700.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+
+        
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+        
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+
+    elif sta == "RR40":
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+        
+            starting_model[:,:,0]= np.array([[   10.,  1820.,  1750.,   340.],
+                                             [  700.,  2550.,  5000.,  2700.],
+                                             [ 1540.,  2850.,  6500.,  3700.],
+                                             [ 4750.,  3050.,  7100.,  4050.],
+                                             [10000.,  3100.,  7530.,  4190.],
+                                             [10000.,  3100.,  7530.,  4190.]])
+       
+        
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
+
+        
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
+        
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[   10.,  1820.,  1750.,   340.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.]])
+            
+    elif sta == "RR50":
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+        
+            starting_model[:,:,0]= np.array([[  700.,  2550.,  5000.,  2700.],
+                                         [ 1540.,  2850.,  6500.,  3700.],
+                                         [ 4750.,  3050.,  7100.,  4050.],
+                                         [10000.,  3100.,  7530.,  4190.],
+                                         [10000.,  3100.,  7530.,  4190.],
+                                         [10000.,  3230.,  7830.,  4370.]])
+       
+        
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[  350.,  2550.,  5000.,  2700.],
+                                              [  350.,  2550.,  5000.,  2700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [  770.,  2850.,  6500.,  3700.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [ 2375.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+
+        
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  233.,  2550.,  5000.,  2700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [  513.,  2850.,  6500.,  3700.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [ 1583.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+        
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  175.,  2550.,  5000.,  2700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [  385.,  2850.,  6500.,  3700.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [ 1187.,  3050.,  7100.,  4050.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3100.,  7530.,  4190.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+    elif sta == "RR52":
+        sediment_thickness = 0 
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+        
+            starting_model[:,:,0]= np.array([[  1170.,  2400.,  4700.,  2540.],
+                                         [ 1170.,  2760.,  6300.,  3590.],
+                                         [ 4560.,  2960.,  6900.,  3940.],
+                                         [10000.,  3190.,  7730.,  4310.],
+                                         [10000.,  3190.,  7730.,  4310.],
+                                         [10000.,  3230.,  7830.,  4370.]])
+       
+        
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[  585.,  2400.,  4700.,  2540.],
+                                              [  585.,  2400.,  4700.,  2540.],
+                                              [  585.,  2760.,  6300.,  3590.],
+                                              [  585.,  2760.,  6300.,  3590.],
+                                              [ 2280.,  2960.,  6900.,  3940.],
+                                              [ 2280.,  2960.,  6900.,  3940.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+
+        
+        elif n_layer == 9:
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  390.,  2400.,  4700.,  2540.],
+                                              [  390.,  2400.,  4700.,  2540.],
+                                              [  390.,  2400.,  4700.,  2540.],
+                                              [  390.,  2760.,  6300.,  3590.],
+                                              [  390.,  2760.,  6300.,  3590.],
+                                              [  390.,  2760.,  6300.,  3590.],
+                                              [ 1520.,  2960.,  6900.,  3940.],
+                                              [ 1520.,  2960.,  6900.,  3940.],
+                                              [ 1520.,  2960.,  6900.,  3940.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+        
+        else :
+            n_layer = 12
+            starting_model = np.zeros([n_layer+3, 4, iteration])
+            starting_model[:,:,0] = np.array([[  292.,  2400.,  4700.,  2540.],
+                                              [  292.,  2400.,  4700.,  2540.],
+                                              [  292.,  2400.,  4700.,  2540.],
+                                              [  292.,  2400.,  4700.,  2540.],
+                                              [  292.,  2760.,  6300.,  3590.],
+                                              [  292.,  2760.,  6300.,  3590.],
+                                              [  292.,  2760.,  6300.,  3590.],
+                                              [  292.,  2760.,  6300.,  3590.],
+                                              [ 1140.,  2960.,  6900.,  3940.],
+                                              [ 1140.,  2960.,  6900.,  3940.],
+                                              [ 1140.,  2960.,  6900.,  3940.],
+                                              [ 1140.,  2960.,  6900.,  3940.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+    # elif sta == "A422A":
+    else:
+        # sediment_thickness = 0 
+        if n_layer == 3:
+            starting_model = np.zeros([n_layer+4, 4, iteration])
         
         
-        starting_model[5][3][0] =  4050 # VS
-        starting_model[5][2][0] =  7100 # Vp
-        starting_model[5][1][0] =  3050 # Density
-        starting_model[5][0][0] =  2375 #Thickness
+            starting_model[:,:,0]= np.array([[ 2000.,  2400.,  4700.,  2000.],
+                                             [ 2000.,  2760.,  6300.,  2500.],
+                                             [ 3000.,  2760.,  6300.,  3200.],
+                                             [ 3000.,  2960.,  6900.,  3800.],
+                                             [10000.,  3190.,  7730.,  4310.],
+                                             [10000.,  3190.,  7730.,  4310.],
+                                             [10000.,  3230.,  7830.,  4370.]])
+       
+       
         
-        starting_model[6][3][0] =  4050 # VS
-        starting_model[6][2][0] =  7100 # Vp
-        starting_model[6][1][0] =  3050 # Density
-        starting_model[6][0][0] =  2375 #Thickness
-        
-        starting_model[7][3][0] =  4190 # VS
-        starting_model[7][2][0] =  7530 # Vp
-        starting_model[7][1][0] =  3100 # Density
-        starting_model[7][0][0] =  10000 #Thickness    
-    
-        starting_model[8][3][0] =  4190 # VS
-        starting_model[8][2][0] =  7530 # Vp
-        starting_model[8][1][0] =  3100 # Density
-        starting_model[8][0][0] =  10000 #Thickness   
-        
-    elif n_layer == 9:
-        starting_model = np.zeros([n_layer+3, 4, iteration])
-    
-        #RR38
-        starting_model[0][3][0] =  340 # VS
-        starting_model[0][2][0] =  1500 # Vp
-        starting_model[0][1][0] =  1820 # Density
-        starting_model[0][0][0] =  10 #Thickness
-    
-        starting_model[1][3][0] =  2700 # VS
-        starting_model[1][2][0] =  5000 # Vp
-        starting_model[1][1][0] =  2550 # Density
-        starting_model[1][0][0] =  233 #Thickness
-        
-        starting_model[2][3][0] =  2700 # VS
-        starting_model[2][2][0] =  5000 # Vp
-        starting_model[2][1][0] =  2550 # Density
-        starting_model[2][0][0] =  233 #Thickness
-        
-        starting_model[3][3][0] =  2700 # VS
-        starting_model[3][2][0] =  5000 # Vp
-        starting_model[3][1][0] =  2550 # Density
-        starting_model[3][0][0] =  233 #Thickness
-        
-        
-        starting_model[4][3][0] =  3700 # VS
-        starting_model[4][2][0] =  6500 # Vp
-        starting_model[4][1][0] =  2850 # Density
-        starting_model[4][0][0] =  513 #Thickness
-        
-        starting_model[5][3][0] =  3700 # VS
-        starting_model[5][2][0] =  6500 # Vp
-        starting_model[5][1][0] =  2850 # Density
-        starting_model[5][0][0] =  513 #Thickness
-        
-        starting_model[6][3][0] =  3700 # VS
-        starting_model[6][2][0] =  6500 # Vp
-        starting_model[6][1][0] =  2850 # Density
-        starting_model[6][0][0] =  513 #Thickness
-        
-        
-        starting_model[7][3][0] =  4050 # VS
-        starting_model[7][2][0] =  7100 # Vp
-        starting_model[7][1][0] =  3050 # Density
-        starting_model[7][0][0] =  1583 #Thickness
-        
-        starting_model[8][3][0] =  4050 # VS
-        starting_model[8][2][0] =  7100 # Vp
-        starting_model[8][1][0] =  3050 # Density
-        starting_model[8][0][0] =  1583 #Thickness
-        
-        starting_model[9][3][0] =  4050 # VS
-        starting_model[9][2][0] =  7100 # Vp
-        starting_model[9][1][0] =  3050 # Density
-        starting_model[9][0][0] =  1583 #Thickness
-        
-        starting_model[10][3][0] =  4190 # VS
-        starting_model[10][2][0] =  7530 # Vp
-        starting_model[10][1][0] =  3100 # Density
-        starting_model[10][0][0] =  10000 #Thickness    
-        
-        starting_model[11][3][0] =  4190 # VS
-        starting_model[11][2][0] =  7530 # Vp
-        starting_model[11][1][0] =  3100 # Density
-        starting_model[11][0][0] =  10000 #Thickness    
-        
-        
-    else :
-        n_layer = 12
-        starting_model = np.zeros([n_layer+3, 4, iteration])
-    
-        #RR38
-        starting_model[0][3][0] =  340 # VS
-        starting_model[0][2][0] =  1500 # Vp
-        starting_model[0][1][0] =  1820 # Density
-        starting_model[0][0][0] =  10 #Thickness
-        
-    
-    
-        starting_model[1][3][0] =  2700 # VS
-        starting_model[1][2][0] =  5000 # Vp
-        starting_model[1][1][0] =  2550 # Density
-        starting_model[1][0][0] =  175 #Thickness
-        
-        starting_model[2][3][0] =  2700 # VS
-        starting_model[2][2][0] =  5000 # Vp
-        starting_model[2][1][0] =  2550 # Density
-        starting_model[2][0][0] =  175 #Thickness
-        
-        starting_model[3][3][0] =  2700 # VS
-        starting_model[3][2][0] =  5000 # Vp
-        starting_model[3][1][0] =  2550 # Density
-        starting_model[3][0][0] =  175 #Thickness
-        
-        starting_model[4][3][0] =  2700 # VS
-        starting_model[4][2][0] =  5000 # Vp
-        starting_model[4][1][0] =  2550 # Density
-        starting_model[4][0][0] =  175 #Thickness
-        
-        
-        starting_model[5][3][0] =  3700 # VS
-        starting_model[5][2][0] =  6500 # Vp
-        starting_model[5][1][0] =  2850 # Density
-        starting_model[5][0][0] =  385 #Thickness
-        
-        starting_model[6][3][0] =  3700 # VS
-        starting_model[6][2][0] =  6500 # Vp
-        starting_model[6][1][0] =  2850 # Density
-        starting_model[6][0][0] =  385 #Thickness
-        
-        starting_model[7][3][0] =  3700 # VS
-        starting_model[7][2][0] =  6500 # Vp
-        starting_model[7][1][0] =  2850 # Density
-        starting_model[7][0][0] =  385 #Thickness
-                
-        starting_model[8][3][0] =  3700 # VS
-        starting_model[8][2][0] =  6500 # Vp
-        starting_model[8][1][0] =  2850 # Density
-        starting_model[8][0][0] =  385 #Thickness
-        
-        
-        
-        starting_model[9][3][0] =  4050 # VS
-        starting_model[9][2][0] =  7100 # Vp
-        starting_model[9][1][0] =  3050 # Density
-        starting_model[9][0][0] =  1187 #Thickness
-        
-        starting_model[10][3][0] =  4050 # VS
-        starting_model[10][2][0] =  7100 # Vp
-        starting_model[10][1][0] =  3050 # Density
-        starting_model[10][0][0] =  1187 #Thickness
-        
-        starting_model[11][3][0] =  4050 # VS
-        starting_model[11][2][0] =  7100 # Vp
-        starting_model[11][1][0] =  3050 # Density
-        starting_model[11][0][0] =  1187 #Thickness
-        
-        starting_model[12][3][0] =  4050 # VS
-        starting_model[12][2][0] =  7100 # Vp
-        starting_model[12][1][0] =  3050 # Density
-        starting_model[12][0][0] =  1187 #Thickness
-        
-        
-        starting_model[13][3][0] =  4190 # VS
-        starting_model[13][2][0] =  7530 # Vp
-        starting_model[13][1][0] =  3100 # Density
-        starting_model[13][0][0] =  10000 #Thickness         
-        
-        starting_model[14][3][0] =  4190 # VS
-        starting_model[14][2][0] =  7530 # Vp
-        starting_model[14][1][0] =  3100 # Density
-        starting_model[14][0][0] =  10000 #Thickness    
-        
-        
+        elif n_layer == 6:
+            starting_model = np.zeros([n_layer+5, 4, iteration])
+            
+            starting_model[:,:,0] = np.array([[  1000.,  2400.,  4700.,  2000.],
+                                              [  1000.,  2400.,  4700.,  2000.],
+                                              [  1000.,  2760.,  6300.,  2500.],
+                                              [  1000.,  2760.,  6300.,  2500.],
+                                              [ 1500.,  2960.,  6900.,  3200.],
+                                              [ 1500.,  2960.,  6900.,  3200.],
+                                              [ 1500.,  2960.,  6900.,  3800.],
+                                              [ 1500.,  2960.,  6900.,  3800.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3190.,  7730.,  4310.],
+                                              [10000.,  3230.,  7830.,  4370.]])
+
+            
+            
+                    
     vs0 = np.zeros([1, int(np.sum(starting_model[:, 0, 0])), 1])
     for i in range(0, len(starting_model)):
         vs0[0, int(np.sum(starting_model[:, :, 0][:, 0][0:i])):int(np.sum(
@@ -662,8 +1122,7 @@ def Model_V2(iteration,n_layer=4):
     # print("Depth above half-space is "+ str(dep) + " m")
     # print("Depth above half-space is "+ str(dep - starting_model[len(starting_model)-1][0][0]) + " m")
     return(starting_model,vs0,vsi)
-    
-    # return(starting_model)
+
 #%%
 def velp(vs , p = 0.25):
     """
@@ -1067,7 +1526,7 @@ def calc_norm_compliance(depth,freq,model):
     return ncomp
 
 #%%
-def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,sta,iteration,s,sigma_v,sigma_h,n_layer,alpha,burnin = 50000,mis_fit_trsh = 1):
+def plot_inversion_v2(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,sta,iteration,s,sigma_v,sigma_h,n_layer,alpha,burnin = 50000,mis_fit_trsh = 1):
 
     depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
     # var_vs = np.zeros([1,vs.shape[0]])
@@ -1077,19 +1536,39 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     layer_number  = -2
     Vs_final = np.zeros(vs[0].shape)
     N = 0
+    vs_filtered = []
+    
     for i in range(burnin,iteration):
         if mis_fit[0][i] < mis_fit_trsh:
-                if starting_model[layer_number][3][i] < 5000:
-                    Vs_final = Vs_final + vs[i]
-                    N = N + 1
+                # if starting_model[layer_number][3][i] < 50000:
+                Vs_final = Vs_final + vs[i]
+                N = N + 1
+                vs_filtered.append(vs[i])
+    vs_filtered = np.array(vs_filtered)
     
     Vs_final = Vs_final/N
     print(N)
 
+    plt.figure(dpi=300, figsize=(15, 25))
+    plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
+
+    plt.xlabel('Shear Velocity [m/s]')
+    plt.ylabel('Depth [m Below Seafloor]')
+    plt.ylim([-12000, 0])
+    plt.grid(True)
+    plt.legend(loc='lower left')
+    plt.tight_layout()
+
+
+    dd = np.zeros([len(vs[0]),1000])
+
+    for i in range(0,len(vs[0])):
+            dd[i] = np.histogram(vs_filtered[:,i],bins=5000,range=([0,5000]))[0]
+            dd[i] = dd[i] / np.max(dd[i])
     plt.rcParams.update({'font.size': 40})
-    nn = int((iteration - burnin)/1000) # I want to see just 1000 points of the data
+    nn = int((iteration - burnin)/1000)+1 # I want to see just 1000 points of the data
     # nn = 1
-    plt.figure(dpi=300, figsize=(30, 25))
+    plt.figure(dpi=300, figsize=(35, 25))
     plt.suptitle("Sigma V = " + str(sigma_v) + ", Sigma h = " + str(sigma_h) + ", Alpha = " + str(alpha) + ",N of Layer =" +str(n_layer))
     plt.subplot(121)
 
@@ -1108,6 +1587,8 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     #             label='Median of Brun-in')
     plt.plot(freq, ncompl[1],color='black', label='Start Compliance',linewidth= 5,linestyle='dashed')
     # plt.ylim([10e-14,10e-10])
+    plt.ylim([10e-13,10e-11])
+
     plt.grid(True)
     plt.legend(loc='upper left',fontsize=30)
     # plt.ylim([1e-11,6e-11])
@@ -1115,11 +1596,136 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     
     plt.subplot(122)
     plt.title(sta)
+    plt.imshow(dd,aspect="auto")
+    plt.colorbar()
+    # plt.plot(vs[0], depth, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
+
+    # Add labels, legend, and colorbar as in your code
+    plt.xlabel('Shear Velocity [m/s]')
+    plt.ylabel('Depth [m Below Seafloor]')
+    plt.ylim([12000,0])
+    plt.grid(True)
+    plt.legend(loc='lower left')
+    plt.tight_layout()
+
+
+
+
+
+    plt.figure(dpi=300,figsize=(16,24))
+    plt.subplot(211)
+    # plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
+    # plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
+    plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
+    plt.xscale('log')
+    plt.vlines(x=burnin, ymin=0, ymax=1, color='r',
+                label='Burn-in Region', linestyles='dashed')
+    plt.legend(loc='upper left')
+    
+    plt.title('Likelihood')
+    plt.xlabel('Iteration')
+    plt.ylabel('Liklihood')
+    
+    plt.grid(True)
+    
+    plt.subplot(212)
+    plt.plot(mis_fit[0,1:iteration-1])
+    plt.xscale('log')
+    # plt.yscale('log')
+    
+    plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
+               label='Burn-in Region', linestyles='dashed',linewidth=3)
+    
+    plt.title('Data Misfit')
+    plt.xlabel('Iteration')
+    plt.ylabel("$\\chi^2$")
+    plt.grid(True)
+    plt.minorticks_on()
+
+    plt.tight_layout()
+
+    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
+    plt.legend(loc='lower left')
+    plt.tight_layout()
+    print(N)
+    
+#%%
+def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,sta,iteration,s,sigma_v,sigma_h,n_layer,alpha,burnin = 50000,mis_fit_trsh = 1):
+    linewidth_models = 0.05
+    linewidth_compliance = 0.5 
+    depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
+    # var_vs = np.zeros([1,vs.shape[0]])
+
+    # for i in range(0, vs.shape[0]):
+    #     var_vs[0,i] = np.var(vs[i])
+    layer_number  = -2
+    Vs_final = np.zeros(vs[0].shape)
+    N = 0
+    for i in range(burnin,iteration):
+        if mis_fit[0][i] < mis_fit_trsh:
+                # if starting_model[layer_number][3][i] < 50000:
+                Vs_final = Vs_final + vs[i]
+                N = N + 1
+    
+    Vs_final = Vs_final/N
+    print(N)
+    
+    plt.figure(dpi=300, figsize=(15, 25))
+    plt.title(sta)
+
+    plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
+
+    plt.xlabel('Shear Velocity [m/s]')
+    plt.ylabel('Depth [m Below Seafloor]')
+    plt.ylim([-12000, 0])
+    plt.grid(True)
+    plt.legend(loc='lower left')
+    plt.tight_layout()
+
+    # plt.show()  # Don't forget to show the plot
+
+    # plt.rcParams.update({'font.size': 30})
+    # plt.figure(dpi=300, figsize=(10, 10))
+    # for i in range(burnin, vs.shape[0], nn):
+    #     if mis_fit[0][i] < mis_fit_trsh:
+    #         plt.plot(vs[i], depth, color='grey', linewidth= 1)
+            
+    
+    plt.rcParams.update({'font.size': 40})
+    nn = int((iteration - burnin)/1000) # I want to see just 1000 points of the data
+    # nn = 1
+    plt.figure(dpi=300, figsize=(35, 25))
+    plt.suptitle("Sigma V = " + str(sigma_v) + ", Sigma h = " + str(sigma_h) + ", Alpha = " + str(alpha) + ",N of Layer =" +str(n_layer))
+    plt.subplot(121)
+
+    for i in range(burnin, ncompl.shape[0], nn):
+        if mis_fit[0][i] < mis_fit_trsh:
+            plt.plot(freq, ncompl[i], color='green', linewidth=linewidth_compliance)
+        
+        plt.xlabel('Frequency [Hz]')
+        plt.ylabel('Normalized Compliance')
+        
+        # plt.plot(freq, Data, color='black', label='Measured Compliance')
+    plt.errorbar(freq, Data, yerr=s, ecolor=('black'), color='black',fmt='none',
+                    linewidth= 5, label='Measured Compliance',capsize=15)
+        
+    # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
+    #             label='Median of Brun-in')
+    plt.plot(freq, ncompl[1],color='black', label='Start Compliance',linewidth= 5,linestyle='dashed')
+    # plt.ylim([10e-14,10e-10])
+    # plt.ylim([10e-13,10e-11])
+
+    plt.grid(True)
+    plt.legend(loc='upper left',fontsize=30)
+    # plt.ylim([1e-11,6e-11])
+    # plt.yscale('log')
+    
+    plt.subplot(122)
+    plt.title("YV."+sta)
+    # plt.figure(dpi=300, figsize=(35, 25))
     for i in range(burnin, vs.shape[0]):
         if mis_fit[0][i] < mis_fit_trsh:
-                if starting_model[layer_number][3][i] < 5000:
-
-                    plt.plot(vs[i], depth, color = 'green', linewidth = 0.01)
+            plt.plot(vs[i], depth, color = 'green', linewidth = linewidth_models)
     plt.plot(vs[0], depth, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
 
     # Add labels, legend, and colorbar as in your code
@@ -1149,7 +1755,10 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     # plt.ylim([-10000, 0])
     # plt.xlim([0,4500])
     plt.figure(dpi=300,figsize=(16,24))
+
     plt.subplot(211)
+    plt.suptitle("YV."+sta)
+
     # plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
     # plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
     plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
@@ -1161,6 +1770,7 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     plt.title('Likelihood')
     plt.xlabel('Iteration')
     plt.ylabel('Liklihood')
+    
     plt.grid(True)
     
     plt.subplot(212)
@@ -1183,8 +1793,505 @@ def plot_inversion(starting_model,vs,mis_fit,ncompl,Data,likelihood_data,freq,st
     plt.legend(loc='lower left')
     plt.tight_layout()
     print(N)
-#%%    
+    
+#%%
+def plot_inversion_beta(starting_model,vs,vs0,mis_fit,ncompl,Data,likelihood_data,freq,sta,iteration,s,sigma_v,sigma_h,n_layer,alpha,burnin = 50000,mis_fit_trsh = 1):
+    linewidth_models = 0.05
+    linewidth_compliance = 0.5 
+    depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
+    # var_vs = np.zeros([1,vs.shape[0]])
 
+    # for i in range(0, vs.shape[0]):
+    #     var_vs[0,i] = np.var(vs[i])
+    layer_number  = -2
+    Vs_final = np.zeros(vs[0].shape)
+    N = 0
+    for i in range(burnin,iteration):
+        if mis_fit[0][i] < mis_fit_trsh:
+                # if starting_model[layer_number][3][i] < 50000:
+                Vs_final = Vs_final + vs[i]
+                N = N + 1
+    
+    Vs_final = Vs_final/N
+    print(N)
+    
+    plt.figure(dpi=300, figsize=(15, 25))
+    plt.title(sta)
+
+    plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
+
+    plt.xlabel('Shear Velocity [m/s]')
+    plt.ylabel('Depth [m Below Seafloor]')
+    plt.ylim([-12000, 0])
+    plt.xlim([0, 5000])
+    plt.grid(True)
+    plt.legend(loc='lower left')
+    plt.tight_layout()
+
+    # plt.show()  # Don't forget to show the plot
+
+    # plt.rcParams.update({'font.size': 30})
+    # plt.figure(dpi=300, figsize=(10, 10))
+    # for i in range(burnin, vs.shape[0], nn):
+    #     if mis_fit[0][i] < mis_fit_trsh:
+    #         plt.plot(vs[i], depth, color='grey', linewidth= 1)
+            
+    
+    plt.rcParams.update({'font.size': 40})
+    
+    nn = int((iteration - burnin)/1000) # I want to see just 1000 points of the data
+    # nn = 1
+    plt.figure(dpi=300, figsize=(35, 25))
+    plt.suptitle("Sigma V = " + str(sigma_v) + ", Sigma h = " + str(sigma_h) + ", Alpha = " + str(alpha) + ",N of Layer =" +str(n_layer))
+    plt.subplot(121)
+
+    for i in range(burnin, ncompl.shape[0], nn):
+        if mis_fit[0][i] < mis_fit_trsh:
+            if np.mean(vs[i]) < np.mean(vs0[:,0:len(vs[0])]):
+                plt.plot(freq, ncompl[i], color='red', linewidth=linewidth_compliance)
+            else:
+                plt.plot(freq, ncompl[i], color='green', linewidth=linewidth_compliance)
+
+        plt.xlabel('Frequency [Hz]')
+        plt.ylabel('Normalized Compliance')
+        
+        # plt.plot(freq, Data, color='black', label='Measured Compliance')
+    plt.errorbar(freq, Data, yerr=s, ecolor=('black'), color='black',fmt='none',
+                    linewidth= 5, label='Measured Compliance',capsize=15)
+        
+    # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
+    #             label='Median of Brun-in')
+    plt.plot(freq, ncompl[1],color='black', label='Start Compliance',linewidth= 5,linestyle='dashed')
+    # plt.ylim([10e-14,10e-10])
+    # plt.ylim([10e-13,10e-11])
+
+    plt.grid(True)
+    plt.legend(loc='upper left',fontsize=30)
+    # plt.ylim([1e-11,6e-11])
+    # plt.yscale('log')
+    
+    plt.subplot(122)
+    plt.title("YV."+sta)
+    # plt.figure(dpi=300, figsize=(35, 25))
+    for i in range(burnin, vs.shape[0]):
+        if mis_fit[0][i] < mis_fit_trsh:
+            if np.mean(vs[i]) < np.mean(vs0[:,0:len(vs[0])]):
+                plt.plot(vs[i], depth, color = 'red', linewidth = linewidth_models)
+            else:
+                plt.plot(vs[i], depth, color = 'green', linewidth = linewidth_models)
+
+    plt.plot(vs[0], depth, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
+
+    # Add labels, legend, and colorbar as in your code
+    plt.xlabel('Shear Velocity [m/s]')
+    plt.ylabel('Depth [m Below Seafloor]')
+    plt.ylim([-12000, 0])
+    plt.grid(True)
+    plt.legend(loc='lower left')
+    plt.tight_layout()
+
+    # plt.show()  # Don't forget to show the plot
+
+    # plt.rcParams.update({'font.size': 30})
+    # plt.figure(dpi=300, figsize=(10, 10))
+    # for i in range(burnin, vs.shape[0], nn):
+    #     if mis_fit[0][i] < mis_fit_trsh:
+    #         plt.plot(vs[i], depth, color='grey', linewidth= 1)
+            
+    # plt.plot(Vs_final, depth, color='black', label='Final Result',linewidth=3)
+    # plt.plot(vs[0], depth, color='green', label='Start Model',linewidth=5,linestyle='dashed')
+    
+    # plt.grid(True)
+    # plt.xlabel('Shear Velocity [m/s]')
+    # plt.ylabel('Depth [m]')
+    # plt.ylim([-int(np.sum(starting_model[:, 0, 0]))+2000, 0])
+    
+    # plt.ylim([-10000, 0])
+    # plt.xlim([0,4500])
+    plt.figure(dpi=300,figsize=(16,24))
+
+    plt.subplot(211)
+    plt.suptitle("YV."+sta)
+
+    # plt.plot(likeli_hood[0, 1:iteration-1],color='Blue',label="Total Likelihood")
+    # plt.plot(likelihood_Model[0, 1:iteration-1],color='red',label="Model Likelihood")
+    plt.plot(likelihood_data[0, 1:iteration-1],color='green',label="Data Likelihood")
+    plt.xscale('log')
+    plt.vlines(x=burnin, ymin=0, ymax=1, color='r',
+                label='Burn-in Region', linestyles='dashed')
+    plt.legend(loc='upper left')
+    
+    plt.title('Likelihood')
+    plt.xlabel('Iteration')
+    plt.ylabel('Liklihood')
+    
+    plt.grid(True)
+    
+    plt.subplot(212)
+    plt.plot(mis_fit[0,1:iteration-1])
+    plt.xscale('log')
+    # plt.yscale('log')
+    
+    plt.vlines(x=burnin, ymin=0, ymax=np.max(mis_fit[0,1:iteration-1]), color='r',
+               label='Burn-in Region', linestyles='dashed',linewidth=3)
+    
+    plt.title('Data Misfit')
+    plt.xlabel('Iteration')
+    plt.ylabel("$\\chi^2$")
+    plt.grid(True)
+    plt.minorticks_on()
+
+    plt.tight_layout()
+
+    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
+    plt.legend(loc='lower left')
+    plt.tight_layout()
+    print(N)
+#%%
+
+def plot_inversion_density(vs,vs0,mis_fit,Data,s,freq,sta,burnin,ncompl,iteration,mis_fit_trsh = 8):
+    start_model = start_model_plot(sta)/50
+    # start_model = start_model_plot_mean(sta)/50
+    bins = 100
+    jj = 0
+    vs_good = []
+
+    for ii in range(0,len(mis_fit[0])):
+        if mis_fit[0][ii] < mis_fit_trsh:
+            # if vs[ii][9000][0] < vs[ii][6000][0]:
+
+                vs_good.append(vs[ii])
+                jj = jj+1
+        
+    vs_good = np.array(vs_good)
+      
+    linewidth_compliance = 0.5 
+    nn = int((iteration - burnin)/1000) 
+    
+    # a = []
+    # b = plt.hist(vs[:,100,0],bins=100,range=([0,5000]))[1]
+    # vs_good = np.array(vs_good)
+    
+    # for i in range(0,len(vs[0])):
+    #     a.append(plt.hist(vs_good[:,i,0],bins=100,range=([0,5000]))[0])
+    #     print(len(vs[0]) - i)
+        
+        
+        
+    # plt.figure(dpi=300,figsize=(20,20))
+    # selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+    # selected_labels = b[selected_indices]
+    # selected_labels = selected_labels.astype(int)
+    
+    # plt.imshow(a / 1000, aspect='auto', cmap='jet', norm=plt.Normalize(vmin=0, vmax=1.5))
+    
+    # # Setting custom y-axis ticks and labels
+    # plt.xticks(ticks=selected_indices, labels=selected_labels)
+    
+    # plt.colorbar()
+    # plt.show()
+
+
+
+    vs_good = vs_good[:,0:10000,0]
+    
+    downsample_factor = vs_good.shape[1] // 100
+    
+    # Reshape the array to prepare for averaging
+    # New shape will be (20000, 100, downsample_factor, 1)
+    vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+    
+    # Take the mean along the downsample_factor dimension
+    vs_downsampled = vs_reshaped.mean(axis=2)
+    
+    print(vs_downsampled.shape)  # This should print (20000, 100, 1)
+    
+    # a = np.zeros([100,100])
+    c = np.zeros([bins,bins])
+    b = plt.hist(vs_reshaped[:,10,0],bins=bins,range=([0,5000]))[1]
+    
+    for i in range(0,len(vs_downsampled[0])):
+        
+        c[i] = plt.hist(vs_downsampled[:,i],bins=bins,range=([0,5000]),density=True,log=False)[0]
+        c[i] = c[i]/np.max(c[i])
+        print(i)
+        
+    
+    from matplotlib.colors import LinearSegmentedColormap
+    
+    # Define the colors for the colormap (from white to red to black)
+    colors = ["white", "red", "black"]
+    
+    # Define the transition points for the colors
+    n_bins = [0, 0.4, 1]  # You can adjust these thresholds based on your data
+    
+    # Create the custom colormap
+    custom_colormap = LinearSegmentedColormap.from_list("custom_cmap", list(zip(n_bins, colors)))
+    
+        
+    plt.figure(dpi=300,figsize=(30,20))
+    plt.suptitle("YV."+str(sta))
+    plt.subplot(121)
+    for i in range(burnin, ncompl.shape[0], nn):
+        if mis_fit[0][i] < mis_fit_trsh:
+            plt.plot(freq, ncompl[i], color='green', linewidth=linewidth_compliance)
+
+    plt.xlabel('Frequency [Hz]')
+    plt.ylabel('Normalized Compliance')
+        
+        # plt.plot(freq, Data, color='black', label='Measured Compliance')
+    plt.errorbar(freq, Data, yerr=s, ecolor=('black'), color='black',fmt='none',
+                    linewidth= 5, label='Measured Compliance',capsize=15)
+    plt.plot(freq, ncompl[1],color='blue', label='Starting Compliance',linewidth= 5,linestyle='dashed')
+    plt.legend(loc='upper left',fontsize=30)
+    
+    plt.subplot(122)
+    selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+    selected_labels = b[selected_indices]
+    selected_labels = selected_labels.astype(int)
+    
+    depth = np.arange(0,100,1 )
+    
+    ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
+    plt.plot(start_model,depth,color='blue',linewidth=8,linestyle='dashed',label="Starting Model ")
+    # plt.imshow(a , aspect='auto', cmap='jet')
+
+    # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
+    #             label='Median of Brun-in')
+    # plt.ylim([10e-14,10e-10])
+    # plt.ylim([10e-13,10e-11])
+
+    plt.grid(True)
+    # plt.ylim([1e-11,6e-11])
+    # plt.yscale('log')
+    
+    # Setting custom y-axis ticks and labels
+    plt.xticks(ticks=selected_indices, labels=selected_labels)
+    cbar = plt.colorbar(ff)
+    # depth = np.arange(0, -10000, -1)
+
+    # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
+
+    selected_indices_y = [0,12,24,36,48,60,72,84]
+    selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+    plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+    plt.xlabel("Shear Velocity [m/s]")
+    plt.ylabel("Depth [m]")
+    cbar.set_label('Probability')
+    plt.legend(loc='lower left',fontsize=35)
+    plt.ylim(72,0)
+    # plt.colorbar()
+    plt.tight_layout()
+    plt.show()
+    
+#%%
+
+def plot_inversion_density_all(Inversion_container):
+    
+    plt.figure(dpi=300,figsize=(40,25))
+    
+    for ii in range(0,len(Inversion_container)):
+        vs = Inversion_container[ii]["Shear Velocity"]
+        # vs0 = Inversion_container[ii]["Shear Velocity Starting"]
+        mis_fit = Inversion_container[ii]["Misfit Fucntion"]
+        # Data = Inversion_container[ii]["compliance Measured"]
+        # s = Inversion_container[ii]["uncertainty"]
+        # freq = Inversion_container[ii]["compliance Frequency"]
+        sta = Inversion_container[ii]["Station"]
+        # burnin = Inversion_container[ii]["burnin"]
+        # ncompl = Inversion_container[ii]["compliance Forward"]
+        # iteration = Inversion_container[ii]["iteration"]
+        mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
+    
+    
+        start_model = start_model_plot(sta)/50
+        
+        start_model = start_model_plot_mean(sta)/50 #mean of all models,sedimental models differ from rocky models
+        
+        # start_model = start_model_plot_mean(sta)/50
+        bins = 100
+        jj = 0
+        vs_good = []
+        
+        for i in range(0,len(mis_fit[0])):
+            if mis_fit[0][i] < mis_fit_trsh:
+                # if vs[ii][9000][0] < vs[ii][6000][0]:
+    
+                    vs_good.append(vs[i])
+                    jj = jj+1
+            
+        vs_good = np.array(vs_good)
+          
+        vs_good = vs_good[:,0:10000,0]
+        
+        downsample_factor = vs_good.shape[1] // 100
+        
+        # Reshape the array to prepare for averaging
+        # New shape will be (20000, 100, downsample_factor, 1)
+        vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+        
+        # Take the mean along the downsample_factor dimension
+        vs_downsampled = vs_reshaped.mean(axis=2)
+        
+        print(vs_downsampled.shape)  # This should print (20000, 100, 1)
+        
+        # a = np.zeros([100,100])
+        c = np.zeros([bins,bins])
+        b = np.histogram(vs_reshaped[:, 10, 0], bins=bins, range=(0, 5000))[1]
+        
+        for i in range(0,len(vs_downsampled[0])):
+            
+            # c[i] = plt.hist(vs_downsampled[:,i],bins=bins,range=([0,5000]),density=True,log=False)[0]
+            c[i] = np.histogram(vs_downsampled[:, i], bins=bins, range=(0, 5000), density=True)[0]
+            c[i] = c[i]/np.max(c[i])
+            print(i)
+            
+        
+        from matplotlib.colors import LinearSegmentedColormap
+        
+        # Define the colors for the colormap (from white to red to black)
+        colors = ["white", "red", "black"]
+        
+        # Define the transition points for the colors
+        n_bins = [0, 0.4, 1]  # You can adjust these thresholds based on your data
+        
+        # Create the custom colormap
+        custom_colormap = LinearSegmentedColormap.from_list("custom_cmap", list(zip(n_bins, colors)))
+   
+        plt.subplot(2,4,int(ii+1))
+        plt.title(str("YV.")+sta)
+        selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+        selected_labels = b[selected_indices]
+        selected_labels = selected_labels.astype(int)
+        
+        depth = np.arange(0,100,1 )
+        
+        ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
+        plt.plot(start_model,depth,color='blue',linewidth=8,linestyle='dashed',label="Mean Starting Model ")
+        # plt.imshow(a , aspect='auto', cmap='jet')
+    
+        # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
+        #             label='Median of Brun-in')
+        # plt.ylim([10e-14,10e-10])
+        # plt.ylim([10e-13,10e-11])
+    
+        plt.grid(True)
+        # plt.ylim([1e-11,6e-11])
+        # plt.yscale('log')
+        
+        # Setting custom y-axis ticks and labels
+        plt.xticks(ticks=selected_indices, labels=selected_labels)
+        cbar = plt.colorbar(ff)
+        # depth = np.arange(0, -10000, -1)
+    
+        # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
+    
+        selected_indices_y = [0,12,24,36,48,60,72,84]
+        selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+        plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+        if ii == 0 or ii == 4:
+            plt.ylabel("Depth [m]")
+        if ii == 4 or ii == 5 or ii == 6 or ii == 7:
+            plt.xlabel("Shear Velocity [m/s]")
+        if ii == 3 or ii == 7:
+            cbar.set_label('Probability')
+        if ii == 7:
+            plt.legend(loc='lower left',fontsize=30)
+        plt.ylim(48,0)
+        # plt.ylim(72,0)
+        # plt.colorbar()
+    plt.tight_layout()
+    # file_path_save = "/Users/mohammadamin/Desktop"
+    # plt.savefig(file_path_save + "Inversion_Table.pdf")
+
+#%%
+def start_model_plot_mean(sta):
+    start_model = np.zeros(100)
+    if sta == "RR28" or sta == "RR29" or sta == "RR34":
+        start_model[0:2] = 340
+        start_model[2:7] = 2540
+        start_model[7:16] = 3590
+        start_model[16:44] = 3940
+        start_model[44:100] = 4310
+        
+    # elif  sta == "RR29":
+    #     start_model[0:1] = 340
+    #     start_model[1:6] = 2540
+    #     start_model[6:15] = 3590
+    #     start_model[15:43] = 3940
+    #     start_model[43:100] = 4310
+
+    elif  sta == "RR52" or sta == "RR50" or sta == "RR40" or sta == "RR38" or sta == "RR36"  :
+        start_model[0:5] = 2540
+        start_model[5:14] = 3590
+        start_model[14:42] = 3940
+        start_model[42:100] = 4310
+        
+    return(start_model)
+#%%
+def start_model_plot(sta):
+    start_model = np.zeros(100)
+    if sta == "RR28":
+        start_model[0:1] = 340
+        start_model[1:6] = 2700
+        start_model[6:16] = 3700
+        start_model[16:45] = 4050
+        start_model[45:99] = 4510
+        
+    elif  sta == "RR29":
+        start_model[0:1] = 340
+        start_model[1:5] = 2700
+        start_model[5:14] = 3700
+        start_model[14:44] = 4050
+        start_model[44:99] = 4510
+        
+    elif  sta == "RR34":
+        start_model[0:2] = 340
+        start_model[2:7] = 2700
+        start_model[7:15] = 3700
+        start_model[15:42] = 4050
+        start_model[42:99] = 4500  
+
+    elif  sta == "RR36":
+        start_model[0:4] = 2700
+        start_model[4:15] = 3700
+        start_model[15:42] = 4050
+        start_model[42:99] = 4370  
+        
+    elif  sta == "RR38":
+        start_model[0:4] = 2700
+        start_model[4:15] = 3700
+        start_model[15:42] = 4050
+        start_model[42:99] = 4190  
+                
+    elif  sta == "RR40":
+        start_model[0:4] = 2700
+        start_model[4:13] = 3700
+        start_model[13:42] = 4050
+        start_model[42:100] = 4360      
+
+    elif  sta == "RR50":
+        start_model[0:7] = 2540
+        start_model[7:14] = 3590
+        start_model[14:42] = 3940
+        start_model[42:100] = 4190 
+
+    elif  sta == "RR52":
+        start_model[0:7] = 2660
+        start_model[7:14] = 3670
+        start_model[14:42] = 4022
+        start_model[42:100] = 4330
+        
+    else:
+    # elif  sta == "A422A":
+        start_model[0:13] = 2200
+        start_model[13:25] = 2700
+        start_model[25:42] = 3500
+        start_model[42:60] = 3800
+        start_model[60:100] = 4310
+    return(start_model)
+
+#%%
 def plot_hist(starting_model,burnin,mis_fit,mis_fit_trsh): 
     
     starting_model_opt =[]
