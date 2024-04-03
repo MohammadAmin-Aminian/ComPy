@@ -9,6 +9,7 @@ Created on Mon Jul 10 11:13:05 2023
 import numpy as np
 # import ffplot as fp
 import matplotlib.pyplot as plt
+# import tiskitpy as tiskit
 import tiskit
 # from obspy import read
 from obspy.clients.fdsn import Client
@@ -823,6 +824,42 @@ def Rotate(stream,time_window = 2):
     rotated_stream.merge(fill_value='interpolate')
     return(rotated_stream,azimuth,angle)
     # return(azimuth,angle)
+#%%
+
+def Rotate_angles(stream,time_window = 1):
+    
+    #Split the data into pieces    
+    print("Splitting The stream into "+ str(time_window)+"-Hour" + ' Windows')
+    print("...")
+    split_streams = split_stream(stream, duration = time_window*60*60)
+    
+    for i in range(0,len(split_streams)):
+        split_streams[i].detrend('simple')
+        
+    azimuth = np.zeros([len(split_streams)])
+    angle = np.zeros([len(split_streams)])
+    
+    variance_percentage = np.zeros([len(split_streams)])
+    
+    print("Reducing Tilt Effect")
+    for i in range(0,len(split_streams)):
+        try:
+            print(len(split_streams) - i)
+            D = tiskit.CleanRotator(split_streams[i], remove_eq=False)
+    
+            azimuth[i] = D.azimuth
+            angle[i] =  D.angle
+            variance_percentage[i] = D.variance
+
+            # variance_percentage[i] = 100* (1 - np.var(D.apply(split_streams[i]).select(channel="BHZ")) / np.var(split_streams[i].select(channel="BHZ")))
+
+        except Exception as e:
+                print(f"Error occurred while processing item: {i}")
+    
+
+    return(azimuth,angle,variance_percentage)
+    # return(azimuth,angle)
+    
 
 #%%
 def split_stream(stream, duration):

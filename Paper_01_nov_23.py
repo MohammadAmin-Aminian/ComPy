@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 client = Client("RESIF")
 net = "YV"
-sta = "RR50"
+sta = "RR52"
 
 # client = Client("NCEDC")
 # net = "BK"
@@ -34,9 +34,69 @@ stream.clear()
 for i in range(0,len(A)):
     stream = stream + read("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Transients/'+A[i])
 stream.merge(fill_value='interpolate')
+
+A = os.listdir("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Decimated/')
+A.sort()
+stream = read()
+stream.clear()
+
+i = 7
+for i in range(0,len(A)):
+    stream = stream + read("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Decimated/'+A[i])
+stream.merge(fill_value='interpolate')
+
+
+
 #%% Rotating
 import compy 
-rotated_stream , azimuth,angle = compy.Rotate(stream,time_window = ((1/60)))
+# rotated_stream , azimuth,angle = compy.Rotate(stream,time_window = ((1/60)))
+
+azimuth,angle,variance = compy.Rotate_angles(stream,time_window = 24)
+
+# azimuth,angle = compy.Rotate_angles(stream,time_window = 1)
+
+
+# Assuming 'angle' is your array of angle values
+# Example data for demonstration
+
+# Generate an array representing time steps (x values)
+time_steps = np.arange(len(angle))
+
+
+
+# for i in range(0,len(angle)):
+#     if angle[i] < 0 :
+#         angle[i] = -angle[i]
+#         azimuth[i] =azimuth[i]+180
+        
+        
+# for i in range(0,len(angle)):
+#     if azimuth[i] < 0 :
+#         azimuth[i] = azimuth[i]+180
+              
+
+# Normalize 'varia' to get colors
+norm = plt.Normalize(variance.min(), variance.max())
+cmap = plt.cm.jet  # Using 'viridis', but you can choose any colormap
+
+# Plot
+plt.figure(dpi=300,figsize=(30,15))
+plt.subplot(211)
+plt.scatter(time_steps, azimuth, c=variance, cmap=cmap, norm=norm,s=3)
+plt.colorbar(label='Reducted Variance %')  # Shows the mapping of color to 'varia' values
+# plt.xlabel('Time ')
+plt.ylabel('Azimuth')
+plt.title('Angles Over Time Colored by Reducted Variance %')
+
+plt.subplot(212)
+plt.scatter(time_steps, angle, c=variance, cmap=cmap, norm=norm,s=3)
+plt.colorbar(label='Reducted Variance %')  # Shows the mapping of color to 'varia' values
+plt.ylim([-0.5,10])
+plt.xlabel('Time [Hour] ')
+plt.ylabel('Incident Angle')
+plt.show()
+plt.tight_layout()
+
 #%% Loading rotated stream
 A = os.listdir("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Rotated/')
 A.sort()
@@ -523,14 +583,15 @@ rotation_container = {
     'stream stats': stream.select(channel="*Z")[0].stats,
     'angle': angle,
     'azimuth': azimuth,
-    'gain factor': gain_factor,
+    # 'gain factor': gain_factor,
+    'Variance' : variance
 }
 
 # Serialize and save the data container using pickle
 file_path = "/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Compliance/'
-os.makedirs(file_path)
+# os.makedirs(file_path)
 
-with open(file_path+f'rotation_hourly_{sta}.pkl', 'wb') as f1:
+with open(file_path+f'rotation_daily_Variance_raw_{sta}.pkl', 'wb') as f1:
     pickle.dump(rotation_container, f1)
     
 print("Data container saved.")
@@ -562,7 +623,7 @@ plt.figure(dpi=300, figsize=(30, 20))
 
 plt.subplot(211)
 # plt.title("YV." + str(stream[0].stats.station) +'  '+ str(stream[0].stats.starttime)[0:10]+'--'+str(stream[0].stats.endtime)[0:10]+" Tilt ")
-# plt.plot(azimuth, '.', color='black')
+plt.plot(azimuth, '.', color='black')
 # for i in range(0,len(eq_spans)):
 #     plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
 #               azimuth[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10)

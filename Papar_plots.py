@@ -45,7 +45,7 @@ sta = "RR52"
 inv = client.get_stations(
         network=net,
         station=sta,
-        channel="BH*",
+        channel="B*",
         location="*",
         level="response")
     
@@ -149,16 +149,22 @@ fp.psd_h_all(raw_stream,raw_stream_zero,transients_stream_zero,rotated_stream_ze
 #                   transients_stream_zero,
 #                   rotated_stream_zero)
 
+fp.coherogram_spectrogram_all(raw_stream)
+
 fp.coherogram_spectrogram(raw_stream,nseg=2**11,tw =1)
 fp.coherogram_spectrogram(transients_stream,nseg=2**11,tw =1)
 fp.coherogram_spectrogram(transients_stream_zero,nseg=2**11,tw =1)
 
 
+fp.coherogram_spectrogram_alpha(raw_stream,nseg=2**12,tw = 1)
 fp.coherogram_spectrogram_alpha(rotated_stream_zero,nseg=2**12,tw = 1)
 
-fp.coherogram_spectrogram_alpha(raw_stream,nseg=2**12,tw = 1)
+
 
 fp.psd_h(rotated_stream,nseg=2**12,tw =1)
+
+fp.plot_transfer_function(transients_stream)
+
 #%%
 #Glitch plots
 
@@ -188,7 +194,7 @@ compy.plt_params()
 client = Client("RESIF")
 # start =UTCDateTime("2012-10-12")
 net = "YV"
-sta = "RR50"
+sta = "RR52"
 inv = client.get_stations(
         network=net,
         station=sta,
@@ -234,8 +240,6 @@ raw_stream.select(channel="BHZ").remove_response(inventory=inv,
                                                               output="DISP", plot=False)
 
 
-
-
 transients_stream.select(channel="BHZ").remove_response(inventory=inv,
                                                               output="DISP", plot=False)
 
@@ -252,14 +256,9 @@ plt.plot(transients_stream.select(channel="BHZ")[0].data - raw_stream.select(cha
 plt.title(raw_stream[3].stats.network + "."+raw_stream[3].stats.station)
 
 
-
-
-
 #%% Rotation Container 
 file_path = "/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Compliance/'
 file_path_save = "/Users/mohammadamin/Desktop/figures_1Feb"
-
-
 
 import pickle
 with open(file_path+f'rotation_hourly_{sta}.pkl', 'rb') as file:
@@ -282,8 +281,6 @@ starttime = stream_stats.starttime
 eq_spans = tiskit.TimeSpans.from_eqs(starttime,
                                      endtime,
                                      minmag=6, days_per_magnitude=1.5)
-
-
 
 
 aa = (endtime - starttime) // (3600)
@@ -356,7 +353,9 @@ angle_reshaped = angle_c.reshape(24*ii, -1)
 
 plt.tight_layout()
 plt.savefig(file_path_save + f"YV_{stream_stats.station}_Tilt_Hourly_{starttime}_{endtime}.pdf")
-plt.close()  # Close the figure to free memory
+
+
+
 
 plt.figure(dpi=300, figsize=(30, 20))
 plt.subplot(211)
@@ -417,6 +416,239 @@ plt.plot(auto_azi_ang,linewidth=3,color='b')
 plt.grid(True)
 plt.tight_layout()
 
+#%%
+# Loading Rotation Container 
+import pickle
+with open(file_path+f'rotation_hourly_{sta}.pkl', 'rb') as file:
+    loaded_rotation_container = pickle.load(file)
+    
+angle = loaded_rotation_container["angle"]
+azimuth = loaded_rotation_container["azimuth"]
+stream_stats =loaded_rotation_container['stream stats']
+
+for i in range(0,len(angle)):
+    if angle[i] < 0 :
+        angle[i] = -angle[i]
+        azimuth[i] =azimuth[i]+180
+        
+        
+for i in range(0,len(angle)):
+    if azimuth[i] < 0 :
+        azimuth[i] = -azimuth[i]
+                
+t1 = np.arange(0,len(angle))
+    
+dates = []
+for i in range(0, int(len(t1) // (24*30))):
+    print(i)
+    dates.append(str(stream_stats.starttime + (stream_stats.endtime - stream_stats.starttime) * i / int(len(t1) // (24*30)))[0:10])
+    
+    
+    # Assuming t1 is a list that contains the time values
+    # Calculate the positions of the ticks to align with the dates
+tick_positions = [int(i * len(t1) / (len(dates) - 1)) for i in range(len(dates))]
+    
+plt.rcParams.update({'font.size': 40})
+plt.figure(dpi=300, figsize=(30, 20))
+
+plt.subplot(211)
+plt.title("YV." + str(stream_stats.station) +'  '+ str(stream_stats.starttime)[0:10]+'--'+str(stream_stats.endtime)[0:10]+" Tilt [Hourly]")
+plt.plot(azimuth, '.', color='black')
+# for i in range(0,len(eq_spans)):
+#     plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
+#               azimuth[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10)
+
+plt.xticks([])
+plt.ylabel("Azimuth ["u"\u00b0]")
+# plt.legend(loc="lower right")
+plt.grid(True)
+
+plt.subplot(212)
+plt.plot(angle, '.', color='black')
+    
+# for i in range(0,len(eq_spans)):
+#     plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
+#               angle[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10)
+
+# plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
+                  # angle[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10,label="Event")       
+plt.xlabel("Time [Date]")
+plt.ylabel("Incident Angle ["u"\u00b0]")
+plt.grid(True)
+# plt.legend(loc="lower right", facecolor='lightgreen')
+    
+    # Set x-axis names with rotation and align ticks with the dates generated
+plt.xticks(tick_positions, dates, rotation=65)
+plt.ylim([-0.1, 3])
+plt.tight_layout()
+
+plt.savefig(file_path_save + f"YV_{stream_stats.station}_Tilt_Hourly_{starttime}_{endtime}.pdf")
+
+
+
+
+
+#%% Rotation Container Variance
+from obspy import UTCDateTime
+import tiskitpy as tiskit
+import numpy as np
+from obspy import read
+from obspy.clients.fdsn import Client
+import ffplot as fp
+from obspy import UTCDateTime
+import obspy
+# import tiskit
+# import ffplot as fp
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+# import com_forward as cm
+# nhnm = obspy.signal.spectral_estimation.get_nhnm()
+# nlnm = obspy.signal.spectral_estimation.get_nlnm()
+import tiskit
+import scipy
+import scipy.stats
+# import math as M
+import obspy.signal
+nhnm = obspy.signal.spectral_estimation.get_nhnm()
+nlnm = obspy.signal.spectral_estimation.get_nlnm()
+import compy
+compy.plt_params()
+
+
+file_path = "/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Compliance/'
+import pickle
+with open(file_path+f'rotation_hourly_Variance_raw_{sta}.pkl', 'rb') as file:
+# with open(file_path+f'rotation_daily_Variance_raw_{sta}.pkl', 'rb') as file:
+    loaded_rotation_container = pickle.load(file)
+    
+angle = loaded_rotation_container["angle"]
+azimuth = loaded_rotation_container["azimuth"]
+stream_stats =loaded_rotation_container['stream stats']
+variance = loaded_rotation_container['Variance']
+
+#RR52
+endtime = stream_stats.endtime - 45*24*3600
+
+
+# endtime = stream_stats.endtime 
+
+angle = angle[0:int((endtime -stream_stats.starttime )//3600)]
+azimuth = azimuth[0:int((endtime -stream_stats.starttime )//3600)]
+variance = variance[0:int((endtime -stream_stats.starttime )//3600)]
+
+
+
+eq_spans = tiskit.TimeSpans.from_eqs(stream_stats.starttime,endtime,
+                                     minmag=6, days_per_magnitude=1.5)
+
+
+time_window = 1
+time_steps = np.arange(len(angle))
+
+t1 = np.arange(0,len(angle))
+
+time_interval  =  24 # if you do for daily put 1 , if you doing it for hourly put 24 
+dates = []
+for i in range(0, int(len(t1) // (time_interval*30))):
+    print(i)
+    dates.append(str(stream_stats.starttime + (endtime - stream_stats.starttime) * i / int(len(t1) // (time_interval*30)))[0:10])
+    
+    
+    # Assuming t1 is a list that contains the time values
+    # Calculate the positions of the ticks to align with the dates
+tick_positions = [int(i * len(t1) / (len(dates) - 1)) for i in range(len(dates))]
+    
+
+
+
+   
+for i in range(0,len(angle)):
+    if angle[i] < 0 :
+        angle[i] = -angle[i]
+        azimuth[i] =azimuth[i]+180
+        
+azimuth = np.remainder(azimuth, 360.)    
+
+              
+variance = np.log10(variance+10e-0)
+# variance = ((variance - 1) // 10) * 10 + 1
+
+norm = plt.Normalize(variance.min(), variance.max())
+norm = plt.Normalize(0, variance.max())
+cmap = plt.cm.Greys  # Using 'viridis', but you can choose any colormap
+
+# Plot
+plt.figure(dpi=300,figsize=(30,20))
+plt.subplot(211)
+plt.title("YV." + str(stream_stats.station) +'  '+ str(stream_stats.starttime)[0:10]+'--'+str(endtime)[0:10]+" Tilt [Daily]")
+
+plt.scatter(time_steps, azimuth, c=variance, cmap=cmap, norm=norm,s=25)
+plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,azimuth,3,w=variance))(time_steps),color="red",linewidth=5)
+# for i in range(0,len(eq_spans)):
+#     plt.plot(int((eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)),
+#               angle[int(eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)],'o', color='white', markersize=5)
+plt.ylim([0, 120])
+
+plt.colorbar(label='Log10 Variance Reduction')  # Shows the mapping of color to 'varia' values
+plt.xticks([])
+plt.ylabel("Azimuth ["u"\u00b0]")
+plt.grid(True)
+
+
+plt.subplot(212)
+plt.scatter(time_steps, angle, c=variance, cmap=cmap, norm=norm,s=25)
+plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,angle,3,w=variance))(time_steps),color="red",linewidth=5)
+
+# for i in range(0,len(eq_spans)):
+#     plt.plot(int((eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)),
+#               angle[int(eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)],'o', color='white', markersize=5)
+
+plt.colorbar(label='Log10 Variance Reduction')  # Shows the mapping of color to 'varia' values
+plt.xlabel("Time [Date]")
+plt.ylabel("Incident Angle ["u"\u00b0]")
+plt.grid(True)
+plt.xticks(tick_positions, dates, rotation=65)
+plt.ylim([-0.1, 5])
+plt.tight_layout()
+
+plt.savefig(f"YV_{stream_stats.station}_Tilt_Daily.pdf")
+
+# Fs = 1/3600  # In Hertz
+# nseg = 2**8
+# # Compute the spectrogram
+# frequencies, times, S_azimuth = scipy.signal.spectrogram(azimuth, fs=Fs, nperseg=nseg, noverlap=nseg//2, nfft=2**12, window='hann', scaling='spectrum')
+# frequencies, times, S_Angle = scipy.signal.spectrogram(angle, fs=Fs, nperseg=nseg, noverlap=nseg//2, nfft=2**12, window='hann', scaling='spectrum')
+
+# t1_spec = np.arange(0,len(times))
+# tick_positions_spec = [int(i * len(t1_spec) / (len(dates) - 1)) for i in range(len(dates))]
+
+
+# # Plotting the Spectrogram
+# plt.figure(dpi=300,figsize=(30,20))
+# plt.subplot(211)
+# plt.title("Spectrogram of Azimuth of  YV."+str(sta))
+# plt.pcolormesh(times, frequencies, 10 * np.log10(S_azimuth), shading='gouraud')
+# plt.ylabel('Frequency [Hz]')
+# plt.yscale('log')
+# plt.ylim(0.000001,0.0001)
+# plt.xticks([])
+# plt.colorbar(label='Intensity [dB]')
+
+# plt.subplot(212)
+# plt.title("Spectrogram of Angle")
+# plt.pcolormesh(times, frequencies, 10 * np.log10(S_Angle), shading='gouraud')
+# plt.ylabel('Frequency [Hz]')
+# plt.xlabel('Time [sec]')
+# plt.yscale('log')
+
+# plt.ylim(0.000001,0.0001)
+# plt.colorbar(label='Intensity [dB]')
+# # plt.xticks(tick_positions_spec, dates, rotation=65)
+
+# plt.tight_layout()
+# plt.show()
+
 
 #%%
 #Rotation Auto Correltations
@@ -444,6 +676,7 @@ import compy
 compy.plt_params()
 import pickle
 
+nseg = 2**10
 angle = []
 azimuth = []
 
@@ -455,8 +688,11 @@ for i in range(0,len(stations)):
 
 
 
-    with open(file_path+f'rotation_hourly_{sta}.pkl', 'rb') as file:
+    with open(file_path+f'rotation_hourly_Variance_raw_{sta}.pkl', 'rb') as file:
         loaded_rotation_container = pickle.load(file)
+        
+    # with open(file_path+f'rotation_daily_Variance_raw_{sta}.pkl', 'rb') as file:
+        # loaded_rotation_container = pickle.load(file)        
     
 
     stream_stats =loaded_rotation_container['stream stats']
@@ -478,13 +714,29 @@ for i in range(0,len(stations)):
     
     azimuth.append(loaded_rotation_container["azimuth"][0:int(aa)])
 
+for j in range(0,len(azimuth)):
+    for i in range(0,len(angle[j])):
+        if angle[j][i] < 0 :
+            angle[j][i] = -angle[j][i]
+            azimuth[j][i] =azimuth[j][i]+180
+        
 
+for j in range(0,len(azimuth)):
+    for i in range(0,len(angle)):
+        if azimuth[j][i] < 0 :
+            azimuth[j][i] = azimuth[j][i]+180
+              
+        
 
 #Auto Corrolation
-auto_angle= []
-auto_Azimuth= []
+auto_angle = []
+auto_Azimuth = []
+psd_angle = []
+psd_Azimuth= []
+psd_freq = []
 stations = ["RR28","RR29","RR34","RR36","RR38","RR40","RR50","RR52"]
 stations1 = ["RR28","RR29","RR34","RR36","RR38","RR40","RR50","RR52"]
+
 
 jj = 60
 # stations1.pop(jj)
@@ -494,8 +746,9 @@ for i in range(0,len(angle)):
     else:
         auto_angle.append(np.correlate(angle[i],angle[i] ,mode='full') - np.mean(np.correlate(angle[i],angle[i] ,mode='full')))
         auto_Azimuth.append(np.correlate(azimuth[i],azimuth[i] ,mode='full') - np.mean(np.correlate(azimuth[i],azimuth[i] ,mode='full')))
-
-
+        psd_Azimuth.append(scipy.signal.welch(azimuth[i],fs = (1/(3600)),nperseg=nseg,noverlap=nseg//2)[1])
+        psd_angle.append(scipy.signal.welch(angle[i],fs = (1/(3600)),nperseg=nseg,noverlap=nseg//2)[1])
+        psd_freq.append(scipy.signal.welch(angle[i],fs = (1/(3600)),nperseg=nseg,noverlap=nseg//2)[0])
 
 Hour_start = 0
 Hour_End = 96
@@ -510,7 +763,7 @@ for i in range(0,len(angle)):
     plt.legend(loc="upper right")
     # plt.xlabel([])
     plt.ylabel('Autocorrelation')
-    plt.ylim([-2e6,1e7])
+    # plt.ylim([-2e6,1e7])
     plt.xlim([Hour_start,Hour_End])
     plt.grid(True)
     
@@ -526,13 +779,71 @@ for i in range(0,len(angle)):
     plt.xlabel("Lag [Hour]")
     plt.ylabel('Autocorrelation')
     plt.xlim([Hour_start,Hour_End])
-    plt.ylim([-2e6,3e7])
+    plt.yscale('log')
+    plt.ylim([1e7,2e8])
     plt.grid(True)
     # plt.yscale('log')
 plt.tight_layout()
 
 
-plt.savefig(file_path_save + f"YV_{stream_stats.station}_AutoCorrelation.pdf")
+# plt.savefig(file_path_save + f"YV_{stream_stats.station}_AutoCorrelation.pdf")
+
+# Automatic peaking
+peaks, _ = scipy.signal.find_peaks(scipy.signal.savgol_filter(np.mean(psd_Azimuth,axis=0),9,1))
+top_four_peaks_idx = np.argsort(np.mean(psd_Azimuth,axis=0)[peaks])[-4:]
+top_four_frequencies = psd_freq[0][peaks][top_four_peaks_idx]
+top_four_psd_values = np.mean(psd_Azimuth,axis=0)[peaks][top_four_peaks_idx]
+
+# Manual peaking
+top_four_peaks_idx = [5,42 ,83 ,125 ,167]
+x_points = 1/psd_freq[0][top_four_peaks_idx ]
+y_points = scipy.signal.savgol_filter(np.mean(psd_Azimuth, axis=0), 9, 1)[top_four_peaks_idx]
+labels = ['8d 12h 48m','24h 22m', '12h 20m', '8h 11m', '6h 8m']
+# Outputs
+print("Top Four Frequencies:", top_four_frequencies)
+print("Top Four PSD Values:", top_four_psd_values)
+
+
+
+plt.figure(dpi=300, figsize=(25, 30))
+plt.suptitle("PSD of Incident Angles and Azimuths")
+plt.subplot(211)
+for i in range(0,len(angle)):
+    # plt.title("Correlation Angle " + str(stations[jj]))
+    # plt.loglog(psd_freq[i],psd_angle[i],linewidth=3,label=str(stations1[i]))
+    plt.loglog(1/psd_freq[i],scipy.signal.savgol_filter(psd_angle[i],9,1),linewidth=3,label=str(stations1[i]))
+    
+plt.title("Incident Angle")
+plt.loglog(1/psd_freq[i],scipy.signal.savgol_filter(np.mean(psd_angle,axis=0),9,1),linewidth=5,label="Mean",color='black',linestyle="dashed")
+
+plt.grid(True)
+plt.legend(loc="upper right")
+plt.ylabel('Amplitude [°$^2$/Hz]')
+plt.grid(True)
+    
+plt.subplot(212)
+for i in range(0,len(angle)):
+    plt.loglog(1/psd_freq[i],scipy.signal.savgol_filter(psd_Azimuth[i],9,1),linewidth=3,label=str(stations1[i]))
+
+plt.title("Azimuth")    
+plt.loglog(1/psd_freq[i],scipy.signal.savgol_filter(np.mean(psd_Azimuth,axis=0),9,1),linewidth=5,label="Mean",color='black',linestyle="dashed")
+plt.scatter(x_points, y_points, color='red', s=500)  # Example: s=100 for larger circles
+y_points[0] = y_points[0]/1.3
+
+for x, y, label in zip(x_points, y_points, labels):
+    plt.text(x-2000, y**1.04, label, fontsize=40,rotation=-60)
+
+
+plt.grid(True)
+plt.legend(loc="upper right")
+# plt.xlabel("Frequency [Hz]")
+plt.xlabel("Period [s]")
+plt.ylabel('Amplitude [°$^2$/Hz]')
+plt.grid(True)
+# plt.xlim(1e5,1e7)
+plt.tight_layout()
+
+plt.savefig("Tilt_PSD.pdf")
 
 #%% Compliance Container
 import obspy
@@ -571,15 +882,15 @@ f_com = f_com[a1:a2]
 #                                                   f_min_com=0.007,
 #                                                   f_max_com=0.018)
 
-# compliance_high,coh_high,stream = compy.optimizer_rms(compliance_high, 
-#                                                       coh_high, 
-#                                                       stream,
-#                                                       f_com,
-#                                                       a1,
-#                                                       a2,
-#                                                       percentage = 5,
-#                                                       alpha=0.1,
-#                                                       beta=0.10)
+compliance_high,coh_high,stream = compy.optimizer_rms(compliance_high, 
+                                                      coh_high, 
+                                                      stream,
+                                                      f_com,
+                                                      a1,
+                                                      a2,
+                                                      percentage = 50,
+                                                      alpha=0.1,
+                                                      beta=0.10)
 
 
 print("calculating Median of Coherence And Compliance funtion")
@@ -740,11 +1051,10 @@ plt.ylim([10e-13,0.2*10e-10])
 plt.legend(loc = "upper left")
 plt.tight_layout()
 
-plt.tight_layout()
 plt.savefig(file_path_save + f"Compliance_RR52.pdf")
 
 
-#%%
+#%% Coherence frequency bands
 import pickle
 import scipy
 import compy
@@ -754,9 +1064,12 @@ import matplotlib.pyplot as plt
 sta = "RR52"
 # Load compliance Container
 print("Loading Compliance Container...")
-with open('/Users/mohammadamin/Desktop/Data/YV/'+sta+'/Compliance/com_container.pkl', 'rb') as file:
+# with open('/Users/mohammadamin/Desktop/Data/YV/'+sta+'/Compliance/com_container.pkl', 'rb') as file:
+with open('/Users/mohammadamin/Desktop/Data/YV/'+sta+'/Compliance/com_container_old.pkl', 'rb') as file:
     loaded = pickle.load(file)
+    
 
+    
 compliance_high = loaded["Compliance"]
 f = loaded["Frequency of Compliance"]
 uncertainty = loaded['Uncertainty']
@@ -776,46 +1089,49 @@ Gzz = Gzz*((2*np.pi*F_G)**4)
 
 print("calculating Median of Coherence And Compliance funtion")
 Coherence_all = np.median(coh_high,axis=0)
-Coherence_all_smoothed = scipy.signal.savgol_filter(Coherence_all,5,1)
+Coherence_all_smoothed = scipy.signal.savgol_filter(Coherence_all,5,4)
 
 Data = np.median(compliance_high,axis=0)
  
 
 treshhold = 0.8
 
-a1= 0
-a2= -150
+a1 = 10
+a2 = -158
+a1 = 4
+a2 = -11
 
 plt.rcParams.update({'font.size': 35})
-plt.figure(dpi=300,figsize=(20,12))
+plt.figure(dpi=300,figsize=(25,15))
 
 # plt.subplot(211)
 # plt.semilogx(f_coh,Coherence_all,'b')
-plt.title("Coherence P/Z''  " + str(sta))
+plt.title("Coherence (BHZ / BDH) YV." + str(sta))
 plt.semilogx(f_coh,Coherence_all_smoothed,'b',linewidth = 3)
 plt.vlines(x = f[a1], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=3)
 plt.vlines(x = f[a2-1], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=3,label="Compliance Frequency Band")
 plt.hlines(y =treshhold, xmin = f[a1] , xmax = f[a2-1],linestyles='dashed',linewidth=3,color = 'r',label="0.8 Treshhold")
-plt.plot(F_G,np.mean(Gzz,axis=0)/max(np.mean(Gzz,axis=0)),label = "Normalized PSD (Z'')",linewidth=3)
-plt.plot(F_G,np.mean(Gpp,axis=0)/max(np.mean(Gpp,axis=0)),label = "Normalized PSD (P)",linewidth=3)
-
+# plt.plot(F_G,np.mean(Gzz,axis=0)/max(np.mean(Gzz,axis=0)),label = "Normalized PSD (Z'')",linewidth=3)
+# plt.plot(F_G,np.mean(Gpp,axis=0)/max(np.mean(Gpp,axis=0)),label = "Normalized PSD (P)",linewidth=3)
 
 plt.ylim([0,1])
-plt.xlim([0.004,1])
 plt.xlabel('Frequency [Hz]')
 plt.ylabel('Coherence')
-plt.axvspan(0.004, 0.02, color='Blue', alpha=0.3, lw=0,label='Infragravity Band (I))')
-plt.axvspan(0.02,0.05, color='Orange', alpha=0.3, lw=0,label='low correlation Band (II)')
+plt.axvspan(0.004, 0.021, color='Blue', alpha=0.3, lw=0,label='Infragravity Band (I))')
+plt.axvspan(0.021,0.05, color='Orange', alpha=0.3, lw=0,label='low correlation Band (II)')
 plt.axvspan(0.05, 0.08, color='Green', alpha=0.3, lw=0,label='Microseismic Band (III) ')
 plt.axvspan(0.08, 0.2, color='Pink', alpha=0.6, lw=0,label='Microseismic Band (IV)')
-tick_positions = np.logspace(-2.4, 0, num=20)  # Adjust the range and number of ticks as needed
 
-# Set the tick positions and use ScalarFormatter for scientific notation labels
-plt.xticks(tick_positions, [f"{val:.3f}" for val in tick_positions], rotation=90) 
- # Display tick labels in decimal form
+tick_positions = np.logspace(-2.4, 0, num=20)  # Adjust the range and number of ticks as needed
+plt.xticks(tick_positions, [f"{val:.3f}" for val in tick_positions], rotation=90)  # Set the tick positions and labels
+plt.gca().xaxis.set_minor_locator(plt.NullLocator())  # Disable minor ticks on the x-axis
+plt.xlim([0.004,0.2])
+
 plt.grid(True)
-plt.legend(loc='upper right',fontsize = 20)
+plt.legend(loc='lower right')
 plt.tight_layout()
+plt.savefig("/Users/mohammadamin/Desktop/Coherence_bands_RR52.pdf")
+
 
 # plt.subplot(212)
 # plt.title(sta)
@@ -827,28 +1143,31 @@ plt.tight_layout()
 
 
 
-Data1 = np.median(compliance_high[:,a1:a2],axis=0)
-Data = Data1
-Data = scipy.signal.savgol_filter(Data1,10,5)
-f = f[a1:a2]
+# Data1 = np.median(compliance_high[:,a1:a2],axis=0)
+# Data = Data1
+# Data = scipy.signal.savgol_filter(Data1,10,5)
+# f = f[a1:a2]
 
-plt.figure(dpi=300,figsize=(12,12))
-plt.subplot(211)
-plt.title(sta)
-plt.plot(f,Data1,'blue',linewidth=3,label='Compliance')
-plt.plot(f,Data,'r',linewidth=3,linestyle='dashed',label='Smoothed Compliance')
-plt.ylabel('Compliance')
-plt.legend(loc='upper left')
-plt.grid(True)
 
-plt.subplot(212)
-plt.plot(f_coh,Coherence_all)
-plt.hlines(y = treshhold, xmin = f[0] , xmax = f[-1],linestyles='dashed',linewidth=3,color = 'r')
-plt.xlim(f[0],f[-1])
-plt.xlabel('Frequency [Hz]')
-plt.ylabel('Coherence')
-plt.grid(True)
-plt.tight_layout()
+
+
+# plt.figure(dpi=300,figsize=(12,12))
+# plt.subplot(211)
+# plt.title(sta)
+# plt.plot(f,Data1,'blue',linewidth=3,label='Compliance')
+# plt.plot(f,Data,'r',linewidth=3,linestyle='dashed',label='Smoothed Compliance')
+# plt.ylabel('Compliance')
+# plt.legend(loc='upper left')
+# plt.grid(True)
+
+# plt.subplot(212)
+# plt.plot(f_coh,Coherence_all)
+# plt.hlines(y = treshhold, xmin = f[0] , xmax = f[-1],linestyles='dashed',linewidth=3,color = 'r')
+# plt.xlim(f[0],f[-1])
+# plt.xlabel('Frequency [Hz]')
+# plt.ylabel('Coherence')
+# plt.grid(True)
+# plt.tight_layout()
 #%%
 # Tectonic Difference
 import numpy as np

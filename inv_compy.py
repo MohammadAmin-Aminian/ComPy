@@ -2042,7 +2042,7 @@ def plot_inversion_density(vs,vs0,mis_fit,Data,s,freq,sta,burnin,ncompl,iteratio
         # plt.plot(freq, Data, color='black', label='Measured Compliance')
     plt.errorbar(freq, Data, yerr=s, ecolor=('black'), color='black',fmt='none',
                     linewidth= 5, label='Measured Compliance',capsize=15)
-    plt.plot(freq, ncompl[1],color='blue', label='Starting Compliance',linewidth= 5,linestyle='dashed')
+    # plt.plot(freq, ncompl[1],color='blue', label='Starting Compliance',linewidth= 5,linestyle='dashed')
     plt.legend(loc='upper left',fontsize=30)
     
     plt.subplot(122)
@@ -2053,7 +2053,9 @@ def plot_inversion_density(vs,vs0,mis_fit,Data,s,freq,sta,burnin,ncompl,iteratio
     depth = np.arange(0,100,1 )
     
     ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
-    plt.plot(start_model,depth,color='blue',linewidth=8,linestyle='dashed',label="Starting Model ")
+    # plt.plot(start_model,depth,color='blue',linewidth=8,linestyle='dashed',label="Starting Model ")
+    
+    
     # plt.imshow(a , aspect='auto', cmap='jet')
 
     # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
