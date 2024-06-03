@@ -14,8 +14,6 @@ Utilization of advanced signal processing techniques to handle seafloor complian
 
 Before installing ComPy, ensure you have Python and the necessary packages installed. ComPy requires Python 3.x.
 
-# bash
-Copy code
 # Clone the repository
 git clone https://github.com/your-repository/ComPy.git
 
