@@ -1,4 +1,4 @@
-ComPy: Seafloor Compliance Analysis Tool
+# ComPy: Seafloor Compliance Analysis Tool
 
 Overview
 
