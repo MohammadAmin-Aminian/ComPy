@@ -2153,7 +2153,13 @@ def plot_inversion_density_all(Inversion_container):
         
         # Define the colors for the colormap (from white to red to black)
         colors = ["white", "red", "black"]
-        
+        viridis = plt.cm.get_cmap('viridis', 256)
+
+    # Sample the colormap
+        colors = [viridis(0.0),  # dark blue/lilac at the start of the colormap
+          viridis(0.5),  # greenish in the middle of the colormap
+          viridis(1.0)]  # bright yellow at the end of the colormap
+
         # Define the transition points for the colors
         n_bins = [0, 0.4, 1]  # You can adjust these thresholds based on your data
         
@@ -2169,7 +2175,8 @@ def plot_inversion_density_all(Inversion_container):
         depth = np.arange(0,100,1 )
         
         ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
-        plt.plot(start_model,depth,color='blue',linewidth=8,linestyle='dashed',label="Mean Starting Model ")
+        # plt.plot(start_model,depth,color='blue',linewidth=8,linestyle='dashed',label="Mean Starting Model ")
+        plt.plot(np.median(vs_downsampled,axis=0)/50,depth,color='red',linewidth=8,linestyle='dashed',label="Median")
         # plt.imshow(a , aspect='auto', cmap='jet')
     
         # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
@@ -2199,13 +2206,724 @@ def plot_inversion_density_all(Inversion_container):
             cbar.set_label('Probability')
         if ii == 7:
             plt.legend(loc='lower left',fontsize=30)
+            
+        if ii == 0:
+            plt.text(0.5, 0.95, 'a)', fontsize=40, fontweight='bold', va='top',color="white")
+        if ii == 1:
+            plt.text(0.05, 0.95, 'b)', fontsize=40, fontweight='bold', va='top',color="white")
+        if ii == 2:
+            plt.text(0.001, 0.95, 'c)', fontsize=40, fontweight='bold', va='top',color="white")
+        if ii == 3:
+            plt.text(0.4, 0.95, 'd)', fontsize=40, fontweight='bold', va='top',color="white")
+        if ii == 4:
+            plt.text(0.9, 0.95, 'e)', fontsize=40, fontweight='bold', va='top',color="white")
+        if ii == 5:
+            plt.text(0.1, 0.95, 'f)', fontsize=40, fontweight='bold', va='top',color="white")
+        if ii == 6:
+            plt.text(0.1, 0.95, 'g)', fontsize=40, fontweight='bold', va='top',color="white")
+        if ii == 7:
+            plt.text(0.1, 0.95, 'h)', fontsize=40, fontweight='bold', va='top',color="white")
+
+        plt.ylim(48,0)
+        # plt.ylim(72,0)
+        # plt.colorbar()
+    plt.tight_layout()
+    plt.savefig("/Users/mohammadamin/Desktop//Inversion_Table.pdf")
+#%%
+def final_plot(Inversion_container):
+    from matplotlib import gridspec
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+    import matplotlib.image as mpimg  # Import the image module
+
+    # Create a new figure with specified dimensions
+    fig = plt.figure(figsize=(35, 30), constrained_layout=True)
+    
+    # Define the grid layout with customized row heights for the third column
+    gs = gridspec.GridSpec(3, 3, width_ratios=[1, 1, 2], height_ratios=[1, 1, 1])
+    
+    img1 = mpimg.imread('/Users/mohammadamin/Desktop/Data/Final_figure_Bath/RR36.png')
+    img2 = mpimg.imread('/Users/mohammadamin/Desktop/Data/Final_figure_Bath/RR38.png')
+    img3 = mpimg.imread('/Users/mohammadamin/Desktop/Data/Final_figure_Bath/RR40.png')
+    img4 = mpimg.imread('/Users/mohammadamin/Desktop/Data/Final_figure_Bath/RR50.png')
+    img5 = mpimg.imread('/Users/mohammadamin/Desktop/Data/Final_figure_Bath/RR52.png')
+    img6 = mpimg.imread('/Users/mohammadamin/Desktop/Data/Final_figure_Bath/Rift_valley.png')
+
+    # First plot
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax1.set_title("RR36")
+    ax1.imshow(img1,extent=[0, 100, 0, 100], aspect='auto')
+    ax1.set_xlabel("Distance East/West [km]")
+    ax1.set_ylabel("Distance North/South [km]")
+    plt.text(0.05, 0.95, 'a)', transform=ax1.transAxes, fontsize=40, fontweight='bold', va='top')
+
+    # Second plot
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax2.set_title("RR38")
+    ax2.imshow(img2,extent=[0, 100, 0, 100], aspect='auto')
+    ax2.set_xlabel("Distance East/West [km]")
+    ax2.set_ylabel("Distance North/South [km]")
+    plt.text(0.05, 0.95, 'b)', transform=ax2.transAxes, fontsize=40, fontweight='bold', va='top')
+
+    # Third plot
+    ax3 = fig.add_subplot(gs[1, 0])
+    ax3.set_title("RR40")
+    ax3.imshow(img3,extent=[0, 100, 0, 100], aspect='auto')
+    ax3.set_xlabel("Distance East/West [km]")
+    ax3.set_ylabel("Distance North/South [km]")
+    plt.text(0.05, 0.95, 'c)', transform=ax3.transAxes, fontsize=40, fontweight='bold', va='top')
+
+    # Fourth plot
+    ax4 = fig.add_subplot(gs[1, 1])
+    ax4.set_title("RR50")
+    ax4.imshow(img4,extent=[0, 100, 0, 100], aspect='auto')
+    ax4.set_xlabel("Distance East/West [km]")
+    ax4.set_ylabel("Distance North/South [km]")
+    plt.text(0.05, 0.95, 'd)', transform=ax4.transAxes, fontsize=40, fontweight='bold', va='top')
+
+    # Fifth plot
+    ax5 = fig.add_subplot(gs[2, 0])
+    ax5.set_title("RR52")
+    ax5.imshow(img5,extent=[0, 100, 0, 100], aspect='auto')
+    ax5.set_xlabel("Distance East/West [km]")
+    ax5.set_ylabel("Distance North/South [km]")
+    plt.text(0.05, 0.95, 'e)', transform=ax5.transAxes, fontsize=40, fontweight='bold', va='top')
+
+    # Sixth plot
+    ax6 = fig.add_subplot(gs[2, 1])
+    ax6.imshow(img6,extent=[-25, 25, -5, 5], aspect='auto')
+
+    ax6.set_xlabel("Distance [km]")
+    ax6.set_ylabel("Depth [km]")
+    plt.text(0.05, 0.95, 'f)', transform=ax6.transAxes, fontsize=40, fontweight='bold', va='top')
+    ax6.grid(False)
+
+    # Seventh plot
+    ax7 = fig.add_subplot(gs[0:3, 2])  # Spanning the top two rows of the third column
+        
+    for ii in range(0,len(Inversion_container)):
+        vs = Inversion_container[ii]["Shear Velocity"]
+        # vs0 = Inversion_container[ii]["Shear Velocity Starting"]
+        mis_fit = Inversion_container[ii]["Misfit Fucntion"]
+        # Data = Inversion_container[ii]["compliance Measured"]
+        # s = Inversion_container[ii]["uncertainty"]
+        # freq = Inversion_container[ii]["compliance Frequency"]
+        sta = Inversion_container[ii]["Station"]
+        # burnin = Inversion_container[ii]["burnin"]
+        # ncompl = Inversion_container[ii]["compliance Forward"]
+        # iteration = Inversion_container[ii]["iteration"]
+        mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
+    
+    
+        # start_model = start_model_plot(sta)/50
+        # refrence_model = refrence_models()/50
+        # start_model = start_model_plot_mean(sta)/50 #mean of all models,sedimental models differ from rocky models
+        
+        # start_model = start_model_plot_mean(sta)/50
+        bins = 100
+        jj = 0
+        vs_good = []
+        
+        for i in range(0,len(mis_fit[0])):
+            if mis_fit[0][i] < mis_fit_trsh:
+                # if vs[ii][9000][0] < vs[ii][6000][0]:
+    
+                    vs_good.append(vs[i])
+                    jj = jj+1
+            
+        vs_good = np.array(vs_good)
+          
+        vs_good = vs_good[:,0:10000,0]
+        
+        downsample_factor = vs_good.shape[1] // 100
+        
+        # Reshape the array to prepare for averaging
+        # New shape will be (20000, 100, downsample_factor, 1)
+        vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+        
+        # Take the mean along the downsample_factor dimension
+        vs_downsampled = vs_reshaped.mean(axis=2)
+        
+        print(vs_downsampled.shape)  # This should print (20000, 100, 1)
+        
+        # a = np.zeros([100,100])
+        c = np.zeros([bins,bins])
+        b = np.histogram(vs_reshaped[:, 10, 0], bins=bins, range=(0, 5000))[1]
+        
+        for i in range(0,len(vs_downsampled[0])):
+            
+            # c[i] = plt.hist(vs_downsampled[:,i],bins=bins,range=([0,5000]),density=True,log=False)[0]
+            c[i] = np.histogram(vs_downsampled[:, i], bins=bins, range=(0, 5000), density=True)[0]
+            c[i] = c[i]/np.max(c[i])
+            print(i)
+            
+        
+        
+        # plt.title(str("YV.")+sta)
+        selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+        selected_labels = b[selected_indices]
+        selected_labels = selected_labels.astype(int)
+          
+        depth = np.arange(0,100,1 )
+          
+            # ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
+        plt.vlines(90, 0, 100,linestyles="dashed",colors='grey',linewidth=3)
+        plt.text(95, 25, 'Fresh peridotite', fontsize=35, color='grey', ha='center', rotation=90)
+    
+        plt.plot(np.median(vs_downsampled,axis=0)/50,depth,linewidth=5,linestyle='solid',label=sta)
+        # medians = np.median(vs_downsampled, axis=0) / 50
+        # std_dev = np.std(vs_downsampled, axis=0) / 50
+           
+            # plt.errorbar(np.median(vs_downsampled,axis=0)/50, depth, xerr=np.std(vs_downsampled,axis=0)/50)
+        # plt.fill_betweenx(depth, medians - std_dev, medians + std_dev, color='gray', alpha=0.5)
+        plt.grid(True)
+          
+            # Setting custom y-axis ticks and labels
+        plt.xticks(ticks=selected_indices, labels=selected_labels)
+    
+        selected_indices_y = [0,12,24,36,48,60,72,84]
+        selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+        plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+        plt.legend(loc='upper right')
+        plt.ylim(48,0)
+    
+    
+    
+        ax7.set_xlabel("Shear Velocity [m/s]")
+        ax7.set_ylabel("Depth [m]")
+        plt.text(0.025, 0.98, 'g)', transform=ax7.transAxes, fontsize=40, fontweight='bold', va='top')
+
+    # Eighth plot as inset
+    ax8 = inset_axes(ax7, width="40%", height="40%", loc='lower left', borderpad=3.5)
+            
+    for ii in range(0,len(Inversion_container)):
+        vs = Inversion_container[ii]["Shear Velocity"]
+        # vs0 = Inversion_container[ii]["Shear Velocity Starting"]
+        mis_fit = Inversion_container[ii]["Misfit Fucntion"]
+        # Data = Inversion_container[ii]["compliance Measured"]
+        # s = Inversion_container[ii]["uncertainty"]
+        # freq = Inversion_container[ii]["compliance Frequency"]
+        sta = Inversion_container[ii]["Station"]
+        # burnin = Inversion_container[ii]["burnin"]
+        # ncompl = Inversion_container[ii]["compliance Forward"]
+        # iteration = Inversion_container[ii]["iteration"]
+        mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
+    
+    
+        # start_model = start_model_plot(sta)/50
+        # refrence_model = refrence_models()/50
+        # start_model = start_model_plot_mean(sta)/50 #mean of all models,sedimental models differ from rocky models
+        
+        # start_model = start_model_plot_mean(sta)/50
+        bins = 100
+        jj = 0
+        vs_good = []
+        
+        for i in range(0,len(mis_fit[0])):
+            if mis_fit[0][i] < mis_fit_trsh:
+                # if vs[ii][9000][0] < vs[ii][6000][0]:
+    
+                    vs_good.append(vs[i])
+                    jj = jj+1
+            
+        vs_good = np.array(vs_good)
+          
+        vs_good = vs_good[:,0:10000,0]
+        
+        downsample_factor = vs_good.shape[1] // 100
+        
+        # Reshape the array to prepare for averaging
+        # New shape will be (20000, 100, downsample_factor, 1)
+        vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+        
+        # Take the mean along the downsample_factor dimension
+        vs_downsampled = vs_reshaped.mean(axis=2)
+        
+        print(vs_downsampled.shape)  # This should print (20000, 100, 1)
+        
+        # a = np.zeros([100,100])
+        c = np.zeros([bins,bins])
+        b = np.histogram(vs_reshaped[:, 10, 0], bins=bins, range=(0, 5000))[1]
+        
+        for i in range(0,len(vs_downsampled[0])):
+            
+            # c[i] = plt.hist(vs_downsampled[:,i],bins=bins,range=([0,5000]),density=True,log=False)[0]
+            c[i] = np.histogram(vs_downsampled[:, i], bins=bins, range=(0, 5000), density=True)[0]
+            c[i] = c[i]/np.max(c[i])
+            print(i)
+        selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+        selected_labels = b[selected_indices]
+        selected_labels = selected_labels.astype(int)
+          
+        depth = np.arange(0,100,1 )
+          
+        serpentinization_percentage = (9000-2*(np.median(vs_downsampled,axis=0)))/30
+        serpentinization_percentage = np.minimum(serpentinization_percentage, 100)
+        plt.plot(serpentinization_percentage,depth,linewidth=5,linestyle='solid',label=sta)
+           
+        # medians = np.median(vs_downsampled, axis=0) / 50
+        # std_dev = np.std(vs_downsampled, axis=0) / 50
+           
+            # plt.errorbar(np.median(vs_downsampled,axis=0)/50, depth, xerr=np.std(vs_downsampled,axis=0)/50)
+        # plt.fill_betweenx(depth, serpentinization_percentage - std_dev, serpentinization_percentage + std_dev, color='blue', alpha=0.5)
+           
+        plt.grid(True)
+        plt.xlim([0,100])
+        selected_indices_y = [0,12,24,36,48,60,72,84]
+        selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+        plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+        plt.ylim(48,0)
+        plt.legend(loc='lower right')
+
+        ax8.set_xlabel("Serpentinization (%)")
+        # ax8.set_ylabel("Depth (m)")
+    plt.text(0.05, 0.95, 'h)', transform=ax8.transAxes, fontsize=40, fontweight='bold', va='top')
+
+    plt.tight_layout()
+    plt.savefig("/Users/mohammadamin/Desktop/Final_Figure.pdf")
+    plt.show()
+
+
+#%%
+def plot_inversion_all(Inversion_container):
+    refrence_model = refrence_models()/50
+
+    plt.figure(dpi=300,figsize=(15,25))
+    
+    for ii in range(0,len(Inversion_container)):
+        vs = Inversion_container[ii]["Shear Velocity"]
+        # vs0 = Inversion_container[ii]["Shear Velocity Starting"]
+        mis_fit = Inversion_container[ii]["Misfit Fucntion"]
+        # Data = Inversion_container[ii]["compliance Measured"]
+        # s = Inversion_container[ii]["uncertainty"]
+        # freq = Inversion_container[ii]["compliance Frequency"]
+        sta = Inversion_container[ii]["Station"]
+        # burnin = Inversion_container[ii]["burnin"]
+        # ncompl = Inversion_container[ii]["compliance Forward"]
+        # iteration = Inversion_container[ii]["iteration"]
+        mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
+    
+    
+        start_model = start_model_plot(sta)/50
+        
+        start_model = start_model_plot_mean(sta)/50 #mean of all models,sedimental models differ from rocky models
+        
+        # start_model = start_model_plot_mean(sta)/50
+        bins = 100
+        jj = 0
+        vs_good = []
+        
+        for i in range(0,len(mis_fit[0])):
+            if mis_fit[0][i] < mis_fit_trsh:
+                # if vs[ii][9000][0] < vs[ii][6000][0]:
+    
+                    vs_good.append(vs[i])
+                    jj = jj+1
+            
+        vs_good = np.array(vs_good)
+          
+        vs_good = vs_good[:,0:10000,0]
+        
+        downsample_factor = vs_good.shape[1] // 100
+        
+        # Reshape the array to prepare for averaging
+        # New shape will be (20000, 100, downsample_factor, 1)
+        vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+        
+        # Take the mean along the downsample_factor dimension
+        vs_downsampled = vs_reshaped.mean(axis=2)
+        
+        print(vs_downsampled.shape)  # This should print (20000, 100, 1)
+        
+        # a = np.zeros([100,100])
+        c = np.zeros([bins,bins])
+        b = np.histogram(vs_reshaped[:, 10, 0], bins=bins, range=(0, 5000))[1]
+        
+        for i in range(0,len(vs_downsampled[0])):
+            
+            # c[i] = plt.hist(vs_downsampled[:,i],bins=bins,range=([0,5000]),density=True,log=False)[0]
+            c[i] = np.histogram(vs_downsampled[:, i], bins=bins, range=(0, 5000), density=True)[0]
+            c[i] = c[i]/np.max(c[i])
+            print(i)
+            
+   
+        # plt.title(str("YV.")+sta)
+        selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+        selected_labels = b[selected_indices]
+        selected_labels = selected_labels.astype(int)
+        
+        depth = np.arange(0,100,1 )
+        
+        # plt.plot(start_model,depth,color='blue',linewidth=8,linestyle='dashed',label="Mean Starting Model ")
+        plt.plot(np.median(vs_downsampled,axis=0)/50,depth,linewidth=5,label=sta)
+        # plt.imshow(a , aspect='auto', cmap='jet')
+    
+        # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
+        #             label='Median of Brun-in')
+        # plt.ylim([10e-14,10e-10])
+        # plt.ylim([10e-13,10e-11])
+    
+        plt.grid(True)
+        # plt.ylim([1e-11,6e-11])
+        # plt.yscale('log')
+        
+        # Setting custom y-axis ticks and labels
+    plt.xticks(ticks=selected_indices, labels=selected_labels)
+        # depth = np.arange(0, -10000, -1)
+    
+        # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
+    
+    selected_indices_y = [0,12,24,36,48,60,72,84]
+    selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+    plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+    plt.ylabel("Depth [m]")
+    plt.xlabel("Shear Velocity [m/s]")
+    plt.plot(refrence_model[0],depth,color='red',linewidth=5,linestyle='dashed',label="SWIR 64°30'E (EW)")
+    plt.plot(refrence_model[1],depth,color='purple',linewidth=5,linestyle='dotted',label="SWIR 64°30'E (NS) ")
+    plt.plot(refrence_model[2],depth,color='green',linewidth=5,linestyle='dotted',label="SWIR 65-64°E ")    
+    plt.legend(loc='lower left',fontsize=30)
+    plt.ylim(48,0)
+        # plt.ylim(72,0)
+        # plt.colorbar()
+    plt.tight_layout()
+    plt.savefig("/Users/mohammadamin/Desktop//Inversion_Table.pdf")
+    
+#%%
+
+def plot_inversion_density_mean_all(Inversion_container):
+    
+    plt.figure(dpi=300,figsize=(40,25))
+    
+    for ii in range(0,len(Inversion_container)):
+        vs = Inversion_container[ii]["Shear Velocity"]
+        # vs0 = Inversion_container[ii]["Shear Velocity Starting"]
+        mis_fit = Inversion_container[ii]["Misfit Fucntion"]
+        # Data = Inversion_container[ii]["compliance Measured"]
+        # s = Inversion_container[ii]["uncertainty"]
+        # freq = Inversion_container[ii]["compliance Frequency"]
+        sta = Inversion_container[ii]["Station"]
+        # burnin = Inversion_container[ii]["burnin"]
+        # ncompl = Inversion_container[ii]["compliance Forward"]
+        # iteration = Inversion_container[ii]["iteration"]
+        mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
+    
+    
+        start_model = start_model_plot(sta)/50
+        refrence_model = refrence_models()/50
+        # start_model = start_model_plot_mean(sta)/50 #mean of all models,sedimental models differ from rocky models
+        
+        # start_model = start_model_plot_mean(sta)/50
+        bins = 100
+        jj = 0
+        vs_good = []
+        
+        for i in range(0,len(mis_fit[0])):
+            if mis_fit[0][i] < mis_fit_trsh:
+                # if vs[ii][9000][0] < vs[ii][6000][0]:
+    
+                    vs_good.append(vs[i])
+                    jj = jj+1
+            
+        vs_good = np.array(vs_good)
+          
+        vs_good = vs_good[:,0:10000,0]
+        
+        downsample_factor = vs_good.shape[1] // 100
+        
+        # Reshape the array to prepare for averaging
+        # New shape will be (20000, 100, downsample_factor, 1)
+        vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+        
+        # Take the mean along the downsample_factor dimension
+        vs_downsampled = vs_reshaped.mean(axis=2)
+        
+        print(vs_downsampled.shape)  # This should print (20000, 100, 1)
+        
+        # a = np.zeros([100,100])
+        c = np.zeros([bins,bins])
+        b = np.histogram(vs_reshaped[:, 10, 0], bins=bins, range=(0, 5000))[1]
+        
+        for i in range(0,len(vs_downsampled[0])):
+            
+            # c[i] = plt.hist(vs_downsampled[:,i],bins=bins,range=([0,5000]),density=True,log=False)[0]
+            c[i] = np.histogram(vs_downsampled[:, i], bins=bins, range=(0, 5000), density=True)[0]
+            c[i] = c[i]/np.max(c[i])
+            print(i)
+            
+        
+        
+        # Define the colors for the colormap (from white to red to black)
+        
+        # Define the transition points for the colors
+        
+        # Create the custom colormap
+   
+        plt.subplot(2,4,int(ii+1))
+        plt.title(str("YV.")+sta)
+        selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+        selected_labels = b[selected_indices]
+        selected_labels = selected_labels.astype(int)
+        
+        depth = np.arange(0,100,1 )
+        
+        # ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
+        plt.plot(start_model,depth,color='blue',linewidth=5,linestyle='dashdot',label="Crust 1 ")
+        if sta == "RR40":
+            plt.plot(refrence_model[0],depth,color='red',linewidth=5,linestyle='dashed',label="SWIR 64°30'E (EW)")
+            plt.plot(refrence_model[1],depth,color='purple',linewidth=5,linestyle='dotted',label="SWIR 64°30'E (NS) ")
+            plt.plot(refrence_model[2],depth,color='green',linewidth=5,linestyle='dotted',label="SWIR 65-64°E ")
+            
+        if sta == "RR36" or sta== "RR38":
+            plt.plot(refrence_model[4],depth,color='red',linewidth=5,linestyle='dashed',label="Atlantis Bank")
+            
+        # plt.plot(refrence_models[2],depth,color='blue',linewidth=8,linestyle='dashed',label="Crust 1 ")
+        
+        
+        
+        plt.plot(np.median(vs_downsampled,axis=0)/50,depth,color='black',linewidth=6,linestyle='solid',label="Median (This Study)")
+        # plt.imshow(a , aspect='auto', cmap='jet')
+    
+        # plt.plot(freq, np.median(ncompl[burnin:iteration],axis=0), color='blue', 
+        #             label='Median of Brun-in')
+        # plt.ylim([10e-14,10e-10])
+        # plt.ylim([10e-13,10e-11])
+    
+        plt.grid(True)
+        # plt.ylim([1e-11,6e-11])
+        # plt.yscale('log')
+        
+        # Setting custom y-axis ticks and labels
+        plt.xticks(ticks=selected_indices, labels=selected_labels)
+        # cbar = plt.colorbar(ff)
+        # depth = np.arange(0, -10000, -1)
+    
+        # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
+    
+        selected_indices_y = [0,12,24,36,48,60,72,84]
+        selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+        plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+        if ii == 0 or ii == 4:
+            plt.ylabel("Depth [m]")
+        if ii == 4 or ii == 5 or ii == 6 or ii == 7:
+            plt.xlabel("Shear Velocity [m/s]")
+        # if ii == 3 or ii == 7:
+            # cbar.set_label('Probability')
+        # if ii == 7:
+            # plt.legend(loc='lower left',fontsize=30)
+        plt.legend(loc='lower left',fontsize=30)
         plt.ylim(48,0)
         # plt.ylim(72,0)
         # plt.colorbar()
     plt.tight_layout()
     # file_path_save = "/Users/mohammadamin/Desktop"
     # plt.savefig(file_path_save + "Inversion_Table.pdf")
+#%%
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
+def plot_inversion_serpentinization(Inversion_container):
+    
+    plt.figure(dpi=300, figsize=(45, 25))
+    
+    for ii in range(len(Inversion_container)):
+        vs = Inversion_container[ii]["Shear Velocity"]
+        mis_fit = Inversion_container[ii]["Misfit Fucntion"]
+        sta = Inversion_container[ii]["Station"]
+        mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
+        
+        vs_good = []
+        for i in range(len(mis_fit[0])):
+            if mis_fit[0][i] < mis_fit_trsh:
+                vs_good.append(vs[i])
+                
+        vs_good = np.array(vs_good)[:,0:10000,0]
+        
+        downsample_factor = vs_good.shape[1] // 100
+        vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+        vs_downsampled = vs_reshaped.mean(axis=2)
+        
+        ax_main = plt.subplot(2, len(Inversion_container), ii + 1)
+        plt.title(str("YV.") + sta)
+        plt.vlines(90, 0, 100, linestyles="dashed", colors='grey', linewidth=3)
+        plt.text(95, 25, 'Fresh peridotite', fontsize=35, color='grey', ha='center', rotation=90)
+        
+        depth = np.arange(0, 100, 1)
+        plt.plot(np.median(vs_downsampled, axis=0) / 50, depth, color='black', linewidth=5, linestyle='solid', label="Median")
+        medians = np.median(vs_downsampled, axis=0) / 50
+        std_dev = np.std(vs_downsampled, axis=0) / 50
+        plt.fill_betweenx(depth, medians - std_dev, medians + std_dev, color='gray', alpha=0.5)
+        plt.grid(True)
+        # plt.legend(loc='lower left', fontsize=30)
+        plt.ylim(100, 0)
+        plt.xlabel("Shear Velocity [m/s]")
+        plt.ylabel("Depth [m]")
+        
+        # Adding inset plot at a new position
+        ax_inset = inset_axes(ax_main, width="30%", height="50%", loc='lower left', borderpad=1.5)
+        serpentinization_percentage = (9000 - 2 * np.median(vs_downsampled, axis=0)) / 30
+        serpentinization_percentage = np.minimum(serpentinization_percentage, 100)
+        ax_inset.plot(serpentinization_percentage, depth, color='blue', linewidth=5, linestyle='solid')
+        ax_inset.fill_betweenx(depth, serpentinization_percentage - std_dev, serpentinization_percentage + std_dev, color='blue', alpha=0.5)
+        ax_inset.set_xlabel("Serpentinization [%]")
+        ax_inset.set_ylabel("Depth [m]")
+        ax_inset.set_ylim(100, 0)
+        ax_inset.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+# Assuming Inversion_container is predefined somewhere in your code with the necessary data
+# plot_inversion_serpentinization(Inversion_container)
+
+#%%
+def plot_inversion_serpentinization1(Inversion_container):
+    
+    plt.figure(dpi=300,figsize=(45,25))
+    
+    for ii in range(0,len(Inversion_container)):
+        vs = Inversion_container[ii]["Shear Velocity"]
+        # vs0 = Inversion_container[ii]["Shear Velocity Starting"]
+        mis_fit = Inversion_container[ii]["Misfit Fucntion"]
+        # Data = Inversion_container[ii]["compliance Measured"]
+        # s = Inversion_container[ii]["uncertainty"]
+        # freq = Inversion_container[ii]["compliance Frequency"]
+        sta = Inversion_container[ii]["Station"]
+        # burnin = Inversion_container[ii]["burnin"]
+        # ncompl = Inversion_container[ii]["compliance Forward"]
+        # iteration = Inversion_container[ii]["iteration"]
+        mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
+    
+    
+        # start_model = start_model_plot(sta)/50
+        # refrence_model = refrence_models()/50
+        # start_model = start_model_plot_mean(sta)/50 #mean of all models,sedimental models differ from rocky models
+        
+        # start_model = start_model_plot_mean(sta)/50
+        bins = 100
+        jj = 0
+        vs_good = []
+        
+        for i in range(0,len(mis_fit[0])):
+            if mis_fit[0][i] < mis_fit_trsh:
+                # if vs[ii][9000][0] < vs[ii][6000][0]:
+    
+                    vs_good.append(vs[i])
+                    jj = jj+1
+            
+        vs_good = np.array(vs_good)
+          
+        vs_good = vs_good[:,0:10000,0]
+        
+        downsample_factor = vs_good.shape[1] // 100
+        
+        # Reshape the array to prepare for averaging
+        # New shape will be (20000, 100, downsample_factor, 1)
+        vs_reshaped = vs_good.reshape(vs_good.shape[0], 100, downsample_factor)
+        
+        # Take the mean along the downsample_factor dimension
+        vs_downsampled = vs_reshaped.mean(axis=2)
+        
+        print(vs_downsampled.shape)  # This should print (20000, 100, 1)
+        
+        # a = np.zeros([100,100])
+        c = np.zeros([bins,bins])
+        b = np.histogram(vs_reshaped[:, 10, 0], bins=bins, range=(0, 5000))[1]
+        
+        for i in range(0,len(vs_downsampled[0])):
+            
+            # c[i] = plt.hist(vs_downsampled[:,i],bins=bins,range=([0,5000]),density=True,log=False)[0]
+            c[i] = np.histogram(vs_downsampled[:, i], bins=bins, range=(0, 5000), density=True)[0]
+            c[i] = c[i]/np.max(c[i])
+            print(i)
+            
+        
+        
+        # Define the colors for the colormap (from white to red to black)
+        
+        # Define the transition points for the colors
+        n_bins = [0, 0.4, 1]  # You can adjust these thresholds based on your data
+        
+        # Create the custom colormap
+        plt.subplot(2,len(Inversion_container),int(ii+1))
+        plt.title(str("YV.")+sta)
+        selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+        selected_labels = b[selected_indices]
+        selected_labels = selected_labels.astype(int)
+       
+        depth = np.arange(0,100,1 )
+       
+        # ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
+        plt.vlines(90, 0, 100,linestyles="dashed",colors='grey',linewidth=3)
+        plt.text(95, 25, 'Fresh peridotite', fontsize=35, color='grey', ha='center', rotation=90)
+
+        plt.plot(np.median(vs_downsampled,axis=0)/50,depth,color='black',linewidth=5,linestyle='solid',label="Median")
+        medians = np.median(vs_downsampled, axis=0) / 50
+        std_dev = np.std(vs_downsampled, axis=0) / 50
+        
+        # plt.errorbar(np.median(vs_downsampled,axis=0)/50, depth, xerr=np.std(vs_downsampled,axis=0)/50)
+        plt.fill_betweenx(depth, medians - std_dev, medians + std_dev, color='gray', alpha=0.5)
+        plt.grid(True)
+       
+        # Setting custom y-axis ticks and labels
+        plt.xticks(ticks=selected_indices, labels=selected_labels)
+        # cbar = plt.colorbar(ff)
+        # depth = np.arange(0, -10000, -1)
+   
+        # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
+   
+        selected_indices_y = [0,12,24,36,48,60,72,84]
+        selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+        plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+        if ii == 0 or ii == 4:
+            plt.ylabel("Depth [m]")
+        if ii in range(len(Inversion_container)):
+            plt.xlabel("Shear Velocity [m/s]")
+        # if ii == 3 or ii == 7:
+           # cbar.set_label('Probability')
+       # if ii == 7:
+           # plt.legend(loc='lower left',fontsize=30)
+        plt.legend(loc='lower left',fontsize=30)
+        plt.ylim(48,0)
+        # plt.ylim(72,0)
+        # plt.colorbar()
+
+        plt.subplot(2,len(Inversion_container),int(ii+len(Inversion_container)+1))
+        selected_indices = np.linspace(0, len(b) - 1, 6, dtype=int)
+        selected_labels = b[selected_indices]
+        selected_labels = selected_labels.astype(int)
+       
+        depth = np.arange(0,100,1 )
+       
+        # ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
+        serpentinization_percentage = (9000-2*(np.median(vs_downsampled,axis=0)))/30
+        serpentinization_percentage = np.minimum(serpentinization_percentage, 100)
+        plt.plot(serpentinization_percentage,depth,color='blue',linewidth=5,linestyle='solid')
+        
+        medians = np.median(vs_downsampled, axis=0) / 50
+        std_dev = np.std(vs_downsampled, axis=0) / 50
+        
+        # plt.errorbar(np.median(vs_downsampled,axis=0)/50, depth, xerr=np.std(vs_downsampled,axis=0)/50)
+        plt.fill_betweenx(depth, serpentinization_percentage - std_dev, serpentinization_percentage + std_dev, color='blue', alpha=0.5)
+        
+        plt.grid(True)
+        plt.xlim([0,100])
+        selected_indices_y = [0,12,24,36,48,60,72,84]
+        selected_labels_y = [0,-2000,-4000,-6000,-8000,-10000,-12000,-14000]
+        plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
+        if ii == 0 or ii == len(Inversion_container):
+            plt.ylabel("Depth [m]")
+        if ii in range(len(Inversion_container)):
+            plt.xlabel("Serpentinization [%]")
+        # if ii == 3 or ii == 7:
+            # cbar.set_label('Probability')
+        # if ii == 7:
+            # plt.legend(loc='lower left',fontsize=30)
+        # plt.legend(loc='lower left',fontsize=30)
+        plt.ylim(48,0)
+        # plt.ylim(72,0)
+        # plt.colorbar()
+ 
+    plt.tight_layout()
+    # file_path_save = "/Users/mohammadamin/Desktop""
 #%%
 def start_model_plot_mean(sta):
     start_model = np.zeros(100)
@@ -2230,6 +2948,88 @@ def start_model_plot_mean(sta):
         start_model[42:100] = 4310
         
     return(start_model)
+#%%
+def refrence_models(p=0.25):
+    # Possion Ratio
+    ref_models = np.zeros([5,100])
+    
+    #SWIR-64-EW_profile
+    ref_models[0][0:2] = 3500 
+    ref_models[0][2:3] = 4070
+    ref_models[0][3:5] = 4730
+    ref_models[0][5:7] = 5200
+    ref_models[0][7:10] = 5900    
+    ref_models[0][10:13] = 6200
+    ref_models[0][13:15] = 6600
+    ref_models[0][15:17] = 6900
+    ref_models[0][17:20] = 7120    
+    ref_models[0][20:23] = 7230
+    ref_models[0][23:39] = 7600
+    ref_models[0][39:100] = 7780
+
+    #SWIR-64-NS_profile.txt
+    ref_models[1][0:1] = 2938 
+    ref_models[1][1:4] = 4214 
+    ref_models[1][4:7] = 4994 
+    ref_models[1][7:10] = 5881
+    ref_models[1][10:13] = 6414
+    ref_models[1][13:19] = 7018
+    ref_models[1][19:23] = 7374
+    ref_models[1][23:28] = 7589
+    ref_models[1][28:35] = 7770
+    ref_models[1][35:100] = 7846
+
+    #SWIR65-66E.txt
+    ref_models[2][0:12] = 3680 
+    ref_models[2][12:34] = 6540 
+    ref_models[2][34:100] = 6910     
+    
+    #BestFit
+    ref_models[3][0:1] = 3500 
+    ref_models[3][1:2] = 3730 
+    ref_models[3][2:3] = 3910 
+    ref_models[3][3:5] = 4060 
+    ref_models[3][5:7] = 4230 
+    ref_models[3][7:8] = 4420 
+    ref_models[3][8:19] = 4630 
+    ref_models[3][9:10] = 4870 
+    ref_models[3][10:11] = 5080 
+    ref_models[3][11:12] = 5280 
+    ref_models[3][12:13] = 5460 
+    ref_models[3][13:14] = 5610 
+    
+    ref_models[3][14:15] = 5760 
+    ref_models[3][15:16] = 5910 
+    ref_models[3][16:17] = 6060 
+    ref_models[3][17:18] = 6210 
+    ref_models[3][18:20] = 6360 
+    ref_models[3][20:21] = 6520 
+    ref_models[3][21:22] = 6670 
+    ref_models[3][22:23] = 6850 
+    
+    ref_models[3][23:24] = 7030
+    ref_models[3][24:25] = 7200 
+    ref_models[3][25:27] = 7370 
+    ref_models[3][27:28] = 7510 
+    ref_models[3][28:35] = 7640 
+    ref_models[3][35:100] = 8000 
+    
+    # Atlantis Bank M uller 1997
+    ref_models[4][0:1] = 5900 
+    ref_models[4][1:4] = 6000 
+    ref_models[4][4:7] = 6200 
+    ref_models[4][7:10] = 6300
+    ref_models[4][10:13] = 6414
+    ref_models[4][13:19] = 6500
+    ref_models[4][19:23] = 6600
+    ref_models[4][23:28] = 6789
+    ref_models[4][28:30] = 6800
+    ref_models[4][30:100] = 8000
+    
+    
+    return(ref_models/np.sqrt((1-p)/(0.5-p)))
+
+    
 #%%
 def start_model_plot(sta):
     start_model = np.zeros(100)

@@ -42,10 +42,12 @@ client = Client("RESIF")
 # start =UTCDateTime("2012-10-12")
 net = "YV"
 sta = "RR52"
+
+
 inv = client.get_stations(
         network=net,
         station=sta,
-        channel="B*",
+        channel="BH*",
         location="*",
         level="response")
     
@@ -142,6 +144,9 @@ transients_stream_zero = eq_spans.zero(transients_stream)
 rotated_stream_zero = eq_spans.zero(rotated_stream)
 # stream_rot_var_zero = eq_spans.zero(stream_rot_var)
 
+
+fp.coherogram_spectrogram_all(raw_stream,transients_stream,transients_stream_zero,rotated_stream_zero)
+
 fp.psd_h_all(raw_stream,raw_stream_zero,transients_stream_zero,rotated_stream_zero,tw = 1,treshhold_high=1.5e-14, treshhold_low=1e-17)
 
 # fp.psd_h_all_beta(raw_stream,
@@ -149,14 +154,32 @@ fp.psd_h_all(raw_stream,raw_stream_zero,transients_stream_zero,rotated_stream_ze
 #                   transients_stream_zero,
 #                   rotated_stream_zero)
 
-fp.coherogram_spectrogram_all(raw_stream)
+fp.coherogram_spectrogram_all(raw_stream,transients_stream,transients_stream_zero,rotated_stream_zero)
 
-fp.coherogram_spectrogram(raw_stream,nseg=2**11,tw =1)
-fp.coherogram_spectrogram(transients_stream,nseg=2**11,tw =1)
-fp.coherogram_spectrogram(transients_stream_zero,nseg=2**11,tw =1)
+# fp.coherogram_spectrogram(raw_stream,nseg=2**11,tw =1)
+
+# fp.coherogram_spectrogram(transients_stream,nseg=2**11,tw =1)
+
+# fp.coherogram_spectrogram(transients_stream_zero,nseg=2**11,tw =1)
+rotated_stream.select(channel="BH1").remove_response(inventory=inv,
+                                                              output="DISP", plot=False)
+rotated_stream.select(channel="BH2").remove_response(inventory=inv,
+                                                              output="DISP", plot=False)
+
+fp.psd(rotated_stream)
+fp.psd(raw_stream)
 
 
-fp.coherogram_spectrogram_alpha(raw_stream,nseg=2**12,tw = 1)
+
+fp.coherogram_spectrogram_alpha(raw_stream,nseg=2**11,tw = 1)
+
+
+fp.coherogram_spectrogram_alpha(transients_stream,nseg=2**11,tw = 1)
+
+
+fp.coherogram_spectrogram_alpha(transients_stream_zero,nseg=2**11,tw = 1)
+
+
 fp.coherogram_spectrogram_alpha(rotated_stream_zero,nseg=2**12,tw = 1)
 
 
@@ -164,6 +187,10 @@ fp.coherogram_spectrogram_alpha(rotated_stream_zero,nseg=2**12,tw = 1)
 fp.psd_h(rotated_stream,nseg=2**12,tw =1)
 
 fp.plot_transfer_function(transients_stream)
+
+
+plt.plot(rotated_stream[2])
+plt.plot(rotated_stream_zero[2])
 
 #%%
 #Glitch plots
@@ -194,7 +221,7 @@ compy.plt_params()
 client = Client("RESIF")
 # start =UTCDateTime("2012-10-12")
 net = "YV"
-sta = "RR52"
+sta = "RR50"
 inv = client.get_stations(
         network=net,
         station=sta,
@@ -223,8 +250,8 @@ raw_stream.clear()
 transients_stream = read()
 transients_stream.clear()
 
-i=  2
-N = 24
+i=  4
+N = 6
 
 raw_stream = raw_stream+ read("/Users/mohammadamin/Desktop/Data/YV/"+sta+'/Decimated/'+A[i])
 
@@ -244,16 +271,40 @@ transients_stream.select(channel="BHZ").remove_response(inventory=inv,
                                                               output="DISP", plot=False)
 
 
+raw_stream_filtered = raw_stream.copy()
+
+raw_stream.filter("bandpass",freqmin=0.0001,freqmax=1)
+
+raw_stream_filtered.filter("bandpass",freqmin=0.008,freqmax=1)
+
+raw_stream_filtered_rev = raw_stream.select(channel="BHZ")[0].data - raw_stream_filtered.select(channel="BHZ")[0].data
+
+raw_stream_filtered.taper(type="hann", max_percentage=0.05)
+
 compy.plt_params()
-plt.figure(dpi=300,figsize=(20,10))
 
-plt.plot(raw_stream.select(channel="BHZ")[0],linewidth=5,label="Raw")
 
-plt.plot(transients_stream.select(channel="BHZ")[0],linewidth=5,label="Cleaned")
 
-plt.plot(transients_stream.select(channel="BHZ")[0].data - raw_stream.select(channel="BHZ")[0].data ,linewidth=5,label="Cleaned")
-
+plt.figure(dpi=300,figsize=(15,15))
+plt.subplot(211)
 plt.title(raw_stream[3].stats.network + "."+raw_stream[3].stats.station)
+plt.plot(raw_stream.select(channel="BHZ")[0].data/np.max(raw_stream.select(channel="BHZ")[0].data,axis=0),linewidth=3,label="Raw",color='black')
+
+plt.legend(loc="upper right")
+plt.xlabel("Time [s]")
+plt.ylabel("Normilized Displacement [m]")
+
+plt.subplot(212)
+# plt.plot(raw_stream_filtered_rev,linewidth=3,label="Deglitched")
+
+plt.plot(raw_stream_filtered.select(channel="BHZ")[0].data/np.max(raw_stream_filtered.select(channel="BHZ")[0].data,axis=0),linewidth=3,label="Deglitched",color='black')
+
+plt.xlabel("Time [s]")
+plt.ylabel("Normilized Displacement [m]")
+plt.legend(loc="upper right")
+
+plt.tight_layout()
+
 
 
 #%% Rotation Container 
@@ -570,49 +621,66 @@ for i in range(0,len(angle)):
         
 azimuth = np.remainder(azimuth, 360.)    
 
-              
+
+#Outlayer Correction
+for i in range(0,len(angle)): 
+    if angle[i] > 5 :
+        angle[i] = angle[i-1]
+        
+for i in range(0,len(azimuth)): 
+    if np.mean(azimuth)/1.5> azimuth[i] > np.mean(azimuth)*1.5 :
+        azimuth[i] = azimuth[i-1]
+
+deg = 15
+    
 variance = np.log10(variance+10e-0)
 # variance = ((variance - 1) // 10) * 10 + 1
 
 norm = plt.Normalize(variance.min(), variance.max())
-norm = plt.Normalize(0, variance.max())
+
 cmap = plt.cm.Greys  # Using 'viridis', but you can choose any colormap
+cmap = plt.cm.viridis_r # Using 'viridis', but you can choose any colormap
+# cmap = plt.cm.jet_r # Using 'viridis', but you can choose any colormap
 
 # Plot
 plt.figure(dpi=300,figsize=(30,20))
 plt.subplot(211)
-plt.title("YV." + str(stream_stats.station) +'  '+ str(stream_stats.starttime)[0:10]+'--'+str(endtime)[0:10]+" Tilt [Daily]")
+plt.title("YV." + str(stream_stats.station) +'  '+ str(stream_stats.starttime)[0:10]+'--'+str(endtime)[0:10]+" Tilt [Hourly]")
 
 plt.scatter(time_steps, azimuth, c=variance, cmap=cmap, norm=norm,s=25)
-plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,azimuth,3,w=variance))(time_steps),color="red",linewidth=5)
+# plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,azimuth,deg=deg,w=variance))(time_steps),color="red",linewidth=5)
 # for i in range(0,len(eq_spans)):
 #     plt.plot(int((eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)),
 #               angle[int(eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)],'o', color='white', markersize=5)
 plt.ylim([0, 120])
+plt.grid(True)
 
 plt.colorbar(label='Log10 Variance Reduction')  # Shows the mapping of color to 'varia' values
 plt.xticks([])
 plt.ylabel("Azimuth ["u"\u00b0]")
-plt.grid(True)
+plt.text(0.025, 0.95, 'a)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
 
 
 plt.subplot(212)
 plt.scatter(time_steps, angle, c=variance, cmap=cmap, norm=norm,s=25)
-plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,angle,3,w=variance))(time_steps),color="red",linewidth=5)
+# plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,angle,deg=deg,w=variance))(time_steps),color="red",linewidth=5)
 
 # for i in range(0,len(eq_spans)):
 #     plt.plot(int((eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)),
 #               angle[int(eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)],'o', color='white', markersize=5)
+plt.grid(True)
 
 plt.colorbar(label='Log10 Variance Reduction')  # Shows the mapping of color to 'varia' values
 plt.xlabel("Time [Date]")
 plt.ylabel("Incident Angle ["u"\u00b0]")
-plt.grid(True)
 plt.xticks(tick_positions, dates, rotation=65)
 plt.ylim([-0.1, 5])
+plt.text(0.025, 0.95, 'b)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
+
 plt.tight_layout()
 
-plt.savefig(f"YV_{stream_stats.station}_Tilt_Daily.pdf")
+
+plt.savefig(f'/Users/mohammadamin/Desktop/ Tilt Hourly YV.{sta}.pdf')
 
 # Fs = 1/3600  # In Hertz
 # nseg = 2**8
@@ -807,7 +875,7 @@ print("Top Four PSD Values:", top_four_psd_values)
 
 plt.figure(dpi=300, figsize=(25, 30))
 plt.suptitle("PSD of Incident Angles and Azimuths")
-plt.subplot(211)
+plt.subplot(212)
 for i in range(0,len(angle)):
     # plt.title("Correlation Angle " + str(stations[jj]))
     # plt.loglog(psd_freq[i],psd_angle[i],linewidth=3,label=str(stations1[i]))
@@ -820,19 +888,85 @@ plt.grid(True)
 plt.legend(loc="upper right")
 plt.ylabel('Amplitude [°$^2$/Hz]')
 plt.grid(True)
-    
-plt.subplot(212)
+plt.xlim([80e2,20e4])
+
+plt.subplot(211)
 for i in range(0,len(angle)):
     plt.loglog(1/psd_freq[i],scipy.signal.savgol_filter(psd_Azimuth[i],9,1),linewidth=3,label=str(stations1[i]))
 
 plt.title("Azimuth")    
 plt.loglog(1/psd_freq[i],scipy.signal.savgol_filter(np.mean(psd_Azimuth,axis=0),9,1),linewidth=5,label="Mean",color='black',linestyle="dashed")
 plt.scatter(x_points, y_points, color='red', s=500)  # Example: s=100 for larger circles
+
+
 y_points[0] = y_points[0]/1.3
 
-for x, y, label in zip(x_points, y_points, labels):
-    plt.text(x-2000, y**1.04, label, fontsize=40,rotation=-60)
+# for x, y, label in zip(x_points, y_points, labels):
+#     plt.text(x-2000, y**1.04, label, fontsize=40,rotation=-60)
 
+# plt.text(12.66*3600, y_points[2]*5, "N2", fontsize=40, rotation=0)
+plt.vlines(12.66*3600, 10e5, 10e10, colors='black')
+
+# plt.text(12.42*3600, y_points[2]*4, "M2", fontsize=40, rotation=0)
+plt.vlines(12.42*3600, 10e5, 10e10, colors='black')
+
+# plt.text(12.63*3600, y_points[2]*2, "v2", fontsize=40, rotation=0)
+# plt.vlines(12.63*3600, 10e5, 10e10, colors='black')
+
+
+# plt.text(12.22*3600, y_points[2]*2, "lambda2", fontsize=40, rotation=0)
+# plt.vlines(12.22*3600, 10e5, 10e10, colors='black')
+
+# plt.text(12.19*3600, y_points[2]*3, "L2", fontsize=40, rotation=0)
+plt.vlines(12.19*3600, 10e5, 10e10, colors='black')
+
+# plt.text(12*3600, y_points[2]*2, "S2", fontsize=40, rotation=0)
+plt.vlines(12*3600, 10e5, 10e10, colors='black')
+
+# plt.text(11.98*3600, y_points[2], "K2", fontsize=40, rotation=0)
+plt.vlines(11.98*3600, 10e5, 10e10, colors='black')
+
+
+
+
+
+# plt.text(24.07*3600, y_points[2]*2, "P1", fontsize=40, rotation=0)
+plt.vlines(24.07*3600, 10e5, 10e10, colors='black')
+
+# plt.text(24.13*3600, y_points[2]*2, "Pi 1", fontsize=40, rotation=0)
+# plt.vlines(24.13*3600, 10e5, 10e10, colors='black')
+
+# plt.text(24.*3600, y_points[2]*2, "S1", fontsize=40, rotation=0)
+plt.vlines(24.*3600, 10e5, 10e10, colors='black')
+
+# plt.text(23.93*3600, y_points[2]*2, "K1", fontsize=40, rotation=0)
+plt.vlines(23.93*3600, 10e5, 10e10, colors='black')
+
+# plt.text(23.80*3600, y_points[2]*2, "Phi 1", fontsize=40, rotation=0)
+# plt.vlines(23.80*3600, 10e5, 10e10, colors='black')
+
+
+
+
+plt.text(24*3600, y_points[2]*6, "K1/S1/P1", fontsize=40, rotation=0)
+# plt.vlines(24*3600, 10e5, 10e10, colors='black')
+
+
+plt.text(12.22*3600, y_points[2]*3, "K2/S2/L2/M2/N2", fontsize=40, rotation=0)
+# plt.vlines(12.22*3600, 10e5, 10e10, colors='black')
+
+
+
+
+plt.text(8.18*3600, y_points[2]*2, "K3", fontsize=40, rotation=0)
+plt.vlines(8.18*3600, 10e5, 10e10, colors='black')
+
+plt.text(6.22*3600, y_points[2], "M4", fontsize=40, rotation=0)
+plt.vlines(6.22*3600, 10e5, 10e10, colors='black')
+
+
+plt.xlim([80e2,20e4])
+plt.ylim([10e5,10e9])
 
 plt.grid(True)
 plt.legend(loc="upper right")
@@ -867,8 +1001,8 @@ stream = loaded["Stream"]
 
 a1 = 10
 a2 = -158
-a1 = 5
-a2 = -10
+a1 = 3
+a2 = -11
 
 f_com = f_com[a1:a2]
 
@@ -920,19 +1054,19 @@ for i in range(0,len(stream)):
                                window=scipy.signal.windows.tukey(nseg,
                                (5*60*stream[i][0].stats.sampling_rate)/nseg))
 
-# buggy_indices = np.where((f >= 0.048) & (f <= 0.052))[0]
-# if buggy_indices.size > 0:
-#         # Use interpolation to estimate the correct values for buggy data points
-#     good_indices = np.where((f < 0.048) | (f > 0.052))[0]
+buggy_indices = np.where((f >= 0.048) & (f <= 0.052))[0]
+if buggy_indices.size > 0:
+        # Use interpolation to estimate the correct values for buggy data points
+    good_indices = np.where((f < 0.048) | (f > 0.052))[0]
     
 
 Dz_filtered = [Dz]
 Czp_filtered = [Czp]
-# for ii in range(0,len(Dz)):
-#     correct_values1 = np.interp(buggy_indices, good_indices, Dz[ii][good_indices])
-#     correct_values2 = np.interp(buggy_indices, good_indices, Czp[ii][good_indices])
-#     Dz_filtered[0][ii][buggy_indices] = correct_values1
-#     Czp_filtered[0][ii][buggy_indices] = correct_values2
+for ii in range(0,len(Dz)):
+    correct_values1 = np.interp(buggy_indices, good_indices, Dz[ii][good_indices])
+    correct_values2 = np.interp(buggy_indices, good_indices, Czp[ii][good_indices])
+    Dz_filtered[0][ii][buggy_indices] = correct_values1
+    Czp_filtered[0][ii][buggy_indices] = correct_values2
 
 Dz = np.array(Dz_filtered[0])
 Czp = np.array(Czp_filtered[0])
@@ -963,8 +1097,9 @@ plt.ylim([-200 ,-80])
 plt.xlim([0.005,0.1])
 plt.plot(1/nhnm[0],nhnm[1],'--k',label = "New Low/High Noise Model" )
 plt.plot(1/nlnm[0],nlnm[1],'--k')
-plt.legend(loc = "upper left")
+plt.legend(loc = "upper right")
 plt.tight_layout()
+plt.text(0.025, 0.95, 'a)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
 
 plt.subplot(222)
 for i in range(0,len(Dz)):
@@ -990,8 +1125,9 @@ plt.grid(True)
 plt.xlim([0.005,0.1])
 # plt.plot(1/nhnm[0],nhnm[1],'--k',label = "New Low/High Noise Model" )
 # plt.plot(1/nlnm[0],nlnm[1],'--k')
-plt.legend(loc = "upper left")
+plt.legend(loc = "upper right")
 plt.tight_layout()
+plt.text(0.025, 0.95, 'b)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
 
 
 plt.subplot(223)
@@ -1003,7 +1139,7 @@ plt.plot(f,Czp[i],linewidth = 2,color='green',label = "BHZ / BDH")
 # plt.plot(f,scipy.signal.savgol_filter(np.median(Czp,axis=0),10,5),linewidth = 5,color='red',label="Median")    
 # plt.plot(f,np.median(Czp,axis=0),linewidth = 5,color='red',label="Median")    
  
-plt.hlines(y = 0.8, xmin = f_com[0] , xmax = f_com[-1],linestyles='dashed',linewidth=3,color = 'r',label='0.8 Treshhold')
+plt.hlines(y = 0.80, xmin = f_com[0] , xmax = f_com[-1],linestyles='dashed',linewidth=3,color = 'r',label='0.8 Treshhold')
 
 plt.vlines(x = f_com[0], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=3)
 plt.vlines(x = f_com[-1], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=3,label="Frequency Limit")
@@ -1022,15 +1158,16 @@ plt.xlim([0.005,0.1])
 # plt.plot(1/nlnm[0],nlnm[1],'--k')
 plt.legend(loc = "upper right")
 plt.tight_layout()
+plt.text(0.025, 0.95, 'c)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
 
 plt.subplot(224)
 for i in range(0,len(compliance_high)):
-  plt.plot(f_com,compliance_high[i][a1:a2],linewidth = 0.5,color='green')    
+  plt.plot(f_com,1e9*compliance_high[i][a1:a2],linewidth = 0.5,color='green')    
 # plt.plot(f_com,compliance_high[i],linewidth = 0.5,color='blue',label = "Compliance")    
 # plt.plot(f_com,np.median(compliance_high,axis=0)[a1:a2],linewidth = 3,color='red',label="Median")    
-plt.plot(f_com,compliance_high[i][a1:a2],linewidth = 0.5,color='green',label="Compliance")
+plt.plot(f_com,1e9*compliance_high[i][a1:a2],linewidth = 0.5,color='green',label="Compliance")
 
-plt.errorbar(f_com,np.median(compliance_high,axis=0)[a1:a2], yerr=np.std(compliance_high,axis=0)[a1:a2], 
+plt.errorbar(f_com,1e9*np.median(compliance_high,axis=0)[a1:a2], yerr=1e9*np.std(compliance_high,axis=0)[a1:a2], 
              fmt='o',markersize=10,color='black', ecolor='black', capsize=10,linewidth=5,label="Median")
 
 # plt.yscale('log')
@@ -1039,19 +1176,20 @@ plt.errorbar(f_com,np.median(compliance_high,axis=0)[a1:a2], yerr=np.std(complia
 # plt.yscale('log')
 # plt.title(st[0].stats.network+"."+st[0].stats.station+"  "+str(st[0].stats.starttime)[0:10]+"--"+str(st[0].stats.endtime)[0:10])    
 plt.xlabel("Frequency [Hz]")
-plt.ylabel('Compliance')
+plt.ylabel("Compliance [$GPa^{-1}$]")
 plt.grid(True)
 # plt.ylim([-200 ,-80])
 # plt.xlim([((st[0].stats.sampling_rate*2)/nseg),1])
 plt.xlim([f_com[0],f_com[-1]])
-plt.ylim([10e-13,0.2*10e-10])
+# plt.ylim([10e-13,0.2*10e-10])
 # plt.plot(1/nhnm[0],nhnm[1],'--k',label = "New Low/High Noise Model" )
 # plt.plot(1/nlnm[0],nlnm[1],'--k')
+plt.text(0.025, 0.95, 'd)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
 
-plt.legend(loc = "upper left")
+plt.legend(loc = "upper right")
 plt.tight_layout()
 
-plt.savefig(file_path_save + f"Compliance_RR52.pdf")
+plt.savefig("/Users/mohammadamin/Desktop/Compliance_RR52.pdf")
 
 
 #%% Coherence frequency bands
@@ -1130,7 +1268,7 @@ plt.xlim([0.004,0.2])
 plt.grid(True)
 plt.legend(loc='lower right')
 plt.tight_layout()
-plt.savefig("/Users/mohammadamin/Desktop/Coherence_bands_RR52.pdf")
+# plt.savefig("/Users/mohammadamin/Desktop/Coherence_bands_RR52.pdf")
 
 
 # plt.subplot(212)
@@ -1172,8 +1310,8 @@ plt.savefig("/Users/mohammadamin/Desktop/Coherence_bands_RR52.pdf")
 # Tectonic Difference
 import numpy as np
 sta = ["RR28","RR29","RR34","RR36","RR38","RR40","RR50","RR52"]
-frequency_limits = np.array([[8,-165],[8,-170],[8,-165],[8,-165],[8,-165],[8,-165],[8,-165],[8,-160]])
-frequency_limits = np.array([[8,-155],[8,-155],[8,-155],[8,-155],[8,-155],[8,-155],[8,-155],[8,-155]])
+frequency_limits = np.array([[10,-164],[9,-167],[11,-166],[10,-164],[10,-164],[13,-165],[11,-166],[11,-158]])
+# frequency_limits = np.array([[8,-155],[8,-155],[8,-155],[8,-155],[8,-155],[8,-155],[8,-155],[8,-155]])
 
 percentage = np.array([25,25,25,50,25,25,25,25,])
 alpha = np.array([0.85,0.85,0.85,0.85,0.85,0.80,0.85,0.80,])
@@ -1191,15 +1329,17 @@ import matplotlib.pyplot as plt
 import compy
 compy.plt_params()
 
+Compliance_Funcs = []
 Data_All = []
 s = []
-
+sigma = []
 # for RR52 use  old container and a1=4 a2=29
 
 for ii in range(0,len(sta)):
     # Load compliance Container
     print("Loading Compliance Container...")
-    with open('/Users/mohammadamin/Desktop/Data/YV/'+sta[ii]+'/Compliance/com_container_old.pkl', 'rb') as file:
+    with open('/Users/mohammadamin/Desktop/Data/YV/'+sta[ii]+'/Compliance/com_container.pkl', 'rb') as file:
+    # with open('/Users/mohammadamin/Desktop/Data/YV/'+sta[ii]+'/Compliance/com_container_old.pkl', 'rb') as file:
         loaded = pickle.load(file)
     
     compliance_high = loaded["Compliance"]
@@ -1207,6 +1347,10 @@ for ii in range(0,len(sta)):
     uncertainty = loaded['Uncertainty']
     coh_high = loaded["Coherence"]
     f_coh = loaded["Frequency of Coherence"]
+    Uncertainty = loaded["Uncertainty"]
+    
+    if sta[ii] == "RR40":
+        uncertainty[a1+3] = uncertainty[a1+3]/2
     stream = loaded["Stream"]
     a1= frequency_limits[ii][0]
     a2= frequency_limits[ii][1]
@@ -1235,42 +1379,43 @@ for ii in range(0,len(sta)):
     Coherence_all_smoothed = scipy.signal.savgol_filter(Coherence_all,5,1)
     
     Data = np.median(compliance_high,axis=0)
-    
-
+    Compliance_Funcs.append(compliance_high[:,a1:a2])
 
     print(sta[ii])
     print(f[a1])
     print(f[a2])
-    plt.figure(dpi=300,figsize=(30,20))
-    
-    # plt.subplot(211)
-    # plt.semilogx(f_coh,Coherence_all,'b')
-    plt.title("Coherence P/Z'' , YV."+str(sta[ii]))
-    plt.semilogx(f_coh,Coherence_all_smoothed,'b',linewidth = 7)
-    plt.vlines(x = f[a1], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=5)
-    plt.vlines(x = f[a2], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=5,label="Compliance Frequency Band")
-    plt.hlines(y = treshhold, xmin = f[a1] , xmax = f[a2],linestyles='dashed',linewidth=5,color = 'r',label="0.8 Treshhold")
-    # plt.plot(F_G,np.mean(Gzz,axis=0)/max(np.mean(Gzz,axis=0)),label = "Normalized PSD (Z'')",linewidth=3)
-    # plt.plot(F_G,np.mean(Gpp,axis=0)/max(np.mean(Gpp,axis=0)),label = "Normalized PSD (P)",linewidth=3)
     
     
-    plt.ylim([0,1])
-    plt.xlabel('Frequency [Hz]')
-    plt.ylabel('Coherence')
-    plt.axvspan(0.004, 0.02, color='Blue', alpha=0.3, lw=0,label='Infragravity Band (I))')
-    plt.axvspan(0.02,0.05, color='Orange', alpha=0.3, lw=0,label='low correlation Band (II)')
-    plt.axvspan(0.05, 0.08, color='Green', alpha=0.3, lw=0,label='Microseismic Band (III) ')
-    plt.axvspan(0.08, 0.2, color='Pink', alpha=0.6, lw=0,label='Microseismic Band (IV)')
-    tick_positions = np.logspace(-2.4, 0, num=20)  # Adjust the range and number of ticks as needed
+    # plt.figure(dpi=300,figsize=(30,20))
     
-    # Set the tick positions and use ScalarFormatter for scientific notation labels
-    plt.xticks(tick_positions, [f"{val:.3f}" for val in tick_positions], rotation=90) 
-     # Display tick labels in decimal form
-    plt.grid(True)
-    plt.xlim([0.004,0.2])
+    # # plt.subplot(211)
+    # # plt.semilogx(f_coh,Coherence_all,'b')
+    # plt.title("Coherence P/Z'' , YV."+str(sta[ii]))
+    # plt.semilogx(f_coh,Coherence_all_smoothed,'b',linewidth = 7)
+    # plt.vlines(x = f[a1], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=5)
+    # plt.vlines(x = f[a2], ymin=0, ymax=1,color='black',linestyles="dashed",linewidth=5,label="Compliance Frequency Band")
+    # plt.hlines(y = treshhold, xmin = f[a1] , xmax = f[a2],linestyles='dashed',linewidth=5,color = 'r',label="0.8 Treshhold")
+    # # plt.plot(F_G,np.mean(Gzz,axis=0)/max(np.mean(Gzz,axis=0)),label = "Normalized PSD (Z'')",linewidth=3)
+    # # plt.plot(F_G,np.mean(Gpp,axis=0)/max(np.mean(Gpp,axis=0)),label = "Normalized PSD (P)",linewidth=3)
+    
+    
+    # plt.ylim([0,1])
+    # plt.xlabel('Frequency [Hz]')
+    # plt.ylabel('Coherence')
+    # plt.axvspan(0.004, 0.02, color='Blue', alpha=0.3, lw=0,label='Infragravity Band (I))')
+    # plt.axvspan(0.02,0.05, color='Orange', alpha=0.3, lw=0,label='low correlation Band (II)')
+    # plt.axvspan(0.05, 0.08, color='Green', alpha=0.3, lw=0,label='Microseismic Band (III) ')
+    # plt.axvspan(0.08, 0.2, color='Pink', alpha=0.6, lw=0,label='Microseismic Band (IV)')
+    # tick_positions = np.logspace(-2.4, 0, num=20)  # Adjust the range and number of ticks as needed
+    
+    # # Set the tick positions and use ScalarFormatter for scientific notation labels
+    # plt.xticks(tick_positions, [f"{val:.3f}" for val in tick_positions], rotation=90) 
+    #  # Display tick labels in decimal form
+    # plt.grid(True)
+    # plt.xlim([0.004,0.2])
 
-    plt.legend(loc='lower right')
-    plt.tight_layout()
+    # plt.legend(loc='lower right')
+    # plt.tight_layout()
     
     # plt.subplot(212)
     # plt.title(sta)
@@ -1309,8 +1454,9 @@ for ii in range(0,len(sta)):
     
     Data_All.append(Data)
     s.append(np.std(compliance_high,axis=0)[a1:a2])
-    
-    plt.savefig("/Users/mohammadamin/Desktop/Coherence_bands.pdf")
+    sigma.append(uncertainty[a1:a2])
+
+    # plt.savefig("/Users/mohammadamin/Desktop/Coherence_bands.pdf")
 
 
 
@@ -1321,8 +1467,9 @@ plt.figure(dpi=300, figsize=[25, 20])
 plt.title("Nomalized Compliance")
 
 for jj in range(0, len(Data_All)):
-    plt.plot(frequency_limits_2[jj], Data_All[jj], label=str(sta[jj]), linewidth=7)
+    # plt.plot(frequency_limits_2[jj], Data_All[jj], label=str(sta[jj]), linewidth=7)
     # plt.plot(frequency_limits_2[jj], np.mean(Data_All,axis=0) - Data_All[jj], label=str(sta[jj]), linewidth=7)
+    plt.errorbar(frequency_limits_2[jj], 1e9*Data_All[jj], yerr=1e9*sigma[jj]/2, label=str(sta[jj]), linewidth=5, fmt='-')
 
 # Get current handles and labels
 handles, labels = plt.gca().get_legend_handles_labels()
@@ -1338,58 +1485,70 @@ ordered_labels = [labels[i] for i in new_order]
 
 # Create the legend with the new order
 plt.legend(ordered_handles, ordered_labels, loc='upper left')
-
-plt.xlabel("Frequency")
+plt.ylabel("Compliance [$GPa^{-1}$]")
+plt.xlim([0.004,0.02])
+plt.xlabel("Frequency [Hz]")
 plt.grid(True)
 
-# Display the plot
-# plt.show()
+plt.show()
+
+# Plotting with subplots
+fig, axs = plt.subplots(4, 2, figsize=(25, 30),dpi=300)  # Adjust the layout to fit your number of plots
+axs = axs.flatten()
+
+for jj in range(8):
+    row = jj // 2
+    col = jj % 2
+    ax = axs[jj]
+    # ax.errorbar(frequency_limits_2[jj], 1e9*Data_All[jj], yerr=1e9*sigma[jj]/2, label=sta[jj], linewidth=5)
+    ax.plot(frequency_limits_2[jj], 1e9*Data_All[jj],linewidth=5)
+    ax.fill_between(frequency_limits_2[jj], 1e9*(Data_All[jj] +sigma[jj]/2) ,1e9*(Data_All[jj]-sigma[jj]/2), alpha=0.25)
+    ax.set_title(sta[jj])
+    ax.set_xlim([0.004,0.020])
+    ax.set_ylim([-0.1,0.5])
+    ax.set_xlabel('Frequency [Hz]')
+    ax.set_ylabel("Compliance [$GPa^{-1}$]")
+    ax.grid()
+    # ax.legend()
+plt.tight_layout()
+plt.savefig(f'/Users/mohammadamin/Desktop/Compliance_Functions_grid.pdf')
+plt.show()
+
+
 
 sta = ["RR28","RR29","RR34","RR36","RR38","RR40","RR50","RR52"]
 
-# plt.rcParams.update({'font.size': 35})
-plt.figure(dpi=300, figsize=[30, 16])
 
-for jj in range(0, len(Data_All)):
-    plt.subplot(121)
+plt.figure(dpi=300, figsize=[20, 15])
+
+# Initialize the alpha scaling factor based on the number of datasets
+alpha_base = 0.5
+alpha_scale = max(0.1, alpha_base / (len(Data_All) / 5))
+
+for jj in range(len(Data_All)):
+    # Define unique color and select a hatch pattern
+    color = plt.cm.jet_r(jj / len(Data_All))
+    hatch_pattern = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*'][jj % 10]  # Cycle through hatch patterns
+
     plt.title("Normalized Compliance")
-    plt.legend(ordered_handles, ordered_labels, loc='upper left')
-    # plt.plot(frequency_limits_2[jj], np.mean(Data_All,axis=0), label=str("Mean"), linewidth=10,color= 'black',linestyle='dashed')
-
     plt.xlabel("Frequency [Hz]")
-    plt.ylabel("Normalized Compliance")
-
+    plt.ylabel('Compliance [$GPa^{-1}$]')
     plt.grid(True)
-    plt.plot(frequency_limits_2[jj], Data_All[jj], label=str(sta[jj]), linewidth=5)
-    plt.subplot(122)
-    plt.title("Normalized Compliance Deviations from Mean")
-    plt.legend(ordered_handles, ordered_labels, loc='upper left')
 
-    plt.xlabel("Frequency [Hz]")
+    # Plot each dataset with a unique color and vary line styles
+    plt.plot(frequency_limits_2[jj], 1e9*Data_All[jj], label=str(sta[jj]), linewidth=5, color=color, linestyle=['-', '--', '-.', ':'][jj % 4])
 
-    plt.grid(True)
-    plt.plot(frequency_limits_2[jj],- np.mean(Data_All,axis=0) + Data_All[jj], label=str(sta[jj]), linewidth=7)
-
-# Get current handles and labels
-handles, labels = plt.gca().get_legend_handles_labels()
-
-# Define the new order of your labels here
-# For example, to reverse the order, you can do:
-new_order = list((range(len(sta))))
-new_order = [5,2,0,6,4,3,1,7]
-    
-# Reorder handles and labels
-ordered_handles = [handles[i] for i in new_order]
-ordered_labels = [labels[i] for i in new_order]
-
-# Create the legend with the new order
-
-
-# Display the plot
+    # Use fill_between with adjusted alpha and hatch patterns
+    plt.fill_between(frequency_limits_2[jj], 1e9*(Data_All[jj] + sigma[jj]/2), 1e9*(Data_All[jj] - sigma[jj]/2), 
+                     color=color, alpha=alpha_scale, hatch=hatch_pattern)
+    # plt.yscale('log')
+# Update the legend to accommodate new styles
+plt.legend(loc='upper left')
 # plt.show()
 
-plt.tight_layout()
-plt.savefig(file_path_save + f"Compliance_Functions.pdf")
+# plt.savefig(file_path_save + f"Compliance_Functions.pdf")
+
+plt.savefig( f"Compliance_Functions.pdf")
 
 # plt.subplot(212)
 # plt.title("Deviation of Station Compliance from Overall Mean")
@@ -1397,15 +1556,29 @@ plt.savefig(file_path_save + f"Compliance_Functions.pdf")
 #     plt.plot(frequency_limits_2[jj],np.mean(Data_All,axis=0) -Data_All[jj],label=str(sta[jj]),linewidth=3)
 # plt.legend(loc = 'lower left')
 # plt.grid(True)
-
-
+from matplotlib.colors import LogNorm
+for j in range(0,len(Compliance_Funcs)):
+    plt.figure(dpi=300,figsize=(12,12))
+    plt.title("Compliance Over Time YV."+sta[j])
+    plt.imshow(Compliance_Funcs[j],cmap="viridis",aspect='auto',norm=LogNorm())
+    # plt.yticks(ticks=frequency_limits_2[j])
+    plt.xlabel("Frequency [Hz]")
+    plt.ylabel("Time []")
+    plt.colorbar()
+    plt.savefig(f'/Users/mohammadamin/Desktop/Sven/Compliance Over Time YV.{sta[j]}.pdf')
+    plt.close()  #
+    
 #%%
 # Inversion
 import pickle
 import inv_compy
 import compy
+import os
+import numpy as np
+import matplotlib.pyplot as plt
 
 sta1 = ["RR28","RR29","RR34","RR36","RR38","RR40","RR50","RR52"]
+sta1 = ["RR36","RR38","RR40","RR50","RR52"]
 
 print("Loading Compliance Container...")
 Inversion_container = [] 
@@ -1435,9 +1608,16 @@ accept_rate = Inversion_container[jj]["accept_rate"]
 
 
 compy.plt_params()
-inv_compy.plot_inversion_density(vs,vs0,mis_fit,Data,s,freq=f,sta=sta,burnin=burnin,ncompl=(ncompl),iteration=iteration,mis_fit_trsh = mis_fit_trsh)
+# inv_compy.plot_inversion_density(vs,vs0,mis_fit,Data,s,freq=f,sta=sta,burnin=burnin,ncompl=(ncompl),iteration=iteration,mis_fit_trsh = mis_fit_trsh)
 
 inv_compy.plot_inversion_density_all(Inversion_container)
+
+inv_compy.plot_inversion_all(Inversion_container)
+
+inv_compy.plot_inversion_density_mean_all(Inversion_container)
+
+inv_compy.plot_inversion_serpentinization1(Inversion_container)
+
 
 
 Vs_final = []
@@ -1453,10 +1633,11 @@ argmean = np.argmin(np.abs(vs_dif),axis=0)[0]
 argmin = np.argmin(vs_dif,axis=0)[0]
 argmax = np.argmax(vs_dif,axis=0)[0]
 
+#%%
+# final Figure 
+compy.plt_params()
 
-
-
-
+inv_compy.final_plot(Inversion_container)
 
 
 
