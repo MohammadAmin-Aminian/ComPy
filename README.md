@@ -41,11 +41,11 @@ The `compy.Rotate` function rotates seismic data to minimize tilt effects and re
 - **rotated_stream**: The seismic data stream after rotation and noise removal.
 - **azimuth**: The direction of the rotation applied to correct the tilt in degrees.
 - **angle**: The angle of tilt correction applied to the seismic data.
-- **variance**: The variance in the seismic data after applying the tilt correction, indicating the effectiveness of noise reduction.
+- **variance**: The reducted variance ratio (After/Before), indicating the effectiveness of noise reduction.
 
 
 <p align="center">
-  <img src="_Images/RR52_Tilt.png" width="800">
+  <img src="_Images/RR52_Tilt.png" width="700">
 </p>
 
 # Contributing
@@ -61,3 +61,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 # Acknowledgments
 
 This tool was developed at the Institut de Physique du Globe de Paris and funded by the SPIN project, an Innovative Training Network (ITN) supported by the European Commission under the Horizon 2020 Marie Skłodowska-Curie Actions (MSCA). We extend our gratitude to all contributors and collaborators who have made this project possible.
+<p align="center">
+  <img src="_Images/H2020_acknowledgment.png" width="300">
+</p>

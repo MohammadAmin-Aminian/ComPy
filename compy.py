@@ -730,14 +730,13 @@ def Rotate(stream,time_window = 1):
         except Exception as e:
                 print(f"Error occurred while processing item: {i}")
     
-    time_window = 1
     time_steps = np.arange(len(angle))
     
     t1 = np.arange(0,len(angle))
     
     time_interval  =  24 # if you do for daily put 1 , if you doing it for hourly put 24 
     dates = []
-    for i in range(0, int(len(t1) // (time_interval*30))):
+    for i in range(0, int(len(t1) // (time_interval*7))):
         print(i)
         dates.append(str(stream[0].stats.starttime + (stream[0].stats.endtime - stream[0].stats.starttime) * i / int(len(t1) // (time_interval*30)))[0:10])
         
