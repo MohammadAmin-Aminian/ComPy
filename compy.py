@@ -7,11 +7,8 @@ Created on Mon Jul 10 11:13:05 2023
 """
 
 import numpy as np
-# import ffplot as fp
 import matplotlib.pyplot as plt
-# import tiskitpy as tiskit
-import tiskit
-# from obspy import read
+import tiskitpy as tiskit
 from obspy.clients.fdsn import Client
 import scipy 
 import obspy
@@ -696,7 +693,7 @@ def Comliance_uncertainty(compliance_function,coherence_function,number_of_windo
                                   (np.abs(coherence_function)*np.sqrt(2*number_of_window)))
     return(sigma)
 #%%
-def Rotate(stream,time_window = 2):
+def Rotate(stream,time_window = 1):
     server="RESIF"
     client = Client(server)
 
@@ -729,7 +726,8 @@ def Rotate(stream,time_window = 2):
 
     azimuth = np.zeros([len(split_streams)])
     angle = np.zeros([len(split_streams)])
-    
+    variance_percentage = np.zeros([len(split_streams)])
+
     print("Reducing Tilt Effect")
     for i in range(0,len(split_streams)):
         try:
@@ -738,13 +736,14 @@ def Rotate(stream,time_window = 2):
     
             azimuth[i] = D.azimuth
             angle[i] =  D.angle
-    
+            variance_percentage[i] = D.variance
+
             split_streams[i] = D.apply(split_streams[i])
 
     # Transfer Function
             F = tiskit.DataCleaner(split_streams[i], ["*1","*2"], n_to_reject=0)
             split_streams[i] = F.clean_stream(split_streams[i])
-            
+
             split_streams[i][0].stats.location = '00'
             split_streams[i][1].stats.location = '00'
             split_streams[i][2].stats.location = '00'
@@ -754,66 +753,91 @@ def Rotate(stream,time_window = 2):
     
     print("Removing Instrument Response")
     print('...')
-    for i in range(0,len(split_streams)):
-    
-        split_streams[i].select(channel="*Z").remove_response(inventory=invz,
-                                                              output="DISP", plot=False)
-        split_streams[i].select(channel="*1").remove_response(inventory=invz,
-                                                              output="DISP", plot=False)
-        split_streams[i].select(channel="*2").remove_response(inventory=invz,
-                                                              output="DISP", plot=False)
-
-        split_streams[i].select(channel="*H").remove_response(inventory=invp,
-                                                              output="DEF", plot=False)
-    st = stream
+    time_window = 1
+    time_steps = np.arange(len(angle))
     
     t1 = np.arange(0,len(angle))
     
+    time_interval  =  24 # if you do for daily put 1 , if you doing it for hourly put 24 
     dates = []
-    for i in range(0, int(len(t1) // (24*30))):
+    for i in range(0, int(len(t1) // (time_interval*30))):
         print(i)
-        dates.append(str(st[0].stats.starttime + (st[0].stats.endtime - st[0].stats.starttime) * i / int(len(t1) // (24*30)))[0:10])
+        dates.append(str(stream[0].stats.starttime + (stream[0].stats.endtime - stream[0].stats.starttime) * i / int(len(t1) // (time_interval*30)))[0:10])
+        
+        
+        # Assuming t1 is a list that contains the time values
+        # Calculate the positions of the ticks to align with the dates
+    tick_positions = [int(i * len(t1) / (len(dates) - 1)) for i in range(len(dates))]
+        
     
-    
-    # Assuming t1 is a list that contains the time values
-    # Calculate the positions of the ticks to align with the dates
-    # tick_positions = [int(i * len(t1) / (len(dates) - 1)) for i in range(len(dates))]
-    
-    # plt.rcParams.update({'font.size': 40})
-    # plt.figure(dpi=300, figsize=(30, 20))
-    # plt.subplot(211)
-    # plt.title("YV." + str(stream[0].stats.station) +'  '+ str(stream[0].stats.starttime)[0:10]+'--'+str(stream[0].stats.endtime)[0:10]+" Tilt ")
-    # plt.plot(azimuth, '.', color='black')
-    # for i in range(0,len(eq_spans)):
-    #     plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
-    #               azimuth[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10)
 
-    # plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
-    #               azimuth[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10,label="Event")
-    # # plt.xlabel("Time [Hour]")
-    # plt.xticks([])
-    # plt.ylabel("Azimuth ["u"\u00b0]")
-    # plt.legend(loc="lower right", facecolor='lightgreen')
-    # plt.grid(True)
+
+   
+    for i in range(0,len(angle)):
+        if angle[i] < 0 :
+            angle[i] = -angle[i]
+            azimuth[i] =azimuth[i]+180
+            
+    azimuth = np.remainder(azimuth, 360.)    
     
-    # plt.subplot(212)
-    # plt.plot(angle, '.', color='black')
+    
+    #Outlayer Correction
+    for i in range(0,len(angle)): 
+        if angle[i] > 5 :
+            angle[i] = angle[i-1]
+            
+    for i in range(0,len(azimuth)): 
+        if np.mean(azimuth)/1.5> azimuth[i] > np.mean(azimuth)*1.5 :
+            azimuth[i] = azimuth[i-1]
+    
+    deg = 15
+    
+    variance = np.log10(variance_percentage+10e-0)
+    # variance = ((variance - 1) // 10) * 10 + 1
+    
+    norm = plt.Normalize(variance.min(), variance.max())
+    
+    cmap = plt.cm.Greys  # Using 'viridis', but you can choose any colormap
+    cmap = plt.cm.viridis_r # Using 'viridis', but you can choose any colormap
+    # cmap = plt.cm.jet_r # Using 'viridis', but you can choose any colormap
+    
+    # Plot
+    plt.figure(dpi=300,figsize=(30,20))
+    plt.subplot(211)
+    plt.title("YV." + str(stream[0].stats.station) +'  '+ str(stream[0].stats.starttime)[0:10]+'--'+str(stream[0].stats.endtime)[0:10]+" Tilt [Hourly]")
+    
+    plt.scatter(time_steps, azimuth, c=variance, cmap=cmap, norm=norm,s=25)
+    # plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,azimuth,deg=deg,w=variance))(time_steps),color="red",linewidth=5)
+    # for i in range(0,len(eq_spans)):
+    #     plt.plot(int((eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)),
+    #               angle[int(eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)],'o', color='white', markersize=5)
+    plt.ylim([0, 120])
+    plt.grid(True)
+    
+    plt.colorbar(label='Log10 Variance Reduction')  # Shows the mapping of color to 'varia' values
+    plt.xticks([])
+    plt.ylabel("Azimuth ["u"\u00b0]")
+    plt.text(0.025, 0.95, 'a)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
+    
+    
+    plt.subplot(212)
+    plt.scatter(time_steps, angle, c=variance, cmap=cmap, norm=norm,s=25)
+    # plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,angle,deg=deg,w=variance))(time_steps),color="red",linewidth=5)
     
     # for i in range(0,len(eq_spans)):
-    #     plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
-    #               angle[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10)
-
-    # plt.plot(int((eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)),
-    #               angle[int(eq_spans.start_times[i] - stream[0].stats.starttime) // (time_window*3600)],'o', color='red', markersize=10,label="Event")       
-    # plt.xlabel("Time [Date]")
-    # plt.ylabel("Incident Angle ["u"\u00b0]")
-    # plt.grid(True)
-    # plt.legend(loc="lower right", facecolor='lightgreen')
+    #     plt.plot(int((eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)),
+    #               angle[int(eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)],'o', color='white', markersize=5)
+    plt.grid(True)
     
-    # # Set x-axis names with rotation and align ticks with the dates generated
-    # plt.xticks(tick_positions, dates, rotation=65)
-    # plt.ylim([-5, 5])
-    # plt.tight_layout()
+    plt.colorbar(label='Log10 Variance Reduction')  # Shows the mapping of color to 'varia' values
+    plt.xlabel("Time [Date]")
+    plt.ylabel("Incident Angle ["u"\u00b0]")
+    plt.xticks(tick_positions, dates, rotation=65)
+    plt.ylim([-0.1, 5])
+    plt.text(0.025, 0.95, 'b)', transform=plt.gca().transAxes, fontsize=40, fontweight='bold', va='top')
+    
+    plt.tight_layout()
+
 
     
     print("Merging Stream ...")
@@ -822,7 +846,7 @@ def Rotate(stream,time_window = 2):
     for i in range(0,len(split_streams)) : 
         rotated_stream = rotated_stream + split_streams[i]
     rotated_stream.merge(fill_value='interpolate')
-    return(rotated_stream,azimuth,angle)
+    return(rotated_stream,azimuth,angle,variance_percentage)
     # return(azimuth,angle)
 #%%
 
