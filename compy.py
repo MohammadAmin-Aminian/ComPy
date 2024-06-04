@@ -694,30 +694,7 @@ def Comliance_uncertainty(compliance_function,coherence_function,number_of_windo
     return(sigma)
 #%%
 def Rotate(stream,time_window = 1):
-    server="RESIF"
-    client = Client(server)
 
-    net = stream[0].stats.network
-    sta = stream[0].stats.station
-    
-    invz = client.get_stations(
-        network=net,
-        station=sta,
-        channel="*",
-        location="*",
-        level="response")
-    
-    invp = client.get_stations(
-        network=net,
-        station=sta,
-        channel="BDH",
-        location="*",
-        level="response")
-    
-    eq_spans = tiskit.TimeSpans.from_eqs(stream.select(channel='*Z')[0].stats.starttime,
-                                         stream.select(
-                                             channel='*Z')[0].stats.endtime,
-                                         minmag=6, days_per_magnitude=1.5)
     
     #Split the data into pieces    
     print("Splitting The stream into "+ str(time_window)+"-Hour" + ' Windows')
@@ -736,13 +713,15 @@ def Rotate(stream,time_window = 1):
     
             azimuth[i] = D.azimuth
             angle[i] =  D.angle
-            variance_percentage[i] = D.variance
+            variance_percentage[i] = np.var(split_streams[i].select(channel="*Z")[0].data)
 
             split_streams[i] = D.apply(split_streams[i])
 
     # Transfer Function
             F = tiskit.DataCleaner(split_streams[i], ["*1","*2"], n_to_reject=0)
             split_streams[i] = F.clean_stream(split_streams[i])
+            
+            variance_percentage[i] = variance_percentage[i] / np.var(split_streams[i].select(channel="*Z")[0].data)
 
             split_streams[i][0].stats.location = '00'
             split_streams[i][1].stats.location = '00'
@@ -751,8 +730,6 @@ def Rotate(stream,time_window = 1):
         except Exception as e:
                 print(f"Error occurred while processing item: {i}")
     
-    print("Removing Instrument Response")
-    print('...')
     time_window = 1
     time_steps = np.arange(len(angle))
     
@@ -789,9 +766,7 @@ def Rotate(stream,time_window = 1):
     for i in range(0,len(azimuth)): 
         if np.mean(azimuth)/1.5> azimuth[i] > np.mean(azimuth)*1.5 :
             azimuth[i] = azimuth[i-1]
-    
-    deg = 15
-    
+        
     variance = np.log10(variance_percentage+10e-0)
     # variance = ((variance - 1) // 10) * 10 + 1
     
@@ -804,14 +779,14 @@ def Rotate(stream,time_window = 1):
     # Plot
     plt.figure(dpi=300,figsize=(30,20))
     plt.subplot(211)
-    plt.title("YV." + str(stream[0].stats.station) +'  '+ str(stream[0].stats.starttime)[0:10]+'--'+str(stream[0].stats.endtime)[0:10]+" Tilt [Hourly]")
+    plt.title("YV." + str(stream[0].stats.station) +'  '+ str(stream[0].stats.starttime)[0:10]+'--'+str(stream[0].stats.endtime)[0:10]+" Tilt ["+str(time_window)+" Hour]")
     
     plt.scatter(time_steps, azimuth, c=variance, cmap=cmap, norm=norm,s=25)
     # plt.plot(time_steps,np.poly1d(np.polyfit(time_steps,azimuth,deg=deg,w=variance))(time_steps),color="red",linewidth=5)
     # for i in range(0,len(eq_spans)):
     #     plt.plot(int((eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)),
     #               angle[int(eq_spans.start_times[i] - stream_stats.starttime) // (time_window*3600)],'o', color='white', markersize=5)
-    plt.ylim([0, 120])
+    plt.ylim([np.mean(azimuth)-60, np.mean(azimuth)+60])
     plt.grid(True)
     
     plt.colorbar(label='Log10 Variance Reduction')  # Shows the mapping of color to 'varia' values

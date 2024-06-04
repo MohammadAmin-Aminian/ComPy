@@ -1,6 +1,6 @@
 # ComPy: Seafloor Compliance Analysis Tool
 <p align="center">
-  <img src="ComPy.png" width="225">
+  <img src="_Images/ComPy.png" width="225">
 </p>
 
 
@@ -32,6 +32,12 @@ pip install numpy matplotlib scipy obspy tiskitpy
 Here's how you can use ComPy to process your seafloor compliance data:
 
 import compy
+
+# Rotate the data and remove coherence noise to minimize tilt effects. The default time window is 1 hour, which can be changed as needed.
+rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)
+<p align="center">
+  <img src="_Images/RR52_Tilt.pdf" width="225">
+</p>
 
 # Contributing
 
