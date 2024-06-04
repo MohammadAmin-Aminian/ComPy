@@ -1,23 +1,24 @@
 # ComPy: Seafloor Compliance Analysis Tool
+
 <p align="center">
   <img src="_Images/ComPy.png" width="225">
 </p>
 
-
-# Overview
+## Overview
 
 ComPy is a specialized software tool designed for the automated processing and analysis of seafloor compliance data. It enhances the precision of subsurface shear velocity models using Broadband Ocean-Bottom Stations data from the Indian Ocean. ComPy is tailored to manage extensive data processing steps, ensuring high resolution and accuracy in geological analysis.
 
-# Features
+## Features
 
-Automation of data pre-processing steps including glitch removal, tilt effect minimization, and pressure gauge calibration.
-Implementation of the Metropolis-Hastings algorithm for robust depth-velocity inversion.
-Utilization of advanced signal processing techniques to handle seafloor compliance data.
+- Automation of data pre-processing steps including glitch removal, tilt effect minimization, and pressure gauge calibration.
+- Implementation of the Metropolis-Hastings algorithm for robust depth-velocity inversion.
+- Utilization of advanced signal processing techniques to handle seafloor compliance data.
 
-# Installation
+## Installation
 
 Before installing ComPy, ensure you have Python and the necessary packages installed. ComPy requires Python 3.x.
 
+```bash
 # Clone the repository
 git clone https://github.com/your-repository/ComPy.git
 
@@ -26,6 +27,7 @@ cd ComPy
 
 # Install required Python packages
 pip install numpy matplotlib scipy obspy tiskitpy
+
 
 # Usage
 
