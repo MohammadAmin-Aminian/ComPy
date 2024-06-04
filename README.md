@@ -37,7 +37,7 @@ _Rotates the data and remove coherence noise to minimize tilt effects. The defau
 
 rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)
 <p align="center">
-  <img src="_Images/RR52_Tilt" width="225">
+  <img src="_Images/RR52_Tilt.png" width="225">
 </p>
 
 # Contributing
