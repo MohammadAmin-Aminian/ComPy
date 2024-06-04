@@ -33,7 +33,8 @@ Here's how you can use ComPy to process your seafloor compliance data:
 
 import compy
 
-rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)
+
+## `rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)`
 
 **Function Overview:**
 The `compy.Rotate` function rotates seismic data to minimize tilt effects and removes coherence noise, enhancing data accuracy for compliance analysis. The default processing window is set to 1 hour but can be adjusted as needed.
