@@ -48,6 +48,24 @@ The `compy.Rotate` function rotates seismic data to minimize tilt effects and re
   <img src="_Images/RR52_Tilt.png" width="700">
 </p>
 
+# Plotting Functions
+
+## `fp.coherogram_spectrogram_alpha(rotated_stream)`
+
+This function plots spectrograms that feature average values within the compliance frequency band. The output includes several panels:
+
+- **(a) Calibrated Pressure:** Shows pressure data adjusted for calibration errors.
+- **(b) Median Values of Pressure:** Displays the median values of the calibrated pressure data.
+- **(c) Corrected Vertical Acceleration:** Presents the vertical acceleration data after corrections.
+- **(d) Median Values of Vertical Acceleration:** Shows the median values of the corrected vertical acceleration data.
+- **(e) Coherogram:** Plots the coherogram between the calibrated pressure and the corrected vertical acceleration.
+- **(f) Average Values:** Illustrates the average values across the dataset. 
+
+Black dashed lines indicate the frequency limits of the compliance band. Green shaded areas in panel (f) highlight selected time windows with coherency exceeding the coherence threshold, marked by a red dashed line set at 0.8. This visualization aids in identifying significant patterns and anomalies in the data.
+<p align="center">
+  <img src="_Images/RR52_window_selection.png" width="700">
+</p>
+
 # Contributing
 
 We welcome contributions from the community. Please review CONTRIBUTING.md for guidelines on how to submit improvements to ComPy.

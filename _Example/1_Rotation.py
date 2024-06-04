@@ -18,9 +18,9 @@ compy.plt_params()
 stream_decim = read("Path")
 
 
-# Rotate the data and remove coherence noise to minimize tilt effects. Set the time window to 1 hour.
+# Rotate the data and remove coherence noise to minimize tilt effects. The default time window is 1 hour, which can be changed as needed.
 
-rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 24)
+rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)
 
 fp.psd(rotated_stream)
 
