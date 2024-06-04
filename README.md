@@ -62,8 +62,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 This tool was developed at the Institut de Physique du Globe de Paris and funded by the SPIN project, an Innovative Training Network (ITN) supported by the European Commission under the Horizon 2020 Marie Skłodowska-Curie Actions (MSCA). We extend our gratitude to all contributors and collaborators who have made this project possible.
 <p align="center">
-  <img src="_Images/H2020_acknowledgment.png" width="250" style="display: inline-block;">
-  <img src="_Images/IPGP_UPC.png" width="250" style="display: inline-block;">
+  <img src="_Images/H2020_acknowledgment.png" width="300" style="display: inline-block;">
+  <img src="_Images/IPGP_UPC.png" width="300" style="display: inline-block;">
 </p>
 
 
