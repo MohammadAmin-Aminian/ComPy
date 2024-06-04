@@ -1491,7 +1491,7 @@ def coherogram_spectrogram_alpha(st,nseg=2**12,tw =1):
     plt.grid(True)
     plt.ylim([0,len(Czp)])
     plt.tight_layout()
-    plt.xlim([20,40])
+    # plt.xlim([20,40])
     plt.yticks([])
     # Subplot 3 (twice the width, next to subplot 2)
     ax3 = plt.subplot(gs[2])

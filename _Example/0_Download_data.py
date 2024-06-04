@@ -22,8 +22,8 @@ compy.plt_params()
 client = Client("RESIF")
 net = "4G"
 sta = "AZBBA"
-start_time = "2008-01-01T00:00:00"
-end_time = "2008-02-01T00:00:00"
+start_time = "2008-03-01T00:00:00"
+end_time = "2008-03-10T00:00:00"
 
 
 inv = client.get_stations(
@@ -44,9 +44,9 @@ stream = client.get_waveforms(network = net,
                               endtime = endtime,
                               attach_response= True)
 
-
-# Downsample the data in 3 stages using FIR filter
-decim = Decimator([5, 3, 2])
+stream.merge(method=1)
+# Downsample the data in 3 steps using FIR filter
+decim = Decimator([5, 5, 2])
 stream_decim = decim.decimate(stream)
 stream_decim.remove_response()
 
@@ -56,7 +56,8 @@ fp.coh(stream_decim)
 # Plots Power Spectrum Density Function of various Cahnnels
 fp.psd(stream_decim,nseg=2**12)
 
-
+# Spectrogram and Coherogram (Coherence Over Time)
+fp.coherogram_spectrogram_alpha(stream_decim,nesg=2**11)
 
 
 

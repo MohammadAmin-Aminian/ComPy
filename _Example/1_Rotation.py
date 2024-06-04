@@ -22,8 +22,4 @@ stream_decim = read("Path")
 
 rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)
 
-fp.psd(rotated_stream)
-
-fp.coh(rotated_stream)
-
-fp.coh_h(rotated_stream)
+fp.coherogram_spectrogram_alpha(rotated_stream,tw=1,nseg=2**11)
