@@ -1,4 +1,7 @@
 # ComPy: Seafloor Compliance Analysis Tool
+<div style="text-align: center;">
+    <img src="ComPy.png" width="250" height="150" alt="ComPy">
+</div>
 
 # Overview
 
@@ -27,8 +30,6 @@ pip install numpy matplotlib scipy obspy tiskitpy
 
 Here's how you can use ComPy to process your seafloor compliance data:
 
-python
-Copy code
 import compy
 
 # Contributing
