@@ -1,6 +1,6 @@
 # ComPy: Seafloor Compliance Analysis Tool
 <div style="text-align: center;">
-    <img src="ComPy.png" width="250" height="150" alt="ComPy">
+    <img src="ComPy.png" width="250">
 </div>
 
 # Overview
