@@ -51,6 +51,8 @@ The `tiskit.TimeSpans.from_eqs` function generates timespans to exclude based on
   <img src="_Images/EQ_Removal.png" width="750">
 </p>
 
+For further information and examples, visit the [tiskitpy repository](https://github.com/WayneCrawford/tiskitpy/tree/develop/tiskitpy/rptransient).
+
 ## `rt.calc_timing(zdata, eq_spans)`
 
 **Function Overview:**
@@ -61,6 +63,8 @@ The `rt.calc_timing` function calculates and stores a list of periodic transient
 <p align="center">
   <img src="_Images/Glitch_Stack.png" width="700">
 </p>
+
+For further information and examples, visit the [tiskitpy repository](https://github.com/WayneCrawford/tiskitpy/tree/develop/tiskitpy/rptransient).
 
 ## `rt.calc_transients(zdata, eq_spans, plot=False)`
 
@@ -96,6 +100,25 @@ The `compy.Rotate` function rotates seismic data to minimize tilt effects and re
 - **angle**: The angle of tilt correction applied to the seismic data.
 - **variance**: The reducted variance ratio (After/Before), indicating the effectiveness of noise reduction.
 
+
+<p align="center">
+  <img src="_Images/DPG_Dispersion.png" width="800">
+</p>
+
+<p align="center">
+  <img src="_Images/DPGCalibration.png" width="800">
+</p>
+
+**Function Overview:**
+The `compy.calculate_spectral_ratio` function calculates the spectral ratio of seismic data, specifically targeting high-magnitude earthquake events. This function helps in refining the calibration of seismic data.
+
+- **stream**: The raw seismic data stream before removing instrument response.
+- **mag**: Minimum magnitude of earthquakes to consider for the calculation. The default is 7.
+- **coh_trsh**: Coherence threshold to accept earthquakes. The default is 0.97.
+- **mean_trsh**: Mean threshold to accept earthquakes. The default is 0.97.
+- **f_min**: Low frequency corner of the band of interest. The default is 0.02.
+- **f_max**: High frequency corner of the band of interest. The default is 0.06.
+- **plot_condition**: Boolean flag to plot the condition or not. The default is False.
 
 <p align="center">
   <img src="_Images/RR52_Tilt.png" width="800">
