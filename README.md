@@ -178,8 +178,23 @@ The `compy.plot_inversion_density_all` function visualizes the inversion results
   - **Station**: Identifier for the seismic station.
   - **mis_fit_trsh**: Threshold value for the misfit function.
 <p align="center">
-  <img src="_Images/Inversion.png" width="600">
+  <img src="_Images/Inversion.png" width="500">
 </p>
+
+## `compy.plot_inversion_serpentinization1(Inversion_container)`
+
+**Function Overview:**
+The `compy.plot_inversion_serpentinization1` function visualizes the extent of serpentinization at various seismic stations. This function helps in understanding the degree of serpentinization and its impact on shear velocity profiles in the oceanic crust.
+
+- **Inversion_container**: A container that holds the inversion results for different stations. The format should include:
+  - **Shear Velocity**: Shear velocity profiles obtained from the inversion.
+  - **Misfit Function**: Misfit function values indicating the quality of the inversion fit.
+  - **Station**: Identifier for the seismic station.
+  - **mis_fit_trsh**: Threshold value for the misfit function.
+<p align="center">
+  <img src="_Images/Serpentinization.png" width="500">
+</p>
+
 
 
 
