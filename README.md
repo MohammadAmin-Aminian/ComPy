@@ -50,6 +50,7 @@ The `tiskit.TimeSpans.from_eqs` function generates timespans to exclude based on
 <p align="center">
   <img src="_Images/EQ_Removal.png" width="750">
 </p>
+
 ## `rt.calc_timing(zdata, eq_spans)`
 
 **Function Overview:**
@@ -60,6 +61,7 @@ The `rt.calc_timing` function calculates and stores a list of periodic transient
 <p align="center">
   <img src="_Images/Glitch_Stack.png" width="700">
 </p>
+
 ## `rt.calc_transients(zdata, eq_spans, plot=False)`
 
 **Function Overview:**
