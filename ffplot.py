@@ -515,23 +515,23 @@ def plot_transfer_function(st, nseg=2**12, TP=5):
     H = Pxy / Pxx
     
     # Plot the magnitude and phase of the transfer function
-    plt.figure(figsize=(15, 6))
+    plt.figure(figsize=(25, 15),dpi=300)
     
     # Magnitude plot
     plt.subplot(1, 2, 1)
-    plt.semilogx(f, 20 * np.log10(np.abs(H)), label='Magnitude')
+    plt.semilogx(f, 20 * np.log10(np.abs(H)),linewidth=3)
     plt.title('Transfer Function Magnitude')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Magnitude (dB)')
+    plt.xlabel('Frequency [Hz]')
+    plt.ylabel('Magnitude [dB]')
     plt.grid(True)
     plt.legend()
     
     # Phase plot
     plt.subplot(1, 2, 2)
-    plt.semilogx(f, np.angle(H, deg=True), label='Phase')
+    plt.semilogx(f, np.angle(H, deg=True),linewidth=3)
     plt.title('Transfer Function Phase')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Phase (degrees)')
+    plt.xlabel('Frequency [Hz]')
+    plt.ylabel('Phase [degrees]')
     plt.grid(True)
     plt.legend()
     

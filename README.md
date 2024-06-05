@@ -163,6 +163,26 @@ Black dashed lines indicate the frequency limits of the compliance band. Green s
   <img src="_Images/RR52_window_selection.png" width="800">
 </p>
 
+## `compy.plot_transfer_function(st, nseg=2**12, TP=5)`
+
+**Function Overview:**
+The `compy.plot_transfer_function` function plots the transfer function between different seismic data channels. This helps in visualizing the relationship and coherence between channels, which is crucial for accurate seismic data analysis.
+
+- **st**: The seismic data stream.
+- **nseg**: Number of segments for Fast Fourier Transform (FFT). The default is 2**12.
+- **TP**: Time for tapering the sides of each segment using a Tukey window. The default is 5 minutes.
+
+**Returns:**
+
+- This function generates a plot of the transfer function, aiding in the identification of coherent noise and its removal for enhanced data quality.
+<p align="center">
+  <img src="_Images/Transferfunction.png" width="800">
+</p>
+
+
+<p align="center">
+  <img src="_Images/PSD_ALL.png" width="800">
+</p>
 
 # Contributing
 
