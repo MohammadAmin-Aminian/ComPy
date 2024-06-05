@@ -178,7 +178,7 @@ The `compy.plot_inversion_density_all` function visualizes the inversion results
   - **Station**: Identifier for the seismic station.
   - **mis_fit_trsh**: Threshold value for the misfit function.
 <p align="center">
-  <img src="_Images/Inversion.png" width="800">
+  <img src="_Images/Inversion.png" width="600">
 </p>
 
 
