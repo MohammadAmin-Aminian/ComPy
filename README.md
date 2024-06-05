@@ -32,7 +32,57 @@ pip install numpy matplotlib scipy obspy tiskitpy
 Here's how you can use ComPy to process your seafloor compliance data:
 
 import compy
+```markdown
+# Generate Timespans to Avoid Because of Earthquakes
 
+To ensure the accuracy of the compliance data, it is crucial to exclude timespans affected by significant seismic events.
+
+## `eq_spans = tiskit.TimeSpans.from_eqs(zdata.stats.starttime, zdata.stats.endtime, minmag=5.5, days_per_magnitude=0.5, save_eq_file=False)`
+
+**Function Overview:**
+The `tiskit.TimeSpans.from_eqs` function generates timespans to exclude based on earthquake events within the data recording period. This helps in avoiding data contamination from seismic activities.
+
+- **eq_spans**: Time spans generated to avoid due to earthquakes.
+- **zdata.stats.starttime**: Start time of the data recording.
+- **zdata.stats.endtime**: End time of the data recording.
+- **minmag**: Minimum magnitude of earthquakes to consider.
+- **days_per_magnitude**: Number of days to exclude per unit of earthquake magnitude.
+- **save_eq_file**: Boolean flag to save the earthquake file or not.
+
+## `rt.calc_timing(zdata, eq_spans)`
+
+**Function Overview:**
+The `rt.calc_timing` function calculates and stores a list of periodic transients based on the provided timespans.
+
+- **zdata**: The seismic data.
+- **eq_spans**: Timespans to exclude due to earthquakes.
+<p align="center">
+  <img src="_Images/Glitch_Stack.png" width="700">
+</p>
+## `rt.calc_transients(zdata, eq_spans, plot=False)`
+
+**Function Overview:**
+The `rt.calc_transients` function calculates the transient time parameters from the data within the given timespans.
+
+- **zdata**: The seismic data.
+- **eq_spans**: Timespans to exclude due to earthquakes.
+- **plot**: Boolean flag to plot the results or not.
+
+## `cleaned = rt.remove_transients(zdata, plot=False, match=False, prep_filter=False)`
+
+**Function Overview:**
+The `rt.remove_transients` function removes transients from the data based on the calculated parameters.
+
+- **cleaned**: The data after removing transients.
+- **zdata**: The seismic data.
+- **plot**: Boolean flag to plot the results or not.
+- **match**: Boolean flag to match the transients or not.
+- **prep_filter**: Boolean flag to apply a pre-filtering process or not.
+<p align="center">
+  <img src="_Images/Residuals.png" width="700">
+</p>
+For further information and examples, visit the [tiskitpy repository](https://github.com/WayneCrawford/tiskitpy/tree/develop/tiskitpy/rptransient).
+```
 
 ## `rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)`
 

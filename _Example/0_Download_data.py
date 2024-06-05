@@ -20,10 +20,10 @@ import compy
 compy.plt_params()
 
 client = Client("RESIF")
-net = "4G"
-sta = "AZBBA"
-start_time = "2008-03-01T00:00:00"
-end_time = "2008-03-10T00:00:00"
+net = "Z3"
+sta = "A419A"
+start_time = "2018-01-01T00:00:00"
+end_time = "2018-02-01T00:00:00"
 
 
 inv = client.get_stations(
@@ -57,7 +57,7 @@ fp.coh(stream_decim)
 fp.psd(stream_decim,nseg=2**12)
 
 # Spectrogram and Coherogram (Coherence Over Time)
-fp.coherogram_spectrogram_alpha(stream_decim,nesg=2**11)
+fp.coherogram_spectrogram_alpha(stream_decim,nseg=2**12)
 
 
 

@@ -1408,7 +1408,7 @@ def coherogram_spectrogram_alpha(st,nseg=2**12,tw =1):
                                    window=scipy.signal.windows.tukey(nseg,
                                    (TP*60*st[0].stats.sampling_rate)/nseg))
     
-    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (7*24*3600)
+    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (1*24*3600)
     
     
     f1 = np.argmin(np.abs(f-f_min))
