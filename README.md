@@ -144,6 +144,44 @@ The `compy.Calculate_Compliance_beta` function calculates the compliance functio
   <img src="_Images/Compliance.png" width="800">
 </p>
 
+## `shear_velocity_model = compy.invert_compliance_beta(Data, f, depth_s, starting_model=None, s=None, n_layer=3, sediment_thickness=80, n_sediment_layer=3, sigma_v=25, sigma_h=25, iteration=1000000, alpha=0.25, sta="RR52")`
+
+**Function Overview:**
+The `compy.invert_compliance_beta` function performs a depth-velocity inversion of the compliance function using the Metropolis-Hastings algorithm. This method provides a robust approach to determine the shear velocity structure of the oceanic sub-surface.
+
+- **Data**: Compliance data.
+- **f**: Frequency of the compliance function.
+- **depth_s**: Depths at which shear velocities are calculated.
+- **starting_model**: Initial model based on prior knowledge (e.g., CRUST1). The default is None.
+- **s**: Uncertainty associated with the compliance data. The default is None.
+- **n_layer**: Number of layers to be used in the inversion. The default is 3.
+- **sediment_thickness**: Thickness of the sediment layer in meters. The default is 80 meters.
+- **n_sediment_layer**: Number of sedimentary layers. The default is 3.
+- **sigma_v**: Step size for shear velocity during inversion. The default is 25 m/s.
+- **sigma_h**: Step size for layer thickness during inversion. The default is 25 meters.
+- **iteration**: Number of iterations for the Metropolis-Hastings algorithm. The default is 1,000,000.
+- **alpha**: Lagrange multiplier controlling the roughness of the results. The default is 0.25.
+- **sta**: Station identifier. The default is "RR52".
+
+**Returns:**
+
+- **shear_velocity_model**: The inverted shear velocity model, providing detailed insights into the subsurface shear velocity structure.
+
+## `compy.plot_inversion_density_all(Inversion_container)`
+
+**Function Overview:**
+The `compy.plot_inversion_density_all` function visualizes the inversion results, displaying the shear velocity profiles and the misfit functions for different stations. This helps in assessing the quality and consistency of the inversion process across multiple stations.
+
+- **Inversion_container**: A container that holds the inversion results for different stations. The format should include:
+  - **Shear Velocity**: Shear velocity profiles obtained from the inversion.
+  - **Misfit Function**: Misfit function values indicating the quality of the inversion fit.
+  - **Station**: Identifier for the seismic station.
+  - **mis_fit_trsh**: Threshold value for the misfit function.
+<p align="center">
+  <img src="_Images/Inversion.png" width="800">
+</p>
+
+
 
 # Plotting Functions
 
