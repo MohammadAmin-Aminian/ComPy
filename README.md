@@ -124,6 +124,27 @@ The `compy.calculate_spectral_ratio` function calculates the spectral ratio of s
   <img src="_Images/RR52_Tilt.png" width="800">
 </p>
 
+
+## `compliance = compy.Calculate_Compliance_beta(stream, f_min_com=0.007, f_max_com=0.02, gain_factor=0.66, time_window=2)`
+
+**Function Overview:**
+The `compy.Calculate_Compliance_beta` function calculates the compliance function with specific window selection criteria to ensure high-quality data. This function is critical for accurate measurement and analysis of seafloor compliance.
+
+- **stream**: The raw seismic data stream before processing.
+- **f_min_com**: Low frequency corner of the compliance band. The default is 0.007.
+- **f_max_com**: High frequency corner of the compliance band. The default is 0.02.
+- **gain_factor**: Gain factor applied during the compliance calculation. The default is 0.66.
+- **time_window**: Time window length for processing the data, in hours. The default is 2 hours.
+
+**Returns:**
+
+- **compliance**: The calculated compliance function, providing insights into the subsurface shear velocity structure.
+
+<p align="center">
+  <img src="_Images/Compliance.png" width="800">
+</p>
+
+
 # Plotting Functions
 
 ## `fp.coherogram_spectrogram_alpha(rotated_stream)`
@@ -141,6 +162,7 @@ Black dashed lines indicate the frequency limits of the compliance band. Green s
 <p align="center">
   <img src="_Images/RR52_window_selection.png" width="800">
 </p>
+
 
 # Contributing
 

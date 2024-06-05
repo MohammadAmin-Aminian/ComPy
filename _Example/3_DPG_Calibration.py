@@ -16,4 +16,4 @@ import Pressure_calibration as DPG
 
 stream = read("Path")
 
-gain_factor = DPG.calculate_spectral_ratio(stream,mag = 7 ,f_min=0.03,f_max=0.07,plot_condition = False)
+gain_factor = DPG.calculate_spectral_ratio(stream,mag = 7 ,f_min=0.03,f_max=0.07,plot_condition = True)
