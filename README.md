@@ -82,7 +82,7 @@ The `rt.remove_transients` function removes transients from the data based on th
 - **match**: Boolean flag to match the transients or not.
 - **prep_filter**: Boolean flag to apply a pre-filtering process or not.
 <p align="center">
-  <img src="_Images/Residuals.png" width="700">
+  <img src="_Images/Residuals.png" width="750">
 </p>
 For further information and examples, visit the [tiskitpy repository](https://github.com/WayneCrawford/tiskitpy/tree/develop/tiskitpy/rptransient).
 
