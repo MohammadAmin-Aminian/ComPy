@@ -98,7 +98,7 @@ The `compy.Rotate` function rotates seismic data to minimize tilt effects and re
 
 
 <p align="center">
-  <img src="_Images/RR52_Tilt.png" width="700">
+  <img src="_Images/RR52_Tilt.png" width="800">
 </p>
 
 # Plotting Functions
@@ -116,7 +116,7 @@ This function plots spectrograms that feature average values within the complian
 
 Black dashed lines indicate the frequency limits of the compliance band. Green shaded areas in panel (f) highlight selected time windows with coherency exceeding the coherence threshold, marked by a red dashed line set at 0.8. This visualization aids in identifying significant patterns and anomalies in the data.
 <p align="center">
-  <img src="_Images/RR52_window_selection.png" width="700">
+  <img src="_Images/RR52_window_selection.png" width="800">
 </p>
 
 # Contributing
