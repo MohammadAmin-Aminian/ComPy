@@ -85,7 +85,6 @@ The `rt.remove_transients` function removes transients from the data based on th
   <img src="_Images/Residuals.png" width="700">
 </p>
 For further information and examples, visit the [tiskitpy repository](https://github.com/WayneCrawford/tiskitpy/tree/develop/tiskitpy/rptransient).
-```
 
 ## `rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)`
 
