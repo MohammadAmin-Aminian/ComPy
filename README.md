@@ -47,7 +47,9 @@ The `tiskit.TimeSpans.from_eqs` function generates timespans to exclude based on
 - **minmag**: Minimum magnitude of earthquakes to consider.
 - **days_per_magnitude**: Number of days to exclude per unit of earthquake magnitude.
 - **save_eq_file**: Boolean flag to save the earthquake file or not.
-
+<p align="center">
+  <img src="_Images/EQ_Removal.png" width="700">
+</p>
 ## `rt.calc_timing(zdata, eq_spans)`
 
 **Function Overview:**

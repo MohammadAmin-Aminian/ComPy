@@ -43,7 +43,7 @@ transients_stream.clear()
 i = 1 
     
 Rot = tiskit.CleanRotator(split_streams[i], remove_eq=False,filt_band=(0.001, 0.5))
-        # Rot = tiskit.CleanRotator(split_streams[i], remove_eq=False,filt_band=(0.002, 0.03))
+
 split_streams[i] = Rot.apply(split_streams[i],horiz_too=True)
     
 split_streams[i].sort(['channel', 'starttime'])
@@ -64,22 +64,28 @@ transients = {'RR28': [PT("1h", 3620.3, 0.05, [-820, 330], stream[0].stats.start
 rt = Transients(transients[sta])
     
 zdata = split_streams[i].select(channel='*Z')[0]
-    
+
+# Generate timespans to avoid because of earthquakes
+
 eq_spans = tiskit.TimeSpans.from_eqs(zdata.stats.starttime, 
                                      zdata.stats.endtime, 
                                      minmag=5.5,
                                      days_per_magnitude = 0.5,
                                      save_eq_file=False)
-    
+
+# calcualates and stores a list of PeriodicTransents
+
 rt.calc_timing(zdata, eq_spans)
+# Calculate transient time parameters
 
 rt.calc_transients(zdata, eq_spans, plot=False)
-    
+# Remove transient from data
+
 cleaned = rt.remove_transients(zdata, plot=False, match=False, prep_filter=False)
 
 
 
-plt.figure(dpi=300,figsize=[20,10])
+plt.figure(dpi=300,figsize=[30,15])
 plt.title("Residuals of One Day")
 plt.plot((cleaned.data - zdata.data)[0:181440],linewidth=5)
 plt.xlabel("Time Sample")
