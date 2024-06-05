@@ -102,11 +102,11 @@ The `compy.Rotate` function rotates seismic data to minimize tilt effects and re
 
 
 <p align="center">
-  <img src="_Images/DPG_Dispersion.png" width="700">
+  <img src="_Images/DPG_Dispersion.png" width="750">
 </p>
 
 <p align="center">
-  <img src="_Images/DPGCalibration.png" width="700">
+  <img src="_Images/DPGCalibration.png" width="750">
 </p>
 
 **Function Overview:**
