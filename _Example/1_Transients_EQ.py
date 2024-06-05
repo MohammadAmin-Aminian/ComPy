@@ -19,7 +19,7 @@ sta = "RR52"
 
 import os 
 import compy
-i = 7
+i = 1
 
 # A = os.listdir("/Users/mohammadamin/Desktop/Data/Z3/decimated")
 A = os.listdir("/Users/mohammadamin/Desktop/Data/YV/"+sta+"/Decimated/")
@@ -69,9 +69,17 @@ zdata = split_streams[i].select(channel='*Z')[0]
 
 eq_spans = tiskit.TimeSpans.from_eqs(zdata.stats.starttime, 
                                      zdata.stats.endtime, 
-                                     minmag=5.5,
+                                     minmag=5,
                                      days_per_magnitude = 0.5,
                                      save_eq_file=False)
+ss = eq_spans.zero(stream)
+plt.figure(dpi=300,figsize=[30,10])
+plt.plot(stream[3].data[1000000:2000000],color="gray",linewidth=5,label="Raw")
+plt.plot(ss[3].data[1000000:2000000],color="black",linewidth=5,label="Raw - Global EQ")
+plt.xlabel("Time Sample")
+plt.ylabel("Amplitude")
+plt.legend(loc="upper right")
+plt.show()
 
 # calcualates and stores a list of PeriodicTransents
 
@@ -84,8 +92,7 @@ rt.calc_transients(zdata, eq_spans, plot=False)
 cleaned = rt.remove_transients(zdata, plot=False, match=False, prep_filter=False)
 
 
-
-plt.figure(dpi=300,figsize=[30,15])
+plt.figure(dpi=300,figsize=[30,10])
 plt.title("Residuals of One Day")
 plt.plot((cleaned.data - zdata.data)[0:181440],linewidth=5)
 plt.xlabel("Time Sample")
