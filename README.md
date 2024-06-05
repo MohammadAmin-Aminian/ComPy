@@ -179,6 +179,24 @@ The `compy.plot_transfer_function` function plots the transfer function between 
   <img src="_Images/Transferfunction.png" width="800">
 </p>
 
+## `compy.psd_h_all(st, st1, st2, st3, tw=6, nseg=2**11, treshhold_high=1e-14, treshhold_low=1e-17)`
+
+**Function Overview:**
+The `compy.psd_h_all` function performs Power Spectral Density (PSD) analysis on seismic data streams to identify and characterize various types of noise and signals across different preprocessing stages. This function helps in evaluating the effectiveness of data preprocessing steps.
+
+- **st**: The seismic data stream.
+- **st1**: The seismic data stream after tilt reduction and removal of local and global events.
+- **st2**: The seismic data stream after transient noise elimination.
+- **st3**: The seismic data stream after removing coherent noise using the transfer function method.
+- **tw**: Time window length for PSD analysis, in hours. The default is 6 hours.
+- **nseg**: Number of segments for Fast Fourier Transform (FFT). The default is 2**11.
+- **treshhold_high**: Upper threshold for PSD values. The default is 1e-14.
+- **treshhold_low**: Lower threshold for PSD values. The default is 1e-17.
+
+**Returns:**
+
+- This function generates PSD plots for different stages of data preprocessing, illustrating the noise reduction and signal enhancement achieved at each step.
+
 
 <p align="center">
   <img src="_Images/PSD_ALL.png" width="800">
