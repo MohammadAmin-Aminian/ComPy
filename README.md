@@ -262,10 +262,12 @@ We welcome contributions from the community. Please review CONTRIBUTING.md for g
 
 # License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GPL-3.0 License. Please see the LICENSE file for more details.
 
 # Citation
-_Inference of Shallow Subsurface Structures of the Indian Ocean Derived from Compliance Function Analysis
+If you use ComPy in your research, please cite:
+	“Shallow Crustal Structures of the Indian Ocean Derived from Compliance Function Analysis”
+
 # Acknowledgments
 
 This tool was developed at the Institut de Physique du Globe de Paris and funded by the SPIN project, an Innovative Training Network (ITN) supported by the European Commission under the Horizon 2020 Marie Skłodowska-Curie Actions (MSCA). We extend our gratitude to all contributors and collaborators who have made this project possible.
