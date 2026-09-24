@@ -1,36 +1,43 @@
-# ComPy: Seafloor Compliance Analysis Tool
+# ComPy
+
+## Seafloor compliance analysis for ocean-bottom seismic data
 <p align="center">
   <img src="_Images/ComPy.png" width="225">
 </p>
 
 [![DOI](https://zenodo.org/badge/665032053.svg)](https://zenodo.org/doi/10.5281/zenodo.13380107)
 
-# Overview
+## Overview
 
-ComPy is a specialized software tool designed for the automated processing and analysis of seafloor compliance data. It enhances the precision of subsurface shear velocity models using Broadband Ocean-Bottom Stations data from the Indian Ocean. ComPy is tailored to manage extensive data processing steps, ensuring high resolution and accuracy in geological analysis.
+ComPy is a Python toolkit for processing and analysing seafloor compliance data from broadband ocean-bottom stations. It provides workflows for data cleaning, tilt correction, pressure-gauge calibration, compliance estimation, and inversion for shallow subsurface shear-velocity models.
 
 ComPy accompanies the methodology presented in Aminian et al. (2025), published in *Geophysical Journal International*:
 
 Aminian, M. A., Crawford, W., Stutzmann, É., Montagner, J.-P., Cannat, M., & Hadziioannou, C. (2025). *Shallow crustal structures of the Indian ocean derived from compliance function analysis*. Geophysical Journal International, 242(3), ggaf253. https://doi.org/10.1093/gji/ggaf253
 
-# Features
+## Features
 
-- Automation of data pre-processing steps including glitch removal, tilt effect minimization, and pressure gauge calibration.
-- Implementation of the Metropolis-Hastings algorithm for robust depth-velocity inversion.
-- Utilization of advanced signal processing techniques to handle seafloor compliance data.
+- Automated preprocessing, including earthquake-window selection and transient/glitch removal.
+- Tilt-effect minimisation through seismic-data rotation.
+- Pressure-gauge calibration using pressure–acceleration spectral ratios.
+- Seafloor compliance estimation and Metropolis–Hastings depth–velocity inversion.
 
-# Installation
+## Installation
 
-Before installing ComPy, ensure you have Python and the necessary packages installed. ComPy requires Python 3.x.
+ComPy requires Python 3.9 or later. Clone the repository and install the runtime dependencies:
 
 ## Clone the repository
-git clone https://github.com/your-repository/ComPy.git
+git clone https://github.com/MohammadAmin-Aminian/ComPy.git
 
 ## Navigate to the ComPy directory
 cd ComPy
 
 ## Install required Python packages
-pip install numpy matplotlib scipy obspy tiskitpy
+python -m pip install numpy matplotlib scipy obspy tiskitpy
+
+## Examples
+
+Runnable scripts are available in [`_Example/`](./_Example/), covering data download, earthquake transients, rotation, and DPG calibration.
 
 # Usage
 
@@ -163,8 +170,8 @@ This function rotates seismic data to minimize tilt effects and removes coherenc
 We calibrate the pressure gauge by calculaing the pressure-acceleration spectral ratio in the ambient
 Rayleigh wave band and comparing to the expected value
 
-```
-import python
+```python
+import compy
 
 compy.calculate_spectral_ratio(...)
 ```
@@ -376,7 +383,7 @@ We welcome contributions from the community. Please review CONTRIBUTING.md for g
 
 This project is licensed under the GPL-3.0 License. Please see the LICENSE file for more details.
 
-# Citation# Citation
+## Citation
 
 If you use ComPy in your research, please cite:
 
@@ -402,6 +409,5 @@ This tool was developed at the Institut de Physique du Globe de Paris and funded
   <img src="_Images/H2020_acknowledgment.png" width="300" style="display: inline-block;">
   <img src="_Images/IPGP_UPC.png" width="300" style="display: inline-block;">
 </p>
-
 
 
