@@ -1,97 +1,45 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jun  3 11:59:46 2024
+"""Download a chosen station interval, decimate and remove channel responses.
 
-@author: Mohammad-Amin AMINIAN
-
-
-Institut de Physique du Globe de Paris
-
+Example: python _Example/0_Download_data.py YV RR52 2012-12-01 2012-12-02 output.mseed
+Review the decimation factors for your input sampling rate before running.
 """
 
-# Download Data from Broadband Ocean Bottom Station 
+import argparse
+from pathlib import Path
 
+from obspy import UTCDateTime
 from obspy.clients.fdsn import Client
-from obspy import UTCDateTime,read
-import ffplot as fp
 from tiskitpy import Decimator
-import compy
-compy.plt_params()
-
-client = Client("RESIF")
-net = "Z3"
-sta = "A419A"
-start_time = "2018-01-01T00:00:00"
-end_time = "2018-02-01T00:00:00"
 
 
-inv = client.get_stations(
-        network=net,
-        station=sta,
-        channel="*",
-        location="*",
-        level="response")
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("network")
+    parser.add_argument("station")
+    parser.add_argument("start")
+    parser.add_argument("end")
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--server", default="RESIF")
+    parser.add_argument("--factors", type=int, nargs="+", default=[5, 5, 2])
+    args = parser.parse_args()
+    if args.output.exists():
+        raise FileExistsError(args.output)
+    start, end = UTCDateTime(args.start), UTCDateTime(args.end)
+    if end <= start:
+        raise ValueError("end must follow start")
+    client = Client(args.server)
+    stream = client.get_waveforms(
+        args.network, args.station, "*", "*", start, end, attach_response=True
+    )
+    stream.merge(method=0)
+    stream = Decimator(args.factors).decimate(stream)
+    for trace in stream:
+        trace.remove_response(
+            output="DEF" if trace.stats.channel.endswith("H") else "DISP"
+        )
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    stream.write(str(args.output), format="MSEED")
 
 
-starttime = UTCDateTime(start_time)
-endtime = UTCDateTime(end_time)
-stream = client.get_waveforms(network = net, 
-                              station = sta , 
-                              location = "*", 
-                              channel = "*", 
-                              starttime = starttime, 
-                              endtime = endtime,
-                              attach_response= True)
-
-stream.merge(method=1)
-# Downsample the data in 3 steps using FIR filter
-decim = Decimator([5, 5, 2])
-stream_decim = decim.decimate(stream)
-stream_decim.remove_response()
-
-# Plots Coherence Function Between Cahnnels
-fp.coh(stream_decim)
-
-# Plots Power Spectrum Density Function of various Cahnnels
-fp.psd(stream_decim,nseg=2**12)
-
-# Spectrogram and Coherogram (Coherence Over Time)
-fp.coherogram_spectrogram_alpha(stream_decim,nseg=2**12)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    main()

@@ -1,31 +1,30 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jun  4 11:27:47 2024
+"""Correct tilt on response-corrected displacement data."""
 
-@author: mohammadamin
-"""
-from obspy.clients.fdsn import Client
-from obspy import UTCDateTime,read
-import ffplot as fp
-from tiskitpy import Decimator
+import argparse
+from pathlib import Path
+
+import numpy as np
+from obspy import read
 import compy
-compy.plt_params()
-
-# Read the downloaded stream. Replace "Path" with the actual file path where your file is stored. 
-# If the file was downloaded using the previous example, you can skip this line.
-
-stream_decim = read("Path")
 
 
-# Rotate the data and remove coherence noise to minimize tilt effects. The default time window is 1 hour, which can be changed as needed.
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input")
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--hours", type=float, default=1)
+    args = parser.parse_args()
+    if args.output.exists():
+        raise FileExistsError(args.output)
+    rotated, azimuth, angle, variance_ratio = compy.Rotate(
+        read(args.input), args.hours, plot=False
+    )
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    rotated.write(str(args.output), format="MSEED")
+    print(
+        f"Cleaned {len(angle)} windows; median after/before variance: {np.median(variance_ratio):.3g}"
+    )
 
-rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim,time_window = 1)
 
-
-fp.coherogram_spectrogram_alpha(rotated_stream,tw=1,nseg=2**11)
-
-
-fp.psd(rotated_stream,nseg=2**12)
-
-fp.coh(rotated_stream)
+if __name__ == "__main__":
+    main()

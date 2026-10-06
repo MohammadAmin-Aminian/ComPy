@@ -1,19 +1,31 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun  5 15:54:22 2024
+"""Estimate gauge gain from raw data and a local StationXML response inventory."""
 
-@author: mohammadamin
-"""
-from obspy.clients.fdsn import Client
-from obspy import UTCDateTime,read
-import ffplot as fp
-from tiskitpy import Decimator
-import compy
-compy.plt_params()
-import Pressure_calibration as DPG
+import argparse
+
+from obspy import read, read_inventory
+import Pressure_calibration as dpg
 
 
-stream = read("Path")
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "input", help="raw-count MiniSEED, not displacement output from example 0"
+    )
+    parser.add_argument(
+        "inventory", help="StationXML containing vertical and pressure responses"
+    )
+    parser.add_argument("--minmag", type=float, default=7)
+    parser.add_argument("--band", type=float, nargs=2, default=[0.03, 0.07])
+    args = parser.parse_args()
+    gain = dpg.calculate_spectral_ratio(
+        read(args.input),
+        inventory=read_inventory(args.inventory),
+        mag=args.minmag,
+        f_min=args.band[0],
+        f_max=args.band[1],
+    )
+    print(f"Pressure gain: {gain:.6g}")
 
-gain_factor = DPG.calculate_spectral_ratio(stream,mag = 7 ,f_min=0.03,f_max=0.07,plot_condition = True)
+
+if __name__ == "__main__":
+    main()

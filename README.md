@@ -1,413 +1,354 @@
-# ComPy
+# ComPy 2.0
 
-## Seafloor compliance analysis for ocean-bottom seismic data
-<p align="center">
-  <img src="_Images/ComPy.png" width="225">
-</p>
+**Seafloor compliance processing, pressure-gauge calibration and layered elastic inversion.**
 
+<p align="center"><img src="_Images/ComPy.png" width="225" alt="ComPy"></p>
+
+[![Tests](https://github.com/MohammadAmin-Aminian/ComPy/actions/workflows/tests.yml/badge.svg)](https://github.com/MohammadAmin-Aminian/ComPy/actions/workflows/tests.yml)
 [![DOI](https://zenodo.org/badge/665032053.svg)](https://zenodo.org/doi/10.5281/zenodo.13380107)
 
-## Overview
+ComPy was developed for broadband ocean-bottom stations in the RHUM-RUM
+experiment. It supports earthquake/transient preprocessing through TiSKitPy,
+tilt correction, teleseismic differential pressure gauge (DPG) calibration,
+compliance estimation and Metropolis sampling of layered shear-velocity models.
 
-ComPy is a Python toolkit for processing and analysing seafloor compliance data from broadband ocean-bottom stations. It provides workflows for data cleaning, tilt correction, pressure-gauge calibration, compliance estimation, and inversion for shallow subsurface shear-velocity models.
-
-ComPy accompanies the methodology presented in Aminian et al. (2025), published in *Geophysical Journal International*:
-
-Aminian, M. A., Crawford, W., Stutzmann, É., Montagner, J.-P., Cannat, M., & Hadziioannou, C. (2025). *Shallow crustal structures of the Indian ocean derived from compliance function analysis*. Geophysical Journal International, 242(3), ggaf253. https://doi.org/10.1093/gji/ggaf253
-
-## Features
-
-- Automated preprocessing, including earthquake-window selection and transient/glitch removal.
-- Tilt-effect minimisation through seismic-data rotation.
-- Pressure-gauge calibration using pressure–acceleration spectral ratios.
-- Seafloor compliance estimation and Metropolis–Hastings depth–velocity inversion.
+The scientific study is [Aminian et al. (2025), Geophysical Journal
+International](https://doi.org/10.1093/gji/ggaf253). Version 2 is a software
+revision of the research code, **not a claim that the published results have
+been reproduced with the revised implementation**. Changes that affect
+numerical results are described in [CHANGELOG.md](CHANGELOG.md).
 
 ## Installation
 
-ComPy requires Python 3.9 or later. Clone the repository and install the runtime dependencies:
+Python 3.10 or later is required. A virtual environment is recommended.
 
-## Clone the repository
+```bash
 git clone https://github.com/MohammadAmin-Aminian/ComPy.git
-
-## Navigate to the ComPy directory
 cd ComPy
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
+python -m pytest -q
+```
 
-## Install required Python packages
-python -m pip install numpy matplotlib scipy obspy tiskitpy
+On Windows, activate with `.venv\Scripts\activate`.
+The distribution is named `seafloor-compy`; the existing module imports remain
+`compy`, `inv_compy`, `Pressure_calibration` and `ffplot`. This repository is
+installed from source; the installation command does not assume a PyPI release.
 
-## Examples
+Runtime dependencies are NumPy, SciPy, Matplotlib, ObsPy, TiSKitPy 2.3 and disba.
+No external CPS executable is required by the built-in compliance propagator.
+Imports do not contact station services. Data download, automatic earthquake
+catalog retrieval and station-depth lookup require network access.
 
-Runnable scripts are available in [`_Example/`](./_Example/), covering data download, earthquake transients, rotation, and DPG calibration.
+## Input conventions
 
-# Usage
+| Operation | Vertical channel | Pressure channel | Other inputs |
+|---|---|---|---|
+| `Calculate_Compliance*` | response-corrected **displacement, m** | nominal response-corrected pressure, **Pa** | positive water depth, m; multiplicative pressure gain |
+| `calculate_spectral_ratio` | raw counts; response removed internally to acceleration | raw counts; response removed internally to pressure | response inventory, earthquake windows |
+| `Rotate` | physically consistent seismic channels | passed through cleaning workflow | `*1`, `*2`, `*Z` seismic channels |
+| `calc_norm_compliance` / inversion | measured normalized compliance, **1/Pa** | not used directly | Hz, m; model columns below |
+| `phase_dispersion` | not used | not used | disba model in **km, km/s, km/s, g/cm³** |
 
-Here's how you can use ComPy and tiskitpy to process your seafloor compliance data:
+`*Z` denotes the vertical component and `*H` the pressure channel (normally
+`BDH`), not a horizontal seismometer. ComPy expects exactly one of each for
+spectral processing. Use one station and one response epoch at a time. Merge
+trace fragments and resolve gaps explicitly before analysis. Masked samples,
+nonfinite data, duplicate trace IDs, unequal sample rates and off-grid start
+times are rejected by the core processing helpers.
 
-## Generate Timespans to Avoid Because of Earthquakes
+For inversion and the elastic forward calculation the model columns are:
 
-To ensure the accuracy of the compliance data, it is crucial to exclude timespans affected by significant seismic events.
+```text
+[finite-layer thickness (m), density (kg/m³), Vp (m/s), Vs (m/s)]
+```
+
+The last row is an elastic half-space; its thickness does not enter the
+propagator. Use zero there in custom models. The preserved station templates
+retain their historical last-row thickness, which is also ignored physically.
+Do not pass a disba model directly to the elastic compliance solver.
+
+Pressure gain is defined as `calibrated_pressure = gain_factor * nominal_pressure`.
+Consequently pressure PSD is multiplied by `gain_factor**2`. Apply the gain
+once. Instrument-response removal is separate from pressure calibration.
+
+## Processing workflow
+
+1. Download/read seismic and pressure data together with their StationXML
+   response inventory; check response epochs, units, timing and gaps.
+2. Decimate with an anti-alias filter and remove the appropriate instrument
+   responses. Use displacement for compliance and acceleration for calibration.
+3. Identify earthquake intervals and periodic transients using TiSKitPy.
+4. Correct seismic tilt and horizontal coherent noise.
+5. Estimate the pressure gain from suitable teleseismic Rayleigh windows.
+6. Estimate compliance in complete windows and inspect the quality selection.
+7. Supply defensible observation uncertainties and a starting model to inversion.
+8. Inspect multiple chains, burn-in, mixing and model sensitivity before
+   reporting a scientific result.
+
+The files in [`_Example/`](./_Example/) show command-line workflows and a runnable
+offline synthetic example. Paths and network/station selection must match your
+own data; no station-specific gain should be transferred to another sensor.
+
+### Earthquakes and periodic transients
+
+TiSKitPy 2.3 accepts the time bounds as a tuple:
 
 ```python
 import tiskitpy
 
-eq_spans = tiskitpy.TimeSpans.from_eqs(zdata.stats.starttime, zdata.stats.endtime, minmag=5.5, days_per_magnitude=0.5, save_eq_file=False)
+spans = tiskitpy.TimeSpans.from_eqs(
+    (zdata.stats.starttime, zdata.stats.endtime),
+    minmag=5.5,
+    days_per_magnitude=0.5,
+    save_eq_file=False,
+)
 ```
 
-This function generates timespans to exclude based on earthquake events within the data recording period.
+Periodic transients require a configured **instance**, including transient
+period, timing and clipping parameters; they are not class-level operations.
+Use the deployment-specific example and the
+[TiSKitPy documentation](https://tiskitpy.readthedocs.io/latest/) to configure it.
 
-**Parameters**:
+<p align="center"><img src="_Images/Glitch_Stack.png" width="650" alt="Periodic transient stacking example"></p>
 
-- **time_bounds** (_tuple, obspy.stream.Stream or obspy.stream.Trace_): time bounds to use. Bounds are forced to be beginning (startime) and end (endtime) of a day  
-- **minmag** (_float_): EQ Magnitude above which to cut out times  
-- **days_per_magnitude** (_float_): days to cut per magnitude above min_magnitude  
-- **eq_file** (_str_): the eq filename (otherwise, generates it)  
-- **save_eq_file** (_bool_): save the catalog file for future use 
-
-**Returns** (_TimeSpans object_): time spans covering EQ signal  
-
-
-<p align="center">
-  <img src="_Images/EQ_Removal.png" width="750">
-</p>
-
-For further information and examples, visit the [tiskitpy TimeSpans documentation](https://tiskitpy.readthedocs.io/latest/classes/time_spans.html).
-
-## Remove Transients
-
-For further information and examples, visit the [tiskitpy PeriodicTransient documentation](https://tiskitpy.readthedocs.io/latest/periodic_transients.html).
-
-### Calculate the periodicity and start time of the transients
-
-```python
-from tiskitpy import PeriodicTransient as pt
-
-pt.calc_timing(zdata, eq_spans)
-```
-
-This function calculates and stores a list of periodic transients based on the provided timespans.
-
-**Parameters**:
-
-- **zdata** (_obspy.core.stream trace_): The seismic data.
-- **eq_spans** (_tiskitpy.TimeSpans_): Timespans to exclude due to earthquakes.
-
-<p align="center">
-  <img src="_Images/Glitch_Stack.png" width="700">
-</p>
-
-
-### Calculate the mean shape of the transient
-
-```python
-from tiskitpy import PeriodicTransient as pt
-
-pt.calc_transients(zdata, eq_spans, plot=False)
-```
-
-This function calculates the transient time parameters from the data within the given timespans.
-
-**Parameters**:
-
-- **zdata** (_obspy.core.stream trace_): The seismic data.
-- **eq_spans** (_tiskitpy.TimeSpans_): Timespans to exclude due to earthquakes.
-- **plot** (_bool_): Boolean flag to plot the results or not.
-
-### Remove transients from the data
-
-```python
-from tiskitpy import PeriodicTransient as pt
-
-cleaned = pt.remove_transients(zdata, plot=False, match=False, prep_filter=False)
-```
-
-This function removes transients from the data based on the calculated parameters.
-
-**Parameters**:
-
-- **zdata** (_obspy.core.stream trace_): The seismic data.
-- **plot** (_bool_): Boolean flag to plot the results or not.
-- **match** (_bool): Boolean flag to match the transients or not.
-- **prep_filter** (_bool): Boolean flag to apply a pre-filtering process or not.
-
-**Returns**:
-
-- **cleaned**(_obspy.core.stream trace_): The data after removing transients.
-
-<p align="center">
-  <img src="_Images/Residuals.png" width="750">
-</p>
-
-For further information and examples, visit the [tiskitpy repository](https://github.com/WayneCrawford/tiskitpy/tree/develop/tiskitpy/rptransient).
-
-## Rotate seismic data to minimize tilt effects
+### Tilt correction
 
 ```python
 import compy
 
-rotated_stream,azimuth,angle,variance = compy.Rotate(stream_decim)
+rotated, azimuth, angle, variance_ratio = compy.Rotate(
+    displacement_stream, time_window=1, plot=False
+)
 ```
 
-This function rotates seismic data to minimize tilt effects and removes coherence noise, enhancing data accuracy for compliance analysis. The default processing window is set to 1 hour but can be adjusted as needed.
+`time_window` is in hours. The function processes complete, non-overlapping
+windows and returns a merged ObsPy Stream. The final incomplete window is
+omitted. `variance_ratio` means **after / before**, so values below one mean
+reduced vertical variance. A failure identifies the affected window and raises
+an exception; failed windows are not silently returned as cleaned data. The
+input stream is copied. TiSKitPy supports additional orientation conventions;
+this wrapper uses numbered horizontal components (`*1`, `*2`).
 
-**Parameters**:
-
-- **stream** (_obspy.core.stream.stream_): The seismic data stream after rotation and noise removal.
-- **time_window** (_float_): Processing window in hours (_default=1_)
-
-**Returns**:
-
-- **rotated_stream** (_obspy.core.stream.stream_): The seismic data stream after rotation and noise removal.
-- **azimuth**: The direction of the rotation applied to correct the tilt in degrees.
-- **angle**: The angle of tilt correction applied to the seismic data.
-- **variance**: The reducted variance ratio (After/Before), indicating the effectiveness of noise reduction.
-
-<p align="center">
-  <img src="_Images/RR52_Tilt.png" width="800">
-</p>
-
-## Calibrate the pressure gauge
-
-We calibrate the pressure gauge by calculaing the pressure-acceleration spectral ratio in the ambient
-Rayleigh wave band and comparing to the expected value
+### Pressure calibration
 
 ```python
-import compy
+import Pressure_calibration as dpg
 
-compy.calculate_spectral_ratio(...)
+gain = dpg.calculate_spectral_ratio(
+    raw_stream,
+    mag=7,
+    f_min=0.03,
+    f_max=0.07,
+    inventory=inventory,
+    event_spans=spans,
+    plot_condition=True,
+)
 ```
 
-This function calculates the spectral ratio of seismic data, specifically targeting high-magnitude earthquake events. This function helps in refining the calibration of seismic data.
+Omitting `inventory` downloads response metadata; omitting `event_spans`
+retrieves earthquake windows using TiSKitPy. Supply both for offline processing.
+Each event is processed independently, including a single-event dataset.
+Calibration compares measured P/a divided by `rho * water_depth` with the
+water-column theoretical ratio. The positive least-squares gain is fitted
+analytically rather than searched in increments of 0.01. The strongest vertical
+amplitude is used as a window-selection heuristic; this is not a seismic travel
+time calculation. Visually check that the selected energy is Rayleigh-wave
+energy. A calibration band crossing an invalid theoretical response is rejected.
 
-**Parameters**:
+Calibration coherence thresholds use **magnitude-squared coherence**. Compliance
+outputs use **amplitude coherence**, its square root. These thresholds are not
+interchangeable.
 
-- **stream**: The raw seismic data stream before removing instrument response.
-- **mag**: Minimum magnitude of earthquakes to consider for the calculation. The default is 7.
-- **coh_trsh**: Coherence threshold to accept earthquakes. The default is 0.97.
-- **mean_trsh**: Mean threshold to accept earthquakes. The default is 0.97.
-- **f_min**: Low frequency corner of the band of interest. The default is 0.02.
-- **f_max**: High frequency corner of the band of interest. The default is 0.06.
-- **plot_condition**: Boolean flag to plot the condition or not. The default is False.
+<p align="center"><img src="_Images/DPGCalibration.png" width="650" alt="Pressure gauge calibration example from the research workflow"></p>
 
-<p align="center">
-  <img src="_Images/DPGCalibration_Signal.png" width="750">
-</p>
-
-<p align="center">
-  <img src="_Images/DPGCalibration.png" width="750">
-</p>
-
-## Calculate seafloor compliance
+### Compliance
 
 ```python
-import compy
-
-compliance = compy.Calculate_Compliance_beta(stream, f_min_com=0.007, f_max_com=0.02, gain_factor=0.66, time_window=2)
+curves, coherence, windows, frequency, full_frequency, scatter = (
+    compy.Calculate_Compliance_beta(
+        displacement_pressure_stream,
+        depth=4000,
+        gain_factor=gain,
+        time_window=2,
+        f_min_com=0.007,
+        f_max_com=0.02,
+        nseg=4096,
+        plot=False,
+    )
+)
 ```
 
-This function calculates the compliance function with specific window selection criteria to ensure high-quality data. This function is critical for accurate measurement and analysis of seafloor compliance.
+Providing `depth` avoids station-service calls. If omitted, depth is determined
+from the vertical channel's elevation at the record start time.
 
-**Parameters**:
+| Function | Return tuple | Processing-window step |
+|---|---|---|
+| `Calculate_Compliance_beta` | curves, amplitude coherence, selected streams, selected frequencies, full frequencies, standard deviation across curves | 5 minutes |
+| `Calculate_Compliance` | same first five items, peak-to-peak scatter, first-window theoretical uncertainty estimate | 1 minute |
 
-- **stream**: The raw seismic data stream before processing.
-- **f_min_com**: Low frequency corner of the compliance band. The default is 0.007.
-- **f_max_com**: High frequency corner of the compliance band. The default is 0.02.
-- **gain_factor**: Gain factor applied during the compliance calculation. The default is 0.66.
-- **time_window**: Time window length for processing the data, in hours. The default is 2 hours.
+`curves` has shape `(accepted_windows, frequency_bins)`. `coherence` contains
+full-frequency arrays matching the selected windows. Beta returns frequencies
+from 0.001–0.1 Hz; the older estimator returns 0.005–0.025 Hz. The requested
+compliance band controls selection. Restrict results to the physically useful
+band before inversion; returning a bin does not establish that it is reliable.
 
-**Returns:**
+The default spectral segment length is 4096 samples, with 50% segment overlap
+and a Hann window. All auto- and cross-spectra use the same mean-Welch estimator.
+Frequency spacing is `sampling_rate / nseg`; `nseg` must fit inside each complete
+processing window. Quality selection retains the historical station-oriented
+coherence and pressure/vertical PSD gates; these are empirical gates, not
+universal thresholds for every deployment. No accepted windows produces a clear
+`ValueError`.
 
-- **compliance**: The calculated compliance function, providing insights into the subsurface shear velocity structure.
+Gravity-wave wavenumber solves `omega² = g*k*tanh(k*H)` with a bounded root
+solver. The gravity correction converts wave-attraction acceleration to
+compatible displacement units before combining it with Z/P. The acceleration
+correction constant is `3.07e-6 s⁻²`.
 
-<p align="center">
-  <img src="_Images/Compliance.png" width="800">
-</p>
+**Scatter is not standard error.** Theoretical uncertainty uses amplitude
+coherence, `abs(eta)*sqrt(1-gamma²)/(gamma*sqrt(2*n))`. Zero coherence yields
+infinite uncertainty. Overlapping spectral segments and processing windows
+are correlated; the nominal average count does not by itself supply an
+independent effective sample count. Include calibration uncertainty separately.
 
-## Invert compliance data for a subsurface shear velocity model
+<p align="center"><img src="_Images/Compliance.png" width="650" alt="Compliance estimation example from the research workflow"></p>
+
+### Forward model and inversion
 
 ```python
-import compy
+import numpy as np
+import inv_compy as inv
 
-shear_velocity_model = compy.invert_compliance_beta(Data, f, depth_s, starting_model=None, s=None, n_layer=3, sediment_thickness=80, n_sediment_layer=3, sigma_v=25, sigma_h=25, iteration=1000000, alpha=0.25, sta="RR52")
+model = np.array(
+    [
+        [100, 2200, 3000, 1500],
+        [1000, 2800, 6000, 3500],
+        [0, 3300, 8000, 4500],
+    ],
+    dtype=float,
+)
+f = np.array([0.005, 0.007, 0.010, 0.015])
+prediction = inv.calc_norm_compliance(4000, f, model)
+
+chain, profiles, prior, misfit, predictions, likelihood, acceptance = (
+    inv.invert_compliance_beta(
+        measured_compliance,
+        f,
+        4000,
+        starting_model=model,
+        s=measurement_uncertainty,
+        iteration=10000,
+        sigma_v=5,
+        sigma_h=5,
+        alpha=0.25,
+        seed=0,
+        return_profiles=False,
+    )
+)
 ```
 
-This function performs a depth-velocity inversion of the compliance function using the Metropolis-Hastings algorithm. This method provides a robust approach to determine the shear velocity structure of the oceanic sub-surface.
+`chain` has shape `(layers, 4, iterations)`; `predictions` has shape
+`(iterations, frequencies)`; `misfit` and `likelihood` have shape `(1, iterations)`.
+`prior` is the initial Vs profile sampled on a fixed metre grid. `profiles` is
+`None` when `return_profiles=False`; otherwise it contains the depth profiles
+for every saved iteration. **For long runs, disable profiles:** 100,000 profiles
+on a 30-km metre grid require approximately 24 GB just for that array.
 
-**Parameters**:
+The starting state is evaluated before proposals. The supplied starting model
+is honored. Density and Vp remain fixed, following the paper's model description;
+Vs and finite-layer thickness are sampled. The half-space remains fixed and
+thickness transfers conserve total finite-layer depth. Proposals outside the
+support are rejected without redraw or reflection, preserving a symmetric
+Gaussian random walk. Acceptance uses differences of log probabilities, so
+an underflowed stored likelihood does not break sampling. The returned acceptance
+rate counts proposals, excluding the initial state. `seed` controls a local RNG
+and does not reset NumPy's global generator.
 
-- **Data**: Compliance data.
-- **f**: Frequency of the compliance function.
-- **depth_s**: Depths at which shear velocities are calculated.
-- **starting_model**: Initial model based on prior knowledge (e.g., CRUST1). The default is None.
-- **s**: Uncertainty associated with the compliance data. The default is None.
-- **n_layer**: Number of layers to be used in the inversion. The default is 3.
-- **sediment_thickness**: Thickness of the sediment layer in meters. The default is 80 meters.
-- **n_sediment_layer**: Number of sedimentary layers. The default is 3.
-- **sigma_v**: Step size for shear velocity during inversion. The default is 25 m/s.
-- **sigma_h**: Step size for layer thickness during inversion. The default is 25 meters.
-- **iteration**: Number of iterations for the Metropolis-Hastings algorithm. The default is 1,000,000.
-- **alpha**: Lagrange multiplier controlling the roughness of the results. The default is 0.25.
-- **sta**: Station identifier. The default is "RR52".
+The Gaussian data term is `sum(((observed-predicted)/s)**2)`; roughness is the
+squared second-derivative energy on a fixed 1-m grid. The data term is a sum,
+whereas the manuscript describes a mean chi-square: alpha values therefore
+need retuning rather than copying unchanged. The basic sampler bounds Vs to
+50–110% of its initial value. Beta uses 15–120% in shallow layers and 90–110%
+in the deepest finite layer. No monotonic-Vs constraint or gain parameter is
+sampled automatically. These priors must suit your scientific question.
 
-**Returns:**
+`s` is required and must be finite and strictly positive. It may be scalar or
+match the data vector. It is fixed during a chain. The sampler returns the
+unnormalized likelihood for compatibility; it is not Bayesian evidence.
+Station templates from `Model_V2` support 3/6/9/12 subdivisions for the eight
+RHUM-RUM stations. Supply a custom model to control sediment properties;
+legacy `sediment_thickness` arguments do not modify station templates.
+Historical misspellings `invert_compliace*`, `liklihood`, `Roughness` and
+`Comliance_uncertainty` remain available for existing notebooks.
 
-- **shear_velocity_model**: The inverted shear velocity model, providing detailed insights into the subsurface shear velocity structure.
+## Plotting and diagnostics
 
-## Show the inversion results as a density plot
+`ffplot` contains the original PSD, coherence, spectrogram and deployment-specific
+publication plotting routines. `ffplot.compl` is a quick **uncorrected** compliance
+diagnostic; use `Calculate_Compliance*` for quality selection and gravity terms.
+`coherogram_spectrogram_daily` exposes the former single-stream routine that
+was accidentally overwritten by a second function of the same name.
 
-```python
-import compy
+Publication layouts expect the original inversion containers and adequate
+post-burn-in samples. `final_plot(..., image_dir=...)` additionally requires
+`RR36.png`, `RR38.png`, `RR40.png`, `RR50.png`, `RR52.png` and `Rift_valley.png`.
+No plotting routine writes to the author's desktop. Export explicitly with
+`matplotlib.pyplot.savefig(...)`. Serpentinization plots assume that velocity
+anomalies arise from serpentinization; they do not establish that interpretation.
 
-compy.plot_inversion_density_all(Inversion_container)
+## Validation and reproducibility
+
+```bash
+MPLBACKEND=Agg python -m pytest -q
+python -m ruff check .
+python -m ruff format --check .
+python -m build
 ```
 
-This function visualizes the inversion results, displaying the shear velocity profiles and the misfit functions for different stations. This helps in assessing the quality and consistency of the inversion process across multiple stations.
+The regression suite tests dispersion-relation residuals, a homogeneous elastic
+half-space limit, identical-layer splitting, known spectral transfer functions,
+gravity units, calibration scaling, event handling, sampler state consistency,
+RNG isolation, window boundaries and MiniSEED round trips. GitHub Actions runs
+these checks across Python 3.10–3.13. Local validation details and scientific
+references are in [docs/VALIDATION.md](docs/VALIDATION.md).
 
-**Parameters**:
-
-- **Inversion_container**: A container that holds the inversion results for different stations. The format should include:
-  - **Shear Velocity**: Shear velocity profiles obtained from the inversion.
-  - **Misfit Function**: Misfit function values indicating the quality of the inversion fit.
-  - **Station**: Identifier for the seismic station.
-  - **mis_fit_trsh**: Threshold value for the misfit function.
-
-<p align="center">
-  <img src="_Images/Inversion.png" width="500">
-</p>
-
-## Interpret inversion results in terms of serpentinization
-
-Assumes that all velocity anomalies are caused by serpentinzation
-
-```python
-import compy
-
-compy.plot_inversion_serpentinization1(Inversion_container)
-```
-
-This function visualizes the extent of serpentinization at various seismic stations. This function helps in understanding the degree of serpentinization and its impact on shear velocity profiles in the oceanic crust.
-
-**Parameters**:
-
-- **Inversion_container**: A container that holds the inversion results for different stations. The format should include:
-  - **Shear Velocity**: Shear velocity profiles obtained from the inversion.
-  - **Misfit Function**: Misfit function values indicating the quality of the inversion fit.
-  - **Station**: Identifier for the seismic station.
-  - **mis_fit_trsh**: Threshold value for the misfit function.
-
-<p align="center">
-  <img src="_Images/Serpentinization.png" width="500">
-</p>
-
-
-# Plotting Functions
-
-## coherogram_spectrogram
-
-```python
-import ffplot
-
-ffplot.coherogram_spectrogram_alpha(rotated_stream)
-```
-
-This function plots spectrograms that feature average values within the compliance frequency band. The output includes several panels:
-
-**Parameters**:
-
-- **(a) Calibrated Pressure:** Shows pressure data adjusted for calibration errors.
-- **(b) Median Values of Pressure:** Displays the median values of the calibrated pressure data.
-- **(c) Corrected Vertical Acceleration:** Presents the vertical acceleration data after corrections.
-- **(d) Median Values of Vertical Acceleration:** Shows the median values of the corrected vertical acceleration data.
-- **(e) Coherogram:** Plots the coherogram between the calibrated pressure and the corrected vertical acceleration.
-- **(f) Average Values:** Illustrates the average values across the dataset. 
-
-Black dashed lines indicate the frequency limits of the compliance band. Green shaded areas in panel (f) highlight selected time windows with coherency exceeding the coherence threshold, marked by a red dashed line set at 0.8. This visualization aids in identifying significant patterns and anomalies in the data.
-
-<p align="center">
-  <img src="_Images/RR52_window_selection.png" width="800">
-</p>
-
-## Plot transfer functions
-
-```python
-import ffplot
-
-ffplot.plot_transfer_function(st, nseg=2**12, TP=5)
-```
-
-This function plots the transfer function between different seismic data channels. This helps in visualizing the relationship and coherence between channels, which is crucial for accurate seismic data analysis.
-
-**Parameters**:
-
-- **st**: The seismic data stream.
-- **nseg**: Number of segments for Fast Fourier Transform (FFT). The default is 2**12.
-- **TP**: Time for tapering the sides of each segment using a Tukey window. The default is 5 minutes.
-
-
-This function generates a plot of the transfer function, aiding in the identification of coherent noise and its removal for enhanced data quality.
-
-<p align="center">
-  <img src="_Images/Transferfunction.png" width="800">
-</p>
-
-## Compare PSDs for different data preprocessing stages
-
-```python
-import ffplot
-
-ffplot.psd_h_all(st, st1, st2, st3, tw=6, nseg=2**11, treshhold_high=1e-14, treshhold_low=1e-17)`
-```
-
-This function generates PSD plots for different stages of data preprocessing, illustrating the noise reduction and signal enhancement achieved at each step.
-
-**Parameters**:
-
-- **st** (_obspy.Stream_): The seismic data stream.
-- **st1** (_obspy.Stream_): The seismic data stream after tilt reduction and removal of local and global events.
-- **st2** (_obspy.Stream_): The seismic data stream after transient noise elimination.
-- **st3** (_obspy.Stream_): The seismic data stream after removing coherent noise using the transfer function method.
-- **tw**: Time window length for PSD analysis, in hours. The default is 6 hours.
-- **nseg** (_int_): Number of segments for Fast Fourier Transform (FFT). The default is 2**11.
-- **treshhold_high** (_float_): Upper threshold for PSD values. The default is 1e-14.
-- **treshhold_low** (_float_): Lower threshold for PSD values. The default is 1e-17.
-
-
-<p align="center">
-  <img src="_Images/PSD_ALL.png" width="800">
-</p>
-
-# Contributing
-
-We welcome contributions from the community. Please review CONTRIBUTING.md for guidelines on how to submit improvements to ComPy.
-
-# License
-
-This project is licensed under the GPL-3.0 License. Please see the LICENSE file for more details.
+Synthetic tests establish specific properties. They do not replace response
+verification, real-data regression, independent forward-solver comparison,
+posterior convergence or reproduction of the published station results.
 
 ## Citation
 
-If you use ComPy in your research, please cite:
-
-Aminian, M. A., Crawford, W., Stutzmann, É., Montagner, J.-P., Cannat, M., & Hadziioannou, C. (2025). *Shallow crustal structures of the Indian ocean derived from compliance function analysis*. Geophysical Journal International, 242(3), ggaf253. https://doi.org/10.1093/gji/ggaf253
+If you use ComPy, cite the scientific article and record the exact software
+commit/version. The Zenodo badge links the existing archived software record;
+it does not certify that version 2 has been archived there.
 
 ```bibtex
 @article{aminian2025shallow,
-  author  = {Aminian, Mohammad Amin and Crawford, Wayne and Stutzmann, {\'E}l{\'e}onore and Montagner, Jean-Paul and Cannat, Mathilde and Hadziioannou, C{\'e}line},
-  title   = {Shallow crustal structures of the Indian ocean derived from compliance function analysis},
+  author = {Aminian, Mohammad Amin and Crawford, Wayne and Stutzmann, Éléonore
+            and Montagner, Jean-Paul and Cannat, Mathilde and Hadziioannou, Céline},
+  title = {Shallow crustal structures of the Indian ocean derived from compliance function analysis},
   journal = {Geophysical Journal International},
-  year    = {2025},
-  volume  = {242},
-  number  = {3},
-  pages   = {ggaf253},
-  doi     = {10.1093/gji/ggaf253}
+  year = {2025},
+  volume = {242},
+  number = {3},
+  pages = {ggaf253},
+  doi = {10.1093/gji/ggaf253}
 }
 ```
 
-# Acknowledgments
+## Contributing, license and acknowledgments
 
-This tool was developed at the Institut de Physique du Globe de Paris and funded by the SPIN project, an Innovative Training Network (ITN) supported by the European Commission under the Horizon 2020 Marie Skłodowska-Curie Actions (MSCA). We extend our gratitude to all contributors and collaborators who have made this project possible.
+See [CONTRIBUTING.md](CONTRIBUTING.md). ComPy is licensed under
+[GPL-3.0](LICENSE). Report reproducible numerical or processing issues with
+units, parameters, dependency versions and a small synthetic case.
+
+Developed at the Institut de Physique du Globe de Paris, with support from the
+SPIN Innovative Training Network, funded by the European Commission under
+Horizon 2020 Marie Skłodowska-Curie Actions.
+
 <p align="center">
-  <img src="_Images/H2020_acknowledgment.png" width="300" style="display: inline-block;">
-  <img src="_Images/IPGP_UPC.png" width="300" style="display: inline-block;">
+<img src="_Images/H2020_acknowledgment.png" width="300" alt="Horizon 2020 acknowledgment">
+<img src="_Images/IPGP_UPC.png" width="300" alt="IPGP and Université Paris Cité">
 </p>
-
-
