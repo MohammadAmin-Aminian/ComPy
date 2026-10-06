@@ -19,3 +19,11 @@ jobs:
         env:
           MPLBACKEND: Agg
       - run: python -m build
+      - name: Exercise installed wheel outside the checkout
+        shell: bash
+        run: |
+          python -m venv --system-site-packages /tmp/compy-wheel
+          /tmp/compy-wheel/bin/python -m pip install --no-deps --force-reinstall dist/*.whl
+          cd /tmp
+          /tmp/compy-wheel/bin/python -c "import compy, inv_compy; assert '/tmp/compy-wheel/' in compy.__file__, compy.__file__"
+          /tmp/compy-wheel/bin/python "$GITHUB_WORKSPACE/_Example/synthetic_inversion.py"
