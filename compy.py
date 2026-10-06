@@ -127,7 +127,7 @@ def Calculate_Compliance(stream,f_min_com = 0.007,f_max_com = 0.017,gain_factor=
             #This term cause by change in distance of the sensor from the earth's center of mass Crawford report
             omega = 2* np.pi * f
             
-            ad = (omega**2) /(omega**2 + 3.07* 10e-6)
+            ad = (omega**2) /(omega**2 + 3.07e-6)
             # Com = (k * Czp[i]* np.sqrt(np.abs(Dz[i]+aw**2) / np.abs(Dp[i]))) / gain_factor
             
             Com = (k * Czp[i])* ad*(pa_ratio + (np.sqrt(Dz[i])) / (np.sqrt(Dp[i]) * gain_factor))
@@ -491,7 +491,7 @@ def Calculate_Compliance_beta(stream,f_min_com = 0.007,f_max_com = 0.02,gain_fac
             #This term cause by change in distance of the sensor from the earth's center of mass Crawford report
             omega = 2* np.pi * f
             
-            ad = (omega**2) /(omega**2 + 3.07* 10e-6)
+            ad = (omega**2) /(omega**2 + 3.07e-6)
             
             Com = (k * High_Czp[i])* ad*(pa_ratio + (np.sqrt(Dz[i])) / (np.sqrt(Dp[i]) ))
 
