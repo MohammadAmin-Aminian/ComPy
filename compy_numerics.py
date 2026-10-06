@@ -131,3 +131,21 @@ def compliance_uncertainty(compliance, coherence, n_windows):
         where=coh > 0,
     )
     return result
+
+
+def plot_smooth(data, window_length, polyorder, **kwargs):
+    """Savitzky-Golay display smoothing bounded by the available axis length.
+
+    Return unchanged values when there are too few samples for the requested
+    polynomial. This helper is for plots, not inversion or scientific estimators.
+    """
+    from scipy.signal import savgol_filter
+
+    values = np.asarray(data)
+    axis = kwargs.get("axis", -1)
+    width = min(int(window_length), values.shape[axis])
+    if width % 2 == 0:
+        width -= 1
+    if width <= polyorder:
+        return values.copy()
+    return savgol_filter(values, width, polyorder, **kwargs)

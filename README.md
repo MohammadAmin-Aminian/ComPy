@@ -352,3 +352,11 @@ Horizon 2020 Marie Skłodowska-Curie Actions.
 <img src="_Images/H2020_acknowledgment.png" width="300" alt="Horizon 2020 acknowledgment">
 <img src="_Images/IPGP_UPC.png" width="300" alt="IPGP and Université Paris Cité">
 </p>
+
+### Version 2.0.1 maintenance fixes
+
+Short-record spectrogram date labels and display smoothing now adapt to available
+bins. Pressure power spectra use the standard 10·log10 dB conversion. The download
+example adds each decimation FIR stage to a copied response inventory and attaches
+that response before deconvolution, including decimations that change only the
+location code. Waveforms spanning a response-epoch boundary must be split first.

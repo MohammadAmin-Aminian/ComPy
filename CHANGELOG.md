@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+Fixed short-record date labels and pressure PSD dB scaling; the download example now updates and attaches decimation response stages.
+
 ## 2.0.0 — 2026-10-07
 
 ### Numerical and scientific corrections

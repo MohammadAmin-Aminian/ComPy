@@ -9,7 +9,7 @@ DFG Calibration
 
 """
 
-from compy_numerics import sliding_window, positive, residual
+from compy_numerics import plot_smooth, sliding_window, positive, residual
 from obspy.signal.trigger import plot_trigger
 
 # from obspy.signal.trigger import coincidence_trigger
@@ -716,6 +716,18 @@ import matplotlib as mpl
 import scipy.signal
 
 
+def _date_ticks(start, end, bins, *, spacing=7 * 86400):
+    """Date ticks within the plotted bin range, including short recordings."""
+    if bins < 1:
+        raise ValueError("spectrogram must contain at least one time bin")
+    duration = float(end - start)
+    intervals = max(1, int(np.ceil(duration / spacing)))
+    count = min(bins, intervals + 1)
+    positions = np.linspace(0, bins - 1, count)
+    times = np.linspace(0, max(0, duration), count)
+    return positions, [str(start + offset)[:10] for offset in times]
+
+
 def plot_spectrogram(raw_stream):
     """
     Plots the spectrogram of a raw stream and highlights specific frequency bands.
@@ -724,7 +736,14 @@ def plot_spectrogram(raw_stream):
     - raw_stream: The raw data stream containing seismic or other time series data.
     """
     # Define the number of segments for the spectrogram
-    nseg = 2**14
+    from compy_streams import validate_stream
+    validate_stream(raw_stream)
+    z, p = raw_stream.select(component="Z"), raw_stream.select(component="H")
+    if len(z) != 1 or len(p) != 1:
+        raise ValueError("exactly one vertical and pressure channel are required")
+    nseg = min(2**14, len(z[0]), len(p[0]))
+    if nseg < 2:
+        raise ValueError("spectrogram needs at least two samples")
 
     # Compute the spectrogram
     f, t, Sp = scipy.signal.spectrogram(
@@ -739,25 +758,9 @@ def plot_spectrogram(raw_stream):
     # Calculate the time difference between consecutive spectrogram points in hours
     # time_diff_hours = (t[1] - t[0]) / 3600
 
-    # Calculate the number of months spanned by the data
-    number_month = (raw_stream[0].stats.endtime - raw_stream[0].stats.starttime) // (
-        7 * 24 * 3600
+    tick_positions, dates = _date_ticks(
+        raw_stream[0].stats.starttime, raw_stream[0].stats.endtime, len(t)
     )
-
-    # Generate date labels for plotting
-    dates = []
-    for i in range(int(number_month) + 1):
-        dates.append(
-            str(
-                raw_stream[0].stats.starttime
-                + (raw_stream[0].stats.endtime - raw_stream[0].stats.starttime)
-                * i
-                / number_month
-            )[0:10]
-        )
-
-    # Determine tick positions for plotting
-    tick_positions = [int(i * len(Sp[0]) / (len(dates) - 1)) for i in range(len(dates))]
 
     # Create a new time array for plotting
     t2 = np.arange(0, len(t))
@@ -803,7 +806,7 @@ def plot_spectrogram(raw_stream):
         label="Infra-Gravity",
     )
     plt.plot(
-        15 * np.log10(np.mean(Sp[f1_ms:f2_ms], axis=0)),
+        10 * np.log10(np.mean(Sp[f1_ms:f2_ms], axis=0)),
         np.arange(0, len(Sp[0])),
         "red",
         label="Microsiesmic",
@@ -828,25 +831,9 @@ def plot_spectrogram(raw_stream):
     # Calculate the time difference between consecutive spectrogram points in hours
     # time_diff_hours = (t[1] - t[0]) / 3600
 
-    # Calculate the number of months spanned by the data
-    number_month = (raw_stream[0].stats.endtime - raw_stream[0].stats.starttime) // (
-        7 * 24 * 3600
+    tick_positions, dates = _date_ticks(
+        raw_stream[0].stats.starttime, raw_stream[0].stats.endtime, len(t)
     )
-
-    # Generate date labels for plotting
-    dates = []
-    for i in range(int(number_month) + 1):
-        dates.append(
-            str(
-                raw_stream[0].stats.starttime
-                + (raw_stream[0].stats.endtime - raw_stream[0].stats.starttime)
-                * i
-                / number_month
-            )[0:10]
-        )
-
-    # Determine tick positions for plotting
-    tick_positions = [int(i * len(Sp[0]) / (len(dates) - 1)) for i in range(len(dates))]
 
     # Create a new time array for plotting
     t2 = np.arange(0, len(t))
@@ -972,22 +959,13 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
         ),
     )
 
-    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (7 * 24 * 3600)
 
     f1 = np.argmin(np.abs(f - f_min))
     f2 = np.argmin(np.abs(f - f_max))
 
-    dates = []
-    for i in range(0, int(number_month) + 1):
-        # print(i)
-        dates.append(
-            str(
-                st[0].stats.starttime
-                + (st[0].stats.endtime - st[0].stats.starttime) * i / number_month
-            )[0:10]
-        )
-
-    tick_positions = [int(i * len(Sz[0]) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions, dates = _date_ticks(
+        st[0].stats.starttime, st[0].stats.endtime, len(t)
+    )
 
     t2 = np.arange(0, len(t))
     t1 = np.arange(0, len(t))
@@ -997,15 +975,15 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
 
     Dzz_smoothed = 10 * np.log10(
         (
-            scipy.signal.savgol_filter(
+            plot_smooth(
                 np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1), 10, 1
             )
         )
     )
     Dpp_smoothed = 10 * np.log10(
-        scipy.signal.savgol_filter(np.median(Dpp[:, f1:f2], axis=1), 10, 1)
+        plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)
     )
-    Czp_smoothed = scipy.signal.savgol_filter(np.median(Czp[:, f1:f2], axis=1), 10, 1)
+    Czp_smoothed = plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
     bad_windows = []
@@ -1021,7 +999,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
         else:
             bad_windows.append(i)
 
-    tick_positions_2 = [int(i * len(Dpp) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions_2 = np.linspace(0, max(0, len(Dpp) - 1), len(dates))
 
     import matplotlib.gridspec as gridspec
 
@@ -1060,7 +1038,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
     )
     plt.plot(
         10
-        * np.log10(scipy.signal.savgol_filter(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
+        * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
         np.arange(0, len(Czp)),
         "black",
         linewidth=5,
@@ -1097,7 +1075,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
         10
         * np.log10(
             (
-                scipy.signal.savgol_filter(
+                plot_smooth(
                     np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1),
                     10,
                     1,
@@ -1138,7 +1116,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
     f2 = np.argmin(np.abs(f - f_max))
     plt.plot(np.median(Czp[:, f1:f2], axis=1), np.arange(0, len(Czp)), "b")
     plt.plot(
-        scipy.signal.savgol_filter(np.median(Czp[:, f1:f2], axis=1), 10, 1),
+        plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1),
         np.arange(0, len(Czp)),
         "black",
         linewidth=5,

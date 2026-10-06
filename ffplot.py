@@ -4,7 +4,7 @@
 @author: Mohammad Amin Aminian
 """
 
-from compy_numerics import sliding_window, wavenumber, positive
+from compy_numerics import plot_smooth, sliding_window, wavenumber, positive
 from compy_numerics import compliance_uncertainty as _compliance_uncertainty
 
 # import obstools as obs
@@ -993,7 +993,7 @@ def coh_h(st, tw=1, nseg=2**12, lim=[0.005, 0.1], TP=5):
             nseg, (TP * 60 * st[0].stats.sampling_rate) / nseg
         ),
     )
-    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (30 * 24 * 3600 / 7)
+    number_month = max(1, (st[0].stats.endtime - st[0].stats.starttime) // (30 * 24 * 3600 / 7))
 
     dates = []
     for i in range(0, int(number_month) + 1):
@@ -1005,7 +1005,7 @@ def coh_h(st, tw=1, nseg=2**12, lim=[0.005, 0.1], TP=5):
             )[0:10]
         )
 
-    # tick_positions = [int(i * len(Czp[0]) / (len(dates) - 1)) for i in range(len(dates))]
+    # tick_positions = [int(i * max(0, len(Czp[0]) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     f1 = np.argmin(np.abs(f - 0.007))
     f2 = np.argmin(np.abs(f - 0.015))
@@ -1248,7 +1248,7 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
         ),
     )
 
-    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (30 * 24 * 3600)
+    number_month = max(1, (st[0].stats.endtime - st[0].stats.starttime) // (30 * 24 * 3600))
 
     f1 = np.argmin(np.abs(f - f_min))
     f2 = np.argmin(np.abs(f - f_max))
@@ -1263,7 +1263,7 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
             )[0:10]
         )
 
-    tick_positions = [int(i * len(Sz[0]) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions = [int(i * max(0, len(Sz[0]) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     t2 = np.arange(0, len(t))
     t1 = np.arange(0, len(t))
@@ -1329,7 +1329,7 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
     # f1 = np.argmin(np.abs(f-f_min))
     # f2 = np.argmin(np.abs(f-f_max))
     # plt.plot(np.median(Czp[:,f1:f2],axis=1), np.arange(0, len(Czp)),'b')
-    # plt.plot(scipy.signal.savgol_filter(np.median(Czp[:,f1:f2],axis=1), 24, 1)*1, np.arange(0, len(Czp)),'black',linewidth=3)
+    # plt.plot(plot_smooth(np.median(Czp[:,f1:f2],axis=1), 24, 1)*1, np.arange(0, len(Czp)),'black',linewidth=3)
     # plt.vlines(x=0.80, ymin=0, ymax=len(Czp),linestyles='dashed',color='r',label='0.80 Threshold',linewidth =3)
     # # plt.xlim([0.75,1])
     # plt.xlabel('Coherence')
@@ -1342,15 +1342,15 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
 
     Dzz_smoothed = 10 * np.log10(
         (
-            scipy.signal.savgol_filter(
+            plot_smooth(
                 np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1), 10, 1
             )
         )
     )
     Dpp_smoothed = 10 * np.log10(
-        scipy.signal.savgol_filter(np.median(Dpp[:, f1:f2], axis=1), 10, 1)
+        plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)
     )
-    Czp_smoothed = scipy.signal.savgol_filter(np.median(Czp[:, f1:f2], axis=1), 10, 1)
+    Czp_smoothed = plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
     bad_windows = []
@@ -1366,7 +1366,7 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
         else:
             bad_windows.append(i)
 
-    tick_positions_2 = [int(i * len(Dpp) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions_2 = [int(i * max(0, len(Dpp) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     plt.figure(dpi=300, figsize=(30, 25))
     # plt.suptitle("Median [" +str(f_min) +' to ' +str(f_max) + ' Hz ]')
@@ -1380,7 +1380,7 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
     )
     plt.plot(
         10
-        * np.log10(scipy.signal.savgol_filter(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
+        * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
         np.arange(0, len(Czp)),
         "black",
         linewidth=5,
@@ -1411,7 +1411,7 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
         10
         * np.log10(
             (
-                scipy.signal.savgol_filter(
+                plot_smooth(
                     np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1),
                     10,
                     1,
@@ -1446,7 +1446,7 @@ def coherogram_spectrogram(st, nseg=2**12, tw=1):
     f2 = np.argmin(np.abs(f - f_max))
     plt.plot(np.median(Czp[:, f1:f2], axis=1), np.arange(0, len(Czp)), "b")
     plt.plot(
-        scipy.signal.savgol_filter(np.median(Czp[:, f1:f2], axis=1), 10, 1),
+        plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1),
         np.arange(0, len(Czp)),
         "black",
         linewidth=5,
@@ -1547,9 +1547,9 @@ def coherogram_spectrogram_daily(st, nseg=2**12, data_indetvarl=7):
         window="hann",
     )
 
-    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (
+    number_month = max(1, (st[0].stats.endtime - st[0].stats.starttime) // (
         data_indetvarl * 24 * 3600
-    )
+    ))
 
     dates = []
     for i in range(0, int(number_month) + 1):
@@ -1561,7 +1561,7 @@ def coherogram_spectrogram_daily(st, nseg=2**12, data_indetvarl=7):
             )[0:10]
         )
 
-    tick_positions = [int(i * len(Sz[0]) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions = [int(i * max(0, len(Sz[0]) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     t2 = np.arange(0, len(t))
 
@@ -1689,7 +1689,7 @@ def coherogram_spectrogram_all(st, st1, st2, st3, nseg=2**11, tw=1):
         ),
     )
 
-    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (1 * 24 * 3600)
+    number_month = max(1, (st[0].stats.endtime - st[0].stats.starttime) // (1 * 24 * 3600))
 
     f1 = np.argmin(np.abs(f - f_min))
     f2 = np.argmin(np.abs(f - f_max))
@@ -1704,7 +1704,7 @@ def coherogram_spectrogram_all(st, st1, st2, st3, nseg=2**11, tw=1):
             )[0:10]
         )
 
-    tick_positions = [int(i * len(Czp) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions = [int(i * max(0, len(Czp) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     t2 = np.arange(0, len(t))
     t1 = np.arange(0, len(t))
@@ -1856,7 +1856,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1):
         ),
     )
 
-    number_month = (st[0].stats.endtime - st[0].stats.starttime) // (1 * 24 * 3600)
+    number_month = max(1, (st[0].stats.endtime - st[0].stats.starttime) // (1 * 24 * 3600))
 
     f1 = np.argmin(np.abs(f - f_min))
     f2 = np.argmin(np.abs(f - f_max))
@@ -1871,7 +1871,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1):
             )[0:10]
         )
 
-    tick_positions = [int(i * len(Sz[0]) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions = [int(i * max(0, len(Sz[0]) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     t2 = np.arange(0, len(t))
     t1 = np.arange(0, len(t))
@@ -1890,15 +1890,15 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1):
 
     Dzz_smoothed = 10 * np.log10(
         (
-            scipy.signal.savgol_filter(
+            plot_smooth(
                 np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1), 10, 1
             )
         )
     )
     Dpp_smoothed = 10 * np.log10(
-        scipy.signal.savgol_filter(np.median(Dpp[:, f1:f2], axis=1), 10, 1)
+        plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)
     )
-    Czp_smoothed = scipy.signal.savgol_filter(np.median(Czp[:, f1:f2], axis=1), 10, 1)
+    Czp_smoothed = plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
     bad_windows = []
@@ -1914,7 +1914,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1):
         else:
             bad_windows.append(i)
 
-    tick_positions_2 = [int(i * len(Dpp) / (len(dates) - 1)) for i in range(len(dates))]
+    tick_positions_2 = [int(i * max(0, len(Dpp) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     import matplotlib.gridspec as gridspec
 
@@ -1952,7 +1952,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1):
     )
     plt.plot(
         10
-        * np.log10(scipy.signal.savgol_filter(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
+        * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
         np.arange(0, len(Czp)),
         "black",
         linewidth=5,
@@ -1989,7 +1989,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1):
         10
         * np.log10(
             (
-                scipy.signal.savgol_filter(
+                plot_smooth(
                     np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1),
                     10,
                     1,
@@ -2031,7 +2031,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1):
     f2 = np.argmin(np.abs(f - f_max))
     plt.plot(np.median(Czp[:, f1:f2], axis=1), np.arange(0, len(Czp)), "b")
     plt.plot(
-        scipy.signal.savgol_filter(np.median(Czp[:, f1:f2], axis=1), 10, 1),
+        plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1),
         np.arange(0, len(Czp)),
         "black",
         linewidth=5,
