@@ -1204,7 +1204,7 @@ def liklihood(d,m,k=1,s=1):
      
      m : Modeled Data
      
-     k : I don'y know what is it! 
+     k : Likelihood normalization constant. 
          The default is 1.
          
      s : Estimated uncertainty
