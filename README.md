@@ -24,16 +24,22 @@ Aminian, M. A., Crawford, W., Stutzmann, É., Montagner, J.-P., Cannat, M., & Ha
 
 ## Installation
 
-ComPy requires Python 3.9 or later. Clone the repository and install the runtime dependencies:
+ComPy requires Python 3.9 or later. Installation from a clone is recommended so the exact code version is recorded:
 
-## Clone the repository
+```bash
 git clone https://github.com/MohammadAmin-Aminian/ComPy.git
-
-## Navigate to the ComPy directory
 cd ComPy
+python -m pip install -e .
+```
 
-## Install required Python packages
-python -m pip install numpy matplotlib scipy obspy tiskitpy
+For development and testing:
+
+```bash
+python -m pip install -e ".[dev]"
+pytest
+```
+
+The package metadata declares NumPy, SciPy, Matplotlib, ObsPy, tiskitpy, and disba as runtime dependencies.
 
 ## Examples
 
@@ -375,9 +381,26 @@ This function generates PSD plots for different stages of data preprocessing, il
   <img src="_Images/PSD_ALL.png" width="800">
 </p>
 
+# Reproducibility and scientific scope
+
+ComPy is research software accompanying a peer-reviewed study. The repository contains processing and inversion choices developed for broadband ocean-bottom stations and should not be treated as a universal black-box workflow. Frequency bands, coherence gates, station-specific starting models, pressure calibration, and inversion priors should be checked for each dataset.
+
+Numerical or algorithmic changes that can alter scientific results are regression-tested where possible and should be validated against synthetic cases or known station results before interpretation. Git history and the Zenodo archive provide provenance for released versions.
+
+# Repository layout
+
+- `compy.py` — compliance estimation, rotation, windowing, and core signal-processing utilities.
+- `Pressure_calibration.py` — DPG calibration and pressure/vertical spectral-ratio tools.
+- `inv_compy.py` — forward compliance calculation, model construction, inversion, and inversion plotting.
+- `ffplot.py` — spectral/coherence diagnostic plotting.
+- `_Example/` — example workflows.
+- `tests/` — scientific and regression tests.
+- `pyproject.toml` — package metadata and reproducible dependency declaration.
+- `CITATION.cff` — machine-readable software citation.
+
 # Contributing
 
-We welcome contributions from the community. Please review CONTRIBUTING.md for guidelines on how to submit improvements to ComPy.
+Contributions are welcome. See `CONTRIBUTING.md`. Changes to scientific algorithms should include a test or validation case and a description of their expected numerical impact.
 
 # License
 
