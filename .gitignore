@@ -3,4 +3,11 @@ __pycache__/
 .DS_Store
 .venv/
 venv/
-
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.ipynb_checkpoints/
