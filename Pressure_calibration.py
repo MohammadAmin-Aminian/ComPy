@@ -113,8 +113,10 @@ def calculate_spectral_ratio(stream,mag = 7,coh_trsh=0.97,mean_trsh = 0.97,f_min
     stream22.select(channel="*H").remove_response(inventory=invp,
                                             output="DEF", plot=False)
     
-    stream22.filter("lowpass", freq=freq1)
-    stream22.filter("highpass", freq=freq2)
+    # Retain the intended 0.005--0.1 Hz band.
+    # Applying lowpass(freq1) followed by highpass(freq2) leaves no passband.
+    stream22.filter("highpass", freq=freq1)
+    stream22.filter("lowpass", freq=freq2)
 
     stream22.sort(['starttime','channel'])
 
