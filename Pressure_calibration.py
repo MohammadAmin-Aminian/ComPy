@@ -91,7 +91,7 @@ def calculate_spectral_ratio(stream,mag = 7,coh_trsh=0.97,mean_trsh = 0.97,f_min
 
     for i in range(0,len(eq_spans)):
         stream1= stream.copy()
-        stream22 =stream22 + stream1.trim(eq_spans.start_times[i-1],eq_spans.start_times[i-1]+2*3600)
+        stream22 =stream22 + stream1.trim(eq_spans.start_times[i],eq_spans.start_times[i]+2*3600)
     
     stream22.sort(['starttime','channel'])
     
@@ -113,8 +113,10 @@ def calculate_spectral_ratio(stream,mag = 7,coh_trsh=0.97,mean_trsh = 0.97,f_min
     stream22.select(channel="*H").remove_response(inventory=invp,
                                             output="DEF", plot=False)
     
-    stream22.filter("lowpass", freq=freq1)
-    stream22.filter("highpass", freq=freq2)
+    # Retain the intended 0.005--0.1 Hz band.
+    # Applying lowpass(freq1) followed by highpass(freq2) leaves no passband.
+    stream22.filter("highpass", freq=freq1)
+    stream22.filter("lowpass", freq=freq2)
 
     stream22.sort(['starttime','channel'])
 
@@ -725,7 +727,7 @@ def pressure_calibration(stream,mag=7,i=1):
                                          channel='*Z')[0].stats.endtime,
                                      minmag=mag, days_per_magnitude=0.5)
     
-    stream.trim(eq_spans.start_times[i-1],eq_spans.start_times[i-1]+10*3600)
+    stream.trim(eq_spans.start_times[i],eq_spans.start_times[i]+10*3600)
     
     stream.select(channel="*Z").remove_response(inventory=invz,
                                             output="ACC", plot=False)
@@ -816,7 +818,7 @@ def p_calibration(stream,gain_factor,rho=1025,mag=6):
     for i in range(0,len(eq_spans)):
         stream1= stream.copy()
         stream1= st1.copy()
-        stream22 =stream22 + stream1.trim(eq_spans.start_times[i-1],eq_spans.start_times[i-1]+2*3600)
+        stream22 =stream22 + stream1.trim(eq_spans.start_times[i],eq_spans.start_times[i]+2*3600)
     
     Czp = np.zeros([len(eq_spans),int(nseg/2 + 1)])
 

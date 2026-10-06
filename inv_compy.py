@@ -1204,7 +1204,7 @@ def liklihood(d,m,k=1,s=1):
      
      m : Modeled Data
      
-     k : I don'y know what is it! 
+     k : Likelihood normalization constant. 
          The default is 1.
          
      s : Estimated uncertainty
@@ -1216,19 +1216,19 @@ def liklihood(d,m,k=1,s=1):
      # L =   k * np.exp(-0.5*np.sum((d-m)**2/(s**2)))
      # L =   k * np.exp(-0.5*np.linalg.norm(d-m)**2/(s**2))
      
-     L =   k * np.exp(-0.5*np.linalg.norm((d-m)/s,ord = 2))
+     L = k * np.exp(-0.5 * np.linalg.norm((d - m) / s, ord=2)**2)
 
      return(L)
 #%%
 def liklihood_all(d,m,vs,vs_prior,k=1,s=1,sm=1,alpha=1,beta=1,lamda=1,order=2):
 
       R_m = alpha*Roughness(vs.flatten(),order)
-      L2_data = np.linalg.norm((d - m)/s,ord=2)
+      L2_data = np.linalg.norm((d - m) / s, ord=2)**2
       # L2_Model = beta*np.linalg.norm((vs_prior - vs)/sm)
       
-      L2_Model = beta*np.sqrt(np.sum(((vs_prior - vs)**2)/(sm**2)))
+      L2_Model = beta * np.linalg.norm((vs_prior - vs) / sm, ord=2)**2
       
-      Damping = lamda * np.sqrt(np.linalg.norm(m/s)**2)
+      Damping = lamda * np.linalg.norm(m / s, ord=2)**2
       L =   k * np.exp ( -0.5 * ( ( L2_data + L2_Model + R_m + Damping) ))
 
       return(L)
@@ -1256,13 +1256,18 @@ def liklihood_roughness(d,m,vs,k=1,s=1,alpha=1,order=2):
       R_m = alpha*Roughness(vs.flatten(),order)
       # L =   k * np.exp ( -0.5 * ( ( np.linalg.norm(d - m)**2 / (s**2)) + R_m) )
       
-      L =   k * np.exp ( -0.5 * ( ( np.linalg.norm((d - m)/s,ord=2)  + R_m) ))
+      L = k * np.exp(-0.5 * (np.linalg.norm((d - m) / s, ord=2)**2 + R_m))
 
       return(L)
   
 #%%
 def Roughness(vs,order):
-    R_m = np.sqrt(np.sum(np.gradient(vs,order)))
+    if order < 1:
+        raise ValueError("order must be >= 1")
+    derivative = np.asarray(vs, dtype=float)
+    for _ in range(order):
+        derivative = np.gradient(derivative)
+    R_m = np.sum(np.square(derivative))
     return(R_m)
 #%%
 # stable hyperbolic tangent
