@@ -34,3 +34,14 @@ def test_pressure_calibration_retains_intended_band():
     lp = 'stream22.filter("lowpass", freq=freq2)'
     assert hp in source and lp in source
     assert source.index(hp) < source.index(lp)
+
+
+def test_acceleration_correction_constant_is_unambiguous():
+    source = Path("compy.py").read_text()
+    assert "3.07e-6" in source
+    assert "3.07* 10e-6" not in source
+
+
+def test_calibration_does_not_wrap_first_event_to_last():
+    source = Path("Pressure_calibration.py").read_text()
+    assert "eq_spans.start_times[i-1]" not in source
