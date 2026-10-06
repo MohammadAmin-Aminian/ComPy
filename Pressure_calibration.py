@@ -737,6 +737,7 @@ def plot_spectrogram(raw_stream):
     """
     # Define the number of segments for the spectrogram
     from compy_streams import validate_stream
+
     validate_stream(raw_stream)
     z, p = raw_stream.select(component="Z"), raw_stream.select(component="H")
     if len(z) != 1 or len(p) != 1:
@@ -959,7 +960,6 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
         ),
     )
 
-
     f1 = np.argmin(np.abs(f - f_min))
     f2 = np.argmin(np.abs(f - f_max))
 
@@ -980,9 +980,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
             )
         )
     )
-    Dpp_smoothed = 10 * np.log10(
-        plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)
-    )
+    Dpp_smoothed = 10 * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1))
     Czp_smoothed = plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
@@ -1037,8 +1035,7 @@ def coherogram_spectrogram_alpha(st, nseg=2**12, tw=1, f_min=0.005, f_max=0.02):
         10 * np.log10(np.median(Dpp[:, f1:f2], axis=1)), np.arange(0, len(Czp)), "b"
     )
     plt.plot(
-        10
-        * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
+        10 * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1)),
         np.arange(0, len(Czp)),
         "black",
         linewidth=5,
