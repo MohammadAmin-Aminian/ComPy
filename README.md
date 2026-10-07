@@ -1,4 +1,4 @@
-# ComPy 2.0
+# ComPy 2.1
 
 **Seafloor compliance processing, pressure-gauge calibration and layered elastic inversion.**
 
@@ -420,6 +420,35 @@ references are in [docs/VALIDATION.md](docs/VALIDATION.md).
 Synthetic tests establish specific properties. They do not replace response
 verification, real-data regression, independent forward-solver comparison,
 posterior convergence or reproduction of the published station results.
+
+### Reproducible multiple-chain example (v2.1)
+
+Run a complete offline synthetic experiment with noisy observations, a biased
+starting model and four independent seeds:
+
+```bash
+MPLBACKEND=Agg python _Example/reproducible_inversion.py --output synthetic-results
+```
+
+The development installation includes the optional ArviZ diagnostics dependency.
+The example saves models, observations, uncertainties, predictions, settings,
+software versions and checksums. It reports rank-normalized folded split-Rhat,
+bulk/tail effective sample sizes and warnings for poorly mixed or stuck chains,
+then exports a diagnostic figure. Existing output directories are refused.
+
+This is a short workflow benchmark using ComPy-generated observations. It does
+not establish convergence, unique model recovery or reproduction of field results.
+See [the run-record and diagnostics guide](docs/REPRODUCIBLE_RUNS.md) for array
+shapes, interpretation and use with your own chains.
+
+![Offline synthetic inversion: residuals, noisy compliance and shallow velocity chains](docs/benchmark/diagnostics.svg)
+
+**Example output.** The four short chains broadly fit the compliance observations,
+but shallow-velocity Rhat is about 1.49 and bulk ESS about 7.5. The velocity traces
+show incomplete mixing, so this snapshot must not be interpreted as a converged
+posterior. [Recorded settings and diagnostics](docs/benchmark/metadata.json) are
+included alongside the figure.
+
 
 ## Citation
 

@@ -2,6 +2,7 @@
 
 import numpy as np
 import inv_compy as inv
+from compy import __version__
 
 
 def main():
@@ -25,7 +26,9 @@ def main():
         seed=0,
         return_profiles=False,
     )
-    print(f"ComPy 2.0: {result[0].shape[-1]} saved states; acceptance {result[-1]:.3f}")
+    print(
+        f"ComPy {__version__}: {result[0].shape[-1]} saved states; acceptance {result[-1]:.3f}"
+    )
     print("This short synthetic run demonstrates the API, not posterior convergence.")
 
 

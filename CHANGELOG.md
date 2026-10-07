@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.0
+
+- Add optional ArviZ multiple-chain diagnostics: rank-normalized folded split-Rhat,
+  bulk/tail ESS, retained-sample quantiles and explicit warnings.
+- Save portable numeric run records with settings, seeds, dependency versions,
+  source hashes and artifact checksums; refuse existing destinations.
+- Add an offline four-chain noisy synthetic inversion example with a biased
+  starting model and diagnostic plots. Existing sampler return tuples are unchanged.
+
+
 ## 2.0.1
 
 Fixed short-record date labels and pressure PSD dB scaling; the download example now updates and attaches decimation response stages.

@@ -25,5 +25,13 @@ jobs:
           python -m venv --system-site-packages /tmp/compy-wheel
           /tmp/compy-wheel/bin/python -m pip install --no-deps --force-reinstall dist/*.whl
           cd /tmp
-          /tmp/compy-wheel/bin/python -c "import compy, inv_compy; assert '/tmp/compy-wheel/' in compy.__file__, compy.__file__"
+          /tmp/compy-wheel/bin/python -c "import compy, inv_compy, compy_diagnostics; assert '/tmp/compy-wheel/' in compy.__file__, compy.__file__"
           /tmp/compy-wheel/bin/python "$GITHUB_WORKSPACE/_Example/synthetic_inversion.py"
+      - name: Run reproducible multi-chain benchmark
+        if: matrix.python == '3.12'
+        run: MPLBACKEND=Agg python _Example/reproducible_inversion.py --output "$RUNNER_TEMP/compy-synthetic" --iterations 250 --burnin 50
+      - uses: actions/upload-artifact@v4
+        if: matrix.python == '3.12'
+        with:
+          name: synthetic-inversion-record
+          path: ${{ runner.temp }}/compy-synthetic

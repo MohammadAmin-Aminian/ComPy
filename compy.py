@@ -13,7 +13,7 @@ from compy_streams import (
     trim_streams_to_same_length,
 )
 
-__version__ = "2.0.1"
+__version__ = "2.1.0"
 
 import numpy as np
 import matplotlib.pyplot as plt

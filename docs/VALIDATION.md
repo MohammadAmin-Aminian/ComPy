@@ -1,4 +1,4 @@
-# ComPy 2.0.1 validation record
+# ComPy 2.1 validation record
 
 ## Scope
 
@@ -51,7 +51,7 @@ is already in physical units. It does not validate a particular StationXML respo
 ## Local environment
 
 Python 3.12; NumPy 2.3.5; ObsPy 1.5.1; TiSKitPy 2.3.1; disba 0.7.0.
-Local verification: 46 regression tests passed; Ruff checks and formatting passed;
+Local verification: 56 regression tests passed; Ruff checks and formatting passed;
 source distribution and wheel built successfully; the offline synthetic example ran. CI is configured
 for Python 3.10–3.13; unobserved CI runs are not represented as locally verified.
 
@@ -79,3 +79,16 @@ Tests provide evidence for checked properties, not a guarantee of zero defects.
 CI also installs the built wheel into an isolated virtual environment and runs
 the synthetic inversion outside the checkout. This catches packaging defects
 that editable-install tests can miss.
+
+## Version 2.1 workflow checks
+
+Diagnostics use ArviZ rather than a new implementation of Rhat or ESS. Tests
+check responses to shifted locations, different scales, serial correlation,
+stuck/duplicate chains and burn-in removal. Run-record tests verify safe numeric
+round trips, strict JSON, checksums, destination protection and failed-write cleanup.
+The offline example is run twice with identical seeds, and saved predictions are
+checked against their corresponding forward models.
+
+The default synthetic benchmark has four 1,000-state chains and 250-state burn-in.
+Its parameter diagnostics flag poor mixing despite broadly matching compliance
+curves; this is deliberately reported, not represented as a converged recovery.
