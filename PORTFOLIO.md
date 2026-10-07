@@ -22,13 +22,13 @@ My doctoral research at the **Institut de Physique du Globe de Paris (IPGP), Uni
 ### [ComPy](https://github.com/MohammadAmin-Aminian/ComPy)
 Seafloor-compliance processing, differential pressure gauge calibration, spectral quality control and layered elastic inversion for broadband ocean-bottom observations.
 
-### [OBS Transient Cleaner](https://github.com/MohammadAmin-Aminian/Transients)
+### [OBS Transient Cleaner](https://github.com/MohammadAmin-Aminian/obs-transient-cleaner)
 Detection and removal of repeating instrumental transients in ocean-bottom seismic records, with timing-preserving chunked processing and quantitative synthetic validation.
 
-### [ComPy Inversion Tuner](https://github.com/MohammadAmin-Aminian/Optimization)
+### [ComPy Inversion Tuner](https://github.com/MohammadAmin-Aminian/compy-inversion-tuner)
 Optuna-based tuning of proposal scales and regularization controls for the ComPy compliance inversion workflow.
 
-### [RHUM-RUM Geospatial Mapper](https://github.com/MohammadAmin-Aminian/Map)
+### [RHUM-RUM Geospatial Mapper](https://github.com/MohammadAmin-Aminian/rhum-rum-geospatial-mapper)
 Reproducible PyGMT/GMT mapping of OBS stations, bathymetry, ridge geometry and tectonic context for the RHUM-RUM experiment.
 
 ### [VRE Seismic Enhancement](https://github.com/MohammadAmin-Aminian/vre-seismic-enhancement)
