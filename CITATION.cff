@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use ComPy, please cite the software and the associated research article."
+title: "ComPy"
+type: software
+authors:
+  - family-names: Aminian
+    given-names: Mohammad-Amin
+version: 2.1.0
+repository-code: "https://github.com/MohammadAmin-Aminian/ComPy"
+license: GPL-3.0-only
+preferred-citation:
+  type: article
+  title: "Shallow crustal structures of the Indian ocean derived from compliance function analysis"
+  authors:
+    - family-names: Aminian
+      given-names: Mohammad Amin
+    - family-names: Crawford
+      given-names: Wayne
+    - family-names: Stutzmann
+      given-names: Éléonore
+    - family-names: Montagner
+      given-names: Jean-Paul
+    - family-names: Cannat
+      given-names: Mathilde
+    - family-names: Hadziioannou
+      given-names: Céline
+  journal: "Geophysical Journal International"
+  volume: 242
+  issue: 3
+  year: 2025
+  doi: "10.1093/gji/ggaf253"
