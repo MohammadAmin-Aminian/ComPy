@@ -6,6 +6,11 @@
 
 [![Tests](https://github.com/MohammadAmin-Aminian/ComPy/actions/workflows/tests.yml/badge.svg)](https://github.com/MohammadAmin-Aminian/ComPy/actions/workflows/tests.yml)
 [![DOI](https://zenodo.org/badge/665032053.svg)](https://zenodo.org/doi/10.5281/zenodo.13380107)
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0001--9192--2734-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0001-9192-2734)
+[![GJI 2025](https://img.shields.io/badge/GJI-2025%20paper-4B6B8A)](https://doi.org/10.1093/gji/ggaf253)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Mohammad--Amin%20Aminian-0A66C2?logo=linkedin&logoColor=white)](https://fr.linkedin.com/in/mohammad-amin-aminian-061b86298)
+
+**Author:** [Mohammad-Amin Aminian](https://orcid.org/0009-0001-9192-2734) — geophysicist and scientific-software developer working across ocean-bottom seismology, seismic signal processing, seafloor compliance and inversion. See the [research software portfolio](PORTFOLIO.md).
 
 ComPy was developed for broadband ocean-bottom stations in the RHUM-RUM
 experiment. It supports earthquake/transient preprocessing through TiSKitPy,
