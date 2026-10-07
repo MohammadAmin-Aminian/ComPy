@@ -18,6 +18,40 @@ revision of the research code, **not a claim that the published results have
 been reproduced with the revised implementation**. Changes that affect
 numerical results are described in [CHANGELOG.md](CHANGELOG.md).
 
+## Research results
+
+The figures below present the RHUM-RUM research workflow and its station results.
+They are the existing research figures supplied with this repository. Their
+provenance is the original workflow; they have not been regenerated with v2.
+The [study](https://doi.org/10.1093/gji/ggaf253) provides the scientific context.
+
+### Shear-velocity structure beneath RR52
+
+<p align="center"><a href="_Images/Inversion.png"><img src="_Images/Inversion.png" width="600" alt="RR52 shear-velocity inversion: normalized model density versus velocity and depth"></a></p>
+
+**Inversion result.** The RR52 figure shows the distribution of sampled
+shear-velocity models with depth. The shallow low-velocity structure and the
+increase in velocity below it are visible in the model-density image. Colours
+show normalized density; the overlaid profiles allow comparison with the sampled
+models. Density in this historical figure should not be taken as a convergence
+diagnostic for a new chain. The measured compliance example is shown in the
+[compliance workflow](#compliance).
+
+### Velocity-based serpentinization interpretation
+
+<p align="center"><a href="_Images/Serpentinization.png"><img src="_Images/Serpentinization.png" width="600" alt="RR52 shear-velocity profile and inferred serpentinization percentage versus depth"></a></p>
+
+**Interpretation.** The upper panel presents the RR52 shear-velocity profile;
+the lower panel translates velocity into an inferred serpentinization percentage.
+This conversion assumes that the velocity anomaly is caused by serpentinization.
+The percentage depends on that assumption and the adopted velocity relationship;
+the compliance inversion alone does not distinguish serpentinization from other
+causes of reduced velocity.
+
+Click any research figure to inspect its full-resolution image. Processing,
+calibration and quality-selection figures are included beside their workflow
+steps below.
+
 ## Installation
 
 Python 3.10 or later is required. A virtual environment is recommended.
@@ -111,7 +145,21 @@ period, timing and clipping parameters; they are not class-level operations.
 Use the deployment-specific example and the
 [TiSKitPy documentation](https://tiskitpy.readthedocs.io/latest/) to configure it.
 
-<p align="center"><img src="_Images/Glitch_Stack.png" width="650" alt="Periodic transient stacking example"></p>
+<p align="center"><a href="_Images/EQ_Removal.png"><img src="_Images/EQ_Removal.png" width="850" alt="Waveform showing earthquake intervals excluded from processing"></a></p>
+
+**Earthquake exclusion.** The waveform comparison illustrates the intervals
+identified for exclusion before estimating the repeating instrumental transient.
+
+<p align="center"><a href="_Images/Glitch_Stack.png"><img src="_Images/Glitch_Stack.png" width="850" alt="RR52 periodic transient slices aligned and stacked with clipping bounds"></a></p>
+
+**Transient stack.** Aligned RR52 waveform slices expose the repeating pulse;
+the clipping bounds define the samples used to estimate its representative shape.
+
+<p align="center"><a href="_Images/Residuals.png"><img src="_Images/Residuals.png" width="850" alt="One-day residual waveform used to diagnose repeating instrumental transients"></a></p>
+
+**Residual diagnostic.** The one-day residual plot makes the repeating pulse
+structure visible. Inspect residuals after cleaning to check whether transient
+energy remains and whether useful seismic signals were preserved.
 
 ### Tilt correction
 
@@ -130,6 +178,12 @@ reduced vertical variance. A failure identifies the affected window and raises
 an exception; failed windows are not silently returned as cleaned data. The
 input stream is copied. TiSKitPy supports additional orientation conventions;
 this wrapper uses numbered horizontal components (`*1`, `*2`).
+
+<p align="center"><a href="_Images/RR52_Tilt.png"><img src="_Images/RR52_Tilt.png" width="850" alt="RR52 hourly tilt azimuth and inclination with logarithmic variance reduction"></a></p>
+
+**Tilt estimates.** The RR52 example tracks the estimated tilt azimuth and
+inclination through time, coloured by logarithmic variance reduction. It shows
+how the inferred orientation and effectiveness vary between processing windows.
 
 ### Pressure calibration
 
@@ -161,7 +215,27 @@ Calibration coherence thresholds use **magnitude-squared coherence**. Compliance
 outputs use **amplitude coherence**, its square root. These thresholds are not
 interchangeable.
 
-<p align="center"><img src="_Images/DPGCalibration.png" width="650" alt="Pressure gauge calibration example from the research workflow"></p>
+<p align="center"><a href="_Images/DPGCalibration_Signal.png"><img src="_Images/DPGCalibration_Signal.png" width="750" alt="Teleseismic waveform selection, pressure and acceleration comparison, coherence and spectral ratio"></a></p>
+
+**Calibration event.** Waveform and spectral panels document the selected
+Rayleigh-wave interval and the pressure–acceleration comparison used for calibration.
+
+<p align="center"><a href="_Images/DPGCalibration.png"><img src="_Images/DPGCalibration.png" width="850" alt="High-coherence teleseismic events and measured, theoretical and corrected pressure spectral ratios"></a></p>
+
+**Pressure-gauge calibration.** Coherence identifies useful frequency intervals;
+the spectral-ratio comparison shows how the gain correction aligns the measured
+ratio with the theoretical response in the calibration band.
+
+<details>
+<summary>Reference model and Rayleigh-wave dispersion</summary>
+
+<p align="center"><a href="_Images/DPG_Dispersion.png"><img src="_Images/DPG_Dispersion.png" width="750" alt="Reference velocity and density models with Rayleigh-wave phase dispersion curves"></a></p>
+
+**Dispersion diagnostic.** The reference velocity and density profiles are shown
+with Rayleigh-wave phase-velocity curves. This is model context for the calibration
+workflow, rather than an additional compliance-inversion result.
+
+</details>
 
 ### Compliance
 
@@ -213,7 +287,20 @@ infinite uncertainty. Overlapping spectral segments and processing windows
 are correlated; the nominal average count does not by itself supply an
 independent effective sample count. Include calibration uncertainty separately.
 
-<p align="center"><img src="_Images/Compliance.png" width="650" alt="Compliance estimation example from the research workflow"></p>
+<p align="center"><a href="_Images/RR52_window_selection.png"><img src="_Images/RR52_window_selection.png" width="1000" alt="RR52 pressure and vertical spectrograms, pressure–vertical coherogram and selected time windows"></a></p>
+
+**Window selection.** Pressure and vertical spectra are compared with their
+coherence through time. Frequency limits and highlighted windows show how the
+research workflow selected observations for compliance estimation. Read thresholds
+from this historical figure in its original context; current gates are documented
+above.
+
+<p align="center"><a href="_Images/Compliance.png"><img src="_Images/Compliance.png" width="850" alt="RR52 vertical and pressure power spectra, coherence and estimated compliance curves"></a></p>
+
+**Measured compliance.** The RR52 panels show vertical and pressure power spectra,
+pressure–vertical coherence, and the ensemble of selected compliance curves with
+a median summary. The dispersion between curves is a useful quality diagnostic;
+it is not automatically the uncertainty of the median or an independent sample count.
 
 ### Forward model and inversion
 
@@ -297,6 +384,22 @@ post-burn-in samples. `final_plot(..., image_dir=...)` additionally requires
 No plotting routine writes to the author's desktop. Export explicitly with
 `matplotlib.pyplot.savefig(...)`. Serpentinization plots assume that velocity
 anomalies arise from serpentinization; they do not establish that interpretation.
+
+### Transfer functions and preprocessing spectra
+
+<p align="center"><a href="_Images/Transferfunction.png"><img src="_Images/Transferfunction.png" width="850" alt="Transfer-function magnitude in decibels and phase in degrees versus frequency"></a></p>
+
+**Transfer function.** Magnitude and phase describe the frequency-dependent
+relationship between the selected channels. Interpret the response together with
+coherence and the channel units before using it for coherent-noise removal.
+
+<p align="center"><a href="_Images/PSD_ALL.png"><img src="_Images/PSD_ALL.png" width="850" alt="RR52 power spectral density distributions and median spectra at successive preprocessing stages"></a></p>
+
+**Preprocessing comparison.** The RR52 panels compare vertical power spectra at
+successive stages: raw data, rotation/event handling, transient removal and coherent
+noise removal. The summary panel compares the median spectra. Reduced power must
+be considered together with signal preservation, rather than used alone as proof
+of improved data quality.
 
 ## Validation and reproducibility
 
