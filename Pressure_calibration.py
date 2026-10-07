@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jun  1 16:33:13 2023
+Modified on Thu Jun 18 2025 by W Crawford
 
 @author: Mohammad-Amin Aminian
 
@@ -253,22 +254,22 @@ def calculate_spectral_ratio(stream, inv, zchan="MHZ", pchan="MDG", mag=7,
                 # plt.savefig( str(ztrace22.stats.starttime)[0:19] + '.png',dpi=300)
                 # plt.clf()
   
-    # Calculate the spectral ratio
-    Data = np.median(np.sqrt(High_ratio_psd)/(-invz[0][0][0].elevation*rho),axis=0)
-    Data_zero = np.where((f >= f_min) & (f <= f_max), Data, 0)
-    
+    # Calculate the data's spectral ratio
+    Data = np.median(np.sqrt(High_ratio_psd) /
+                     (-invz[0][0][0].elevation*rho),
+                     axis=0)
+    # Calculate the modeled spectral ratio
     pvel = calculate_speed_of_sound_in_water(depth= - invz[0][0].elevation)
-    
-    f_dispersion_curve, Model = _theoretical_p_a_ratio(alpha=pvel,
+    f_model, Model = _theoretical_p_a_ratio(alpha=pvel,
                                                        h=-invz[0][0][0].elevation,
                                                        t=np.sort(1/f[::-1][0:256]),
                                                        plot_condition=False)
-    
-    # f_dispersion_curve, Model = _phase_dispersion(t=np.sort(1/f[::-1][0:512]))
-    
-    Model_zero = np.where((f_dispersion_curve >= f_min) & (f_dispersion_curve <= f_max), Model, 0)
+    # Set values outside of the frequency range to zero
+    zeroed_data = np.where((f >= f_min) & (f <= f_max), Data, 0)
+    zeroed_model = np.where((f_model >= f_min) & (f_model <= f_max), Model, 0)
 
-    gain_factor = _grid_search(Data_zero[1:257],Model_zero[::-1])
+    # compute the ratio of the data to the model
+    gain_factor = _grid_search(zeroed_data[1:257], zeroed_model[::-1])
     
     # plt.rcParams.update({'font.size': 35})
     import compy
@@ -306,7 +307,7 @@ def calculate_spectral_ratio(stream, inv, zchan="MHZ", pchan="MDG", mag=7,
     plt.semilogx(f, Data,linewidth=3,color='blue',label="Measured P/a ratio")
     # plt.semilogx(f,Data,color='r',linewidth=5)
     
-    plt.semilogx(f_dispersion_curve,Model,color='purple',label='Theoretical P/a Ratio',linewidth=3)
+    plt.semilogx(f_model,Model,color='purple',label='Theoretical P/a Ratio',linewidth=3)
     
     plt.semilogx(f,Data*gain_factor,color='black',label='Corrected P/a ratio',linewidth=3,linestyle='--')
 
@@ -361,32 +362,46 @@ def _rayleigh_arrival(stream, zchan, window = 20 , timelag = - 2,plot_condition 
     return(st,(max_time + (timelag*60)),(max_time + ((timelag+window)*60)))
 
 
-# it can be better by writing the code for step size, you did before somewhere!!!
-def _grid_search(d,m):
-    lower_limit = 0
-    upper_limit = 500
-    sensitivity = 0.01
-    
-    grided_d = np.zeros([(abs(lower_limit) + abs(upper_limit)),len(d)])
-    misfit_value = np.zeros([(abs(lower_limit) + abs(upper_limit)),1])
+def _grid_search(d, m, lower_limit=0, upper_limit=5., step=0.01):
+    """
+    Find the best ratio of data to model
 
-    for i in range(lower_limit,upper_limit):
-    
-        multi_factor = i*sensitivity
-        # print(multi_factor)
-        grided_d[i] = multi_factor * d
-        misfit_value[i] = _misfit(grided_d[i],m,l=2,s=1)
+    Args:
+        d (): data.  Values outside of the frequency range were set to zero
+        m (): model.  Values outside of the frequency range were set to zero
+        lower_limit (float): lowest ratio to test
+        upper_limit (float): highest ratio to test
+        step (float): stepsize between ratios
+    """
+    # lower_limit = 0
+    # upper_limit = 500
+    # step = 0.01
+    # grided_d = np.zeros([(abs(lower_limit) + abs(upper_limit)), len(d)])
+    # misfit_value = np.zeros([(abs(lower_limit) + abs(upper_limit)), 1])
+    # for i in range(lower_limit,upper_limit):
+    #     multi_factor = i*step
+    #     # print(multi_factor)
+    #     grided_d[i] = multi_factor * d
+    #     misfit_value[i] = _misfit(grided_d[i], m, l=2, s=1)
+    # minimum_index = np.argmin(misfit_value)
+    # gain_factor = 1 / (lower_limit + (minimum_index*step))
+    # print("Gain factor is " + str(1/gain_factor))
+    # return(1/gain_factor)
 
-    minimum_index = np.argmin(misfit_value)
-    
-    gain_factor = 1 / (lower_limit + (minimum_index*sensitivity))
+    test_range = np.arange(lower_limit, upper_limit+step/2, step)
+    misfits = [_misfit(d*x, m, l=2, s=1) for x in test_range]
+    i_min = np.argmin(misfits)
+    if i_min == (len(misfits) - 1):
+        print(f"WARNING: gain_factor ({gain_factor}) == upper_limit: "
+              "INCREASE UPPER LIMIT!!!")
+    gain_factor = test_range[i_min]
+    print(f"Gain factor is {gain_factor}")
 
-    print("Gain factor is " + str(1/gain_factor))
-    
-    return(1/gain_factor)
+    return gain_factor
 
 
-def _theoretical_p_a_ratio(alpha = 1500, rho = 1028,h = 4760,plot_condition=True,t = None,velocity_model = None):
+def _theoretical_p_a_ratio(alpha=1500, rho=1028, h=4760, plot_condition=True,
+                           t=None, velocity_model=None):
     '''
     Carefull it is not angular frequency !!! does it matter???
 
