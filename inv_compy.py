@@ -29,6 +29,25 @@ def _depth_profile(model, depth_grid):
     return model[np.searchsorted(interfaces, depth_grid, side="right"), 3]
 
 
+def _step_sizes(value, name):
+    """Validate a proposal scale: a positive scalar or a 1D positive array."""
+    if np.ndim(value) == 0:
+        return positive(value, name)
+    value = np.asarray(value, dtype=float)
+    if value.ndim != 1 or value.size == 0 or np.any(~np.isfinite(value)) or np.any(value <= 0):
+        raise ValueError(f"{name} must be finite and positive")
+    return value
+
+
+def _broadcast_steps(value, n, name):
+    """Return a fresh, writable per-layer copy of a validated proposal scale."""
+    if np.ndim(value) == 0:
+        return np.full(n, value, dtype=float)
+    if len(value) != n:
+        raise ValueError(f"{name} must be a scalar or have {n} entries")
+    return np.array(value, dtype=float)
+
+
 def _inversion(
     Data,
     f,
@@ -44,10 +63,41 @@ def _inversion(
     seed,
     beta,
     return_profiles,
+    *,
+    adapt_until=0,
+    target_acceptance=0.3,
+    initial_state=None,
+    diagnostics=None,
 ):
-    """Symmetric random-walk Metropolis sampler with bounded model support."""
+    """Symmetric random-walk Metropolis sampler with bounded model support.
+
+    Optional, keyword-only extensions (defaults reproduce the v2 sampler
+    exactly, draw for draw):
+
+    sigma_v, sigma_h
+        Scalars, or per-layer arrays: ``sigma_v`` has one entry per finite
+        layer; ``sigma_h`` one entry per finite layer except the deepest
+        (which absorbs every thickness transfer).
+    adapt_until
+        Number of initial iterations during which each move's step size is
+        tuned by Robbins-Monro on the log scale towards ``target_acceptance``.
+        Step sizes are frozen afterwards, so iterations at or beyond
+        ``adapt_until`` form an ordinary Metropolis chain. Discard at least
+        ``adapt_until`` iterations as burn-in.
+    initial_state
+        Model at which the chain starts. Prior bounds, Vp, density, the
+        half-space and the conserved total finite thickness are still defined
+        by ``starting_model``; the state must lie inside that support. Use
+        different states per chain for meaningful convergence diagnostics.
+    diagnostics
+        Optional dict, filled with the final step sizes and the per-move
+        acceptance rates after adaptation.
+    """
     iteration = integer(iteration, "iteration", minimum=2)
-    sigma_v, sigma_h = positive(sigma_v, "sigma_v"), positive(sigma_h, "sigma_h")
+    sigma_v, sigma_h = _step_sizes(sigma_v, "sigma_v"), _step_sizes(sigma_h, "sigma_h")
+    adapt_until = integer(adapt_until, "adapt_until", minimum=0)
+    if not 0 < target_acceptance < 1:
+        raise ValueError("target_acceptance must lie strictly between 0 and 1")
     if not np.isfinite(alpha) or alpha < 0:
         raise ValueError("alpha must be finite and nonnegative")
     Data, f = np.asarray(Data, float), np.asarray(f, float)
@@ -75,6 +125,24 @@ def _inversion(
     upper = initial[:, 3] * (1.2 if beta else 1.1)
     if beta:
         lower[-2], upper[-2] = initial[-2, 3] * np.array([0.9, 1.1])
+    n_finite = len(initial) - 1
+    # Adaptation multiplies by exp(.), so scales stay positive and untouched
+    # scales are passed to the RNG exactly as supplied.
+    step_size = {
+        "vs": _broadcast_steps(sigma_v, n_finite, "sigma_v"),
+        "h": _broadcast_steps(sigma_h, max(n_finite - 1, 1), "sigma_h"),
+    }
+    tuned = {key: np.zeros(len(value), int) for key, value in step_size.items()}
+    proposed = {key: np.zeros(len(value), int) for key, value in step_size.items()}
+    kept = {key: np.zeros(len(value), int) for key, value in step_size.items()}
+
+    def in_support(model):
+        return bool(
+            np.all(model[:-1, 0] > 0)
+            and np.all(model[:, 3] >= lower)
+            and np.all(model[:, 3] <= upper)
+            and np.all(model[:, 3] < model[:, 2])
+        )
 
     def evaluate(model):
         pred = calc_norm_compliance(depth_s, f, model)
@@ -83,7 +151,22 @@ def _inversion(
         log_posterior = log_data - 0.5 * alpha * Roughness(profile, 2)
         return pred, profile, log_data, log_posterior
 
-    current = initial.copy()
+    if initial_state is None:
+        current = initial.copy()
+    else:
+        current = _validate_model(initial_state).copy()
+        if (
+            current.shape != initial.shape
+            or not np.array_equal(current[:, 1:3], initial[:, 1:3])
+            or current[-1, 3] != initial[-1, 3]
+            or not np.isclose(current[:-1, 0].sum(), initial[:-1, 0].sum())
+            or not in_support(current)
+        ):
+            raise ValueError(
+                "initial_state must match starting_model in shape, density, Vp, "
+                "half-space Vs and total finite thickness, and lie within the "
+                "Vs prior bounds"
+            )
     pred, profile, log_data, log_post = evaluate(current)
     accepted = 0
     for i in range(iteration):
@@ -91,7 +174,8 @@ def _inversion(
             candidate = current.copy()
             layer = rng.integers(len(initial) - 1)  # fixed elastic half-space
             if rng.integers(2) == 0:
-                candidate[layer, 3] += rng.normal(0, sigma_v)
+                move = "vs"
+                candidate[layer, 3] += rng.normal(0, step_size[move][layer])
                 # Hold Vp and rho fixed, as specified by Aminian et al. (2025).
             else:
                 # Transfer thickness from the deepest finite layer. Total
@@ -106,16 +190,12 @@ def _inversion(
                     continue
                 if layer == len(initial) - 2:
                     layer = rng.integers(len(initial) - 2)
-                step = rng.normal(0, sigma_h)
+                move = "h"
+                step = rng.normal(0, step_size[move][layer])
                 candidate[layer, 0] += step
                 candidate[-2, 0] -= step
-            valid = (
-                np.all(candidate[:-1, 0] > 0)
-                and np.all(candidate[:, 3] >= lower)
-                and np.all(candidate[:, 3] <= upper)
-                and np.all(candidate[:, 3] < candidate[:, 2])
-            )
-            if valid:
+            took = False
+            if in_support(candidate):
                 new_pred, new_profile, new_log_data, new_log_post = evaluate(candidate)
                 if (
                     np.log(max(rng.random(), np.finfo(float).tiny))
@@ -129,14 +209,31 @@ def _inversion(
                         new_log_post,
                     )
                     accepted += 1
+                    took = True
             # Out-of-support proposals are rejected, not resampled/reflected:
             # this keeps the Gaussian proposal symmetric at the boundaries.
+            if i < adapt_until:
+                tuned[move][layer] += 1
+                gain = tuned[move][layer] ** -0.6  # diminishing Robbins-Monro gain
+                step_size[move][layer] *= np.exp(gain * (took - target_acceptance))
+            else:  # frozen kernel: record per-move acceptance only
+                proposed[move][layer] += 1
+                kept[move][layer] += took
         chain[:, :, i] = current
         prediction[i] = pred
         misfits[0, i] = np.linalg.norm(residual(Data, pred, s))
         likelihood[0, i] = np.exp(log_data)  # may underflow; never used for acceptance
         if profiles is not None:
             profiles[i, :, 0] = profile
+    if diagnostics is not None:
+        with np.errstate(invalid="ignore", divide="ignore"):
+            diagnostics.update(
+                sigma_v=step_size["vs"].copy(),
+                sigma_h=step_size["h"].copy(),
+                acceptance_vs=kept["vs"] / proposed["vs"],
+                acceptance_h=kept["h"] / proposed["h"],
+                adapt_until=adapt_until,
+            )
     return (
         chain,
         profiles,
@@ -165,12 +262,18 @@ def invert_compliace(
     *,
     seed=0,
     return_profiles=True,
+    adapt_until=0,
+    target_acceptance=0.3,
+    initial_state=None,
+    diagnostics=None,
 ):
     """Legacy name for the v2 sampler; see README for units and priors.
 
     Supply a custom starting_model to control sediments. The station templates
     do not use sediment_thickness or n_sediment_layer. s must be supplied.
     Set return_profiles=False to avoid the large metre-grid profile array.
+    adapt_until, target_acceptance, initial_state and diagnostics are optional
+    sampler-tuning keywords documented in ``_inversion``.
     """
     chain, profiles, _, misfits, prediction, likelihood, rate = _inversion(
         Data,
@@ -187,6 +290,10 @@ def invert_compliace(
         seed,
         False,
         return_profiles,
+        adapt_until=adapt_until,
+        target_acceptance=target_acceptance,
+        initial_state=initial_state,
+        diagnostics=diagnostics,
     )
     return chain, profiles, misfits, prediction, likelihood, rate
 
@@ -208,8 +315,16 @@ def invert_compliace_beta(
     *,
     seed=0,
     return_profiles=True,
+    adapt_until=0,
+    target_acceptance=0.3,
+    initial_state=None,
+    diagnostics=None,
 ):
-    """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple."""
+    """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple.
+
+    adapt_until, target_acceptance, initial_state and diagnostics are optional
+    sampler-tuning keywords documented in ``_inversion``.
+    """
     return _inversion(
         Data,
         f,
@@ -225,6 +340,10 @@ def invert_compliace_beta(
         seed,
         True,
         return_profiles,
+        adapt_until=adapt_until,
+        target_acceptance=target_acceptance,
+        initial_state=initial_state,
+        diagnostics=diagnostics,
     )
 
 

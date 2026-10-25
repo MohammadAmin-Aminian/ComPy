@@ -89,3 +89,61 @@ def test_homogeneous_halfspace_static_elastic_limit():
     model = np.array([[100.0, rho, vp, vs], [0.0, rho, vp, vs]])
     result = inv.calc_norm_compliance(0.1, np.array([1e-4]), model)
     np.testing.assert_allclose(result, (1 - nu) / (rho * vs**2), rtol=2e-7)
+
+
+def test_scalar_and_equivalent_per_layer_steps_give_identical_chains(problem):
+    model, f, data = problem
+    kwargs = dict(starting_model=model, s=0.03 * data, iteration=200, alpha=0, seed=1)
+    scalar = inv.invert_compliance_beta(data, f, 4000, sigma_v=40, sigma_h=9, **kwargs)
+    layered = inv.invert_compliance_beta(
+        data, f, 4000, sigma_v=[40, 40], sigma_h=[9], **kwargs
+    )
+    np.testing.assert_array_equal(scalar[0], layered[0])
+    with pytest.raises(ValueError, match="sigma_v must be a scalar or have 2"):
+        inv.invert_compliance_beta(data, f, 4000, sigma_v=[40, 40, 40], **kwargs)
+    with pytest.raises(ValueError, match="sigma_h must be finite and positive"):
+        inv.invert_compliance_beta(data, f, 4000, sigma_h=[-1.0], **kwargs)
+
+
+def test_adaptation_tunes_steps_then_freezes(problem):
+    model, f, data = problem
+    kwargs = dict(starting_model=model, s=0.03 * data, alpha=0, seed=2, sigma_v=5)
+    short, long = {}, {}
+    inv.invert_compliance_beta(
+        data, f, 4000, iteration=600, adapt_until=400, diagnostics=short, **kwargs
+    )
+    inv.invert_compliance_beta(
+        data, f, 4000, iteration=900, adapt_until=400, diagnostics=long, **kwargs
+    )
+    # Same seed, same adaptation window: frozen scales do not depend on run length.
+    np.testing.assert_array_equal(short["sigma_v"], long["sigma_v"])
+    np.testing.assert_array_equal(short["sigma_h"], long["sigma_h"])
+    # A 5 m/s step is far too small for this weakly constrained layer.
+    assert short["sigma_v"][0] > 5
+    assert np.all((short["acceptance_vs"] >= 0) & (short["acceptance_vs"] <= 1))
+
+
+def test_initial_state_starts_chain_but_keeps_prior_from_starting_model(problem):
+    model, f, data = problem
+    state = model.copy()
+    state[0, 3], state[0, 0], state[1, 0] = 900.0, 150.0, 950.0
+    chain, _, prior, *_ = inv.invert_compliance_beta(
+        data, f, 4000, starting_model=model, s=0.03 * data, iteration=5,
+        alpha=0, seed=0, initial_state=state,
+    )
+    np.testing.assert_array_equal(chain[:, :, 0], state)
+    assert prior[0, 0, 0] == model[0, 3]
+    outside = state.copy()
+    outside[0, 3] = 1900.0  # above the beta prior bound 1.2 x 1500, below Vp
+    with pytest.raises(ValueError, match="initial_state"):
+        inv.invert_compliance_beta(
+            data, f, 4000, starting_model=model, s=0.03 * data, iteration=5,
+            initial_state=outside,
+        )
+    thicker = state.copy()
+    thicker[1, 0] += 10  # changes the conserved total finite thickness
+    with pytest.raises(ValueError, match="initial_state"):
+        inv.invert_compliance_beta(
+            data, f, 4000, starting_model=model, s=0.03 * data, iteration=5,
+            initial_state=thicker,
+        )

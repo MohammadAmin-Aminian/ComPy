@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Sampler tuning (opt-in; defaults reproduce 2.1 chains draw for draw):
+  per-layer `sigma_v`/`sigma_h`, Robbins-Monro step-size adaptation frozen after
+  `adapt_until`, `initial_state` for over-dispersed chain starts that keep the
+  prior of `starting_model`, and a `diagnostics` dict with tuned steps and
+  per-move acceptance.
+- Add a converged four-chain synthetic example and a Vs-depth posterior heat map.
+
 ## 2.1.0
 
 - Add optional ArviZ multiple-chain diagnostics: rank-normalized folded split-Rhat,
