@@ -256,3 +256,45 @@ def test_explicit_bounds_and_fixed_geometry(problem):
     for bad in [(3000, 1000), (0, 2000), ([1000], 3000), 5]:
         with pytest.raises(ValueError, match="vs_bounds"):
             inv.invert_compliance_beta(data, f, 4000, vs_bounds=bad, **kwargs)
+
+
+def test_hierarchical_smoothing_weight_is_sampled_within_bounds(problem):
+    model, f, data = problem
+    kwargs = dict(starting_model=model, s=0.03 * data, iteration=300, sigma_v=200,
+                  seed=7, return_profiles=False, vary_thickness=False)
+    info = {}
+    inv.invert_compliance_beta(data, f, 4000, alpha=1e-5, alpha_bounds=(1e-7, 1e-3),
+                               diagnostics=info, **kwargs)
+    trace = info["alpha"]
+    assert trace.shape == (300,) and trace[0] == 1e-5
+    assert np.all((trace >= 1e-7) & (trace <= 1e-3)) and np.ptp(trace) > 0
+    again = {}
+    inv.invert_compliance_beta(data, f, 4000, alpha=1e-5, alpha_bounds=(1e-7, 1e-3),
+                               diagnostics=again, **kwargs)
+    np.testing.assert_array_equal(trace, again["alpha"])
+    for bad in [(1e-3, 1e-7), (1e-4, 1e-3), (-1, 1)]:
+        with pytest.raises(ValueError, match="alpha_bounds"):
+            inv.invert_compliance_beta(data, f, 4000, alpha=1e-5, alpha_bounds=bad, **kwargs)
+
+
+def test_hierarchical_alpha_conditional_matches_gamma():
+    # With data switched off and a single jump, the joint target is
+    # alpha^(k/2 - 1) exp(-alpha R / 2) x box prior on the jump; the marginal of
+    # alpha under bounds wide enough is then nearly the Jeffreys-Gamma mixture.
+    # Check the Gibbs conditional directly: for a frozen model (no accepted
+    # moves possible), alpha draws follow Gamma(k/2, rate=R/2).
+    model = np.array([[500.0, 2500, 5000, 1500], [500.0, 2600, 5200, 2500],
+                      [0, 3300, 8000, 4500]])
+    f = np.array([0.006, 0.012])
+    data = inv.calc_norm_compliance(4000, f, model)
+    info = {}
+    inv.invert_compliance_beta(
+        data, f, 4000, starting_model=model, s=data * 1e-12, iteration=6000,
+        sigma_v=1e-9, alpha=1e-6, alpha_bounds=(1e-12, 1.0), seed=11,
+        return_profiles=False, vary_thickness=False, diagnostics=info,
+    )
+    from compy_numerics import roughness
+    R = roughness(inv._depth_profile(model, np.arange(1000)), 2)
+    draws = info["alpha"][1:]
+    k = 1  # one interface between the two finite layers
+    np.testing.assert_allclose(draws.mean(), (k / 2) / (R / 2), rtol=0.06)

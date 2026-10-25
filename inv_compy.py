@@ -87,6 +87,7 @@ def _inversion(
     diagnostics=None,
     vs_bounds=None,
     vary_thickness=True,
+    alpha_bounds=None,
 ):
     """Symmetric random-walk Metropolis sampler with bounded model support.
 
@@ -120,6 +121,15 @@ def _inversion(
         If False, only Vs is sampled and the layer geometry stays fixed: the
         many-thin-layer "minimum structure" parameterization of Crawford et
         al. (1991), regularized through ``alpha``.
+    alpha_bounds
+        Optional ``(alpha_min, alpha_max)``. The smoothing weight then becomes
+        an unknown (hierarchical Bayes, Malinverno & Briggs 2004) with a
+        Jeffreys prior on that interval, starting at ``alpha``. The roughness
+        term is a Gaussian prior on Vs jumps between the k = n_finite - 1
+        interfaces, so alpha is Gibbs-sampled each iteration from its
+        conditional Gamma(k/2, rate = roughness/2), truncated to the bounds.
+        The data, not a hand-picked value, then set how smooth models are.
+        The trace is returned in ``diagnostics["alpha"]``.
     """
     iteration = integer(iteration, "iteration", minimum=2)
     sigma_v, sigma_h = _step_sizes(sigma_v, "sigma_v"), _step_sizes(sigma_h, "sigma_h")
@@ -174,12 +184,39 @@ def _inversion(
             and np.all(model[:, 3] < model[:, 2])
         )
 
+    hierarchical = alpha_bounds is not None
+    if hierarchical:
+        from scipy.stats import gamma as gamma_dist
+
+        try:
+            a_lo, a_hi = (positive(v, "alpha_bounds") for v in alpha_bounds)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("alpha_bounds must be two positive values") from exc
+        if not a_lo < a_hi or not a_lo <= alpha <= a_hi:
+            raise ValueError("alpha_bounds must satisfy lower < upper and contain alpha")
+        n_jumps = max(n_finite - 1, 1)
+        alpha_trace = np.empty(iteration)
+    state = {"alpha": float(alpha)}
+
     def evaluate(model):
         pred = calc_norm_compliance(depth_s, f, model)
         profile = _depth_profile(model, depth_grid)
         log_data = log_likelihood(Data, pred, s)
-        log_posterior = log_data - 0.5 * alpha * Roughness(profile, 2)
+        log_posterior = log_data - 0.5 * state["alpha"] * Roughness(profile, 2)
         return pred, profile, log_data, log_posterior
+
+    def gibbs_alpha(profile):
+        """Draw alpha from Gamma(k/2, rate=R/2) truncated to alpha_bounds."""
+        rate = 0.5 * Roughness(profile, 2)
+        shape = 0.5 * n_jumps
+        if rate <= np.finfo(float).tiny:  # flat profile: alpha^(k/2-1) on bounds
+            lo, hi = a_lo**shape, a_hi**shape
+            return (lo + rng.random() * (hi - lo)) ** (1 / shape)
+        dist = gamma_dist(shape, scale=1 / rate)
+        c_lo, c_hi = dist.cdf(a_lo), dist.cdf(a_hi)
+        if c_hi - c_lo < 1e-12:  # all mass beyond one bound
+            return a_lo if c_lo >= 1 - 1e-12 else a_hi
+        return float(np.clip(dist.ppf(c_lo + rng.random() * (c_hi - c_lo)), a_lo, a_hi))
 
     if initial_state is None:
         current = initial.copy()
@@ -217,6 +254,8 @@ def _inversion(
                     likelihood[0, i] = np.exp(log_data)
                     if profiles is not None:
                         profiles[i, :, 0] = profile
+                    if hierarchical:
+                        alpha_trace[i] = state["alpha"]
                     continue
                 if layer == len(initial) - 2:
                     layer = rng.integers(len(initial) - 2)
@@ -249,6 +288,11 @@ def _inversion(
             else:  # frozen kernel: record per-move acceptance only
                 proposed[move][layer] += 1
                 kept[move][layer] += took
+            if hierarchical:  # Gibbs step for the smoothing weight
+                state["alpha"] = gibbs_alpha(profile)
+                log_post = log_data - 0.5 * state["alpha"] * Roughness(profile, 2)
+        if hierarchical:
+            alpha_trace[i] = state["alpha"]
         chain[:, :, i] = current
         prediction[i] = pred
         misfits[0, i] = np.linalg.norm(residual(Data, pred, s))
@@ -264,6 +308,8 @@ def _inversion(
                 acceptance_h=kept["h"] / proposed["h"],
                 adapt_until=adapt_until,
             )
+            if hierarchical:
+                diagnostics["alpha"] = alpha_trace
     return (
         chain,
         profiles,
@@ -298,6 +344,7 @@ def invert_compliace(
     diagnostics=None,
     vs_bounds=None,
     vary_thickness=True,
+    alpha_bounds=None,
 ):
     """Legacy name for the v2 sampler; see README for units and priors.
 
@@ -328,6 +375,7 @@ def invert_compliace(
         diagnostics=diagnostics,
         vs_bounds=vs_bounds,
         vary_thickness=vary_thickness,
+        alpha_bounds=alpha_bounds,
     )
     return chain, profiles, misfits, prediction, likelihood, rate
 
@@ -355,6 +403,7 @@ def invert_compliace_beta(
     diagnostics=None,
     vs_bounds=None,
     vary_thickness=True,
+    alpha_bounds=None,
 ):
     """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple.
 
@@ -382,6 +431,7 @@ def invert_compliace_beta(
         diagnostics=diagnostics,
         vs_bounds=vs_bounds,
         vary_thickness=vary_thickness,
+        alpha_bounds=alpha_bounds,
     )
 
 
