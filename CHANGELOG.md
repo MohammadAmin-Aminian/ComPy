@@ -19,6 +19,13 @@
   propagator (agreement ~1e-6), plus kernels, Occam and the new sampler options.
 - Deep-crust synthetic example (14 layers to 13 km, 3.5-18.5 mHz, 4200 m water)
   with prior-versus-posterior resolution analysis.
+- `alpha_bounds`: the smoothing weight is Gibbs-sampled from its Gamma conditional
+  (hierarchical Bayes) instead of being fixed.
+- `data_covariance`: full data covariance (e.g. a pressure-gain error common to all
+  frequency bins) through a Cholesky-whitened likelihood.
+- `interface_move="adjacent"`: move one interface at a time in free-interface runs.
+- `compy_diagnostics.rank_rhat_ess`: rank-normalized split R-hat and bulk ESS on
+  NumPy/SciPy alone; the examples no longer need ArviZ for diagnostics.
 
 ## 2.1.0
 

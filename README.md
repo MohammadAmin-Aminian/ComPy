@@ -375,6 +375,46 @@ legacy `sediment_thickness` arguments do not modify station templates.
 Historical misspellings `invert_compliace*`, `liklihood`, `Roughness` and
 `Comliance_uncertainty` remain available for existing notebooks.
 
+### Verified deep-crust workflow (unreleased)
+
+Opt-in additions, following the compliance literature; every default above is
+unchanged and reproduces earlier chains draw for draw.
+
+| Addition | Purpose |
+|---|---|
+| `sigma_v`/`sigma_h` arrays, `adapt_until` | Per-layer steps tuned during burn-in to ~30 % acceptance, then frozen |
+| `initial_state`, `vs_bounds` | Dispersed chain starts under an explicit prior that no longer depends on the starting model |
+| `vary_thickness=False` | Fixed-geometry minimum-structure grid (Crawford et al. 1991) |
+| `alpha_bounds` | Smoothing weight sampled from the data (hierarchical Bayes, Malinverno & Briggs 2004) |
+| `data_covariance` | Correlated errors, e.g. a pressure-gain error common to all frequencies |
+| `interface_move="adjacent"` | Move one interface at a time in free-interface runs |
+| `invert_occam` | Occam minimum-structure inversion (Constable et al. 1987) as a cross-check |
+| `compliance_kernels`, `resample_model` | Numerical Vs sensitivity kernels on an interface-exact slicing |
+| `compy_diagnostics.rank_rhat_ess` | Rank-normalized split R̂ and bulk ESS without ArviZ |
+
+The propagator is tested against an independent Aki & Richards solver
+(agreement ~1e-6). Points worth knowing before interpreting a model:
+
+- Compliance senses structure to roughly λmax/6 of the longest water wave
+  (Crawford et al. 1991): about 9 km at 4.2 km water depth and 3.5 mHz, but
+  only about 3.6 km at 2.9 km depth and 7.1 mHz. Deeper Vs mostly reflects the
+  prior; compare posterior and prior-only widths (`s` scaled up, as in the
+  example) before interpreting it.
+- With Vp held fixed, raising Vs also lowers λ, so thin shallow layers can
+  have weak or even positive Vs kernels: their Vs is poorly resolved.
+- A thin low-velocity zone beneath a slow upper crust trades off against a
+  smoother, slower upper crust; at 3 % errors the synthetic test cannot
+  separate them.
+- Random-walk Metropolis is most efficient near 23–44 % acceptance (Roberts et
+  al. 1997), not 70–90 %. Free-interface parameterizations remain slow to
+  mix even with adjacent moves; check R̂ and ESS, or prefer the fixed grid
+  with `alpha_bounds`.
+
+```bash
+python _Example/deep_crust_inversion.py --output deep-crust   # ~25 min, 2 cores
+python _Example/plot_deep_posterior.py deep-crust
+```
+
 ## Plotting and diagnostics
 
 `ffplot` contains the original PSD, coherence, spectrogram and deployment-specific
