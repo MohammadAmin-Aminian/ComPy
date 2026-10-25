@@ -298,3 +298,24 @@ def test_hierarchical_alpha_conditional_matches_gamma():
     draws = info["alpha"][1:]
     k = 1  # one interface between the two finite layers
     np.testing.assert_allclose(draws.mean(), (k / 2) / (R / 2), rtol=0.06)
+
+
+def test_adjacent_interface_move_shifts_one_interface_only():
+    model = np.array([[300.0, 2000, 2500, 900], [900, 2500, 4200, 2200],
+                      [1500, 2800, 6000, 3400], [2000, 3000, 7000, 3900],
+                      [0, 3300, 8000, 4400]])
+    f = np.geomspace(0.004, 0.018, 6)
+    data = inv.calc_norm_compliance(4200, f, model)
+    chain = inv.invert_compliance_beta(
+        data, f, 4200, starting_model=model, s=0.03 * data, iteration=400, sigma_v=50,
+        sigma_h=60, alpha=0, seed=13, return_profiles=False, interface_move="adjacent",
+        vs_bounds=(200, 4800),
+    )[0]
+    depths = np.cumsum(chain[:-1, 0, :], axis=0)
+    moved = np.abs(np.diff(depths, axis=1)) > 1e-6  # metres; ignore rounding
+    assert moved.any()
+    assert np.all(moved.sum(axis=0) <= 1)          # never more than one interface per step
+    assert np.allclose(depths[-1], model[:-1, 0].sum())
+    with pytest.raises(ValueError, match="interface_move"):
+        inv.invert_compliance_beta(data, f, 4200, starting_model=model, s=0.03 * data,
+                                   iteration=5, interface_move="random")

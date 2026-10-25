@@ -15,9 +15,8 @@ import time
 from multiprocessing import Pool
 
 import numpy as np
-from scipy.stats import norm, rankdata
-
 import inv_compy as inv
+from compy_diagnostics import rank_rhat_ess
 
 ITER, ADAPT, BURN = 60_000, 10_000, 15_000
 OUT = sys.argv[1]
@@ -51,41 +50,6 @@ def run_chain(k):
         diagnostics=info,
     )
     return out[0], out[4], out[3][0], out[-1], info
-
-
-def rank_rhat_ess(x):
-    """Rank-normalized split R-hat (max of bulk/folded) and bulk ESS (Vehtari 2021)."""
-    m, n = x.shape
-    half = n // 2
-    s = np.concatenate([x[:, :half], x[:, half:2 * half]])
-
-    def z(a):
-        r = rankdata(a, method="average").reshape(a.shape)
-        return norm.ppf((r - 0.375) / (a.size + 0.25))
-
-    def rhat(a):
-        nn = a.shape[1]
-        w = a.var(axis=1, ddof=1).mean()
-        b = nn * a.mean(axis=1).var(ddof=1)
-        return np.sqrt(((nn - 1) / nn * w + b / nn) / w)
-
-    zs = z(s)
-    folded = z(np.abs(s - np.median(s)))
-    r = max(rhat(zs), rhat(folded))
-    # Bulk ESS with Geyer's initial monotone sequence.
-    mm, nn = zs.shape
-    c = zs - zs.mean(axis=1, keepdims=True)
-    fft = np.fft.rfft(c, n=2 * nn)
-    acov = np.fft.irfft(fft * np.conj(fft))[:, :nn] / nn
-    w = acov[:, 0].mean() * nn / (nn - 1)
-    var_plus = w * (nn - 1) / nn + zs.mean(axis=1).var(ddof=1)
-    rho = 1 - (w - acov.mean(axis=0)) / var_plus
-    rho[0] = 1.0
-    pairs = rho[:-1:2] + rho[1::2]
-    keep = np.argmax(pairs < 0) if np.any(pairs < 0) else len(pairs)
-    pairs = np.minimum.accumulate(pairs[:keep])
-    tau = -1 + 2 * pairs.sum()
-    return float(r), float(mm * nn / tau)
 
 
 if __name__ == "__main__":

@@ -101,6 +101,51 @@ def summarize_chains(draws, parameter_names, *, burnin=0):
     }
 
 
+def rank_rhat_ess(draws):
+    """Rank-normalized split R-hat and bulk ESS without ArviZ.
+
+    ``draws`` has shape ``(chains, iterations)``. Implements Vehtari et al.
+    (2021): R-hat is the larger of the bulk (rank-normalized) and folded
+    (rank-normalized absolute deviation from the median) split-R-hat; bulk ESS
+    uses Geyer's initial monotone sequence on the combined autocorrelation.
+    Use ``summarize_chains`` when ArviZ is installed; this helper exists so
+    the offline examples run on NumPy and SciPy alone.
+    """
+    from scipy.stats import norm, rankdata
+
+    x = np.asarray(draws, dtype=float)
+    if x.ndim != 2 or x.shape[0] < 2 or x.shape[1] < 8 or not np.isfinite(x).all():
+        raise ValueError("Need finite (chains >= 2, iterations >= 8) draws")
+    half = x.shape[1] // 2
+    split = np.concatenate([x[:, :half], x[:, half:2 * half]])
+
+    def normal_scores(a):
+        ranks = rankdata(a, method="average").reshape(a.shape)
+        return norm.ppf((ranks - 0.375) / (a.size + 0.25))
+
+    def rhat(a):
+        n = a.shape[1]
+        within = a.var(axis=1, ddof=1).mean()
+        between = n * a.mean(axis=1).var(ddof=1)
+        return float(np.sqrt(((n - 1) / n * within + between / n) / within))
+
+    z = normal_scores(split)
+    folded = normal_scores(np.abs(split - np.median(split)))
+    r = max(rhat(z), rhat(folded))
+    m, n = z.shape
+    centred = z - z.mean(axis=1, keepdims=True)
+    spectrum = np.fft.rfft(centred, n=2 * n)
+    acov = np.fft.irfft(spectrum * np.conj(spectrum))[:, :n] / n
+    within = acov[:, 0].mean() * n / (n - 1)
+    var_plus = within * (n - 1) / n + z.mean(axis=1).var(ddof=1)
+    rho = 1 - (within - acov.mean(axis=0)) / var_plus
+    rho[0] = 1.0
+    pairs = rho[:-1:2] + rho[1::2]
+    stop = int(np.argmax(pairs < 0)) if np.any(pairs < 0) else len(pairs)
+    tau = -1 + 2 * np.minimum.accumulate(pairs[:stop]).sum()
+    return r, float(m * n / max(tau, 1.0 / np.log10(m * n)))
+
+
 def save_run(output, arrays, *, settings, diagnostics=None):
     """Save numeric arrays, strict JSON metadata and a SHA-256 artifact manifest.
 

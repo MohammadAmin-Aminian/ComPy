@@ -88,6 +88,7 @@ def _inversion(
     vs_bounds=None,
     vary_thickness=True,
     alpha_bounds=None,
+    interface_move="deepest",
 ):
     """Symmetric random-walk Metropolis sampler with bounded model support.
 
@@ -130,10 +131,18 @@ def _inversion(
         conditional Gamma(k/2, rate = roughness/2), truncated to the bounds.
         The data, not a hand-picked value, then set how smooth models are.
         The trace is returned in ``diagnostics["alpha"]``.
+    interface_move
+        ``"deepest"`` (default, v2 behaviour) transfers thickness between a
+        layer and the deepest finite layer, which shifts every interface in
+        between. ``"adjacent"`` moves a single interface by exchanging
+        thickness between the two layers that share it, leaving all other
+        interfaces in place; free-interface chains mix much faster with it.
     """
     iteration = integer(iteration, "iteration", minimum=2)
     sigma_v, sigma_h = _step_sizes(sigma_v, "sigma_v"), _step_sizes(sigma_h, "sigma_h")
     adapt_until = integer(adapt_until, "adapt_until", minimum=0)
+    if interface_move not in ("deepest", "adjacent"):
+        raise ValueError("interface_move must be 'deepest' or 'adjacent'")
     if not 0 < target_acceptance < 1:
         raise ValueError("target_acceptance must lie strictly between 0 and 1")
     if not np.isfinite(alpha) or alpha < 0:
@@ -262,7 +271,9 @@ def _inversion(
                 move = "h"
                 step = rng.normal(0, step_size[move][layer])
                 candidate[layer, 0] += step
-                candidate[-2, 0] -= step
+                # Partner layer: the deepest finite layer (v2) or the layer
+                # directly below, so only interface ``layer`` moves.
+                candidate[layer + 1 if interface_move == "adjacent" else -2, 0] -= step
             took = False
             if in_support(candidate):
                 new_pred, new_profile, new_log_data, new_log_post = evaluate(candidate)
@@ -345,6 +356,7 @@ def invert_compliace(
     vs_bounds=None,
     vary_thickness=True,
     alpha_bounds=None,
+    interface_move="deepest",
 ):
     """Legacy name for the v2 sampler; see README for units and priors.
 
@@ -376,6 +388,7 @@ def invert_compliace(
         vs_bounds=vs_bounds,
         vary_thickness=vary_thickness,
         alpha_bounds=alpha_bounds,
+        interface_move=interface_move,
     )
     return chain, profiles, misfits, prediction, likelihood, rate
 
@@ -404,6 +417,7 @@ def invert_compliace_beta(
     vs_bounds=None,
     vary_thickness=True,
     alpha_bounds=None,
+    interface_move="deepest",
 ):
     """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple.
 
@@ -432,6 +446,7 @@ def invert_compliace_beta(
         vs_bounds=vs_bounds,
         vary_thickness=vary_thickness,
         alpha_bounds=alpha_bounds,
+        interface_move=interface_move,
     )
 
 

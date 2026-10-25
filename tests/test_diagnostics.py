@@ -116,3 +116,23 @@ def test_offline_example_is_reproducible_and_preserves_forward_consistency(tmp_p
             inv.calc_norm_compliance(4000, a["frequency"], a["models"][0, :, :, -1]),
         )
     assert (first / "diagnostics.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+
+
+def test_dependency_free_rank_rhat_and_ess():
+    from compy_diagnostics import rank_rhat_ess
+
+    iid = np.random.default_rng(3).normal(size=(4, 4000))
+    r, ess = rank_rhat_ess(iid)
+    assert r < 1.01 and 12000 < ess < 20000
+    shifted = iid.copy()
+    shifted[0] += 1.5
+    assert rank_rhat_ess(shifted)[0] > 1.1
+    scaled = iid.copy()
+    scaled[0] *= 4  # same centre, different spread: caught by the folded R-hat
+    assert rank_rhat_ess(scaled)[0] > 1.05
+    ar = iid.copy()
+    for t in range(1, ar.shape[1]):
+        ar[:, t] = 0.9 * ar[:, t - 1] + iid[:, t]
+    assert rank_rhat_ess(ar)[1] < 3000  # AR(1), rho=0.9: ESS ~ N (1-rho)/(1+rho)
+    with pytest.raises(ValueError):
+        rank_rhat_ess(iid[:1])
