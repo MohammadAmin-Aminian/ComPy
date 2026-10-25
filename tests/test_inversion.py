@@ -319,3 +319,31 @@ def test_adjacent_interface_move_shifts_one_interface_only():
     with pytest.raises(ValueError, match="interface_move"):
         inv.invert_compliance_beta(data, f, 4200, starting_model=model, s=0.03 * data,
                                    iteration=5, interface_move="random")
+
+
+def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
+    model, f, data = problem
+    s = 0.03 * data
+    kwargs = dict(starting_model=model, iteration=300, sigma_v=150, alpha=0, seed=21,
+                  return_profiles=False, vary_thickness=False)
+    diag = inv.invert_compliance_beta(data, f, 4000, s=s, **kwargs)
+    full = inv.invert_compliance_beta(data, f, 4000, s=None,
+                                      data_covariance=np.diag(s**2), **kwargs)
+    np.testing.assert_allclose(full[0], diag[0])          # same chain
+    np.testing.assert_allclose(full[3], diag[3], rtol=1e-10)
+    # A 5 % gain error common to all bins: a uniformly scaled prediction costs
+    # far less than the same scale error treated as independent errors.
+    g = 0.05 * data
+    cov = np.diag((0.01 * data) ** 2) + np.outer(g, g)
+    trial = model.copy()
+    trial[:, 3] *= 1.02                                    # ~4 % lower compliance
+    info_full = inv.invert_compliance_beta(
+        data, f, 4000, s=None, data_covariance=cov, starting_model=trial, iteration=2,
+        alpha=0, return_profiles=False, vary_thickness=False)[3][0, 0]
+    info_diag = inv.invert_compliance_beta(
+        data, f, 4000, s=np.sqrt(np.diag(cov)), starting_model=trial, iteration=2,
+        alpha=0, return_profiles=False, vary_thickness=False)[3][0, 0]
+    assert info_full < info_diag
+    for bad in (np.eye(3), -np.eye(len(f)), np.triu(np.ones((len(f), len(f))))):
+        with pytest.raises(ValueError, match="data_covariance"):
+            inv.invert_compliance_beta(data, f, 4000, s=None, data_covariance=bad, **kwargs)

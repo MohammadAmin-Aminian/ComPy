@@ -89,6 +89,7 @@ def _inversion(
     vary_thickness=True,
     alpha_bounds=None,
     interface_move="deepest",
+    data_covariance=None,
 ):
     """Symmetric random-walk Metropolis sampler with bounded model support.
 
@@ -137,6 +138,12 @@ def _inversion(
         between. ``"adjacent"`` moves a single interface by exchanging
         thickness between the two layers that share it, leaving all other
         interfaces in place; free-interface chains mix much faster with it.
+    data_covariance
+        Optional full data covariance (N x N, 1/Pa**2). Use it for errors that
+        are correlated between frequencies, e.g. a pressure-gain uncertainty
+        common to all bins: C = diag(sigma**2) + (g * eta)(g * eta)^T. The
+        Gaussian likelihood then uses the Cholesky-whitened residual and the
+        returned misfit is its norm; ``s`` is ignored and may be None.
     """
     iteration = integer(iteration, "iteration", minimum=2)
     sigma_v, sigma_h = _step_sizes(sigma_v, "sigma_v"), _step_sizes(sigma_h, "sigma_h")
@@ -150,9 +157,37 @@ def _inversion(
     Data, f = np.asarray(Data, float), np.asarray(f, float)
     if Data.ndim != 1 or f.shape != Data.shape or np.any(f <= 0):
         raise ValueError("data and positive frequencies must be equal-length vectors")
-    if s is None:
-        raise ValueError("s is required: supply positive measurement uncertainties")
-    residual(Data, Data, s)
+    if data_covariance is not None:
+        from scipy.linalg import solve_triangular
+
+        cov = np.asarray(data_covariance, float)
+        if cov.shape != (len(Data), len(Data)) or not np.all(np.isfinite(cov)) \
+                or not np.allclose(cov, cov.T, rtol=1e-10, atol=0):
+            raise ValueError("data_covariance must be a finite symmetric N x N matrix")
+        try:
+            chol = np.linalg.cholesky(cov)
+        except np.linalg.LinAlgError as exc:
+            raise ValueError("data_covariance must be positive definite") from exc
+
+        def whitened(pred):
+            return solve_triangular(chol, Data - pred, lower=True)
+
+        def data_log_likelihood(pred):
+            r = whitened(pred)
+            return -0.5 * float(r @ r)
+
+        def data_misfit(pred):
+            return float(np.linalg.norm(whitened(pred)))
+    else:
+        if s is None:
+            raise ValueError("s is required: supply positive measurement uncertainties")
+        residual(Data, Data, s)
+
+        def data_log_likelihood(pred):
+            return log_likelihood(Data, pred, s)
+
+        def data_misfit(pred):
+            return np.linalg.norm(residual(Data, pred, s))
     if starting_model is None:
         initial = Model_V2(1, n_layer=n_layer, sta=sta)[0][:, :, 0]
     else:
@@ -210,7 +245,7 @@ def _inversion(
     def evaluate(model):
         pred = calc_norm_compliance(depth_s, f, model)
         profile = _depth_profile(model, depth_grid)
-        log_data = log_likelihood(Data, pred, s)
+        log_data = data_log_likelihood(pred)
         log_posterior = log_data - 0.5 * state["alpha"] * Roughness(profile, 2)
         return pred, profile, log_data, log_posterior
 
@@ -259,7 +294,7 @@ def _inversion(
                 if len(initial) == 2:
                     chain[:, :, i] = current
                     prediction[i] = pred
-                    misfits[0, i] = np.linalg.norm(residual(Data, pred, s))
+                    misfits[0, i] = data_misfit(pred)
                     likelihood[0, i] = np.exp(log_data)
                     if profiles is not None:
                         profiles[i, :, 0] = profile
@@ -306,7 +341,7 @@ def _inversion(
             alpha_trace[i] = state["alpha"]
         chain[:, :, i] = current
         prediction[i] = pred
-        misfits[0, i] = np.linalg.norm(residual(Data, pred, s))
+        misfits[0, i] = data_misfit(pred)
         likelihood[0, i] = np.exp(log_data)  # may underflow; never used for acceptance
         if profiles is not None:
             profiles[i, :, 0] = profile
@@ -357,6 +392,7 @@ def invert_compliace(
     vary_thickness=True,
     alpha_bounds=None,
     interface_move="deepest",
+    data_covariance=None,
 ):
     """Legacy name for the v2 sampler; see README for units and priors.
 
@@ -389,6 +425,7 @@ def invert_compliace(
         vary_thickness=vary_thickness,
         alpha_bounds=alpha_bounds,
         interface_move=interface_move,
+        data_covariance=data_covariance,
     )
     return chain, profiles, misfits, prediction, likelihood, rate
 
@@ -418,6 +455,7 @@ def invert_compliace_beta(
     vary_thickness=True,
     alpha_bounds=None,
     interface_move="deepest",
+    data_covariance=None,
 ):
     """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple.
 
@@ -447,6 +485,7 @@ def invert_compliace_beta(
         vary_thickness=vary_thickness,
         alpha_bounds=alpha_bounds,
         interface_move=interface_move,
+        data_covariance=data_covariance,
     )
 
 
