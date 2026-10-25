@@ -90,6 +90,7 @@ def _inversion(
     alpha_bounds=None,
     interface_move="deepest",
     data_covariance=None,
+    elastic_from_vs=None,
 ):
     """Symmetric random-walk Metropolis sampler with bounded model support.
 
@@ -144,6 +145,12 @@ def _inversion(
         common to all bins: C = diag(sigma**2) + (g * eta)(g * eta)^T. The
         Gaussian likelihood then uses the Cholesky-whitened residual and the
         returned misfit is its norm; ``s`` is ignored and may be None.
+    elastic_from_vs
+        Optional callable ``vs -> (vp, rho)`` (m/s, kg/m**3), e.g.
+        ``brocher_elastic``. Vp and density of every finite layer then follow
+        Vs instead of staying fixed, which removes the stiffness floor and
+        the weak or reversed shallow Vs sensitivity of a fixed-Vp column.
+        The half-space keeps its given properties.
     """
     iteration = integer(iteration, "iteration", minimum=2)
     sigma_v, sigma_h = _step_sizes(sigma_v, "sigma_v"), _step_sizes(sigma_h, "sigma_h")
@@ -262,13 +269,24 @@ def _inversion(
             return a_lo if c_lo >= 1 - 1e-12 else a_hi
         return float(np.clip(dist.ppf(c_lo + rng.random() * (c_hi - c_lo)), a_lo, a_hi))
 
+    def couple(model):
+        if elastic_from_vs is not None:
+            vp, rho = elastic_from_vs(model[:-1, 3])
+            model[:-1, 2], model[:-1, 1] = vp, rho
+        return model
+
+    if elastic_from_vs is not None:
+        initial = couple(initial)
+        if not in_support(initial):
+            raise ValueError("elastic_from_vs must give Vp above Vs for the starting model")
     if initial_state is None:
         current = initial.copy()
     else:
-        current = _validate_model(initial_state).copy()
+        current = couple(_validate_model(initial_state).copy())
         if (
             current.shape != initial.shape
-            or not np.array_equal(current[:, 1:3], initial[:, 1:3])
+            or not np.array_equal(current[:, 1:3], initial[:, 1:3]) and elastic_from_vs is None
+            or not np.array_equal(current[-1, 1:], initial[-1, 1:])
             or current[-1, 3] != initial[-1, 3]
             or not np.isclose(current[:-1, 0].sum(), initial[:-1, 0].sum())
             or not in_support(current)
@@ -287,6 +305,8 @@ def _inversion(
             if not vary_thickness or rng.integers(2) == 0:
                 move = "vs"
                 candidate[layer, 3] += rng.normal(0, step_size[move][layer])
+                if elastic_from_vs is not None and candidate[layer, 3] > 0:
+                    couple(candidate)
                 # Hold Vp and rho fixed, as specified by Aminian et al. (2025).
             else:
                 # Transfer thickness from the deepest finite layer. Total
@@ -393,6 +413,7 @@ def invert_compliace(
     alpha_bounds=None,
     interface_move="deepest",
     data_covariance=None,
+    elastic_from_vs=None,
 ):
     """Legacy name for the v2 sampler; see README for units and priors.
 
@@ -426,6 +447,7 @@ def invert_compliace(
         alpha_bounds=alpha_bounds,
         interface_move=interface_move,
         data_covariance=data_covariance,
+        elastic_from_vs=elastic_from_vs,
     )
     return chain, profiles, misfits, prediction, likelihood, rate
 
@@ -456,6 +478,7 @@ def invert_compliace_beta(
     alpha_bounds=None,
     interface_move="deepest",
     data_covariance=None,
+    elastic_from_vs=None,
 ):
     """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple.
 
@@ -486,6 +509,7 @@ def invert_compliace_beta(
         alpha_bounds=alpha_bounds,
         interface_move=interface_move,
         data_covariance=data_covariance,
+        elastic_from_vs=elastic_from_vs,
     )
 
 
@@ -1266,6 +1290,20 @@ def Model_V2(iteration, n_layer=3, sta="RR38"):
 
 
 # %%
+def brocher_elastic(vs):
+    """Vp and density from Vs with Brocher's (2005) empirical crustal relations.
+
+    Vp (eq. 9, valid for Vs up to about 4.5 km/s) and the Nafe-Drake density
+    fit (eq. 1). Input and output in SI units: Vs and Vp in m/s, density in
+    kg/m**3. Intended for ``elastic_from_vs`` in the samplers.
+    """
+    km = np.asarray(vs, dtype=float) / 1000.0
+    vp = 0.9409 + 2.0947 * km - 0.8206 * km**2 + 0.2683 * km**3 - 0.0251 * km**4
+    rho = (1.6612 * vp - 0.4721 * vp**2 + 0.0671 * vp**3 - 0.0043 * vp**4
+           + 0.000106 * vp**5)
+    return vp * 1000.0, rho * 1000.0
+
+
 def velp(vs, p=0.25):
     """Vp in m/s from Vs in m/s and a stable isotropic Poisson ratio."""
     vs = np.asarray(vs, float)

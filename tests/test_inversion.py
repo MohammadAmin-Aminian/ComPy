@@ -347,3 +347,20 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
     for bad in (np.eye(3), -np.eye(len(f)), np.triu(np.ones((len(f), len(f))))):
         with pytest.raises(ValueError, match="data_covariance"):
             inv.invert_compliance_beta(data, f, 4000, s=None, data_covariance=bad, **kwargs)
+
+
+def test_brocher_coupling_keeps_vp_and_density_tied_to_vs(problem):
+    model, f, data = problem
+    chain = inv.invert_compliance_beta(
+        data, f, 4000, starting_model=model, s=0.03 * data, iteration=300, sigma_v=200,
+        alpha=0, seed=31, return_profiles=False, vary_thickness=False,
+        vs_bounds=(200, 4800), elastic_from_vs=inv.brocher_elastic,
+    )[0]
+    vp, rho = inv.brocher_elastic(chain[:-1, 3, :])
+    np.testing.assert_allclose(chain[:-1, 2, :], vp)
+    np.testing.assert_allclose(chain[:-1, 1, :], rho)
+    assert np.all(chain[-1, :, :] == model[-1][:, None])          # half-space untouched
+    assert np.ptp(chain[0, 3]) > 0                                # Vs actually sampled
+    vp, rho = inv.brocher_elastic([1000.0, 3500.0])                # known Brocher values
+    np.testing.assert_allclose(vp, [2458.2, 5956.8], atol=1)  # eq. 9 evaluated by hand
+    assert 1900 < rho[0] < 2300 and 2600 < rho[1] < 2800
