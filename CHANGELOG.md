@@ -8,6 +8,17 @@
   prior of `starting_model`, and a `diagnostics` dict with tuned steps and
   per-move acceptance.
 - Add a converged four-chain synthetic example and a Vs-depth posterior heat map.
+- Explicit uniform Vs prior (`vs_bounds`) independent of the starting model, and
+  `vary_thickness=False` for the fixed-geometry minimum-structure parameterization
+  of Crawford et al. (1991).
+- `invert_occam`: Occam's inversion (Constable et al. 1987) in ln Vs / ln compliance
+  with a damped, monotone second phase; an independent cross-check of the sampler.
+- `compliance_kernels` and `resample_model`: numerical Vs sensitivity kernels on an
+  interface-exact slicing of the model.
+- Tests: the forward model is checked against an independent Aki & Richards
+  propagator (agreement ~1e-6), plus kernels, Occam and the new sampler options.
+- Deep-crust synthetic example (14 layers to 13 km, 3.5-18.5 mHz, 4200 m water)
+  with prior-versus-posterior resolution analysis.
 
 ## 2.1.0
 
