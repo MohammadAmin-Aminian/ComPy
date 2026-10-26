@@ -149,3 +149,31 @@ def plot_smooth(data, window_length, polyorder, **kwargs):
     if width <= polyorder:
         return values.copy()
     return savgol_filter(values, width, polyorder, **kwargs)
+
+
+def legacy_wave_attraction_correction(freq, depth, coherence=1.0):
+    """Compliance missing from estimates made with ComPy before 2.0 (1/Pa).
+
+    Before 2.0, the wave-attraction term (gravitational acceleration of the
+    passing water mass per unit pressure, 2*pi*(G/g)*exp(-kH)*cosh(kH)) was
+    added to the displacement/pressure ratio before the free-air factor
+    omega**2/(omega**2 + 2g/R) was applied, so it entered multiplied by
+    omega**2 and was effectively dropped. Version 2.0 adds it in
+    acceleration/pressure units. The difference is largest at low frequency
+    (tens of per cent near 7 mHz at 3 km water depth). Add the returned value
+    to a pre-2.0 normalized compliance to obtain the 2.0 estimator; pass the
+    amplitude coherence used in that estimate (scalar or per frequency).
+    """
+    freq = np.asarray(freq, dtype=float)
+    depth = positive(depth, "depth")
+    coherence = np.asarray(coherence, dtype=float)
+    if np.any(~np.isfinite(freq)) or np.any(freq <= 0):
+        raise ValueError("frequencies must be finite and positive")
+    if np.any(~np.isfinite(coherence)) or np.any(coherence < 0) or np.any(coherence > 1):
+        raise ValueError("coherence must lie in [0, 1]")
+    omega2 = (2 * np.pi * freq) ** 2
+    k = wavenumber(2 * np.pi * freq, depth)
+    kh = k * depth
+    pa = 2 * np.pi * (6.6743e-11 / 9.8) * (1 + np.exp(-2 * kh)) / 2
+    # new - old = k*gamma*pa/(w2+c) - k*gamma*w2*pa/(w2+c)  (legacy unit mix)
+    return k * coherence * pa * (1 - omega2) / (omega2 + 3.07e-6)

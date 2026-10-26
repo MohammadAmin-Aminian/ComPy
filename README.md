@@ -405,6 +405,10 @@ The propagator is tested against an independent Aki & Richards solver
 - A thin low-velocity zone beneath a slow upper crust trades off against a
   smoother, slower upper crust; at 3 % errors the synthetic test cannot
   separate them.
+- Compliance measured with ComPy before 2.0 lacks the wave-attraction term
+  (see the changelog); add `compy_numerics.legacy_wave_attraction_correction`
+  before inverting such values. The missing term is largest at the lowest
+  frequencies and biases low-frequency compliance low, i.e. the deep crust fast.
 - Random-walk Metropolis is most efficient near 23–44 % acceptance (Roberts et
   al. 1997), not 70–90 %. Free-interface parameterizations remain slow to
   mix even with adjacent moves; check R̂ and ESS, or prefer the fixed grid

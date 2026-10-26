@@ -26,6 +26,13 @@
 - `interface_move="adjacent"`: move one interface at a time in free-interface runs.
 - `compy_diagnostics.rank_rhat_ess`: rank-normalized split R-hat and bulk ESS on
   NumPy/SciPy alone; the examples no longer need ArviZ for diagnostics.
+- `brocher_elastic` and `elastic_from_vs`: optionally tie Vp and density to Vs
+  (Brocher 2005), as in Zheng et al. (2024); Zha & Webb (2016) used a regional relation.
+- `legacy_wave_attraction_correction`: converts compliance estimated with ComPy before
+  2.0 to the 2.0 estimator. The legacy code added the wave-attraction term
+  (acceleration/pressure) to displacement/pressure before the free-air factor, so the
+  term was effectively dropped; published values are low by up to ~25-30 % near 7 mHz
+  at 2.9 km water depth (RR52) and ~11 % at 4.1 km (RR50), decreasing with frequency.
 
 ## 2.1.0
 
