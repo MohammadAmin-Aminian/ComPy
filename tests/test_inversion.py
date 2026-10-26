@@ -364,3 +364,47 @@ def test_brocher_coupling_keeps_vp_and_density_tied_to_vs(problem):
     vp, rho = inv.brocher_elastic([1000.0, 3500.0])                # known Brocher values
     np.testing.assert_allclose(vp, [2458.2, 5956.8], atol=1)  # eq. 9 evaluated by hand
     assert 1900 < rho[0] < 2300 and 2600 < rho[1] < 2800
+
+
+def _tempered(problem, **kw):
+    model, f, data = problem
+    start = model.copy()
+    start[:-1, 3] = [1200.0, 3000.0]
+    args = dict(s=0.03 * data, temperatures=(1.0, 3.0), n_ensembles=2, adapt_until=60,
+                segment=10, rounds=6, burn_rounds=1, sigma_v=80.0, alpha=0.0, seed=3,
+                processes=1, vs_bounds=([500.0, 2000.0], [2900.0, 4400.0]), vary_thickness=False)
+    args.update(kw)
+    return model, f, data, inv.invert_tempered(data, f, 4000, model, [model, start], **args)
+
+
+def test_tempering_keeps_cold_chain_bookkeeping_consistent(problem):
+    model, f, data, out = _tempered(problem)
+    assert out["chain"].shape == (2, 3, 4, 50)
+    assert out["predictions"].shape == (2, 50, 4) and out["chi2"].shape == (2, 50)
+    vs = out["chain"][:, :-1, 3, :]
+    assert np.all(vs[:, 0] >= 500) and np.all(vs[:, 0] <= 2900)
+    assert np.all(vs[:, 1] >= 2000) and np.all(vs[:, 1] <= 4400)
+    np.testing.assert_equal(out["chain"][:, :, :3, :], np.broadcast_to(model[None, :, :3, None],
+                                                                        out["chain"][:, :, :3, :].shape))
+    for e, k in ((0, 0), (1, 17), (1, 49)):
+        pred = inv.calc_norm_compliance(4000, f, out["chain"][e, :, :, k])
+        np.testing.assert_allclose(out["predictions"][e, k], pred, rtol=1e-12)
+        np.testing.assert_allclose(out["chi2"][e, k], np.sum(((data - pred) / (0.03 * data)) ** 2),
+                                   rtol=1e-9)
+    assert out["swap_acceptance"].shape == (1,) and 0 <= out["swap_acceptance"][0] <= 1
+    assert len(out["sigma_v"]) == 2
+
+
+def test_tempering_single_temperature_and_covariance_input(problem):
+    model, f, data = problem
+    cov = np.diag((0.03 * data) ** 2)
+    _, _, _, a = _tempered(problem, temperatures=(1.0,))
+    _, _, _, b = _tempered(problem, temperatures=(1.0,), s=None, data_covariance=cov)
+    assert a["swap_acceptance"].shape == (0,)
+    np.testing.assert_allclose(a["chi2"], b["chi2"], rtol=1e-9)  # same draws, same chi-square
+    with pytest.raises(ValueError):
+        _tempered(problem, temperatures=(2.0, 4.0))
+    with pytest.raises(ValueError):
+        _tempered(problem, data_covariance=cov)  # both s and covariance
+    with pytest.raises(ValueError):
+        _tempered(problem, burn_rounds=6)

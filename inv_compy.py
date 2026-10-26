@@ -1750,6 +1750,143 @@ def invert_occam(
     )
 
 
+def _tempered_segment(job):
+    """Advance one replica of ``invert_tempered`` (module level so it pickles)."""
+    data, f, depth_s, start, s, cov, t, state, alpha, sv, sh, n, seed, adapt, kw = job
+    info = {}
+    chain, _, _, misfits, pred, _, rate = _inversion(
+        data, f, depth_s, start, None if s is None else s * np.sqrt(t), 3, sv, sh, n + 1,
+        alpha, "RR38", seed, True, False, adapt_until=adapt, initial_state=state,
+        diagnostics=info, data_covariance=None if cov is None else cov * t, **kw,
+    )
+    alphas = info["alpha"][1:] if "alpha" in info else np.full(n, float(alpha))
+    # Sample 0 repeats the incoming state; chi-square is reported at T = 1.
+    return (chain[:, :, 1:], pred[1:], misfits[0, 1:] ** 2 * t, alphas,
+            info["sigma_v"], info["sigma_h"], rate)
+
+
+def invert_tempered(
+    Data,
+    f,
+    depth_s,
+    starting_model,
+    initial_states,
+    *,
+    s=None,
+    data_covariance=None,
+    temperatures=(1.0, 2.0, 4.0, 8.0, 16.0),
+    n_ensembles=4,
+    adapt_until=8000,
+    segment=200,
+    rounds=200,
+    burn_rounds=30,
+    sigma_v=100.0,
+    sigma_h=50.0,
+    alpha=0.25,
+    seed=0,
+    processes=None,
+    **sampler_kw,
+):
+    """Parallel tempering (replica exchange) around the Metropolis sampler.
+
+    Shallow compliance posteriors can be multimodal: e.g. slow-over-fast and
+    fast-over-slow layering below the resolution depth fit equally well, and
+    single random-walk chains rarely cross between them (high R-hat). Each of
+    ``n_ensembles`` independent ensembles runs one replica per temperature on
+    likelihood**(1/T) (for a Gaussian likelihood: uncertainties times sqrt(T),
+    covariance times T) with the prior unchanged, and swaps adjacent replicas
+    after every ``segment`` iterations with the replica-exchange acceptance
+    (Geyer 1991; Sambridge 2014). The T = 1 replicas then sample the posterior,
+    and the independent ensembles give the R-hat/ESS diagnostics.
+
+    Each replica is first tuned for ``adapt_until`` iterations at its own
+    temperature; step sizes then stay frozen, so every later segment is an
+    ordinary Metropolis kernel. ``initial_states`` is a list of models;
+    ensemble e at temperature slot j starts from entry (e + j) mod len.
+    ``sampler_kw`` is passed to the sampler (vs_bounds, vary_thickness,
+    alpha_bounds, elastic_from_vs, ...); the first ``burn_rounds`` rounds after
+    tuning are discarded. ``processes`` sets the worker pool (1: serial).
+
+    Returns a dict: ``chain`` (ensembles, rows, 4, draws) of the T = 1
+    replicas, ``predictions``, ``chi2`` (at T = 1), ``alpha``,
+    ``swap_acceptance`` per adjacent pair, ``temperatures`` and the tuned
+    ``sigma_v``/``sigma_h`` per temperature slot.
+    """
+    temps = np.asarray(temperatures, float)
+    if temps.ndim != 1 or temps.size < 1 or temps[0] != 1.0 or np.any(np.diff(temps) <= 0):
+        raise ValueError("temperatures must increase strictly from 1.0")
+    if (s is None) == (data_covariance is None):
+        raise ValueError("give exactly one of s or data_covariance")
+    for name, value in (("n_ensembles", n_ensembles), ("segment", segment), ("rounds", rounds)):
+        integer(value, name)
+    if not 0 <= burn_rounds < rounds:
+        raise ValueError("burn_rounds must lie in [0, rounds)")
+    states = [_validate_model(m).copy() for m in initial_states]
+    if not states:
+        raise ValueError("initial_states must contain at least one model")
+    data, f = np.asarray(Data, float), np.asarray(f, float)
+    s = None if s is None else np.broadcast_to(np.asarray(s, float), data.shape).copy()
+    cov = None if data_covariance is None else np.asarray(data_covariance, float)
+    start = _validate_model(starting_model)
+    reps = [(e, j) for e in range(n_ensembles) for j in range(len(temps))]
+    rng = np.random.default_rng(seed)
+
+    def job(r, state, alpha_r, sv, sh, n, adapt):
+        return (data, f, depth_s, start, s, cov, temps[r[1]], state, alpha_r, sv, sh, n,
+                int(rng.integers(2**31)), adapt, sampler_kw)
+
+    if processes == 1:
+        pool, run = None, lambda jobs: [_tempered_segment(j) for j in jobs]
+    else:
+        from multiprocessing import Pool
+
+        pool = Pool(processes)
+        run = lambda jobs: pool.map(_tempered_segment, jobs)  # noqa: E731
+    try:
+        out = run([job(r, states[(r[0] + r[1]) % len(states)], alpha, sigma_v, sigma_h,
+                       max(adapt_until, 1), adapt_until) for r in reps])
+        cur = {r: o[0][:, :, -1].copy() for r, o in zip(reps, out)}
+        alph = {r: float(o[3][-1]) for r, o in zip(reps, out)}
+        chi2 = {r: float(o[2][-1]) for r, o in zip(reps, out)}
+        sv = {r: o[4] for r, o in zip(reps, out)}  # tied to the temperature slot
+        sh = {r: o[5] for r, o in zip(reps, out)}
+        keep = [dict(chain=[], pred=[], chi2=[], alpha=[]) for _ in range(n_ensembles)]
+        tried, swapped = np.zeros(len(temps) - 1), np.zeros(len(temps) - 1)
+        for rnd in range(rounds):
+            out = run([job(r, cur[r], alph[r], sv[r], sh[r], segment, 0) for r in reps])
+            for r, o in zip(reps, out):
+                cur[r], alph[r], chi2[r] = o[0][:, :, -1].copy(), float(o[3][-1]), float(o[2][-1])
+                if r[1] == 0 and rnd >= burn_rounds:
+                    k = keep[r[0]]
+                    k["chain"].append(o[0]); k["pred"].append(o[1])
+                    k["chi2"].append(o[2]); k["alpha"].append(o[3])
+            for e in range(n_ensembles):  # alternate even and odd adjacent pairs
+                for j in range(rnd % 2, len(temps) - 1, 2):
+                    a, b = (e, j), (e, j + 1)
+                    log_acc = (chi2[a] - chi2[b]) * (0.5 / temps[j] - 0.5 / temps[j + 1])
+                    tried[j] += 1
+                    if np.log(max(rng.random(), np.finfo(float).tiny)) < log_acc:
+                        swapped[j] += 1
+                        for d in (cur, alph, chi2):
+                            d[a], d[b] = d[b], d[a]
+    finally:
+        if pool is not None:
+            pool.close()
+            pool.join()
+    with np.errstate(invalid="ignore"):
+        swap_rate = swapped / tried
+    return dict(
+        chain=np.stack([np.concatenate(k["chain"], axis=2) for k in keep]),
+        predictions=np.stack([np.concatenate(k["pred"]) for k in keep]),
+        chi2=np.stack([np.concatenate(k["chi2"]) for k in keep]),
+        alpha=np.stack([np.concatenate(k["alpha"]) for k in keep]),
+        swap_acceptance=swap_rate,
+        temperatures=temps,
+        sigma_v=[sv[(0, j)] for j in range(len(temps))],
+        sigma_h=[sh[(0, j)] for j in range(len(temps))],
+    )
+
+
 # %%
 def plot_inversion_v2(
     starting_model,

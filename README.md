@@ -389,6 +389,7 @@ unchanged and reproduces earlier chains draw for draw.
 | `data_covariance` | Correlated errors, e.g. a pressure-gain error common to all frequencies |
 | `interface_move="adjacent"` | Move one interface at a time in free-interface runs |
 | `invert_occam` | Occam minimum-structure inversion (Constable et al. 1987) as a cross-check |
+| `invert_tempered` | Parallel tempering for multimodal posteriors (Geyer 1991; Sambridge 2014) |
 | `compliance_kernels`, `resample_model` | Numerical Vs sensitivity kernels on an interface-exact slicing |
 | `compy_diagnostics.rank_rhat_ess` | Rank-normalized split R̂ and bulk ESS without ArviZ |
 
@@ -413,6 +414,10 @@ The propagator is tested against an independent Aki & Richards solver
   al. 1997), not 70–90 %. Free-interface parameterizations remain slow to
   mix even with adjacent moves; check R̂ and ESS, or prefer the fixed grid
   with `alpha_bounds`.
+- Above the resolution depth the posterior can be multimodal: slow-over-fast
+  and fast-over-slow layering may fit equally well (RR50, 4.1 km water). Single
+  chains then stick in one mode (R̂ well above 1); `invert_tempered` swaps
+  states with chains run on a flattened likelihood so both modes are sampled.
 
 ```bash
 python _Example/deep_crust_inversion.py --output deep-crust   # ~25 min, 2 cores

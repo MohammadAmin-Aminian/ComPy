@@ -33,6 +33,9 @@
   (acceleration/pressure) to displacement/pressure before the free-air factor, so the
   term was effectively dropped; published values are low by up to ~25-30 % near 7 mHz
   at 2.9 km water depth (RR52) and ~11 % at 4.1 km (RR50), decreasing with frequency.
+- `invert_tempered`: parallel tempering (replica exchange) around the sampler, with
+  independent ensembles for R-hat. For posteriors where single chains do not mix between
+  equally good shallow layerings when the top kilometre is below resolution.
 
 ## 2.1.0
 
