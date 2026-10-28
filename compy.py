@@ -22,6 +22,8 @@ from compy_streams import (
 
 __version__ = "2.2.0"
 
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
 import tiskitpy as tiskit
@@ -318,14 +320,21 @@ def remove_coherent_noise(
                     **extra,
                 )
                 out = cleaner.apply((vertical + noise).copy(), set_dtype=False)
-                z = out.select(component="Z")[0]
+                candidate = out.select(component="Z")[0]
+                if not np.all(np.isfinite(candidate.data)):
+                    raise ValueError("non-finite cleaned samples")
+                z = candidate
                 break
             except Exception as exc:
                 error = exc
         if z is None:
-            raise RuntimeError(
-                f"coherent-noise removal failed in window {i} starting {t0}"
-            ) from error
+            # Typically a window almost entirely inside event spans: keep the
+            # vertical uncleaned so later quality gates decide on its use.
+            warnings.warn(
+                f"coherent-noise removal failed in window {i} starting {t0} "
+                f"({error!r}); vertical left uncleaned"
+            )
+            z = vertical[0].copy()
         z.stats.location = vertical[0].stats.location
         z.stats.channel = vertical[0].stats.channel
         cleaned.append(z)
