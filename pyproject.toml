@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "seafloor-compy"
-version = "2.1.0"
+version = "2.2.0"
 description = "Seafloor compliance processing, pressure calibration and layered elastic inversion"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -22,7 +22,7 @@ Repository = "https://github.com/MohammadAmin-Aminian/ComPy"
 Publication = "https://doi.org/10.1093/gji/ggaf253"
 
 [tool.setuptools]
-py-modules = ["compy", "inv_compy", "Pressure_calibration", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics"]
+py-modules = ["compy", "inv_compy", "Pressure_calibration", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

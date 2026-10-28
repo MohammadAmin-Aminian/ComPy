@@ -23,6 +23,9 @@ import obspy
 import tiskitpy as tiskit
 from disba import PhaseDispersion
 
+#: Seawater density [kg/m³] used to normalize measured P/a by rho*h (v1 value).
+WATER_DENSITY = 1028.0
+
 
 def calculate_spectral_ratio(
     stream,
@@ -38,6 +41,8 @@ def calculate_spectral_ratio(
     client=None,
     nseg=512,
     velocity_model=None,
+    water_density=WATER_DENSITY,
+    return_details=False,
 ):
     """Estimate pressure gain from response-corrected teleseismic P/a ratios.
 
@@ -45,6 +50,14 @@ def calculate_spectral_ratio(
     Coherence thresholds here are magnitude-squared coherence, as in v1.
     Each event is processed independently; incomplete/low-coherence events
     are excluded and an empty accepted set raises ValueError.
+
+    The gain is proportional to ``water_density`` because measured P/a is
+    normalized by rho*h before fitting the dimensionless theory.
+
+    Args:
+        return_details (bool): If True, return a dict with the gain fitted to
+            the median ratio (``gain``), per-event gains, their standard
+            deviation, accepted event start times and the band used.
     """
     from compy_numerics import integer
     from compy_processing import channel_pair, spectra
@@ -78,7 +91,7 @@ def calculate_spectral_ratio(
     start_times = list(event_spans.start_times)
     if not start_times:
         raise ValueError("no earthquake windows were found")
-    ratios, coherences = [], []
+    ratios, coherences, accepted_starts = [], [], []
     for start in start_times:
         event = (
             (stream.select(id=z.id) + stream.select(id=p.id))
@@ -114,8 +127,9 @@ def calculate_spectral_ratio(
             continue
         ratio = np.zeros_like(f)
         np.divide(pp, aa, out=ratio, where=aa > 0)
-        ratios.append(np.sqrt(ratio) / (1028 * depth))
+        ratios.append(np.sqrt(ratio) / (water_density * depth))
         coherences.append(coherence)
+        accepted_starts.append(start)
     if not ratios:
         raise ValueError("no earthquake windows passed calibration quality thresholds")
     measured = np.median(ratios, axis=0)
@@ -150,6 +164,20 @@ def calculate_spectral_ratio(
         axes[1].semilogx(f[band], measured[band] * gain, label="Calibrated")
         axes[1].set(xlabel="Frequency [Hz]", ylabel="P/a / ρh")
         axes[1].legend()
+    if return_details:
+        event_gains = np.array([grid_search(r[band], target) for r in ratios])
+        return {
+            "gain": gain,
+            "event_gains": event_gains,
+            "gain_std": float(np.std(event_gains, ddof=1)) if len(ratios) > 1 else None,
+            "event_starts": accepted_starts,
+            "band": (float(f[band][0]), float(f[band][-1])),
+            "depth": depth,
+            "frequencies": f,
+            "measured_ratio": measured,
+            "theoretical_ratio": target,
+            "coherences": np.asarray(coherences),
+        }
     return gain
 
 

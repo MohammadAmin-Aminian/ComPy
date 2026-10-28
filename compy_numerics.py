@@ -9,6 +9,18 @@ import operator
 import numpy as np
 from scipy.optimize import brentq
 
+#: Gravitational acceleration [m/s²] used by the gravity-wave dispersion solver.
+GRAVITY = 9.79329
+#: Newtonian gravitational constant [m³/(kg s²)] (CODATA 2018).
+GRAVITATIONAL_CONSTANT = 6.6743e-11
+#: Free-air gravity gradient 2g/R [1/s²]; apparent acceleration per metre of
+#: vertical seafloor displacement (Crawford et al. 1998).
+FREE_AIR_GRADIENT = 3.07e-6
+#: Equivalent number of independent averages contributed by each Hann window
+#: at 50 % overlap, relative to non-overlapping segments (Welch 1967, eq. 17
+#: with c(0.5) = 0.167): 1 / (1 + 2 c²) = 0.947.
+HANN_HALF_OVERLAP_DOF = 1 / (1 + 2 * 0.167**2)
+
 
 def positive(value, name):
     value = float(value)
@@ -62,7 +74,7 @@ def roughness(vs, order=2):
     return float(np.sum(values * values))
 
 
-def wavenumber(omega, depth, gravity=9.79329):
+def wavenumber(omega, depth, gravity=GRAVITY):
     """Solve omega**2 = g*k*tanh(k*depth), including DC and scalar inputs.
 
     A dimensionless bracketed solve avoids the previous first-bin assumption
@@ -103,6 +115,22 @@ def sliding_window(a, ws, ss=None, hann=True):
     if hann:
         out = out * np.hanning(ws)
     return out, len(out)
+
+
+def welch_averages(n_samples, nseg):
+    """Effective independent averages of a 50 %-overlap Hann Welch estimate.
+
+    Args:
+        n_samples (int): Samples in the record.
+        nseg (int): Samples per Welch segment.
+
+    Returns:
+        float: Segment count multiplied by ``HANN_HALF_OVERLAP_DOF``.
+    """
+    n_samples, nseg = integer(n_samples, "n_samples"), integer(nseg, "nseg", 2)
+    if n_samples < nseg:
+        raise ValueError("record is shorter than one Welch segment")
+    return (1 + (n_samples - nseg) // (nseg - nseg // 2)) * HANN_HALF_OVERLAP_DOF
 
 
 def compliance_uncertainty(compliance, coherence, n_windows):
