@@ -269,3 +269,21 @@ def test_remove_coherent_noise_reduces_tilt_leakage():
         cleaned.select(channel="BDH")[0].data,
         st.select(channel="BDH")[0].data[: len(z)],
     )
+
+
+def test_remove_coherent_noise_accepts_spans_crossing_window_edges():
+    import tiskitpy
+
+    rng = np.random.default_rng(10)
+    n = 2 * 86400
+    st = make_stream(("BHZ", "BH1", "BH2", "BDH"), n)
+    for tr in st:
+        tr.data = rng.normal(size=n)
+    t0 = st[0].stats.starttime
+    spans = tiskitpy.TimeSpans(
+        spans=[(t0 + 86400 - 1800, t0 + 86400 + 1800), (t0 + 3600, t0 + 7200)]
+    )
+    cleaned = compy.remove_coherent_noise(
+        st, 24, avoid_spans=spans, spectral_window_s=1024, cover_all=True
+    )
+    assert len(cleaned.select(component="Z")[0]) == n

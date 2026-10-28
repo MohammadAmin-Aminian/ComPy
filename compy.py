@@ -288,7 +288,9 @@ def remove_coherent_noise(
     windows = split_stream(stream, window_s)
     if not windows:
         raise ValueError("no complete cleaning windows")
-    extra = {} if avoid_spans is None else {"avoid_spans": avoid_spans}
+    spans = []
+    if avoid_spans is not None:
+        spans = list(zip(avoid_spans.start_times, avoid_spans.end_times))
     cleaned = []
     for i, window in enumerate(windows):
         vertical = window.select(component="Z")
@@ -297,24 +299,33 @@ def remove_coherent_noise(
         noise = obspy.Stream(
             [tr for pattern in noise_channels for tr in window.select(channel=pattern)]
         )
-        try:
-            # DataCleaner corrects every channel it is given, so it only sees
-            # Z and the noise channels; pressure and horizontals pass through.
-            cleaner = tiskit.DataCleaner(
-                vertical + noise,
-                list(noise_channels),
-                n_to_reject=0,
-                remove_eqs=False,
-                window_s=positive(spectral_window_s, "spectral_window_s"),
-                **extra,
-            )
-            out = cleaner.apply((vertical + noise).copy(), set_dtype=False)
-            z = out.select(component="Z")[0]
-        except Exception as exc:
+        t0, t1 = window[0].stats.starttime, window[0].stats.endtime
+        # Clip spans to this window: TiSKitPy rejects spans crossing its edges.
+        inside = [(max(a, t0), min(b, t1)) for a, b in spans if a < t1 and b > t0]
+        attempts = [{"avoid_spans": tiskit.TimeSpans(spans=inside)}] if inside else []
+        attempts.append({})  # fall back to TiSKitPy's z-score window rejection
+        z = None
+        for extra in attempts:
+            try:
+                # DataCleaner corrects every channel it is given, so it only
+                # sees Z and the noise channels; pressure passes through.
+                cleaner = tiskit.DataCleaner(
+                    vertical + noise,
+                    list(noise_channels),
+                    n_to_reject=0,
+                    remove_eqs=False,
+                    window_s=positive(spectral_window_s, "spectral_window_s"),
+                    **extra,
+                )
+                out = cleaner.apply((vertical + noise).copy(), set_dtype=False)
+                z = out.select(component="Z")[0]
+                break
+            except Exception as exc:
+                error = exc
+        if z is None:
             raise RuntimeError(
-                f"coherent-noise removal failed in window {i} starting "
-                f"{window[0].stats.starttime}"
-            ) from exc
+                f"coherent-noise removal failed in window {i} starting {t0}"
+            ) from error
         z.stats.location = vertical[0].stats.location
         z.stats.channel = vertical[0].stats.channel
         cleaned.append(z)

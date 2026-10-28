@@ -1,4 +1,4 @@
-# ComPy 2.1
+# ComPy 2.2
 
 **Seafloor compliance processing, pressure-gauge calibration and layered elastic inversion.**
 
@@ -125,6 +125,35 @@ once. Instrument-response removal is separate from pressure calibration.
 7. Supply defensible observation uncertainties and a starting model to inversion.
 8. Inspect multiple chains, burn-in, mixing and model sensitivity before
    reporting a scientific result.
+
+### Compliance with the 2.2 tools
+
+Version 2.2 adds an unattended chain that follows Aminian et al. (2025, §4).
+The audit behind it is in [docs/AUDIT_2026-10.md](docs/AUDIT_2026-10.md).
+
+```python
+import compy, compy_cleaning as cleaning
+from compy_processing import GJI2025, coherent_band, stacked_compliance
+
+rotated = cleaning.rotate_smoothly(
+    st, hour_centres, angles, azimuths
+)  # hourly CleanRotator angles
+spans = cleaning.sta_lta_spans(
+    rotated.select(component="Z")[0]
+)  # plus TimeSpans.from_eqs
+cleaned = compy.remove_coherent_noise(rotated, 24, avoid_spans=..., cover_all=True)
+pair = cleaned.select(channel="BHZ") + cleaned.select(channel="BDH")
+windows = compy.split_stream(pair, 2100)  # 35-min, non-overlapping
+result = stacked_compliance(
+    windows, depth, gain, band=(0.007, 0.019), criteria=GJI2025, nseg=1024
+)
+result.compliance, result.uncertainty, result.phase_deg, result.n_windows
+```
+
+`stacked_compliance` returns k·|S_pz|/S_pp from cross-spectra stacked over
+the windows, with the gravity correction applied, together with the Bendat &
+Piersol error. The legacy `Calculate_Compliance*` functions keep their
+historical gates.
 
 The files in [`_Example/`](./_Example/) show command-line workflows and a runnable
 offline synthetic example. Paths and network/station selection must match your

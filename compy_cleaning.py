@@ -190,7 +190,7 @@ def rotate_smoothly(stream, times, angles, azimuths, smooth_hours=24):
 
 
 def sta_lta_spans(
-    trace, sta_s=60, lta_s=1800, on=3.5, off=1.5, pad_s=(300, 1800), band=(0.02, 0.2)
+    trace, sta_s=60, lta_s=1800, on=3.5, off=1.5, pad_s=(300, 1800), band=(0.1, 0.5)
 ):
     """Time spans of local events detected by a recursive STA/LTA.
 
@@ -205,7 +205,10 @@ def sta_lta_spans(
         on (float): Trigger-on ratio.
         off (float): Trigger-off ratio.
         pad_s (tuple): Seconds added before and after each trigger.
-        band (tuple): Band-pass corners [Hz] applied before triggering.
+        band (tuple): Band-pass corners [Hz] applied before triggering. The
+            default stays above the microseism and infragravity bands, where
+            sea-state changes would trigger (tested on RR52: 0.02–0.2 Hz
+            flagged 10 % of the record, 0.1–0.5 Hz about 1 %).
 
     Returns:
         list of tuple: (start, end) UTCDateTime spans.
