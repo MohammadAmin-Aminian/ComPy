@@ -263,3 +263,71 @@ def test_posterior_save_roundtrip(tmp_path):
 
     summary = json.loads((tmp_path / "run.json").read_text())
     assert summary["model"]["names"] == model.names
+
+
+def test_vs_kernels_integrate_to_uniform_change():
+    model = np.array([[300.0, 2000, 1600, 400], [1500.0, 2500, 4500, 2400],
+                      [3000.0, 2900, 6500, 3600], [0.0, 3300, 8000, 4500]])  # fmt: skip
+    f = np.array([0.006, 0.012])
+    z, k = ci.vs_kernels(4000.0, f, model, dz=100.0, max_depth=40000.0)
+    total = (k * np.gradient(z)).sum(axis=1) / 1000.0
+    scaled = model.copy()
+    scaled[:, 2:4] *= 1.01
+    direct = np.log(ci.forward(4000.0, f, scaled) / ci.forward(4000.0, f, model)) / 0.01
+    np.testing.assert_allclose(total, direct, rtol=0.03)
+    assert np.all(total < 0)
+    z90 = [ci.sensitivity_depth(z, row) for row in k]
+    assert z90[0] > z90[1]  # lower frequency senses deeper
+
+
+def test_slice_model_drops_sliver_slices():
+    model = np.array([[6900.000000000002, 2900, 6500, 3600], [0.0, 3300, 8000, 4500]])
+    fine, mid = ci.slice_model(model, 50.0, 8000.0)
+    assert fine[:-1, 0].min() > 1.0
+    assert fine[:-1, 0].sum() == pytest.approx(8000.0)
+
+
+def test_reference_fixes_vp_and_density():
+    ref = np.array([[1000.0, 2400, 4700, 2540], [6000.0, 2900, 6600, 3700], [0.0, 3300, 8100, 4500]])
+    model = ci.CrustalModel(moho_depth=7000.0, sediment_max=0.0, reference=ref)
+    theta = np.array([2000.0] * model.n_crust + [4400.0])
+    layers = model.layers(theta)
+    mid = np.cumsum(layers[:-1, 0]) - layers[:-1, 0] / 2
+    np.testing.assert_allclose(layers[:-1, 2], np.where(mid < 1000, 4700, 6600))
+    np.testing.assert_allclose(layers[-1], [0.0, 3300, 8100, 4400])
+    f = np.array([0.008, 0.012])
+    data = ci.ComplianceData.build(f, ci.forward(4000.0, f, layers), 4000.0, floor_rel=0.02)
+    target = ci._Target(data, model, prior_only=False)
+    assert target(theta) is not None
+    assert target(np.r_[3500.0, theta[1:]]) is None  # Vp/Vs 4700/3500 < sqrt(2)
+
+
+def test_parallel_tempering_samples_bimodal_target():
+    # Two equal modes 40 sigma apart (log-density barrier 200): a single
+    # adaptive chain stays in one; the tempered ensemble visits both equally.
+    bounds = np.array([[-10.0, 10.0]])
+
+    def target(x):
+        if abs(x[0]) > 10:
+            return None
+        ll = np.logaddexp(-0.5 * ((x[0] - 6) / 0.3) ** 2, -0.5 * ((x[0] + 6) / 0.3) ** 2)
+        return float(ll), 0.0, x
+
+    single = ci.dram_chain(target, np.array([6.0]), bounds, n_iter=30000, n_burn=5000, seed=1)
+    assert np.mean(single["theta"][:, 0] > 0) == 1.0
+    pt = ci.dram_chain(target, np.array([6.0]), bounds, n_iter=40000, n_burn=5000, seed=1,
+                       temperatures=3.0 ** np.arange(7))  # fmt: skip
+    assert 0.4 < np.mean(pt["theta"][:, 0] > 0) < 0.6
+    assert np.std(np.abs(pt["theta"][:, 0])) == pytest.approx(0.3, rel=0.1)
+    assert np.all(pt["swap_acceptance"] > 0.1)
+
+
+def test_python_kernel_matches_compiled_kernel():
+    kernel = getattr(ci._eta_kernel, "py_func", None)
+    if kernel is None:
+        pytest.skip("Numba not installed: the Python kernel is the only one")
+    rng = np.random.default_rng(4)
+    model = random_model(rng)
+    fwd = ci.Forward(3000.0, np.array([0.006, 0.01, 0.016]))
+    args = [np.ascontiguousarray(model[:, i]) for i in range(4)]
+    np.testing.assert_allclose(kernel(fwd.k, fwd.omega, *args), fwd(model), rtol=1e-9)

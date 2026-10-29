@@ -1,4 +1,4 @@
-# ComPy 2.2
+# ComPy 2.3
 
 **Seafloor compliance processing, pressure-gauge calibration and layered elastic inversion.**
 
@@ -336,7 +336,45 @@ pressure–vertical coherence, and the ensemble of selected compliance curves wi
 a median summary. The dispersion between curves is a useful quality diagnostic;
 it is not automatically the uncertainty of the median or an independent sample count.
 
-### Forward model and inversion
+### Bayesian Vs inversion (2.3, `compy_inversion`)
+
+The recommended path from a compliance estimate to a shear-velocity model.
+It follows Zha & Webb (2016) for the parameterization and the sampler, and
+Aminian et al. (2025) for the CRUST1.0 Moho and the 5 % gain uncertainty.
+The method, the audit of the earlier inversion code and the validation are in
+[docs/INVERSION.md](docs/INVERSION.md).
+
+```python
+import compy_inversion as ci
+
+column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")   # CRUST1.0 files
+data = ci.ComplianceData.from_npz(
+    "RR52_compliance_compy.npz",      # stacked_compliance output (2.2)
+    subsets=monthly_estimates,        # (n_months, n_freqs), optional
+    gain_rel=0.05,                    # pressure-gain error, common to all f
+    floor_rel=0.01,                   # independent 1-D model error
+)
+model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
+post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000, thin=10)
+prior = ci.sample(data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000)
+print(post.summary()["max_rhat"], post.summary()["chi2"])
+vs_q = post.vs_quantiles(depths)      # (5 quantiles, len(depths)) in m/s
+post.save("RR52_main")                # .npz draws and .json summary
+```
+
+The pieces:
+
+- **Data.** `ComplianceData` holds a full covariance: the random error, the monthly scatter, a gain error shared by all frequencies, and a floor.
+- **Model.** `CrustalModel` is a Hamilton sediment of free thickness over crustal layers that double in thickness to the Moho, above a mantle half-space. Vp/Vs is 1.85 by default; alternatives are Brocher (2005) or Vp fixed from a reference.
+- **Sampler.** `sample` runs independent DRAM chains with a Gibbs-sampled smoothing weight; `temperatures=` adds parallel tempering.
+- **Results.** `Posterior` gives R-hat/ESS, the χ² and Vs-depth quantiles.
+- **Sensitivity.** `vs_kernels` and `sensitivity_depth` show which depths the data see.
+
+The forward model is the `raydep` propagator compiled with Numba if it is installed (`pip install numba`); this is about 140 times faster.
+Results for the eight YV stations are in
+[docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md).
+
+### Legacy forward model and inversion (`inv_compy`)
 
 ```python
 import numpy as np
@@ -388,7 +426,10 @@ rate counts proposals, excluding the initial state. `seed` controls a local RNG
 and does not reset NumPy's global generator.
 
 The Gaussian data term is `sum(((observed-predicted)/s)**2)`; roughness is the
-squared second-derivative energy on a fixed 1-m grid. The data term is a sum,
+squared second-derivative energy on a fixed 1-m grid. A unit Vs step has
+roughness 0.25 there, so `alpha=0.25` is a Gaussian prior on Vs jumps with a
+4 m/s standard deviation, far stiffer than any compliance data. Use
+`alpha_bounds` or `compy_inversion`. The data term is a sum,
 whereas the manuscript describes a mean chi-square: alpha values therefore
 need retuning rather than copying unchanged. The basic sampler bounds Vs to
 50–110% of its initial value. Beta uses 15–120% in shallow layers and 90–110%

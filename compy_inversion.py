@@ -175,6 +175,50 @@ def attraction_compliance(freqs, depth):
     return k * pa / ((2 * np.pi * f) ** 2 + FREE_AIR_GRADIENT)
 
 
+def slice_model(model, dz, max_depth):
+    """Split a layered model into slices of at most ``dz`` down to ``max_depth``.
+
+    Slice edges include every interface, so the sliced model is the same
+    Earth. The half-space is sliced too and kept below ``max_depth``.
+    Returns the sliced model and slice mid-depths [m].
+    """
+    model = np.asarray(model, float)
+    tops = np.concatenate([[0.0], np.cumsum(model[:-1, 0])])
+    grid = np.arange(0.0, max_depth, dz)
+    edges = np.unique(np.concatenate([grid, tops[tops < max_depth], [max_depth]]))
+    edges = edges[np.concatenate([[True], np.diff(edges) > 1e-6])]  # no sliver slices
+    mid = 0.5 * (edges[:-1] + edges[1:])
+    rows = model[np.searchsorted(tops, mid, side="right") - 1].copy()
+    rows[:, 0] = np.diff(edges)
+    return np.vstack([rows, model[-1]]), mid
+
+
+def vs_kernels(depth, freqs, model, *, dz=50.0, max_depth=20000.0, rel=0.01):
+    """Sensitivity d ln(eta) / d ln(Vs) per km of depth, at constant Vp/Vs.
+
+    Each slice of ``slice_model`` is perturbed by ``rel`` in Vs and Vp
+    together (density fixed), the coupling used by ``CrustalModel``. Sums of
+    ``K * dz / 1000`` over depth approximate the response to a uniform
+    relative change. Returns ``(z_mid, K)`` with K shaped (len(freqs), slices).
+    """
+    fine, mid = slice_model(model, dz, max_depth)
+    fwd = Forward(depth, freqs)
+    base = np.log(fwd(fine))
+    kernels = np.empty((len(base), len(mid)))
+    for j in range(len(mid)):
+        trial = fine.copy()
+        trial[j, 2:4] *= 1 + rel
+        kernels[:, j] = (np.log(fwd(trial)) - base) / (rel * fine[j, 0] / 1000.0)
+    return mid, kernels
+
+
+def sensitivity_depth(z, kernel, fraction=0.9):
+    """Depth above which ``fraction`` of the integrated |kernel| lies."""
+    w = np.abs(kernel) * np.gradient(z)
+    c = np.cumsum(w) / w.sum()
+    return float(np.interp(fraction, c, z))
+
+
 # --------------------------------------------------------------------------
 # Rock-physics relations
 # --------------------------------------------------------------------------
@@ -422,6 +466,11 @@ class CrustalModel:
             reproduces the freedom allowed by Aminian et al. (2025).
         vp_vs (float or None): Crust and mantle Vp/Vs; None uses
             ``brocher_vp``. Density follows ``christensen_shaw_density``.
+        reference (array or None): Layered model whose Vp and density, at
+            each crustal layer's mid-depth and in the half-space, replace the
+            ``vp_vs`` relation: the fixed-Vp choice of Crawford et al. (1991)
+            and Aminian et al. (2025, with CRUST1.0). Models with Vp/Vs below
+            sqrt(2) (negative Poisson ratio) are then outside the prior.
         roughness_order (int): Order of the Vs differences between crustal
             layers penalized by the smoothing prior.
         sigma_rough (tuple): Bounds [m/s] of the roughness scale; the
@@ -444,6 +493,7 @@ class CrustalModel:
     vp_vs: float | None = 1.85
     roughness_order: int = 2
     sigma_rough: tuple = (20.0, 3000.0)
+    reference: np.ndarray | None = None
 
     def __post_init__(self):
         positive(self.moho_depth, "moho_depth")
@@ -524,11 +574,19 @@ class CrustalModel:
             for t, a, b in zip(np.diff(edges), vp, vs):
                 rows.append((t, self.sediment_density, a, b))
         vs = self.crust_vs(theta)
-        vp, rho = self.elastic(vs)
-        for t, a, b, r in zip(np.diff(np.append(h, bottoms)), vp, vs, rho):
-            rows.append((t, r, a, b))
+        thick = np.diff(np.append(h, bottoms))
         vsm = theta[self._index["vs_mantle"]]
-        vpm, rhom = self.elastic(vsm)
+        if self.reference is None:
+            vp, rho = self.elastic(vs)
+            vpm, rhom = self.elastic(vsm)
+        else:
+            ref = np.asarray(self.reference, float)
+            tops = np.concatenate([[0.0], np.cumsum(ref[:-1, 0])])
+            row = ref[np.searchsorted(tops, bottoms - thick / 2, side="right") - 1]
+            vp, rho = row[:, 2], row[:, 1]
+            rhom, vpm = ref[-1, 1], ref[-1, 2]
+        for t, a, b, r in zip(thick, vp, vs, rho):
+            rows.append((t, r, a, b))
         rows.append((0.0, float(rhom), float(vpm), float(vsm)))
         return np.array(rows, float)
 
@@ -547,6 +605,8 @@ class CrustalModel:
 
     def settings(self):
         out = {k: v for k, v in asdict(self).items() if not callable(v)}
+        if self.reference is not None:
+            out["reference"] = np.asarray(self.reference).tolist()
         out.update(sediment_vs=getattr(self.sediment_vs, "__name__", "custom"),
                    sediment_vp=getattr(self.sediment_vp, "__name__", "custom"),
                    names=self.names, fixed_layers=self.fixed.tolist())  # fmt: skip
@@ -586,25 +646,128 @@ class _Target:
     def __call__(self, theta):
         if not self.model.in_bounds(theta):
             return None
+        layers = self.model.layers(theta)
+        if np.any(layers[:, 2] < math.sqrt(2) * layers[:, 3]):  # Poisson ratio < 0
+            return None
         try:
-            pred = self.forward(self.model.layers(theta))
+            pred = self.forward(layers)
         except ValueError:
             return None
         loglik = 0.0 if self.prior_only else -0.5 * self.data.chi2(pred)
         return loglik, self.model.roughness(theta), pred
 
 
+class _Dram:
+    """One replica of the delayed-rejection adaptive Metropolis sampler.
+
+    Targets exp(beta loglik(theta) - alpha R(theta) / 2) inside the support
+    of ``target``; see ``dram_chain`` for the algorithm.
+    """
+
+    def __init__(self, target, theta0, bounds, rng, *, beta, n_burn, n_rough, alpha_bounds,
+                 alpha0, adapt_start, adapt_every, target_acceptance, delayed_rejection,
+                 dr_scale, initial_scale):  # fmt: skip
+        self.target, self.rng, self.beta = target, rng, beta
+        self.n_burn, self.n_rough, self.alpha_bounds = n_burn, n_rough, alpha_bounds
+        self.adapt_start, self.adapt_every = adapt_start, adapt_every
+        self.target_acceptance, self.delayed_rejection = target_acceptance, delayed_rejection
+        self.dr_scale = dr_scale
+        self.x = np.array(theta0, float)
+        d = len(self.x)
+        width = bounds[:, 1] - bounds[:, 0]
+        width = np.where(width > 0, width, 1.0)
+        self._set_cov(np.diag((initial_scale * width) ** 2))
+        self.eps = np.diag((1e-4 * width) ** 2)
+        self.sd = 2.38**2 / d
+        self.log_scale = 0.0
+        self.history = np.empty((max(n_burn, 1), d))
+        self.window = [0, 0]  # accepted, tried since the last adaptation
+        self.tried = np.zeros(2)
+        self.taken = np.zeros(2)
+        state = target(self.x)
+        if state is None:
+            raise ValueError("theta0 lies outside the support of the target")
+        self.loglik, self.rough, self.pred = state
+        lo, hi = alpha_bounds
+        self.alpha = float(alpha0 if alpha0 is not None else math.sqrt(lo * hi))
+        self.lp = self.log_post(self.loglik, self.rough)
+
+    def _set_cov(self, cov):
+        self.cov = cov
+        self.chol = np.linalg.cholesky(cov)
+        self.chol_inv = np.linalg.inv(self.chol)
+
+    def log_post(self, loglik, rough):
+        return self.beta * loglik - 0.5 * self.alpha * rough
+
+    def step(self, it):
+        """One Metropolis (and delayed-rejection) step, alpha update and adaptation."""
+        rng, x, d = self.rng, self.x, len(self.x)
+        y1 = x + self.chol @ rng.standard_normal(d)
+        s1 = self.target(y1)
+        a1 = 0.0
+        if s1 is not None:
+            lp1 = self.log_post(s1[0], s1[1])
+            a1 = 1.0 if lp1 >= self.lp else math.exp(lp1 - self.lp)
+        stage = None
+        if rng.random() < a1:
+            stage, new = 0, (y1, s1, lp1)
+        elif self.delayed_rejection:
+            y2 = x + self.dr_scale * (self.chol @ rng.standard_normal(d))
+            s2 = self.target(y2)
+            if s2 is not None:
+                lp2 = self.log_post(s2[0], s2[1])
+                a21 = 0.0 if s1 is None else min(1.0, math.exp(min(lp1 - lp2, 0.0)))
+                if a21 < 1.0:
+                    u2 = self.chol_inv @ (y1 - y2)
+                    ux = self.chol_inv @ (y1 - x)
+                    log_a2 = (lp2 - self.lp - 0.5 * (u2 @ u2) + 0.5 * (ux @ ux)
+                              + math.log1p(-a21) - math.log1p(-a1))  # fmt: skip
+                    if math.log(max(rng.random(), 1e-300)) < log_a2:
+                        stage, new = 1, (y2, s2, lp2)
+        if it >= self.n_burn:
+            self.tried[0] += 1
+            self.tried[1] += stage != 0 and self.delayed_rejection
+            if stage is not None:
+                self.taken[stage] += 1
+        if stage is not None:
+            self.x, (self.loglik, self.rough, self.pred), self.lp = new[0], new[1], new[2]
+        if self.n_rough:
+            lo, hi = self.alpha_bounds
+            self.alpha = truncated_gamma(rng, 0.5 * self.n_rough, 0.5 * self.rough, lo, hi)
+            self.lp = self.log_post(self.loglik, self.rough)
+        if it < self.n_burn:  # adaptive proposal, frozen after burn-in
+            self.history[it] = self.x
+            self.window[0] += stage == 0
+            self.window[1] += 1
+            if it >= self.adapt_start and (it - self.adapt_start) % self.adapt_every == 0:
+                gain = (1 + (it - self.adapt_start) / self.adapt_every) ** -0.6
+                self.log_scale += 2 * gain * (self.window[0] / self.window[1] - self.target_acceptance)
+                self.window = [0, 0]
+                recent = self.history[it // 2:it + 1]
+                self._set_cov(math.exp(2 * self.log_scale) * self.sd
+                              * (np.cov(recent, rowvar=False) + self.eps))  # fmt: skip
+
+    def state(self):
+        return self.x, self.loglik, self.rough, self.pred, self.alpha
+
+    def set_state(self, state):
+        self.x, self.loglik, self.rough, self.pred, self.alpha = state
+        self.lp = self.log_post(self.loglik, self.rough)
+
+
 def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=0,
                alpha_bounds=(1.0, 1.0), alpha0=None, adapt_start=500, adapt_every=50,
                target_acceptance=0.234, delayed_rejection=True, dr_scale=0.1,
-               initial_scale=0.02):  # fmt: skip
+               initial_scale=0.02, temperatures=(1.0,), swap_every=10):  # fmt: skip
     """One chain of delayed-rejection adaptive Metropolis with Gibbs smoothing.
 
     The target density is exp(loglik(theta) - alpha R(theta) / 2) inside
-    ``bounds``. With ``n_rough`` > 0, alpha has the prior
+    the support of ``target``. With ``n_rough`` > 0, alpha has the prior
     alpha**(n_rough/2 - 1) on ``alpha_bounds`` (a Jeffreys prior times the
-    normalization of the Gaussian roughness prior) and is drawn from its
-    Gamma conditional after every Metropolis step.
+    normalization of the Gaussian roughness prior, ignoring the truncation
+    by the Vs bounds) and is drawn from its Gamma conditional after every
+    Metropolis step.
 
     The first-stage proposal is Gaussian with covariance lambda**2 (2.38**2/d)
     C, where C is the covariance of the second half of the chain so far
@@ -612,10 +775,17 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
     over-dispersed start) and lambda is tuned by Robbins-Monro towards
     ``target_acceptance`` (Andrieu & Thoms 2008). Both are updated every
     ``adapt_every`` iterations between ``adapt_start`` and ``n_burn``, then
-    frozen.
-    A rejected first stage is followed by a second, ``dr_scale`` times
-    smaller proposal accepted with the delayed-rejection probability of
+    frozen. A rejected first stage is followed by a second, ``dr_scale``
+    times smaller proposal accepted with the delayed-rejection probability of
     Tierney & Mira (1999), which keeps detailed balance (Haario et al. 2006).
+
+    With several ``temperatures`` (the first 1.0), the chain is a parallel
+    tempering ensemble (Geyer 1991; Sambridge 2014): replica k samples
+    loglik / T_k with the prior untempered, and every ``swap_every``
+    iterations adjacent replicas exchange states with probability
+    min(1, exp((1/T_i - 1/T_j)(loglik_j - loglik_i))). Only the T = 1
+    replica is retained. Use it when chains from different starts disagree
+    (high R-hat), e.g. with Vp fixed.
 
     Args:
         target (callable): theta -> (loglik, roughness, prediction) or None
@@ -626,88 +796,43 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
 
     Returns:
         dict of retained draws after ``n_burn``, every ``thin`` iterations:
-        ``theta``, ``alpha``, ``loglik``, ``roughness``, ``pred``; and the
-        acceptance rates of both stages after burn-in.
+        ``theta``, ``alpha``, ``loglik``, ``roughness``, ``pred``; the
+        acceptance rates of both stages after burn-in, the frozen
+        ``proposal_cov`` and the ``swap_acceptance`` of adjacent replicas.
     """
-    rng = np.random.default_rng(seed)
-    x = np.array(theta0, float)
-    d = len(x)
-    width = bounds[:, 1] - bounds[:, 0]
-    width = np.where(width > 0, width, 1.0)
-    cov = np.diag((initial_scale * width) ** 2)
-    chol = np.linalg.cholesky(cov)
-    chol_inv = np.linalg.inv(chol)
-    eps = np.diag((1e-4 * width) ** 2)
-    sd = 2.38**2 / d
-    log_scale = 0.0
-    history = np.empty((max(n_burn, 1), d))
-    window_taken = window_tried = 0
-    state = target(x)
-    if state is None:
-        raise ValueError("theta0 lies outside the support of the target")
-    loglik, rough, pred = state
-    lo_a, hi_a = alpha_bounds
-    alpha = float(alpha0 if alpha0 is not None else math.sqrt(lo_a * hi_a))
-
-    def log_post(ll, r):
-        return ll - 0.5 * alpha * r
-
-    lp = log_post(loglik, rough)
-    keep = []
-    tried = np.zeros(2)
-    taken = np.zeros(2)
-    for it in range(n_iter):
-        z = chol @ rng.standard_normal(d)
-        y1 = x + z
-        s1 = target(y1)
-        a1 = 0.0
-        if s1 is not None:
-            lp1 = log_post(s1[0], s1[1])
-            a1 = 1.0 if lp1 >= lp else math.exp(lp1 - lp)
-        stage = None
-        if rng.random() < a1:
-            stage, new = 0, (y1, s1, lp1)
-        elif delayed_rejection:
-            y2 = x + dr_scale * (chol @ rng.standard_normal(d))
-            s2 = target(y2)
-            if s2 is not None:
-                lp2 = log_post(s2[0], s2[1])
-                a21 = 0.0 if s1 is None else min(1.0, math.exp(min(lp1 - lp2, 0.0)))
-                if a21 < 1.0:
-                    u2 = chol_inv @ (y1 - y2)
-                    ux = chol_inv @ (y1 - x)
-                    log_a2 = (lp2 - lp - 0.5 * (u2 @ u2) + 0.5 * (ux @ ux)
-                              + math.log1p(-a21) - math.log1p(-a1))  # fmt: skip
-                    if math.log(max(rng.random(), 1e-300)) < log_a2:
-                        stage, new = 1, (y2, s2, lp2)
-        if it >= n_burn:
-            tried[0] += 1
-            tried[1] += stage != 0 and delayed_rejection
-            if stage is not None:
-                taken[stage] += 1
-        if stage is not None:
-            x, (loglik, rough, pred), lp = new[0], new[1], new[2]
-        if n_rough:
-            alpha = truncated_gamma(rng, 0.5 * n_rough, 0.5 * rough, lo_a, hi_a)
-            lp = log_post(loglik, rough)
-        if it < n_burn:  # adaptive proposal, frozen after burn-in
-            history[it] = x
-            window_tried += 1
-            window_taken += stage == 0
-            if it >= adapt_start and (it - adapt_start) % adapt_every == 0:
-                rate = window_taken / window_tried
-                log_scale += (1 + (it - adapt_start) / adapt_every) ** -0.6 * (rate - target_acceptance) * 2
-                window_taken = window_tried = 0
-                recent = history[it // 2:it + 1]
-                cov = math.exp(2 * log_scale) * sd * (np.cov(recent, rowvar=False) + eps)
-                chol = np.linalg.cholesky(cov)
-                chol_inv = np.linalg.inv(chol)
-        elif (it - n_burn) % thin == 0:
-            keep.append((x.copy(), alpha, loglik, rough, pred))
-    if not keep:
+    temps = np.asarray(temperatures, float)
+    if temps.ndim != 1 or temps[0] != 1.0 or np.any(np.diff(temps) <= 0):
+        raise ValueError("temperatures must increase strictly from 1.0")
+    if n_iter <= n_burn:
         raise ValueError("n_iter must exceed n_burn")
+    rng = np.random.default_rng(seed)
+    settings = dict(n_burn=n_burn, n_rough=n_rough, alpha_bounds=alpha_bounds, alpha0=alpha0,
+                    adapt_start=adapt_start, adapt_every=adapt_every,
+                    target_acceptance=target_acceptance, delayed_rejection=delayed_rejection,
+                    dr_scale=dr_scale, initial_scale=initial_scale)  # fmt: skip
+    replicas = [_Dram(target, theta0, bounds, rng, beta=1 / T, **settings) for T in temps]
+    swaps = np.zeros((2, max(len(temps) - 1, 1)))
+    keep = []
+    for it in range(n_iter):
+        for replica in replicas:
+            replica.step(it)
+        if len(replicas) > 1 and it % swap_every == 0:
+            for j in range((it // swap_every) % 2, len(replicas) - 1, 2):
+                a, b = replicas[j], replicas[j + 1]
+                log_r = (a.beta - b.beta) * (b.loglik - a.loglik)
+                swaps[1, j] += 1
+                if math.log(max(rng.random(), 1e-300)) < log_r:
+                    swaps[0, j] += 1
+                    sa, sb = a.state(), b.state()
+                    a.set_state(sb)
+                    b.set_state(sa)
+        if it >= n_burn and (it - n_burn) % thin == 0:
+            cold = replicas[0]
+            keep.append((cold.x.copy(), cold.alpha, cold.loglik, cold.rough, cold.pred))
+    cold = replicas[0]
     with np.errstate(invalid="ignore", divide="ignore"):
-        rates = taken / tried
+        rates = cold.taken / cold.tried
+        swap_rate = swaps[0] / swaps[1]
     return dict(
         theta=np.array([k[0] for k in keep]),
         alpha=np.array([k[1] for k in keep]),
@@ -716,7 +841,8 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
         pred=np.array([k[4] for k in keep]),
         acceptance=float(rates[0]),
         acceptance_dr=float(rates[1]),
-        proposal_cov=cov,
+        proposal_cov=cold.cov,
+        swap_acceptance=swap_rate if len(temps) > 1 else np.array([]),
     )
 
 
@@ -736,8 +862,9 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     starts, so that R-hat is meaningful) unless ``starts`` gives one
     parameter vector per chain. Draws come from ``_Target``: the Gaussian
     likelihood of ``data`` (or none with ``prior_only``) and the uniform and
-    roughness priors of ``model``. ``processes`` sets the worker count
-    (1 runs serially). Remaining keywords go to ``dram_chain``.
+    roughness priors of ``model``, with Vp/Vs >= sqrt(2). ``processes`` sets
+    the worker count (1 runs serially). Remaining keywords go to
+    ``dram_chain``, e.g. ``temperatures`` for parallel tempering.
     """
     rng = np.random.default_rng(seed)
     target = _Target(data, model, prior_only)
@@ -751,6 +878,8 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
         raise ValueError("give one start per chain")
     seeds = rng.integers(2**31, size=n_chains)
     settings = dict(n_iter=n_iter, n_burn=n_burn, thin=thin, **kwargs)
+    if "temperatures" in settings:
+        settings["temperatures"] = [float(v) for v in settings["temperatures"]]
     jobs = [(data, model, prior_only, int(s), np.asarray(t, float), settings)
             for s, t in zip(seeds, starts)]  # fmt: skip
     if processes == 1 or n_chains == 1:
@@ -762,6 +891,7 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
             chains = list(pool.map(_chain_job, jobs))
     stack = {key: np.stack([c[key] for c in chains])
              for key in ("theta", "alpha", "loglik", "roughness", "pred")}  # fmt: skip
+    settings["swap_acceptance"] = np.mean([c["swap_acceptance"] for c in chains], axis=0).tolist()
     return Posterior(
         data=data, model=model, prior_only=prior_only, **stack,
         acceptance=np.array([c["acceptance"] for c in chains]),

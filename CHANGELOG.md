@@ -1,5 +1,55 @@
 # Changelog
 
+## 2.3.0 — 2026-10-29
+
+Shear-velocity inversion, audited and rebuilt on top of the 2.2 compliance
+chain and the `inversion-improvements` branch. Details, audit table and
+validation: `docs/INVERSION.md`.
+
+### Audit of the earlier inversion code (documented, legacy kept)
+
+- v1 roughness `sqrt(sum(np.gradient(vs, 2)))` equals √((V_bottom − V_top)/2)
+  and applied no smoothing to the published models.
+- The v1 likelihood used the residual norm, not its square.
+- v1 coupled Vp (Poisson 0.25) and density (Gardner) to Vs, while the paper's text says
+  they were fixed.
+- v1 proposals near the bounds and thickness moves were asymmetric, and the thickness
+  moves did not conserve total depth.
+- Pre-2.0 compliance also used a free-air constant of `3.07 * 10e-6` (3.07e-5).
+- In v2, the default `alpha=0.25` is a 4 m/s Vs-jump prior, far stiffer than the data. This is now
+  documented in the README.
+
+### New module `compy_inversion`
+
+- `ComplianceData`: a full data covariance assembled from the random error, the covariance of
+  monthly (or other) sub-record estimates, a pressure-gain error common to all
+  frequencies with the exact gain sensitivity of the gravity-corrected
+  estimator, and a relative floor.
+- `CrustalModel`: the Zha & Webb (2016) parameterization:
+  - a sediment of free thickness with Hamilton (1976, 1979) Vs and Vp profiles and an optional Vs scale;
+  - crustal layers doubling from 100 m to a CRUST1.0 Moho, with an optional Moho shift;
+  - a mantle half-space;
+  - Vp/Vs 1.85 with Christensen & Shaw density, Brocher (2005), or Vp and density fixed from a reference;
+  - a hierarchical second-difference roughness prior.
+- `sample` / `dram_chain`: a delayed-rejection adaptive Metropolis sampler.
+  - The covariance is learned from the recent half of the chain, with a global scale tuned to 23 % acceptance; both are frozen after burn-in.
+  - Delayed rejection uses the Tierney & Mira acceptance.
+  - The smoothing weight is Gibbs-sampled.
+  - Parallel tempering is optional; chains run in parallel processes.
+- `Posterior`: rank-normalized R-hat and bulk ESS, χ², Vs-depth quantiles, and save to npz/json.
+- `vs_kernels`, `sensitivity_depth` and `slice_model`: Vs sensitivity at constant
+  Vp/Vs and the depth holding a fraction of it.
+- `crust1_column` / `crust1_model`: read CRUST1.0 at a station.
+- `Forward`: the `raydep` propagator evaluated at the seafloor only, compiled with
+  Numba when installed (optional extra `fast`), about 140 times faster.
+
+### Tests
+
+21 new tests: the forward model against `raydep` and the static half-space,
+the gain sensitivity, the covariance, DRAM on a truncated Gaussian, the
+hierarchical marginal, tempering on a bimodal target, kernels, CRUST1.0
+parsing, the fixed-Vp option and synthetic recovery.
+
 ## Inversion work (branch inversion-improvements, 2026-10-25/26)
 
 - Sampler tuning (opt-in; defaults reproduce 2.1 chains draw for draw):
