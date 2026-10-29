@@ -12,7 +12,10 @@ REPORT = ROOT / "report"
 
 def load_tables():
     tables = ROOT / "results" / "tables"
-    main = {r["station"]: r for r in json.loads((tables / "inversion_summary.json").read_text())}
+    main = {
+        r["station"]: r
+        for r in json.loads((tables / "inversion_summary.json").read_text())
+    }
     variants = json.loads((tables / "variants.json").read_text())
     return main, variants
 
@@ -24,9 +27,9 @@ def main_table(main):
     rows = []
     for s in STATIONS:
         r = main[s]
-        bad = r["chi2_median"] > 2 * r["n_data"]
+        flag = ' class="flag"' if r["chi2_median"] > 2 * r["n_data"] else ""
         rows.append(
-            f"<tr{' class=\"flag\"' if bad else ''}><td>{s}</td><td>{'stable epoch' if r['epoch'] else 'whole'}</td>"
+            f"<tr{flag}><td>{s}</td><td>{'stable epoch' if r['epoch'] else 'whole'}</td>"
             f"<td>{r['band_mhz']}</td><td>{r['chi2_median']:.1f} / {r['n_data']}</td>"
             f"<td>{r['max_rhat']:.3f}</td><td>{r['min_ess']}</td><td>{r['sediment_m']}</td>"
             f"<td>{r['vs_0.5km']}</td><td>{r['vs_1km']}</td><td>{r['vs_2km']}</td>"
@@ -52,7 +55,7 @@ def variant_table(variants):
             f"<td>{r['chi2']:.1f} / {r['n']}</td><td>{r['max_rhat']:.2f}</td><td>{r['sediment']:.0f}</td>"
             f"<td>{vs['0.5']:.0f}</td><td>{vs['1.0']:.0f}</td><td>{vs['2.0']:.0f}</td><td>{vs['3.0']:.0f}</td></tr>"
         )  # fmt: skip
-    return f"<table class=\"compact\">{head}{''.join(rows)}</table>"
+    return f'<table class="compact">{head}{"".join(rows)}</table>'
 
 
 def figure(name, caption):
@@ -66,15 +69,23 @@ def final_table(rows):
             "<th>Vs 2 km</th></tr>")  # fmt: skip
     out = []
     for r in rows:
-        data = " + ".join(r["groups"]) if len(r["groups"]) > 1 else ("stable epoch" if r["station"] in EPOCH else "whole")
+        data = (
+            " + ".join(r["groups"])
+            if len(r["groups"]) > 1
+            else ("stable epoch" if r["station"] in EPOCH else "whole")
+        )
         gains = "<br>".join(f"{g}: {u:.3f} → {r['gain_abs'][g]['median']:.3f} "
                             f"({r['gain_abs'][g]['p05']:.3f}–{r['gain_abs'][g]['p95']:.3f})"
                             for g, u in zip(r["groups"], r["gains_used"]))  # fmt: skip
-        h2 = f"{r['chi2_final_h2']:.1f} / {r['n_final_h2']}" if "chi2_final_h2" in r else "–"
-        bad = r["chi2"] > 2 * r["n"]
+        h2 = (
+            f"{r['chi2_final_h2']:.1f} / {r['n_final_h2']}"
+            if "chi2_final_h2" in r
+            else "–"
+        )
+        flag = ' class="flag"' if r["chi2"] > 2 * r["n"] else ""
         vs = "".join(f"<td>{v['median']:.0f}<br><span class=\"meta\">{v['p05']:.0f}–{v['p95']:.0f}</span></td>"
                      for k, v in r["vs"].items() if k in ("0.5", "1", "2"))  # fmt: skip
-        out.append(f"<tr{' class=\"flag\"' if bad else ''}><td>{r['station']}</td><td>{data}</td>"
+        out.append(f"<tr{flag}><td>{r['station']}</td><td>{data}</td>"
                    f"<td>{r['chi2']:.1f} / {r['n']}</td><td>{h2}</td><td>{r['max_rhat']:.3f}</td><td>{gains}</td>"
                    f"<td>{r['vp_vs']['median']:.2f}<br><span class=\"meta\">{r['vp_vs']['p05']:.2f}–"
                    f"{r['vp_vs']['p95']:.2f}</span></td><td>{r['sediment']['median']:.0f}<br><span class=\"meta\">"
@@ -83,8 +94,10 @@ def final_table(rows):
 
 
 def epoch_table(rows):
-    head = ("<tr><th>Station</th><th>Windows after jump</th><th>Rayleigh gain stable → after</th>"
-            "<th>Compliance after / stable</th><th>Gain ratio after/stable: sampled (Rayleigh)</th></tr>")
+    head = (
+        "<tr><th>Station</th><th>Windows after jump</th><th>Rayleigh gain stable → after</th>"
+        "<th>Compliance after / stable</th><th>Gain ratio after/stable: sampled (Rayleigh)</th></tr>"
+    )
     out = []
     for r in rows:
         if "after_over_stable" not in r:
@@ -106,42 +119,86 @@ def main():
     fixed = {r["station"]: r for r in variants if r["variant"] == "fixedvp"}
     final_rows = json.loads((ROOT / "results" / "tables" / "final.json").read_text())
     round2 = ROUND2.format(
-        final_table=final_table(final_rows), epoch_table=epoch_table(final_rows),
-        fig9=figure("paper_fig9_heatmaps.png", "Figure 9 style: Vs posterior heat maps (each depth row normalized "
-                    "to its maximum), median (red) and CRUST1.0 (white dashed). Depths are true metres. "
-                    "* stable and after-jump data inverted together."),
-        figmisfit=figure("paper_fig_misfit.png", "Thesis Fig. 3.19b style: χ²/N against iteration for all eight "
-                         "chains of each station. Chains start from random prior draws (χ² up to 10⁵) and reach "
-                         "χ²/N ≈ 1 within a few hundred iterations; only draws after the burn-in (red dashed) "
-                         "are used. No misfit threshold is applied: every retained draw is a posterior sample."),
-        fig8=figure("paper_fig8_compliance.png", "Figure 8 style: compliance by tectonic setting, ±1σ shading."),
-        fig10=figure("paper_fig10_profiles.png", "Figure 10 style: posterior medians by setting and the "
-                     "serpentinization they imply with the caption's relation (4.2 km/s = 0 %, 2.2 km/s = 100 %)."),
-        figs_paper_station="".join(figure(f"{s}_paper.png", f"{s}: (a) measured compliance and simulated "
-                                          "compliance of 300 posterior models, (b) misfit function, (c) Vs heat map.")
-                                   for s in STATIONS),  # fmt: skip
+        final_table=final_table(final_rows),
+        epoch_table=epoch_table(final_rows),
+        fig9=figure(
+            "paper_fig9_heatmaps.png",
+            "Figure 9 style: Vs posterior heat maps (each depth row normalized "
+            "to its maximum), median (red) and CRUST1.0 (white dashed). Depths are true metres. "
+            "* stable and after-jump data inverted together.",
+        ),
+        figmisfit=figure(
+            "paper_fig_misfit.png",
+            "Thesis Fig. 3.19b style: χ²/N against iteration for all eight "
+            "chains of each station. Chains start from random prior draws (χ² up to 10⁵) and reach "
+            "χ²/N ≈ 1 within a few hundred iterations; only draws after the burn-in (red dashed) "
+            "are used. No misfit threshold is applied: every retained draw is a posterior sample.",
+        ),
+        fig8=figure(
+            "paper_fig8_compliance.png",
+            "Figure 8 style: compliance by tectonic setting, ±1σ shading.",
+        ),
+        fig10=figure(
+            "paper_fig10_profiles.png",
+            "Figure 10 style: posterior medians by setting and the "
+            "serpentinization they imply with the caption's relation (4.2 km/s = 0 %, 2.2 km/s = 100 %).",
+        ),
+        figs_paper_station="".join(
+            figure(
+                f"{s}_paper.png",
+                f"{s}: (a) measured compliance and simulated "
+                "compliance of 300 posterior models, (b) misfit function, (c) Vs heat map.",
+            )
+            for s in STATIONS
+        ),  # fmt: skip
         **ROUND2_TEXT,
     )
-    body = TEMPLATE.format(round2=round2,
+    body = TEMPLATE.format(
+        round2=round2,
         main_table=main_table(main_rows),
         variant_table=variant_table(variants),
-        rr38_vpvs=(f"{vpvs['RR38']['vp_vs']:.2f}, 90 %: {vpvs['RR38']['vp_vs_90'][0]:.2f}–"
-                   f"{vpvs['RR38']['vp_vs_90'][1]:.2f}") if "RR38" in vpvs else "n/a",
+        rr38_vpvs=(
+            f"{vpvs['RR38']['vp_vs']:.2f}, 90 %: {vpvs['RR38']['vp_vs_90'][0]:.2f}–"
+            f"{vpvs['RR38']['vp_vs_90'][1]:.2f}"
+        )
+        if "RR38" in vpvs
+        else "n/a",
         rr38_vpvs_chi2=f"{vpvs['RR38']['chi2']:.1f}" if "RR38" in vpvs else "n/a",
-        vpvs_list=", ".join(f"{s} {vpvs[s]['vp_vs']:.2f}" for s in STATIONS if s in vpvs and s != "RR38"),
-        fixed_bad=", ".join(f"{s} (χ² {fixed[s]['chi2']:.0f}/{fixed[s]['n']}, R-hat {fixed[s]['max_rhat']:.2f})"
-                            for s in STATIONS if s in fixed and not fixed[s]["converged"]),  # fmt: skip
-        figs_main=figure("vs_profiles.png", "Vs posteriors of the main run with CRUST1.0 and the profiles "
-                         "described in Aminian et al. (2025, §5.2, approximate). Grey: below the depth holding "
-                         "90 % of the lowest-frequency sensitivity.")
-        + figure("compliance_fit.png", "Measured compliance (±1σ including the 5 % gain error) and the "
-                 "posterior predictive median and 90 % band."),
-        figs_sens=figure("sensitivity.png", "Posterior median Vs for each modelling choice.")
-        + figure("sediment.png", "Thickness of the slow uppermost layer (Hamilton sediment profile)."),
-        figs_station="".join(figure(f"{s}_inversion.png", f"{s}{' (stable epoch)' if s in EPOCH else ''}: "
-                                    "(a) data fit, (b) Vs posterior density with prior, CRUST1.0, GJI 2025 "
-                                    "and Occam, (c) cumulative Vs sensitivity, (d) sediment thickness.")
-                             for s in STATIONS),  # fmt: skip
+        vpvs_list=", ".join(
+            f"{s} {vpvs[s]['vp_vs']:.2f}" for s in STATIONS if s in vpvs and s != "RR38"
+        ),
+        fixed_bad=", ".join(
+            f"{s} (χ² {fixed[s]['chi2']:.0f}/{fixed[s]['n']}, R-hat {fixed[s]['max_rhat']:.2f})"
+            for s in STATIONS
+            if s in fixed and not fixed[s]["converged"]
+        ),  # fmt: skip
+        figs_main=figure(
+            "vs_profiles.png",
+            "Vs posteriors of the main run with CRUST1.0 and the profiles "
+            "described in Aminian et al. (2025, §5.2, approximate). Grey: below the depth holding "
+            "90 % of the lowest-frequency sensitivity.",
+        )
+        + figure(
+            "compliance_fit.png",
+            "Measured compliance (±1σ including the 5 % gain error) and the "
+            "posterior predictive median and 90 % band.",
+        ),
+        figs_sens=figure(
+            "sensitivity.png", "Posterior median Vs for each modelling choice."
+        )
+        + figure(
+            "sediment.png",
+            "Thickness of the slow uppermost layer (Hamilton sediment profile).",
+        ),
+        figs_station="".join(
+            figure(
+                f"{s}_inversion.png",
+                f"{s}{' (stable epoch)' if s in EPOCH else ''}: "
+                "(a) data fit, (b) Vs posterior density with prior, CRUST1.0, GJI 2025 "
+                "and Occam, (c) cumulative Vs sensitivity, (d) sediment thickness.",
+            )
+            for s in STATIONS
+        ),  # fmt: skip
     )
     (REPORT / "index.html").write_text(body)
     print(REPORT / "index.html")
@@ -353,7 +410,6 @@ a:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
 """
 
 
-
 ROUND2 = """
 <section class="prose">
   <h2>Second round: gain, epochs and the paper's figures</h2>
@@ -413,26 +469,36 @@ ROUND2 = """
 """
 
 ROUND2_TEXT = dict(
-    gain_text=("At a station with one epoch the data cannot pin the absolute gain: the factor stays near 1 because it "
-               "trades off with the overall Vs level. Its ±5 % now widens the Vs intervals. Where two epochs share "
-               "one Earth model, the relative gain is resolved. The after/stable ratio is 1.677 at RR50 against "
-               "1.705 from Rayleigh waves (−1.6 %), 1.635 at RR36 against 1.708 (one event), and 1.127 at RR40 "
-               "against 1.063. Sampling the gain without tempering mixes slowly (R-hat up to 1.25), so the final "
-               "runs use tempering and converge (R-hat ≤ 1.017)."),
-    epoch_text=("With its own Rayleigh gain, the after-jump compliance matches the stable epoch at RR50 (ratio "
-                "0.97–1.01) and agrees within 3–6 % at RR36 and RR40, so those jumps are gain changes that the "
-                "calibration corrects. RR38 does not match: after the jump its compliance is 27 % higher at the "
-                "lowest frequency and 7 % higher at the highest. That is a change of shape, which no gain explains "
-                "(χ² 33 for 12)."),
-    h2_text=("1/(P/Z) is 7–34 % higher in the band and fits worse at seven stations (χ² 11–85 against 2.4–6.8). "
-             "Their noise is on the vertical, so Z/P is correct there. At RR38, 1/(P/Z) fits better (20 against "
-             "33), so its pressure channel is suspect."),
-    vpvs_text=("The medians are 2.0–2.2 and the 90 % intervals cover most of [1.7, 2.4], so the Vs intervals now "
-               "include the Vp uncertainty. Vs at 1–2 km is 3–11 % lower than with Vp/Vs fixed at 1.85."),
-    errata_text=("depths are in true metres, and serpentinization uses the caption's relation. The published heat "
-                 "maps put posterior depths 5/3 too deep relative to their labels, although their CRUST1.0 lines "
-                 "are right. The published code computes serpentinization as (9000 − 2Vs)/30, which disagrees with "
-                 "the caption."),
+    gain_text=(
+        "At a station with one epoch the data cannot pin the absolute gain: the factor stays near 1 because it "
+        "trades off with the overall Vs level. Its ±5 % now widens the Vs intervals. Where two epochs share "
+        "one Earth model, the relative gain is resolved. The after/stable ratio is 1.677 at RR50 against "
+        "1.705 from Rayleigh waves (−1.6 %), 1.635 at RR36 against 1.708 (one event), and 1.127 at RR40 "
+        "against 1.063. Sampling the gain without tempering mixes slowly (R-hat up to 1.25), so the final "
+        "runs use tempering and converge (R-hat ≤ 1.017)."
+    ),
+    epoch_text=(
+        "With its own Rayleigh gain, the after-jump compliance matches the stable epoch at RR50 (ratio "
+        "0.97–1.01) and agrees within 3–6 % at RR36 and RR40, so those jumps are gain changes that the "
+        "calibration corrects. RR38 does not match: after the jump its compliance is 27 % higher at the "
+        "lowest frequency and 7 % higher at the highest. That is a change of shape, which no gain explains "
+        "(χ² 33 for 12)."
+    ),
+    h2_text=(
+        "1/(P/Z) is 7–34 % higher in the band and fits worse at seven stations (χ² 11–85 against 2.4–6.8). "
+        "Their noise is on the vertical, so Z/P is correct there. At RR38, 1/(P/Z) fits better (20 against "
+        "33), so its pressure channel is suspect."
+    ),
+    vpvs_text=(
+        "The medians are 2.0–2.2 and the 90 % intervals cover most of [1.7, 2.4], so the Vs intervals now "
+        "include the Vp uncertainty. Vs at 1–2 km is 3–11 % lower than with Vp/Vs fixed at 1.85."
+    ),
+    errata_text=(
+        "depths are in true metres, and serpentinization uses the caption's relation. The published heat "
+        "maps put posterior depths 5/3 too deep relative to their labels, although their CRUST1.0 lines "
+        "are right. The published code computes serpentinization as (9000 − 2Vs)/30, which disagrees with "
+        "the caption."
+    ),
 )
 
 

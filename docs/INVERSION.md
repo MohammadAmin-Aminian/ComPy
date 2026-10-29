@@ -66,15 +66,18 @@ is a separate module.
 ```python
 import compy_inversion as ci
 
-column = ci.crust1_column(lat, lon, "path/to/crust1")      # CRUST1.0 cell
-data = ci.ComplianceData.from_npz("RR52_compliance_compy.npz",
-                                  subsets=monthly_estimates,  # (n_months, n_freqs)
-                                  gain_rel=0.05, floor_rel=0.01)
+column = ci.crust1_column(lat, lon, "path/to/crust1")  # CRUST1.0 cell
+data = ci.ComplianceData.from_npz(
+    "RR52_compliance_compy.npz",
+    subsets=monthly_estimates,  # (n_months, n_freqs)
+    gain_rel=0.05,
+    floor_rel=0.01,
+)
 model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
 post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000, thin=10)
 prior = ci.sample(data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000)
-post.save("RR52_main")            # .npz draws + .json summary with R-hat/ESS
-q = post.vs_quantiles(z)          # Vs-depth credible intervals
+post.save("RR52_main")  # .npz draws + .json summary with R-hat/ESS
+q = post.vs_quantiles(z)  # Vs-depth credible intervals
 ```
 
 ### Data and covariance

@@ -24,7 +24,9 @@ def main():
             if not path.exists():
                 continue
             post, _, s = load(station, variant)
-            vs = np.median(post.vs_draws(np.array(DEPTHS) * 1e3, max_draws=4000), axis=0)
+            vs = np.median(
+                post.vs_draws(np.array(DEPTHS) * 1e3, max_draws=4000), axis=0
+            )
             p = s["parameters"]
             rows.append(dict(
                 station=station, variant=variant, chi2=s["chi2"]["median"], n=s["n_data"],
@@ -35,8 +37,14 @@ def main():
                 vs=dict(zip(map(str, DEPTHS), vs.round().tolist())),
                 converged=s["max_rhat"] < 1.05 and s["min_ess"] > 100,
             ))  # fmt: skip
-    (ROOT / "results" / "tables" / "variants.json").write_text(json.dumps(rows, indent=1))
-    head = "| Station | Variant | χ²/N | R-hat | Sed. [m] | " + " | ".join(f"Vs {d:g} km" for d in DEPTHS) + " |"
+    (ROOT / "results" / "tables" / "variants.json").write_text(
+        json.dumps(rows, indent=1)
+    )
+    head = (
+        "| Station | Variant | χ²/N | R-hat | Sed. [m] | "
+        + " | ".join(f"Vs {d:g} km" for d in DEPTHS)
+        + " |"
+    )
     lines = [head, "|" + "---|" * (5 + len(DEPTHS))]
     for r in rows:
         flag = "" if r["converged"] else " ✗"
@@ -46,7 +54,9 @@ def main():
                      + " | ".join(f"{v:.0f}" for v in r["vs"].values()) + " |")  # fmt: skip
     (ROOT / "results" / "tables" / "variants.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
-    main_rows = json.loads((ROOT / "results" / "tables" / "inversion_summary.json").read_text())
+    main_rows = json.loads(
+        (ROOT / "results" / "tables" / "inversion_summary.json").read_text()
+    )
     out = ["| Station | Record | Band [mHz] | χ²/N | R-hat | ESS | Sediment [m] | Vs 0.5 km | Vs 1 km | Vs 2 km "
            "| 50/90 % sensitivity [km] |", "|" + "---|" * 11]  # fmt: skip
     for r in main_rows:

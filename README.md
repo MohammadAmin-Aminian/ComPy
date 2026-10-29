@@ -228,16 +228,16 @@ how the inferred orientation and effectiveness vary between processing windows.
 import Pressure_calibration as dpg
 
 gain = dpg.calculate_spectral_ratio(
-    raw_stream,            # raw counts, vertical and pressure
+    raw_stream,  # raw counts, vertical and pressure
     mag=7,
     f_min=0.03,
     f_max=0.07,
-    inventory=inventory,   # StationXML with both responses
+    inventory=inventory,  # StationXML with both responses
     event_spans=spans,
-    zchan="BHZ",           # explicit channel codes (optional)
+    zchan="BHZ",  # explicit channel codes (optional)
     pchan="BDH",
-    filt_freq1=0.005,      # band-pass pre-filter, below f_min ...
-    filt_freq2=0.1,        # ... and above f_max
+    filt_freq1=0.005,  # band-pass pre-filter, below f_min ...
+    filt_freq2=0.1,  # ... and above f_max
     plot_condition=True,
 )
 ```
@@ -357,19 +357,19 @@ The method, the audit of the earlier inversion code and the validation are in
 ```python
 import compy_inversion as ci
 
-column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")   # CRUST1.0 files
+column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")  # CRUST1.0 files
 data = ci.ComplianceData.from_npz(
-    "RR52_compliance_compy.npz",      # stacked_compliance output (2.2)
-    subsets=monthly_estimates,        # (n_months, n_freqs), optional
-    gain_rel=0.05,                    # pressure-gain error, common to all f
-    floor_rel=0.01,                   # independent 1-D model error
+    "RR52_compliance_compy.npz",  # stacked_compliance output (2.2)
+    subsets=monthly_estimates,  # (n_months, n_freqs), optional
+    gain_rel=0.05,  # pressure-gain error, common to all f
+    floor_rel=0.01,  # independent 1-D model error
 )
 model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
 post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000, thin=10)
 prior = ci.sample(data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000)
 print(post.summary()["max_rhat"], post.summary()["chi2"])
-vs_q = post.vs_quantiles(depths)      # (5 quantiles, len(depths)) in m/s
-post.save("RR52_main")                # .npz draws and .json summary
+vs_q = post.vs_quantiles(depths)  # (5 quantiles, len(depths)) in m/s
+post.save("RR52_main")  # .npz draws and .json summary
 ```
 
 The pieces:

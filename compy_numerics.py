@@ -191,13 +191,22 @@ def legacy_wave_attraction_correction(freq, depth, coherence=1.0):
     (tens of per cent near 7 mHz at 3 km water depth). Add the returned value
     to a pre-2.0 normalized compliance to obtain the 2.0 estimator; pass the
     amplitude coherence used in that estimate (scalar or per frequency).
+
+    The 2.0 estimator still multiplied the wave-attraction term by the
+    coherence (fixed in 2.2, docs/AUDIT_2026-10.md D1). To reach the 2.2
+    estimator, also add ``k (1 - coherence) a_w/p / (omega**2 + 2g/R)`` with
+    a_w/p the first output of ``compy.gravitational_attraction``.
     """
     freq = np.asarray(freq, dtype=float)
     depth = positive(depth, "depth")
     coherence = np.asarray(coherence, dtype=float)
     if np.any(~np.isfinite(freq)) or np.any(freq <= 0):
         raise ValueError("frequencies must be finite and positive")
-    if np.any(~np.isfinite(coherence)) or np.any(coherence < 0) or np.any(coherence > 1):
+    if (
+        np.any(~np.isfinite(coherence))
+        or np.any(coherence < 0)
+        or np.any(coherence > 1)
+    ):
         raise ValueError("coherence must lie in [0, 1]")
     omega2 = (2 * np.pi * freq) ** 2
     k = wavenumber(2 * np.pi * freq, depth)

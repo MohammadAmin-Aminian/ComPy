@@ -137,7 +137,9 @@ def test_crustal_model_optional_parameters():
     theta = np.array([300.0, 2.0] + [2500.0] * model.n_crust + [4400.0, -800.0])
     layers = model.layers(theta)
     assert layers[:-1, 0].sum() == pytest.approx(6200.0)
-    np.testing.assert_allclose(layers[:8, 3], 2 * ci.hamilton_vs(np.linspace(18.75, 281.25, 8)))
+    np.testing.assert_allclose(
+        layers[:8, 3], 2 * ci.hamilton_vs(np.linspace(18.75, 281.25, 8))
+    )
     assert np.all(layers[:, 2] > 1.4 * layers[:, 3])
     with pytest.raises(ValueError):
         ci.CrustalModel(moho_depth=1200.0, sediment_max=1000.0)
@@ -187,7 +189,9 @@ def test_dram_samples_truncated_gaussian(delayed_rejection):
     target = _Gaussian(bounds)
     out = ci.dram_chain(target, np.array([2.5, -2.5]), bounds, n_iter=120000, n_burn=10000,
                         seed=3, delayed_rejection=delayed_rejection)  # fmt: skip
-    g = np.stack(np.meshgrid(np.linspace(-1, 3, 401), np.linspace(-3, 3, 601), indexing="ij"), -1)
+    g = np.stack(
+        np.meshgrid(np.linspace(-1, 3, 401), np.linspace(-3, 3, 601), indexing="ij"), -1
+    )
     w = np.exp(-0.5 * np.einsum("...i,ij,...j", g, target.precision, g))
     w /= w.sum()
     mean = np.einsum("ij,ijk->k", w, g)
@@ -209,7 +213,9 @@ def test_hierarchical_smoothing_weight_marginal():
     out = ci.dram_chain(target, np.array([0.9]), np.array([[-1.0, 1.0]]), n_iter=150000,
                         n_burn=10000, seed=5, n_rough=1, alpha_bounds=(0.5, 50.0))  # fmt: skip
     t = np.linspace(-1, 1, 801)
-    dens = np.array([quad(lambda a: a**-0.5 * np.exp(-a * x * x / 2), 0.5, 50)[0] for x in t])
+    dens = np.array(
+        [quad(lambda a: a**-0.5 * np.exp(-a * x * x / 2), 0.5, 50)[0] for x in t]
+    )
     dens /= np.trapezoid(dens, t)
     expected = np.trapezoid(np.abs(t) * dens, t)
     assert np.mean(np.abs(out["theta"][:, 0])) == pytest.approx(expected, rel=0.04)
@@ -262,7 +268,9 @@ def test_posterior_save_roundtrip(tmp_path):
     truth = np.array([2000.0, 2500, 3000, 3500, 3800, 3900, 4300])[: len(model.names)]
     data = ci.ComplianceData.build(f, ci.forward(3500.0, f, model.layers(truth)), 3500.0,
                                    floor_rel=0.02)  # fmt: skip
-    post = ci.sample(data, model, n_chains=2, n_iter=3000, n_burn=1000, thin=10, processes=1)
+    post = ci.sample(
+        data, model, n_chains=2, n_iter=3000, n_burn=1000, thin=10, processes=1
+    )
     post.save(tmp_path / "run")
     stored = np.load(tmp_path / "run.npz")
     assert stored["theta"].shape == post.theta.shape
@@ -295,7 +303,13 @@ def test_slice_model_drops_sliver_slices():
 
 
 def test_reference_fixes_vp_and_density():
-    ref = np.array([[1000.0, 2400, 4700, 2540], [6000.0, 2900, 6600, 3700], [0.0, 3300, 8100, 4500]])
+    ref = np.array(
+        [
+            [1000.0, 2400, 4700, 2540],
+            [6000.0, 2900, 6600, 3700],
+            [0.0, 3300, 8100, 4500],
+        ]
+    )
     model = ci.CrustalModel(moho_depth=7000.0, sediment_max=0.0, reference=ref)
     theta = np.array([2000.0] * model.n_crust + [4400.0])
     layers = model.layers(theta)
@@ -303,7 +317,9 @@ def test_reference_fixes_vp_and_density():
     np.testing.assert_allclose(layers[:-1, 2], np.where(mid < 1000, 4700, 6600))
     np.testing.assert_allclose(layers[-1], [0.0, 3300, 8100, 4400])
     f = np.array([0.008, 0.012])
-    data = ci.ComplianceData.build(f, ci.forward(4000.0, f, layers), 4000.0, floor_rel=0.02)
+    data = ci.ComplianceData.build(
+        f, ci.forward(4000.0, f, layers), 4000.0, floor_rel=0.02
+    )
     target = ci._Target(data, model, prior_only=False)
     assert target(theta) is not None
     assert target(np.r_[3500.0, theta[1:]]) is None  # Vp/Vs 4700/3500 < sqrt(2)
@@ -317,10 +333,14 @@ def test_parallel_tempering_samples_bimodal_target():
     def target(x):
         if abs(x[0]) > 10:
             return None
-        ll = np.logaddexp(-0.5 * ((x[0] - 6) / 0.3) ** 2, -0.5 * ((x[0] + 6) / 0.3) ** 2)
+        ll = np.logaddexp(
+            -0.5 * ((x[0] - 6) / 0.3) ** 2, -0.5 * ((x[0] + 6) / 0.3) ** 2
+        )
         return float(ll), 0.0, x
 
-    single = ci.dram_chain(target, np.array([6.0]), bounds, n_iter=30000, n_burn=5000, seed=1)
+    single = ci.dram_chain(
+        target, np.array([6.0]), bounds, n_iter=30000, n_burn=5000, seed=1
+    )
     assert np.mean(single["theta"][:, 0] > 0) == 1.0
     pt = ci.dram_chain(target, np.array([6.0]), bounds, n_iter=40000, n_burn=5000, seed=1,
                        temperatures=3.0 ** np.arange(7))  # fmt: skip
@@ -354,17 +374,25 @@ def test_free_crustal_vp_vs():
 
 def test_join_builds_block_covariance_and_groups():
     f = np.array([0.008, 0.01, 0.012])
-    a = ci.ComplianceData.build(f, np.array([2e-11, 2.3e-11, 2.6e-11]), 4000.0, random=1e-13, floor_rel=0.01)
-    b = ci.ComplianceData.build(f[:2], np.array([2.1e-11, 2.4e-11]), 4000.0, random=2e-13, floor_rel=0.01)
+    a = ci.ComplianceData.build(
+        f, np.array([2e-11, 2.3e-11, 2.6e-11]), 4000.0, random=1e-13, floor_rel=0.01
+    )
+    b = ci.ComplianceData.build(
+        f[:2], np.array([2.1e-11, 2.4e-11]), 4000.0, random=2e-13, floor_rel=0.01
+    )
     j = ci.ComplianceData.join([a, b], ["stable", "after"])
     np.testing.assert_array_equal(j.groups, [0, 0, 0, 1, 1])
     assert j.group_names == ("stable", "after")
     np.testing.assert_allclose(j.covariance[:3, :3], a.covariance)
     np.testing.assert_allclose(j.covariance[3:, 3:], b.covariance)
     assert np.all(j.covariance[:3, 3:] == 0)
-    assert j.chi2(j.eta * 1.02) == pytest.approx(a.chi2(a.eta * 1.02) + b.chi2(b.eta * 1.02))
+    assert j.chi2(j.eta * 1.02) == pytest.approx(
+        a.chi2(a.eta * 1.02) + b.chi2(b.eta * 1.02)
+    )
     with pytest.raises(ValueError):
-        ci.ComplianceData.join([a, ci.ComplianceData.build(f, a.eta, 3000.0, floor_rel=0.01)], ["x", "y"])
+        ci.ComplianceData.join(
+            [a, ci.ComplianceData.build(f, a.eta, 3000.0, floor_rel=0.01)], ["x", "y"]
+        )
 
 
 def test_gain_factor_predicts_measured_compliance():
@@ -373,14 +401,21 @@ def test_gain_factor_predicts_measured_compliance():
     theta = np.array([2500.0] * model.n_crust + [4400.0])
     eta = ci.forward(depth, f, model.layers(theta))
     a = ci.attraction_compliance(f, depth)
-    data = ci.ComplianceData.build(f, a + 1.04 * (eta - a), depth, random=1e-14, gain_rel=0)
+    data = ci.ComplianceData.build(
+        f, a + 1.04 * (eta - a), depth, random=1e-14, gain_rel=0
+    )
     target = ci._Target(data, model, False, gain_bounds=(0.95, 1.05))
     assert target.names[-1] == "gain"
     assert target(np.r_[theta, 1.04])[0] == pytest.approx(0.0, abs=1e-6)
     assert target(np.r_[theta, 1.0])[0] < -10
     assert target(np.r_[theta, 1.06]) is None
     with pytest.raises(ValueError):
-        ci._Target(ci.ComplianceData.build(f, eta, depth, gain_rel=0.05), model, False, (0.95, 1.05))
+        ci._Target(
+            ci.ComplianceData.build(f, eta, depth, gain_rel=0.05),
+            model,
+            False,
+            (0.95, 1.05),
+        )
 
 
 def test_sampled_gain_recovers_offset_and_records_trace():
@@ -389,7 +424,9 @@ def test_sampled_gain_recovers_offset_and_records_trace():
     theta = np.r_[np.linspace(2000.0, 4000.0, model.n_crust), 4300.0]
     eta = ci.forward(depth, f, model.layers(theta))
     a = ci.attraction_compliance(f, depth)
-    stable = ci.ComplianceData.build(f, eta, depth, random=0.003 * eta, gain_rel=0, floor_rel=0.005)
+    stable = ci.ComplianceData.build(
+        f, eta, depth, random=0.003 * eta, gain_rel=0, floor_rel=0.005
+    )
     after = ci.ComplianceData.build(f, a + 1.03 * (eta - a), depth, random=0.003 * eta, gain_rel=0,
                                     floor_rel=0.005)  # fmt: skip
     joint = ci.ComplianceData.join([stable, after], ["stable", "after"])
@@ -397,7 +434,47 @@ def test_sampled_gain_recovers_offset_and_records_trace():
                      processes=1, gain_bounds=(0.95, 1.05))  # fmt: skip
     i, j = post.names.index("gain_stable"), post.names.index("gain_after")
     ratio = post.theta[:, :, j] / post.theta[:, :, i]
-    assert np.median(ratio) == pytest.approx(1.03, abs=0.01)  # relative gain is resolved
+    assert np.median(ratio) == pytest.approx(
+        1.03, abs=0.01
+    )  # relative gain is resolved
     assert post.trace_chi2.shape == (4, 20000)
     assert np.median(post.trace_chi2[:, 8000:]) < 3 * len(joint.eta)
     assert post.summary()["names"][-2:] == ["gain_stable", "gain_after"]
+
+
+# --- serpentinization (2.4) -----------------------------------------------------
+
+
+def test_serpentinization_end_members_and_caption_value():
+    beta = ci.serpentinization([4500.0, 4200.0, 3500.0, 3200.0, 2200.0, 1500.0])
+    # Fig. 10c of Aminian et al. (2025): 0 % at 4.2 km/s, 100 % at 2.2 km/s.
+    np.testing.assert_allclose(beta, [0.0, 0.0, 35.0, 50.0, 100.0, 100.0])
+    unclipped = ci.serpentinization([4500.0, 1500.0], clip=False)
+    np.testing.assert_allclose(unclipped, [-15.0, 135.0])
+
+
+def test_serpentinization_rejects_bad_end_members():
+    with pytest.raises(ValueError):
+        ci.serpentinization(3000.0, vs_peridotite=2000.0, vs_serpentinite=2200.0)
+
+
+def test_serpentinization_quantiles_map_vs_quantiles():
+    # A decreasing transform maps the q quantile of Vs onto the 1-q quantile.
+    rng = np.random.default_rng(3)
+    vs = rng.uniform(2600.0, 4000.0, size=(5000, 3))
+    beta = ci.serpentinization(vs)
+    np.testing.assert_allclose(
+        np.quantile(beta, 0.9, axis=0),
+        ci.serpentinization(np.quantile(vs, 0.1, axis=0)),
+        rtol=1e-6,
+    )
+
+
+def test_legacy_heatmap_ticks_use_100_m_rows():
+    import inv_compy
+
+    rows, labels = inv_compy._legacy_depth_ticks(8000)
+    assert labels == [0, -2000, -4000, -6000, -8000]
+    np.testing.assert_allclose(rows, [0, 20, 40, 60, 80])
+    # CRUST1.0 reference arrays: element 42 (Moho) at 7 km, i.e. row 70.
+    assert inv_compy._LEGACY_REFERENCE_ROWS[42] == pytest.approx(70.0)

@@ -117,7 +117,7 @@ def rank_rhat_ess(draws):
     if x.ndim != 2 or x.shape[0] < 2 or x.shape[1] < 8 or not np.isfinite(x).all():
         raise ValueError("Need finite (chains >= 2, iterations >= 8) draws")
     half = x.shape[1] // 2
-    split = np.concatenate([x[:, :half], x[:, half:2 * half]])
+    split = np.concatenate([x[:, :half], x[:, half : 2 * half]])
 
     def normal_scores(a):
         ranks = rankdata(a, method="average").reshape(a.shape)

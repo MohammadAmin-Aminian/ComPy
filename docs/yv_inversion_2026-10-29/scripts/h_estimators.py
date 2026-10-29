@@ -41,15 +41,21 @@ def main():
     out = {}
     for s in STATIONS:
         sub = "epoch/" if s in EPOCH else ""
-        out[s] = {"stable": estimators(COMPLIANCE / "results" / s / f"{sub}{s}_compliance_compy.npz")}
+        out[s] = {
+            "stable": estimators(
+                COMPLIANCE / "results" / s / f"{sub}{s}_compliance_compy.npz"
+            )
+        }
         after = ROOT / "compliance_after" / s / f"{s}_compliance_after.npz"
         if after.exists():
             out[s]["after"] = estimators(after)
         for k, v in out[s].items():
             r = np.array(v["h2_over_h1"])
             check = np.max(np.abs(np.array(v["h1"]) / np.array(v["stored"]) - 1))
-            print(f"{s} {k:6s} H2/H1 {r.min():.3f}-{r.max():.3f}  (lowest f {r[0]:.3f})  "
-                  f"min coherence {min(v['coherence']):.3f}  H1 vs stored {check:.1e}")
+            print(
+                f"{s} {k:6s} H2/H1 {r.min():.3f}-{r.max():.3f}  (lowest f {r[0]:.3f})  "
+                f"min coherence {min(v['coherence']):.3f}  H1 vs stored {check:.1e}"
+            )
     (ROOT / "results" / "tables" / "h1_h2.json").write_text(json.dumps(out, indent=1))
 
 

@@ -21,7 +21,16 @@ from a_invert import EPOCH, ROOT, build_model, load_data  # noqa: E402
 import compy_inversion as ci  # noqa: E402
 
 STATIONS = ("RR28", "RR29", "RR34", "RR36", "RR38", "RR40", "RR50", "RR52")
-SLOTS = ("#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948")
+SLOTS = (
+    "#2a78d6",
+    "#eb6834",
+    "#1baf7a",
+    "#eda100",
+    "#e87ba4",
+    "#008300",
+    "#6250d6",
+    "#e34948",
+)
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#d9d8d3"
 plt.rcParams.update({
     "font.size": 9, "axes.edgecolor": MUTED, "axes.labelcolor": INK,
@@ -55,8 +64,12 @@ def load(station, variant):
                 bruitfm={}, full={}, moho=dict(moho_shift=(-1000.0, 1000.0)),
                 fixedvp=dict(reference="crust1"), vpvs=dict(vp_vs_range=(1.7, 2.4)))[variant]  # fmt: skip
     model, column = build_model(station, **spec)
-    data = ci.ComplianceData(d["freqs"], d["eta"], float(d["depth"]), d["covariance"], station=station)
-    summary = json.loads((ROOT / "results" / station / f"{station}_{variant}.json").read_text())
+    data = ci.ComplianceData(
+        d["freqs"], d["eta"], float(d["depth"]), d["covariance"], station=station
+    )
+    summary = json.loads(
+        (ROOT / "results" / station / f"{station}_{variant}.json").read_text()
+    )
     post = ci.Posterior(data=data, model=model, prior_only=variant == "prior", theta=d["theta"],
                         alpha=d["alpha"], loglik=d["loglik"], roughness=d["roughness"], pred=d["pred"],
                         acceptance=np.array(summary["acceptance"]),
@@ -79,27 +92,42 @@ def step(column):
 
 
 def station_figure(station, post, prior, column, occam, summary):
-    fig, axes = plt.subplots(1, 4, figsize=(13, 4.6), gridspec_kw=dict(width_ratios=[1.25, 1.2, 0.55, 0.8]))
+    fig, axes = plt.subplots(
+        1, 4, figsize=(13, 4.6), gridspec_kw=dict(width_ratios=[1.25, 1.2, 0.55, 0.8])
+    )
     data = post.data
     ax = axes[0]
     pred = post.pred.reshape(-1, len(data.eta)) * 1e9
     lo, med, hi = np.quantile(pred, [0.05, 0.5, 0.95], axis=0)
     f = data.freqs * 1e3
-    ax.fill_between(f, lo, hi, color=SLOTS[0], alpha=0.25, lw=0, label="Posterior 90 % prediction")
+    ax.fill_between(
+        f, lo, hi, color=SLOTS[0], alpha=0.25, lw=0, label="Posterior 90 % prediction"
+    )
     ax.plot(f, med, color=SLOTS[0], lw=2, label="Posterior median prediction")
     ax.errorbar(f, data.eta * 1e9, yerr=data.sigma * 1e9, fmt="o", color=INK, ms=4, capsize=2,
                 label="Measured (±1σ, gain error included)")  # fmt: skip
     ax.set_xlabel("Frequency [mHz]")
     ax.set_ylabel("Normalized compliance [1/GPa]")
-    ax.set_title(f"(a) Data fit, χ² = {summary['chi2']['median']:.1f} for N = {len(data.eta)}", loc="left")
+    ax.set_title(
+        f"(a) Data fit, χ² = {summary['chi2']['median']:.1f} for N = {len(data.eta)}",
+        loc="left",
+    )
     ax.legend(fontsize=8, loc="upper left")
     ax = axes[1]
     vs = post.vs_draws(Z, max_draws=6000)
     bins = np.linspace(0, 5000, 101)
     hist = np.array([np.histogram(v, bins)[0] for v in vs.T]).astype(float)
     hist /= hist.max(axis=1, keepdims=True)
-    ax.pcolormesh(0.5 * (bins[1:] + bins[:-1]), Z / 1e3, hist, cmap="Blues", vmin=0, vmax=1.15,
-                  shading="nearest", rasterized=True)
+    ax.pcolormesh(
+        0.5 * (bins[1:] + bins[:-1]),
+        Z / 1e3,
+        hist,
+        cmap="Blues",
+        vmin=0,
+        vmax=1.15,
+        shading="nearest",
+        rasterized=True,
+    )
     q = np.quantile(vs, [0.05, 0.5, 0.95], axis=0)
     pq = np.quantile(prior.vs_draws(Z, max_draws=6000), [0.05, 0.95], axis=0)
     ax.plot(q[1], Z / 1e3, color=INK, lw=2, label="Posterior median")
@@ -110,7 +138,14 @@ def station_figure(station, post, prior, column, occam, summary):
     cz, cv = step(column)
     ax.plot(cv, cz / 1e3, color=SLOTS[1], lw=1.4, label="CRUST1.0")
     g = np.array(GJI[station])
-    ax.plot(g[:, 1], g[:, 0] / 1e3, color=SLOTS[2], lw=1.4, ls="--", label="GJI 2025 (text, approx.)")
+    ax.plot(
+        g[:, 1],
+        g[:, 0] / 1e3,
+        color=SLOTS[2],
+        lw=1.4,
+        ls="--",
+        label="GJI 2025 (text, approx.)",
+    )
     oz, ov = steps(np.array(occam["thickness"]), np.array(occam["vs"]))
     ax.plot(ov, oz / 1e3, color=SLOTS[6], lw=1.2, label="Occam (from CRUST1.0)")
     ax.set_ylim(8, 0)
@@ -123,7 +158,9 @@ def station_figure(station, post, prior, column, occam, summary):
     median = np.median(post.theta.reshape(-1, post.theta.shape[-1]), axis=0)
     zk, kern = ci.vs_kernels(data.depth, data.freqs[[0, -1]], post.model.layers(median),
                              dz=50.0, max_depth=30000.0)  # fmt: skip
-    for k, color, label in zip(kern, (SLOTS[0], SLOTS[1]), (f"{f[0]:.1f} mHz", f"{f[-1]:.1f} mHz")):
+    for k, color, label in zip(
+        kern, (SLOTS[0], SLOTS[1]), (f"{f[0]:.1f} mHz", f"{f[-1]:.1f} mHz")
+    ):
         w = np.abs(k) * np.gradient(zk)
         ax.plot(np.cumsum(w) / w.sum(), zk / 1e3, color=color, lw=1.4, label=label)
     sens = {q: ci.sensitivity_depth(zk, kern[0], q) for q in (0.5, 0.9)}
@@ -139,7 +176,14 @@ def station_figure(station, post, prior, column, occam, summary):
     ax = axes[3]
     i = post.names.index("sediment_thickness")
     h = post.theta[:, :, i].ravel()
-    ax.hist(h, bins=np.linspace(0, 1000, 41), color=SLOTS[0], alpha=0.8, density=True, label="Posterior")
+    ax.hist(
+        h,
+        bins=np.linspace(0, 1000, 41),
+        color=SLOTS[0],
+        alpha=0.8,
+        density=True,
+        label="Posterior",
+    )
     ax.axhline(1 / 1000, color=MUTED, ls=":", label="Prior (uniform)")
     ax.axvline(column["sediment_thickness"], color=SLOTS[1], lw=1.4, label="CRUST1.0")
     ax.set_xlabel("Sediment thickness [m]")
@@ -160,19 +204,48 @@ def small_multiples(store):
     for ax, station in zip(axes.ravel(), STATIONS):
         s = store[station]
         q = s["vs_q"]
-        ax.fill_betweenx(Z / 1e3, q[0], q[4], color=SLOTS[0], alpha=0.18, lw=0, label="Posterior 90 %")
-        ax.fill_betweenx(Z / 1e3, q[1], q[3], color=SLOTS[0], alpha=0.35, lw=0, label="Posterior 68 %")
+        ax.fill_betweenx(
+            Z / 1e3,
+            q[0],
+            q[4],
+            color=SLOTS[0],
+            alpha=0.18,
+            lw=0,
+            label="Posterior 90 %",
+        )
+        ax.fill_betweenx(
+            Z / 1e3,
+            q[1],
+            q[3],
+            color=SLOTS[0],
+            alpha=0.35,
+            lw=0,
+            label="Posterior 68 %",
+        )
         ax.plot(q[2], Z / 1e3, color=INK, lw=1.8, label="Posterior median")
-        ax.plot(s["prior_q"][0], Z / 1e3, color=MUTED, lw=0.8, ls=":", label="Prior 90 %")
+        ax.plot(
+            s["prior_q"][0], Z / 1e3, color=MUTED, lw=0.8, ls=":", label="Prior 90 %"
+        )
         ax.plot(s["prior_q"][1], Z / 1e3, color=MUTED, lw=0.8, ls=":")
         cz, cv = step(s["column"])
         ax.plot(cv, cz / 1e3, color=SLOTS[1], lw=1.2, label="CRUST1.0")
         g = np.array(GJI[station])
-        ax.plot(g[:, 1], g[:, 0] / 1e3, color=SLOTS[2], lw=1.2, ls="--", label="GJI 2025 (text, approx.)")
+        ax.plot(
+            g[:, 1],
+            g[:, 0] / 1e3,
+            color=SLOTS[2],
+            lw=1.2,
+            ls="--",
+            label="GJI 2025 (text, approx.)",
+        )
         if s["resolved_m"] < 8000:
             ax.axhspan(s["resolved_m"] / 1e3, 8, color=GRID, alpha=0.45, lw=0)
             ax.text(150, 7.75, "< 10 % of sensitivity", color=MUTED, fontsize=7.5)
-        flag = "  ⚠ misfit" if s["summary"]["chi2"]["median"] > 2 * s["summary"]["n_data"] else ""
+        flag = (
+            "  ⚠ misfit"
+            if s["summary"]["chi2"]["median"] > 2 * s["summary"]["n_data"]
+            else ""
+        )
         ax.set_title(f"{station}{flag}", loc="left")
         ax.set_xlim(0, 5000)
         ax.set_ylim(8, 0)
@@ -181,7 +254,14 @@ def small_multiples(store):
     for ax in axes[1]:
         ax.set_xlabel("Vs [m/s]")
     handles, labels = axes[0, 0].get_legend_handles_labels()
-    fig.legend(handles, labels, ncol=6, loc="upper right", fontsize=8, bbox_to_anchor=(1.0, 0.965))
+    fig.legend(
+        handles,
+        labels,
+        ncol=6,
+        loc="upper right",
+        fontsize=8,
+        bbox_to_anchor=(1.0, 0.965),
+    )
     fig.suptitle("Vs posteriors (main run). Grey: below the depth holding 90 % of the lowest-frequency "
                  "Vs sensitivity (deeper than 8 km at RR29 and RR50).", x=0.01, ha="left")  # fmt: skip
     fig.tight_layout(rect=(0, 0, 1, 0.94))
@@ -207,9 +287,16 @@ def sensitivity_figure():
         ax.set_ylabel("Depth below seafloor [km]")
     for ax in axes[1]:
         ax.set_xlabel("Median Vs [m/s]")
-    handles = [plt.Line2D([], [], color=c, lw=2.2 if v == "main" else 1.2) for c, v in zip(SLOTS, VARIANT_LABELS)]
-    fig.legend(handles, list(VARIANT_LABELS.values()), ncol=4, loc="upper right", fontsize=8.5)
-    fig.suptitle("Sensitivity of the posterior median to modelling choices", x=0.01, ha="left")
+    handles = [
+        plt.Line2D([], [], color=c, lw=2.2 if v == "main" else 1.2)
+        for c, v in zip(SLOTS, VARIANT_LABELS)
+    ]
+    fig.legend(
+        handles, list(VARIANT_LABELS.values()), ncol=4, loc="upper right", fontsize=8.5
+    )
+    fig.suptitle(
+        "Sensitivity of the posterior median to modelling choices", x=0.01, ha="left"
+    )
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     fig.savefig(ROOT / "figures" / "sensitivity.png")
     plt.close(fig)
@@ -218,7 +305,9 @@ def sensitivity_figure():
 def sediment_figure(store):
     fig, ax = plt.subplots(figsize=(8, 3.6))
     x = np.arange(len(STATIONS))
-    for k, (variant, color, dx) in enumerate((("main", SLOTS[0], -0.12), ("sedscale", SLOTS[6], 0.12))):
+    for k, (variant, color, dx) in enumerate(
+        (("main", SLOTS[0], -0.12), ("sedscale", SLOTS[6], 0.12))
+    ):
         for j, station in enumerate(STATIONS):
             p = store[station]["sediment"][variant]
             ax.plot([j + dx] * 2, [p["p05"], p["p95"]], color=color, lw=1.5)
@@ -231,7 +320,10 @@ def sediment_figure(store):
             label="GlobSed, as quoted by GJI 2025")  # fmt: skip
     ax.set_xticks(x, STATIONS)
     ax.set_ylabel("Sediment thickness [m]")
-    ax.set_title("Sediment (or very slow uppermost layer) thickness: median and 90 % interval", loc="left")
+    ax.set_title(
+        "Sediment (or very slow uppermost layer) thickness: median and 90 % interval",
+        loc="left",
+    )
     ax.legend(fontsize=8, ncol=2)
     fig.tight_layout()
     fig.savefig(ROOT / "figures" / "sediment.png")
@@ -246,7 +338,15 @@ def compliance_figure(store):
         pred = post.pred.reshape(-1, len(d.eta)) * 1e9
         lo, med, hi = np.quantile(pred, [0.05, 0.5, 0.95], axis=0)
         f = d.freqs * 1e3
-        ax.fill_between(f, lo, hi, color=SLOTS[0], alpha=0.25, lw=0, label="Posterior 90 % prediction")
+        ax.fill_between(
+            f,
+            lo,
+            hi,
+            color=SLOTS[0],
+            alpha=0.25,
+            lw=0,
+            label="Posterior 90 % prediction",
+        )
         ax.plot(f, med, color=SLOTS[0], lw=1.8, label="Posterior median prediction")
         ax.errorbar(f, d.eta * 1e9, yerr=d.sigma * 1e9, fmt="o", color=INK, ms=3.5, capsize=2,
                     label="Measured ±1σ")  # fmt: skip
@@ -269,18 +369,26 @@ def main():
     for station in STATIONS:
         post, column, summary = load(station, "main")
         prior, _, _ = load(station, "prior")
-        occam = json.loads((ROOT / "results" / station / f"{station}_occam.json").read_text())
+        occam = json.loads(
+            (ROOT / "results" / station / f"{station}_occam.json").read_text()
+        )
         sens = station_figure(station, post, prior, column, occam, summary)
         zr = sens[0.9]
         vs = post.vs_draws(Z, max_draws=6000)
         sed = {}
         for variant in ("main", "sedscale"):
-            s = json.loads((ROOT / "results" / station / f"{station}_{variant}.json").read_text())
+            s = json.loads(
+                (ROOT / "results" / station / f"{station}_{variant}.json").read_text()
+            )
             sed[variant] = s["parameters"]["sediment_thickness"]
         store[station] = dict(post=post, column=column, summary=summary, resolved_m=zr, sediment=sed,
                               vs_q=np.quantile(vs, [0.05, 0.16, 0.5, 0.84, 0.95], axis=0),
                               prior_q=np.quantile(prior.vs_draws(Z, max_draws=6000), [0.05, 0.95], axis=0))  # fmt: skip
-        at = np.quantile(post.vs_draws(np.array(DEPTHS_KM) * 1e3, max_draws=6000), [0.05, 0.5, 0.95], axis=0)
+        at = np.quantile(
+            post.vs_draws(np.array(DEPTHS_KM) * 1e3, max_draws=6000),
+            [0.05, 0.5, 0.95],
+            axis=0,
+        )
         _, info = load_data(station)
         row = dict(station=station, epoch=station in EPOCH, water_depth_m=post.data.depth,
                    band_mhz=f"{post.data.freqs[0] * 1e3:.1f}-{post.data.freqs[-1] * 1e3:.1f}",
@@ -300,7 +408,9 @@ def main():
     sediment_figure(store)
     compliance_figure(store)
     tables = ROOT / "results" / "tables"
-    (tables / "inversion_summary.json").write_text(json.dumps(rows, indent=1, default=float))
+    (tables / "inversion_summary.json").write_text(
+        json.dumps(rows, indent=1, default=float)
+    )
     with open(tables / "inversion_summary.csv", "w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()

@@ -30,13 +30,17 @@ def main():
     mid = np.cumsum(thick) - thick / 2
     tops = np.concatenate([[0.0], np.cumsum(ref[:-1, 0])])
     rows = ref[np.searchsorted(tops, mid, side="right") - 1]
-    start = np.vstack([np.column_stack([thick, rows[:, 1:3], np.maximum(rows[:, 3], 300.0)]), ref[-1]])
+    start = np.vstack(
+        [np.column_stack([thick, rows[:, 1:3], np.maximum(rows[:, 3], 300.0)]), ref[-1]]
+    )
     result = inv.invert_occam(data.eta, data.freqs, data.depth, start, data.sigma)
     m = result["model"]
     out = dict(chi2=result["chi2"], chi2_start=float(np.sum(((data.eta - inv.calc_norm_compliance(
         data.depth, data.freqs, start)) / data.sigma) ** 2)), iterations=result["iterations"],
         thickness=m[:, 0].tolist(), vs=m[:, 3].tolist(), vs_start=start[:, 3].tolist())  # fmt: skip
-    (ROOT / "results" / station / f"{station}_occam.json").write_text(json.dumps(out, indent=1))
+    (ROOT / "results" / station / f"{station}_occam.json").write_text(
+        json.dumps(out, indent=1)
+    )
     print(station, {k: out[k] for k in ("chi2_start", "chi2", "iterations")})
 
 

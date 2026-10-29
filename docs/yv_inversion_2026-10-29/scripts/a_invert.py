@@ -65,7 +65,13 @@ def h2_result(npz):
     f, depth = d["all_freqs"], float(d["depth"])
     spz, spp = np.abs(d["S_pz"]), d["S_pp"]
     ok = spz > 0
-    h1 = np.where(ok, gravity_corrected_compliance(f, depth, np.where(ok, spz / spp, 0), np.sqrt(spp)), 1)
+    h1 = np.where(
+        ok,
+        gravity_corrected_compliance(
+            f, depth, np.where(ok, spz / spp, 0), np.sqrt(spp)
+        ),
+        1,
+    )
     h2 = np.where(ok, gravity_corrected_compliance(f, depth, np.where(ok, d["S_zz"] / np.where(ok, spz, 1), 0),
                                                    np.sqrt(spp)), 1)  # fmt: skip
     scale = np.interp(d["freqs"], f, h2 / h1)
@@ -74,7 +80,9 @@ def h2_result(npz):
     return d, scale
 
 
-def load_data(station, gain="compy", epoch=True, after=False, gain_rel=0.05, estimator="h1"):
+def load_data(
+    station, gain="compy", epoch=True, after=False, gain_rel=0.05, estimator="h1"
+):
     """ComplianceData with random, monthly, gain and floor covariance terms.
 
     ``after`` joins the after-jump data of Stage G as a second group (epoch
@@ -84,15 +92,21 @@ def load_data(station, gain="compy", epoch=True, after=False, gain_rel=0.05, est
     sub = "epoch/" if epoch and station in EPOCH else ""
     npz = COMPLIANCE / "results" / station / f"{sub}{station}_compliance_{gain}.npz"
     summary = json.loads((npz.parent / f"{station}_summary.json").read_text())
-    sources = [(npz, summary["results"][gain]["monthly"], "stable" if sub else "record")]
+    sources = [
+        (npz, summary["results"][gain]["monthly"], "stable" if sub else "record")
+    ]
     after_npz = ROOT / "compliance_after" / station / f"{station}_compliance_after.npz"
     if after and station in EPOCH and after_npz.exists():
-        monthly = json.loads((after_npz.parent / f"{station}_summary.json").read_text())["monthly"]
+        monthly = json.loads(
+            (after_npz.parent / f"{station}_summary.json").read_text()
+        )["monthly"]
         sources.append((after_npz, monthly, "after"))
     parts, info = [], dict(files=[], months=[], gains=[], bands=[], estimator=estimator)
     for path, months, name in sources:
         stored = dict(np.load(path))
-        keep = (stored["freqs"] >= stored["band"][0] - 1e-12) & (stored["freqs"] <= stored["band"][1] + 1e-12)
+        keep = (stored["freqs"] >= stored["band"][0] - 1e-12) & (
+            stored["freqs"] <= stored["band"][1] + 1e-12
+        )
         subsets = monthly_subsets(months, int(keep.sum()))
         if estimator == "h2":
             stored, scale = h2_result(path)
@@ -105,7 +119,11 @@ def load_data(station, gain="compy", epoch=True, after=False, gain_rel=0.05, est
         info["months"].append(len(subsets))
         info["gains"].append(float(stored["gain"]))
         info["bands"].append(np.asarray(stored["band"]).tolist())
-    data = parts[0] if len(parts) == 1 else ci.ComplianceData.join(parts, [s[2] for s in sources], station)
+    data = (
+        parts[0]
+        if len(parts) == 1
+        else ci.ComplianceData.join(parts, [s[2] for s in sources], station)
+    )
     return data, info
 
 
@@ -126,15 +144,29 @@ VARIANTS = {
     "full": dict(data=dict(epoch=False)),
     "moho": dict(model=dict(moho_shift=(-1000.0, 1000.0))),
     # Fixed Vp makes the posterior multimodal: parallel tempering, 8 replicas.
-    "fixedvp": dict(model=dict(reference="crust1"), sampler=dict(temperatures=1.6 ** np.arange(8))),
-    "vpvs": dict(model=dict(vp_vs_range=(1.7, 2.4)), sampler=dict(temperatures=1.6 ** np.arange(8))),
+    "fixedvp": dict(
+        model=dict(reference="crust1"), sampler=dict(temperatures=1.6 ** np.arange(8))
+    ),
+    "vpvs": dict(
+        model=dict(vp_vs_range=(1.7, 2.4)),
+        sampler=dict(temperatures=1.6 ** np.arange(8)),
+    ),
     "gain": dict(data=dict(gain_rel=0.0), sampler=dict(gain_bounds=(0.95, 1.05))),
-    "final": dict(model=dict(vp_vs_range=(1.7, 2.4)), data=dict(after=True, gain_rel=0.0),
-                  sampler=dict(gain_bounds=(0.95, 1.05), temperatures=1.6 ** np.arange(8))),
-    "final_stable": dict(model=dict(vp_vs_range=(1.7, 2.4)), data=dict(gain_rel=0.0),
-                         sampler=dict(gain_bounds=(0.95, 1.05), temperatures=1.6 ** np.arange(8))),
-    "final_h2": dict(model=dict(vp_vs_range=(1.7, 2.4)), data=dict(after=True, gain_rel=0.0, estimator="h2"),
-                     sampler=dict(gain_bounds=(0.95, 1.05), temperatures=1.6 ** np.arange(8))),
+    "final": dict(
+        model=dict(vp_vs_range=(1.7, 2.4)),
+        data=dict(after=True, gain_rel=0.0),
+        sampler=dict(gain_bounds=(0.95, 1.05), temperatures=1.6 ** np.arange(8)),
+    ),
+    "final_stable": dict(
+        model=dict(vp_vs_range=(1.7, 2.4)),
+        data=dict(gain_rel=0.0),
+        sampler=dict(gain_bounds=(0.95, 1.05), temperatures=1.6 ** np.arange(8)),
+    ),
+    "final_h2": dict(
+        model=dict(vp_vs_range=(1.7, 2.4)),
+        data=dict(after=True, gain_rel=0.0, estimator="h2"),
+        sampler=dict(gain_bounds=(0.95, 1.05), temperatures=1.6 ** np.arange(8)),
+    ),
 }
 
 
@@ -144,18 +176,32 @@ def run(station, variant, seed=0):
     model, column = build_model(station, **spec.get("model", {}))
     out = ROOT / "results" / station
     out.mkdir(parents=True, exist_ok=True)
-    post = ci.sample(data, model, seed=seed, processes=8, **SAMPLER, **spec.get("sampler", {}))
+    post = ci.sample(
+        data, model, seed=seed, processes=8, **SAMPLER, **spec.get("sampler", {})
+    )
     post.save(out / f"{station}_{variant}")
     record = json.loads((out / f"{station}_{variant}.json").read_text())
     record.update(input=info, crust1=column)
-    (out / f"{station}_{variant}.json").write_text(json.dumps(record, indent=1, default=float))
+    (out / f"{station}_{variant}.json").write_text(
+        json.dumps(record, indent=1, default=float)
+    )
     s = record
     print(f"{station} {variant}: chi2 median {s['chi2']['median']:.1f} / N={s['n_data']}, "
           f"max R-hat {s['max_rhat']:.3f}, min ESS {s['min_ess']:.0f}, "
           f"acceptance {np.mean(s['acceptance']):.2f}", flush=True)  # fmt: skip
     if variant in ("main", "final"):  # tempering is pointless without a likelihood
-        settings = {k: v for k, v in spec.get("sampler", {}).items() if k != "temperatures"}
-        prior = ci.sample(data, model, seed=seed + 1, processes=8, prior_only=True, **SAMPLER, **settings)
+        settings = {
+            k: v for k, v in spec.get("sampler", {}).items() if k != "temperatures"
+        }
+        prior = ci.sample(
+            data,
+            model,
+            seed=seed + 1,
+            processes=8,
+            prior_only=True,
+            **SAMPLER,
+            **settings,
+        )
         prior.save(out / f"{station}_{'prior' if variant == 'main' else 'final_prior'}")
 
 

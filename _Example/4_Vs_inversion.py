@@ -22,8 +22,12 @@ def synthetic():
     model = ci.CrustalModel(moho_depth=6900.0)
     truth = np.array([150.0, 1800, 2200, 2900, 3500, 3800, 3950, 4300])
     clean = ci.forward(depth, f, model.layers(truth))
-    noise = ci.ComplianceData.build(f, clean, depth, random=0.003 * clean, gain_rel=0.05, floor_rel=0.01)
-    obs = clean + np.linalg.cholesky(noise.covariance) @ np.random.default_rng(1).standard_normal(len(f))
+    noise = ci.ComplianceData.build(
+        f, clean, depth, random=0.003 * clean, gain_rel=0.05, floor_rel=0.01
+    )
+    obs = clean + np.linalg.cholesky(noise.covariance) @ np.random.default_rng(
+        1
+    ).standard_normal(len(f))
     data = ci.ComplianceData.build(f, obs, depth, random=0.003 * obs, gain_rel=0.05,
                                    floor_rel=0.01, station="synthetic")  # fmt: skip
     print("true parameters:", dict(zip(model.names, truth)))
@@ -46,7 +50,9 @@ def main():
         if args.crust1:
             moho = ci.crust1_column(args.lat, args.lon, args.crust1)["moho_depth"]
         model = ci.CrustalModel(moho_depth=moho)
-    post = ci.sample(data, model, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed=0)
+    post = ci.sample(
+        data, model, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed=0
+    )
     s = post.summary()
     print(f"chi2 median {s['chi2']['median']:.1f} for N={s['n_data']}, max R-hat {s['max_rhat']:.3f}, "
           f"min ESS {s['min_ess']:.0f}")  # fmt: skip

@@ -20,6 +20,9 @@ The workflow has four parts, each usable on its own:
 4. ``Posterior`` provides Vs-depth quantiles, convergence diagnostics
    (Vehtari et al. 2021) and the data fit. Comparing a posterior with a
    prior-only run (``prior_only=True``) shows which depths the data resolve.
+5. ``serpentinization`` converts Vs draws into the degree of
+   serpentinization of a peridotite crust (Miller & Christensen 1997), the
+   interpretation of Aminian et al. (2025, Fig. 10c), with its uncertainty.
 
 The forward model is the minor-vector P-SV propagator of ``inv_compy.raydep``
 (Crawford et al. 1991), evaluated at the seafloor only. Numba compiles it
@@ -151,7 +154,9 @@ class Forward:
         eta = _eta_kernel(self.k, self.omega, m[:, 0].copy(), m[:, 1].copy(),
                           m[:, 2].copy(), m[:, 3].copy())  # fmt: skip
         if not np.all(np.isfinite(eta)):
-            raise ValueError("model is outside the finite real-valued propagator domain")
+            raise ValueError(
+                "model is outside the finite real-valued propagator domain"
+            )
         return eta
 
 
@@ -233,7 +238,9 @@ def hamilton_vs(z):
     Zha & Webb (2016, Figure 8).
     """
     z = np.asarray(z, float)
-    return np.where(z < 36, 116 + 4.65 * z, np.where(z < 120, 237 + 1.28 * z, 322 + 0.58 * z))
+    return np.where(
+        z < 36, 116 + 4.65 * z, np.where(z < 120, 237 + 1.28 * z, 322 + 0.58 * z)
+    )
 
 
 def hamilton_vp(z):
@@ -248,7 +255,9 @@ def hamilton_vp(z):
 def brocher_vp(vs):
     """Vp [m/s] from Vs [m/s] (Brocher 2005, eq. 9; Vs up to 4.5 km/s)."""
     km = np.asarray(vs, float) / 1000.0
-    return 1000.0 * (0.9409 + 2.0947 * km - 0.8206 * km**2 + 0.2683 * km**3 - 0.0251 * km**4)
+    return 1000.0 * (
+        0.9409 + 2.0947 * km - 0.8206 * km**2 + 0.2683 * km**3 - 0.0251 * km**4
+    )
 
 
 def christensen_shaw_density(vp):
@@ -303,9 +312,15 @@ def crust1_column(lat, lon, directory):
         cell=(89.5 - row // 360, -179.5 + row % 360),
         water_depth=float(thickness[0]),
         layers=layers,
-        mantle=(1000 * values["vp"][8], 1000 * values["vs"][8], 1000 * values["rho"][8]),
+        mantle=(
+            1000 * values["vp"][8],
+            1000 * values["vs"][8],
+            1000 * values["rho"][8],
+        ),
         moho_depth=float(sum(layer[1] for layer in layers)),
-        sediment_thickness=float(sum(t for name, t, *_ in layers if "sediment" in name)),
+        sediment_thickness=float(
+            sum(t for name, t, *_ in layers if "sediment" in name)
+        ),
     )
 
 
@@ -351,10 +366,14 @@ class ComplianceData:
         self.covariance = np.asarray(self.covariance, float)
         n = len(self.eta)
         if self.freqs.shape != (n,) or n == 0 or np.any(~(self.freqs > 0)):
-            raise ValueError("freqs and eta must be equal-length vectors of positive frequencies")
+            raise ValueError(
+                "freqs and eta must be equal-length vectors of positive frequencies"
+            )
         if np.any(~np.isfinite(self.eta)) or np.any(self.eta <= 0):
             raise ValueError("eta must be finite and positive")
-        if self.covariance.shape != (n, n) or not np.allclose(self.covariance, self.covariance.T):
+        if self.covariance.shape != (n, n) or not np.allclose(
+            self.covariance, self.covariance.T
+        ):
             raise ValueError("covariance must be a symmetric N x N matrix")
         positive(self.depth, "water depth")
         try:
@@ -367,7 +386,9 @@ class ComplianceData:
             self.group_names = self.group_names or (self.station or "data",)
         self.groups = np.asarray(self.groups, int)
         if self.groups.shape != (n,) or len(self.group_names) != self.groups.max() + 1:
-            raise ValueError("groups must label every frequency with an index into group_names")
+            raise ValueError(
+                "groups must label every frequency with an index into group_names"
+            )
 
     @classmethod
     def join(cls, parts, names, station=""):
@@ -420,7 +441,9 @@ class ComplianceData:
         n = len(eta)
         terms = {}
         if random is not None:
-            terms["random"] = np.diag(np.broadcast_to(np.asarray(random, float), (n,)) ** 2)
+            terms["random"] = np.diag(
+                np.broadcast_to(np.asarray(random, float), (n,)) ** 2
+            )
         if subsets is not None:
             s = np.atleast_2d(np.asarray(subsets, float))
             if s.shape[1] != n or s.shape[0] < 3:
@@ -430,7 +453,11 @@ class ComplianceData:
             c = np.cov(s, rowvar=False) / s.shape[0]
             terms["subsets"] = (1 - shrinkage) * c + shrinkage * np.diag(np.diag(c))
         if gain_rel:
-            v = eta - attraction_compliance(freqs, depth) if gain_vector is None else gain_vector
+            v = (
+                eta - attraction_compliance(freqs, depth)
+                if gain_vector is None
+                else gain_vector
+            )
             v = np.asarray(v, float)
             terms["gain"] = gain_rel**2 * np.outer(v, v)
         if floor_rel:
@@ -449,7 +476,11 @@ class ComplianceData:
         come from ``stacked_compliance`` run on the windows of each month.
         Other keywords go to ``build``.
         """
-        get = result.__getitem__ if isinstance(result, dict) else lambda k: getattr(result, k)
+        get = (
+            result.__getitem__
+            if isinstance(result, dict)
+            else lambda k: getattr(result, k)
+        )
         freqs = np.asarray(get("freqs"), float)
         lo, hi = get("band") if band is None else band
         keep = (freqs >= lo - 1e-12) & (freqs <= hi + 1e-12)
@@ -466,7 +497,9 @@ class ComplianceData:
         Other keywords go to ``build``.
         """
         with np.load(path) as d:
-            return cls.from_result({k: d[k] for k in d.files}, band=band, subsets=subsets, **kwargs)
+            return cls.from_result(
+                {k: d[k] for k in d.files}, band=band, subsets=subsets, **kwargs
+            )
 
     @property
     def sigma(self):
@@ -552,11 +585,19 @@ class CrustalModel:
         integer(self.sediment_sublayers, "sediment_sublayers")
         if self.growth < 1 or self.sediment_max < 0:
             raise ValueError("growth must be >= 1 and sediment_max >= 0")
-        for name in ("sediment_scale", "vs_crust", "vs_mantle", "moho_shift", "sigma_rough"):
+        for name in (
+            "sediment_scale",
+            "vs_crust",
+            "vs_mantle",
+            "moho_shift",
+            "sigma_rough",
+        ):
             lo, hi = getattr(self, name)
             if not lo <= hi:
                 raise ValueError(f"{name} must be (lower, upper)")
-        shallowest = self.moho_depth + self.moho_shift[0] - self.sediment_max - self.min_last
+        shallowest = (
+            self.moho_depth + self.moho_shift[0] - self.sediment_max - self.min_last
+        )
         fixed, edge = [], 0.0
         while edge + self.first_layer * self.growth ** len(fixed) <= shallowest:
             fixed.append(self.first_layer * self.growth ** len(fixed))
@@ -579,7 +620,10 @@ class CrustalModel:
             names.append("moho_shift")
             bounds.append(tuple(map(float, self.moho_shift)))
         if self.vp_vs_range is not None:
-            if self.reference is not None or not 1.0 < self.vp_vs_range[0] < self.vp_vs_range[1]:
+            if (
+                self.reference is not None
+                or not 1.0 < self.vp_vs_range[0] < self.vp_vs_range[1]
+            ):
                 raise ValueError("vp_vs_range needs 1 < lower < upper and no reference")
             names.append("vp_vs")
             bounds.append(tuple(map(float, self.vp_vs_range)))
@@ -587,7 +631,9 @@ class CrustalModel:
         self.bounds = np.array(bounds, float)
         self._index = {name: i for i, name in enumerate(names)}
         if self.roughness_order >= self.n_crust:
-            raise ValueError("roughness_order must be smaller than the number of crustal layers")
+            raise ValueError(
+                "roughness_order must be smaller than the number of crustal layers"
+            )
 
     @property
     def n_rough(self):
@@ -600,7 +646,7 @@ class CrustalModel:
 
     def crust_vs(self, theta):
         i = self._index["vs_crust_1"]
-        return np.asarray(theta[i:i + self.n_crust], float)
+        return np.asarray(theta[i : i + self.n_crust], float)
 
     def roughness(self, theta):
         """Sum of squared ``roughness_order`` differences of crustal Vs [m**2/s**2]."""
@@ -608,7 +654,9 @@ class CrustalModel:
 
     def elastic(self, vs):
         """(Vp, rho) of crust or mantle rows for Vs [m/s]."""
-        vp = brocher_vp(vs) if self.vp_vs is None else self.vp_vs * np.asarray(vs, float)
+        vp = (
+            brocher_vp(vs) if self.vp_vs is None else self.vp_vs * np.asarray(vs, float)
+        )
         return vp, christensen_shaw_density(vp)
 
     def interfaces(self, theta):
@@ -658,7 +706,9 @@ class CrustalModel:
         return model[np.searchsorted(tops, np.asarray(z, float), side="right") - 1, 3]
 
     def in_bounds(self, theta):
-        return bool(np.all(theta >= self.bounds[:, 0]) and np.all(theta <= self.bounds[:, 1]))
+        return bool(
+            np.all(theta >= self.bounds[:, 0]) and np.all(theta <= self.bounds[:, 1])
+        )
 
     def random(self, rng):
         """A draw from the uniform part of the prior."""
@@ -716,12 +766,17 @@ class _Target:
         names = list(model.names)
         if self.gain:
             if "gain" in data.components:
-                raise ValueError("remove the gain covariance term (gain_rel=0) when sampling the gain")
+                raise ValueError(
+                    "remove the gain covariance term (gain_rel=0) when sampling the gain"
+                )
             lo, hi = map(float, gain_bounds)
             if not 0 < lo < 1 < hi:
                 raise ValueError("gain_bounds must bracket 1")
             bounds.append(np.tile([lo, hi], (len(data.group_names), 1)))
-            names += [f"gain_{g}" if len(data.group_names) > 1 else "gain" for g in data.group_names]
+            names += [
+                f"gain_{g}" if len(data.group_names) > 1 else "gain"
+                for g in data.group_names
+            ]
             self.attraction = attraction_compliance(data.freqs, data.depth)
         self.bounds = np.vstack(bounds)
         self.names = names
@@ -732,7 +787,7 @@ class _Target:
     def __call__(self, theta):
         if np.any(theta < self.bounds[:, 0]) or np.any(theta > self.bounds[:, 1]):
             return None
-        layers = self.model.layers(theta[:self.n_model])
+        layers = self.model.layers(theta[: self.n_model])
         if np.any(layers[:, 2] < math.sqrt(2) * layers[:, 3]):  # Poisson ratio < 0
             return None
         try:
@@ -740,10 +795,10 @@ class _Target:
         except ValueError:
             return None
         if self.gain:
-            g = theta[self.n_model:][self.data.groups]
+            g = theta[self.n_model :][self.data.groups]
             pred = self.attraction + g * (pred - self.attraction)
         loglik = 0.0 if self.prior_only else -0.5 * self.data.chi2(pred)
-        return loglik, self.model.roughness(theta[:self.n_model]), pred
+        return loglik, self.model.roughness(theta[: self.n_model]), pred
 
 
 class _Dram:
@@ -759,7 +814,10 @@ class _Dram:
         self.target, self.rng, self.beta = target, rng, beta
         self.n_burn, self.n_rough, self.alpha_bounds = n_burn, n_rough, alpha_bounds
         self.adapt_start, self.adapt_every = adapt_start, adapt_every
-        self.target_acceptance, self.delayed_rejection = target_acceptance, delayed_rejection
+        self.target_acceptance, self.delayed_rejection = (
+            target_acceptance,
+            delayed_rejection,
+        )
         self.dr_scale = dr_scale
         self.x = np.array(theta0, float)
         d = len(self.x)
@@ -820,20 +878,33 @@ class _Dram:
             if stage is not None:
                 self.taken[stage] += 1
         if stage is not None:
-            self.x, (self.loglik, self.rough, self.pred), self.lp = new[0], new[1], new[2]
+            self.x, (self.loglik, self.rough, self.pred), self.lp = (
+                new[0],
+                new[1],
+                new[2],
+            )
         if self.n_rough:
             lo, hi = self.alpha_bounds
-            self.alpha = truncated_gamma(rng, 0.5 * self.n_rough, 0.5 * self.rough, lo, hi)
+            self.alpha = truncated_gamma(
+                rng, 0.5 * self.n_rough, 0.5 * self.rough, lo, hi
+            )
             self.lp = self.log_post(self.loglik, self.rough)
         if it < self.n_burn:  # adaptive proposal, frozen after burn-in
             self.history[it] = self.x
             self.window[0] += stage == 0
             self.window[1] += 1
-            if it >= self.adapt_start and (it - self.adapt_start) % self.adapt_every == 0:
+            if (
+                it >= self.adapt_start
+                and (it - self.adapt_start) % self.adapt_every == 0
+            ):
                 gain = (1 + (it - self.adapt_start) / self.adapt_every) ** -0.6
-                self.log_scale += 2 * gain * (self.window[0] / self.window[1] - self.target_acceptance)
+                self.log_scale += (
+                    2
+                    * gain
+                    * (self.window[0] / self.window[1] - self.target_acceptance)
+                )
                 self.window = [0, 0]
-                recent = self.history[it // 2:it + 1]
+                recent = self.history[it // 2 : it + 1]
                 self._set_cov(math.exp(2 * self.log_scale) * self.sd
                               * (np.cov(recent, rowvar=False) + self.eps))  # fmt: skip
 
@@ -901,7 +972,9 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
                     adapt_start=adapt_start, adapt_every=adapt_every,
                     target_acceptance=target_acceptance, delayed_rejection=delayed_rejection,
                     dr_scale=dr_scale, initial_scale=initial_scale)  # fmt: skip
-    replicas = [_Dram(target, theta0, bounds, rng, beta=1 / T, **settings) for T in temps]
+    replicas = [
+        _Dram(target, theta0, bounds, rng, beta=1 / T, **settings) for T in temps
+    ]
     swaps = np.zeros((2, max(len(temps) - 1, 1)))
     keep = []
     trace = np.empty(n_iter)
@@ -992,8 +1065,12 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
             chains = list(pool.map(_chain_job, jobs))
     stack = {key: np.stack([c[key] for c in chains])
              for key in ("theta", "alpha", "loglik", "roughness", "pred")}  # fmt: skip
-    settings["swap_acceptance"] = np.mean([c["swap_acceptance"] for c in chains], axis=0).tolist()
-    settings["gain_bounds"] = None if gain_bounds is None else [float(v) for v in gain_bounds]
+    settings["swap_acceptance"] = np.mean(
+        [c["swap_acceptance"] for c in chains], axis=0
+    ).tolist()
+    settings["gain_bounds"] = (
+        None if gain_bounds is None else [float(v) for v in gain_bounds]
+    )
     return Posterior(
         data=data, model=model, prior_only=prior_only, **stack,
         acceptance=np.array([c["acceptance"] for c in chains]),
@@ -1036,7 +1113,9 @@ class Posterior:
         """Pooled parameter draws, optionally a random subset."""
         theta = self.theta.reshape(-1, self.theta.shape[-1])
         if max_draws is not None and len(theta) > max_draws:
-            theta = theta[np.random.default_rng(seed).choice(len(theta), max_draws, replace=False)]
+            theta = theta[
+                np.random.default_rng(seed).choice(len(theta), max_draws, replace=False)
+            ]
         return theta
 
     def chi2(self):
@@ -1066,6 +1145,17 @@ class Posterior:
         """Pointwise Vs quantiles at depths ``z``, shape (len(q), len(z))."""
         return np.quantile(self.vs_draws(z, max_draws), q, axis=0)
 
+    def serpentinization_quantiles(self, z, q=(0.05, 0.16, 0.5, 0.84, 0.95), max_draws=4000,
+                                   **kwargs):  # fmt: skip
+        """Pointwise quantiles of :func:`serpentinization` [%] at depths ``z``.
+
+        ``kwargs`` are passed to :func:`serpentinization` (end-member Vs).
+        Returns an array shaped (len(q), len(z)).
+        """
+        return np.quantile(
+            serpentinization(self.vs_draws(z, max_draws), **kwargs), q, axis=0
+        )
+
     def summary(self):
         """JSON-ready summary: parameter quantiles, diagnostics and fit."""
         flat = self.theta.reshape(-1, self.theta.shape[-1])
@@ -1082,13 +1172,27 @@ class Posterior:
             prior_only=self.prior_only,
             n_data=len(self.data.eta),
             parameters=params,
-            sigma_rough=dict(zip(("p05", "median", "p95"),
-                                 map(float, np.quantile(sigma, [0.05, 0.5, 0.95]))),
-                             **diag["log_alpha"]),  # fmt: skip
-            chi2=dict(zip(("p05", "median", "p95"), map(float, np.quantile(chi2, [0.05, 0.5, 0.95])))),
-            max_rhat=max((v["rhat"] for v in diag.values() if v["rhat"] is not None), default=None),
-            min_ess=min((v["ess_bulk"] for v in diag.values() if v["ess_bulk"] is not None),
-                        default=None),  # fmt: skip
+            sigma_rough=dict(
+                zip(
+                    ("p05", "median", "p95"),
+                    map(float, np.quantile(sigma, [0.05, 0.5, 0.95])),
+                ),
+                **diag["log_alpha"],
+            ),  # fmt: skip
+            chi2=dict(
+                zip(
+                    ("p05", "median", "p95"),
+                    map(float, np.quantile(chi2, [0.05, 0.5, 0.95])),
+                )
+            ),
+            max_rhat=max(
+                (v["rhat"] for v in diag.values() if v["rhat"] is not None),
+                default=None,
+            ),
+            min_ess=min(
+                (v["ess_bulk"] for v in diag.values() if v["ess_bulk"] is not None),
+                default=None,
+            ),  # fmt: skip
             acceptance=self.acceptance.tolist(),
             acceptance_dr=self.acceptance_dr.tolist(),
             settings=self.settings,
@@ -1107,7 +1211,9 @@ class Posterior:
                             groups=self.data.groups, group_names=np.array(self.data.group_names),
                             names=np.array(self.names),
                             trace_chi2=np.array([]) if self.trace_chi2 is None else self.trace_chi2)  # fmt: skip
-        path.with_suffix(".json").write_text(json.dumps(self.summary(), indent=1, default=float))
+        path.with_suffix(".json").write_text(
+            json.dumps(self.summary(), indent=1, default=float)
+        )
 
 
 def resolution_ratio(posterior, prior, z, q=(0.16, 0.84)):
@@ -1120,3 +1226,59 @@ def resolution_ratio(posterior, prior, z, q=(0.16, 0.84)):
     pri = np.quantile(prior.vs_draws(z), q, axis=0)
     with np.errstate(invalid="ignore", divide="ignore"):
         return (post[1] - post[0]) / (pri[1] - pri[0])
+
+
+#: Vs of unaltered peridotite [m/s] (Miller & Christensen 1997: 4.2-4.35 km/s;
+#: the 0 % end member of Aminian et al. 2025, Fig. 10c).
+VS_PERIDOTITE = 4200.0
+#: Vs of fully serpentinized peridotite [m/s] (Miller & Christensen 1997:
+#: 2.1-2.3 km/s; the 100 % end member of Aminian et al. 2025, Fig. 10c).
+VS_SERPENTINITE = 2200.0
+
+
+def serpentinization(
+    vs, vs_peridotite=VS_PERIDOTITE, vs_serpentinite=VS_SERPENTINITE, clip=True
+):
+    """Degree of serpentinization [%] implied by Vs, for a peridotite crust.
+
+    P and S velocities of peridotite decrease linearly with the degree of
+    serpentinization (Miller & Christensen 1997), so
+
+        beta = 100 (Vs_peridotite - Vs) / (Vs_peridotite - Vs_serpentinite).
+
+    The defaults are the end members of Aminian et al. (2025, Fig. 10c):
+    0 % at 4.2 km/s and 100 % at 2.2 km/s. The published figure code used
+    (9000 - 2 Vs)/30 instead, i.e. 0 % at 4.5 km/s and 100 % at 3.0 km/s
+    (docs/INVERSION.md, F2).
+
+    The relation assumes that the rock is ultramafic and that serpentinization
+    alone lowers Vs. Porosity, cracks, basalt or gabbro, and temperature also
+    lower Vs, and compliance cannot tell them apart (Aminian et al. 2025,
+    section 6). Apply it to posterior Vs draws, not to a median profile, so the
+    uncertainty is carried through: the transform is monotonic, so quantiles of
+    the draws map onto quantiles of serpentinization.
+
+    Args:
+        vs (array): Shear velocity [m/s], any shape (e.g. draws x depths).
+        vs_peridotite (float): Vs of unaltered peridotite [m/s] (0 %).
+        vs_serpentinite (float): Vs of fully serpentinized peridotite [m/s] (100 %).
+        clip (bool): Limit the result to [0, 100] %. Vs above the peridotite
+            value gives 0 % and below the serpentinite value 100 %.
+
+    Returns:
+        ndarray: Serpentinization [%], same shape as ``vs``.
+
+    Raises:
+        ValueError: If the end members are not positive with
+            ``vs_peridotite > vs_serpentinite``.
+    """
+    vs_peridotite = positive(vs_peridotite, "vs_peridotite")
+    vs_serpentinite = positive(vs_serpentinite, "vs_serpentinite")
+    if vs_peridotite <= vs_serpentinite:
+        raise ValueError("vs_peridotite must exceed vs_serpentinite")
+    beta = (
+        100.0
+        * (vs_peridotite - np.asarray(vs, dtype=float))
+        / (vs_peridotite - vs_serpentinite)
+    )
+    return np.clip(beta, 0.0, 100.0) if clip else beta

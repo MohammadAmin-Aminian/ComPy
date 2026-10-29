@@ -41,20 +41,22 @@ from compy_diagnostics import rank_rhat_ess
 H = 4200.0
 F = np.geomspace(0.0035, 0.0185, 16)
 NOISE, NOISE_SEED = 0.03, 2026
-TRUTH = np.array([
-    [300.0, 1900.0, 2000.0, 800.0],
-    [900.0, 2500.0, 4200.0, 2100.0],
-    [1300.0, 2800.0, 6200.0, 3500.0],
-    [1500.0, 2800.0, 6000.0, 2700.0],
-    [2500.0, 3000.0, 7000.0, 3900.0],
-    [0.0, 3300.0, 8000.0, 4400.0],
-])
+TRUTH = np.array(
+    [
+        [300.0, 1900.0, 2000.0, 800.0],
+        [900.0, 2500.0, 4200.0, 2100.0],
+        [1300.0, 2800.0, 6200.0, 3500.0],
+        [1500.0, 2800.0, 6000.0, 2700.0],
+        [2500.0, 3000.0, 7000.0, 3900.0],
+        [0.0, 3300.0, 8000.0, 4400.0],
+    ]
+)
 N_LAYER, FIRST, GROWTH = 14, 150.0, 1.25
 THICK = FIRST * GROWTH ** np.arange(N_LAYER)
 EDGES = np.concatenate([[0.0], np.cumsum(THICK)])
 MID = 0.5 * (EDGES[:-1] + EDGES[1:])
 VS_BOUNDS = (200.0, 4800.0)
-SIGMA_RANGE = (100.0, 5000.0)           # allowed Vs-jump scale, m/s
+SIGMA_RANGE = (100.0, 5000.0)  # allowed Vs-jump scale, m/s
 STEP = inv.Roughness(np.r_[np.zeros(100), np.ones(100)], 2)  # roughness of a unit step
 ALPHA_BOUNDS = (1 / (STEP * SIGMA_RANGE[1] ** 2), 1 / (STEP * SIGMA_RANGE[0] ** 2))
 ALPHA0 = 1 / (STEP * 600.0**2)
@@ -87,15 +89,30 @@ def run_chain(args):
     name = list(STARTS)[k % len(STARTS)]
     info = {}
     out = inv.invert_compliance_beta(
-        OBS, F, H, starting_model=grid_model(START_VS),
-        s=UNC * (1e9 if prior_only else 1.0), iteration=iterations, sigma_v=100,
-        alpha=ALPHA0, seed=(900 if prior_only else 200) + k, return_profiles=False,
-        adapt_until=adapt, initial_state=grid_model(STARTS[name]),
-        vs_bounds=VS_BOUNDS, vary_thickness=False, alpha_bounds=ALPHA_BOUNDS,
+        OBS,
+        F,
+        H,
+        starting_model=grid_model(START_VS),
+        s=UNC * (1e9 if prior_only else 1.0),
+        iteration=iterations,
+        sigma_v=100,
+        alpha=ALPHA0,
+        seed=(900 if prior_only else 200) + k,
+        return_profiles=False,
+        adapt_until=adapt,
+        initial_state=grid_model(STARTS[name]),
+        vs_bounds=VS_BOUNDS,
+        vary_thickness=False,
+        alpha_bounds=ALPHA_BOUNDS,
         diagnostics=info,
     )
-    return (out[0][:, 3, :].astype(np.float32), out[4].astype(np.float32), out[3][0],
-            out[-1], info["alpha"].astype(np.float32))
+    return (
+        out[0][:, 3, :].astype(np.float32),
+        out[4].astype(np.float32),
+        out[3][0],
+        out[-1],
+        info["alpha"].astype(np.float32),
+    )
 
 
 def main():
@@ -111,8 +128,12 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     t0 = time.time()
     with Pool(2) as pool:
-        res = pool.map(run_chain, [(k, args.iterations, args.adapt, False) for k in range(4)])
-        prior = pool.map(run_chain, [(k, args.prior_iterations, args.adapt, True) for k in range(2)])
+        res = pool.map(
+            run_chain, [(k, args.iterations, args.adapt, False) for k in range(4)]
+        )
+        prior = pool.map(
+            run_chain, [(k, args.prior_iterations, args.adapt, True) for k in range(2)]
+        )
     vs = np.stack([r[0] for r in res])
     misfit = np.stack([r[2] for r in res])
     alphas = np.stack([r[4] for r in res])
@@ -125,19 +146,40 @@ def main():
         r, ess = rank_rhat_ess(post)
         q = np.quantile(post, [0.05, 0.5, 0.95])
         layers[f"layer_{j + 1:02d}"] = dict(
-            top_m=float(EDGES[j]), bottom_m=float(EDGES[j + 1]), rhat=r, ess_bulk=ess,
-            p05=float(q[0]), median=float(q[1]), p95=float(q[2]),
-            truth_mid=float(sample_truth(3, MID[j])), occam=float(occam["model"][j, 3]))
+            top_m=float(EDGES[j]),
+            bottom_m=float(EDGES[j + 1]),
+            rhat=r,
+            ess_bulk=ess,
+            p05=float(q[0]),
+            median=float(q[1]),
+            p95=float(q[2]),
+            truth_mid=float(sample_truth(3, MID[j])),
+            occam=float(occam["model"][j, 3]),
+        )
     sigma = np.sqrt(1 / (STEP * alphas[:, B:].astype(float)))
     rs, ess_s = rank_rhat_ess(np.log(sigma))
     summary = dict(
-        settings=dict(iterations=args.iterations, adapt_until=args.adapt, burnin=B,
-                      chains=4, starts=list(STARTS), water_depth_m=H, freq_hz=F.tolist(),
-                      noise=NOISE, vs_bounds=VS_BOUNDS, sigma_range=SIGMA_RANGE,
-                      n_layer=N_LAYER),
+        settings=dict(
+            iterations=args.iterations,
+            adapt_until=args.adapt,
+            burnin=B,
+            chains=4,
+            starts=list(STARTS),
+            water_depth_m=H,
+            freq_hz=F.tolist(),
+            noise=NOISE,
+            vs_bounds=VS_BOUNDS,
+            sigma_range=SIGMA_RANGE,
+            n_layer=N_LAYER,
+        ),
         layers=layers,
-        sigma_jump=dict(p05=float(np.quantile(sigma, 0.05)), median=float(np.median(sigma)),
-                        p95=float(np.quantile(sigma, 0.95)), rhat=rs, ess_bulk=ess_s),
+        sigma_jump=dict(
+            p05=float(np.quantile(sigma, 0.05)),
+            median=float(np.median(sigma)),
+            p95=float(np.quantile(sigma, 0.95)),
+            rhat=rs,
+            ess_bulk=ess_s,
+        ),
         chi2_truth=float(np.sum(((OBS - CLEAN) / UNC) ** 2)),
         chi2_posterior_median=float(np.median(misfit[:, B:] ** 2)),
         occam=dict(chi2=occam["chi2"], iterations=occam["iterations"]),
@@ -147,13 +189,39 @@ def main():
         runtime_s=time.time() - t0,
     )
     (args.output / "summary.json").write_text(json.dumps(summary, indent=1))
-    np.savez_compressed(args.output / "chains.npz", vs=vs, preds=np.stack([r[1] for r in res]),
-                        misfit=misfit, alpha=alphas, occam=occam["model"], obs=OBS,
-                        clean=CLEAN, unc=UNC, truth=TRUTH, edges=EDGES, freq=F,
-                        water_depth=H, kernel_z=z_k, kernels=kernels,
-                        prior_vs=np.stack([p[0][:, args.adapt:] for p in prior]))
-    print(json.dumps({k: summary[k] for k in ("max_rhat", "min_ess", "sigma_jump",
-                                              "chi2_truth", "chi2_posterior_median")}, indent=1))
+    np.savez_compressed(
+        args.output / "chains.npz",
+        vs=vs,
+        preds=np.stack([r[1] for r in res]),
+        misfit=misfit,
+        alpha=alphas,
+        occam=occam["model"],
+        obs=OBS,
+        clean=CLEAN,
+        unc=UNC,
+        truth=TRUTH,
+        edges=EDGES,
+        freq=F,
+        water_depth=H,
+        kernel_z=z_k,
+        kernels=kernels,
+        prior_vs=np.stack([p[0][:, args.adapt :] for p in prior]),
+    )
+    print(
+        json.dumps(
+            {
+                k: summary[k]
+                for k in (
+                    "max_rhat",
+                    "min_ess",
+                    "sigma_jump",
+                    "chi2_truth",
+                    "chi2_posterior_median",
+                )
+            },
+            indent=1,
+        )
+    )
 
 
 if __name__ == "__main__":

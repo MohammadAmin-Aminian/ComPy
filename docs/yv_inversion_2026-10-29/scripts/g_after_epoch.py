@@ -29,20 +29,30 @@ OUT = ROOT / "compliance_after"
 
 def main():
     station = sys.argv[1]
-    step = json.loads((COMPLIANCE / "results" / "tables" / "stability_steps.json").read_text())[station]
+    step = json.loads(
+        (COMPLIANCE / "results" / "tables" / "stability_steps.json").read_text()
+    )[station]
     jump = UTCDateTime(step["step_time"])
     cal = json.loads((C.WORK / station / "calibration" / "compy_gain.json").read_text())
-    after = [(t, g) for t, g in zip(cal["events_used"], cal["event_gains"]) if UTCDateTime(t) >= jump]
+    after = [
+        (t, g)
+        for t, g in zip(cal["events_used"], cal["event_gains"])
+        if UTCDateTime(t) >= jump
+    ]
     if not after:
         raise SystemExit(f"{station}: no Rayleigh calibration event after {jump}")
     gain = float(np.median([g for _, g in after]))
-    stable = np.load(COMPLIANCE / "results" / station / "epoch" / f"{station}_compliance_compy.npz")
+    stable = np.load(
+        COMPLIANCE / "results" / station / "epoch" / f"{station}_compliance_compy.npz"
+    )
     band = tuple(stable["band"])
     depth = float(stable["depth"])  # station depth from the stable-epoch file
     windows, dropped = C.load_windows(station)
     windows = [w for w in windows if w[0].stats.starttime >= jump]
     criteria = SelectionCriteria(0.9, (10.0, 50.0), (-170.0, -150.0), "gji2025_0.9")
-    r = stacked_compliance(windows, depth, gain, band, criteria, C.NSEG, output_band=C.OUTPUT_BAND)
+    r = stacked_compliance(
+        windows, depth, gain, band, criteria, C.NSEG, output_band=C.OUTPUT_BAND
+    )
     out = OUT / station
     out.mkdir(parents=True, exist_ok=True)
     np.savez(out / f"{station}_compliance_after.npz", freqs=r.freqs, compliance=r.compliance,
@@ -52,14 +62,18 @@ def main():
              S_zz=r.stack["S_zz"], S_pp=r.stack["S_pp"], S_pz=r.stack["S_pz"], gain=gain,
              depth=depth, window_starts=np.array([float(t) for t in r.window_starts]))  # fmt: skip
     in_band = (r.freqs >= band[0] - 1e-12) & (r.freqs <= band[1] + 1e-12)
-    ratio = r.compliance[in_band] / np.interp(r.freqs[in_band], stable["freqs"], stable["compliance"])
+    ratio = r.compliance[in_band] / np.interp(
+        r.freqs[in_band], stable["freqs"], stable["compliance"]
+    )
     summary = dict(station=station, jump=str(jump), gain_after=gain, events_after=after,
                    gain_stable=float(stable["gain"]), band_hz=band, n_windows=r.n_windows,
                    windows_available=len(windows), rejected=r.rejected,
                    monthly=C.monthly(windows, r, depth, gain),
                    ratio_after_over_stable=ratio.tolist(),
                    median_ratio=float(np.median(ratio)))  # fmt: skip
-    (out / f"{station}_summary.json").write_text(json.dumps(summary, indent=1, default=str))
+    (out / f"{station}_summary.json").write_text(
+        json.dumps(summary, indent=1, default=str)
+    )
     print(f"{station}: jump {jump.date}, gain {summary['gain_stable']:.3f} -> {gain:.3f} "
           f"({len(after)} events), {r.n_windows} windows, after/stable compliance "
           f"{np.round(ratio, 3).tolist()}", flush=True)  # fmt: skip

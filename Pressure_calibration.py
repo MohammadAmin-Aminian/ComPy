@@ -103,13 +103,17 @@ def calculate_spectral_ratio(
     from compy_streams import trim_streams_to_same_length
 
     if zchan is not None or pchan is not None:
-        stream = stream.select(channel=zchan or "*Z") + stream.select(channel=pchan or "*H")
+        stream = stream.select(channel=zchan or "*Z") + stream.select(
+            channel=pchan or "*H"
+        )
     z, p = channel_pair(stream)
     nseg = integer(nseg, "nseg", minimum=2)
     if not 0 < f_min < f_max < stream[0].stats.sampling_rate / 2:
         raise ValueError("calibration band must be positive and below Nyquist")
     if not 0 < filt_freq1 < f_min or not filt_freq2 > f_max:
-        raise ValueError("pre-filter must satisfy filt_freq1 < f_min and filt_freq2 > f_max")
+        raise ValueError(
+            "pre-filter must satisfy filt_freq1 < f_min and filt_freq2 > f_max"
+        )
     if not 0 <= coh_trsh <= 1 or not 0 <= mean_trsh <= 1:
         raise ValueError("coherence thresholds must be in [0, 1]")
     if inventory is None:
@@ -259,7 +263,10 @@ def rayleigh_arrival(stream, window=20, timelag=-2, plot_condition=False, zchan=
         plt.subplot(211)
         plt.plot(ztrace.data)
         plt.vlines(
-            max_index + (timelag * 60) * fs, np.min(ztrace.data), np.max(ztrace.data), color="r"
+            max_index + (timelag * 60) * fs,
+            np.min(ztrace.data),
+            np.max(ztrace.data),
+            color="r",
         )
         plt.vlines(
             max_index + ((timelag + window) * 60 * fs),

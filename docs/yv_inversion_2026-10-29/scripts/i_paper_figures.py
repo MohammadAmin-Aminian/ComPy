@@ -54,7 +54,9 @@ CMAP = LinearSegmentedColormap.from_list(
     "aminian2025", list(zip([0, 0.4, 1], [VIRIDIS(0.0), VIRIDIS(0.5), VIRIDIS(1.0)])))  # fmt: skip
 Z = np.arange(0.0, 8000.0 + 1, 50.0)
 VS_BINS = np.linspace(0, 5000, 101)
-plt.rcParams.update({"font.family": "serif", "font.size": 12, "axes.grid": True, "grid.alpha": 0.35})
+plt.rcParams.update(
+    {"font.family": "serif", "font.size": 12, "axes.grid": True, "grid.alpha": 0.35}
+)
 
 
 def load(station, variant="final"):
@@ -105,7 +107,9 @@ def heat_axis(ax, post, column, cbar_label=True, legend=False):
     if cbar_label:
         cb.set_label("Probability")
     if legend:
-        ax.legend(loc="lower left", facecolor="0.15", labelcolor="white", framealpha=0.6)
+        ax.legend(
+            loc="lower left", facecolor="0.15", labelcolor="white", framealpha=0.6
+        )
     return med
 
 
@@ -132,9 +136,17 @@ def misfit_axis(ax, post, title=None):
     n = len(post.data.eta)
     burn = 30000
     it = np.arange(1, post.trace_chi2.shape[1] + 1)
-    keep = np.unique(np.geomspace(1, len(it), 3000).astype(int)) - 1  # even on a log axis
+    keep = (
+        np.unique(np.geomspace(1, len(it), 3000).astype(int)) - 1
+    )  # even on a log axis
     for c, trace in enumerate(post.trace_chi2):
-        ax.plot(it[keep], trace[keep] / n, lw=0.6, alpha=0.8, label="Misfit" if c == 0 else None)
+        ax.plot(
+            it[keep],
+            trace[keep] / n,
+            lw=0.6,
+            alpha=0.8,
+            label="Misfit" if c == 0 else None,
+        )
     ax.set_xscale("log")
     ax.axvline(burn, color="red", ls="--", lw=1.5, label="Burn-in end")
     ax.axhline(1.0, color="red", ls=":", lw=1.5, label="χ²/N = 1")
@@ -155,8 +167,13 @@ def data_axis(ax, post):
         f = d.freqs[sel]
         order = np.argsort(f)
         for i in pick:
-            ax.plot(f[order], pred[i, sel][order] * 1e9, color="green", lw=0.25, alpha=0.4)
-        label = {"stable": "Measured (stable epoch)", "after": "Measured (after jump)"}.get(name, "Measured")
+            ax.plot(
+                f[order], pred[i, sel][order] * 1e9, color="green", lw=0.25, alpha=0.4
+            )
+        label = {
+            "stable": "Measured (stable epoch)",
+            "after": "Measured (after jump)",
+        }.get(name, "Measured")
         ax.errorbar(f[order], d.eta[sel][order] * 1e9, yerr=d.sigma[sel][order] * 1e9, fmt=markers[g],
                     color="black" if g == 0 else "0.45", ms=5, capsize=4, lw=1.5, label=label)  # fmt: skip
     ax.plot([], [], color="green", lw=1, label="Simulated (posterior models)")
@@ -166,7 +183,9 @@ def data_axis(ax, post):
 
 
 def station_figure(s, post, column):
-    fig, axes = plt.subplots(1, 3, figsize=(20, 6), gridspec_kw=dict(width_ratios=[1, 1.1, 0.9]))
+    fig, axes = plt.subplots(
+        1, 3, figsize=(20, 6), gridspec_kw=dict(width_ratios=[1, 1.1, 0.9])
+    )
     data_axis(axes[0], post)
     axes[0].set_title("(a) Measured and simulated compliance")
     misfit_axis(axes[1], post, "(b) Misfit function")
@@ -185,7 +204,10 @@ def misfit_grid(store):
     for ax, s in zip(axes.ravel(), STATIONS):
         misfit_axis(ax, store[s][0], TITLES[s])
     axes[0, 0].legend(loc="upper right", fontsize=10)
-    fig.suptitle("Misfit function over iterations, all chains (burn-in: first 30 000 iterations)", fontsize=13)
+    fig.suptitle(
+        "Misfit function over iterations, all chains (burn-in: first 30 000 iterations)",
+        fontsize=13,
+    )
     fig.tight_layout()
     fig.savefig(ROOT / "figures" / "paper_fig_misfit.png", dpi=130)
     plt.close(fig)
@@ -199,14 +221,19 @@ def fig8(store):
             sel = d.groups == 0
             f, eta, sig = d.freqs[sel], d.eta[sel] * 1e9, d.sigma[sel] * 1e9
             line = ax.plot(f, eta, ls=ls, lw=2.5, label=s)[0]
-            ax.fill_between(f, eta - sig, eta + sig, color=line.get_color(), alpha=0.25, lw=0)
+            ax.fill_between(
+                f, eta - sig, eta + sig, color=line.get_color(), alpha=0.25, lw=0
+            )
         ax.set_yscale("log")
         ax.set_xlim(0.005, 0.02)
         ax.set_title(setting)
         ax.set_xlabel("Frequency [Hz]")
         ax.legend(loc="lower right")
     axes[0].set_ylabel("Log Compliance [1/GPa]")
-    fig.suptitle("Normalized compliance (stable epoch; shading ±1σ including the 5 % gain error)", fontsize=13)
+    fig.suptitle(
+        "Normalized compliance (stable epoch; shading ±1σ including the 5 % gain error)",
+        fontsize=13,
+    )
     fig.tight_layout()
     fig.savefig(ROOT / "figures" / "paper_fig8_compliance.png", dpi=130)
     plt.close(fig)
@@ -218,7 +245,12 @@ def fig10(store):
                                 (axes[1], GROUPS["SWIR"] + GROUPS["RTJ and CIR"], "Mid-Ocean Ridge")):  # fmt: skip
         for s in stations:
             post, column = store[s]
-            ax.plot(np.median(post.vs_draws(Z, 6000), axis=0), -Z, lw=2.2, label=f"{s} {TITLES[s][5:]}")
+            ax.plot(
+                np.median(post.vs_draws(Z, 6000), axis=0),
+                -Z,
+                lw=2.2,
+                label=f"{s} {TITLES[s][5:]}",
+            )
         mean_col = np.mean([crust1_vs_at(store[s][1], Z) for s in stations], axis=0)
         ax.plot(mean_col, -Z, color="black", ls="--", lw=2, label="Avg Crust1")
         ax.set_title(title)

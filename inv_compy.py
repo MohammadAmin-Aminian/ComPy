@@ -9,6 +9,7 @@ Created on Tue Jul 11 14:04:23 2023
 
 from compy_numerics import positive, integer, residual, log_likelihood
 from compy_numerics import roughness as Roughness, wavenumber
+from compy_inversion import serpentinization as _serpentinization
 
 
 def gravd(W, h):
@@ -19,6 +20,33 @@ def gravd(W, h):
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+
+
+#: Depth of one row of the legacy posterior heat maps [m]: the 1-m Vs profiles
+#: of the first 10 km are averaged over 100 samples (docs/INVERSION.md, F1).
+LEGACY_HEATMAP_ROW_M = 100.0
+#: Depth of one element of the 100-element reference arrays of
+#: ``start_model_plot``/``start_model_plot_mean``/``refrence_models`` [m]
+#: (the CRUST1.0 Moho at element 42 lies at about 7 km).
+LEGACY_REFERENCE_ROW_M = 10000.0 / 60.0
+_LEGACY_REFERENCE_ROWS = np.arange(100) * LEGACY_REFERENCE_ROW_M / LEGACY_HEATMAP_ROW_M
+
+
+def _legacy_rows(depth_m):
+    """Heat-map row index of a depth [m] in the legacy figures."""
+    return depth_m / LEGACY_HEATMAP_ROW_M
+
+
+def _legacy_depth_ticks(max_depth_m=14000.0, step_m=2000.0):
+    """Row positions and depth labels [m, negative down] for legacy heat maps.
+
+    Before 2.4 the ticks put row 12 at 2000 m (167-m rows) while each row is
+    100 m, so features were labelled 5/3 too deep (docs/INVERSION.md, F1).
+    """
+    depths = np.arange(0.0, max_depth_m + step_m / 2, step_m)
+    return list(depths / LEGACY_HEATMAP_ROW_M), [int(-d) for d in depths]
+
+
 # %%
 
 
@@ -34,7 +62,12 @@ def _step_sizes(value, name):
     if np.ndim(value) == 0:
         return positive(value, name)
     value = np.asarray(value, dtype=float)
-    if value.ndim != 1 or value.size == 0 or np.any(~np.isfinite(value)) or np.any(value <= 0):
+    if (
+        value.ndim != 1
+        or value.size == 0
+        or np.any(~np.isfinite(value))
+        or np.any(value <= 0)
+    ):
         raise ValueError(f"{name} must be finite and positive")
     return value
 
@@ -46,11 +79,24 @@ def _explicit_bounds(vs_bounds, initial):
     except (TypeError, ValueError) as exc:
         raise ValueError("vs_bounds must be a (lower, upper) pair") from exc
     n = len(initial) - 1
-    lo = np.broadcast_to(np.asarray(lo, float), (n,)) if np.ndim(lo) == 0 else np.asarray(lo, float)
-    hi = np.broadcast_to(np.asarray(hi, float), (n,)) if np.ndim(hi) == 0 else np.asarray(hi, float)
+    lo = (
+        np.broadcast_to(np.asarray(lo, float), (n,))
+        if np.ndim(lo) == 0
+        else np.asarray(lo, float)
+    )
+    hi = (
+        np.broadcast_to(np.asarray(hi, float), (n,))
+        if np.ndim(hi) == 0
+        else np.asarray(hi, float)
+    )
     if lo.shape != (n,) or hi.shape != (n,):
         raise ValueError(f"vs_bounds entries must be scalars or have {n} values")
-    if np.any(~np.isfinite(lo)) or np.any(~np.isfinite(hi)) or np.any(lo <= 0) or np.any(hi <= lo):
+    if (
+        np.any(~np.isfinite(lo))
+        or np.any(~np.isfinite(hi))
+        or np.any(lo <= 0)
+        or np.any(hi <= lo)
+    ):
         raise ValueError("vs_bounds must be finite with 0 < lower < upper")
     half = initial[-1, 3]
     return np.append(lo, half), np.append(hi, half)
@@ -168,8 +214,11 @@ def _inversion(
         from scipy.linalg import solve_triangular
 
         cov = np.asarray(data_covariance, float)
-        if cov.shape != (len(Data), len(Data)) or not np.all(np.isfinite(cov)) \
-                or not np.allclose(cov, cov.T, rtol=1e-10, atol=0):
+        if (
+            cov.shape != (len(Data), len(Data))
+            or not np.all(np.isfinite(cov))
+            or not np.allclose(cov, cov.T, rtol=1e-10, atol=0)
+        ):
             raise ValueError("data_covariance must be a finite symmetric N x N matrix")
         try:
             chol = np.linalg.cholesky(cov)
@@ -195,6 +244,7 @@ def _inversion(
 
         def data_misfit(pred):
             return np.linalg.norm(residual(Data, pred, s))
+
     if starting_model is None:
         initial = Model_V2(1, n_layer=n_layer, sta=sta)[0][:, :, 0]
     else:
@@ -244,7 +294,9 @@ def _inversion(
         except (TypeError, ValueError) as exc:
             raise ValueError("alpha_bounds must be two positive values") from exc
         if not a_lo < a_hi or not a_lo <= alpha <= a_hi:
-            raise ValueError("alpha_bounds must satisfy lower < upper and contain alpha")
+            raise ValueError(
+                "alpha_bounds must satisfy lower < upper and contain alpha"
+            )
         n_jumps = max(n_finite - 1, 1)
         alpha_trace = np.empty(iteration)
     state = {"alpha": float(alpha)}
@@ -278,14 +330,17 @@ def _inversion(
     if elastic_from_vs is not None:
         initial = couple(initial)
         if not in_support(initial):
-            raise ValueError("elastic_from_vs must give Vp above Vs for the starting model")
+            raise ValueError(
+                "elastic_from_vs must give Vp above Vs for the starting model"
+            )
     if initial_state is None:
         current = initial.copy()
     else:
         current = couple(_validate_model(initial_state).copy())
         if (
             current.shape != initial.shape
-            or not np.array_equal(current[:, 1:3], initial[:, 1:3]) and elastic_from_vs is None
+            or not np.array_equal(current[:, 1:3], initial[:, 1:3])
+            and elastic_from_vs is None
             or not np.array_equal(current[-1, 1:], initial[-1, 1:])
             or current[-1, 3] != initial[-1, 3]
             or not np.isclose(current[:-1, 0].sum(), initial[:-1, 0].sum())
@@ -1299,8 +1354,13 @@ def brocher_elastic(vs):
     """
     km = np.asarray(vs, dtype=float) / 1000.0
     vp = 0.9409 + 2.0947 * km - 0.8206 * km**2 + 0.2683 * km**3 - 0.0251 * km**4
-    rho = (1.6612 * vp - 0.4721 * vp**2 + 0.0671 * vp**3 - 0.0043 * vp**4
-           + 0.000106 * vp**5)
+    rho = (
+        1.6612 * vp
+        - 0.4721 * vp**2
+        + 0.0671 * vp**3
+        - 0.0043 * vp**4
+        + 0.000106 * vp**5
+    )
     return vp * 1000.0, rho * 1000.0
 
 
@@ -1589,8 +1649,11 @@ def resample_model(model, dz, max_depth=None):
     max_depth = total if max_depth is None else positive(max_depth, "max_depth")
     interfaces = np.cumsum(model[:-1, 0])
     grid = np.arange(0, max_depth + dz / 2, dz)
-    edges = np.unique(np.concatenate([grid[grid < max_depth],
-                                      interfaces[interfaces < max_depth], [max_depth]]))
+    edges = np.unique(
+        np.concatenate(
+            [grid[grid < max_depth], interfaces[interfaces < max_depth], [max_depth]]
+        )
+    )
     edges = edges[np.concatenate([[True], np.diff(edges) > 1e-9 * max(dz, 1.0)])]
     mid = 0.5 * (edges[:-1] + edges[1:])
     rows = model[np.searchsorted(np.cumsum(model[:-1, 0]), mid, side="right")].copy()
@@ -1755,14 +1818,37 @@ def _tempered_segment(job):
     data, f, depth_s, start, s, cov, t, state, alpha, sv, sh, n, seed, adapt, kw = job
     info = {}
     chain, _, _, misfits, pred, _, rate = _inversion(
-        data, f, depth_s, start, None if s is None else s * np.sqrt(t), 3, sv, sh, n + 1,
-        alpha, "RR38", seed, True, False, adapt_until=adapt, initial_state=state,
-        diagnostics=info, data_covariance=None if cov is None else cov * t, **kw,
+        data,
+        f,
+        depth_s,
+        start,
+        None if s is None else s * np.sqrt(t),
+        3,
+        sv,
+        sh,
+        n + 1,
+        alpha,
+        "RR38",
+        seed,
+        True,
+        False,
+        adapt_until=adapt,
+        initial_state=state,
+        diagnostics=info,
+        data_covariance=None if cov is None else cov * t,
+        **kw,
     )
     alphas = info["alpha"][1:] if "alpha" in info else np.full(n, float(alpha))
     # Sample 0 repeats the incoming state; chi-square is reported at T = 1.
-    return (chain[:, :, 1:], pred[1:], misfits[0, 1:] ** 2 * t, alphas,
-            info["sigma_v"], info["sigma_h"], rate)
+    return (
+        chain[:, :, 1:],
+        pred[1:],
+        misfits[0, 1:] ** 2 * t,
+        alphas,
+        info["sigma_v"],
+        info["sigma_h"],
+        rate,
+    )
 
 
 def invert_tempered(
@@ -1813,11 +1899,20 @@ def invert_tempered(
     ``sigma_v``/``sigma_h`` per temperature slot.
     """
     temps = np.asarray(temperatures, float)
-    if temps.ndim != 1 or temps.size < 1 or temps[0] != 1.0 or np.any(np.diff(temps) <= 0):
+    if (
+        temps.ndim != 1
+        or temps.size < 1
+        or temps[0] != 1.0
+        or np.any(np.diff(temps) <= 0)
+    ):
         raise ValueError("temperatures must increase strictly from 1.0")
     if (s is None) == (data_covariance is None):
         raise ValueError("give exactly one of s or data_covariance")
-    for name, value in (("n_ensembles", n_ensembles), ("segment", segment), ("rounds", rounds)):
+    for name, value in (
+        ("n_ensembles", n_ensembles),
+        ("segment", segment),
+        ("rounds", rounds),
+    ):
         integer(value, name)
     if not 0 <= burn_rounds < rounds:
         raise ValueError("burn_rounds must lie in [0, rounds)")
@@ -1832,8 +1927,23 @@ def invert_tempered(
     rng = np.random.default_rng(seed)
 
     def job(r, state, alpha_r, sv, sh, n, adapt):
-        return (data, f, depth_s, start, s, cov, temps[r[1]], state, alpha_r, sv, sh, n,
-                int(rng.integers(2**31)), adapt, sampler_kw)
+        return (
+            data,
+            f,
+            depth_s,
+            start,
+            s,
+            cov,
+            temps[r[1]],
+            state,
+            alpha_r,
+            sv,
+            sh,
+            n,
+            int(rng.integers(2**31)),
+            adapt,
+            sampler_kw,
+        )
 
     if processes == 1:
         pool, run = None, lambda jobs: [_tempered_segment(j) for j in jobs]
@@ -1843,8 +1953,20 @@ def invert_tempered(
         pool = Pool(processes)
         run = lambda jobs: pool.map(_tempered_segment, jobs)  # noqa: E731
     try:
-        out = run([job(r, states[(r[0] + r[1]) % len(states)], alpha, sigma_v, sigma_h,
-                       max(adapt_until, 1), adapt_until) for r in reps])
+        out = run(
+            [
+                job(
+                    r,
+                    states[(r[0] + r[1]) % len(states)],
+                    alpha,
+                    sigma_v,
+                    sigma_h,
+                    max(adapt_until, 1),
+                    adapt_until,
+                )
+                for r in reps
+            ]
+        )
         cur = {r: o[0][:, :, -1].copy() for r, o in zip(reps, out)}
         alph = {r: float(o[3][-1]) for r, o in zip(reps, out)}
         chi2 = {r: float(o[2][-1]) for r, o in zip(reps, out)}
@@ -1855,15 +1977,23 @@ def invert_tempered(
         for rnd in range(rounds):
             out = run([job(r, cur[r], alph[r], sv[r], sh[r], segment, 0) for r in reps])
             for r, o in zip(reps, out):
-                cur[r], alph[r], chi2[r] = o[0][:, :, -1].copy(), float(o[3][-1]), float(o[2][-1])
+                cur[r], alph[r], chi2[r] = (
+                    o[0][:, :, -1].copy(),
+                    float(o[3][-1]),
+                    float(o[2][-1]),
+                )
                 if r[1] == 0 and rnd >= burn_rounds:
                     k = keep[r[0]]
-                    k["chain"].append(o[0]); k["pred"].append(o[1])
-                    k["chi2"].append(o[2]); k["alpha"].append(o[3])
+                    k["chain"].append(o[0])
+                    k["pred"].append(o[1])
+                    k["chi2"].append(o[2])
+                    k["alpha"].append(o[3])
             for e in range(n_ensembles):  # alternate even and odd adjacent pairs
                 for j in range(rnd % 2, len(temps) - 1, 2):
                     a, b = (e, j), (e, j + 1)
-                    log_acc = (chi2[a] - chi2[b]) * (0.5 / temps[j] - 0.5 / temps[j + 1])
+                    log_acc = (chi2[a] - chi2[b]) * (
+                        0.5 / temps[j] - 0.5 / temps[j + 1]
+                    )
                     tried[j] += 1
                     if np.log(max(rng.random(), np.finfo(float).tiny)) < log_acc:
                         swapped[j] += 1
@@ -2616,14 +2746,13 @@ def plot_inversion_density(
 
     # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
 
-    selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-    selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+    selected_indices_y, selected_labels_y = _legacy_depth_ticks()
     plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
     plt.xlabel("Shear Velocity [m/s]")
     plt.ylabel("Depth [m]")
     cbar.set_label("Probability")
     plt.legend(loc="lower left", fontsize=35)
-    plt.ylim(72, 0)
+    plt.ylim(_legacy_rows(10000), 0)
     # plt.colorbar()
     plt.tight_layout()
     plt.show()
@@ -2753,8 +2882,7 @@ def plot_inversion_density_all(Inversion_container):
 
         # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
 
-        selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-        selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+        selected_indices_y, selected_labels_y = _legacy_depth_ticks()
         plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
         if ii == 0 or ii == 4:
             plt.ylabel("Depth [m]")
@@ -2810,7 +2938,7 @@ def plot_inversion_density_all(Inversion_container):
                 0.1, 0.95, "h)", fontsize=40, fontweight="bold", va="top", color="white"
             )
 
-        plt.ylim(48, 0)
+        plt.ylim(_legacy_rows(8000), 0)
         # plt.ylim(72,0)
         # plt.colorbar()
     plt.tight_layout()
@@ -3032,11 +3160,10 @@ def final_plot(Inversion_container, *, image_dir):
         # Setting custom y-axis ticks and labels
         plt.xticks(ticks=selected_indices, labels=selected_labels)
 
-        selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-        selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+        selected_indices_y, selected_labels_y = _legacy_depth_ticks()
         plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
         plt.legend(loc="upper right")
-        plt.ylim(48, 0)
+        plt.ylim(_legacy_rows(8000), 0)
 
         ax7.set_xlabel("Shear Velocity [m/s]")
         ax7.set_ylabel("Depth [m]")
@@ -3114,10 +3241,10 @@ def final_plot(Inversion_container, *, image_dir):
 
         depth = np.arange(0, 100, 1)
 
-        serpentinization_percentage = (
-            9000 - 2 * (np.median(vs_downsampled, axis=0))
-        ) / 30
-        serpentinization_percentage = np.minimum(serpentinization_percentage, 100)
+        # Fig. 10c relation (4.2 km/s: 0 %, 2.2 km/s: 100 %); was (9000 - 2 Vs)/30 (F2).
+        serpentinization_percentage = _serpentinization(
+            np.median(vs_downsampled, axis=0)
+        )
         plt.plot(
             serpentinization_percentage,
             depth,
@@ -3134,10 +3261,9 @@ def final_plot(Inversion_container, *, image_dir):
 
         plt.grid(True)
         plt.xlim([0, 100])
-        selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-        selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+        selected_indices_y, selected_labels_y = _legacy_depth_ticks()
         plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
-        plt.ylim(48, 0)
+        plt.ylim(_legacy_rows(8000), 0)
         plt.legend(loc="lower right")
 
         ax8.set_xlabel("Serpentinization (%)")
@@ -3246,14 +3372,13 @@ def plot_inversion_all(Inversion_container):
 
     # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
 
-    selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-    selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+    selected_indices_y, selected_labels_y = _legacy_depth_ticks()
     plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
     plt.ylabel("Depth [m]")
     plt.xlabel("Shear Velocity [m/s]")
     plt.plot(
         refrence_model[0],
-        depth,
+        _LEGACY_REFERENCE_ROWS,
         color="red",
         linewidth=5,
         linestyle="dashed",
@@ -3261,7 +3386,7 @@ def plot_inversion_all(Inversion_container):
     )
     plt.plot(
         refrence_model[1],
-        depth,
+        _LEGACY_REFERENCE_ROWS,
         color="purple",
         linewidth=5,
         linestyle="dotted",
@@ -3269,14 +3394,14 @@ def plot_inversion_all(Inversion_container):
     )
     plt.plot(
         refrence_model[2],
-        depth,
+        _LEGACY_REFERENCE_ROWS,
         color="green",
         linewidth=5,
         linestyle="dotted",
         label="SWIR 65-64°E ",
     )
     plt.legend(loc="lower left", fontsize=30)
-    plt.ylim(48, 0)
+    plt.ylim(_legacy_rows(8000), 0)
     # plt.ylim(72,0)
     # plt.colorbar()
     plt.tight_layout()
@@ -3362,7 +3487,7 @@ def plot_inversion_density_mean_all(Inversion_container):
         # ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
         plt.plot(
             start_model,
-            depth,
+            _LEGACY_REFERENCE_ROWS,
             color="blue",
             linewidth=5,
             linestyle="dashdot",
@@ -3371,7 +3496,7 @@ def plot_inversion_density_mean_all(Inversion_container):
         if sta == "RR40":
             plt.plot(
                 refrence_model[0],
-                depth,
+                _LEGACY_REFERENCE_ROWS,
                 color="red",
                 linewidth=5,
                 linestyle="dashed",
@@ -3379,7 +3504,7 @@ def plot_inversion_density_mean_all(Inversion_container):
             )
             plt.plot(
                 refrence_model[1],
-                depth,
+                _LEGACY_REFERENCE_ROWS,
                 color="purple",
                 linewidth=5,
                 linestyle="dotted",
@@ -3387,7 +3512,7 @@ def plot_inversion_density_mean_all(Inversion_container):
             )
             plt.plot(
                 refrence_model[2],
-                depth,
+                _LEGACY_REFERENCE_ROWS,
                 color="green",
                 linewidth=5,
                 linestyle="dotted",
@@ -3397,7 +3522,7 @@ def plot_inversion_density_mean_all(Inversion_container):
         if sta == "RR36" or sta == "RR38":
             plt.plot(
                 refrence_model[4],
-                depth,
+                _LEGACY_REFERENCE_ROWS,
                 color="red",
                 linewidth=5,
                 linestyle="dashed",
@@ -3432,8 +3557,7 @@ def plot_inversion_density_mean_all(Inversion_container):
 
         # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
 
-        selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-        selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+        selected_indices_y, selected_labels_y = _legacy_depth_ticks()
         plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
         if ii == 0 or ii == 4:
             plt.ylabel("Depth [m]")
@@ -3444,7 +3568,7 @@ def plot_inversion_density_mean_all(Inversion_container):
         # if ii == 7:
         # plt.legend(loc='lower left',fontsize=30)
         plt.legend(loc="lower left", fontsize=30)
-        plt.ylim(48, 0)
+        plt.ylim(_legacy_rows(8000), 0)
         # plt.ylim(72,0)
         # plt.colorbar()
     plt.tight_layout()
@@ -3513,10 +3637,10 @@ def plot_inversion_serpentinization(Inversion_container):
         ax_inset = inset_axes(
             ax_main, width="30%", height="50%", loc="lower left", borderpad=1.5
         )
-        serpentinization_percentage = (
-            9000 - 2 * np.median(vs_downsampled, axis=0)
-        ) / 30
-        serpentinization_percentage = np.minimum(serpentinization_percentage, 100)
+        # Fig. 10c relation (4.2 km/s: 0 %, 2.2 km/s: 100 %); was (9000 - 2 Vs)/30 (F2).
+        serpentinization_percentage = _serpentinization(
+            np.median(vs_downsampled, axis=0)
+        )
         ax_inset.plot(
             serpentinization_percentage,
             depth,
@@ -3655,8 +3779,7 @@ def plot_inversion_serpentinization1(Inversion_container):
 
         # plt.plot(vs[0][0:10000], depth/100, color='black', label='Start Model',linewidth= 5 ,linestyle='dashed')
 
-        selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-        selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+        selected_indices_y, selected_labels_y = _legacy_depth_ticks()
         plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
         if ii == 0 or ii == 4:
             plt.ylabel("Depth [m]")
@@ -3667,7 +3790,7 @@ def plot_inversion_serpentinization1(Inversion_container):
         # if ii == 7:
         # plt.legend(loc='lower left',fontsize=30)
         plt.legend(loc="lower left", fontsize=30)
-        plt.ylim(48, 0)
+        plt.ylim(_legacy_rows(8000), 0)
         # plt.ylim(72,0)
         # plt.colorbar()
 
@@ -3679,10 +3802,10 @@ def plot_inversion_serpentinization1(Inversion_container):
         depth = np.arange(0, 100, 1)
 
         # ff = plt.imshow(c , aspect='auto', cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1))
-        serpentinization_percentage = (
-            9000 - 2 * (np.median(vs_downsampled, axis=0))
-        ) / 30
-        serpentinization_percentage = np.minimum(serpentinization_percentage, 100)
+        # Fig. 10c relation (4.2 km/s: 0 %, 2.2 km/s: 100 %); was (9000 - 2 Vs)/30 (F2).
+        serpentinization_percentage = _serpentinization(
+            np.median(vs_downsampled, axis=0)
+        )
         plt.plot(
             serpentinization_percentage,
             depth,
@@ -3705,8 +3828,7 @@ def plot_inversion_serpentinization1(Inversion_container):
 
         plt.grid(True)
         plt.xlim([0, 100])
-        selected_indices_y = [0, 12, 24, 36, 48, 60, 72, 84]
-        selected_labels_y = [0, -2000, -4000, -6000, -8000, -10000, -12000, -14000]
+        selected_indices_y, selected_labels_y = _legacy_depth_ticks()
         plt.yticks(ticks=selected_indices_y, labels=selected_labels_y)
         if ii == 0 or ii == len(Inversion_container):
             plt.ylabel("Depth [m]")
@@ -3717,7 +3839,7 @@ def plot_inversion_serpentinization1(Inversion_container):
         # if ii == 7:
         # plt.legend(loc='lower left',fontsize=30)
         # plt.legend(loc='lower left',fontsize=30)
-        plt.ylim(48, 0)
+        plt.ylim(_legacy_rows(8000), 0)
         # plt.ylim(72,0)
         # plt.colorbar()
 

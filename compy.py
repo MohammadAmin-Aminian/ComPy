@@ -259,8 +259,11 @@ def remove_coherent_noise(
 
     Implements the transfer-function correction of Crawford & Webb (2000) as
     applied by Aminian et al. (2025, section 4.1.4): each 12–24 h window is
-    cleaned with TiSKitPy's DataCleaner using the horizontals in order of
-    decreasing coherence. Long windows give many spectral averages, avoiding
+    cleaned with TiSKitPy's DataCleaner. The horizontals are removed one after
+    the other, each from the vertical and from the remaining horizontals
+    (conditioned spectra, Bendat & Piersol), so the result is the
+    multiple-coherence correction and does not depend on their order; the
+    paper's "dominant channel first" is therefore equivalent. Long windows give many spectral averages, avoiding
     the high-coherence bias of one-hour estimates. Pressure is never used as a
     noise channel, so the compliance signal itself is not removed.
 

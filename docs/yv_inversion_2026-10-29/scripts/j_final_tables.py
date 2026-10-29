@@ -48,14 +48,25 @@ def main():
             row["gain_abs"][g] = q(used * flat[:, names.index(key)])
         if len(final["groups"]) == 2:
             i, j = names.index("gain_stable"), names.index("gain_after")
-            ratio = final["input"]["gains"][1] * flat[:, j] / (final["input"]["gains"][0] * flat[:, i])
+            ratio = (
+                final["input"]["gains"][1]
+                * flat[:, j]
+                / (final["input"]["gains"][0] * flat[:, i])
+            )
             row["gain_ratio_after_stable"] = q(ratio)
-            row["rayleigh_ratio"] = final["input"]["gains"][1] / final["input"]["gains"][0]
+            row["rayleigh_ratio"] = (
+                final["input"]["gains"][1] / final["input"]["gains"][0]
+            )
         vs = post.vs_draws(np.array(DEPTHS) * 1e3, max_draws=6000)
         row["vs"] = {f"{d:g}": q(vs[:, k]) for k, d in enumerate(DEPTHS)}
         if s in EPOCH:
-            g = json.loads((ROOT / "compliance_after" / s / f"{s}_summary.json").read_text())
-            row["after_over_stable"] = [min(g["ratio_after_over_stable"]), max(g["ratio_after_over_stable"])]
+            g = json.loads(
+                (ROOT / "compliance_after" / s / f"{s}_summary.json").read_text()
+            )
+            row["after_over_stable"] = [
+                min(g["ratio_after_over_stable"]),
+                max(g["ratio_after_over_stable"]),
+            ]
             row["after_windows"] = g["n_windows"]
         rows.append(row)
     (ROOT / "results" / "tables" / "final.json").write_text(json.dumps(rows, indent=1))
@@ -65,8 +76,15 @@ def main():
     for r in rows:
         gains = "; ".join(f"{g}: {u:.3f} → {r['gain_abs'][g]['median']:.3f}"
                           for g, u in zip(r["groups"], r["gains_used"]))  # fmt: skip
-        h2 = f"{r['chi2_final_h2']:.1f}/{r['n_final_h2']}" if "chi2_final_h2" in r else "–"
-        vs = " | ".join(f"{v['median']:.0f} ({v['p05']:.0f}–{v['p95']:.0f})" for v in r["vs"].values())
+        h2 = (
+            f"{r['chi2_final_h2']:.1f}/{r['n_final_h2']}"
+            if "chi2_final_h2" in r
+            else "–"
+        )
+        vs = " | ".join(
+            f"{v['median']:.0f} ({v['p05']:.0f}–{v['p95']:.0f})"
+            for v in r["vs"].values()
+        )
         lines.append(f"| {r['station']} | {r['chi2']:.1f}/{r['n']} | {h2} | {r['max_rhat']:.3f} | "
                      f"{r['vp_vs']['median']:.2f} ({r['vp_vs']['p05']:.2f}–{r['vp_vs']['p95']:.2f}) | {gains} | "
                      f"{r['sediment']['median']:.0f} ({r['sediment']['p05']:.0f}–{r['sediment']['p95']:.0f}) | {vs} |")  # fmt: skip
