@@ -197,7 +197,8 @@ def vs_kernels(depth, freqs, model, *, dz=50.0, max_depth=20000.0, rel=0.01):
     """Sensitivity d ln(eta) / d ln(Vs) per km of depth, at constant Vp/Vs.
 
     Each slice of ``slice_model`` is perturbed by ``rel`` in Vs and Vp
-    together (density fixed), the coupling used by ``CrustalModel``. Sums of
+    together with density fixed, close to the coupling of ``CrustalModel``
+    (whose density also follows Vp, a minor effect on compliance). Sums of
     ``K * dz / 1000`` over depth approximate the response to a uniform
     relative change. Returns ``(z_mid, K)`` with K shaped (len(freqs), slices).
     """
