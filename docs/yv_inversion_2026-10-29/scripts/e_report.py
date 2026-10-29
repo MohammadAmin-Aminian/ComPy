@@ -145,7 +145,7 @@ a:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
   <p class="eyebrow">ComPy 2.3 · RHUM-RUM network YV · 29 October 2026</p>
   <h1>Shear velocity beneath the YV broadband stations</h1>
   <p class="meta">Bayesian inversion of the 2.2 compliance results with the new <code>compy_inversion</code> module.
-  Branch <code>claude/inversion-2026-10-29</code>. All 121 tests pass.</p>
+  Branch <code>claude/inversion-2026-10-29</code>, draft <a href="https://github.com/MohammadAmin-Aminian/ComPy/pull/7">PR #7</a>. All 121 tests pass.</p>
 </header>
 
 <section class="prose">
