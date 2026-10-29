@@ -371,6 +371,8 @@ The pieces:
 - **Sensitivity.** `vs_kernels` and `sensitivity_depth` show which depths the data see.
 
 The forward model is the `raydep` propagator compiled with Numba if it is installed (`pip install numba`); this is about 140 times faster.
+Chains run in spawned processes: call `sample` from a notebook or from a script
+guarded by `if __name__ == "__main__":` (or pass `processes=1`).
 Results for the eight YV stations are in
 [docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md).
 

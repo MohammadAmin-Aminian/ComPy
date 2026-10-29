@@ -408,6 +408,23 @@ class ComplianceData:
         return cls(freqs, eta, depth, sum(terms.values()), terms, station)
 
     @classmethod
+    def from_result(cls, result, *, band=None, subsets=None, **kwargs):
+        """Build from a ``compy_processing.ComplianceResult`` (or any object with
+        ``freqs``, ``compliance``, ``uncertainty``, ``band`` and ``depth``).
+
+        Frequencies outside ``band`` (default: the result's band) are dropped;
+        ``subsets`` must already be restricted to that band. Monthly subsets
+        come from ``stacked_compliance`` run on the windows of each month.
+        Other keywords go to ``build``.
+        """
+        get = result.__getitem__ if isinstance(result, dict) else lambda k: getattr(result, k)
+        freqs = np.asarray(get("freqs"), float)
+        lo, hi = get("band") if band is None else band
+        keep = (freqs >= lo - 1e-12) & (freqs <= hi + 1e-12)
+        return cls.build(freqs[keep], np.asarray(get("compliance"))[keep], float(get("depth")),
+                         random=np.asarray(get("uncertainty"))[keep], subsets=subsets, **kwargs)  # fmt: skip
+
+    @classmethod
     def from_npz(cls, path, *, band=None, subsets=None, **kwargs):
         """Load a ComPy 2.2 compliance file (``stacked_compliance`` output).
 
@@ -416,11 +433,8 @@ class ComplianceData:
         are dropped; ``subsets`` must already be restricted to that band.
         Other keywords go to ``build``.
         """
-        d = np.load(path)
-        lo, hi = d["band"] if band is None else band
-        keep = (d["freqs"] >= lo - 1e-12) & (d["freqs"] <= hi + 1e-12)
-        return cls.build(d["freqs"][keep], d["compliance"][keep], float(d["depth"]),
-                         random=d["uncertainty"][keep], subsets=subsets, **kwargs)  # fmt: skip
+        with np.load(path) as d:
+            return cls.from_result({k: d[k] for k in d.files}, band=band, subsets=subsets, **kwargs)
 
     @property
     def sigma(self):
@@ -466,6 +480,10 @@ class CrustalModel:
             reproduces the freedom allowed by Aminian et al. (2025).
         vp_vs (float or None): Crust and mantle Vp/Vs; None uses
             ``brocher_vp``. Density follows ``christensen_shaw_density``.
+        vp_vs_range (tuple or None): Bounds of a free crustal Vp/Vs, sampled
+            as one parameter for all crustal layers (the mantle keeps
+            ``vp_vs``, or 1.85 if ``vp_vs`` is None). Lets the data weigh
+            Poisson's ratio, e.g. high Vp/Vs of serpentinized peridotite.
         reference (array or None): Layered model whose Vp and density, at
             each crustal layer's mid-depth and in the half-space, replace the
             ``vp_vs`` relation: the fixed-Vp choice of Crawford et al. (1991)
@@ -493,6 +511,7 @@ class CrustalModel:
     vp_vs: float | None = 1.85
     roughness_order: int = 2
     sigma_rough: tuple = (20.0, 3000.0)
+    vp_vs_range: tuple | None = None
     reference: np.ndarray | None = None
 
     def __post_init__(self):
@@ -527,6 +546,11 @@ class CrustalModel:
         if self.moho_shift[0] < self.moho_shift[1]:
             names.append("moho_shift")
             bounds.append(tuple(map(float, self.moho_shift)))
+        if self.vp_vs_range is not None:
+            if self.reference is not None or not 1.0 < self.vp_vs_range[0] < self.vp_vs_range[1]:
+                raise ValueError("vp_vs_range needs 1 < lower < upper and no reference")
+            names.append("vp_vs")
+            bounds.append(tuple(map(float, self.vp_vs_range)))
         self.names = names
         self.bounds = np.array(bounds, float)
         self._index = {name: i for i, name in enumerate(names)}
@@ -576,7 +600,12 @@ class CrustalModel:
         vs = self.crust_vs(theta)
         thick = np.diff(np.append(h, bottoms))
         vsm = theta[self._index["vs_mantle"]]
-        if self.reference is None:
+        if "vp_vs" in self._index:
+            vp = theta[self._index["vp_vs"]] * vs
+            rho = christensen_shaw_density(vp)
+            vpm = (self.vp_vs or 1.85) * vsm
+            rhom = christensen_shaw_density(vpm)
+        elif self.reference is None:
             vp, rho = self.elastic(vs)
             vpm, rhom = self.elastic(vsm)
         else:
@@ -863,8 +892,10 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     parameter vector per chain. Draws come from ``_Target``: the Gaussian
     likelihood of ``data`` (or none with ``prior_only``) and the uniform and
     roughness priors of ``model``, with Vp/Vs >= sqrt(2). ``processes`` sets
-    the worker count (1 runs serially). Remaining keywords go to
-    ``dram_chain``, e.g. ``temperatures`` for parallel tempering.
+    the worker count (1 runs serially). Worker processes are spawned, so call
+    ``sample`` from a notebook or from a script guarded by
+    ``if __name__ == "__main__":``. Remaining keywords go to ``dram_chain``,
+    e.g. ``temperatures`` for parallel tempering.
     """
     rng = np.random.default_rng(seed)
     target = _Target(data, model, prior_only)

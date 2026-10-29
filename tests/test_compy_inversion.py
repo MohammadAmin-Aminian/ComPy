@@ -102,6 +102,13 @@ def test_from_npz_restricts_to_band(tmp_path):
     data = ci.ComplianceData.from_npz(path)
     np.testing.assert_allclose(data.freqs, [0.003, 0.004, 0.005, 0.006, 0.007])
     assert data.depth == 3000.0
+    from types import SimpleNamespace
+
+    stored = dict(np.load(path))
+    same = ci.ComplianceData.from_result(SimpleNamespace(**stored))
+    np.testing.assert_allclose(same.covariance, data.covariance)
+    narrow = ci.ComplianceData.from_result(stored, band=(0.004, 0.005))
+    np.testing.assert_allclose(narrow.freqs, [0.004, 0.005])
 
 
 def test_crustal_model_geometry_and_elastic_relations():
@@ -331,3 +338,15 @@ def test_python_kernel_matches_compiled_kernel():
     fwd = ci.Forward(3000.0, np.array([0.006, 0.01, 0.016]))
     args = [np.ascontiguousarray(model[:, i]) for i in range(4)]
     np.testing.assert_allclose(kernel(fwd.k, fwd.omega, *args), fwd(model), rtol=1e-9)
+
+
+def test_free_crustal_vp_vs():
+    model = ci.CrustalModel(moho_depth=7000.0, sediment_max=0.0, vp_vs_range=(1.7, 2.4))
+    assert model.names[-1] == "vp_vs"
+    theta = np.array([2000.0] * model.n_crust + [4400.0, 2.2])
+    layers = model.layers(theta)
+    np.testing.assert_allclose(layers[:-1, 2], 2.2 * layers[:-1, 3])
+    np.testing.assert_allclose(layers[-1, 2], 1.85 * 4400.0)
+    np.testing.assert_allclose(layers[:, 1], 1850 + 0.165 * layers[:, 2])
+    with pytest.raises(ValueError):
+        ci.CrustalModel(moho_depth=7000.0, vp_vs_range=(1.7, 2.4), reference=layers)
