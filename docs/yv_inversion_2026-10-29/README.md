@@ -4,6 +4,59 @@ Bayesian shear-velocity inversion of the eight YV (RHUM-RUM) broadband complianc
 2026-10-28 (`docs/yv_compliance_2026-10-28`). The method, the audit of the earlier inversion code and the validation are
 in [`docs/INVERSION.md`](../INVERSION.md).
 
+## Second round: gain sampled, epochs joined, paper-style figures
+
+- **Gain.** The pressure gain is sampled as a free factor within ±5 % of the Rayleigh value, one per epoch
+  (`gain_bounds`), instead of a 5 % covariance term.
+- **After-jump data.** For RR36, RR38, RR40 and RR50, the data after the sensitivity jump (`g_after_epoch.py`) are
+  stacked with their own Rayleigh gain and inverted together with the stable epoch.
+- **Final model.** Crustal Vp/Vs is free in [1.7, 2.4]; Z/P estimator; tempering with 8 replicas.
+- **Bracket.** `final_h2` repeats the final run with 1/(P/Z) (`h_estimators.py`).
+- **Figures.** `i_paper_figures.py` writes the figures in the style of Aminian et al. (2025):
+  - `paper_fig9_heatmaps.png`;
+  - `paper_fig_misfit.png`;
+  - `paper_fig8_compliance.png`;
+  - `paper_fig10_profiles.png`;
+  - `<STA>_paper.png`.
+
+| Station | χ²/N (H1) | χ²/N (H2) | R-hat | Vp/Vs | Gain used → sampled | Sediment [m] | Vs 0.5 km | Vs 1 km | Vs 2 km | Vs 3 km |
+|---|---|---|---|---|---|---|---|---|---|---|
+| RR28 | 2.9/6 | 17.8/6 | 1.012 | 2.15 (1.81–2.38) | data: 0.780 → 0.777 | 311 (138–398) | 2157 (1450–3760) | 2789 (2150–3725) | 3421 (2910–3931) | 3421 (2910–3931) |
+| RR29 | 2.9/5 | 12.4/5 | 1.005 | 2.15 (1.79–2.38) | data: 0.693 → 0.689 | 91 (15–139) | 3186 (2333–4252) | 3426 (2709–4217) | 3678 (3106–4218) | 3678 (3106–4218) |
+| RR34 | 2.4/6 | 33.9/6 | 1.008 | 2.08 (1.75–2.37) | data: 0.573 → 0.574 | 219 (50–309) | 2258 (1723–3727) | 2811 (2203–3560) | 3185 (2757–3686) | 3185 (2757–3686) |
+| RR36 | 6.8/16 | 39.3/16 | 1.017 | 2.12 (1.80–2.37) | stable: 0.642 → 0.656; after: 1.097 → 1.071 | 72 (10–143) | 2236 (1756–3320) | 2578 (2082–3094) | 3090 (2740–3594) | 3090 (2740–3594) |
+| RR38 | 33.0/12 | 19.6/12 | 1.015 | 2.20 (1.90–2.38) | stable: 0.596 → 0.570; after: 0.638 → 0.667 | 224 (138–251) | 3062 (2307–4369) | 3722 (3025–4402) | 4058 (3697–4471) | 4058 (3697–4471) |
+| RR40 | 4.2/10 | 31.5/10 | 1.009 | 2.01 (1.73–2.36) | stable: 0.739 → 0.717; after: 0.786 → 0.810 | 164 (40–219) | 2964 (2092–4165) | 3269 (2581–3978) | 3556 (3078–3994) | 3556 (3078–3994) |
+| RR50 | 5.7/12 | 85.1/12 | 1.005 | 2.11 (1.82–2.37) | stable: 0.681 → 0.685; after: 1.161 → 1.148 | 80 (14–112) | 3389 (2502–4346) | 3672 (2980–4363) | 3964 (3495–4429) | 3964 (3495–4429) |
+| RR52 | 3.3/9 | 11.4/9 | 1.007 | 2.04 (1.74–2.36) | data: 0.666 → 0.664 | 46 (6–81) | 2823 (2332–3632) | 3193 (2779–3672) | 3590 (3283–4013) | 3590 (3283–4013) |
+
+Vs in m/s, median (5–95 %); gains are the absolute values (Rayleigh gain → posterior median).
+
+### Findings
+
+- **Gain resolution.** One epoch cannot pin the absolute gain, which trades off with the Vs level. Two epochs resolve
+  their relative gain:
+
+  | Station | After/stable gain: inversion | Rayleigh |
+  |---|---|---|
+  | RR50 | 1.677 | 1.705 |
+  | RR36 | 1.635 | 1.708 (1 event) |
+  | RR40 | 1.127 | 1.063 |
+
+  The RR50 and RR36 jumps are gain changes that the Rayleigh calibration corrects.
+- **RR38.** Its after-jump compliance differs in shape (+27 % at the lowest, +7 % at the highest frequency), and it
+  misfits (χ² 33/12). 1/(P/Z) fits it better than Z/P, so its pressure channel is suspect. Leave RR38 out of the
+  interpretation.
+- **Estimator.** 1/(P/Z) misfits the other seven stations (χ² 11–85), so their noise is on the vertical and Z/P is
+  right.
+- **Vp/Vs and Vs level.** With Vp/Vs free, Vs at 1–2 km is 3–11 % lower than with Vp/Vs 1.85, and its intervals
+  include that uncertainty.
+- **Errors in the publication figure code** (`docs/INVERSION.md`, F1–F2):
+  - the heat-map depths are 5/3 too deep relative to their labels;
+  - the serpentinization formula disagrees with the Fig. 10 caption.
+
+## First round
+
 ## Inputs and choices
 
 - **Compliance**: gain from ComPy's own Rayleigh-wave calibration (matches Aminian et al. 2025, Table 1). RR36, RR38, RR40
@@ -63,7 +116,11 @@ sensitivity lie; deeper Vs reflects the prior and the layer geometry.
 ## Files
 
 - `scripts/`:
-  - `a_invert.py`: all variants and the prior-only run;
+  - `a_invert.py`: all variants and the prior-only runs (`main`, `final`);
+  - `g_after_epoch.py`: compliance after the sensitivity jump;
+  - `h_estimators.py`: Z/P and 1/(P/Z) estimators;
+  - `i_paper_figures.py`: figures in the style of the paper;
+  - `j_final_tables.py`: tables of the final runs;
   - `b_occam.py`: Occam inversion from CRUST1.0;
   - `c_figures.py`: figures and summary tables;
   - `d_tables.py`: variant comparison;
