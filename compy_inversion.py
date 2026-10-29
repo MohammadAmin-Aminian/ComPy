@@ -342,6 +342,8 @@ class ComplianceData:
     covariance: np.ndarray
     components: dict = field(default_factory=dict)
     station: str = ""
+    groups: np.ndarray | None = None
+    group_names: tuple = ()
 
     def __post_init__(self):
         self.freqs = np.asarray(self.freqs, float)
@@ -360,6 +362,35 @@ class ComplianceData:
         except np.linalg.LinAlgError as exc:
             raise ValueError("covariance must be positive definite") from exc
         self._whitener = np.linalg.inv(chol)
+        if self.groups is None:
+            self.groups = np.zeros(n, int)
+            self.group_names = self.group_names or (self.station or "data",)
+        self.groups = np.asarray(self.groups, int)
+        if self.groups.shape != (n,) or len(self.group_names) != self.groups.max() + 1:
+            raise ValueError("groups must label every frequency with an index into group_names")
+
+    @classmethod
+    def join(cls, parts, names, station=""):
+        """Several estimates of one station (e.g. epochs with different gains).
+
+        Frequencies and compliance are concatenated, the covariance is block
+        diagonal (the parts are independent), and ``groups`` records the part
+        of every frequency so that each part can have its own gain factor.
+        """
+        if len(parts) != len(names) or not parts:
+            raise ValueError("give one name per part")
+        if len({float(p.depth) for p in parts}) != 1:
+            raise ValueError("parts must share the water depth")
+        from scipy.linalg import block_diag
+
+        keys = sorted({k for p in parts for k in p.components})
+        components = {k: block_diag(*[p.components.get(k, np.zeros_like(p.covariance)) for p in parts])
+                      for k in keys}  # fmt: skip
+        return cls(np.concatenate([p.freqs for p in parts]), np.concatenate([p.eta for p in parts]),
+                   parts[0].depth, block_diag(*[p.covariance for p in parts]), components,
+                   station or parts[0].station,
+                   np.concatenate([np.full(len(p.eta), i) for i, p in enumerate(parts)]),
+                   tuple(names))  # fmt: skip
 
     @classmethod
     def build(cls, freqs, eta, depth, *, random=None, subsets=None, shrinkage=0.5,
@@ -667,24 +698,52 @@ def truncated_gamma(rng, shape, rate, lower, upper):
 
 
 class _Target:
-    """Log-likelihood, roughness and prediction of one parameter vector."""
+    """Log-likelihood, roughness and prediction of one parameter vector.
 
-    def __init__(self, data, model, prior_only):
+    The parameter vector is the ``model`` parameters followed, when
+    ``gain_bounds`` is given, by one gain factor per data group. A factor g
+    is the ratio of the true pressure gain to the one used for the data, so
+    the data predicted for compliance eta are eta_a + g (eta - eta_a), where
+    eta_a (``attraction_compliance``) does not depend on the gain.
+    """
+
+    def __init__(self, data, model, prior_only, gain_bounds=None):
         self.data, self.model, self.prior_only = data, model, prior_only
         self.forward = Forward(data.depth, data.freqs)
+        self.n_model = len(model.names)
+        self.gain = gain_bounds is not None
+        bounds = [model.bounds]
+        names = list(model.names)
+        if self.gain:
+            if "gain" in data.components:
+                raise ValueError("remove the gain covariance term (gain_rel=0) when sampling the gain")
+            lo, hi = map(float, gain_bounds)
+            if not 0 < lo < 1 < hi:
+                raise ValueError("gain_bounds must bracket 1")
+            bounds.append(np.tile([lo, hi], (len(data.group_names), 1)))
+            names += [f"gain_{g}" if len(data.group_names) > 1 else "gain" for g in data.group_names]
+            self.attraction = attraction_compliance(data.freqs, data.depth)
+        self.bounds = np.vstack(bounds)
+        self.names = names
+
+    def random(self, rng):
+        return rng.uniform(self.bounds[:, 0], self.bounds[:, 1])
 
     def __call__(self, theta):
-        if not self.model.in_bounds(theta):
+        if np.any(theta < self.bounds[:, 0]) or np.any(theta > self.bounds[:, 1]):
             return None
-        layers = self.model.layers(theta)
+        layers = self.model.layers(theta[:self.n_model])
         if np.any(layers[:, 2] < math.sqrt(2) * layers[:, 3]):  # Poisson ratio < 0
             return None
         try:
             pred = self.forward(layers)
         except ValueError:
             return None
+        if self.gain:
+            g = theta[self.n_model:][self.data.groups]
+            pred = self.attraction + g * (pred - self.attraction)
         loglik = 0.0 if self.prior_only else -0.5 * self.data.chi2(pred)
-        return loglik, self.model.roughness(theta), pred
+        return loglik, self.model.roughness(theta[:self.n_model]), pred
 
 
 class _Dram:
@@ -828,7 +887,9 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
         dict of retained draws after ``n_burn``, every ``thin`` iterations:
         ``theta``, ``alpha``, ``loglik``, ``roughness``, ``pred``; the
         acceptance rates of both stages after burn-in, the frozen
-        ``proposal_cov`` and the ``swap_acceptance`` of adjacent replicas.
+        ``proposal_cov``, the ``swap_acceptance`` of adjacent replicas and
+        ``trace_loglik``, the log-likelihood of the T = 1 replica at every
+        iteration including burn-in.
     """
     temps = np.asarray(temperatures, float)
     if temps.ndim != 1 or temps[0] != 1.0 or np.any(np.diff(temps) <= 0):
@@ -843,9 +904,11 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
     replicas = [_Dram(target, theta0, bounds, rng, beta=1 / T, **settings) for T in temps]
     swaps = np.zeros((2, max(len(temps) - 1, 1)))
     keep = []
+    trace = np.empty(n_iter)
     for it in range(n_iter):
         for replica in replicas:
             replica.step(it)
+        trace[it] = replicas[0].loglik
         if len(replicas) > 1 and it % swap_every == 0:
             for j in range((it // swap_every) % 2, len(replicas) - 1, 2):
                 a, b = replicas[j], replicas[j + 1]
@@ -873,19 +936,20 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
         acceptance_dr=float(rates[1]),
         proposal_cov=cold.cov,
         swap_acceptance=swap_rate if len(temps) > 1 else np.array([]),
+        trace_loglik=trace,
     )
 
 
 def _chain_job(job):
-    data, model, prior_only, seed, theta0, kwargs = job
-    target = _Target(data, model, prior_only)
+    data, model, prior_only, gain_bounds, seed, theta0, kwargs = job
+    target = _Target(data, model, prior_only, gain_bounds)
     lo, hi = model.sigma_rough
-    return dram_chain(target, theta0, model.bounds, seed=seed, n_rough=model.n_rough,
+    return dram_chain(target, theta0, target.bounds, seed=seed, n_rough=model.n_rough,
                       alpha_bounds=(1 / hi**2, 1 / lo**2), **kwargs)  # fmt: skip
 
 
 def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed=0,
-           prior_only=False, processes=None, starts=None, **kwargs):  # fmt: skip
+           prior_only=False, processes=None, starts=None, gain_bounds=None, **kwargs):  # fmt: skip
     """Run independent DRAM chains and return a ``Posterior``.
 
     Chains start from independent draws of the uniform prior (over-dispersed
@@ -897,13 +961,18 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     ``sample`` from a notebook or from a script guarded by
     ``if __name__ == "__main__":``. Remaining keywords go to ``dram_chain``,
     e.g. ``temperatures`` for parallel tempering.
+
+    ``gain_bounds=(lo, hi)`` samples one pressure-gain factor per data group
+    (see ``_Target``) with a uniform prior, e.g. (0.95, 1.05) for the 5 %
+    freedom of Aminian et al. (2025, section 4.1.5). The data covariance must
+    then exclude the gain term (``gain_rel=0``).
     """
     rng = np.random.default_rng(seed)
-    target = _Target(data, model, prior_only)
+    target = _Target(data, model, prior_only, gain_bounds)
     if starts is None:
         starts = []
         while len(starts) < n_chains:
-            theta = model.random(rng)
+            theta = target.random(rng)
             if target(theta) is not None:
                 starts.append(theta)
     if len(starts) != n_chains:
@@ -912,7 +981,7 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     settings = dict(n_iter=n_iter, n_burn=n_burn, thin=thin, **kwargs)
     if "temperatures" in settings:
         settings["temperatures"] = [float(v) for v in settings["temperatures"]]
-    jobs = [(data, model, prior_only, int(s), np.asarray(t, float), settings)
+    jobs = [(data, model, prior_only, gain_bounds, int(s), np.asarray(t, float), settings)
             for s, t in zip(seeds, starts)]  # fmt: skip
     if processes == 1 or n_chains == 1:
         chains = [_chain_job(j) for j in jobs]
@@ -924,11 +993,14 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     stack = {key: np.stack([c[key] for c in chains])
              for key in ("theta", "alpha", "loglik", "roughness", "pred")}  # fmt: skip
     settings["swap_acceptance"] = np.mean([c["swap_acceptance"] for c in chains], axis=0).tolist()
+    settings["gain_bounds"] = None if gain_bounds is None else [float(v) for v in gain_bounds]
     return Posterior(
         data=data, model=model, prior_only=prior_only, **stack,
         acceptance=np.array([c["acceptance"] for c in chains]),
         acceptance_dr=np.array([c["acceptance_dr"] for c in chains]),
         settings=dict(n_chains=n_chains, seed=seed, **settings),
+        trace_chi2=-2 * np.stack([c["trace_loglik"] for c in chains]),
+        names_extra=target.names[len(model.names):],
     )  # fmt: skip
 
 
@@ -952,10 +1024,13 @@ class Posterior:
     acceptance: np.ndarray
     acceptance_dr: np.ndarray
     settings: dict
+    trace_chi2: np.ndarray | None = None
+    names_extra: list = field(default_factory=list)
 
     @property
     def names(self):
-        return self.model.names
+        """Model parameters followed by any gain factors."""
+        return list(self.model.names) + list(self.names_extra)
 
     def flat(self, max_draws=None, seed=0):
         """Pooled parameter draws, optionally a random subset."""
@@ -1018,6 +1093,8 @@ class Posterior:
             acceptance_dr=self.acceptance_dr.tolist(),
             settings=self.settings,
             model=self.model.settings(),
+            names=self.names,
+            groups=list(self.data.group_names),
         )
 
     def save(self, path):
@@ -1027,7 +1104,9 @@ class Posterior:
                             loglik=self.loglik, roughness=self.roughness, pred=self.pred,
                             freqs=self.data.freqs, eta=self.data.eta,
                             covariance=self.data.covariance, depth=self.data.depth,
-                            names=np.array(self.names))  # fmt: skip
+                            groups=self.data.groups, group_names=np.array(self.data.group_names),
+                            names=np.array(self.names),
+                            trace_chi2=np.array([]) if self.trace_chi2 is None else self.trace_chi2)  # fmt: skip
         path.with_suffix(".json").write_text(json.dumps(self.summary(), indent=1, default=float))
 
 

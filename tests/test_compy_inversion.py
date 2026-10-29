@@ -350,3 +350,54 @@ def test_free_crustal_vp_vs():
     np.testing.assert_allclose(layers[:, 1], 1850 + 0.165 * layers[:, 2])
     with pytest.raises(ValueError):
         ci.CrustalModel(moho_depth=7000.0, vp_vs_range=(1.7, 2.4), reference=layers)
+
+
+def test_join_builds_block_covariance_and_groups():
+    f = np.array([0.008, 0.01, 0.012])
+    a = ci.ComplianceData.build(f, np.array([2e-11, 2.3e-11, 2.6e-11]), 4000.0, random=1e-13, floor_rel=0.01)
+    b = ci.ComplianceData.build(f[:2], np.array([2.1e-11, 2.4e-11]), 4000.0, random=2e-13, floor_rel=0.01)
+    j = ci.ComplianceData.join([a, b], ["stable", "after"])
+    np.testing.assert_array_equal(j.groups, [0, 0, 0, 1, 1])
+    assert j.group_names == ("stable", "after")
+    np.testing.assert_allclose(j.covariance[:3, :3], a.covariance)
+    np.testing.assert_allclose(j.covariance[3:, 3:], b.covariance)
+    assert np.all(j.covariance[:3, 3:] == 0)
+    assert j.chi2(j.eta * 1.02) == pytest.approx(a.chi2(a.eta * 1.02) + b.chi2(b.eta * 1.02))
+    with pytest.raises(ValueError):
+        ci.ComplianceData.join([a, ci.ComplianceData.build(f, a.eta, 3000.0, floor_rel=0.01)], ["x", "y"])
+
+
+def test_gain_factor_predicts_measured_compliance():
+    depth, f = 4000.0, np.array([0.008, 0.01, 0.012])
+    model = ci.CrustalModel(moho_depth=7000.0, sediment_max=0.0)
+    theta = np.array([2500.0] * model.n_crust + [4400.0])
+    eta = ci.forward(depth, f, model.layers(theta))
+    a = ci.attraction_compliance(f, depth)
+    data = ci.ComplianceData.build(f, a + 1.04 * (eta - a), depth, random=1e-14, gain_rel=0)
+    target = ci._Target(data, model, False, gain_bounds=(0.95, 1.05))
+    assert target.names[-1] == "gain"
+    assert target(np.r_[theta, 1.04])[0] == pytest.approx(0.0, abs=1e-6)
+    assert target(np.r_[theta, 1.0])[0] < -10
+    assert target(np.r_[theta, 1.06]) is None
+    with pytest.raises(ValueError):
+        ci._Target(ci.ComplianceData.build(f, eta, depth, gain_rel=0.05), model, False, (0.95, 1.05))
+
+
+def test_sampled_gain_recovers_offset_and_records_trace():
+    depth, f = 2918.0, np.arange(6, 15) * 1.220703125e-3
+    model = ci.CrustalModel(moho_depth=6900.0, sediment_max=0.0)
+    theta = np.r_[np.linspace(2000.0, 4000.0, model.n_crust), 4300.0]
+    eta = ci.forward(depth, f, model.layers(theta))
+    a = ci.attraction_compliance(f, depth)
+    stable = ci.ComplianceData.build(f, eta, depth, random=0.003 * eta, gain_rel=0, floor_rel=0.005)
+    after = ci.ComplianceData.build(f, a + 1.03 * (eta - a), depth, random=0.003 * eta, gain_rel=0,
+                                    floor_rel=0.005)  # fmt: skip
+    joint = ci.ComplianceData.join([stable, after], ["stable", "after"])
+    post = ci.sample(joint, model, n_chains=4, n_iter=20000, n_burn=8000, thin=5, seed=1,
+                     processes=1, gain_bounds=(0.95, 1.05))  # fmt: skip
+    i, j = post.names.index("gain_stable"), post.names.index("gain_after")
+    ratio = post.theta[:, :, j] / post.theta[:, :, i]
+    assert np.median(ratio) == pytest.approx(1.03, abs=0.01)  # relative gain is resolved
+    assert post.trace_chi2.shape == (4, 20000)
+    assert np.median(post.trace_chi2[:, 8000:]) < 3 * len(joint.eta)
+    assert post.summary()["names"][-2:] == ["gain_stable", "gain_after"]

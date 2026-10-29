@@ -43,9 +43,20 @@ validation: `docs/INVERSION.md`.
 - `Forward`: the `raydep` propagator evaluated at the seafloor only, compiled with
   Numba when installed (optional extra `fast`), about 140 times faster.
 
+### Gain, epochs, figures (same release)
+
+- `sample(gain_bounds=...)`: pressure-gain factor(s) sampled with a uniform prior.
+- `ComplianceData.join`: several epochs of one station with their own gains.
+- `ComplianceData.from_result`: build directly from a `ComplianceResult`.
+- `CrustalModel(vp_vs_range=...)`: one free crustal Vp/Vs.
+- `Posterior.trace_chi2`: the misfit at every iteration, including burn-in.
+- Documented two errors in the publication figure code:
+  - heat-map depths are 5/3 too deep relative to their labels;
+  - the serpentinization formula does not match the Fig. 10 caption.
+
 ### Tests
 
-21 new tests: the forward model against `raydep` and the static half-space,
+New tests: the forward model against `raydep` and the static half-space,
 the gain sensitivity, the covariance, DRAM on a truncated Gaussian, the
 hierarchical marginal, tempering on a bimodal target, kernels, CRUST1.0
 parsing, the fixed-Vp option and synthetic recovery.

@@ -27,6 +27,13 @@ literature. The generations are:
 | V7 | The data uncertainty is the standard deviation of the per-window estimates (thesis §3.3.4: 1.25e-11 at RR52, 30–60 % of η). The thesis also describes annealing it during the run, but that code is commented out. | Errors were roughly √n too large for a stacked mean. The fit hardly constrained the model, so deep Vs came from the bounds. |
 | V8 | Compliance computed before ComPy 2.0 multiplied the wave-attraction term by ω²/(ω²+c), i.e. `k·γ·ad·(pa_ratio + |Z/P|)` in `Calculate_Compliance`, so the term was effectively dropped. The same line writes the free-air constant as `3.07 * 10e-6`, which is 3.07e-5, ten times too large. | The published η is low: by up to 25–30 % at 7 mHz at RR52 from the dropped term, plus 1.4 % at 7 mHz from the constant. Both bias deep Vs high. 2.0 fixed both. |
 
+Figure code (`plot_inversion_density_all`, `final_plot`, `start_model_plot*` in `inv_compy`):
+
+| # | Finding | Effect |
+|---|---|---|
+| F1 | The heat maps average the 1-m Vs profile over 100 samples, so each of the 100 rows is 100 m. The y ticks put row 12 at −2000 m (167-m rows), and the CRUST1.0 reference lines are built on 167-m rows (interfaces at rows 14 and 42 = 2340 and 6900 m). | Posterior heat maps and medians in Figs. 9–10 are drawn 5/3 too deep relative to their labels, while the CRUST1.0 lines are at the right depths. A feature labelled at 3.5 km is at about 2.1 km. Check against the saved `Inversion_container`, which is not on this machine. |
+| F2 | Serpentinization is computed as (9000 − 2 Vs)/30, i.e. 0 % at 4.5 km/s and 100 % at 3.0 km/s. The Fig. 10 caption states 0 % at 4.2 km/s and 100 % at 2.2 km/s (Miller & Christensen 1997). | Fig. 10c overstates serpentinization: Vs 3.5 km/s gives 67 % in the code and 35 % with the caption's relation. |
+
 Documentation errata in the paper:
 - Eq. 13 accepts unconditionally when L(m_i) ≤ L(m_{i−1}). With L a likelihood, this is reversed; the code was correct.
 - The misfit (1/N)·√Σ(·)² is neither the χ² used in the code nor a standard one.
@@ -130,6 +137,15 @@ instead of 290 µs per call.
 posterior/prior width ratio does not provide when the layer geometry is fixed
 (see the limits below).
 
+### Gain as an unknown and several epochs
+
+- **Sampled gain.** `sample(..., gain_bounds=(0.95, 1.05))` adds a pressure-gain factor g, the true gain over the gain used, with a uniform prior: the ±5 % of Aminian et al. (2025, §4.1.5). The predicted data are η_a + g (η − η_a), with η_a the gain-independent wave attraction. The covariance must then exclude the gain term (`gain_rel=0`). Without it, the gain enters as the covariance term above; with a Gaussian prior the two are equivalent to first order.
+- **Several epochs.** `ComplianceData.join(parts, names)` stacks estimates of one station, e.g. before and after a change in pressure sensitivity, each computed with its own Rayleigh gain. The covariance is block diagonal, and each part gets its own gain factor, while the Earth model is shared. The ratio of the factors tests whether the two calibrations agree.
+
+### Estimator bias (H1 and H2)
+
+Compliance uses H1 = |S_pz|/S_pp, unbiased when the noise is on the vertical. Noise on the pressure gauge biases H1 low by the squared coherence; H2 = S_zz/|S_pz| is unbiased in that case. The truth lies between the two (Bendat & Piersol 2010; Crawford & Singh 2008). With stacked coherence of 0.86–0.97, H2/H1 is 1.07–1.34 for the YV stations, largest at the lowest frequencies. Inverting H2 (variant `final_h2`) brackets this systematic error.
+
 ## 3. Validation (tests/test_compy_inversion.py)
 
 - **Forward model:**
@@ -144,6 +160,7 @@ posterior/prior width ratio does not provide when the layer geometry is fixed
   - Parallel tempering samples both modes of a target with a log-density barrier of 200 equally, where a single adaptive chain stays in one mode.
 - **Kernels:** they integrate to the response to a uniform change (3 %); lower frequencies sense deeper; sliver slices at the Moho are removed.
 - **Synthetic recovery:** an RR52-like model with realistic covariance is recovered (truth inside every 90 % interval, R-hat < 1.1).
+- **Joint data and gain:** a joint data set has a block-diagonal covariance and additive χ². The gain factor maps compliance to measured data exactly. A 3 % gain offset between two epochs is recovered to ±1 %, and the misfit trace includes burn-in.
 
 ## 4. Results for the YV broadband stations
 

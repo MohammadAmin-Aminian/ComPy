@@ -369,6 +369,7 @@ The pieces:
 - **Sampler.** `sample` runs independent DRAM chains with a Gibbs-sampled smoothing weight; `temperatures=` adds parallel tempering.
 - **Results.** `Posterior` gives R-hat/ESS, the χ² and Vs-depth quantiles.
 - **Sensitivity.** `vs_kernels` and `sensitivity_depth` show which depths the data see.
+- **Gain.** `sample(..., gain_bounds=(0.95, 1.05))` samples the pressure gain within ±5 %, as in the paper; use `gain_rel=0` in the data then. `ComplianceData.join` inverts epochs with different gains together.
 
 The forward model is the `raydep` propagator compiled with Numba if it is installed (`pip install numba`); this is about 140 times faster.
 Chains run in spawned processes: call `sample` from a notebook or from a script
