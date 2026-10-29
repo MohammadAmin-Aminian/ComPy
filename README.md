@@ -76,6 +76,9 @@ The distribution is named `seafloor-compy`; the existing module imports remain
 installed from source; the installation command does not assume a PyPI release.
 
 Runtime dependencies are NumPy, SciPy, Matplotlib, ObsPy, TiSKitPy 2.3 and disba.
+The pressure calibration needs the `disba` Rayleigh-wave mode calculator, which
+uses Numba; install Numba with conda rather than pip (`conda install numba`,
+then `pip install disba`). Numba also speeds up the 2.3 inversion forward model.
 No external CPS executable is required by the built-in compliance propagator.
 Imports do not contact station services. Data download, automatic earthquake
 catalog retrieval and station-depth lookup require network access.
@@ -225,15 +228,22 @@ how the inferred orientation and effectiveness vary between processing windows.
 import Pressure_calibration as dpg
 
 gain = dpg.calculate_spectral_ratio(
-    raw_stream,
+    raw_stream,            # raw counts, vertical and pressure
     mag=7,
     f_min=0.03,
     f_max=0.07,
-    inventory=inventory,
+    inventory=inventory,   # StationXML with both responses
     event_spans=spans,
+    zchan="BHZ",           # explicit channel codes (optional)
+    pchan="BDH",
+    filt_freq1=0.005,      # band-pass pre-filter, below f_min ...
+    filt_freq2=0.1,        # ... and above f_max
     plot_condition=True,
 )
 ```
+
+`return_details=True` returns a dict with the per-event gains and their
+standard deviation (the ±5 % of Aminian et al. 2025, Table 1).
 
 Omitting `inventory` downloads response metadata; omitting `event_spans`
 retrieves earthquake windows using TiSKitPy. Supply both for offline processing.
