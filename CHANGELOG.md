@@ -1,5 +1,42 @@
 # Changelog
 
+## Inversion work (branch inversion-improvements, 2026-10-25/26)
+
+- Sampler tuning (opt-in; defaults reproduce 2.1 chains draw for draw):
+  per-layer `sigma_v`/`sigma_h`, Robbins-Monro step-size adaptation frozen after
+  `adapt_until`, `initial_state` for over-dispersed chain starts that keep the
+  prior of `starting_model`, and a `diagnostics` dict with tuned steps and
+  per-move acceptance.
+- Add a converged four-chain synthetic example and a Vs-depth posterior heat map.
+- Explicit uniform Vs prior (`vs_bounds`) independent of the starting model, and
+  `vary_thickness=False` for the fixed-geometry minimum-structure parameterization
+  of Crawford et al. (1991).
+- `invert_occam`: Occam's inversion (Constable et al. 1987) in ln Vs / ln compliance
+  with a damped, monotone second phase; an independent cross-check of the sampler.
+- `compliance_kernels` and `resample_model`: numerical Vs sensitivity kernels on an
+  interface-exact slicing of the model.
+- Tests: the forward model is checked against an independent Aki & Richards
+  propagator (agreement ~1e-6), plus kernels, Occam and the new sampler options.
+- Deep-crust synthetic example (14 layers to 13 km, 3.5-18.5 mHz, 4200 m water)
+  with prior-versus-posterior resolution analysis.
+- `alpha_bounds`: the smoothing weight is Gibbs-sampled from its Gamma conditional
+  (hierarchical Bayes) instead of being fixed.
+- `data_covariance`: full data covariance (e.g. a pressure-gain error common to all
+  frequency bins) through a Cholesky-whitened likelihood.
+- `interface_move="adjacent"`: move one interface at a time in free-interface runs.
+- `compy_diagnostics.rank_rhat_ess`: rank-normalized split R-hat and bulk ESS on
+  NumPy/SciPy alone; the examples no longer need ArviZ for diagnostics.
+- `brocher_elastic` and `elastic_from_vs`: optionally tie Vp and density to Vs
+  (Brocher 2005), as in Zheng et al. (2024); Zha & Webb (2016) used a regional relation.
+- `legacy_wave_attraction_correction`: converts compliance estimated with ComPy before
+  2.0 to the 2.0 estimator. The legacy code added the wave-attraction term
+  (acceleration/pressure) to displacement/pressure before the free-air factor, so the
+  term was effectively dropped; published values are low by up to ~25-30 % near 7 mHz
+  at 2.9 km water depth (RR52) and ~11 % at 4.1 km (RR50), decreasing with frequency.
+- `invert_tempered`: parallel tempering (replica exchange) around the sampler, with
+  independent ensembles for R-hat. For posteriors where single chains do not mix between
+  equally good shallow layerings when the top kilometre is below resolution.
+
 ## 2.2.0 — 2026-10-28
 
 Audit of the chain up to the compliance function. The full list is in

@@ -29,6 +29,42 @@ def _depth_profile(model, depth_grid):
     return model[np.searchsorted(interfaces, depth_grid, side="right"), 3]
 
 
+def _step_sizes(value, name):
+    """Validate a proposal scale: a positive scalar or a 1D positive array."""
+    if np.ndim(value) == 0:
+        return positive(value, name)
+    value = np.asarray(value, dtype=float)
+    if value.ndim != 1 or value.size == 0 or np.any(~np.isfinite(value)) or np.any(value <= 0):
+        raise ValueError(f"{name} must be finite and positive")
+    return value
+
+
+def _explicit_bounds(vs_bounds, initial):
+    """Uniform Vs prior bounds for every row; the half-space is pinned."""
+    try:
+        lo, hi = vs_bounds
+    except (TypeError, ValueError) as exc:
+        raise ValueError("vs_bounds must be a (lower, upper) pair") from exc
+    n = len(initial) - 1
+    lo = np.broadcast_to(np.asarray(lo, float), (n,)) if np.ndim(lo) == 0 else np.asarray(lo, float)
+    hi = np.broadcast_to(np.asarray(hi, float), (n,)) if np.ndim(hi) == 0 else np.asarray(hi, float)
+    if lo.shape != (n,) or hi.shape != (n,):
+        raise ValueError(f"vs_bounds entries must be scalars or have {n} values")
+    if np.any(~np.isfinite(lo)) or np.any(~np.isfinite(hi)) or np.any(lo <= 0) or np.any(hi <= lo):
+        raise ValueError("vs_bounds must be finite with 0 < lower < upper")
+    half = initial[-1, 3]
+    return np.append(lo, half), np.append(hi, half)
+
+
+def _broadcast_steps(value, n, name):
+    """Return a fresh, writable per-layer copy of a validated proposal scale."""
+    if np.ndim(value) == 0:
+        return np.full(n, value, dtype=float)
+    if len(value) != n:
+        raise ValueError(f"{name} must be a scalar or have {n} entries")
+    return np.array(value, dtype=float)
+
+
 def _inversion(
     Data,
     f,
@@ -44,18 +80,121 @@ def _inversion(
     seed,
     beta,
     return_profiles,
+    *,
+    adapt_until=0,
+    target_acceptance=0.3,
+    initial_state=None,
+    diagnostics=None,
+    vs_bounds=None,
+    vary_thickness=True,
+    alpha_bounds=None,
+    interface_move="deepest",
+    data_covariance=None,
+    elastic_from_vs=None,
 ):
-    """Symmetric random-walk Metropolis sampler with bounded model support."""
+    """Symmetric random-walk Metropolis sampler with bounded model support.
+
+    Optional, keyword-only extensions (defaults reproduce the v2 sampler
+    exactly, draw for draw):
+
+    sigma_v, sigma_h
+        Scalars, or per-layer arrays: ``sigma_v`` has one entry per finite
+        layer; ``sigma_h`` one entry per finite layer except the deepest
+        (which absorbs every thickness transfer).
+    adapt_until
+        Number of initial iterations during which each move's step size is
+        tuned by Robbins-Monro on the log scale towards ``target_acceptance``.
+        Step sizes are frozen afterwards, so iterations at or beyond
+        ``adapt_until`` form an ordinary Metropolis chain. Discard at least
+        ``adapt_until`` iterations as burn-in.
+    initial_state
+        Model at which the chain starts. Prior bounds, Vp, density, the
+        half-space and the conserved total finite thickness are still defined
+        by ``starting_model``; the state must lie inside that support. Use
+        different states per chain for meaningful convergence diagnostics.
+    diagnostics
+        Optional dict, filled with the final step sizes and the per-move
+        acceptance rates after adaptation.
+    vs_bounds
+        Optional ``(lower, upper)`` uniform Vs prior in m/s, as scalars or
+        arrays with one entry per finite layer (the half-space is fixed).
+        Replaces the bounds otherwise derived from ``starting_model``, so the
+        prior no longer depends on where a chain starts.
+    vary_thickness
+        If False, only Vs is sampled and the layer geometry stays fixed: the
+        many-thin-layer "minimum structure" parameterization of Crawford et
+        al. (1991), regularized through ``alpha``.
+    alpha_bounds
+        Optional ``(alpha_min, alpha_max)``. The smoothing weight then becomes
+        an unknown (hierarchical Bayes, Malinverno & Briggs 2004) with a
+        Jeffreys prior on that interval, starting at ``alpha``. The roughness
+        term is a Gaussian prior on Vs jumps between the k = n_finite - 1
+        interfaces, so alpha is Gibbs-sampled each iteration from its
+        conditional Gamma(k/2, rate = roughness/2), truncated to the bounds.
+        The data, not a hand-picked value, then set how smooth models are.
+        The trace is returned in ``diagnostics["alpha"]``.
+    interface_move
+        ``"deepest"`` (default, v2 behaviour) transfers thickness between a
+        layer and the deepest finite layer, which shifts every interface in
+        between. ``"adjacent"`` moves a single interface by exchanging
+        thickness between the two layers that share it, leaving all other
+        interfaces in place; free-interface chains mix much faster with it.
+    data_covariance
+        Optional full data covariance (N x N, 1/Pa**2). Use it for errors that
+        are correlated between frequencies, e.g. a pressure-gain uncertainty
+        common to all bins: C = diag(sigma**2) + (g * eta)(g * eta)^T. The
+        Gaussian likelihood then uses the Cholesky-whitened residual and the
+        returned misfit is its norm; ``s`` is ignored and may be None.
+    elastic_from_vs
+        Optional callable ``vs -> (vp, rho)`` (m/s, kg/m**3), e.g.
+        ``brocher_elastic``. Vp and density of every finite layer then follow
+        Vs instead of staying fixed, which removes the stiffness floor and
+        the weak or reversed shallow Vs sensitivity of a fixed-Vp column.
+        The half-space keeps its given properties.
+    """
     iteration = integer(iteration, "iteration", minimum=2)
-    sigma_v, sigma_h = positive(sigma_v, "sigma_v"), positive(sigma_h, "sigma_h")
+    sigma_v, sigma_h = _step_sizes(sigma_v, "sigma_v"), _step_sizes(sigma_h, "sigma_h")
+    adapt_until = integer(adapt_until, "adapt_until", minimum=0)
+    if interface_move not in ("deepest", "adjacent"):
+        raise ValueError("interface_move must be 'deepest' or 'adjacent'")
+    if not 0 < target_acceptance < 1:
+        raise ValueError("target_acceptance must lie strictly between 0 and 1")
     if not np.isfinite(alpha) or alpha < 0:
         raise ValueError("alpha must be finite and nonnegative")
     Data, f = np.asarray(Data, float), np.asarray(f, float)
     if Data.ndim != 1 or f.shape != Data.shape or np.any(f <= 0):
         raise ValueError("data and positive frequencies must be equal-length vectors")
-    if s is None:
-        raise ValueError("s is required: supply positive measurement uncertainties")
-    residual(Data, Data, s)
+    if data_covariance is not None:
+        from scipy.linalg import solve_triangular
+
+        cov = np.asarray(data_covariance, float)
+        if cov.shape != (len(Data), len(Data)) or not np.all(np.isfinite(cov)) \
+                or not np.allclose(cov, cov.T, rtol=1e-10, atol=0):
+            raise ValueError("data_covariance must be a finite symmetric N x N matrix")
+        try:
+            chol = np.linalg.cholesky(cov)
+        except np.linalg.LinAlgError as exc:
+            raise ValueError("data_covariance must be positive definite") from exc
+
+        def whitened(pred):
+            return solve_triangular(chol, Data - pred, lower=True)
+
+        def data_log_likelihood(pred):
+            r = whitened(pred)
+            return -0.5 * float(r @ r)
+
+        def data_misfit(pred):
+            return float(np.linalg.norm(whitened(pred)))
+    else:
+        if s is None:
+            raise ValueError("s is required: supply positive measurement uncertainties")
+        residual(Data, Data, s)
+
+        def data_log_likelihood(pred):
+            return log_likelihood(Data, pred, s)
+
+        def data_misfit(pred):
+            return np.linalg.norm(residual(Data, pred, s))
     if starting_model is None:
         initial = Model_V2(1, n_layer=n_layer, sta=sta)[0][:, :, 0]
     else:
@@ -75,23 +214,99 @@ def _inversion(
     upper = initial[:, 3] * (1.2 if beta else 1.1)
     if beta:
         lower[-2], upper[-2] = initial[-2, 3] * np.array([0.9, 1.1])
+    n_finite = len(initial) - 1
+    if vs_bounds is not None:
+        lower, upper = _explicit_bounds(vs_bounds, initial)
+    # Adaptation multiplies by exp(.), so scales stay positive and untouched
+    # scales are passed to the RNG exactly as supplied.
+    step_size = {
+        "vs": _broadcast_steps(sigma_v, n_finite, "sigma_v"),
+        "h": _broadcast_steps(sigma_h, max(n_finite - 1, 1), "sigma_h"),
+    }
+    tuned = {key: np.zeros(len(value), int) for key, value in step_size.items()}
+    proposed = {key: np.zeros(len(value), int) for key, value in step_size.items()}
+    kept = {key: np.zeros(len(value), int) for key, value in step_size.items()}
+
+    def in_support(model):
+        return bool(
+            np.all(model[:-1, 0] > 0)
+            and np.all(model[:, 3] >= lower)
+            and np.all(model[:, 3] <= upper)
+            and np.all(model[:, 3] < model[:, 2])
+        )
+
+    hierarchical = alpha_bounds is not None
+    if hierarchical:
+        from scipy.stats import gamma as gamma_dist
+
+        try:
+            a_lo, a_hi = (positive(v, "alpha_bounds") for v in alpha_bounds)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("alpha_bounds must be two positive values") from exc
+        if not a_lo < a_hi or not a_lo <= alpha <= a_hi:
+            raise ValueError("alpha_bounds must satisfy lower < upper and contain alpha")
+        n_jumps = max(n_finite - 1, 1)
+        alpha_trace = np.empty(iteration)
+    state = {"alpha": float(alpha)}
 
     def evaluate(model):
         pred = calc_norm_compliance(depth_s, f, model)
         profile = _depth_profile(model, depth_grid)
-        log_data = log_likelihood(Data, pred, s)
-        log_posterior = log_data - 0.5 * alpha * Roughness(profile, 2)
+        log_data = data_log_likelihood(pred)
+        log_posterior = log_data - 0.5 * state["alpha"] * Roughness(profile, 2)
         return pred, profile, log_data, log_posterior
 
-    current = initial.copy()
+    def gibbs_alpha(profile):
+        """Draw alpha from Gamma(k/2, rate=R/2) truncated to alpha_bounds."""
+        rate = 0.5 * Roughness(profile, 2)
+        shape = 0.5 * n_jumps
+        if rate <= np.finfo(float).tiny:  # flat profile: alpha^(k/2-1) on bounds
+            lo, hi = a_lo**shape, a_hi**shape
+            return (lo + rng.random() * (hi - lo)) ** (1 / shape)
+        dist = gamma_dist(shape, scale=1 / rate)
+        c_lo, c_hi = dist.cdf(a_lo), dist.cdf(a_hi)
+        if c_hi - c_lo < 1e-12:  # all mass beyond one bound
+            return a_lo if c_lo >= 1 - 1e-12 else a_hi
+        return float(np.clip(dist.ppf(c_lo + rng.random() * (c_hi - c_lo)), a_lo, a_hi))
+
+    def couple(model):
+        if elastic_from_vs is not None:
+            vp, rho = elastic_from_vs(model[:-1, 3])
+            model[:-1, 2], model[:-1, 1] = vp, rho
+        return model
+
+    if elastic_from_vs is not None:
+        initial = couple(initial)
+        if not in_support(initial):
+            raise ValueError("elastic_from_vs must give Vp above Vs for the starting model")
+    if initial_state is None:
+        current = initial.copy()
+    else:
+        current = couple(_validate_model(initial_state).copy())
+        if (
+            current.shape != initial.shape
+            or not np.array_equal(current[:, 1:3], initial[:, 1:3]) and elastic_from_vs is None
+            or not np.array_equal(current[-1, 1:], initial[-1, 1:])
+            or current[-1, 3] != initial[-1, 3]
+            or not np.isclose(current[:-1, 0].sum(), initial[:-1, 0].sum())
+            or not in_support(current)
+        ):
+            raise ValueError(
+                "initial_state must match starting_model in shape, density, Vp, "
+                "half-space Vs and total finite thickness, and lie within the "
+                "Vs prior bounds"
+            )
     pred, profile, log_data, log_post = evaluate(current)
     accepted = 0
     for i in range(iteration):
         if i:
             candidate = current.copy()
             layer = rng.integers(len(initial) - 1)  # fixed elastic half-space
-            if rng.integers(2) == 0:
-                candidate[layer, 3] += rng.normal(0, sigma_v)
+            if not vary_thickness or rng.integers(2) == 0:
+                move = "vs"
+                candidate[layer, 3] += rng.normal(0, step_size[move][layer])
+                if elastic_from_vs is not None and candidate[layer, 3] > 0:
+                    couple(candidate)
                 # Hold Vp and rho fixed, as specified by Aminian et al. (2025).
             else:
                 # Transfer thickness from the deepest finite layer. Total
@@ -99,23 +314,23 @@ def _inversion(
                 if len(initial) == 2:
                     chain[:, :, i] = current
                     prediction[i] = pred
-                    misfits[0, i] = np.linalg.norm(residual(Data, pred, s))
+                    misfits[0, i] = data_misfit(pred)
                     likelihood[0, i] = np.exp(log_data)
                     if profiles is not None:
                         profiles[i, :, 0] = profile
+                    if hierarchical:
+                        alpha_trace[i] = state["alpha"]
                     continue
                 if layer == len(initial) - 2:
                     layer = rng.integers(len(initial) - 2)
-                step = rng.normal(0, sigma_h)
+                move = "h"
+                step = rng.normal(0, step_size[move][layer])
                 candidate[layer, 0] += step
-                candidate[-2, 0] -= step
-            valid = (
-                np.all(candidate[:-1, 0] > 0)
-                and np.all(candidate[:, 3] >= lower)
-                and np.all(candidate[:, 3] <= upper)
-                and np.all(candidate[:, 3] < candidate[:, 2])
-            )
-            if valid:
+                # Partner layer: the deepest finite layer (v2) or the layer
+                # directly below, so only interface ``layer`` moves.
+                candidate[layer + 1 if interface_move == "adjacent" else -2, 0] -= step
+            took = False
+            if in_support(candidate):
                 new_pred, new_profile, new_log_data, new_log_post = evaluate(candidate)
                 if (
                     np.log(max(rng.random(), np.finfo(float).tiny))
@@ -129,14 +344,38 @@ def _inversion(
                         new_log_post,
                     )
                     accepted += 1
+                    took = True
             # Out-of-support proposals are rejected, not resampled/reflected:
             # this keeps the Gaussian proposal symmetric at the boundaries.
+            if i < adapt_until:
+                tuned[move][layer] += 1
+                gain = tuned[move][layer] ** -0.6  # diminishing Robbins-Monro gain
+                step_size[move][layer] *= np.exp(gain * (took - target_acceptance))
+            else:  # frozen kernel: record per-move acceptance only
+                proposed[move][layer] += 1
+                kept[move][layer] += took
+            if hierarchical:  # Gibbs step for the smoothing weight
+                state["alpha"] = gibbs_alpha(profile)
+                log_post = log_data - 0.5 * state["alpha"] * Roughness(profile, 2)
+        if hierarchical:
+            alpha_trace[i] = state["alpha"]
         chain[:, :, i] = current
         prediction[i] = pred
-        misfits[0, i] = np.linalg.norm(residual(Data, pred, s))
+        misfits[0, i] = data_misfit(pred)
         likelihood[0, i] = np.exp(log_data)  # may underflow; never used for acceptance
         if profiles is not None:
             profiles[i, :, 0] = profile
+    if diagnostics is not None:
+        with np.errstate(invalid="ignore", divide="ignore"):
+            diagnostics.update(
+                sigma_v=step_size["vs"].copy(),
+                sigma_h=step_size["h"].copy(),
+                acceptance_vs=kept["vs"] / proposed["vs"],
+                acceptance_h=kept["h"] / proposed["h"],
+                adapt_until=adapt_until,
+            )
+            if hierarchical:
+                diagnostics["alpha"] = alpha_trace
     return (
         chain,
         profiles,
@@ -165,12 +404,24 @@ def invert_compliace(
     *,
     seed=0,
     return_profiles=True,
+    adapt_until=0,
+    target_acceptance=0.3,
+    initial_state=None,
+    diagnostics=None,
+    vs_bounds=None,
+    vary_thickness=True,
+    alpha_bounds=None,
+    interface_move="deepest",
+    data_covariance=None,
+    elastic_from_vs=None,
 ):
     """Legacy name for the v2 sampler; see README for units and priors.
 
     Supply a custom starting_model to control sediments. The station templates
     do not use sediment_thickness or n_sediment_layer. s must be supplied.
     Set return_profiles=False to avoid the large metre-grid profile array.
+    adapt_until, target_acceptance, initial_state and diagnostics are optional
+    sampler-tuning keywords documented in ``_inversion``.
     """
     chain, profiles, _, misfits, prediction, likelihood, rate = _inversion(
         Data,
@@ -187,6 +438,16 @@ def invert_compliace(
         seed,
         False,
         return_profiles,
+        adapt_until=adapt_until,
+        target_acceptance=target_acceptance,
+        initial_state=initial_state,
+        diagnostics=diagnostics,
+        vs_bounds=vs_bounds,
+        vary_thickness=vary_thickness,
+        alpha_bounds=alpha_bounds,
+        interface_move=interface_move,
+        data_covariance=data_covariance,
+        elastic_from_vs=elastic_from_vs,
     )
     return chain, profiles, misfits, prediction, likelihood, rate
 
@@ -208,8 +469,22 @@ def invert_compliace_beta(
     *,
     seed=0,
     return_profiles=True,
+    adapt_until=0,
+    target_acceptance=0.3,
+    initial_state=None,
+    diagnostics=None,
+    vs_bounds=None,
+    vary_thickness=True,
+    alpha_bounds=None,
+    interface_move="deepest",
+    data_covariance=None,
+    elastic_from_vs=None,
 ):
-    """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple."""
+    """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple.
+
+    adapt_until, target_acceptance, initial_state and diagnostics are optional
+    sampler-tuning keywords documented in ``_inversion``.
+    """
     return _inversion(
         Data,
         f,
@@ -225,6 +500,16 @@ def invert_compliace_beta(
         seed,
         True,
         return_profiles,
+        adapt_until=adapt_until,
+        target_acceptance=target_acceptance,
+        initial_state=initial_state,
+        diagnostics=diagnostics,
+        vs_bounds=vs_bounds,
+        vary_thickness=vary_thickness,
+        alpha_bounds=alpha_bounds,
+        interface_move=interface_move,
+        data_covariance=data_covariance,
+        elastic_from_vs=elastic_from_vs,
     )
 
 
@@ -1005,6 +1290,20 @@ def Model_V2(iteration, n_layer=3, sta="RR38"):
 
 
 # %%
+def brocher_elastic(vs):
+    """Vp and density from Vs with Brocher's (2005) empirical crustal relations.
+
+    Vp (eq. 9, valid for Vs up to about 4.5 km/s) and the Nafe-Drake density
+    fit (eq. 1). Input and output in SI units: Vs and Vp in m/s, density in
+    kg/m**3. Intended for ``elastic_from_vs`` in the samplers.
+    """
+    km = np.asarray(vs, dtype=float) / 1000.0
+    vp = 0.9409 + 2.0947 * km - 0.8206 * km**2 + 0.2683 * km**3 - 0.0251 * km**4
+    rho = (1.6612 * vp - 0.4721 * vp**2 + 0.0671 * vp**3 - 0.0043 * vp**4
+           + 0.000106 * vp**5)
+    return vp * 1000.0, rho * 1000.0
+
+
 def velp(vs, p=0.25):
     """Vp in m/s from Vs in m/s and a stable isotropic Poisson ratio."""
     vs = np.asarray(vs, float)
@@ -1274,6 +1573,318 @@ def calc_norm_compliance(depth, freq, model):
     if not np.all(np.isfinite(ncomp)):
         raise ValueError("model is outside the finite real-valued propagator domain")
     return ncomp
+
+
+def resample_model(model, dz, max_depth=None):
+    """Split a layered model into slices of at most ``dz`` (m) down to ``max_depth``.
+
+    Slice edges include every model interface, so the resampled model is the
+    same Earth and has the same compliance. The half-space is sliced as well
+    when ``max_depth`` exceeds the finite thickness, and a half-space with its
+    properties is kept below. Returns the sliced model and slice mid-depths (m).
+    """
+    model = _validate_model(model)
+    dz = positive(dz, "dz")
+    total = model[:-1, 0].sum()
+    max_depth = total if max_depth is None else positive(max_depth, "max_depth")
+    interfaces = np.cumsum(model[:-1, 0])
+    grid = np.arange(0, max_depth + dz / 2, dz)
+    edges = np.unique(np.concatenate([grid[grid < max_depth],
+                                      interfaces[interfaces < max_depth], [max_depth]]))
+    edges = edges[np.concatenate([[True], np.diff(edges) > 1e-9 * max(dz, 1.0)])]
+    mid = 0.5 * (edges[:-1] + edges[1:])
+    rows = model[np.searchsorted(np.cumsum(model[:-1, 0]), mid, side="right")].copy()
+    rows[:, 0] = np.diff(edges)
+    return np.vstack([rows, model[-1]]), mid
+
+
+def compliance_kernels(depth, freq, model, dz=50.0, max_depth=None, rel=0.01):
+    """Numerical Vs sensitivity kernels of normalized compliance.
+
+    K[i, j] = d ln(eta(f_i)) / d ln(Vs) per km of depth, for slice j of
+    thickness ``dz`` (Vp and density held fixed, as in the inversion). Summing
+    ``K * dz / 1000`` over depth gives the response to a uniform relative Vs
+    change. Computed by finite differences, the approach of Doran & Laske
+    (2020); depth sensitivity peaks between about lambda/2pi and lambda/4 of
+    the water wavelength (Crawford 2004). Kernels are mostly negative (a
+    stiffer slice lowers compliance). With Vp fixed, raising Vs also lowers
+    lambda, so thin shallow slices can have small positive kernels at long
+    periods; the Vs sensitivity of such layers is then weak.
+
+    Returns ``(z_mid_m, K)`` with ``K`` of shape ``(len(freq), n_slices)``.
+    """
+    rel = positive(rel, "rel")
+    fine, mid = resample_model(model, dz, max_depth)
+    base = np.log(calc_norm_compliance(depth, freq, fine))
+    kernels = np.empty((len(base), len(mid)))
+    for j in range(len(mid)):
+        trial = fine.copy()
+        trial[j, 3] *= 1 + rel
+        if trial[j, 3] >= trial[j, 2]:
+            raise ValueError("perturbed Vs reaches Vp; reduce rel")
+        kernels[:, j] = (np.log(calc_norm_compliance(depth, freq, trial)) - base) / (
+            rel * fine[j, 0] / 1000
+        )
+    return mid, kernels
+
+
+def invert_occam(
+    Data,
+    f,
+    depth_s,
+    model,
+    s,
+    *,
+    target_chi2=None,
+    order=2,
+    max_iter=40,
+    vs_min=50.0,
+):
+    """Occam's inversion for a smooth Vs profile (Constable et al. 1987).
+
+    The linearized minimum-structure method used for compliance by Crawford
+    et al. (1991, 1998). Finite-layer Vs values are inverted; thickness, Vp,
+    density and the half-space stay as given in ``model``. The problem is
+    linearized in ln(Vs) and ln(compliance), since compliance scales roughly
+    as 1/Vs**2. Each iteration builds a finite-difference Jacobian, scans the
+    Lagrange multiplier and keeps the smoothest model whose chi-square is at
+    most ``target_chi2`` (default: the number of data); while the target is
+    out of reach it keeps the best-fitting one. A halving line search stops
+    a step from degrading the fit. Roughness is the ``order``-th difference of
+    ln(Vs) between layers. Chi-square is computed on the compliance itself,
+    ``sum(((Data - prediction) / s) ** 2)``.
+
+    Returns a dict with ``model``, ``chi2``, ``mu``, ``roughness``,
+    ``iterations`` and a per-iteration ``history``.
+    """
+    model = _validate_model(model).copy()
+    Data, f = np.asarray(Data, float), np.asarray(f, float)
+    s = np.broadcast_to(np.asarray(s, float), Data.shape)
+    residual(Data, Data, s)
+    if np.any(Data <= 0):
+        raise ValueError("Occam inversion works on positive normalized compliance")
+    n = len(model) - 1
+    order = integer(order, "order")
+    if n <= order:
+        raise ValueError("need more finite layers than the roughness order")
+    target = len(Data) if target_chi2 is None else positive(target_chi2, "target_chi2")
+    lo, hi = np.log(positive(vs_min, "vs_min")), np.log(0.98 * model[:-1, 2])
+    D = np.diff(np.eye(n), n=order, axis=0)
+    DtD = D.T @ D
+    log_data, w = np.log(Data), Data / s  # 1 / relative uncertainty
+
+    def forward(x):
+        trial = model.copy()
+        trial[:-1, 3] = np.exp(x)
+        return calc_norm_compliance(depth_s, f, trial)
+
+    def chi2(pred):
+        return float(np.sum(((Data - pred) / s) ** 2))
+
+    def rough(x):
+        return float(np.sum((D @ x) ** 2))
+
+    x = np.clip(np.log(model[:-1, 3]), lo, hi)
+    pred = forward(x)
+    c_now = chi2(pred)
+    history = [dict(chi2=c_now, mu=np.nan, roughness=rough(x))]
+    mu_now = np.nan
+    for iteration in range(1, integer(max_iter, "max_iter") + 1):
+        log_pred = np.log(pred)
+        J = np.empty((len(Data), n))
+        for j in range(n):
+            step = x.copy()
+            step[j] += 1e-3
+            J[:, j] = (np.log(forward(step)) - log_pred) / 1e-3
+        WJ = J * w[:, None]
+        JtJ = WJ.T @ WJ
+        rhs = WJ.T @ (w * (log_data - log_pred + J @ x))
+        scale = np.trace(JtJ) / np.trace(DtD)
+        trials = []
+        for mu in scale * np.logspace(-8, 6, 57):
+            cand = np.clip(np.linalg.solve(mu * DtD + JtJ, rhs), lo, hi)
+            try:
+                cand_pred = forward(cand)
+            except ValueError:
+                continue
+            trials.append((mu, chi2(cand_pred), cand, cand_pred))
+        feasible = [t for t in trials if t[1] <= target]
+        # Smoothest model that fits (evaluated with the full forward model),
+        # or the best fit while the target is still out of reach.
+        mu, c2, cand, cand_pred = (
+            min(feasible, key=lambda t: rough(t[2]))
+            if feasible
+            else min(trials, key=lambda t: t[1])
+        )
+        # Damped step. Before the target is reached a step must improve the
+        # fit; afterwards it must stay feasible AND be smoother, so phase two
+        # decreases roughness monotonically (Constable et al. 1987).
+        reached = c_now <= target
+        r_old = rough(x)
+
+        def admissible(c, xx):
+            return (c <= target and rough(xx) < r_old) if reached else c < c_now
+
+        t = 1.0
+        while not admissible(c2, cand) and t > 1 / 64:
+            t /= 2
+            trial_x = x + t * (cand - x)
+            trial_pred = forward(trial_x)
+            c2, cand, cand_pred = chi2(trial_pred), trial_x, trial_pred
+        if not admissible(c2, cand):  # no admissible step: converged
+            break
+        r_new = rough(cand)
+        x, pred, c_now, mu_now = cand, cand_pred, c2, mu
+        history.append(dict(chi2=c_now, mu=float(mu), roughness=r_new, step=t))
+        if reached and r_old - r_new <= 1e-3 * r_old:
+            break
+    final = model.copy()
+    final[:-1, 3] = np.exp(x)
+    return dict(
+        model=final,
+        chi2=c_now,
+        mu=float(mu_now),
+        roughness=rough(x),
+        iterations=len(history) - 1,
+        history=history,
+    )
+
+
+def _tempered_segment(job):
+    """Advance one replica of ``invert_tempered`` (module level so it pickles)."""
+    data, f, depth_s, start, s, cov, t, state, alpha, sv, sh, n, seed, adapt, kw = job
+    info = {}
+    chain, _, _, misfits, pred, _, rate = _inversion(
+        data, f, depth_s, start, None if s is None else s * np.sqrt(t), 3, sv, sh, n + 1,
+        alpha, "RR38", seed, True, False, adapt_until=adapt, initial_state=state,
+        diagnostics=info, data_covariance=None if cov is None else cov * t, **kw,
+    )
+    alphas = info["alpha"][1:] if "alpha" in info else np.full(n, float(alpha))
+    # Sample 0 repeats the incoming state; chi-square is reported at T = 1.
+    return (chain[:, :, 1:], pred[1:], misfits[0, 1:] ** 2 * t, alphas,
+            info["sigma_v"], info["sigma_h"], rate)
+
+
+def invert_tempered(
+    Data,
+    f,
+    depth_s,
+    starting_model,
+    initial_states,
+    *,
+    s=None,
+    data_covariance=None,
+    temperatures=(1.0, 2.0, 4.0, 8.0, 16.0),
+    n_ensembles=4,
+    adapt_until=8000,
+    segment=200,
+    rounds=200,
+    burn_rounds=30,
+    sigma_v=100.0,
+    sigma_h=50.0,
+    alpha=0.25,
+    seed=0,
+    processes=None,
+    **sampler_kw,
+):
+    """Parallel tempering (replica exchange) around the Metropolis sampler.
+
+    Shallow compliance posteriors can be multimodal: e.g. slow-over-fast and
+    fast-over-slow layering below the resolution depth fit equally well, and
+    single random-walk chains rarely cross between them (high R-hat). Each of
+    ``n_ensembles`` independent ensembles runs one replica per temperature on
+    likelihood**(1/T) (for a Gaussian likelihood: uncertainties times sqrt(T),
+    covariance times T) with the prior unchanged, and swaps adjacent replicas
+    after every ``segment`` iterations with the replica-exchange acceptance
+    (Geyer 1991; Sambridge 2014). The T = 1 replicas then sample the posterior,
+    and the independent ensembles give the R-hat/ESS diagnostics.
+
+    Each replica is first tuned for ``adapt_until`` iterations at its own
+    temperature; step sizes then stay frozen, so every later segment is an
+    ordinary Metropolis kernel. ``initial_states`` is a list of models;
+    ensemble e at temperature slot j starts from entry (e + j) mod len.
+    ``sampler_kw`` is passed to the sampler (vs_bounds, vary_thickness,
+    alpha_bounds, elastic_from_vs, ...); the first ``burn_rounds`` rounds after
+    tuning are discarded. ``processes`` sets the worker pool (1: serial).
+
+    Returns a dict: ``chain`` (ensembles, rows, 4, draws) of the T = 1
+    replicas, ``predictions``, ``chi2`` (at T = 1), ``alpha``,
+    ``swap_acceptance`` per adjacent pair, ``temperatures`` and the tuned
+    ``sigma_v``/``sigma_h`` per temperature slot.
+    """
+    temps = np.asarray(temperatures, float)
+    if temps.ndim != 1 or temps.size < 1 or temps[0] != 1.0 or np.any(np.diff(temps) <= 0):
+        raise ValueError("temperatures must increase strictly from 1.0")
+    if (s is None) == (data_covariance is None):
+        raise ValueError("give exactly one of s or data_covariance")
+    for name, value in (("n_ensembles", n_ensembles), ("segment", segment), ("rounds", rounds)):
+        integer(value, name)
+    if not 0 <= burn_rounds < rounds:
+        raise ValueError("burn_rounds must lie in [0, rounds)")
+    states = [_validate_model(m).copy() for m in initial_states]
+    if not states:
+        raise ValueError("initial_states must contain at least one model")
+    data, f = np.asarray(Data, float), np.asarray(f, float)
+    s = None if s is None else np.broadcast_to(np.asarray(s, float), data.shape).copy()
+    cov = None if data_covariance is None else np.asarray(data_covariance, float)
+    start = _validate_model(starting_model)
+    reps = [(e, j) for e in range(n_ensembles) for j in range(len(temps))]
+    rng = np.random.default_rng(seed)
+
+    def job(r, state, alpha_r, sv, sh, n, adapt):
+        return (data, f, depth_s, start, s, cov, temps[r[1]], state, alpha_r, sv, sh, n,
+                int(rng.integers(2**31)), adapt, sampler_kw)
+
+    if processes == 1:
+        pool, run = None, lambda jobs: [_tempered_segment(j) for j in jobs]
+    else:
+        from multiprocessing import Pool
+
+        pool = Pool(processes)
+        run = lambda jobs: pool.map(_tempered_segment, jobs)  # noqa: E731
+    try:
+        out = run([job(r, states[(r[0] + r[1]) % len(states)], alpha, sigma_v, sigma_h,
+                       max(adapt_until, 1), adapt_until) for r in reps])
+        cur = {r: o[0][:, :, -1].copy() for r, o in zip(reps, out)}
+        alph = {r: float(o[3][-1]) for r, o in zip(reps, out)}
+        chi2 = {r: float(o[2][-1]) for r, o in zip(reps, out)}
+        sv = {r: o[4] for r, o in zip(reps, out)}  # tied to the temperature slot
+        sh = {r: o[5] for r, o in zip(reps, out)}
+        keep = [dict(chain=[], pred=[], chi2=[], alpha=[]) for _ in range(n_ensembles)]
+        tried, swapped = np.zeros(len(temps) - 1), np.zeros(len(temps) - 1)
+        for rnd in range(rounds):
+            out = run([job(r, cur[r], alph[r], sv[r], sh[r], segment, 0) for r in reps])
+            for r, o in zip(reps, out):
+                cur[r], alph[r], chi2[r] = o[0][:, :, -1].copy(), float(o[3][-1]), float(o[2][-1])
+                if r[1] == 0 and rnd >= burn_rounds:
+                    k = keep[r[0]]
+                    k["chain"].append(o[0]); k["pred"].append(o[1])
+                    k["chi2"].append(o[2]); k["alpha"].append(o[3])
+            for e in range(n_ensembles):  # alternate even and odd adjacent pairs
+                for j in range(rnd % 2, len(temps) - 1, 2):
+                    a, b = (e, j), (e, j + 1)
+                    log_acc = (chi2[a] - chi2[b]) * (0.5 / temps[j] - 0.5 / temps[j + 1])
+                    tried[j] += 1
+                    if np.log(max(rng.random(), np.finfo(float).tiny)) < log_acc:
+                        swapped[j] += 1
+                        for d in (cur, alph, chi2):
+                            d[a], d[b] = d[b], d[a]
+    finally:
+        if pool is not None:
+            pool.close()
+            pool.join()
+    with np.errstate(invalid="ignore"):
+        swap_rate = swapped / tried
+    return dict(
+        chain=np.stack([np.concatenate(k["chain"], axis=2) for k in keep]),
+        predictions=np.stack([np.concatenate(k["pred"]) for k in keep]),
+        chi2=np.stack([np.concatenate(k["chi2"]) for k in keep]),
+        alpha=np.stack([np.concatenate(k["alpha"]) for k in keep]),
+        swap_acceptance=swap_rate,
+        temperatures=temps,
+        sigma_v=[sv[(0, j)] for j in range(len(temps))],
+        sigma_h=[sh[(0, j)] for j in range(len(temps))],
+    )
 
 
 # %%
