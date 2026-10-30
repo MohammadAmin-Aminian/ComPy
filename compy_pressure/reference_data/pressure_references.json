@@ -1,0 +1,113 @@
+{
+  "brown": {
+    "title": "The IDC Seismic, Hydroacoustic and Infrasound Global Low and High Noise Models",
+    "doi": "10.1007/s00024-012-0573-6",
+    "figure_url": "https://link.springer.com/article/10.1007/s00024-012-0573-6/figures/8",
+    "provenance": "Approximate digitization of the solid IDC hydroacoustic curves, not official numerical model data.",
+    "original_units": "dB re 1 microPa^2/Hz",
+    "conversion_to_db_pa2_hz": -120,
+    "figure_license": "CC BY 2.0; Brown, Ceranna, Prior, Mialle and Le Bras",
+    "figure_raster_sha256": "60b9dde6b87b3ec5120a4887bbd4915a6fa523b340ac5666568d6e496880baae",
+    "pixel_axes": {
+      "frequency_min_x": 123,
+      "frequency_max_x": 831,
+      "frequency_min_hz": 0.01,
+      "frequency_max_hz": 100,
+      "amplitude_max_y": 15,
+      "amplitude_min_y": 723,
+      "amplitude_max_db_micro_pa2_hz": 190,
+      "amplitude_min_db_micro_pa2_hz": 40
+    },
+    "digitization_tolerance_db": 2,
+    "data_file": "brown_hydroacoustic_fullband.csv",
+    "legacy_data_file": "brown_hydroacoustic.csv",
+    "digitized_support_hz": [
+      0.011389303737,
+      78.1007792792
+    ],
+    "figure_axis_limits_hz": [
+      0.01,
+      100
+    ],
+    "comparison_band": "Bins centred at or above 0.2 Hz (below 0.2 Hz Webb 1998 Fig. 2 is used) with full smoothing-bin support inside the digitized curve; no extrapolation.",
+    "applicability": "In-water IMS hydrophone statistical curves, not universal seafloor pressure acceptance limits. Low/high are station 5th/95th percentile envelopes across the network.",
+    "reviewed_20261019": {
+      "source_pdf_url": "https://link.springer.com/content/pdf/10.1007/s00024-012-0573-6.pdf",
+      "pdf_sha256": "ca9e95c9206fb7231e55190eb579ef900e12ed31bd105ea0dcdc50a651e19ba8",
+      "figure": 8,
+      "printed_page": 371,
+      "extracted_raster_sha256": "7e39eebc0ebde9afd4482df61b319115df15a3dbb88680b094f76cc929664dec",
+      "method": "Manual samples of the two solid curves using the original 123..831 x and 15..723 y pixel axes. Original 17 samples retained; 20 added. No shipping dashed curves. Pixel precision is not physical accuracy. 2 dB is a review flag, not a certified error bound."
+    },
+    "minimum_comparison_hz": 0.2,
+    "check_20261026": "Project instruction values 1 Hz -25..-2, 10 Hz -49..-25, 100 Hz -56..-38 dB match this digitization within its 2 dB tolerance."
+  },
+  "webb": {
+    "title": "Broadband seismology and noise under the ocean",
+    "citation": "Webb, S. C. (1998), Rev. Geophys., 36(1), 105-142, Figure 2 (non-Arctic: Pacific and Atlantic)",
+    "doi": "10.1029/97RG02287",
+    "provenance": "Low/high bounds read from Webb (1998) Figure 2 Pacific and Atlantic curves, as given in the project instructions (screenshot 2026-10-26) and checked against the figure: 0.005 Hz Atlantic ~3e3, Pacific ~6e4 Pa^2/Hz; 0.05 Hz ~0.3-0.5 Pa^2/Hz; 0.1 Hz ~1-100 Pa^2/Hz; 0.2 Hz Atlantic ~7e2, Pacific ~4e4 Pa^2/Hz.",
+    "verified_published_bounds": true,
+    "use_in_comparison": true,
+    "use_in_plot": true,
+    "supplied_by": "Project instructions (Wayne Crawford), source Webb (1998) Fig. 2",
+    "display_label": "Webb 1998 Fig. 2",
+    "units": "dB re 1 Pa^2/Hz",
+    "maximum_frequency_hz": 0.2,
+    "comparison_band": "Discrete figure-read points at or below 0.2 Hz; no interpolation in the comparison. Brown et al. is used above 0.2 Hz.",
+    "points": [
+      {
+        "frequency_hz": 0.005,
+        "low_db_pa2_hz": 20,
+        "high_db_pa2_hz": 50
+      },
+      {
+        "frequency_hz": 0.05,
+        "low_db_pa2_hz": -25,
+        "high_db_pa2_hz": 5
+      },
+      {
+        "frequency_hz": 0.1,
+        "low_db_pa2_hz": -20,
+        "high_db_pa2_hz": 20
+      },
+      {
+        "frequency_hz": 0.2,
+        "low_db_pa2_hz": 10,
+        "high_db_pa2_hz": 50
+      }
+    ],
+    "superseded_20261026": {
+      "title": "Unverified project handout values attributed to Webb",
+      "doi": "10.1029/90JC02212",
+      "provenance": "Bounds transcribed from the user-supplied instructions attributed to Webb. Review of the author-uploaded 1991 paper did not establish this table as a published universal low/high model.",
+      "points": [
+        {
+          "frequency_hz": 0.005,
+          "low_db_pa2_hz": 10,
+          "high_db_pa2_hz": 50
+        },
+        {
+          "frequency_hz": 0.05,
+          "low_db_pa2_hz": -50,
+          "high_db_pa2_hz": 10
+        },
+        {
+          "frequency_hz": 0.1,
+          "low_db_pa2_hz": -9,
+          "high_db_pa2_hz": 20
+        },
+        {
+          "frequency_hz": 0.2,
+          "low_db_pa2_hz": 10,
+          "high_db_pa2_hz": 34
+        },
+        {
+          "frequency_hz": 1,
+          "low_db_pa2_hz": -25,
+          "high_db_pa2_hz": -2
+        }
+      ]
+    }
+  }
+}

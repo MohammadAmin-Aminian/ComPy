@@ -1,5 +1,45 @@
 # Changelog
 
+## Unreleased
+
+### New package `compy_pressure`: pressure-gauge QC and calibration
+
+BRUIT-FM's core, exported from BRUIT-FM 1.3.0 by its
+`integration/export_to_compy.py`. It runs pressure-gauge QC and calibration
+over a whole SDS archive and its StationXML. Guide: `docs/PRESSURE.md`.
+
+- Master table of every channel epoch. Response-corrected PPSDs, checkpointed
+  and run in parallel.
+- QC tests:
+  - Webb/Brown seafloor limits;
+  - nearby gauges at a similar depth;
+  - Godin et al. (2013) infragravity model.
+- Gain estimates from Rayleigh waves, microseisms and local P waves. They are
+  recorded, never applied.
+- Percentile noise models by ocean basin, sensor type, water depth and season.
+- Commands: `compy-pressure` (stages `inventory` … `rayleigh`, `all`, `view`),
+  `compy-pressure-inventory`, `-paired`, `-microseism`, `-local-p` and
+  `-noise-model`.
+- New extras: `pressure` (pandas, openpyxl) and `maps` (Cartopy). `dev` now
+  includes pandas and openpyxl.
+- Differences from BRUIT-FM:
+  - no Godin pilot stage;
+  - no tilt module (ComPy has `Rotate`);
+  - default output folders in the current directory;
+  - the master-table lock also works on Windows.
+- `_Example/5_Pressure_QC.py`: inventory, PPSDs, plots and QC tests 1 and 3 on
+  a synthetic gauge (offline, seconds), or on real data. CI runs it from the
+  installed wheel.
+- `Pressure_calibration.py` (including the 2.4.0 changes from PR #5) is not
+  modified by this package.
+
+### Tests
+
+- `tests/pressure/`: 225 tests on synthetic StationXML and waveforms; 3 skip
+  without BRUIT-FM's campaign scripts. They pass on Python 3.10 and 3.13.
+- The wheel check also imports `compy_pressure` outside the checkout. It loads
+  the packaged reference data and runs the console scripts and the example.
+
 ## 2.4.0 — 2026-10-30
 
 Integration release: every open pull request and branch is merged, the

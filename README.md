@@ -547,6 +547,41 @@ python _Example/deep_crust_inversion.py --output deep-crust   # ~25 min, 2 cores
 python _Example/plot_deep_posterior.py deep-crust
 ```
 
+## Pressure-gauge QC and calibration across an archive (`compy_pressure`)
+
+`compy_pressure` runs QC and calibration on every pressure gauge in a waveform
+archive. It reads an SDS archive and its StationXML and writes one master table
+that scores every pressure channel. The table holds:
+
+- response-corrected PPSDs;
+- three spectral QC tests:
+  - against the Webb (1998) and Brown et al. (2014) seafloor limits;
+  - against nearby gauges at a similar depth;
+  - against the Godin et al. (2013) infragravity model;
+- three independent gain estimates: Rayleigh waves, microseisms and local P
+  waves;
+- percentile noise models by ocean basin, depth, sensor type and season.
+
+Gains are estimated and recorded; they are never applied. Runs are parallel,
+checkpointed and restartable. The package comes from
+[BRUIT-FM](https://github.com/MohammadAmin-Aminian/bruit-fm), where it
+processed 846 pressure channels from 30 networks.
+
+```bash
+python -m pip install -e '.[pressure]'
+python _Example/5_Pressure_QC.py --output qc-example    # synthetic gauge, offline, seconds
+compy-pressure inventory --inventory-dir $XML --master-dir run/master
+compy-pressure ppsd --data-dir $SDS --inventory-dir $XML --master-dir run/master \
+    --results-dir run/results --network YV --pressure-only --workers max
+compy-pressure pressure --data-dir $SDS --inventory-dir $XML --master-dir run/master \
+    --results-dir run/results --network YV
+```
+
+Commands, outputs, the Python interface and how the package stays in step with
+BRUIT-FM are in [`docs/PRESSURE.md`](docs/PRESSURE.md). For one station and
+one event, `Pressure_calibration.calculate_spectral_ratio` (see
+[Pressure calibration](#pressure-calibration)) is still available.
+
 ## Plotting and diagnostics
 
 `ffplot` contains the original PSD, coherence, spectrogram and deployment-specific

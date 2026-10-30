@@ -14,9 +14,20 @@ authors = [{name = "Mohammad-Amin Aminian"}]
 dependencies = ["numpy>=1.24", "scipy>=1.10", "matplotlib>=3.7", "obspy>=1.4", "tiskitpy>=2.3,<3", "disba>=0.7,<1"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.9", "build>=1", "arviz>=0.19,<0.23"]
+dev = ["pytest>=8", "ruff>=0.9", "build>=1", "arviz>=0.19,<0.23", "pandas>=2.2", "openpyxl>=3.1"]
 diagnostics = ["arviz>=0.19,<0.23"]
 fast = ["numba>=0.59"]
+# compy_pressure: pressure-gauge QC, calibration and noise models (docs/PRESSURE.md)
+pressure = ["pandas>=2.2", "openpyxl>=3.1"]
+maps = ["cartopy>=0.24"]
+
+[project.scripts]
+compy-pressure = "compy_pressure.network:main"
+compy-pressure-inventory = "compy_pressure.inventory:main"
+compy-pressure-local-p = "compy_pressure.local_p_check:main"
+compy-pressure-microseism = "compy_pressure.microseism_check:main"
+compy-pressure-paired = "compy_pressure.paired_spectra:main"
+compy-pressure-noise-model = "compy_pressure.group_noise_model:main"
 
 [project.urls]
 Repository = "https://github.com/MohammadAmin-Aminian/ComPy"
@@ -24,6 +35,11 @@ Publication = "https://doi.org/10.1093/gji/ggaf253"
 
 [tool.setuptools]
 py-modules = ["compy", "inv_compy", "Pressure_calibration", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
+# reference_data is listed as a (data-only) package so that setuptools ships it.
+packages = ["compy_pressure", "compy_pressure.reference_data"]
+
+[tool.setuptools.package-data]
+"compy_pressure.reference_data" = ["*.csv", "*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

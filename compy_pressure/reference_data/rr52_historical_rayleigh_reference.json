@@ -1,0 +1,17 @@
+{
+  "purpose": "Historical model reproduction; not a validated local Earth model",
+  "source_repository": "https://github.com/MohammadAmin-Aminian/DPG_Calibration",
+  "source_commit": "7719622",
+  "source_function": "Pressure_calibration.py:phase_dispersion",
+  "adaptation": "Last-layer thickness set to zero to declare the half-space explicitly",
+  "solver": "disba 0.7.0, fundamental Rayleigh PhaseDispersion and GroupDispersion",
+  "periods_seconds": {
+    "minimum": 11.76470588235294,
+    "maximum": 66.66666666666667,
+    "count": 160
+  },
+  "columns": "frequency_hz, phase_velocity_m_s, group_velocity_m_s",
+  "units": "Model: km, km/s, km/s, g/cm3; dispersion velocities converted to m/s",
+  "model_sha256": "f6a8ac05c5c21498a1e55c4982cacb8db3b9bc7053d90ed61d91ec494e186a53",
+  "dispersion_sha256": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
+}
