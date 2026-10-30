@@ -1,6 +1,6 @@
 # Pressure gauges: QC, calibration and noise models (`compy_pressure`)
 
-ComPy holds all of
+ComPy 2.5 holds all of
 [BRUIT-FM](https://github.com/MohammadAmin-Aminian/bruit-fm). BRUIT-FM checks
 and calibrates ocean-bottom pressure gauges across a whole waveform archive.
 It starts from an SDS archive and its StationXML and ends with one master

@@ -1,3 +1,6 @@
-include CHANGELOG.md CONTRIBUTING.md
+include CHANGELOG.md CONTRIBUTING.md CITATION.cff
 recursive-include docs *.md *.json *.svg
 recursive-include _Example *.py
+recursive-include _Images *.png
+recursive-include pipeline *.py *.md
+recursive-include pressure *.py *.sh *.md *.json *.csv *.xml *.png

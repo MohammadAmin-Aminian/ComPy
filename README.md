@@ -1,4 +1,10 @@
-# ComPy 2.4
+# ComPy 2.5
+
+Version **2.5.0** integrates BRUIT-FM's pressure-gauge QC, calibration and noise
+models. The full network workflow is available as
+`python pipeline/run_pipeline.py`; see [the pipeline guide](pipeline/README.md).
+The old `Pressure_calibration` import has been removed; existing callers must
+follow the [calibration migration table](#pressure-calibration).
 
 **Seafloor compliance processing, pressure-gauge calibration and layered elastic inversion.**
 
@@ -75,7 +81,7 @@ git clone https://github.com/MohammadAmin-Aminian/ComPy.git
 cd ComPy
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,pressure]'
 python -m pytest -q
 ```
 
@@ -510,7 +516,7 @@ legacy `sediment_thickness` arguments do not modify station templates.
 Historical misspellings `invert_compliace*`, `liklihood`, `Roughness` and
 `Comliance_uncertainty` remain available for existing notebooks.
 
-### Verified deep-crust workflow (unreleased)
+### Verified deep-crust workflow
 
 Opt-in additions, following the compliance literature; every default above is
 unchanged and reproduces earlier chains draw for draw.

@@ -1,11 +1,12 @@
 # Changelog
 
-## Unreleased
+## 2.5.0 — 2026-10-30
 
 ComPy becomes the complete package for seafloor pressure gauges: all of
 BRUIT-FM moves in, and its calibration replaces `Pressure_calibration.py`.
-The version number is chosen at release; the changes below include breaking
-ones.
+This release stays in the 2.x series at the owner's request. It includes the
+breaking calibration API change below; existing scripts must use the migration
+guide or pin ComPy 2.4.0.
 
 ### Breaking changes
 
@@ -62,6 +63,15 @@ its dated reports), moved by its `integration/export_to_compy.py`:
 - Guide: `docs/PRESSURE.md`.
 
 ### Fixed (in `compy_pressure`, since the move)
+
+- Calibration masters validate the station, channel selection and complete
+  StationXML source set before reusing a saved table.
+- `pipeline/run_pipeline.py` runs A → B → D → C → E → figures/report in one
+  command, saves a run manifest and stops on failed stages. Stage A now exits
+  unsuccessfully if any preprocessing chunk fails.
+- Source distributions now include the pipeline and BRUIT-FM's scripts,
+  methods and tests, so the complete workflow is available from the release
+  source archive as well as a Git checkout.
 
 - The tilt-cleaned Rayleigh calibration read the channel responses from the
   PPSD folder (`<PPSD folder>/inventory.xml`) instead of the response

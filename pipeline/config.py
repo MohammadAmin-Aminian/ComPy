@@ -90,3 +90,7 @@ def seed_id(station, channel=P):
 _override = os.environ.get("COMPY_PIPELINE_CONFIG")
 if _override:
     exec(compile(Path(_override).read_text(), _override, "exec"))
+
+# The sequential runner applies the same station scope to figures and reports.
+if os.environ.get("COMPY_STATIONS"):
+    STATIONS = tuple(os.environ["COMPY_STATIONS"].split(","))

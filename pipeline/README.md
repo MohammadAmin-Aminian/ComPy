@@ -35,6 +35,29 @@ Serpentinization is computed from the posterior draws with
 
 ## Running
 
+Install `.[pressure,maps]` (or `.[dev,pressure,maps]` for development).
+For a complete run, set the archive, station, response and CRUST1.0 paths in
+your configuration, then use the sequential runner:
+
+```console
+export COMPY_RUN_DIR=~/runs/xe
+export COMPY_PIPELINE_CONFIG=/absolute/path/to/my_config.py
+python pipeline/run_pipeline.py CC11 CC05 --workers 8 --processes 8 --fetch
+```
+
+This runs A → B → D → C → E → F → G and writes individual logs plus a JSON
+run manifest under `logs/`. Omit `--fetch` when the inventory and catalogue
+already exist. `--start-at D` resumes at calibration; `--stop-after C` ends
+after compliance. Existing stage checkpoints are reused. Every selected
+station must finish each requested stage. Missing calibration is recorded as
+an explicit fallback to the alternative or nominal gain, with the existing
+wider inversion prior; failed preprocessing or empty compliance stops the
+run with a nonzero exit code. Figures and report tables use the same selected
+stations. A completed workflow does not establish posterior convergence;
+inspect the saved R-hat, ESS and fit diagnostics.
+
+The original concurrent schedulers remain available for large campaigns:
+
 ```console
 export COMPY_RUN_DIR=~/runs/xe   # holds metadata/, work/, results/, logs/
 cd ComPy/pipeline

@@ -131,12 +131,25 @@ def calibration_master(inventory, master_dir, network, station, *, channels=None
     also avoids pairing errors from wrong horizontal dips. A saved table is
     reused; a changed StationXML needs a new ``master_dir``.
     """
-    inventory, master_dir = Path(inventory), Path(master_dir)
+    inventory = Path(inventory).expanduser().resolve()
+    master_dir = Path(master_dir).expanduser().resolve()
     sources = sorted(inventory.glob("*.xml")) if inventory.is_dir() else [inventory]
+    if not sources or any(not source.is_file() for source in sources):
+        raise FileNotFoundError(f"No StationXML files in {inventory}")
+    inputs = {
+        "station": f"{network}.{station}",
+        "channels": sorted(set(channels)) if channels is not None else None,
+        "sources": {source.name: digest(source) for source in sources},
+    }
+    manifest = master_dir / "calibration_inputs.json"
     copies = master_dir / "stationxml"
     if (master_dir / "master_inventory.csv").exists():
-        if any((copies / s.name).read_bytes() != s.read_bytes() for s in sources):
-            raise ValueError(f"{inventory} changed; use a new master folder")
+        if not manifest.is_file() or json.loads(manifest.read_text()) != inputs:
+            raise ValueError(
+                "Calibration inputs changed or were not recorded; use a new master folder"
+            )
+        if any(digest(copies / s.name) != digest(s) for s in sources):
+            raise ValueError(f"{inventory} snapshot changed; use a new master folder")
         return master_dir, load_master_dataset(master_dir)
     copies.mkdir(parents=True, exist_ok=True)
     for source in sources:
@@ -157,6 +170,7 @@ def calibration_master(inventory, master_dir, network, station, *, channels=None
         shutil.copy2(master.at[index, "inventory_file"], snapshot)
         master.at[index, "rayleigh_response_snapshot_file"] = str(snapshot)
     save_master_dataset(master, master_dir)
+    atomic_json(manifest, inputs)
     return master_dir, master
 
 

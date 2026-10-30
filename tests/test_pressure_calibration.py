@@ -83,6 +83,31 @@ def test_calibration_master_keeps_only_the_named_channels(tmp_path):
     assert sorted(master.Seed_id) == ["XX.OBS1..BDH", "XX.OBS1..BHZ"]
 
 
+@pytest.mark.parametrize(
+    "station,channels", [("OTHER", ("BDH", "BHZ")), ("OBS1", None)]
+)
+def test_calibration_master_does_not_reuse_another_selection(
+    tmp_path, station, channels
+):
+    xml = write_stationxml(tmp_path / "XX.xml")
+    folder, _ = calibration_master(
+        xml, tmp_path / "cal", "XX", "OBS1", channels=("BDH", "BHZ")
+    )
+    with pytest.raises(ValueError, match="inputs changed"):
+        calibration_master(xml, folder, "XX", station, channels=channels)
+
+
+def test_calibration_master_detects_a_removed_inventory_source(tmp_path):
+    sources = tmp_path / "xml"
+    sources.mkdir()
+    write_stationxml(sources / "XX.xml")
+    extra = write_stationxml(sources / "extra.xml")
+    folder, _ = calibration_master(sources, tmp_path / "cal", "XX", "OBS1")
+    extra.unlink()
+    with pytest.raises(ValueError, match="inputs changed"):
+        calibration_master(sources, folder, "XX", "OBS1")
+
+
 def test_tilt_training_reads_the_explicit_response_snapshot(tmp_path):
     """Regression: the TiSKitPy path read <PPSD folder>/inventory.xml.
 

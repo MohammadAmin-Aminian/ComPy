@@ -65,7 +65,7 @@ def gains_for(station):
     path = WORK / station / "calibration" / "compy_gain.json"
     if path.exists():
         info = json.loads(path.read_text())
-        if info.get("gain"):
+        if not info.get("error") and info.get("gain"):
             gains["compy"] = float(info["gain"])
     if not gains:
         # No calibration: nominal response (g = 1), flagged; stage E samples
