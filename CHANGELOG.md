@@ -38,6 +38,13 @@ is validated on a second network.
   - Stage E: inversion.
   - Schedulers that chain the stages per station. `a_fast.py` stages a slow USB archive through local disk.
 - `calculate_spectral_ratio(..., zchan=, pchan=, filt_freq1=, filt_freq2=)`.
+- From the XE validation run (`docs/xe_young_orca_2026-10-29`):
+  - `pipeline/f_figures.py`: the figures of Aminian et al. (2025) for any network;
+  - `pipeline/g_report.py`: report numbers;
+  - `pipeline/a_download.py`: FDSN staging;
+  - inversion queues with lock files;
+  - a nominal-gain fallback for stations without calibration, with a 0.6–1.4 gain prior;
+  - the paper's 500-window minimum applied when the results are collected.
 
 ### Fixed
 

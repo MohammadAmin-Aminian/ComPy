@@ -67,6 +67,10 @@ def gains_for(station):
         info = json.loads(path.read_text())
         if info.get("gain"):
             gains["compy"] = float(info["gain"])
+    if not gains:
+        # No calibration: nominal response (g = 1), flagged; stage E samples
+        # the gain over a wide range (e_invert.GAIN_BOUNDS["nominal"]).
+        gains["nominal"] = 1.0
     return gains
 
 

@@ -1,0 +1,47 @@
+{
+ "station": "WC01",
+ "depth_m": 4483.2,
+ "f_c_hz": 0.018645769732200224,
+ "windows_total": 4717,
+ "windows_dropped_events": 1618,
+ "window_s": 2100.0,
+ "nseg": 1024,
+ "gains": {
+  "nominal": 1.0
+ },
+ "paper_table1": null,
+ "results": {
+  "nominal": {
+   "gain": 1.0,
+   "attempts": {
+    "0.9": {
+     "error": "no windows passed compliance quality thresholds {'coherence': 4717, 'pressure_psd': 0, 'acceleration_psd': 0}"
+    },
+    "0.8": {
+     "n_windows": 3,
+     "band": [
+      0.007,
+      0.01491661578576018
+     ]
+    }
+   },
+   "threshold": 0.8,
+   "band_hz": [
+    0.007,
+    0.01491661578576018
+   ],
+   "n_windows": 3,
+   "n_averages": 11.366025812244619,
+   "rejected": {
+    "coherence": 4714,
+    "pressure_psd": 0,
+    "acceleration_psd": 0
+   },
+   "median_coherence_in_band": 0.37106458751596677,
+   "median_phase_deg_in_band": 110.72733341708536,
+   "median_relative_uncertainty": 0.30881014058632633,
+   "monthly": {}
+  }
+ },
+ "epoch_end": null
+}

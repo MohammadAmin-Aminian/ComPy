@@ -63,6 +63,13 @@ BRUITFM_GAINS = None
 CRUST1 = ROOT / "metadata" / "crust1"  # crust1.bnds, .vp, .vs, .rho
 
 
+# --- figures (f_figures.py) -----------------------------------------------------
+# Station-code prefix -> sub-array label for Figs. 8 and 10. Optional files:
+# metadata/bathy/etopo_<net>.nc (map) and metadata/bathy/etopo_region.nc (inset).
+GROUPS = {"WW": "West (WW)", "WC": "West-central (WC)", "CC": "Central (CC)",
+          "EC": "East-central (EC)", "EE": "East (EE)"}  # fmt: skip
+
+
 def seed_id(station, channel=P):
     """SEED id as written in the BRUIT-FM tables."""
     return f"{NETWORK}.{station}..{channel}"
