@@ -1,0 +1,5 @@
+station,frozen_gain,isolated_usable_events,isolated_median_error_percent,qc_usable_including_body_review,qc_only_median_error_percent,status
+RR01,1.0413799616596953,0,,1,-2.0583678440274755,insufficient_heldout_events
+RR06,1.1396787894514488,1,-1.0410988955193323,3,-0.5260343686473212,insufficient_heldout_events
+RR48,1.3867103370013885,0,,0,,insufficient_heldout_events
+RR52,0.6787278140712512,14,0.6641401376585199,22,0.6375182607714969,heldout_review

@@ -1,0 +1,79 @@
+{
+  "scope": "Saved spectra only, held original candidate events; not new event acceptance",
+  "model": {
+    "source_kind": "layer_model_disba",
+    "source_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_layers.csv",
+    "source_sha256": "f6a8ac05c5c21498a1e55c4982cacb8db3b9bc7053d90ed61d91ec494e186a53",
+    "disba_version": "0.7.0",
+    "numba_version": "0.68.0",
+    "algorithm": "dunkin",
+    "mode": 0,
+    "wave": "rayleigh",
+    "layers_units": "km, km/s, km/s, g/cm3",
+    "period_seconds": [
+      10.0,
+      50.0
+    ],
+    "period_count": 160,
+    "field_validation": "not_established_by_solver"
+  },
+  "source": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015JB012688",
+  "stations": [
+    {
+      "station": "A02W",
+      "published_coefficient": 1.5,
+      "station_pressure_multiplier": 0.7041067971080038,
+      "reciprocal": 1.420239094562538,
+      "relative_difference_percent": -5.317393695830797,
+      "candidate_events": 3,
+      "wide_band_fixed_events_diagnostic": 0.723536847781126,
+      "wide_band_retained_events": 3
+    },
+    {
+      "station": "A06W",
+      "published_coefficient": 1.53,
+      "station_pressure_multiplier": null,
+      "reciprocal": null,
+      "relative_difference_percent": null,
+      "candidate_events": 2,
+      "wide_band_fixed_events_diagnostic": null,
+      "wide_band_retained_events": 2
+    },
+    {
+      "station": "A08W",
+      "published_coefficient": 1.43,
+      "station_pressure_multiplier": 0.7413702234495223,
+      "reciprocal": 1.3488537418553161,
+      "relative_difference_percent": -5.674563506621244,
+      "candidate_events": 3,
+      "wide_band_fixed_events_diagnostic": 0.7506732567993395,
+      "wide_band_retained_events": 3
+    },
+    {
+      "station": "A10W",
+      "published_coefficient": 1.82,
+      "station_pressure_multiplier": 0.5850303714758279,
+      "reciprocal": 1.7093129669103302,
+      "relative_difference_percent": -6.0817051148170265,
+      "candidate_events": 3,
+      "wide_band_fixed_events_diagnostic": 0.5892046212118851,
+      "wide_band_retained_events": 3
+    },
+    {
+      "station": "A12W",
+      "published_coefficient": 1.67,
+      "station_pressure_multiplier": 0.6394006168044105,
+      "reciprocal": 1.5639647096335145,
+      "relative_difference_percent": -6.349418584819489,
+      "candidate_events": 3,
+      "wide_band_fixed_events_diagnostic": 0.6360168060481766,
+      "wide_band_retained_events": 3
+    }
+  ],
+  "masters_workflow_preserved": true,
+  "protected_sha256": {
+    "exports/master_inventory.csv": "4cf9575636df3be7dc22121b43043f8c6fe83c4d5138aa26464698bdd856b505",
+    "exports/master_inventory.xlsx": "0956b8703ec83b48bd3ffc105524678b34ba1f62556e18a8051e9e773a74d234",
+    "results/NETWORKS/YL_FIVE_NO_TILT/_workflow/rayleigh.json": "5b226e8c70a49da17863f50ee6c4bc14c874bd86aba3dce0db2d2970561d4e34"
+  }
+}

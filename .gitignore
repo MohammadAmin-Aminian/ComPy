@@ -9,3 +9,11 @@ venv/
 *.egg-info/
 build/
 dist/
+
+# compy_pressure: default outputs of the campaign tools under pressure/, and
+# of the core stages (exports/, results/) when run from the checkout.
+/pressure/results/
+/pressure/exports/
+/pressure/data/
+/exports/
+/results/

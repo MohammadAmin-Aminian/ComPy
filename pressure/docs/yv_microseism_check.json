@@ -1,0 +1,693 @@
+{
+  "run": "results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23",
+  "run_summary_sha256": "68fede255edc524ba05af387d199b3d1bb6b6db9e65aa9dcabbc99187f96c0da",
+  "response_flags": "/Users/mohammadamin/Projects/bruit-fm-claude/docs/yv_rayleigh_independent_validation.json",
+  "response_flags_sha256": "3f2fe080937f2d29cec7423abc61407b70573a5a29e52ea08985b5bea9b16422",
+  "coherent_bin_threshold": 0.5,
+  "phase_band_hz": [
+    0.05,
+    0.3
+  ],
+  "label_thresholds_deg": {
+    "fits": 10.0,
+    "unexplained": 20.0
+  },
+  "informative_conditioning_ratio": 1.5,
+  "phase_label_counts": {
+    "insufficient_coherent_bins": 4,
+    "reflected_pole": 22,
+    "nominal": 9,
+    "unresolved_pairing": 2,
+    "unexplained_phase": 5,
+    "reversed_reflected_pole": 1
+  },
+  "stations": {
+    "RR01": {
+      "label": "insufficient_coherent_bins",
+      "coherent_bins": 0
+    },
+    "RR03": {
+      "coherent_bins": 654,
+      "frequency_hz": [
+        0.113888889,
+        0.3
+      ],
+      "circular_mean_phase_deg": -6.712711431826218,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 7.217091048780765,
+        "reflected_pole": 3.339001536530761,
+        "reversed_nominal": 173.30536008559878,
+        "reversed_reflected_pole": 177.31644065917564
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR05": {
+      "coherent_bins": 660,
+      "frequency_hz": [
+        0.116111111,
+        0.3
+      ],
+      "circular_mean_phase_deg": -17.22862117057184,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 17.71301946337735,
+        "reflected_pole": 7.952552146046846,
+        "reversed_nominal": 162.82053741455508,
+        "reversed_reflected_pole": 172.3895768025808
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR06": {
+      "coherent_bins": 661,
+      "frequency_hz": [
+        0.116388889,
+        0.3
+      ],
+      "circular_mean_phase_deg": -12.396727934734054,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 12.873844507391105,
+        "reflected_pole": 2.3466260088186974,
+        "reversed_nominal": 167.63801580910157,
+        "reversed_reflected_pole": 178.03968095542126
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR07": {
+      "coherent_bins": 573,
+      "frequency_hz": [
+        0.138888889,
+        0.3
+      ],
+      "circular_mean_phase_deg": -4.889043899550973,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 5.644381516592554,
+        "reflected_pole": 3.025561950592651,
+        "reversed_nominal": 175.03012451498464,
+        "reversed_reflected_pole": 177.6118744884619
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR08": {
+      "coherent_bins": 686,
+      "frequency_hz": [
+        0.107777778,
+        0.3
+      ],
+      "circular_mean_phase_deg": -6.7629258064419675,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 7.150277927313595,
+        "reflected_pole": 3.472642964480009,
+        "reversed_nominal": 173.25226171315498,
+        "reversed_reflected_pole": 177.24983970878026
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR09": {
+      "coherent_bins": 667,
+      "frequency_hz": [
+        0.114444444,
+        0.3
+      ],
+      "circular_mean_phase_deg": -4.447258896907451,
+      "bins_below_first_resonance": 40,
+      "circular_mean_phase_below_resonance_deg": -7.325701212326934,
+      "rms_residual_deg": {
+        "nominal": 5.0956250621330135,
+        "reflected_pole": 2.686030987988146,
+        "reversed_nominal": 175.45620728584572,
+        "reversed_reflected_pole": 177.9169380387885
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR10": {
+      "coherent_bins": 669,
+      "frequency_hz": [
+        0.0622222222,
+        0.3
+      ],
+      "circular_mean_phase_deg": -10.724773741370377,
+      "bins_below_first_resonance": 173,
+      "circular_mean_phase_below_resonance_deg": -16.946602789897536,
+      "rms_residual_deg": {
+        "nominal": 11.656151226596176,
+        "reflected_pole": 2.575715604213376,
+        "reversed_nominal": 169.33170534607012,
+        "reversed_reflected_pole": 178.08535130602976
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR11": {
+      "coherent_bins": 536,
+      "frequency_hz": [
+        0.149722222,
+        0.3
+      ],
+      "circular_mean_phase_deg": 2.164863881622283,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 3.941103703030541,
+        "reflected_pole": 7.314571755397339,
+        "reversed_nominal": 176.8855086954772,
+        "reversed_reflected_pole": 173.45911731622357
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR13": {
+      "coherent_bins": 641,
+      "frequency_hz": [
+        0.122222222,
+        0.3
+      ],
+      "circular_mean_phase_deg": -5.104015414141395,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 5.297678238094853,
+        "reflected_pole": 1.055224643670508,
+        "reversed_nominal": 174.90163307181737,
+        "reversed_reflected_pole": 179.148100496462
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR14": {
+      "coherent_bins": 662,
+      "frequency_hz": [
+        0.116111111,
+        0.3
+      ],
+      "circular_mean_phase_deg": -5.469369604485424,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 5.705538268892302,
+        "reflected_pole": 2.039726640275505,
+        "reversed_nominal": 174.5381247340217,
+        "reversed_reflected_pole": 178.29479390594688
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR16": {
+      "coherent_bins": 696,
+      "frequency_hz": [
+        0.0569444444,
+        0.3
+      ],
+      "circular_mean_phase_deg": -10.867837944369855,
+      "bins_below_first_resonance": 22,
+      "circular_mean_phase_below_resonance_deg": -31.654649802538444,
+      "rms_residual_deg": {
+        "nominal": 11.914688493146654,
+        "reflected_pole": 2.426211946605869,
+        "reversed_nominal": 169.1864972555814,
+        "reversed_reflected_pole": 178.14405514972452
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR17": {
+      "coherent_bins": 668,
+      "frequency_hz": [
+        0.0605555556,
+        0.3
+      ],
+      "circular_mean_phase_deg": -35.49914044038236,
+      "bins_below_first_resonance": 222,
+      "circular_mean_phase_below_resonance_deg": -44.82863627550506,
+      "rms_residual_deg": {
+        "nominal": 36.48787834541029,
+        "reflected_pole": 29.20450217306844,
+        "reversed_nominal": 144.74196428207438,
+        "reversed_reflected_pole": 151.92114192893388
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "unexplained_phase"
+    },
+    "RR18": {
+      "coherent_bins": 678,
+      "frequency_hz": [
+        0.0608333333,
+        0.3
+      ],
+      "circular_mean_phase_deg": -38.03514098313191,
+      "bins_below_first_resonance": 2,
+      "circular_mean_phase_below_resonance_deg": -77.62095000000001,
+      "rms_residual_deg": {
+        "nominal": 38.905551391867405,
+        "reflected_pole": 26.839082843238472,
+        "reversed_nominal": 142.17230901701333,
+        "reversed_reflected_pole": 154.18787115693152
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "unexplained_phase"
+    },
+    "RR19": {
+      "coherent_bins": 653,
+      "frequency_hz": [
+        0.0602777778,
+        0.3
+      ],
+      "circular_mean_phase_deg": -15.948178531482965,
+      "bins_below_first_resonance": 15,
+      "circular_mean_phase_below_resonance_deg": -39.675660025470904,
+      "rms_residual_deg": {
+        "nominal": 17.296973601345282,
+        "reflected_pole": 7.799144708435097,
+        "reversed_nominal": 163.83122783239583,
+        "reversed_reflected_pole": 172.66626642223179
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR20": {
+      "coherent_bins": 748,
+      "frequency_hz": [
+        0.0522222222,
+        0.3
+      ],
+      "circular_mean_phase_deg": -15.268732514730626,
+      "bins_below_first_resonance": 51,
+      "circular_mean_phase_below_resonance_deg": -35.0690885862922,
+      "rms_residual_deg": {
+        "nominal": 16.548484080463798,
+        "reflected_pole": 4.025656761999305,
+        "reversed_nominal": 164.82261832808973,
+        "reversed_reflected_pole": 176.93521801366893
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR21": {
+      "coherent_bins": 726,
+      "frequency_hz": [
+        0.0527777778,
+        0.3
+      ],
+      "circular_mean_phase_deg": -17.404808627164037,
+      "bins_below_first_resonance": 51,
+      "circular_mean_phase_below_resonance_deg": -43.01393593669347,
+      "rms_residual_deg": {
+        "nominal": 19.944032075837242,
+        "reflected_pole": 8.304520240934739,
+        "reversed_nominal": 162.79949053335937,
+        "reversed_reflected_pole": 172.6526861715153
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR22": {
+      "coherent_bins": 640,
+      "frequency_hz": [
+        0.0597222222,
+        0.3
+      ],
+      "circular_mean_phase_deg": 110.39191724242475,
+      "bins_below_first_resonance": 5,
+      "circular_mean_phase_below_resonance_deg": 86.24896894889285,
+      "rms_residual_deg": {
+        "nominal": 110.49673855756714,
+        "reflected_pole": 120.18649500758801,
+        "reversed_nominal": 69.78633305926988,
+        "reversed_reflected_pole": 60.000295486620054
+      },
+      "best_hypothesis": "reversed_reflected_pole",
+      "label": "unexplained_phase"
+    },
+    "RR25": {
+      "coherent_bins": 655,
+      "frequency_hz": [
+        0.118333333,
+        0.3
+      ],
+      "circular_mean_phase_deg": -6.608012391607435,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 6.994741510136997,
+        "reflected_pole": 3.206971111012296,
+        "reversed_nominal": 173.40703646569978,
+        "reversed_reflected_pole": 177.30282203043532
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR26": {
+      "coherent_bins": 566,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": -12.697352322657805,
+      "bins_below_first_resonance": 28,
+      "circular_mean_phase_below_resonance_deg": 74.61785522067508,
+      "rms_residual_deg": {
+        "nominal": 22.999293984991674,
+        "reflected_pole": 25.010911957237017,
+        "reversed_nominal": 162.03092165780592,
+        "reversed_reflected_pole": 169.6268573341948
+      },
+      "best_hypothesis": "nominal",
+      "label": "unexplained_phase"
+    },
+    "RR28": {
+      "coherent_bins": 897,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": -2.7742415329229204,
+      "bins_below_first_resonance": 117,
+      "circular_mean_phase_below_resonance_deg": -0.1305804618930773,
+      "rms_residual_deg": {
+        "nominal": 5.0421968274321,
+        "reversed_nominal": 176.23560151253596
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR29": {
+      "coherent_bins": 701,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": -3.9195592594849886,
+      "bins_below_first_resonance": 100,
+      "circular_mean_phase_below_resonance_deg": 0.9782962295783431,
+      "rms_residual_deg": {
+        "nominal": 9.475270809263835,
+        "reversed_nominal": 173.40292933220238
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR30": {
+      "coherent_bins": 728,
+      "frequency_hz": [
+        0.0558333333,
+        0.3
+      ],
+      "circular_mean_phase_deg": -14.284617465612367,
+      "bins_below_first_resonance": 36,
+      "circular_mean_phase_below_resonance_deg": -34.446663378050935,
+      "rms_residual_deg": {
+        "nominal": 15.468026183892274,
+        "reflected_pole": 4.2653269613933915,
+        "reversed_nominal": 165.79578779814642,
+        "reversed_reflected_pole": 176.2341635268577
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR31": {
+      "label": "insufficient_coherent_bins",
+      "coherent_bins": 0
+    },
+    "RR34": {
+      "coherent_bins": 856,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": -3.3856856844797623,
+      "bins_below_first_resonance": 120,
+      "circular_mean_phase_below_resonance_deg": -1.0792925983657338,
+      "rms_residual_deg": {
+        "nominal": 5.162862925101522,
+        "reversed_nominal": 176.16261114322285
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR36": {
+      "coherent_bins": 891,
+      "frequency_hz": [
+        0.0502777778,
+        0.3
+      ],
+      "circular_mean_phase_deg": -3.662793550911161,
+      "bins_below_first_resonance": 190,
+      "circular_mean_phase_below_resonance_deg": -1.7492530884807278,
+      "rms_residual_deg": {
+        "nominal": 5.290554365721559,
+        "reversed_nominal": 175.78348569841404
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR38": {
+      "coherent_bins": 875,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": -3.0809002381763086,
+      "bins_below_first_resonance": 117,
+      "circular_mean_phase_below_resonance_deg": -0.28203337636058035,
+      "rms_residual_deg": {
+        "nominal": 6.571867078874923,
+        "reversed_nominal": 175.47348743423026
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR40": {
+      "coherent_bins": 882,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": -5.994752553004962,
+      "bins_below_first_resonance": 103,
+      "circular_mean_phase_below_resonance_deg": -8.466235862052372,
+      "rms_residual_deg": {
+        "nominal": 8.349214333316766,
+        "reversed_nominal": 173.1336276193528
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR41": {
+      "coherent_bins": 673,
+      "frequency_hz": [
+        0.0613888889,
+        0.3
+      ],
+      "circular_mean_phase_deg": -15.131889207370293,
+      "bins_below_first_resonance": 12,
+      "circular_mean_phase_below_resonance_deg": -46.80896097020878,
+      "rms_residual_deg": {
+        "nominal": 16.494386170229546,
+        "reflected_pole": 5.092712100362314,
+        "reversed_nominal": 164.96375284541872,
+        "reversed_reflected_pole": 175.92399733109787
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR43": {
+      "coherent_bins": 635,
+      "frequency_hz": [
+        0.123055556,
+        0.3
+      ],
+      "circular_mean_phase_deg": -14.223250010868552,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 14.570370682438163,
+        "reflected_pole": 5.4171300058934735,
+        "reversed_nominal": 165.80635521884412,
+        "reversed_reflected_pole": 175.2393954975069
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR44": {
+      "coherent_bins": 601,
+      "frequency_hz": [
+        0.122222222,
+        0.3
+      ],
+      "circular_mean_phase_deg": -15.120461386109447,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 15.409205948451088,
+        "reflected_pole": 6.642485283824888,
+        "reversed_nominal": 164.9052808975359,
+        "reversed_reflected_pole": 173.96949875217473
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR45": {
+      "coherent_bins": 582,
+      "frequency_hz": [
+        0.115833333,
+        0.3
+      ],
+      "circular_mean_phase_deg": -10.436375782548366,
+      "bins_below_first_resonance": 53,
+      "circular_mean_phase_below_resonance_deg": -16.911201151358412,
+      "rms_residual_deg": {
+        "nominal": 11.405485516228298,
+        "reflected_pole": 3.258682445077678,
+        "reversed_nominal": 169.62242881645355,
+        "reversed_reflected_pole": 177.50501954370154
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR46": {
+      "coherent_bins": 652,
+      "frequency_hz": [
+        0.118333333,
+        0.3
+      ],
+      "circular_mean_phase_deg": -11.038785142725576,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 11.728940524065699,
+        "reflected_pole": 3.5482512190079616,
+        "reversed_nominal": 169.0046648804066,
+        "reversed_reflected_pole": 177.21185505649552
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR47": {
+      "coherent_bins": 693,
+      "frequency_hz": [
+        0.0572222222,
+        0.3
+      ],
+      "circular_mean_phase_deg": 169.4146910085734,
+      "bins_below_first_resonance": 17,
+      "circular_mean_phase_below_resonance_deg": 147.53389264404638,
+      "rms_residual_deg": {
+        "nominal": 169.45885128622524,
+        "reflected_pole": 177.57799692906156,
+        "reversed_nominal": 11.471418747398571,
+        "reversed_reflected_pole": 3.005918524643434
+      },
+      "best_hypothesis": "reversed_reflected_pole",
+      "label": "reversed_reflected_pole"
+    },
+    "RR48": {
+      "coherent_bins": 622,
+      "frequency_hz": [
+        0.120555556,
+        0.3
+      ],
+      "circular_mean_phase_deg": -8.650293445840974,
+      "bins_below_first_resonance": 0,
+      "circular_mean_phase_below_resonance_deg": null,
+      "rms_residual_deg": {
+        "nominal": 9.507293486648557,
+        "reflected_pole": 3.947449659557679,
+        "reversed_nominal": 171.3783692856927,
+        "reversed_reflected_pole": 176.84238480999537
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR50": {
+      "coherent_bins": 813,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": -1.1713639818452741,
+      "bins_below_first_resonance": 137,
+      "circular_mean_phase_below_resonance_deg": -1.807720720939174,
+      "rms_residual_deg": {
+        "nominal": 4.241068877664244,
+        "reversed_nominal": 176.83563734639236
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR52": {
+      "coherent_bins": 901,
+      "frequency_hz": [
+        0.05,
+        0.3
+      ],
+      "circular_mean_phase_deg": 3.108928910336792,
+      "bins_below_first_resonance": 283,
+      "circular_mean_phase_below_resonance_deg": -1.7182850779124645,
+      "rms_residual_deg": {
+        "nominal": 5.295880509392836,
+        "reversed_nominal": 175.61799480559318
+      },
+      "best_hypothesis": "nominal",
+      "label": "nominal"
+    },
+    "RR53": {
+      "label": "insufficient_coherent_bins",
+      "coherent_bins": 0
+    },
+    "RR55": {
+      "coherent_bins": 728,
+      "frequency_hz": [
+        0.0572222222,
+        0.3
+      ],
+      "circular_mean_phase_deg": -13.946127445851182,
+      "bins_below_first_resonance": 27,
+      "circular_mean_phase_below_resonance_deg": -28.156710831381563,
+      "rms_residual_deg": {
+        "nominal": 14.678877363438906,
+        "reflected_pole": 9.971007162680532,
+        "reversed_nominal": 166.11152169086006,
+        "reversed_reflected_pole": 170.61186029906105
+      },
+      "best_hypothesis": "reflected_pole",
+      "label": "reflected_pole"
+    },
+    "RR56": {
+      "coherent_bins": 669,
+      "frequency_hz": [
+        0.0616666667,
+        0.293333333
+      ],
+      "circular_mean_phase_deg": -112.22547525298285,
+      "bins_below_first_resonance": 8,
+      "circular_mean_phase_below_resonance_deg": -138.7255272364956,
+      "rms_residual_deg": {
+        "nominal": 112.3715674807897,
+        "reflected_pole": 102.07950549568187,
+        "reversed_nominal": 67.97933089705096,
+        "reversed_reflected_pole": 78.03486714600325
+      },
+      "best_hypothesis": "reversed_nominal",
+      "label": "unexplained_phase"
+    },
+    "RR57": {
+      "label": "insufficient_coherent_bins",
+      "coherent_bins": 0
+    }
+  },
+  "status": "diagnostic_only; screening labels are not scores"
+}

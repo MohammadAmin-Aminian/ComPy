@@ -1,0 +1,5056 @@
+{
+ "status": "diagnostic_only",
+ "generated_utc": "2026-10-19T12:58:43+00:00",
+ "hypotheses": {
+  "H0": "nominal metadata",
+  "H1": "positive-real pressure pole reflected",
+  "H2": "H1 + vertical unpaired complex roots conjugate-repaired",
+  "H3": "H2 + reversed relative P/Z polarity",
+  "H4": "H2 + positive pressure pole magnitude / 10"
+ },
+ "workflow_options": {
+  "band": [
+   0.03,
+   0.07
+  ],
+  "pressure_sign": -1,
+  "tilt_method": "none",
+  "min_events": 3,
+  "max_events": 8,
+  "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json",
+  "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv"
+ },
+ "phase_screen_deg": 20.0,
+ "microseism_band_hz": [
+  0.05,
+  0.3
+ ],
+ "microseism_coherence_squared": 0.5,
+ "gain_fitted": false,
+ "gain_applied": false,
+ "responses_or_masters_changed": false,
+ "waveforms_read": false,
+ "code_sha256": "89aba20e211f85372defd31032cb8f64a940822e08fe4e8b748535dc7236bb07",
+ "versions": {
+  "numpy": "2.5.3",
+  "obspy": "1.5.1"
+ },
+ "stations": [
+  {
+   "station": "RR01",
+   "seed_id": "YV.RR01.00.BDH",
+   "epoch_start": "2012-10-05T05:53:07.000000Z",
+   "epoch_end": "2013-11-06T23:08:27.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 1,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.0413799616596953,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.043098
+   ],
+   "depth_m": 4298.0,
+   "event_outcomes": {
+    "candidate": 1,
+    "phase_review": 4,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 19
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     44,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     107,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 107,
+   "local_coverage": {
+    "pressure_day_files": 310,
+    "vertical_day_files": 310,
+    "epoch_days": 398,
+    "paired_epoch_day_files": 310,
+    "paired_epoch_fraction": 0.7789,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.310"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "1af63e5b3e8e96dedb6afb12af4298625af5392ef012b0b8f6b6a501469caa0c"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 28.691448714239822,
+     "phase_low_bin_deg": 41.300473669544715,
+     "phase_high_bin_deg": 20.805556356651646,
+     "fraction_bins_within_20deg": 0.13157894736842105,
+     "events_passing_phase_screen_only": 1,
+     "median_log_ratio_slope": 0.07140723751528741
+    },
+    "H1": {
+     "phase_rms_deg": 12.226039393696638,
+     "phase_low_bin_deg": 17.518325263506362,
+     "phase_high_bin_deg": 9.441307313683287,
+     "fraction_bins_within_20deg": 0.9210526315789473,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.07140723751528741
+    },
+    "H2": {
+     "phase_rms_deg": 12.226039393696638,
+     "phase_low_bin_deg": 17.518325263506362,
+     "phase_high_bin_deg": 9.441307313683287,
+     "fraction_bins_within_20deg": 0.9210526315789473,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.07140723751528741
+    },
+    "H3": {
+     "phase_rms_deg": 168.59860111661717,
+     "phase_low_bin_deg": -162.48167473649366,
+     "phase_high_bin_deg": -170.55869268631676,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.07140723751528741
+    },
+    "H4": {
+     "phase_rms_deg": 19.587055291285687,
+     "phase_low_bin_deg": 28.202166820773524,
+     "phase_high_bin_deg": 14.553364242409403,
+     "fraction_bins_within_20deg": 0.7105263157894737,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.09189413634148134
+    }
+   },
+   "nominal_ratio_level_median": 0.9525158108303549,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0092710607756452
+   },
+   "microseism": {
+    "coherent_bins": 0
+   }
+  },
+  {
+   "station": "RR03",
+   "seed_id": "YV.RR03.00.BDH",
+   "epoch_start": "2012-10-04T13:35:56.000000Z",
+   "epoch_end": "2013-11-05T23:22:46.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.1240555699483565,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.1420244912381006,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [
+    0.047357
+   ],
+   "depth_m": 4340.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1,
+    "coherence_failed": 2
+   },
+   "events_attempted": 6,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     6,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 11,
+   "local_coverage": {
+    "pressure_day_files": 309,
+    "vertical_day_files": 309,
+    "epoch_days": 398,
+    "paired_epoch_day_files": 309,
+    "paired_epoch_fraction": 0.7764,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.309"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 6,
+    "sha256_of_sorted_file_hash_lines": "c2f7bfbb29756899aaae480ba3673dc8c2f8cd8ce588db72c0159475dc084484"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 24.17301756333933,
+     "phase_low_bin_deg": 35.16037383874949,
+     "phase_high_bin_deg": 15.766212300923987,
+     "fraction_bins_within_20deg": 0.48484848484848486,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.03445431209251985
+    },
+    "H1": {
+     "phase_rms_deg": 6.082838250286656,
+     "phase_low_bin_deg": 8.664819724446025,
+     "phase_high_bin_deg": 3.4751632660410907,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.03445431209252008
+    },
+    "H2": {
+     "phase_rms_deg": 6.082838250286656,
+     "phase_low_bin_deg": 8.664819724446025,
+     "phase_high_bin_deg": 3.4751632660410907,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.03445431209252008
+    },
+    "H3": {
+     "phase_rms_deg": 174.9078587299695,
+     "phase_low_bin_deg": -171.33518027555397,
+     "phase_high_bin_deg": -176.52483673395892,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.03445431209252008
+    },
+    "H4": {
+     "phase_rms_deg": 14.03789408719852,
+     "phase_low_bin_deg": 20.56178957515445,
+     "phase_high_bin_deg": 9.00379154196502,
+     "fraction_bins_within_20deg": 0.9090909090909091,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.009871295590141778
+    }
+   },
+   "nominal_ratio_level_median": 0.8599703932251883,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0111828777509941
+   },
+   "microseism": {
+    "coherent_bins": 654,
+    "circular_mean_phase_deg": -6.712711431826218,
+    "H0_phase_rms_deg": 7.217091048780765,
+    "H1_phase_rms_deg": 3.33900153653076,
+    "H2_phase_rms_deg": 3.33900153653076,
+    "H3_phase_rms_deg": 177.31644065917564,
+    "H4_phase_rms_deg": 4.921008827690269
+   }
+  },
+  {
+   "station": "RR05",
+   "seed_id": "YV.RR05.00.BDH",
+   "epoch_start": "2012-10-02T16:07:28.000000Z",
+   "epoch_end": "2013-11-03T00:35:38.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.1201435166537377,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.102613
+   ],
+   "depth_m": 4092.0,
+   "event_outcomes": {
+    "phase_review": 5,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 19
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     44,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     107,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 107,
+   "local_coverage": {
+    "pressure_day_files": 306,
+    "vertical_day_files": 306,
+    "epoch_days": 398,
+    "paired_epoch_day_files": 306,
+    "paired_epoch_fraction": 0.7688,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.306"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "ea0bca24a66a787e460b8331206cd0c7239b09caa089927800b4aa6ddb9de57b"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 52.54558671539736,
+     "phase_low_bin_deg": 68.13983423517702,
+     "phase_high_bin_deg": 39.25948617813094,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.1805241523730258
+    },
+    "H1": {
+     "phase_rms_deg": 15.445364124293796,
+     "phase_low_bin_deg": 18.42676818893925,
+     "phase_high_bin_deg": 12.605740065589956,
+     "fraction_bins_within_20deg": 0.8285714285714286,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.1805241523730256
+    },
+    "H2": {
+     "phase_rms_deg": 15.445364124293796,
+     "phase_low_bin_deg": 18.42676818893925,
+     "phase_high_bin_deg": 12.605740065589956,
+     "fraction_bins_within_20deg": 0.8285714285714286,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.1805241523730256
+    },
+    "H3": {
+     "phase_rms_deg": 165.5255096111078,
+     "phase_low_bin_deg": -161.57323181106074,
+     "phase_high_bin_deg": -167.39425993441006,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.1805241523730256
+    },
+    "H4": {
+     "phase_rms_deg": 31.89916873219388,
+     "phase_low_bin_deg": 40.61980062287668,
+     "phase_high_bin_deg": 24.5755369816331,
+     "fraction_bins_within_20deg": 0.02857142857142857,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.28259156291161497
+    }
+   },
+   "nominal_ratio_level_median": 0.8642820792015944,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0514304517546267
+   },
+   "microseism": {
+    "coherent_bins": 660,
+    "circular_mean_phase_deg": -17.22862117057184,
+    "H0_phase_rms_deg": 17.71301946337735,
+    "H1_phase_rms_deg": 7.952552146046846,
+    "H2_phase_rms_deg": 7.952552146046846,
+    "H3_phase_rms_deg": 172.3895768025808,
+    "H4_phase_rms_deg": 12.303175451193761
+   }
+  },
+  {
+   "station": "RR06",
+   "seed_id": "YV.RR06.00.BDH",
+   "epoch_start": "2012-10-02T11:34:10.000000Z",
+   "epoch_end": "2013-10-31T20:50:31.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.1396787894514488,
+   "trial_candidates": 6,
+   "positive_pressure_poles_rad_s": [
+    0.113471
+   ],
+   "depth_m": 4216.0,
+   "event_outcomes": {
+    "phase_review": 7,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 17
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     104,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 104,
+   "local_coverage": {
+    "pressure_day_files": 304,
+    "vertical_day_files": 304,
+    "epoch_days": 395,
+    "paired_epoch_day_files": 304,
+    "paired_epoch_fraction": 0.7696,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.304"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "57af5107dc34e57da3ba53451f3238f9939c378511963c0d801e11b43f82ea49"
+   },
+   "coherent_events": 7,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 46.89561681930288,
+     "phase_low_bin_deg": 64.4773177593943,
+     "phase_high_bin_deg": 32.329399777835256,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.0061325120491543495
+    },
+    "H1": {
+     "phase_rms_deg": 5.456932811680371,
+     "phase_low_bin_deg": 5.3810699969378915,
+     "phase_high_bin_deg": 3.396555712524853,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": 0.0061325120491543495
+    },
+    "H2": {
+     "phase_rms_deg": 5.456932811680371,
+     "phase_low_bin_deg": 5.3810699969378915,
+     "phase_high_bin_deg": 3.396555712524853,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": 0.0061325120491543495
+    },
+    "H3": {
+     "phase_rms_deg": 175.21766533252918,
+     "phase_low_bin_deg": -174.6189300030621,
+     "phase_high_bin_deg": -176.60344428747516,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.0061325120491543495
+    },
+    "H4": {
+     "phase_rms_deg": 23.676570661153136,
+     "phase_low_bin_deg": 31.67425322621279,
+     "phase_high_bin_deg": 16.385117800173653,
+     "fraction_bins_within_20deg": 0.3333333333333333,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": 0.1270548545370782
+    }
+   },
+   "nominal_ratio_level_median": 0.8871675424362016,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 0.9999999999999998,
+    "H2": 0.9999999999999998,
+    "H3": 0.9999999999999998,
+    "H4": 1.0625370307770512
+   },
+   "microseism": {
+    "coherent_bins": 661,
+    "circular_mean_phase_deg": -12.396727934734054,
+    "H0_phase_rms_deg": 12.873844507391105,
+    "H1_phase_rms_deg": 2.346626008818698,
+    "H2_phase_rms_deg": 2.346626008818698,
+    "H3_phase_rms_deg": 178.03968095542126,
+    "H4_phase_rms_deg": 6.89343389408231
+   }
+  },
+  {
+   "station": "RR07",
+   "seed_id": "YV.RR07.00.BDH",
+   "epoch_start": "2012-09-29T10:44:16.000000Z",
+   "epoch_end": "2013-10-24T06:40:49.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.0791871659768566,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.0672879354480276,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [
+    0.042893
+   ],
+   "depth_m": 4370.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     10,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 10,
+   "local_coverage": {
+    "pressure_day_files": 366,
+    "vertical_day_files": 366,
+    "epoch_days": 391,
+    "paired_epoch_day_files": 297,
+    "paired_epoch_fraction": 0.7596,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.297"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "93a8773625087c434f3db8c270d77f364bd657873e20eef37344f83f601b6ad1"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 19.43837560795612,
+     "phase_low_bin_deg": 30.579066194894942,
+     "phase_high_bin_deg": 9.356730101286121,
+     "fraction_bins_within_20deg": 0.6,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.209075321061483
+    },
+    "H1": {
+     "phase_rms_deg": 3.79866538376019,
+     "phase_low_bin_deg": 5.83063072741205,
+     "phase_high_bin_deg": -1.7833920906257488,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.20907532106148274
+    },
+    "H2": {
+     "phase_rms_deg": 3.79866538376019,
+     "phase_low_bin_deg": 5.83063072741205,
+     "phase_high_bin_deg": -1.7833920906257488,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.20907532106148274
+    },
+    "H3": {
+     "phase_rms_deg": 177.20756095834273,
+     "phase_low_bin_deg": -174.16936927258794,
+     "phase_high_bin_deg": 178.21660790937426,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.20907532106148274
+    },
+    "H4": {
+     "phase_rms_deg": 10.305141276768666,
+     "phase_low_bin_deg": 16.948011080633542,
+     "phase_high_bin_deg": 3.2279192077424352,
+     "fraction_bins_within_20deg": 0.9714285714285714,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.188777067476611
+    }
+   },
+   "nominal_ratio_level_median": 0.9671051982113787,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.009183489705032
+   },
+   "microseism": {
+    "coherent_bins": 573,
+    "circular_mean_phase_deg": -4.889043899550973,
+    "H0_phase_rms_deg": 5.644381516592554,
+    "H1_phase_rms_deg": 3.0255619505926505,
+    "H2_phase_rms_deg": 3.0255619505926505,
+    "H3_phase_rms_deg": 177.61187448846186,
+    "H4_phase_rms_deg": 3.970734381896553
+   }
+  },
+  {
+   "station": "RR08",
+   "seed_id": "YV.RR08.00.BDH",
+   "epoch_start": "2012-09-29T13:07:11.000000Z",
+   "epoch_end": "2013-10-24T19:42:36.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.1596505188461836,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.1604533922171434,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [
+    0.043098
+   ],
+   "depth_m": 4190.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     10,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 10,
+   "local_coverage": {
+    "pressure_day_files": 297,
+    "vertical_day_files": 284,
+    "epoch_days": 391,
+    "paired_epoch_day_files": 284,
+    "paired_epoch_fraction": 0.7263,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.297"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "440876ba53673fc32d7397552ab13fafdb8b766532a01a1fc124f9b27a20ea5d"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 21.289657495445244,
+     "phase_low_bin_deg": 31.891361191235177,
+     "phase_high_bin_deg": 12.185290172114392,
+     "fraction_bins_within_20deg": 0.5294117647058824,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07763169307181234
+    },
+    "H1": {
+     "phase_rms_deg": 4.354519553386741,
+     "phase_low_bin_deg": 6.133673774434895,
+     "phase_high_bin_deg": 0.7784916648071443,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07763169307181234
+    },
+    "H2": {
+     "phase_rms_deg": 4.354519553386741,
+     "phase_low_bin_deg": 6.133673774434895,
+     "phase_high_bin_deg": 0.7784916648071443,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07763169307181234
+    },
+    "H3": {
+     "phase_rms_deg": 176.43691628373568,
+     "phase_low_bin_deg": -173.86632622556513,
+     "phase_high_bin_deg": -179.22150833519285,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.07763169307181234
+    },
+    "H4": {
+     "phase_rms_deg": 11.700998637438051,
+     "phase_low_bin_deg": 17.702723580259143,
+     "phase_high_bin_deg": 5.909679039503059,
+     "fraction_bins_within_20deg": 0.9705882352941176,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.057144794245618365
+    }
+   },
+   "nominal_ratio_level_median": 0.8657721859589317,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0092710607756452
+   },
+   "microseism": {
+    "coherent_bins": 686,
+    "circular_mean_phase_deg": -6.7629258064419675,
+    "H0_phase_rms_deg": 7.150277927313595,
+    "H1_phase_rms_deg": 3.472642964480009,
+    "H2_phase_rms_deg": 3.472642964480009,
+    "H3_phase_rms_deg": 177.24983970878026,
+    "H4_phase_rms_deg": 4.999471972232566
+   }
+  },
+  {
+   "station": "RR09",
+   "seed_id": "YV.RR09.00.BDH",
+   "epoch_start": "2012-09-30T04:14:57.000000Z",
+   "epoch_end": "2013-10-25T15:19:04.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.1937250435214037,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.1754799362953212,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [
+    0.043098
+   ],
+   "depth_m": 2976.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "input_refused": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     10,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 10,
+   "local_coverage": {
+    "pressure_day_files": 298,
+    "vertical_day_files": 298,
+    "epoch_days": 391,
+    "paired_epoch_day_files": 298,
+    "paired_epoch_fraction": 0.7621,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.298"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 3,
+    "sha256_of_sorted_file_hash_lines": "a5aae95e9e9d7fc5fe839fbcaafdd82b9a2232d6184bd48a994942e84018b8c9"
+   },
+   "coherent_events": 3,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 19.23632317857432,
+     "phase_low_bin_deg": 29.095347819694876,
+     "phase_high_bin_deg": 10.762564511841779,
+     "fraction_bins_within_20deg": 0.6296296296296297,
+     "events_passing_phase_screen_only": 3,
+     "median_log_ratio_slope": -0.023867921518843396
+    },
+    "H1": {
+     "phase_rms_deg": 2.9845161695888014,
+     "phase_low_bin_deg": 3.337660402894599,
+     "phase_high_bin_deg": -0.4304628393254974,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 3,
+     "median_log_ratio_slope": -0.023867921518843396
+    },
+    "H2": {
+     "phase_rms_deg": 2.9845161695888014,
+     "phase_low_bin_deg": 3.337660402894599,
+     "phase_high_bin_deg": -0.4304628393254974,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 3,
+     "median_log_ratio_slope": -0.023867921518843396
+    },
+    "H3": {
+     "phase_rms_deg": 177.6359637644939,
+     "phase_low_bin_deg": -176.66233959710544,
+     "phase_high_bin_deg": 179.56953716067449,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.023867921518843396
+    },
+    "H4": {
+     "phase_rms_deg": 9.819016541499595,
+     "phase_low_bin_deg": 14.90671020871885,
+     "phase_high_bin_deg": 4.604630756939531,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 3,
+     "median_log_ratio_slope": -0.0033810226926494495
+    }
+   },
+   "nominal_ratio_level_median": 0.8474585751077037,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0092710607756452
+   },
+   "microseism": {
+    "coherent_bins": 667,
+    "circular_mean_phase_deg": -4.447258896907451,
+    "H0_phase_rms_deg": 5.0956250621330135,
+    "H1_phase_rms_deg": 2.6860309879881457,
+    "H2_phase_rms_deg": 2.6860309879881457,
+    "H3_phase_rms_deg": 177.9169380387885,
+    "H4_phase_rms_deg": 3.3499096711601024
+   }
+  },
+  {
+   "station": "RR10",
+   "seed_id": "YV.RR10.00.BDH",
+   "epoch_start": "2012-09-30T06:05:36.000000Z",
+   "epoch_end": "2013-10-26T00:15:42.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.0837923536648884,
+   "trial_candidates": 6,
+   "positive_pressure_poles_rad_s": [
+    0.102613
+   ],
+   "depth_m": 2310.0,
+   "event_outcomes": {
+    "phase_review": 7,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 17
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     102,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 102,
+   "local_coverage": {
+    "pressure_day_files": 298,
+    "vertical_day_files": 298,
+    "epoch_days": 392,
+    "paired_epoch_day_files": 298,
+    "paired_epoch_fraction": 0.7602,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.298"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "cf4fdbc11847127a26077665bc41c91ff726121235155c13480040a62238033e"
+   },
+   "coherent_events": 7,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 38.82580928696714,
+     "phase_low_bin_deg": 57.839399844985756,
+     "phase_high_bin_deg": 25.545645637373603,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.1230964808316914
+    },
+    "H1": {
+     "phase_rms_deg": 2.6645692084528543,
+     "phase_low_bin_deg": 1.7266719842366454,
+     "phase_high_bin_deg": -0.7193449489637468,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": -0.1230964808316914
+    },
+    "H2": {
+     "phase_rms_deg": 2.6645692084528543,
+     "phase_low_bin_deg": 1.7266719842366454,
+     "phase_high_bin_deg": -0.7193449489637468,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": -0.1230964808316914
+    },
+    "H3": {
+     "phase_rms_deg": 178.00547366733767,
+     "phase_low_bin_deg": -178.27332801576335,
+     "phase_high_bin_deg": 179.2806550510362,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.1230964808316914
+    },
+    "H4": {
+     "phase_rms_deg": 17.328724165194377,
+     "phase_low_bin_deg": 26.729774320603802,
+     "phase_high_bin_deg": 11.076652292331053,
+     "fraction_bins_within_20deg": 0.7540983606557377,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": -0.021029070293102168
+    }
+   },
+   "nominal_ratio_level_median": 0.9279375872939446,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0514304517546267
+   },
+   "microseism": {
+    "coherent_bins": 669,
+    "circular_mean_phase_deg": -10.724773741370377,
+    "H0_phase_rms_deg": 11.656151226596176,
+    "H1_phase_rms_deg": 2.5757156042133755,
+    "H2_phase_rms_deg": 2.5757156042133755,
+    "H3_phase_rms_deg": 178.08535130602976,
+    "H4_phase_rms_deg": 6.1836290645365075
+   }
+  },
+  {
+   "station": "RR11",
+   "seed_id": "YV.RR11.00.BDH",
+   "epoch_start": "2012-09-30T09:17:25.000000Z",
+   "epoch_end": "2013-10-26T06:47:53.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.0826583507802883,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.0535454510586144,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [
+    0.051838
+   ],
+   "depth_m": 3473.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "phase_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 11,
+   "local_coverage": {
+    "pressure_day_files": 299,
+    "vertical_day_files": 299,
+    "epoch_days": 392,
+    "paired_epoch_day_files": 299,
+    "paired_epoch_fraction": 0.7628,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.299"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "c541d6075aa9cc92803f6d8eff0c3180946b0ca223a451451661af2be3bd7b9e"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 25.675503900274645,
+     "phase_low_bin_deg": 36.01217131761447,
+     "phase_high_bin_deg": 14.608220641939035,
+     "fraction_bins_within_20deg": 0.3611111111111111,
+     "events_passing_phase_screen_only": 3,
+     "median_log_ratio_slope": -0.07805097578105949
+    },
+    "H1": {
+     "phase_rms_deg": 5.585874527443769,
+     "phase_low_bin_deg": 5.2586960169211565,
+     "phase_high_bin_deg": 1.1643601000549528,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07805097578105925
+    },
+    "H2": {
+     "phase_rms_deg": 5.585874527443769,
+     "phase_low_bin_deg": 5.2586960169211565,
+     "phase_high_bin_deg": 1.1643601000549528,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07805097578105925
+    },
+    "H3": {
+     "phase_rms_deg": 175.46428911631227,
+     "phase_low_bin_deg": -174.74130398307884,
+     "phase_high_bin_deg": -178.83563989994505,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.07805097578105925
+    },
+    "H4": {
+     "phase_rms_deg": 14.355787947131528,
+     "phase_low_bin_deg": 19.060144462436483,
+     "phase_high_bin_deg": 7.211027527861522,
+     "fraction_bins_within_20deg": 0.9166666666666666,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.04880406794710014
+    }
+   },
+   "nominal_ratio_level_median": 0.959179601184385,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 0.9999999999999998,
+    "H2": 0.9999999999999998,
+    "H3": 0.9999999999999998,
+    "H4": 1.013384035344156
+   },
+   "microseism": {
+    "coherent_bins": 536,
+    "circular_mean_phase_deg": 2.164863881622283,
+    "H0_phase_rms_deg": 3.941103703030541,
+    "H1_phase_rms_deg": 7.314571755397339,
+    "H2_phase_rms_deg": 7.314571755397339,
+    "H3_phase_rms_deg": 173.45911731622357,
+    "H4_phase_rms_deg": 5.614976982037646
+   }
+  },
+  {
+   "station": "RR12",
+   "seed_id": "YV.RR12.00.BDH",
+   "epoch_start": "2012-09-30T09:32:06.000000Z",
+   "epoch_end": "2013-10-26T18:39:40.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [
+    0.093928
+   ],
+   "depth_m": 3185.0,
+   "event_outcomes": {
+    "input_refused": 24,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     102,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 102,
+   "local_coverage": {
+    "pressure_day_files": 299,
+    "vertical_day_files": 299,
+    "epoch_days": 392,
+    "paired_epoch_day_files": 299,
+    "paired_epoch_fraction": 0.7628,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.299"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 0,
+    "sha256_of_sorted_file_hash_lines": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "coherent_events": 0,
+   "trial_reflection_reproduction_max_abs_deg": null
+  },
+  {
+   "station": "RR13",
+   "seed_id": "YV.RR13.00.BDH",
+   "epoch_start": "2012-10-01T05:42:21.000000Z",
+   "epoch_end": "2013-10-09T01:39:35.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.2236136664429182,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.2010676398313844,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.052261
+   ],
+   "depth_m": 4130.0,
+   "event_outcomes": {
+    "phase_review": 1,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1,
+    "candidate": 3,
+    "coherence_failed": 1
+   },
+   "events_attempted": 6,
+   "magnitude_search": [
+    [
+     7.0,
+     9,
+     6,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 9,
+   "local_coverage": {
+    "pressure_day_files": 282,
+    "vertical_day_files": 282,
+    "epoch_days": 374,
+    "paired_epoch_day_files": 282,
+    "paired_epoch_fraction": 0.754,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.282"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 6,
+    "sha256_of_sorted_file_hash_lines": "60a91dc17e28f963ced691cc57d19e292de8d21ae61cc3b778d8780b6ecd28bc"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 24.403734943541327,
+     "phase_low_bin_deg": 37.03310029109237,
+     "phase_high_bin_deg": 14.806632244917001,
+     "fraction_bins_within_20deg": 0.43902439024390244,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.06033284347301588
+    },
+    "H1": {
+     "phase_rms_deg": 5.842180059304364,
+     "phase_low_bin_deg": 8.600035416420392,
+     "phase_high_bin_deg": 1.254085344161028,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.060332843473015645
+    },
+    "H2": {
+     "phase_rms_deg": 5.842180059304364,
+     "phase_low_bin_deg": 8.600035416420392,
+     "phase_high_bin_deg": 1.254085344161028,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.060332843473015645
+    },
+    "H3": {
+     "phase_rms_deg": 175.54098917918432,
+     "phase_low_bin_deg": -171.39996458357962,
+     "phase_high_bin_deg": -178.74591465583896,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.060332843473015645
+    },
+    "H4": {
+     "phase_rms_deg": 13.667468663931404,
+     "phase_low_bin_deg": 21.36482176930231,
+     "phase_high_bin_deg": 7.349586298079766,
+     "fraction_bins_within_20deg": 0.8536585365853658,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.030627472717167637
+    }
+   },
+   "nominal_ratio_level_median": 0.8374704512928911,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0136018230005253
+   },
+   "microseism": {
+    "coherent_bins": 641,
+    "circular_mean_phase_deg": -5.104015414141395,
+    "H0_phase_rms_deg": 5.297678238094853,
+    "H1_phase_rms_deg": 1.0552246436705088,
+    "H2_phase_rms_deg": 1.0552246436705088,
+    "H3_phase_rms_deg": 179.148100496462,
+    "H4_phase_rms_deg": 2.6673342091290904
+   }
+  },
+  {
+   "station": "RR14",
+   "seed_id": "YV.RR14.00.BDH",
+   "epoch_start": "2012-10-01T07:43:39.000000Z",
+   "epoch_end": "2013-10-27T05:11:43.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.0956568229260422,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.064746314907649,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [
+    0.041903
+   ],
+   "depth_m": 3420.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 11,
+   "local_coverage": {
+    "pressure_day_files": 300,
+    "vertical_day_files": 300,
+    "epoch_days": 392,
+    "paired_epoch_day_files": 300,
+    "paired_epoch_fraction": 0.7653,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.300"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "ea87128b3bd29481e7acbe4e2750149e2d1e3a71ff0c1c731961e81e44cbe7d4"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 20.461563466117582,
+     "phase_low_bin_deg": 31.02177745359669,
+     "phase_high_bin_deg": 12.340335630318163,
+     "fraction_bins_within_20deg": 0.5555555555555556,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.08727949959364761
+    },
+    "H1": {
+     "phase_rms_deg": 4.006278361100079,
+     "phase_low_bin_deg": 5.955415656638965,
+     "phase_high_bin_deg": 1.4557733160844617,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.08727949959364786
+    },
+    "H2": {
+     "phase_rms_deg": 4.006278361100079,
+     "phase_low_bin_deg": 5.955415656638965,
+     "phase_high_bin_deg": 1.4557733160844617,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.08727949959364786
+    },
+    "H3": {
+     "phase_rms_deg": 176.79529990903058,
+     "phase_low_bin_deg": -174.04458434336107,
+     "phase_high_bin_deg": -178.54422668391553,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.08727949959364786
+    },
+    "H4": {
+     "phase_rms_deg": 11.235256928511735,
+     "phase_low_bin_deg": 17.215107838945073,
+     "phase_high_bin_deg": 6.352200216466701,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.06788107644742959
+    }
+   },
+   "nominal_ratio_level_median": 0.9530357899728785,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 0.9999999999999998,
+    "H2": 0.9999999999999998,
+    "H3": 0.9999999999999998,
+    "H4": 1.0087663539322966
+   },
+   "microseism": {
+    "coherent_bins": 662,
+    "circular_mean_phase_deg": -5.469369604485424,
+    "H0_phase_rms_deg": 5.705538268892302,
+    "H1_phase_rms_deg": 2.039726640275506,
+    "H2_phase_rms_deg": 2.039726640275506,
+    "H3_phase_rms_deg": 178.29479390594688,
+    "H4_phase_rms_deg": 3.577392938306653
+   }
+  },
+  {
+   "station": "RR16",
+   "seed_id": "YV.RR16.00.BDH",
+   "epoch_start": "2012-10-01T09:09:13.000000Z",
+   "epoch_end": "2013-10-28T22:38:16.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.078308697242057,
+   "trial_candidates": 8,
+   "positive_pressure_poles_rad_s": [
+    0.094194
+   ],
+   "depth_m": 4426.0,
+   "event_outcomes": {
+    "phase_review": 9,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 15
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     102,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 102,
+   "local_coverage": {
+    "pressure_day_files": 301,
+    "vertical_day_files": 301,
+    "epoch_days": 393,
+    "paired_epoch_day_files": 301,
+    "paired_epoch_fraction": 0.7659,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.301"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "4d293b31cb311330b8fc1d89fa15bf75b603f458aa1dd45b7baaa5787047f6d7"
+   },
+   "coherent_events": 9,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 40.14004844735526,
+     "phase_low_bin_deg": 56.0250484232691,
+     "phase_high_bin_deg": 28.114100506473964,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.05506787270242744
+    },
+    "H1": {
+     "phase_rms_deg": 5.682290165676906,
+     "phase_low_bin_deg": 8.294674986491504,
+     "phase_high_bin_deg": 3.7378628450808704,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 9,
+     "median_log_ratio_slope": 0.05506787270242744
+    },
+    "H2": {
+     "phase_rms_deg": 5.682290165676906,
+     "phase_low_bin_deg": 8.294674986491504,
+     "phase_high_bin_deg": 3.7378628450808704,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 9,
+     "median_log_ratio_slope": 0.05506787270242744
+    },
+    "H3": {
+     "phase_rms_deg": 175.15165958821808,
+     "phase_low_bin_deg": -171.7053250135085,
+     "phase_high_bin_deg": -176.26213715491915,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.05506787270242744
+    },
+    "H4": {
+     "phase_rms_deg": 20.887913507749836,
+     "phase_low_bin_deg": 29.616603512823062,
+     "phase_high_bin_deg": 14.688601243734112,
+     "fraction_bins_within_20deg": 0.5972222222222222,
+     "events_passing_phase_screen_only": 9,
+     "median_log_ratio_slope": 0.14308518894078143
+    }
+   },
+   "nominal_ratio_level_median": 0.9235870679965603,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0435125343648164
+   },
+   "microseism": {
+    "coherent_bins": 696,
+    "circular_mean_phase_deg": -10.867837944369855,
+    "H0_phase_rms_deg": 11.914688493146654,
+    "H1_phase_rms_deg": 2.4262119466058687,
+    "H2_phase_rms_deg": 2.4262119466058687,
+    "H3_phase_rms_deg": 178.14405514972452,
+    "H4_phase_rms_deg": 6.367700109098805
+   }
+  },
+  {
+   "station": "RR17",
+   "seed_id": "YV.RR17.00.BDH",
+   "epoch_start": "2012-10-02T15:50:20.000000Z",
+   "epoch_end": "2013-10-23T15:41:08.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [
+    0.747005
+   ],
+   "depth_m": 2205.0,
+   "event_outcomes": {
+    "phase_review": 11,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 12,
+    "input_refused": 1
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     10,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     41,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     100,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 100,
+   "local_coverage": {
+    "pressure_day_files": 296,
+    "vertical_day_files": 296,
+    "epoch_days": 387,
+    "paired_epoch_day_files": 296,
+    "paired_epoch_fraction": 0.7649,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.296"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 23,
+    "sha256_of_sorted_file_hash_lines": "09cdf446fe22240be1f6efe7d15af6a98eab68061950913087c485c6adc13de0"
+   },
+   "coherent_events": 11,
+   "trial_reflection_reproduction_max_abs_deg": 5.684341886080802e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 77.82638166001037,
+     "phase_low_bin_deg": 90.32699810900837,
+     "phase_high_bin_deg": 66.85434403129703,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.759210176629513
+    },
+    "H1": {
+     "phase_rms_deg": 56.321434290192876,
+     "phase_low_bin_deg": -58.09505853111575,
+     "phase_high_bin_deg": -52.4994050186734,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.759210176629513
+    },
+    "H2": {
+     "phase_rms_deg": 56.321434290192876,
+     "phase_low_bin_deg": -58.09505853111575,
+     "phase_high_bin_deg": -52.4994050186734,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.759210176629513
+    },
+    "H3": {
+     "phase_rms_deg": 123.80844558305432,
+     "phase_low_bin_deg": 121.90494146888426,
+     "phase_high_bin_deg": 127.5005949813266,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.759210176629513
+    },
+    "H4": {
+     "phase_rms_deg": 4.002463478719923,
+     "phase_low_bin_deg": -3.4826830620638733,
+     "phase_high_bin_deg": -2.5277746501337877,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 11,
+     "median_log_ratio_slope": -0.08858236851860744
+    }
+   },
+   "nominal_ratio_level_median": 2.5332009357750382,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 2.509545243107055
+   },
+   "microseism": {
+    "coherent_bins": 668,
+    "circular_mean_phase_deg": -35.49914044038236,
+    "H0_phase_rms_deg": 36.48787834541029,
+    "H1_phase_rms_deg": 29.20450217306844,
+    "H2_phase_rms_deg": 29.20450217306844,
+    "H3_phase_rms_deg": 151.92114192893388,
+    "H4_phase_rms_deg": 2.818924263679471
+   }
+  },
+  {
+   "station": "RR18",
+   "seed_id": "YV.RR18.00.BDH",
+   "epoch_start": "2012-10-05T06:07:29.000000Z",
+   "epoch_end": "2013-10-29T16:25:04.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [
+    0.765683
+   ],
+   "depth_m": 4743.0,
+   "event_outcomes": {
+    "phase_review": 4,
+    "coherence_failed": 20,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     102,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 102,
+   "local_coverage": {
+    "pressure_day_files": 302,
+    "vertical_day_files": 302,
+    "epoch_days": 390,
+    "paired_epoch_day_files": 302,
+    "paired_epoch_fraction": 0.7744,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.302"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "8b288bc5891931304789587d6e3ace65a119c6f718b1447ecb50446f77629a88"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 5.684341886080802e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 83.25680995263416,
+     "phase_low_bin_deg": 100.08455005323194,
+     "phase_high_bin_deg": 70.32727416850507,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.7071443886840093
+    },
+    "H1": {
+     "phase_rms_deg": 52.79390866166843,
+     "phase_low_bin_deg": -51.15759112507527,
+     "phase_high_bin_deg": -49.924957431750556,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.7071443886840096
+    },
+    "H2": {
+     "phase_rms_deg": 52.79390866166843,
+     "phase_low_bin_deg": -51.15759112507527,
+     "phase_high_bin_deg": -49.924957431750556,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.7071443886840096
+    },
+    "H3": {
+     "phase_rms_deg": 127.43500003384378,
+     "phase_low_bin_deg": 128.84240887492473,
+     "phase_high_bin_deg": 130.07504256824944,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.7071443886840096
+    },
+    "H4": {
+     "phase_rms_deg": 3.9819561347814236,
+     "phase_low_bin_deg": 3.083869777270461,
+     "phase_high_bin_deg": 0.3255713426606493,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.03443458123269886
+    }
+   },
+   "nominal_ratio_level_median": 2.1330790152751096,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 2.559496132714627
+   },
+   "microseism": {
+    "coherent_bins": 678,
+    "circular_mean_phase_deg": -38.03514098313191,
+    "H0_phase_rms_deg": 38.905551391867405,
+    "H1_phase_rms_deg": 26.839082843238472,
+    "H2_phase_rms_deg": 26.839082843238472,
+    "H3_phase_rms_deg": 154.18787115693152,
+    "H4_phase_rms_deg": 2.794452219959913
+   }
+  },
+  {
+   "station": "RR19",
+   "seed_id": "YV.RR19.00.BDH",
+   "epoch_start": "2012-10-08T15:38:52.000000Z",
+   "epoch_end": "2013-10-30T05:34:17.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.12961069422626,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.095277
+   ],
+   "depth_m": 4901.0,
+   "event_outcomes": {
+    "phase_review": 4,
+    "coherence_failed": 20,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     103,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 103,
+   "local_coverage": {
+    "pressure_day_files": 303,
+    "vertical_day_files": 303,
+    "epoch_days": 388,
+    "paired_epoch_day_files": 303,
+    "paired_epoch_fraction": 0.7809,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.303"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "12d3957418444c853344b4b07325203d86584b05877f2abb9b6b1f424c5a4073"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 53.201328510291,
+     "phase_low_bin_deg": 74.25438317698644,
+     "phase_high_bin_deg": 37.96506521292893,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.14246006932020774
+    },
+    "H1": {
+     "phase_rms_deg": 16.013679817958973,
+     "phase_low_bin_deg": 22.321103515041823,
+     "phase_high_bin_deg": 11.919752943150131,
+     "fraction_bins_within_20deg": 0.8709677419354839,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": 0.14246006932020766
+    },
+    "H2": {
+     "phase_rms_deg": 16.013679817958973,
+     "phase_low_bin_deg": 22.321103515041823,
+     "phase_high_bin_deg": 11.919752943150131,
+     "fraction_bins_within_20deg": 0.8709677419354839,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": 0.14246006932020766
+    },
+    "H3": {
+     "phase_rms_deg": 164.73298745554123,
+     "phase_low_bin_deg": -157.6788964849582,
+     "phase_high_bin_deg": -168.08024705684986,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.14246006932020766
+    },
+    "H4": {
+     "phase_rms_deg": 32.58069730935454,
+     "phase_low_bin_deg": 45.49714114278963,
+     "phase_high_bin_deg": 23.616833674844784,
+     "fraction_bins_within_20deg": 0.03225806451612903,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.23225231705907956
+    }
+   },
+   "nominal_ratio_level_median": 0.8800695287343843,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0444965109608897
+   },
+   "microseism": {
+    "coherent_bins": 653,
+    "circular_mean_phase_deg": -15.948178531482965,
+    "H0_phase_rms_deg": 17.296973601345282,
+    "H1_phase_rms_deg": 7.799144708435098,
+    "H2_phase_rms_deg": 7.799144708435098,
+    "H3_phase_rms_deg": 172.66626642223179,
+    "H4_phase_rms_deg": 11.955808344322984
+   }
+  },
+  {
+   "station": "RR20",
+   "seed_id": "YV.RR20.00.BDH",
+   "epoch_start": "2012-10-05T08:52:36.000000Z",
+   "epoch_end": "2013-10-30T19:51:39.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.3415307469704698,
+   "trial_candidates": 7,
+   "positive_pressure_poles_rad_s": [
+    0.113947
+   ],
+   "depth_m": 4820.0,
+   "event_outcomes": {
+    "phase_review": 8,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 16
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     103,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 103,
+   "local_coverage": {
+    "pressure_day_files": 303,
+    "vertical_day_files": 303,
+    "epoch_days": 391,
+    "paired_epoch_day_files": 303,
+    "paired_epoch_fraction": 0.7749,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.303"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "e62a74ed7b534fdedd5a3953e895bf763ca0f025ce371c707f04494d7e22ec44"
+   },
+   "coherent_events": 8,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 46.17209756263142,
+     "phase_low_bin_deg": 62.85232873514107,
+     "phase_high_bin_deg": 32.81325114596751,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.06747464224201775
+    },
+    "H1": {
+     "phase_rms_deg": 3.9217867174348036,
+     "phase_low_bin_deg": 3.168330995887151,
+     "phase_high_bin_deg": 2.127309242324592,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 8,
+     "median_log_ratio_slope": -0.06747464224201764
+    },
+    "H2": {
+     "phase_rms_deg": 3.9217867174348036,
+     "phase_low_bin_deg": 3.168330995887151,
+     "phase_high_bin_deg": 2.127309242324592,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 8,
+     "median_log_ratio_slope": -0.06747464224201764
+    },
+    "H3": {
+     "phase_rms_deg": 176.789387607438,
+     "phase_low_bin_deg": -176.83166900411285,
+     "phase_high_bin_deg": -177.87269075767543,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.06747464224201764
+    },
+    "H4": {
+     "phase_rms_deg": 22.095929646579307,
+     "phase_low_bin_deg": 29.716241381607983,
+     "phase_high_bin_deg": 15.89859914052843,
+     "fraction_bins_within_20deg": 0.42857142857142855,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.05428995172014567
+    }
+   },
+   "nominal_ratio_level_median": 0.7620127863038144,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0630465398154658
+   },
+   "microseism": {
+    "coherent_bins": 748,
+    "circular_mean_phase_deg": -15.268732514730626,
+    "H0_phase_rms_deg": 16.548484080463798,
+    "H1_phase_rms_deg": 4.025656761999305,
+    "H2_phase_rms_deg": 4.025656761999305,
+    "H3_phase_rms_deg": 176.93521801366893,
+    "H4_phase_rms_deg": 9.104166418848331
+   }
+  },
+  {
+   "station": "RR21",
+   "seed_id": "YV.RR21.00.BDH",
+   "epoch_start": "2012-10-06T06:15:29.000000Z",
+   "epoch_end": "2013-10-31T13:29:22.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.114118297539466,
+   "trial_candidates": 6,
+   "positive_pressure_poles_rad_s": [
+    0.09768
+   ],
+   "depth_m": 4782.0,
+   "event_outcomes": {
+    "phase_review": 7,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 17
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     104,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 104,
+   "local_coverage": {
+    "pressure_day_files": 304,
+    "vertical_day_files": 304,
+    "epoch_days": 391,
+    "paired_epoch_day_files": 304,
+    "paired_epoch_fraction": 0.7775,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.304"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "62fbb185129d53fd129742e6dcfbf6489e5347b8fdc6f9a2c5e5c5af3da460f9"
+   },
+   "coherent_events": 7,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 51.278279201505335,
+     "phase_low_bin_deg": 70.73224445373813,
+     "phase_high_bin_deg": 36.41970762378142,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.04443925441332077
+    },
+    "H1": {
+     "phase_rms_deg": 13.913206050029448,
+     "phase_low_bin_deg": 17.920382200463525,
+     "phase_high_bin_deg": 10.31652909622308,
+     "fraction_bins_within_20deg": 0.9272727272727272,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": 0.04443925441332077
+    },
+    "H2": {
+     "phase_rms_deg": 13.913206050029448,
+     "phase_low_bin_deg": 17.920382200463525,
+     "phase_high_bin_deg": 10.31652909622308,
+     "fraction_bins_within_20deg": 0.9272727272727272,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": 0.04443925441332077
+    },
+    "H3": {
+     "phase_rms_deg": 166.9813568687231,
+     "phase_low_bin_deg": -162.07961779953646,
+     "phase_high_bin_deg": -169.6834709037769,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.04443925441332077
+    },
+    "H4": {
+     "phase_rms_deg": 30.491213500233883,
+     "phase_low_bin_deg": 41.48082155736996,
+     "phase_high_bin_deg": 22.040056674874823,
+     "fraction_bins_within_20deg": 0.05454545454545454,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.1382053232799688
+    }
+   },
+   "nominal_ratio_level_median": 0.8590171864788717,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0467164067720602
+   },
+   "microseism": {
+    "coherent_bins": 726,
+    "circular_mean_phase_deg": -17.404808627164037,
+    "H0_phase_rms_deg": 19.944032075837242,
+    "H1_phase_rms_deg": 8.30452024093474,
+    "H2_phase_rms_deg": 8.30452024093474,
+    "H3_phase_rms_deg": 172.6526861715153,
+    "H4_phase_rms_deg": 13.394164726926697
+   }
+  },
+  {
+   "station": "RR22",
+   "seed_id": "YV.RR22.00.BDH",
+   "epoch_start": "2012-10-08T15:49:42.000000Z",
+   "epoch_end": "2013-11-01T13:56:08.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [
+    0.099011
+   ],
+   "depth_m": 4920.0,
+   "event_outcomes": {
+    "phase_review": 7,
+    "coherence_failed": 16,
+    "selection_excluded_24h": 18,
+    "input_refused": 1
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     44,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     105,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 105,
+   "local_coverage": {
+    "pressure_day_files": 305,
+    "vertical_day_files": 305,
+    "epoch_days": 390,
+    "paired_epoch_day_files": 305,
+    "paired_epoch_fraction": 0.7821,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.305"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [
+     [
+      -395.097,
+      -850.693
+     ],
+     [
+      -395.097,
+      -850.693
+     ]
+    ],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 23,
+    "sha256_of_sorted_file_hash_lines": "851474381706c2a76dab5a2c349eae61bc4c2818dbbe229d523c174af2e49dcd"
+   },
+   "coherent_events": 7,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 73.0103801620867,
+     "phase_low_bin_deg": -48.54270617570881,
+     "phase_high_bin_deg": -88.52655993047668,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.2053168438960774
+    },
+    "H1": {
+     "phase_rms_deg": 110.0951652782685,
+     "phase_low_bin_deg": -102.97697428373922,
+     "phase_high_bin_deg": -115.64890753257201,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.20531684389607724
+    },
+    "H2": {
+     "phase_rms_deg": 21.054943362720074,
+     "phase_low_bin_deg": 27.198815850422914,
+     "phase_high_bin_deg": 14.52687592978612,
+     "fraction_bins_within_20deg": 0.4807692307692308,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.20580288000577127
+    },
+    "H3": {
+     "phase_rms_deg": 159.87140883755453,
+     "phase_low_bin_deg": -152.8011841495771,
+     "phase_high_bin_deg": -165.47312407021388,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.20580288000577127
+    },
+    "H4": {
+     "phase_rms_deg": 38.3577420033311,
+     "phase_low_bin_deg": 51.46886002099506,
+     "phase_high_bin_deg": 26.706073009749737,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.30179031957021607
+    }
+   },
+   "nominal_ratio_level_median": 0.7050543491360146,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 0.9993926393952953,
+    "H3": 0.9993926393952953,
+    "H4": 1.0473311180944755
+   },
+   "microseism": {
+    "coherent_bins": 640,
+    "circular_mean_phase_deg": 110.39191724242475,
+    "H0_phase_rms_deg": 110.49673855756714,
+    "H1_phase_rms_deg": 120.18649500758801,
+    "H2_phase_rms_deg": 10.768915489832294,
+    "H3_phase_rms_deg": 169.9867975313751,
+    "H4_phase_rms_deg": 14.999077005813884
+   }
+  },
+  {
+   "station": "RR25",
+   "seed_id": "YV.RR25.00.BDH",
+   "epoch_start": "2012-10-02T16:29:10.000000Z",
+   "epoch_end": "2013-11-04T14:41:16.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 1.1625814466578428,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.157091865709016,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.043098
+   ],
+   "depth_m": 4759.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1,
+    "phase_review": 1,
+    "coherence_failed": 1
+   },
+   "events_attempted": 6,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     6,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 11,
+   "local_coverage": {
+    "pressure_day_files": 308,
+    "vertical_day_files": 308,
+    "epoch_days": 399,
+    "paired_epoch_day_files": 308,
+    "paired_epoch_fraction": 0.7719,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.308"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 6,
+    "sha256_of_sorted_file_hash_lines": "8e5b637a4b3c797639a27d22c4fe3802d1fb386e264cc572987c78415900ad49"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 23.142282130563814,
+     "phase_low_bin_deg": 33.62007699161246,
+     "phase_high_bin_deg": 15.948838532287935,
+     "fraction_bins_within_20deg": 0.4473684210526316,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.04883323998384132
+    },
+    "H1": {
+     "phase_rms_deg": 5.744555246566747,
+     "phase_low_bin_deg": 7.862389574812175,
+     "phase_high_bin_deg": 3.7017876749270466,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.04883323998384132
+    },
+    "H2": {
+     "phase_rms_deg": 5.744555246566747,
+     "phase_low_bin_deg": 7.862389574812175,
+     "phase_high_bin_deg": 3.7017876749270466,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.04883323998384132
+    },
+    "H3": {
+     "phase_rms_deg": 175.12399968830806,
+     "phase_low_bin_deg": -172.13761042518786,
+     "phase_high_bin_deg": -176.29821232507297,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.04883323998384132
+    },
+    "H4": {
+     "phase_rms_deg": 13.360972493820043,
+     "phase_low_bin_deg": 19.431439380636423,
+     "phase_high_bin_deg": 9.210629170686666,
+     "fraction_bins_within_20deg": 0.9473684210526315,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.028346341157647302
+    }
+   },
+   "nominal_ratio_level_median": 0.851937279113166,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0092710607756452
+   },
+   "microseism": {
+    "coherent_bins": 655,
+    "circular_mean_phase_deg": -6.608012391607435,
+    "H0_phase_rms_deg": 6.994741510136997,
+    "H1_phase_rms_deg": 3.206971111012296,
+    "H2_phase_rms_deg": 3.206971111012296,
+    "H3_phase_rms_deg": 177.30282203043532,
+    "H4_phase_rms_deg": 4.833949929582189
+   }
+  },
+  {
+   "station": "RR26",
+   "seed_id": "YV.RR26.00.BDH",
+   "epoch_start": "2012-10-03T15:20:58.000000Z",
+   "epoch_end": "2013-11-02T07:24:09.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.088702813782616,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.098119
+   ],
+   "depth_m": 4259.0,
+   "event_outcomes": {
+    "phase_review": 5,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 19
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     44,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     105,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 105,
+   "local_coverage": {
+    "pressure_day_files": 306,
+    "vertical_day_files": 306,
+    "epoch_days": 396,
+    "paired_epoch_day_files": 306,
+    "paired_epoch_fraction": 0.7727,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.306"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "4f1ddadc1b3b78b54a682b65012ebd3a05a29a557ddf5bd7c524128c316b99d0"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 56.02051340276254,
+     "phase_low_bin_deg": 78.55328814280324,
+     "phase_high_bin_deg": 40.065969765577336,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.10223224497716304
+    },
+    "H1": {
+     "phase_rms_deg": 18.860196929471112,
+     "phase_low_bin_deg": 26.312707451886354,
+     "phase_high_bin_deg": 14.16709761446448,
+     "fraction_bins_within_20deg": 0.7,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.10223224497716345
+    },
+    "H2": {
+     "phase_rms_deg": 18.860196929471112,
+     "phase_low_bin_deg": 26.312707451886354,
+     "phase_high_bin_deg": 14.16709761446448,
+     "fraction_bins_within_20deg": 0.7,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.10223224497716345
+    },
+    "H3": {
+     "phase_rms_deg": 162.12750299061005,
+     "phase_low_bin_deg": -153.6872925481137,
+     "phase_high_bin_deg": -165.83290238553553,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.10223224497716345
+    },
+    "H4": {
+     "phase_rms_deg": 35.4212613097571,
+     "phase_low_bin_deg": 49.62244933519333,
+     "phase_high_bin_deg": 25.799218310522022,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.19672941825750154
+    }
+   },
+   "nominal_ratio_level_median": 0.9041708208306091,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0471273890387225
+   },
+   "microseism": {
+    "coherent_bins": 566,
+    "circular_mean_phase_deg": -12.697352322657805,
+    "H0_phase_rms_deg": 22.999293984991674,
+    "H1_phase_rms_deg": 25.010911957237017,
+    "H2_phase_rms_deg": 25.010911957237017,
+    "H3_phase_rms_deg": 169.6268573341948,
+    "H4_phase_rms_deg": 23.46825688143998
+   }
+  },
+  {
+   "station": "RR28",
+   "seed_id": "YV.RR28.00.BDH",
+   "epoch_start": "2012-10-10T20:00:00.000000Z",
+   "epoch_end": "2013-11-13T01:03:09.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.8195128791834925,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.8195128791834925,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 4550.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 11,
+   "local_coverage": {
+    "pressure_day_files": 317,
+    "vertical_day_files": 317,
+    "epoch_days": 400,
+    "paired_epoch_day_files": 317,
+    "paired_epoch_fraction": 0.7925,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.317"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "115c81c24a69af3b7757d93060b0242a8e60634e8dd12a9e9dd1aef4e1b4a423"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 3.0748176977087356,
+     "phase_low_bin_deg": -2.6212663311651343,
+     "phase_high_bin_deg": -2.0464493364446934,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.04660332474127084
+    },
+    "H1": {
+     "phase_rms_deg": 3.0748176977087356,
+     "phase_low_bin_deg": -2.6212663311651343,
+     "phase_high_bin_deg": -2.0464493364446934,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.04660332474127084
+    },
+    "H2": {
+     "phase_rms_deg": 3.0748176977087356,
+     "phase_low_bin_deg": -2.6212663311651343,
+     "phase_high_bin_deg": -2.0464493364446934,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.04660332474127084
+    },
+    "H3": {
+     "phase_rms_deg": 177.57891810091087,
+     "phase_low_bin_deg": 177.37873366883485,
+     "phase_high_bin_deg": 177.95355066355532,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.04660332474127084
+    },
+    "H4": {
+     "phase_rms_deg": 3.0748176977087356,
+     "phase_low_bin_deg": -2.6212663311651343,
+     "phase_high_bin_deg": -2.0464493364446934,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.04660332474127084
+    }
+   },
+   "nominal_ratio_level_median": 1.2681440570302103,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 897,
+    "circular_mean_phase_deg": -2.7742415329229204,
+    "H0_phase_rms_deg": 5.0421968274321,
+    "H1_phase_rms_deg": 5.0421968274321,
+    "H2_phase_rms_deg": 5.0421968274321,
+    "H3_phase_rms_deg": 176.23560151253596,
+    "H4_phase_rms_deg": 5.0421968274321
+   }
+  },
+  {
+   "station": "RR29",
+   "seed_id": "YV.RR29.00.BDH",
+   "epoch_start": "2012-10-11T09:59:59.000000Z",
+   "epoch_end": "2013-11-13T19:41:50.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.7299131673781379,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.7299131673781379,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 4829.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 11,
+   "local_coverage": {
+    "pressure_day_files": 317,
+    "vertical_day_files": 317,
+    "epoch_days": 399,
+    "paired_epoch_day_files": 317,
+    "paired_epoch_fraction": 0.7945,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.317"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "418c4b6e3f5102084e4b7b5a225ae6d9f173cf99d6a0fbf25f9bb5163803e834"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 4.375388864257017,
+     "phase_low_bin_deg": -4.809107797351452,
+     "phase_high_bin_deg": -2.8743937638098966,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.029666547251337355
+    },
+    "H1": {
+     "phase_rms_deg": 4.375388864257017,
+     "phase_low_bin_deg": -4.809107797351452,
+     "phase_high_bin_deg": -2.8743937638098966,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.029666547251337355
+    },
+    "H2": {
+     "phase_rms_deg": 4.375388864257017,
+     "phase_low_bin_deg": -4.809107797351452,
+     "phase_high_bin_deg": -2.8743937638098966,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.029666547251337355
+    },
+    "H3": {
+     "phase_rms_deg": 176.0473615796032,
+     "phase_low_bin_deg": 175.19089220264854,
+     "phase_high_bin_deg": 177.1256062361901,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.029666547251337355
+    },
+    "H4": {
+     "phase_rms_deg": 4.375388864257017,
+     "phase_low_bin_deg": -4.809107797351452,
+     "phase_high_bin_deg": -2.8743937638098966,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.029666547251337355
+    }
+   },
+   "nominal_ratio_level_median": 1.4041160209112742,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 701,
+    "circular_mean_phase_deg": -3.9195592594849886,
+    "H0_phase_rms_deg": 9.475270809263835,
+    "H1_phase_rms_deg": 9.475270809263835,
+    "H2_phase_rms_deg": 9.475270809263835,
+    "H3_phase_rms_deg": 173.40292933220238,
+    "H4_phase_rms_deg": 9.475270809263835
+   }
+  },
+  {
+   "station": "RR30",
+   "seed_id": "YV.RR30.00.BDH",
+   "epoch_start": "2012-10-10T11:12:28.000000Z",
+   "epoch_end": "2013-10-08T17:26:49.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.1856816217792,
+   "trial_candidates": 8,
+   "positive_pressure_poles_rad_s": [
+    0.099769
+   ],
+   "depth_m": 5140.0,
+   "event_outcomes": {
+    "coherence_failed": 15,
+    "phase_review": 9,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     9,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     37,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     95,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 95,
+   "local_coverage": {
+    "pressure_day_files": 281,
+    "vertical_day_files": 281,
+    "epoch_days": 364,
+    "paired_epoch_day_files": 281,
+    "paired_epoch_fraction": 0.772,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.281"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "c2a3105611a4efc76041e9ce36d0f6072d9a86050772ac588f0f509f3226bd61"
+   },
+   "coherent_events": 9,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 46.429100717441095,
+     "phase_low_bin_deg": 63.605773306665064,
+     "phase_high_bin_deg": 30.848346689370008,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.15786340078149547
+    },
+    "H1": {
+     "phase_rms_deg": 7.641070619728857,
+     "phase_low_bin_deg": 9.977449984111727,
+     "phase_high_bin_deg": 2.808088125564863,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 9,
+     "median_log_ratio_slope": -0.15786340078149536
+    },
+    "H2": {
+     "phase_rms_deg": 7.641070619728857,
+     "phase_low_bin_deg": 9.977449984111727,
+     "phase_high_bin_deg": 2.808088125564863,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 9,
+     "median_log_ratio_slope": -0.15786340078149536
+    },
+    "H3": {
+     "phase_rms_deg": 173.60123669808937,
+     "phase_low_bin_deg": -170.02255001588824,
+     "phase_high_bin_deg": -177.19191187443516,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.15786340078149536
+    },
+    "H4": {
+     "phase_rms_deg": 24.65214362526192,
+     "phase_low_bin_deg": 33.89067021125971,
+     "phase_high_bin_deg": 15.397493188784562,
+     "fraction_bins_within_20deg": 0.3787878787878788,
+     "events_passing_phase_screen_only": 6,
+     "median_log_ratio_slope": -0.060604657421265064
+    }
+   },
+   "nominal_ratio_level_median": 0.8497820335521012,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 0.9999999999999998,
+    "H2": 0.9999999999999998,
+    "H3": 0.9999999999999998,
+    "H4": 1.0486870306730716
+   },
+   "microseism": {
+    "coherent_bins": 728,
+    "circular_mean_phase_deg": -14.284617465612367,
+    "H0_phase_rms_deg": 15.468026183892274,
+    "H1_phase_rms_deg": 4.265326961393392,
+    "H2_phase_rms_deg": 4.265326961393392,
+    "H3_phase_rms_deg": 176.2341635268577,
+    "H4_phase_rms_deg": 9.137411101777277
+   }
+  },
+  {
+   "station": "RR31",
+   "seed_id": "YV.RR31.00.BDH",
+   "epoch_start": "2012-11-30T01:11:00.000000Z",
+   "epoch_end": "2013-06-16T08:45:00.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 2709.0,
+   "event_outcomes": {
+    "coherence_failed": 21,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 21,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     24,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     57,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 57,
+   "local_coverage": {
+    "pressure_day_files": 167,
+    "vertical_day_files": 167,
+    "epoch_days": 199,
+    "paired_epoch_day_files": 167,
+    "paired_epoch_fraction": 0.8392,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.167"
+   },
+   "response": {
+    "pressure_sensor": "DPG5004 with logger 21 (card #?),Cox-Webb Differen",
+    "vertical_sensor": "T240OBS,Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 21,
+    "sha256_of_sorted_file_hash_lines": "6abed891c926f1045da2a7b240c2a55670396e30123a1619b7997bd0fb24e50d"
+   },
+   "coherent_events": 0,
+   "trial_reflection_reproduction_max_abs_deg": null,
+   "microseism": {
+    "coherent_bins": 0
+   }
+  },
+  {
+   "station": "RR34",
+   "seed_id": "YV.RR34.00.BDH",
+   "epoch_start": "2012-11-15T14:21:00.000000Z",
+   "epoch_end": "2013-06-23T01:36:00.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.5852564043561718,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.5852564043561718,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 4265.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 6,
+   "local_coverage": {
+    "pressure_day_files": 174,
+    "vertical_day_files": 174,
+    "epoch_days": 221,
+    "paired_epoch_day_files": 174,
+    "paired_epoch_fraction": 0.7873,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.174"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "b481a0f86a05bdbda0aa8a03a74c79696dc24d975a839dcb65676ccc791161c4"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 2.4072502528280273,
+     "phase_low_bin_deg": 0.8781279903415641,
+     "phase_high_bin_deg": 1.416815554267153,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07422921395297719
+    },
+    "H1": {
+     "phase_rms_deg": 2.4072502528280273,
+     "phase_low_bin_deg": 0.8781279903415641,
+     "phase_high_bin_deg": 1.416815554267153,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07422921395297719
+    },
+    "H2": {
+     "phase_rms_deg": 2.4072502528280273,
+     "phase_low_bin_deg": 0.8781279903415641,
+     "phase_high_bin_deg": 1.416815554267153,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07422921395297719
+    },
+    "H3": {
+     "phase_rms_deg": 177.92788138735452,
+     "phase_low_bin_deg": -179.12187200965843,
+     "phase_high_bin_deg": -178.58318444573283,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.07422921395297719
+    },
+    "H4": {
+     "phase_rms_deg": 2.4072502528280273,
+     "phase_low_bin_deg": 0.8781279903415641,
+     "phase_high_bin_deg": 1.416815554267153,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.07422921395297719
+    }
+   },
+   "nominal_ratio_level_median": 1.7185566167984183,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 856,
+    "circular_mean_phase_deg": -3.3856856844797623,
+    "H0_phase_rms_deg": 5.162862925101522,
+    "H1_phase_rms_deg": 5.162862925101522,
+    "H2_phase_rms_deg": 5.162862925101522,
+    "H3_phase_rms_deg": 176.16261114322285,
+    "H4_phase_rms_deg": 5.162862925101522
+   }
+  },
+  {
+   "station": "RR36",
+   "seed_id": "YV.RR36.00.BDH",
+   "epoch_start": "2012-10-14T08:00:00.000000Z",
+   "epoch_end": "2013-11-17T20:56:20.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.6535727798235094,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.6535727798235094,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 3560.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     12,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 12,
+   "local_coverage": {
+    "pressure_day_files": 321,
+    "vertical_day_files": 321,
+    "epoch_days": 400,
+    "paired_epoch_day_files": 321,
+    "paired_epoch_fraction": 0.8025,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.321"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "147a2d7b342d7459471d6a7b2e148fd4487956f03dc409be10f94387a1aa8950"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 2.8295273631057123,
+     "phase_low_bin_deg": 1.3303963363466633,
+     "phase_high_bin_deg": 2.3510981978296788,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.09713416879288908
+    },
+    "H1": {
+     "phase_rms_deg": 2.8295273631057123,
+     "phase_low_bin_deg": 1.3303963363466633,
+     "phase_high_bin_deg": 2.3510981978296788,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.09713416879288908
+    },
+    "H2": {
+     "phase_rms_deg": 2.8295273631057123,
+     "phase_low_bin_deg": 1.3303963363466633,
+     "phase_high_bin_deg": 2.3510981978296788,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.09713416879288908
+    },
+    "H3": {
+     "phase_rms_deg": 177.88106454214187,
+     "phase_low_bin_deg": -178.66960366365333,
+     "phase_high_bin_deg": -177.64890180217031,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.09713416879288908
+    },
+    "H4": {
+     "phase_rms_deg": 2.8295273631057123,
+     "phase_low_bin_deg": 1.3303963363466633,
+     "phase_high_bin_deg": 2.3510981978296788,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.09713416879288908
+    }
+   },
+   "nominal_ratio_level_median": 1.545949579559962,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 891,
+    "circular_mean_phase_deg": -3.662793550911161,
+    "H0_phase_rms_deg": 5.290554365721559,
+    "H1_phase_rms_deg": 5.290554365721559,
+    "H2_phase_rms_deg": 5.290554365721559,
+    "H3_phase_rms_deg": 175.78348569841404,
+    "H4_phase_rms_deg": 5.290554365721559
+   }
+  },
+  {
+   "station": "RR38",
+   "seed_id": "YV.RR38.00.BDH",
+   "epoch_start": "2012-10-15T11:00:00.000000Z",
+   "epoch_end": "2013-11-19T04:16:01.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.6364844374276042,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.6364844374276042,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 4560.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     12,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 12,
+   "local_coverage": {
+    "pressure_day_files": 322,
+    "vertical_day_files": 322,
+    "epoch_days": 401,
+    "paired_epoch_day_files": 322,
+    "paired_epoch_fraction": 0.803,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.322"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "d643e58d35760db4c28f82da820e4b871da84c0702c7357e9a7d61d6a50a511d"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 2.765616320730243,
+     "phase_low_bin_deg": -2.1583947808841315,
+     "phase_high_bin_deg": 3.524437804568051,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.15771089963570167
+    },
+    "H1": {
+     "phase_rms_deg": 2.765616320730243,
+     "phase_low_bin_deg": -2.1583947808841315,
+     "phase_high_bin_deg": 3.524437804568051,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.15771089963570167
+    },
+    "H2": {
+     "phase_rms_deg": 2.765616320730243,
+     "phase_low_bin_deg": -2.1583947808841315,
+     "phase_high_bin_deg": 3.524437804568051,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.15771089963570167
+    },
+    "H3": {
+     "phase_rms_deg": 178.06323052832826,
+     "phase_low_bin_deg": 177.84160521911588,
+     "phase_high_bin_deg": -176.47556219543196,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.15771089963570167
+    },
+    "H4": {
+     "phase_rms_deg": 2.765616320730243,
+     "phase_low_bin_deg": -2.1583947808841315,
+     "phase_high_bin_deg": 3.524437804568051,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.15771089963570167
+    }
+   },
+   "nominal_ratio_level_median": 1.607580843009442,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 875,
+    "circular_mean_phase_deg": -3.0809002381763086,
+    "H0_phase_rms_deg": 6.571867078874923,
+    "H1_phase_rms_deg": 6.571867078874923,
+    "H2_phase_rms_deg": 6.571867078874923,
+    "H3_phase_rms_deg": 175.47348743423026,
+    "H4_phase_rms_deg": 6.571867078874923
+   }
+  },
+  {
+   "station": "RR40",
+   "seed_id": "YV.RR40.00.BDH",
+   "epoch_start": "2012-10-16T06:00:00.000000Z",
+   "epoch_end": "2013-11-20T09:21:32.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.7425859807590932,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.7425859807590932,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 4780.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     12,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 12,
+   "local_coverage": {
+    "pressure_day_files": 324,
+    "vertical_day_files": 324,
+    "epoch_days": 401,
+    "paired_epoch_day_files": 324,
+    "paired_epoch_fraction": 0.808,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.324"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "96fc43332d9f10014ccdfb33a2e40edb50c13d04c1fc1af748c0eab6efbd1d66"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 8.29137015498174,
+     "phase_low_bin_deg": 10.213363663089083,
+     "phase_high_bin_deg": 6.475446417169151,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1169174794120994
+    },
+    "H1": {
+     "phase_rms_deg": 8.29137015498174,
+     "phase_low_bin_deg": 10.213363663089083,
+     "phase_high_bin_deg": 6.475446417169151,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1169174794120994
+    },
+    "H2": {
+     "phase_rms_deg": 8.29137015498174,
+     "phase_low_bin_deg": 10.213363663089083,
+     "phase_high_bin_deg": 6.475446417169151,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1169174794120994
+    },
+    "H3": {
+     "phase_rms_deg": 172.04285627172519,
+     "phase_low_bin_deg": -169.78663633691093,
+     "phase_high_bin_deg": -173.52455358283086,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.1169174794120994
+    },
+    "H4": {
+     "phase_rms_deg": 8.29137015498174,
+     "phase_low_bin_deg": 10.213363663089083,
+     "phase_high_bin_deg": 6.475446417169151,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1169174794120994
+    }
+   },
+   "nominal_ratio_level_median": 1.3004397256615237,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 882,
+    "circular_mean_phase_deg": -5.994752553004962,
+    "H0_phase_rms_deg": 8.349214333316766,
+    "H1_phase_rms_deg": 8.349214333316766,
+    "H2_phase_rms_deg": 8.349214333316766,
+    "H3_phase_rms_deg": 173.1336276193528,
+    "H4_phase_rms_deg": 8.349214333316766
+   }
+  },
+  {
+   "station": "RR41",
+   "seed_id": "YV.RR41.00.BDH",
+   "epoch_start": "2012-10-15T09:34:54.000000Z",
+   "epoch_end": "2013-06-17T14:18:36.000000Z",
+   "baseline_status": "reference_band_unusable",
+   "baseline_reason": "Band approaches first water-column resonance",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "reference_band_unusable",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": null,
+   "event_outcomes": {},
+   "events_attempted": 0,
+   "magnitude_search": [],
+   "eligible_lowest_level": null,
+   "local_coverage": {
+    "pressure_day_files": 168,
+    "vertical_day_files": 168,
+    "epoch_days": 246,
+    "paired_epoch_day_files": 168,
+    "paired_epoch_fraction": 0.6829,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.168"
+   },
+   "response": null
+  },
+  {
+   "station": "RR42",
+   "seed_id": "YV.RR42.00.BDH",
+   "epoch_start": "2012-10-15T10:28:42.000000Z",
+   "epoch_end": "2013-08-10T22:19:53.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [
+    0.094328
+   ],
+   "depth_m": 4771.0,
+   "event_outcomes": {
+    "input_refused": 22,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 22,
+   "magnitude_search": [
+    [
+     7.0,
+     7,
+     6,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     28,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     70,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 70,
+   "local_coverage": {
+    "pressure_day_files": 1,
+    "vertical_day_files": 1,
+    "epoch_days": 300,
+    "paired_epoch_day_files": 1,
+    "paired_epoch_fraction": 0.0033,
+    "first_paired_day": "2013.129",
+    "last_paired_day": "2013.129"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [
+     [
+      -395.097,
+      -850.693
+     ],
+     [
+      -395.1,
+      -850.693
+     ]
+    ],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 0,
+    "sha256_of_sorted_file_hash_lines": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "coherent_events": 0,
+   "trial_reflection_reproduction_max_abs_deg": null
+  },
+  {
+   "station": "RR43",
+   "seed_id": "YV.RR43.00.BDH",
+   "epoch_start": "2012-10-15T11:49:27.000000Z",
+   "epoch_end": "2013-06-15T09:25:49.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.1401078630721446,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.106536
+   ],
+   "depth_m": 4264.0,
+   "event_outcomes": {
+    "phase_review": 5,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 16
+   },
+   "events_attempted": 21,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     23,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     55,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 55,
+   "local_coverage": {
+    "pressure_day_files": 166,
+    "vertical_day_files": 166,
+    "epoch_days": 244,
+    "paired_epoch_day_files": 166,
+    "paired_epoch_fraction": 0.6803,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.166"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 21,
+    "sha256_of_sorted_file_hash_lines": "b710839f4075f96ed2e9d61a88fa13df8ae39c51a455e01e95e7d45909ea78c0"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 51.927095580750866,
+     "phase_low_bin_deg": 73.83638929953901,
+     "phase_high_bin_deg": 35.7494714047619,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.0402700075011239
+    },
+    "H1": {
+     "phase_rms_deg": 11.612188307753643,
+     "phase_low_bin_deg": 16.324733194136044,
+     "phase_high_bin_deg": 8.517076204961281,
+     "fraction_bins_within_20deg": 0.9767441860465116,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.0402700075011239
+    },
+    "H2": {
+     "phase_rms_deg": 11.612188307753643,
+     "phase_low_bin_deg": 16.324733194136044,
+     "phase_high_bin_deg": 8.517076204961281,
+     "fraction_bins_within_20deg": 0.9767441860465116,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.0402700075011239
+    },
+    "H3": {
+     "phase_rms_deg": 169.01040187683137,
+     "phase_low_bin_deg": -163.67526680586397,
+     "phase_high_bin_deg": -171.48292379503874,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.0402700075011239
+    },
+    "H4": {
+     "phase_rms_deg": 29.552765149297088,
+     "phase_low_bin_deg": 41.934946589156176,
+     "phase_high_bin_deg": 20.74569967320685,
+     "fraction_bins_within_20deg": 0.11627906976744186,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.06852462347261914
+    }
+   },
+   "nominal_ratio_level_median": 0.9066839200805282,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 0.9999999999999998,
+    "H2": 0.9999999999999998,
+    "H3": 0.9999999999999998,
+    "H4": 1.055328367980519
+   },
+   "microseism": {
+    "coherent_bins": 635,
+    "circular_mean_phase_deg": -14.223250010868552,
+    "H0_phase_rms_deg": 14.570370682438163,
+    "H1_phase_rms_deg": 5.417130005893474,
+    "H2_phase_rms_deg": 5.417130005893474,
+    "H3_phase_rms_deg": 175.2393954975069,
+    "H4_phase_rms_deg": 9.308726985546885
+   }
+  },
+  {
+   "station": "RR44",
+   "seed_id": "YV.RR44.00.BDH",
+   "epoch_start": "2012-10-15T09:21:54.000000Z",
+   "epoch_end": "2013-06-03T08:19:12.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.3074771393410773,
+   "trial_candidates": 4,
+   "positive_pressure_poles_rad_s": [
+    0.102613
+   ],
+   "depth_m": 4548.0,
+   "event_outcomes": {
+    "coherence_failed": 16,
+    "phase_review": 5,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 21,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     22,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     53,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 53,
+   "local_coverage": {
+    "pressure_day_files": 154,
+    "vertical_day_files": 154,
+    "epoch_days": 232,
+    "paired_epoch_day_files": 154,
+    "paired_epoch_fraction": 0.6638,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.154"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 21,
+    "sha256_of_sorted_file_hash_lines": "62f7cc0356ee27031f3fc87930b9d657072c4e360489d8f08c4dc7d7d45aa707"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 43.558340163913414,
+     "phase_low_bin_deg": 64.48902800632027,
+     "phase_high_bin_deg": 28.370107963911884,
+     "fraction_bins_within_20deg": 0.023809523809523808,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.09441220373285716
+    },
+    "H1": {
+     "phase_rms_deg": 4.853757617113453,
+     "phase_low_bin_deg": 7.363150532604545,
+     "phase_high_bin_deg": 0.9377739139429453,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.09441220373285729
+    },
+    "H2": {
+     "phase_rms_deg": 4.853757617113453,
+     "phase_low_bin_deg": 7.363150532604545,
+     "phase_high_bin_deg": 0.9377739139429453,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": -0.09441220373285729
+    },
+    "H3": {
+     "phase_rms_deg": 175.7947770077727,
+     "phase_low_bin_deg": -172.63684946739548,
+     "phase_high_bin_deg": -179.0622260860571,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.09441220373285729
+    },
+    "H4": {
+     "phase_rms_deg": 21.384891079935787,
+     "phase_low_bin_deg": 32.81010371296315,
+     "phase_high_bin_deg": 13.255614509647023,
+     "fraction_bins_within_20deg": 0.5714285714285714,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.007655206805732221
+    }
+   },
+   "nominal_ratio_level_median": 0.7710552805375925,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0514304517546267
+   },
+   "microseism": {
+    "coherent_bins": 601,
+    "circular_mean_phase_deg": -15.120461386109447,
+    "H0_phase_rms_deg": 15.409205948451088,
+    "H1_phase_rms_deg": 6.642485283824889,
+    "H2_phase_rms_deg": 6.642485283824889,
+    "H3_phase_rms_deg": 173.96949875217473,
+    "H4_phase_rms_deg": 10.461612465824194
+   }
+  },
+  {
+   "station": "RR45",
+   "seed_id": "YV.RR45.00.BDH",
+   "epoch_start": "2012-10-15T12:14:01.000000Z",
+   "epoch_end": "2013-03-04T11:33:53.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 2,
+   "positive_pressure_poles_rad_s": [
+    0.102613
+   ],
+   "depth_m": 2822.0,
+   "event_outcomes": {
+    "phase_review": 2,
+    "coherence_failed": 11,
+    "selection_excluded_24h": 18
+   },
+   "events_attempted": 13,
+   "magnitude_search": [
+    [
+     7.0,
+     4,
+     3,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     14,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.0,
+     31,
+     5,
+     "eligible_events_exhausted"
+    ]
+   ],
+   "eligible_lowest_level": 31,
+   "local_coverage": {
+    "pressure_day_files": 61,
+    "vertical_day_files": 61,
+    "epoch_days": 141,
+    "paired_epoch_day_files": 61,
+    "paired_epoch_fraction": 0.4326,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.061"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 13,
+    "sha256_of_sorted_file_hash_lines": "0a01645cd5a63ba13a1aa84f9f1198d0fb0f5b01358c54e7797c630a5ccf0434"
+   },
+   "coherent_events": 2,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 49.88062034302843,
+     "phase_low_bin_deg": 66.42565002504226,
+     "phase_high_bin_deg": 35.66516014967854,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.035882321296511324
+    },
+    "H1": {
+     "phase_rms_deg": 7.582201688930037,
+     "phase_low_bin_deg": 9.299772551326528,
+     "phase_high_bin_deg": 5.02349261482486,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 2,
+     "median_log_ratio_slope": 0.035882321296511324
+    },
+    "H2": {
+     "phase_rms_deg": 7.582201688930037,
+     "phase_low_bin_deg": 9.299772551326528,
+     "phase_high_bin_deg": 5.02349261482486,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 2,
+     "median_log_ratio_slope": 0.035882321296511324
+    },
+    "H3": {
+     "phase_rms_deg": 173.27363858241023,
+     "phase_low_bin_deg": -170.70022744867347,
+     "phase_high_bin_deg": -174.97650738517513,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.035882321296511324
+    },
+    "H4": {
+     "phase_rms_deg": 26.188116298789108,
+     "phase_low_bin_deg": 34.74672573168513,
+     "phase_high_bin_deg": 18.774291258397124,
+     "fraction_bins_within_20deg": 0.15384615384615385,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.13794973183510062
+    }
+   },
+   "nominal_ratio_level_median": 1.0141839664875236,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0514304517546267
+   },
+   "microseism": {
+    "coherent_bins": 582,
+    "circular_mean_phase_deg": -10.436375782548366,
+    "H0_phase_rms_deg": 11.405485516228298,
+    "H1_phase_rms_deg": 3.2586824450776777,
+    "H2_phase_rms_deg": 3.2586824450776777,
+    "H3_phase_rms_deg": 177.50501954370154,
+    "H4_phase_rms_deg": 6.193324208920606
+   }
+  },
+  {
+   "station": "RR46",
+   "seed_id": "YV.RR46.00.BDH",
+   "epoch_start": "2012-10-15T12:04:37.000000Z",
+   "epoch_end": "2013-05-26T19:58:57.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.015092786139538,
+   "trial_candidates": 7,
+   "positive_pressure_poles_rad_s": [
+    0.092366
+   ],
+   "depth_m": 3640.0,
+   "event_outcomes": {
+    "phase_review": 8,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 13
+   },
+   "events_attempted": 21,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     22,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     52,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 52,
+   "local_coverage": {
+    "pressure_day_files": 146,
+    "vertical_day_files": 146,
+    "epoch_days": 224,
+    "paired_epoch_day_files": 146,
+    "paired_epoch_fraction": 0.6518,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.146"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 21,
+    "sha256_of_sorted_file_hash_lines": "ecc1151d372255943a2b73f182e17ee472e75688b839bda9b9ee1cbf05af8977"
+   },
+   "coherent_events": 8,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 44.1623829016453,
+     "phase_low_bin_deg": 64.17629239052029,
+     "phase_high_bin_deg": 29.54473248588551,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.03272572178571602
+    },
+    "H1": {
+     "phase_rms_deg": 8.428314022799022,
+     "phase_low_bin_deg": 12.790034040543539,
+     "phase_high_bin_deg": 5.164121068179167,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 8,
+     "median_log_ratio_slope": -0.03272572178571579
+    },
+    "H2": {
+     "phase_rms_deg": 8.428314022799022,
+     "phase_low_bin_deg": 12.790034040543539,
+     "phase_high_bin_deg": 5.164121068179167,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 8,
+     "median_log_ratio_slope": -0.03272572178571579
+    },
+    "H3": {
+     "phase_rms_deg": 172.53557181429073,
+     "phase_low_bin_deg": -167.2099659594565,
+     "phase_high_bin_deg": -174.83587893182084,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.03272572178571579
+    },
+    "H4": {
+     "phase_rms_deg": 24.24641781158812,
+     "phase_low_bin_deg": 35.726292718144656,
+     "phase_high_bin_deg": 16.116836906105128,
+     "fraction_bins_within_20deg": 0.36363636363636365,
+     "events_passing_phase_screen_only": 6,
+     "median_log_ratio_slope": 0.052319182165020815
+    }
+   },
+   "nominal_ratio_level_median": 0.9734612547310291,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 0.9999999999999998,
+    "H2": 0.9999999999999998,
+    "H3": 0.9999999999999998,
+    "H4": 1.0418750472301141
+   },
+   "microseism": {
+    "coherent_bins": 652,
+    "circular_mean_phase_deg": -11.038785142725576,
+    "H0_phase_rms_deg": 11.728940524065699,
+    "H1_phase_rms_deg": 3.548251219007961,
+    "H2_phase_rms_deg": 3.548251219007961,
+    "H3_phase_rms_deg": 177.21185505649552,
+    "H4_phase_rms_deg": 7.0169571437743645
+   }
+  },
+  {
+   "station": "RR47",
+   "seed_id": "YV.RR47.00.BDH",
+   "epoch_start": "2012-10-16T05:13:40.000000Z",
+   "epoch_end": "2013-06-22T15:59:37.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [
+    0.091985
+   ],
+   "depth_m": 4582.0,
+   "event_outcomes": {
+    "phase_review": 7,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 14
+   },
+   "events_attempted": 21,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     24,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     58,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 58,
+   "local_coverage": {
+    "pressure_day_files": 173,
+    "vertical_day_files": 172,
+    "epoch_days": 250,
+    "paired_epoch_day_files": 172,
+    "paired_epoch_fraction": 0.688,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.173"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 21,
+    "sha256_of_sorted_file_hash_lines": "6212cff7b389589f07a2172b7086cf0f5fefb8169926ca9ed98d3307cd333265"
+   },
+   "coherent_events": 7,
+   "trial_reflection_reproduction_max_abs_deg": 5.684341886080802e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 139.84444464281597,
+     "phase_low_bin_deg": -119.2766287250372,
+     "phase_high_bin_deg": -152.77079093648211,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.18746164259310621
+    },
+    "H1": {
+     "phase_rms_deg": 174.25643687134038,
+     "phase_low_bin_deg": -169.4103670198922,
+     "phase_high_bin_deg": -177.1505623484877,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.18746164259310621
+    },
+    "H2": {
+     "phase_rms_deg": 174.25643687134038,
+     "phase_low_bin_deg": -169.4103670198922,
+     "phase_high_bin_deg": -177.1505623484877,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.18746164259310621
+    },
+    "H3": {
+     "phase_rms_deg": 6.651804433892931,
+     "phase_low_bin_deg": 10.589632980107826,
+     "phase_high_bin_deg": 2.8494376515123356,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 7,
+     "median_log_ratio_slope": -0.18746164259310621
+    },
+    "H4": {
+     "phase_rms_deg": 158.78878708009447,
+     "phase_low_bin_deg": -147.02455053398967,
+     "phase_high_bin_deg": -166.1982743208485,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.10303245375015836
+    }
+   },
+   "nominal_ratio_level_median": 0.9154906984815417,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0415374621515432
+   },
+   "microseism": {
+    "coherent_bins": 693,
+    "circular_mean_phase_deg": 169.4146910085734,
+    "H0_phase_rms_deg": 169.45885128622524,
+    "H1_phase_rms_deg": 177.57799692906156,
+    "H2_phase_rms_deg": 177.57799692906156,
+    "H3_phase_rms_deg": 3.005918524643433,
+    "H4_phase_rms_deg": 174.45356866768992
+   }
+  },
+  {
+   "station": "RR48",
+   "seed_id": "YV.RR48.00.BDH",
+   "epoch_start": "2012-10-16T05:04:36.000000Z",
+   "epoch_end": "2013-06-10T23:28:43.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.3867103370013885,
+   "trial_candidates": 5,
+   "positive_pressure_poles_rad_s": [
+    0.094328
+   ],
+   "depth_m": 4830.0,
+   "event_outcomes": {
+    "phase_review": 8,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 13
+   },
+   "events_attempted": 21,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     22,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     54,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 54,
+   "local_coverage": {
+    "pressure_day_files": 161,
+    "vertical_day_files": 161,
+    "epoch_days": 238,
+    "paired_epoch_day_files": 161,
+    "paired_epoch_fraction": 0.6765,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.161"
+   },
+   "response": {
+    "pressure_sensor": "HTI-04-PCA/ULF,Hydrophone",
+    "vertical_sensor": "CMG-40T,Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 21,
+    "sha256_of_sorted_file_hash_lines": "00bf17d0d2b331770e378766729f50b00fdde854810935a1ff48478678ea1812"
+   },
+   "coherent_events": 8,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 57.53946343339318,
+     "phase_low_bin_deg": 80.97121648982352,
+     "phase_high_bin_deg": 36.85920709858535,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.20453088573978656
+    },
+    "H1": {
+     "phase_rms_deg": 20.900555915023354,
+     "phase_low_bin_deg": 28.647715704733773,
+     "phase_high_bin_deg": 11.747105448699767,
+     "fraction_bins_within_20deg": 0.48484848484848486,
+     "events_passing_phase_screen_only": 6,
+     "median_log_ratio_slope": -0.2045308857397864
+    },
+    "H2": {
+     "phase_rms_deg": 20.900555915023354,
+     "phase_low_bin_deg": 28.647715704733773,
+     "phase_high_bin_deg": 11.747105448699767,
+     "fraction_bins_within_20deg": 0.48484848484848486,
+     "events_passing_phase_screen_only": 6,
+     "median_log_ratio_slope": -0.2045308857397864
+    },
+    "H3": {
+     "phase_rms_deg": 160.5844392060418,
+     "phase_low_bin_deg": -151.35228429526626,
+     "phase_high_bin_deg": -168.25289455130024,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.2045308857397864
+    },
+    "H4": {
+     "phase_rms_deg": 37.191813097012506,
+     "phase_low_bin_deg": 51.995556578722855,
+     "phase_high_bin_deg": 23.027186621322667,
+     "fraction_bins_within_20deg": 0.030303030303030304,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.11629450997805
+    }
+   },
+   "nominal_ratio_level_median": 0.7810701734338075,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0436337246491036
+   },
+   "microseism": {
+    "coherent_bins": 622,
+    "circular_mean_phase_deg": -8.650293445840974,
+    "H0_phase_rms_deg": 9.507293486648557,
+    "H1_phase_rms_deg": 3.9474496595576793,
+    "H2_phase_rms_deg": 3.9474496595576793,
+    "H3_phase_rms_deg": 176.84238480999537,
+    "H4_phase_rms_deg": 5.490962370969413
+   }
+  },
+  {
+   "station": "RR50",
+   "seed_id": "YV.RR50.00.BDH",
+   "epoch_start": "2012-10-18T03:00:00.000000Z",
+   "epoch_end": "2013-11-23T13:05:26.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.716796868576758,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.716796868576758,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 4118.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     12,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 12,
+   "local_coverage": {
+    "pressure_day_files": 327,
+    "vertical_day_files": 327,
+    "epoch_days": 402,
+    "paired_epoch_day_files": 327,
+    "paired_epoch_fraction": 0.8134,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.327"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "e358985f23093f41f0ae0615725445c7140cfb53a23e2f781a7f235a7c91007c"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 2.6662416160587976,
+     "phase_low_bin_deg": -3.230646075575886,
+     "phase_high_bin_deg": 1.4602888928133964,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1014140950288454
+    },
+    "H1": {
+     "phase_rms_deg": 2.6662416160587976,
+     "phase_low_bin_deg": -3.230646075575886,
+     "phase_high_bin_deg": 1.4602888928133964,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1014140950288454
+    },
+    "H2": {
+     "phase_rms_deg": 2.6662416160587976,
+     "phase_low_bin_deg": -3.230646075575886,
+     "phase_high_bin_deg": 1.4602888928133964,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1014140950288454
+    },
+    "H3": {
+     "phase_rms_deg": 177.9955637137213,
+     "phase_low_bin_deg": 176.7693539244241,
+     "phase_high_bin_deg": -178.5397111071866,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.1014140950288454
+    },
+    "H4": {
+     "phase_rms_deg": 2.6662416160587976,
+     "phase_low_bin_deg": -3.230646075575886,
+     "phase_high_bin_deg": 1.4602888928133964,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.1014140950288454
+    }
+   },
+   "nominal_ratio_level_median": 1.4249872927570442,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 813,
+    "circular_mean_phase_deg": -1.1713639818452741,
+    "H0_phase_rms_deg": 4.241068877664244,
+    "H1_phase_rms_deg": 4.241068877664244,
+    "H2_phase_rms_deg": 4.241068877664244,
+    "H3_phase_rms_deg": 176.83563734639236,
+    "H4_phase_rms_deg": 4.241068877664244
+   }
+  },
+  {
+   "station": "RR52",
+   "seed_id": "YV.RR52.00.BDH",
+   "epoch_start": "2012-10-19T09:00:00.000000Z",
+   "epoch_end": "2013-11-25T05:17:31.000000Z",
+   "baseline_status": "candidate_comparison_under_assumed_sign",
+   "baseline_reason": null,
+   "baseline_g": 0.6787278140712512,
+   "baseline_candidates": 3,
+   "trial_status": "provisional_experiment",
+   "trial_g": 0.6787278140712512,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": 2918.0,
+   "event_outcomes": {
+    "candidate": 3,
+    "arrival_overlap_review": 1,
+    "selection_excluded_24h": 1
+   },
+   "events_attempted": 4,
+   "magnitude_search": [
+    [
+     7.0,
+     12,
+     4,
+     "target_reached"
+    ]
+   ],
+   "eligible_lowest_level": 12,
+   "local_coverage": {
+    "pressure_day_files": 329,
+    "vertical_day_files": 329,
+    "epoch_days": 403,
+    "paired_epoch_day_files": 329,
+    "paired_epoch_fraction": 0.8164,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.329"
+   },
+   "response": {
+    "pressure_sensor": "DPG",
+    "vertical_sensor": "Trillium240OBS",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 4,
+    "sha256_of_sorted_file_hash_lines": "4cef0a9fc72c79a7c2117b4bf59769900734ec934a929d6b9443ab832d905968"
+   },
+   "coherent_events": 4,
+   "trial_reflection_reproduction_max_abs_deg": 0.0,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 3.177439646280178,
+     "phase_low_bin_deg": -6.721006965840681,
+     "phase_high_bin_deg": 0.20223421722639426,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.08489026586856849
+    },
+    "H1": {
+     "phase_rms_deg": 3.177439646280178,
+     "phase_low_bin_deg": -6.721006965840681,
+     "phase_high_bin_deg": 0.20223421722639426,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.08489026586856849
+    },
+    "H2": {
+     "phase_rms_deg": 3.177439646280178,
+     "phase_low_bin_deg": -6.721006965840681,
+     "phase_high_bin_deg": 0.20223421722639426,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.08489026586856849
+    },
+    "H3": {
+     "phase_rms_deg": 177.97830423492488,
+     "phase_low_bin_deg": 173.2789930341593,
+     "phase_high_bin_deg": -179.7977657827736,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.08489026586856849
+    },
+    "H4": {
+     "phase_rms_deg": 3.177439646280178,
+     "phase_low_bin_deg": -6.721006965840681,
+     "phase_high_bin_deg": 0.20223421722639426,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 4,
+     "median_log_ratio_slope": -0.08489026586856849
+    }
+   },
+   "nominal_ratio_level_median": 1.4808161825490886,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0,
+    "H2": 1.0,
+    "H3": 1.0,
+    "H4": 1.0
+   },
+   "microseism": {
+    "coherent_bins": 901,
+    "circular_mean_phase_deg": 3.108928910336792,
+    "H0_phase_rms_deg": 5.295880509392836,
+    "H1_phase_rms_deg": 5.295880509392836,
+    "H2_phase_rms_deg": 5.295880509392836,
+    "H3_phase_rms_deg": 175.61799480559318,
+    "H4_phase_rms_deg": 5.295880509392836
+   }
+  },
+  {
+   "station": "RR53",
+   "seed_id": "YV.RR53.00.BDH",
+   "epoch_start": "2012-10-18T06:46:14.000000Z",
+   "epoch_end": "2013-10-30T10:28:57.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 1,
+   "positive_pressure_poles_rad_s": [
+    0.107744
+   ],
+   "depth_m": 2940.0,
+   "event_outcomes": {
+    "phase_review": 10,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 14
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     43,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     103,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 103,
+   "local_coverage": {
+    "pressure_day_files": 303,
+    "vertical_day_files": 303,
+    "epoch_days": 378,
+    "paired_epoch_day_files": 303,
+    "paired_epoch_fraction": 0.8016,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.303"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [
+     [
+      -0.074016,
+      0.07347
+     ],
+     [
+      -0.074016,
+      0.07347
+     ],
+     [
+      -502.655,
+      596.903
+     ],
+     [
+      -502.655,
+      596.903
+     ]
+    ],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 24,
+    "sha256_of_sorted_file_hash_lines": "99fd30b85413fcdf2fb3fd8b7cecfb4d05dfed270871399118c9d4299abd73ab"
+   },
+   "coherent_events": 10,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 68.51662905933215,
+     "phase_low_bin_deg": 97.81082177431055,
+     "phase_high_bin_deg": 47.879017971710844,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.5883929015945788
+    },
+    "H1": {
+     "phase_rms_deg": 28.51128748248125,
+     "phase_low_bin_deg": 41.22253462340234,
+     "phase_high_bin_deg": 19.944024857350293,
+     "fraction_bins_within_20deg": 0.13924050632911392,
+     "events_passing_phase_screen_only": 1,
+     "median_log_ratio_slope": 0.5883929015945788
+    },
+    "H2": {
+     "phase_rms_deg": 79.72095832528697,
+     "phase_low_bin_deg": -73.82744322259373,
+     "phase_high_bin_deg": -83.17313374105301,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.9485921664865428
+    },
+    "H3": {
+     "phase_rms_deg": 100.52854460916247,
+     "phase_low_bin_deg": 106.17255677740624,
+     "phase_high_bin_deg": 96.82686625894699,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.9485921664865428
+    },
+    "H4": {
+     "phase_rms_deg": 62.60763807062419,
+     "phase_low_bin_deg": -48.61986502078606,
+     "phase_high_bin_deg": -70.63057127530598,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 1.0594787492284166
+    }
+   },
+   "nominal_ratio_level_median": 0.45103041809004324,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 0.9999999999999999,
+    "H1": 0.9999999999999999,
+    "H2": 1.5681316257643736,
+    "H3": 1.5681316257643736,
+    "H4": 1.6568172661472544
+   },
+   "microseism": {
+    "coherent_bins": 0
+   }
+  },
+  {
+   "station": "RR55",
+   "seed_id": "YV.RR55.00.BDH",
+   "epoch_start": "2012-10-19T11:59:37.000000Z",
+   "epoch_end": "2013-11-08T17:02:35.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "provisional_experiment",
+   "trial_g": 1.5920987451655904,
+   "trial_candidates": 3,
+   "positive_pressure_poles_rad_s": [
+    0.043098
+   ],
+   "depth_m": 4462.0,
+   "event_outcomes": {
+    "fit_bound_unresolved": 4,
+    "selection_excluded_24h": 18,
+    "phase_review": 5,
+    "coherence_failed": 15
+   },
+   "events_attempted": 24,
+   "magnitude_search": [
+    [
+     7.0,
+     11,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.5,
+     44,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     107,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 107,
+   "local_coverage": {
+    "pressure_day_files": 312,
+    "vertical_day_files": 312,
+    "epoch_days": 386,
+    "paired_epoch_day_files": 312,
+    "paired_epoch_fraction": 0.8083,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.312"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 20,
+    "sha256_of_sorted_file_hash_lines": "a199869ec52843e3e80994f980deaf9113576c49a77fbe963db0215b5a6e2075"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 2.842170943040401e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 37.18663784322838,
+     "phase_low_bin_deg": 52.64019371513451,
+     "phase_high_bin_deg": 27.630200457663555,
+     "fraction_bins_within_20deg": 0.023809523809523808,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.032045924683983984
+    },
+    "H1": {
+     "phase_rms_deg": 20.19707925302401,
+     "phase_low_bin_deg": 26.882506298334235,
+     "phase_high_bin_deg": 16.266706053251415,
+     "fraction_bins_within_20deg": 0.47619047619047616,
+     "events_passing_phase_screen_only": 3,
+     "median_log_ratio_slope": -0.032045924683983984
+    },
+    "H2": {
+     "phase_rms_deg": 20.19707925302401,
+     "phase_low_bin_deg": 26.882506298334235,
+     "phase_high_bin_deg": 16.266706053251415,
+     "fraction_bins_within_20deg": 0.47619047619047616,
+     "events_passing_phase_screen_only": 3,
+     "median_log_ratio_slope": -0.032045924683983984
+    },
+    "H3": {
+     "phase_rms_deg": 160.90191700277524,
+     "phase_low_bin_deg": -153.1174937016658,
+     "phase_high_bin_deg": -163.7332939467486,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.032045924683983984
+    },
+    "H4": {
+     "phase_rms_deg": 27.78237671215567,
+     "phase_low_bin_deg": 38.451556104158485,
+     "phase_high_bin_deg": 21.37839445392342,
+     "fraction_bins_within_20deg": 0.19047619047619047,
+     "events_passing_phase_screen_only": 2,
+     "median_log_ratio_slope": -0.011559025857790069
+    }
+   },
+   "nominal_ratio_level_median": 0.6220008038855356,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 1.0,
+    "H1": 1.0000000000000002,
+    "H2": 1.0000000000000002,
+    "H3": 1.0000000000000002,
+    "H4": 1.0092710607756452
+   },
+   "microseism": {
+    "coherent_bins": 728,
+    "circular_mean_phase_deg": -13.946127445851182,
+    "H0_phase_rms_deg": 14.678877363438906,
+    "H1_phase_rms_deg": 9.971007162680532,
+    "H2_phase_rms_deg": 9.971007162680532,
+    "H3_phase_rms_deg": 170.61186029906105,
+    "H4_phase_rms_deg": 12.064629917981522
+   }
+  },
+  {
+   "station": "RR56",
+   "seed_id": "YV.RR56.00.BDH",
+   "epoch_start": "2012-10-20T18:27:45.000000Z",
+   "epoch_end": "2013-06-29T20:55:33.000000Z",
+   "baseline_status": "unresolved",
+   "baseline_reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "insufficient_candidates",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [
+    0.102613
+   ],
+   "depth_m": 4230.0,
+   "event_outcomes": {
+    "phase_review": 5,
+    "selection_excluded_24h": 18,
+    "coherence_failed": 16
+   },
+   "events_attempted": 21,
+   "magnitude_search": [
+    [
+     7.0,
+     6,
+     5,
+     "eligible_events_exhausted"
+    ],
+    [
+     6.5,
+     25,
+     8,
+     "attempt_limit_reached"
+    ],
+    [
+     6.0,
+     59,
+     8,
+     "attempt_limit_reached"
+    ]
+   ],
+   "eligible_lowest_level": 59,
+   "local_coverage": {
+    "pressure_day_files": 180,
+    "vertical_day_files": 180,
+    "epoch_days": 253,
+    "paired_epoch_day_files": 180,
+    "paired_epoch_fraction": 0.7115,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.180"
+   },
+   "response": {
+    "pressure_sensor": "Hydrophone",
+    "vertical_sensor": "Seismometer",
+    "vertical_unpaired_roots": [
+     [
+      -0.074016,
+      0.07347
+     ],
+     [
+      -0.074016,
+      0.07347
+     ],
+     [
+      -502.655,
+      596.903
+     ],
+     [
+      -502.655,
+      596.903
+     ]
+    ],
+    "pressure_unpaired_roots": []
+   },
+   "event_spectra": {
+    "files": 21,
+    "sha256_of_sorted_file_hash_lines": "1dfb2d1531f9cf9af90089265aa4d342eb98ea1fe0795937bfc62851db8034be"
+   },
+   "coherent_events": 5,
+   "trial_reflection_reproduction_max_abs_deg": 5.684341886080802e-14,
+   "rayleigh": {
+    "H0": {
+     "phase_rms_deg": 152.56397301289388,
+     "phase_low_bin_deg": 178.40218250978373,
+     "phase_high_bin_deg": 135.0675430909027,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.3348558511898657
+    },
+    "H1": {
+     "phase_rms_deg": 115.2788552418848,
+     "phase_low_bin_deg": 124.11597527600162,
+     "phase_high_bin_deg": 108.41395125218835,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": -0.3348558511898659
+    },
+    "H2": {
+     "phase_rms_deg": 8.594106645127573,
+     "phase_low_bin_deg": 9.069268893591094,
+     "phase_high_bin_deg": 5.296696793602924,
+     "fraction_bins_within_20deg": 1.0,
+     "events_passing_phase_screen_only": 5,
+     "median_log_ratio_slope": 0.025343413702098267
+    },
+    "H3": {
+     "phase_rms_deg": 171.99544399990916,
+     "phase_low_bin_deg": -170.93073110640893,
+     "phase_high_bin_deg": -174.7033032063971,
+     "fraction_bins_within_20deg": 0.0,
+     "events_passing_phase_screen_only": 0,
+     "median_log_ratio_slope": 0.025343413702098267
+    },
+    "H4": {
+     "phase_rms_deg": 25.478856604106742,
+     "phase_low_bin_deg": 33.27230282868773,
+     "phase_high_bin_deg": 17.266432372469932,
+     "fraction_bins_within_20deg": 0.21951219512195122,
+     "events_passing_phase_screen_only": 1,
+     "median_log_ratio_slope": 0.12741082424068756
+    }
+   },
+   "nominal_ratio_level_median": 1.3869659926083442,
+   "amplitude_factor_at_0p05hz": {
+    "H0": 0.9999999999999999,
+    "H1": 1.0,
+    "H2": 1.5681316257643738,
+    "H3": 1.5681316257643738,
+    "H4": 1.6487813436881527
+   },
+   "microseism": {
+    "coherent_bins": 669,
+    "circular_mean_phase_deg": -112.22547525298285,
+    "H0_phase_rms_deg": 112.3715674807897,
+    "H1_phase_rms_deg": 102.07950549568187,
+    "H2_phase_rms_deg": 3.486719871465013,
+    "H3_phase_rms_deg": 177.71050394355422,
+    "H4_phase_rms_deg": 7.293643275840213
+   }
+  },
+  {
+   "station": "RR57",
+   "seed_id": "YV.RR57.00.BDH",
+   "epoch_start": "2012-10-21T09:46:48.000000Z",
+   "epoch_end": "2013-10-31T18:56:14.000000Z",
+   "baseline_status": "reference_band_unusable",
+   "baseline_reason": "Band approaches first water-column resonance",
+   "baseline_g": null,
+   "baseline_candidates": 0,
+   "trial_status": "reference_band_unusable",
+   "trial_g": null,
+   "trial_candidates": 0,
+   "positive_pressure_poles_rad_s": [],
+   "depth_m": null,
+   "event_outcomes": {},
+   "events_attempted": 0,
+   "magnitude_search": [],
+   "eligible_lowest_level": null,
+   "local_coverage": {
+    "pressure_day_files": 304,
+    "vertical_day_files": 304,
+    "epoch_days": 376,
+    "paired_epoch_day_files": 304,
+    "paired_epoch_fraction": 0.8085,
+    "first_paired_day": "2013.001",
+    "last_paired_day": "2013.304"
+   },
+   "response": null
+  }
+ ],
+ "input_sha256": {
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR01/run_20261014T175609Z_58a503fb/microseism_check_bins.csv": "ef37c092cc5a14d26b163b0557dfd66d0979553e5022c3d100e04f97014413a2",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR03/run_20261014T175624Z_2a332eb0/microseism_check_bins.csv": "f06e0d2e228f8378c2e398f4802e2555969e3dc3b7f2faae93a1cd36c3b860c1",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR05/run_20261014T175639Z_7db552c1/microseism_check_bins.csv": "3edf14c2a7ffbc2020a28fcc7505d84691de6952a0977a5d33d6c2f37b266ee2",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR06/run_20261014T175654Z_024f724b/microseism_check_bins.csv": "ef9bab181523dfe1bacabed35a10e04d5a4222c66508712d2791ac3b04f27751",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR07/run_20261014T175710Z_e30a2a19/microseism_check_bins.csv": "c35333f362854af932dcc9076a2e7e15241c0b8c6ba843fe15923192d24d300f",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR08/run_20261014T175727Z_6f202354/microseism_check_bins.csv": "733cb4d1d1d961fbd82eb751aaf8192d05274b833cca9b45ddf83c3f54772d72",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR09/run_20261014T175743Z_a41fc0b1/microseism_check_bins.csv": "345cc3a452aa17f8ba2baa271a18f9c3ed12c7958358ae811913b081a6a6bcd3",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR10/run_20261014T175757Z_8af6b5b4/microseism_check_bins.csv": "4f8b2cc152f004d1bd41e1a76d977213e2567a27c45cbc9f2c7dcc925efe0a1c",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR11/run_20261014T175811Z_eaacc115/microseism_check_bins.csv": "bfa2cdb31c2f26e1f3f6c1ffff381e445a077519936924de885e60022ac22acc",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR13/run_20261014T175837Z_256b20fc/microseism_check_bins.csv": "f214ca83aafdefab4080e2605f8f48a73dca903edfdf5f014dae5abdfdae9cfa",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR14/run_20261014T175852Z_8ac67810/microseism_check_bins.csv": "32662ac1300a53b38a1ca75500bdb2c4bd925540c5e853a7e8988b82a686f1f3",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR16/run_20261014T175906Z_92aa411b/microseism_check_bins.csv": "550195d83bdb7272038298798bb92f3a5a9ad99c73a4d25162fdc20d9537925a",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR17/run_20261014T175921Z_07711afc/microseism_check_bins.csv": "5446a045c2037ac51a5e45a2a530a31733a1a4f2acd94e9ad0983e64b2d75018",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR18/run_20261014T175936Z_32d9b6e4/microseism_check_bins.csv": "cb6eecd11dda56236c47b48ea01df32d19cd64d82735fc62bd09d17686d7342b",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR19/run_20261014T175951Z_c36b0b28/microseism_check_bins.csv": "5ab4f663714edd1b424a6a5c0776462e5a6d57faa8dabfecba8c0e3acaaaec4d",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR20/run_20261014T180005Z_1cf15845/microseism_check_bins.csv": "5aa2d365f95c84fd1be05cd2a95b82a935f4a1d9945036e5b4d5f958cee034e0",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR21/run_20261014T180019Z_dd1ba96a/microseism_check_bins.csv": "beb2bbeb32bc2c002c9cbeaa8bfa941d88d01b2d8afdfed3e014d19b5dc2bab0",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR22/run_20261014T180033Z_95c1aeb5/microseism_check_bins.csv": "4604074238f2253054a5938e0653cc12e0bffe68fe111f10fc548673eb5ced54",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR25/run_20261014T180048Z_ea080361/microseism_check_bins.csv": "1b2217d37d2a21b87c11abb02802f31f6a6bf203fca3c5dd7cb1809e347ccaf1",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR26/run_20261014T180102Z_eadaf017/microseism_check_bins.csv": "36607be26c5fb612b6cb986fb45bc10019ac92078ac2149fcbd53cc02bb5d0c0",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR28/run_20261014T180118Z_088be89a/microseism_check_bins.csv": "d96d905fbc4366f2a48be44c565ea94cedea8b098bcec661f5d0874d4c69732f",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR29/run_20261014T180134Z_dde47e76/microseism_check_bins.csv": "ef49db10a0d1f31e9ea196108eaf76a8b06e5f7d2bc13d372d65b3166bcc2c67",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR30/run_20261014T180148Z_91ab68b5/microseism_check_bins.csv": "9922fed0f5baf6bb70d67764bb4832c2da91697ea08678ab7229c4c2ef42bb09",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR31/run_20261014T180202Z_20c58028/microseism_check_bins.csv": "77d54075a9ed531fcdc45c667114d1a6582374b1e5f4f5e15f6ef3e14e47816b",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR34/run_20261014T180213Z_922dd8fc/microseism_check_bins.csv": "7a5819c655b5fab7ca9f8089243d0393f0121db0262392e18d67c79e08dde734",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR36/run_20261014T180229Z_6b22b8e0/microseism_check_bins.csv": "32d71fa497d3174dc79911f2c54dde40c0e4535d735eeff1e99cfdc95dd07546",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR38/run_20261014T180245Z_5f6573cb/microseism_check_bins.csv": "6639f3cb562148dc348f4b3a4e3c0a473f085c6444f23b9cc1888bfe7a245adc",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR40/run_20261014T180301Z_a34caadb/microseism_check_bins.csv": "ba7ca1cb3d2344e171879c870cd8b1a87f14f85ce35b3eb09d79c6580aebba69",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR43/run_20261014T180341Z_ed0f6aa5/microseism_check_bins.csv": "30450933fa2efc5fbbacd98c3f2ff407528caa00d2c8fbfa438b1769a2971c21",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR44/run_20261014T180358Z_05981c1c/microseism_check_bins.csv": "1fb099cb72e8249427e32a30a181eb39050daf84b6f6bc924febf00c35b7b5c2",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR45/run_20261014T180411Z_c24304cb/microseism_check_bins.csv": "18299ea5875a67a3f61ba0d04b46b27a587e6f33cdc865a8faa5cb206cb73886",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR46/run_20261014T180429Z_944b93c8/microseism_check_bins.csv": "fd2fbb3f0eabf6721a16d5450d66fd38915df665cd69392c11ecb84286199a12",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR47/run_20261014T180444Z_b39689bc/microseism_check_bins.csv": "c00d8c7bc4f8c64988cd0a522682d1ee1b6c14b177e4397f799cc22e0818e577",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR48/run_20261014T180503Z_f53317d9/microseism_check_bins.csv": "955a56a1c52d20e22035f1db79325fb561edd892d23725527dd62c3cab7f693e",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR50/run_20261014T180526Z_aefa21b9/microseism_check_bins.csv": "f819cf22e21467b348d3d50d3af8242f1f0ce639a113509eee7a9e903479d374",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR52/run_20261014T180543Z_fc2b9868/microseism_check_bins.csv": "8ff24208de0e23010ae17c3dced8f0047e8311208d85ccd960a14b9f3f7af10f",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR53/run_20261014T180557Z_18d94c5c/microseism_check_bins.csv": "7189856b67d11c2d1e06eddba12d1dce1a3ae3e28ea274406b2b3fbd2f459e5d",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR55/run_20261014T180612Z_bb37f7fa/microseism_check_bins.csv": "149e2d3da2bb8f206e170254fdad5ce64d960c866ef0610e639cbcc5a03d389c",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/checks/YV.RR56/run_20261014T180623Z_791a9f25/microseism_check_bins.csv": "4817e5cd55b22c5e876bc21779c6c43bf3f8e29aca15b3d8afef39ade1f01b82",
+  "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/summary.json": "68fede255edc524ba05af387d199b3d1bb6b6db9e65aa9dcabbc99187f96c0da",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR01/trial.json": "b9c91ce87a2e91ac1339338463493dd38740eaaac8110ea71186a8bd46c4a243",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR03/trial.json": "aa90172d85b5c4328a64310959103d4fca528d64c3eaefbd17dfada82d97e3a9",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR05/trial.json": "c72398b325c1241dce65d2115dcd62af92a95ac921261faa6ed3ea66d1de99de",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR06/trial.json": "262671ea0db5add64a5b3a366af61bc95a889c9f330294d82e8d32a8083efc58",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR07/trial.json": "af336a744fa449cff67bbcfcf91c3ddbc77f754dd9b4c31770c9dd338a07cd16",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR08/trial.json": "93d4d79634b6b30a530cdf728d543eee270c84673dc1abf11425620d5b127e0e",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR09/trial.json": "b35bd487aff65b4e812c7d01a4700e24b4adf4ca536dde2b069719fc5bf25b45",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR10/trial.json": "c40a5688d29a1c63cbf4afa05affd0c709e446ee74e5f7ef06ba512813d07504",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR11/trial.json": "aa2f516710cc8be792e59f89d3a1e16e36d6a4f1e3adb24735c69fd2f1fba364",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR12/trial.json": "44af2f5d82fd4f0be43063278bb85bc401050e7700b0fc18103688ef25b2bb9b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR13/trial.json": "e84dfda77609c4316fbd9b727e4d739176a0b1f48d36e67dfac2cab1ec4a22c7",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR14/trial.json": "db2d40ca1d5384f9c9a057ec96ef39deaa2e1514c53acc2fec315fae71fa6bd6",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR16/trial.json": "96d63173f7b5ed572c8eb0564b3564d494fe1efc4b009489ba33206ee81ac61b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR17/trial.json": "b98ac1562f3911b36b7554075c66a0c37ec7919509f91286e6a223222512bc2b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR18/trial.json": "31105bd02ab84869a83618ff3b6d66b67709c6806f743af0862038324ef376e5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR19/trial.json": "3aaf70f4e701ef3d709f3b55a7f169154950cd078b29dea6636f130976a25eeb",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR20/trial.json": "9679d1a77d33db6b896b0013626a135a6d3c53e725079b1fa5c937e10566db99",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR21/trial.json": "fa09d2c8d6f7e0dc34313ded6b135ab97a29f59ac80d2e2abf4d5e3d8555f3bc",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR22/trial.json": "cd67a50bea267ba31fb55c2104863397eb190ea1a85c2677092dd04228b02d9e",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR25/trial.json": "9443afb34dd6b8970dd6a9d296a0446e20adc521203a0623779d2788fad4923f",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR26/trial.json": "c77d4dca09672efefbf4af242689e15d820ec55b9e5ca5b9f581fb0efba22613",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR28/trial.json": "524091cec1cccd0cc03d2b1f7ba439dbc39bdf76e857d88f4eefc78bed048e12",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR29/trial.json": "b6e6a2dd82e76f360195333af2ebcfcef0c5a8ad8d6f6f4e719a2d992f8a4caf",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR30/trial.json": "10209269b36784d804446562bd1e46a8c06e9722751c361b07a86c914bb375ce",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR31/trial.json": "9f62773b6c5a106778d69dbb8cb4d3fe6b832c08957146eaace06a2b23cafebf",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR34/trial.json": "67b43068b789c12464912a1145c384aadd262ee1248a84d294ad0dd09b9b6e74",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR36/trial.json": "50bfa83a8389648eb7a6a7e11ef175b9bbb47f1fc92d3e2298f52e06839672a1",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR38/trial.json": "9ab4ed62c02a3b0a406e15021643ebd6a5ce6cfbb7f98012662b7d62cc567828",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR40/trial.json": "3936f9345d68438ccf0d69cbd56e6b1fb8bb2e08a6cffaed743289dd869feb88",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR41/trial.json": "fccda44e3876266cf4f33dfa2cd62c391c19208476b306d61a9556fe07365c48",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR42/trial.json": "31e545b703707853ad2e4347154f22b141a85f6721ea0975d567bc4edcfecd33",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR43/trial.json": "8aa243ef42bd7e7f64b79b1ca38013d56a19741ec534d5e8dd8cec88fbd0d8b1",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR44/trial.json": "b4bcb910f3e5fb83bfebf5afe8cc520990ddf74d103b5d803312d8bc146295b6",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR45/trial.json": "ef318d8d26343967b57608b0a47629df2b28b7a129fc62f2571c0fb7afcedbe8",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR46/trial.json": "d343f7304f740f3f1734584ca06e9a05cf3741dc343138ff8d8f29dd25e3f218",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR47/trial.json": "550d71c5990ba27a03cf3c1731d72cd009346c84acced444e0ad75f613fd1ea5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR48/trial.json": "d570444643002f1f8c2c4c365bb86165a8350ac066a6edab2e9ef92a28fa2070",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR50/trial.json": "603568a57306d8de5b6bdb1d799ed0ad69dadc4adb8590fc750bcc5e5624e5f5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR52/trial.json": "d5ffcb1412c6d3a98a46cab69dd2c07fda8c7849166199a4c692fdbeba8d1391",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR53/trial.json": "dca43d4f7ed2e344d78c82f7a2886e9ad47909055d13742ef61b4238b8f97bb8",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR55/trial.json": "c8cf1a70c83b9fdef82afedb2f4fd5f16c45aacc3560d3ead6aa3543baff9810",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR56/trial.json": "e382879c6af6019fab8dae81c30576d2e193732d1b9e889edd3eb54f90a99b76",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/YV_RR57/trial.json": "d9ec2f6bee5e16b610feb96d02ba6bc3744af24967d493feac8447cf7470ae4c",
+  "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/experiment.json": "446b8e36b94c9952736b9a2c9b2353f0dfb0c95e05e8cc3719b9cea72fcc20cf",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BDH__20121005T055307__58afc2d6f005/inventory.xml": "3d0857fda77648267d5a70dc1c8df4f231c840b02a58a62e16da2d16d14b69e5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BDH__20121005T055307__58afc2d6f005/rayleigh_calibration/run_137d70d92d6c/comparison.json": "5b391ba7776aa50aa2e0025ff0e0fb2bd3ade2efceab0dd5df55e9a25556be1f",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BHZ__20121005T055307__58afc2d6f005/inventory.xml": "04960d50b93ef995333df00860c1e277cd398445b71729881204145363a2ce6b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/inventory.xml": "3a19862b768e60fd5526d1416e9b9bdf772dc82b3efb79a4b7695cf14df20e14",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_1da215e232e6/comparison.json": "44698ac80999918c7bfb2a87ff7c9614f1009a907c226b1beef5251bb8880f74",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BHZ__20121004T133556__58afc2d6f005/inventory.xml": "2c8a9d2b1964766938c4584eb8bd16068f83c713efdc607a50657cb2cd80749a",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BDH__20121002T160728__58afc2d6f005/inventory.xml": "015439aa9fdf80c930282eaeaa0d468659cd8bcf8e21665edafb9f00b49da12c",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BDH__20121002T160728__58afc2d6f005/rayleigh_calibration/run_b61b43e1d070/comparison.json": "0c5e483cb9448f86f307cff06069c4dead73b57f6db0335e10d902567912a909",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BHZ__20121002T160728__58afc2d6f005/inventory.xml": "ab55a4900a0c57457930d59305b1a9cfad87017ad2224e5771d701b8144100bc",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BDH__20121002T113410__58afc2d6f005/inventory.xml": "3e05f0320ed7e08fbc37a786c948b757e438daa9360696217ade3714b4b8e14f",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BDH__20121002T113410__58afc2d6f005/rayleigh_calibration/run_1082cdb70987/comparison.json": "334e996bc08fc9c5663a31c9fc1b67543325c0d8b5c24034a88ef5057dfe2142",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BHZ__20121002T113410__58afc2d6f005/inventory.xml": "9da8125ad45542cac383ef778a64f85d9e1301be362128f883ccaf56a611347a",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/inventory.xml": "755b20488e71540e7ca8d7eb06d950314e9ea6537baf95e966f631a6bbfbd1ab",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_c3cef78b9fb4/comparison.json": "8b6ff0d7272d1ef9ea87d3655dbab278fa7be3f424c36b55344e787d096a4487",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BHZ__20120929T104416__58afc2d6f005/inventory.xml": "cad07232ec47015bd0adc1c795c42b65e1678e44a32521f025f76cfc7b16d05a",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/inventory.xml": "118efd16c2d50ac586cb092bc0eb62c4bfad2b88b9c300e213e2cd19a71c1da6",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_f4958aebec25/comparison.json": "def617c894d8fb431fce3a3f597874761773921a01413b4ffa1650f130b4d535",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BHZ__20120929T130711__58afc2d6f005/inventory.xml": "d570946061b62ac1f30b48b03c7f961c703506d6f55c71e211f7cc5327c69ebc",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/inventory.xml": "58d24de799ee2a298f1ca0b77614ed92a3d05871e2277919a9c86778aff6f0b7",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_1e2a34b22357/comparison.json": "37a70499c842aa806f75c879ff1d602731ae9be0aa19421077ca9818d083ea01",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BHZ__20120930T041457__58afc2d6f005/inventory.xml": "820a092bba70dd4f9c73c210b0c8d094556cc78b1b1995a1f8344c42e3dd2d87",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR10/YV.RR10.00.BDH__20120930T060536__58afc2d6f005/inventory.xml": "9dbacfc6a00096fcd09e4a810d28797c40feb6fd5a23ddaf07d7eea0d6cc6136",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR10/YV.RR10.00.BDH__20120930T060536__58afc2d6f005/rayleigh_calibration/run_deb2ff7b8e21/comparison.json": "e987aa173509ede4b4fd82477097258c2027a94893522c1266cf6763bdf63ace",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR10/YV.RR10.00.BHZ__20120930T060536__58afc2d6f005/inventory.xml": "52a0c366057a62dea0a3173405d488718522d7d6330fd4820f8bb55203832628",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR11/YV.RR11.00.BDH__20120930T091725__58afc2d6f005/inventory.xml": "1c52ffccee171d78b434c51775220d86b7c7aece321e25df652db7ae4c476523",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR11/YV.RR11.00.BDH__20120930T091725__58afc2d6f005/rayleigh_calibration/run_06f3462d5f27/comparison.json": "41a34e56c29eb44b4faf7e556b1eb36aa36cfc03bb675b48fa1525291f8b1e09",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR11/YV.RR11.00.BHZ__20120930T091725__58afc2d6f005/inventory.xml": "408a4dcfd55d9ad96ced7ecc6d3d438a25bd599c55694fb9a316c15731cea834",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR12/YV.RR12.00.BDH__20120930T093206__58afc2d6f005/inventory.xml": "2787f46e2b42d4da9874eeeedcc7c766127316cd4a4ba0d224c9d496f6ac2091",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR12/YV.RR12.00.BDH__20120930T093206__58afc2d6f005/rayleigh_calibration/run_c51d133167b0/comparison.json": "e086dbb526140d0a6f3291b6421500647bc4510ab194e9f339bb7e044379adaf",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR12/YV.RR12.00.BHZ__20120930T093206__58afc2d6f005/inventory.xml": "96c254af4a7f4e92977bb293b7ac85b991aeac249db071cfa198eb533ab8e257",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR13/YV.RR13.00.BDH__20121001T054221__58afc2d6f005/inventory.xml": "ee9d7d8f1387917bf8c3a6c75dd26648546b8a3f00941547e9eb97962e08af91",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR13/YV.RR13.00.BDH__20121001T054221__58afc2d6f005/rayleigh_calibration/run_64ce0b3dae31/comparison.json": "d94ff099ef66ae59dcec53a5e230a978aa7e5512be97325564003b584feea9a5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR13/YV.RR13.00.BHZ__20121001T054221__58afc2d6f005/inventory.xml": "7d29f15483d8c73becac9601b96131399a775e145db7ce999bb15c881c016ef5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR14/YV.RR14.00.BDH__20121001T074339__58afc2d6f005/inventory.xml": "14fb2ceb40b64f50884939d2c804b352737c99a842500b89fc8519703b40d061",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR14/YV.RR14.00.BDH__20121001T074339__58afc2d6f005/rayleigh_calibration/run_c9c9f900c294/comparison.json": "ccee0bc137b596dde651fc5ff912b64f27cbb37bc9c878af72e2bddad36efd6b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR14/YV.RR14.00.BHZ__20121001T074339__58afc2d6f005/inventory.xml": "dbf31af0a45f5bd46b2bbc5713b797163c6a80fa7c6d00cbbff4d4ac48c09782",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR16/YV.RR16.00.BDH__20121001T090913__58afc2d6f005/inventory.xml": "28f4711dd835f6e00934cbe39400ce3bb8b483204a6b35cbf6e8d3a241307508",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR16/YV.RR16.00.BDH__20121001T090913__58afc2d6f005/rayleigh_calibration/run_63a96ea877cd/comparison.json": "11e07d27f0ed95a3c9e1b3aee692e3cbf13774ee1e0d4d4bdb357a4c0b37d3e8",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR16/YV.RR16.00.BHZ__20121001T090913__58afc2d6f005/inventory.xml": "5990e0ed7110649f6a6c3481c2874079b7a149494164f76c209640235fe1ce4c",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/inventory.xml": "718d0fdb7e3429a9c30421a13604e07a138a8087f99365bfd883e8977f8cf7d9",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/rayleigh_calibration/run_4f84bae01f9f/comparison.json": "5f9065d1177a13d299e5947149ec591ad61d2743115d16a76d48fca8d771edd5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BHZ__20121002T155020__58afc2d6f005/inventory.xml": "e5a4f5840639be3ec65f5f5f49b8c42ec6e81d83fd7d2d490d7df6b50adfd54c",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/inventory.xml": "69766b79952ecc14cec75774255b72e54853a5560c336176cf49bdbbaf22842a",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/rayleigh_calibration/run_483529232689/comparison.json": "028dca0e2684f3355bdab512a9c6ce7dd17631d7e87dee074c9902f5aab225c8",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BHZ__20121005T060729__58afc2d6f005/inventory.xml": "c7000e4717f2794e29fe85c7fe01cf493e3c97906330f3ff284079a1717de505",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR19/YV.RR19.00.BDH__20121008T153852__58afc2d6f005/inventory.xml": "c325788b7e29908460199d8f48d702db06e12e816aafe409f0657f5859f769ca",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR19/YV.RR19.00.BDH__20121008T153852__58afc2d6f005/rayleigh_calibration/run_41a73456ccbc/comparison.json": "1761776eadaea251a747ea26a31d469fb7c20a0f9178d0c4e46b896e165c818b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR19/YV.RR19.00.BHZ__20121008T153852__58afc2d6f005/inventory.xml": "ea8edc3e687a1c2de8bf5412629e017025946fdb1ab450a594aa648721b1bc62",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR20/YV.RR20.00.BDH__20121005T085236__58afc2d6f005/inventory.xml": "1ddb0d4a4aa655340199460bfc4b391e0ce53c7477cb63030235d05e86340d4c",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR20/YV.RR20.00.BDH__20121005T085236__58afc2d6f005/rayleigh_calibration/run_22f7a13209f5/comparison.json": "f81e29d8bf9f2f7745d3b3a8700a4769f48dc0a7007792dc9a8d8f4be442df5d",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR20/YV.RR20.00.BHZ__20121005T085236__58afc2d6f005/inventory.xml": "7fcc9da5c494542f19889a978296ebdb9c3b40c6cf229067cd0bed635a2e4786",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR21/YV.RR21.00.BDH__20121006T061529__58afc2d6f005/inventory.xml": "18dfb0607dfb0db64e5651fabf07a32b8e0daed2be8ece8403dac83ed86f3358",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR21/YV.RR21.00.BDH__20121006T061529__58afc2d6f005/rayleigh_calibration/run_6fcbb99a75f1/comparison.json": "caa87f2251bfef7feb99c6b858829f44c3574280ba1b393907546d69674072b2",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR21/YV.RR21.00.BHZ__20121006T061529__58afc2d6f005/inventory.xml": "e9827cbd53d556ab9212f1e418e41cc522f9eba2bc68e400c5431c9f143b86c2",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/inventory.xml": "f319da7555af5d3e62a7e2bf55422b5da00d9a3fc8a40339a5a01802fbd1bbf6",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/rayleigh_calibration/run_15757e4983e5/comparison.json": "9f280f20117c4ec2b8c4550a5fc443c3c9f1c7a4acbd1d2059c59f01d2e6e2f4",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BHZ__20121008T154942__58afc2d6f005/inventory.xml": "d49f570155a77011096cf74776d5a8f14b68208e29044f2eb4952d11aabb8f91",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR25/YV.RR25.00.BDH__20121002T162910__58afc2d6f005/inventory.xml": "69dfbe315f6e00b7d06440b922f8c42c23971f02b05b24bbe32240eaab61158e",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR25/YV.RR25.00.BDH__20121002T162910__58afc2d6f005/rayleigh_calibration/run_1a4302f9168a/comparison.json": "4444eb954ba3cae4d7487b286219f42f97049bcdc89a672ccf3ea0c56d6a2bd4",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR25/YV.RR25.00.BHZ__20121002T162910__58afc2d6f005/inventory.xml": "c1b8b20651244b407af95d110476ec3a9ef319d063617200b9419283332cf35a",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR26/YV.RR26.00.BDH__20121003T152058__58afc2d6f005/inventory.xml": "47e99d2133133f38f4900423a9ecc2fabfbb24b4d8d5f8b6436b8cd74376ea37",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR26/YV.RR26.00.BDH__20121003T152058__58afc2d6f005/rayleigh_calibration/run_49b68e49cba5/comparison.json": "d4e9bff0d124dbe4b583557445a18d118e025dc7e1f499370ff7ea766f1c1f5b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR26/YV.RR26.00.BHZ__20121003T152058__58afc2d6f005/inventory.xml": "e043a9222e99624c2513d6ad889e3b97935332a8340d766e5f5465a943bbcdf6",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR28/YV.RR28.00.BDH__20121010T200000__58afc2d6f005/inventory.xml": "0113dc1dea251c7387014140e1820c00daca67dda33645090e8d8242f29e970f",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR28/YV.RR28.00.BDH__20121010T200000__58afc2d6f005/rayleigh_calibration/run_1301d8126b37/comparison.json": "920aac2a7d91adc89cd3f2873a5b69b46562d077de390b250da81ec65e29d7db",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR28/YV.RR28.00.BHZ__20121010T200000__58afc2d6f005/inventory.xml": "19227cce93758dac17145c4305d17f8b77c2dfac9d22b223618816be8d4c2bdc",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR29/YV.RR29.00.BDH__20121011T095959__58afc2d6f005/inventory.xml": "104cb8b2de729488029258e2c30ecb25493e824f1ef1a2a0476293e4d4b3cd02",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR29/YV.RR29.00.BDH__20121011T095959__58afc2d6f005/rayleigh_calibration/run_9e624ac0eb78/comparison.json": "cca2f5ab54725612452791f7f1eaa929f5dfd7519e705bc875979533589f5552",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR29/YV.RR29.00.BHZ__20121011T095959__58afc2d6f005/inventory.xml": "bc86c75cd6b4bb5aadbdcd86c979cd684184fa5a6b0cda8d4ab158d0c91eab61",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR30/YV.RR30.00.BDH__20121010T111228__58afc2d6f005/inventory.xml": "1814425b34a8b56367365affb099950320172c48e8cab54b133433c57f8ce5cd",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR30/YV.RR30.00.BDH__20121010T111228__58afc2d6f005/rayleigh_calibration/run_633e242ffac6/comparison.json": "29cb50186e939669c07752fdad366ce5b3565d5d958c22513da2eb092b006278",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR30/YV.RR30.00.BHZ__20121010T111228__58afc2d6f005/inventory.xml": "c4dee1667d01dea44035982d3a9007e6803d07274f72059eec5b025731d49700",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR31/YV.RR31.00.BDH__20121130T011100__58afc2d6f005/inventory.xml": "36b53ecbb767b522a16e96a7e678847daebb847daa5ba173f3295843f2a0cc78",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR31/YV.RR31.00.BDH__20121130T011100__58afc2d6f005/rayleigh_calibration/run_6ae9117dac91/comparison.json": "7be080a2910fc642db213558c492188ea0e763f4fca1775c9abfdeb37227789b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR31/YV.RR31.00.BHZ__20121130T011100__58afc2d6f005/inventory.xml": "1dea6300bfb2b95413911b39406582565267bd8c882d8cee72d3e14c99cad591",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR34/YV.RR34.00.BDH__20121115T142100__58afc2d6f005/inventory.xml": "c2a16e54518f29acab0526f3ceaeaecacfb12e55d33183d6e03b22e999ba203d",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR34/YV.RR34.00.BDH__20121115T142100__58afc2d6f005/rayleigh_calibration/run_fe046fdd3929/comparison.json": "a60d2ab73d00700b7d5d44251f15333b63b44d4ed76f99f2c41991a7f0f8a85b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR34/YV.RR34.00.BHZ__20121115T142100__58afc2d6f005/inventory.xml": "23e5be2ed2b28ea791be93c8372d6680fdccbf37e1e21efe96adfb0b76c89762",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR36/YV.RR36.00.BDH__20121014T080000__58afc2d6f005/inventory.xml": "c4bda491b86a40c0d4b0a91783d38cf2a76ca8dd632f6a5b6c98b9c7f654efc4",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR36/YV.RR36.00.BDH__20121014T080000__58afc2d6f005/rayleigh_calibration/run_5c5d8c54d64d/comparison.json": "ce8b451b7fee1058bbda832ff95f549bd9d4a68293fa8b433a3b58d0ea7cf979",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR36/YV.RR36.00.BHZ__20121014T080000__58afc2d6f005/inventory.xml": "b0725f0d34a18d19b4a4aa42d255647f99ca75648a7ad95c21ec47726a419ed9",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR38/YV.RR38.00.BDH__20121015T110000__58afc2d6f005/inventory.xml": "0a8dbde6dfd1f2d94b517edf4bb772f5d9146220bd0d38adea8d1c23bb8d8bea",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR38/YV.RR38.00.BDH__20121015T110000__58afc2d6f005/rayleigh_calibration/run_77b523f588eb/comparison.json": "438cdcbd85ee4f069dea34885f21593117c35e451ff8f76e0a4cc21f4d08b931",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR38/YV.RR38.00.BHZ__20121015T110000__58afc2d6f005/inventory.xml": "aad8f9921814f58445054ff930a8e5f1163e539b81159a86ccbef9d75c2818db",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR40/YV.RR40.00.BDH__20121016T060000__58afc2d6f005/inventory.xml": "f821f42b1b712532e9eae755f9a7b46363f9ec2af24f96ba6b69d50e9415d7d4",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR40/YV.RR40.00.BDH__20121016T060000__58afc2d6f005/rayleigh_calibration/run_186cae3fb586/comparison.json": "08004c3b4b520387127cec73c3a5a09c6810e7aa88b8a5e61b0bc9ea1037e832",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR40/YV.RR40.00.BHZ__20121016T060000__58afc2d6f005/inventory.xml": "3cc272d0cbc4e798707e6abe795643c68e04cfe87c29d3fd004b799493a0290b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR42/YV.RR42.00.BDH__20121015T102842__58afc2d6f005/inventory.xml": "3b10d11f95d0feb1833578a9bd88f194d094cb7e87772338a200ad8d4dc7f659",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR42/YV.RR42.00.BDH__20121015T102842__58afc2d6f005/rayleigh_calibration/run_b7115f0556c0/comparison.json": "4c581ef2994ff1eb398646c07bf6147966e15ed3658a3e35366c9e0766039095",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR42/YV.RR42.00.BHZ__20121015T102842__58afc2d6f005/inventory.xml": "1bea7a8a422e2a5e1a95d853c3b5df77d73f5c37833caf552cc0d2fb28fcc880",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR43/YV.RR43.00.BDH__20121015T114927__58afc2d6f005/inventory.xml": "c35b0efd8ce4b214fb790e0744d531580cc6af92f17b477834c523561b11d743",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR43/YV.RR43.00.BDH__20121015T114927__58afc2d6f005/rayleigh_calibration/run_28144c61feaa/comparison.json": "f1d460929fb426a527dbe6f471e050df125f10dcf81409481312ac2c31209d19",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR43/YV.RR43.00.BHZ__20121015T114927__58afc2d6f005/inventory.xml": "484b5a4526f46be41912bb777e1a7bcba127ceb81f42feb5d44f051e0dad31bd",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR44/YV.RR44.00.BDH__20121015T092154__58afc2d6f005/inventory.xml": "2e112edfafaf748c17be87084fc52552bce7a1d04e08dbc22e32158fe12c015e",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR44/YV.RR44.00.BDH__20121015T092154__58afc2d6f005/rayleigh_calibration/run_3a4cfe565cb4/comparison.json": "fea90fd501b67871bd33691d1b397aec5353b6f24727564e3859ca30efcded53",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR44/YV.RR44.00.BHZ__20121015T092154__58afc2d6f005/inventory.xml": "8674d220ebf894d84748a5161ddcad0d651b58ff95b9e13c4c6d988ff25b2a9b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR45/YV.RR45.00.BDH__20121015T121401__58afc2d6f005/inventory.xml": "51e9bc307892b208e0fb49792ff3a690e2fa8bb40b23ce37834a2fa3ee4832c3",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR45/YV.RR45.00.BDH__20121015T121401__58afc2d6f005/rayleigh_calibration/run_1356a5ebe669/comparison.json": "98383690f4ed2ab1c3d8b7150b531d3658a8e43ea0a05f172478e16fceadd16b",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR45/YV.RR45.00.BHZ__20121015T121401__58afc2d6f005/inventory.xml": "f01e32a7839ee84bc0c7fc11f0186e28fb13522f4d253d366e71844abd56954e",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR46/YV.RR46.00.BDH__20121015T120437__58afc2d6f005/inventory.xml": "213e1fd7ab0729d5b30ffe44e84634caadd9cfc5ac6180b84346b2db6ad5aaf8",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR46/YV.RR46.00.BDH__20121015T120437__58afc2d6f005/rayleigh_calibration/run_c7d4b0d201e3/comparison.json": "9d65176b0e6315c1833c39b19e29a428afb2aa008f8501f665e516a9a2be58dc",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR46/YV.RR46.00.BHZ__20121015T120437__58afc2d6f005/inventory.xml": "b54095dab04e0d4e36003bb02622b3b7e6634093590d167a28d31b0ec90dd958",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR47/YV.RR47.00.BDH__20121016T051340__58afc2d6f005/inventory.xml": "7443ab25825756b6e35f0dfe9895bcbe8778c58cefb0fff191ff2bd9e200ff05",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR47/YV.RR47.00.BDH__20121016T051340__58afc2d6f005/rayleigh_calibration/run_f7d656f65eb4/comparison.json": "db3c7e7b7d087243c24e35c9da7278edda6a110ff041d736b5371967c35d17aa",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR47/YV.RR47.00.BHZ__20121016T051340__58afc2d6f005/inventory.xml": "f0688d0673d396d99d2fec2b236f6f3d0689cb74ec0041f4563abf4fb42def30",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR48/YV.RR48.00.BDH__20121016T050436__58afc2d6f005/inventory.xml": "64a108630e4fca775c9e775361bd7c1005a93ffbceab858849d737686449e159",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR48/YV.RR48.00.BDH__20121016T050436__58afc2d6f005/rayleigh_calibration/run_7e5a788286dc/comparison.json": "a546ddbe7bd08ef1b74538d2647fa6e1ddb9325a8be617227a2fb7267bf84eec",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR48/YV.RR48.00.BHZ__20121016T050436__58afc2d6f005/inventory.xml": "f4c8ad06cc0542ee0075ab655ed8aabd1c7381c26c44eb54b9e2e3bdf415405d",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR50/YV.RR50.00.BDH__20121018T030000__58afc2d6f005/inventory.xml": "6b07cbb66eaa50bc37c4c62b6bb7b4d8373b1d4328877c0018e865abeac5a894",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR50/YV.RR50.00.BDH__20121018T030000__58afc2d6f005/rayleigh_calibration/run_a6a0896467b7/comparison.json": "60c93923c7dbaa6f503957020727b8a30feca055a5a55b1ad9c09e6a90af20a5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR50/YV.RR50.00.BHZ__20121018T030000__58afc2d6f005/inventory.xml": "b91b1027b7721de0e1a0a047013a629a6e8fe97b4ff9443fc3e69ccfdc4373fa",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/inventory.xml": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json": "0d6f7552d45fe1ad59194a6c45dd00501b3bf6ca6c54c8f8f0a324d93a5314e9",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BHZ__20121019T090000__58afc2d6f005/inventory.xml": "6bb01e8992d3dc11a729e9720f34282428805ff35dc03d47bf7f7a8339f19336",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR53/YV.RR53.00.BDH__20121018T064614__58afc2d6f005/inventory.xml": "e844b2d0f3009d1b2eef8000dd7cdd612e536dbcd437eee6c7b01a353acb483e",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR53/YV.RR53.00.BDH__20121018T064614__58afc2d6f005/rayleigh_calibration/run_756a1d4962f1/comparison.json": "029c399bc33eb5dc9a4322a41d94ca16f571afe1ffdf72e47ef8f8e59af5bf20",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR53/YV.RR53.00.BHZ__20121018T064614__58afc2d6f005/inventory.xml": "1358081d23f0c7a6e8230f8603f7eb83cf991032c9b382ed9238d0e4ef91b7a6",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR55/YV.RR55.00.BDH__20121019T115937__58afc2d6f005/inventory.xml": "46b2d0e660a98b96ce2788d4a3a6ebd09be881c984df4192930815fb1ca1aba5",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR55/YV.RR55.00.BDH__20121019T115937__58afc2d6f005/rayleigh_calibration/run_24aa9c4f1527/comparison.json": "9e4b34ba0b9cecd4bd9e30f8e5c64d26e9d04ef504e66fb181c7fcd7907e30de",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR55/YV.RR55.00.BHZ__20121019T115937__58afc2d6f005/inventory.xml": "977e8b8f884f84d35d3a8df564a458a73c39d1073c6447e703f5d49f57c8c3ce",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/inventory.xml": "18f5bca1896c86c063073b9e11506f976e2805648d45bb3d9f50badde2482207",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/rayleigh_calibration/run_701e1afcb0e1/comparison.json": "566bdf041f502d974cfdb0a06b3123f718f24cff96fb5cb579a57bdb6c495aca",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BHZ__20121020T182745__58afc2d6f005/inventory.xml": "4254394d344fb5e794ebe6cb46d7a3433a0574b81a8f125eb88cc1489b821355",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json": "cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh_unresolved/5dc5365bb566abe7_a99fce55.json": "d42e59d0fadebdf99fb670b32140e2eb5a6738d51593d0f4696ffcc593998583",
+  "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh_unresolved/ac5efee3688e43eb_92743361.json": "115df3253691319ef6084028aa1acba47d37a34e45d3d36c65b1e6ca28d3ff6d"
+ }
+}

@@ -1,0 +1,95 @@
+{
+  "scope": "Bounded real-data validation; full network archive not computed",
+  "start_utc": "2013-06-10T00:00:00Z",
+  "end_utc_exclusive": "2013-06-17T00:00:00Z",
+  "ppsd_window_seconds": 10800,
+  "ppsd_overlap": 0.5,
+  "ppsd_workers": 2,
+  "pilot_window_seconds": 44712,
+  "pilot_days": 7,
+  "stage_status_counts": {
+    "ppsd": {
+      "complete": 4
+    },
+    "plots": {
+      "complete": 4
+    },
+    "pressure": {
+      "comparison_only": 3
+    },
+    "infragravity": {
+      "comparison_only": 2,
+      "no_comparable_bins": 1
+    },
+    "pilot": {
+      "comparison_only": 3
+    }
+  },
+  "channels": [
+    {
+      "seed_id": "YV.RR01.00.BDH",
+      "sample_rate_hz": 50.0,
+      "ppsd_windows": 110,
+      "ppsd_units": "Pa^2/Hz",
+      "pressure_status": "comparison_only",
+      "pressure_median_in_range_fraction": 0.46875,
+      "infragravity_status": "comparison_only",
+      "infragravity_compared_bins": 4,
+      "pilot_status": "comparison_only",
+      "pilot_complete_windows": 21,
+      "pilot_retained_windows": 20,
+      "pilot_compared_fft_bins": 587,
+      "pilot_median_mean_minus_model_db": 8.127991759554604
+    },
+    {
+      "seed_id": "YV.RR01.00.BHZ",
+      "sample_rate_hz": 50.0,
+      "ppsd_windows": 110,
+      "ppsd_units": "m^2/s^4/Hz"
+    },
+    {
+      "seed_id": "YV.RR41.00.BDH",
+      "sample_rate_hz": 100.0,
+      "ppsd_windows": 110,
+      "ppsd_units": "Pa^2/Hz",
+      "pressure_status": "comparison_only",
+      "pressure_median_in_range_fraction": 1.0,
+      "infragravity_status": "no_comparable_bins",
+      "infragravity_compared_bins": 0,
+      "pilot_status": "comparison_only",
+      "pilot_complete_windows": 21,
+      "pilot_retained_windows": 20,
+      "pilot_compared_fft_bins": 76,
+      "pilot_median_mean_minus_model_db": 14.336514724344795
+    },
+    {
+      "seed_id": "YV.RR52.00.BDH",
+      "sample_rate_hz": 62.5,
+      "ppsd_windows": 110,
+      "ppsd_units": "Pa^2/Hz",
+      "pressure_status": "comparison_only",
+      "pressure_median_in_range_fraction": 0.7368421052631579,
+      "infragravity_status": "comparison_only",
+      "infragravity_compared_bins": 2,
+      "pilot_status": "comparison_only",
+      "pilot_complete_windows": 21,
+      "pilot_retained_windows": 20,
+      "pilot_compared_fft_bins": 511,
+      "pilot_median_mean_minus_model_db": 17.791081513091395
+    }
+  ],
+  "libraries": {
+    "obspy": "1.5.1",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "pandas": "3.0.6",
+    "openpyxl": "3.1.5"
+  },
+  "software_tests_passed": 47,
+  "rr52_pilot_arrays_identical_to_existing_result": true,
+  "project_master_preserved": true,
+  "project_master_csv_sha256": "cf64c2f354ed89a7be4d3894beac9689c79227a6f3f66fda2b09393d1dd384d1",
+  "calibration_scores_assigned": false,
+  "response_evaluation_note": "FIR normalization warnings observed in some YV evalresp evaluations; original inventories retained."
+}

@@ -1,0 +1,497 @@
+{
+  "scope": "Read-only repository, saved-array and provenance audit; no raw spectra recomputation or calibration acceptance",
+  "source_commit": "c41d0adf9b3f8d03929ed8341f027e06c610e774",
+  "tracked_files": 136,
+  "parsed": {
+    "json": 23,
+    "markdown": 28,
+    "python": 34
+  },
+  "broken_local_links": [],
+  "workflow": [
+    {
+      "path": "results/NETWORKS/TEST/_workflow/infragravity.json",
+      "selected": 43,
+      "entries": 43,
+      "counts": {
+        "comparison_only": 19,
+        "no_comparable_bins": 24
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/TEST/_workflow/nearby.json",
+      "selected": 43,
+      "entries": 43,
+      "counts": {
+        "no_suitable_neighbors": 36,
+        "insufficient_reference_stations": 2,
+        "insufficient_common_days": 1,
+        "exploratory_only": 4
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/TEST/_workflow/paired.json",
+      "selected": 1,
+      "entries": 1,
+      "counts": {
+        "comparison_only": 1
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/TEST/_workflow/pilot.json",
+      "selected": 43,
+      "entries": 43,
+      "counts": {
+        "comparison_only": 39,
+        "failed": 2,
+        "no_comparable_bins": 2
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/TEST/_workflow/plots.json",
+      "selected": 172,
+      "entries": 172,
+      "counts": {
+        "complete": 172
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/TEST/_workflow/ppsd.json",
+      "selected": 172,
+      "entries": 172,
+      "counts": {
+        "complete": 172
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/TEST/_workflow/pressure.json",
+      "selected": 43,
+      "entries": 43,
+      "counts": {
+        "comparison_only": 43
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/TEST/_workflow/rayleigh.json",
+      "selected": 43,
+      "entries": 43,
+      "counts": {
+        "unresolved": 25,
+        "candidate_comparison_under_assumed_sign": 16,
+        "reference_band_unusable": 2
+      },
+      "execution": "complete"
+    },
+    {
+      "path": "results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json",
+      "selected": 25,
+      "entries": 25,
+      "counts": {
+        "candidate_comparison_under_assumed_sign": 22,
+        "unresolved": 3
+      },
+      "execution": "complete"
+    },
+    {
+      "path": "results/NETWORKS/YL_ALL_PPSD/_workflow/ppsd.json",
+      "selected": 40,
+      "entries": 40,
+      "counts": {
+        "complete": 40
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/YL_FIVE_NO_TILT/_workflow/ppsd.json",
+      "selected": 5,
+      "entries": 10,
+      "counts": {
+        "complete": 5
+      },
+      "execution": null
+    },
+    {
+      "path": "results/NETWORKS/YL_FIVE_NO_TILT/_workflow/rayleigh.json",
+      "selected": 5,
+      "entries": 5,
+      "counts": {
+        "candidate_comparison_under_assumed_sign": 4,
+        "unresolved": 1
+      },
+      "execution": "complete"
+    },
+    {
+      "path": "results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json",
+      "selected": 43,
+      "entries": 43,
+      "counts": {
+        "unresolved": 25,
+        "candidate_comparison_under_assumed_sign": 16,
+        "reference_band_unusable": 2
+      },
+      "execution": "complete"
+    }
+  ],
+  "ppsd_channels": 222,
+  "ppsd_segments": 980630,
+  "rayleigh_runs": 116,
+  "rayleigh_events": 5929,
+  "rayleigh_spectra": 2219,
+  "rayleigh_candidate_events": 408,
+  "candidate_windows_containing_first_body_arrivals": 214,
+  "raw_provenance_files": 61694,
+  "csv_excel_cells_checked": 2363760,
+  "scores_nonblank": {
+    "test_pressure_spectrum_vs_expected_noise_levels_score": 0,
+    "test_spectrum_vs_nearby_stations_at_similar_depth_score": 0,
+    "test_pressure_spectrum_vs_predicted_infragravity_levels_score": 0,
+    "calibration_check_pressure_vertical_rayleigh_waves_score": 0,
+    "calibration_check_pressure_vertical_microseisms_score": 0,
+    "calibration_check_pressure_vertical_local_p_waves_score": 0
+  },
+  "historical_protection": [
+    {
+      "snapshot": "results/VALIDATION/YV_rayleigh/conventions_22bf4b45f61d/validation.json",
+      "matched": 2648,
+      "expected_old_master_changes": [
+        "exports/master_inventory.csv",
+        "exports/master_inventory.xlsx"
+      ]
+    },
+    {
+      "snapshot": "docs/yl_all_zha_comparison.json",
+      "matched": 28,
+      "expected_old_master_changes": []
+    }
+  ],
+  "baseline_stat_files": 93784,
+  "baseline_changed": [],
+  "other_saved_diagnostics": {
+    "pressure_expected_result_file": 43,
+    "infragravity_result_file": 43,
+    "raw_godin_pilot": 41,
+    "paired_spectra": 1
+  },
+  "issues": [],
+  "local_audit": "results/VALIDATION/PROJECT_AUDIT/run_843492622eee/audit.json",
+  "local_audit_sha256": "f8b512b7381d2a36212a1ec36e2d454e19869eba3f79d00701b5ad631050e693",
+  "yl_full_interval_check": {
+    "checked": 50,
+    "not_full_or_changed": [],
+    "method": "Read all saved-source MiniSEED headers; compare epoch-clipped available end and full origin to requested PPSD interval; no samples processed"
+  },
+  "verification": {
+    "pytest_passed": 130,
+    "ruff": "passed",
+    "bash_syntax": "passed",
+    "baseline_github_checks": "passed"
+  },
+  "reviewed_code_sha256": {
+    "src/bruitfm/__init__.py": "23974749f9816e9a8bfd122d6c8445929a87ddfdde9bc307a554a3f2f6472279",
+    "src/bruitfm/archive.py": "608f7421813d9608ebb9a412f88d63326bb1b32047d7b4b4aea4609bce5939cb",
+    "src/bruitfm/godin_pilot.py": "0f450d984bd44c7b2935fadd077b180fe78459987bdb2a0ecb173bc9b3d50810",
+    "src/bruitfm/infragravity_test.py": "02e4830d0b773b5574e7f415cb95f46f60939ae55546867d75bf224aaef3eb94",
+    "src/bruitfm/inventory.py": "5319c49100e86d14c350852b5dbc470ebfe982992ef63d2de3fcc6dff3106f2d",
+    "src/bruitfm/nearby_test.py": "5202b0b284728e0dd1afb9871000fe8fb58ef83bb45b4d93115b8dbfc3702b24",
+    "src/bruitfm/network.py": "8038575d82001afba76776466c8d3c7133eebd4c01eec22566625c6ad51528f0",
+    "src/bruitfm/paired_spectra.py": "f5794b58089d0f741af20355dfced632f56af83794a9c5692e60b8826dfc239c",
+    "src/bruitfm/plot_ppsd.py": "dc4e07d74e2eb1a751504af949ac4c58d5bb2089a8b6fa43bd13eebc8d069c4c",
+    "src/bruitfm/ppsd.py": "62f3212e77dab5bccca46a0dd965b7c2cebd7f99b49be0d1def9a59763f2af1a",
+    "src/bruitfm/pressure_test.py": "5b27af9b955cf39b85c5c96be3818a237d7e66c39bd0aeb2bb0cf84259e73996",
+    "src/bruitfm/rayleigh_calibration.py": "8934d72079bb013dc67620becbd8a72c1d0b59ac6cb0ddbfa8fb89afee6a7e86",
+    "src/bruitfm/rayleigh_dispersion.py": "82edd22bd3689eae21c478312127c3ab44b927917e23db743a41df1309884101",
+    "src/bruitfm/rayleigh_network.py": "932704465af13a15c93099b5aa0230a41ed3ea83576cc0730b51dc3dc289777b",
+    "src/bruitfm/rayleigh_validation.py": "4017633aac0feab9f9e7d3f146a5d7a372010acd9bd029c81e1adc475006fe4f"
+  },
+  "limits": [
+    "Arithmetic checks reuse saved spectra and nominal responses; not field certification",
+    "Raw waveform contents were not rehashed or reprocessed; existing size/mtime provenance and current baseline were checked",
+    "Historical YV snapshot master hashes changed with authorized YL registration; current master baseline and YL comparison snapshot match",
+    "No station gains, source metadata, sample timestamps, scores or saved workflows were changed"
+  ],
+  "histogram_range_followup": {
+    "checked_nonzero_channels": 38,
+    "outside_values": 684714,
+    "details": [
+      {
+        "seed": "YV.RR12.00.BDH",
+        "below": 562742,
+        "above": 0,
+        "minimum_db": -3076.526611328125,
+        "maximum_db": 4.015756607055664
+      },
+      {
+        "seed": "YV.RR16.00.BDH",
+        "below": 0,
+        "above": 10,
+        "minimum_db": -64.6218032836914,
+        "maximum_db": 107.97270965576172
+      },
+      {
+        "seed": "YV.RR17.00.BDH",
+        "below": 0,
+        "above": 3259,
+        "minimum_db": -55.8629264831543,
+        "maximum_db": 129.70237731933594
+      },
+      {
+        "seed": "YV.RR18.00.BDH",
+        "below": 0,
+        "above": 451,
+        "minimum_db": -66.68633270263672,
+        "maximum_db": 129.99853515625
+      },
+      {
+        "seed": "YV.RR19.00.BDH",
+        "below": 0,
+        "above": 16,
+        "minimum_db": -62.3924674987793,
+        "maximum_db": 109.3397445678711
+      },
+      {
+        "seed": "YV.RR20.00.BDH",
+        "below": 0,
+        "above": 4,
+        "minimum_db": -64.50857543945312,
+        "maximum_db": 108.7169189453125
+      },
+      {
+        "seed": "YV.RR21.00.BDH",
+        "below": 0,
+        "above": 8,
+        "minimum_db": -58.96841049194336,
+        "maximum_db": 105.85929870605469
+      },
+      {
+        "seed": "YV.RR22.00.BDH",
+        "below": 0,
+        "above": 2,
+        "minimum_db": -61.81502914428711,
+        "maximum_db": 105.32154846191406
+      },
+      {
+        "seed": "YV.RR26.00.BDH",
+        "below": 0,
+        "above": 8,
+        "minimum_db": -59.08252716064453,
+        "maximum_db": 110.67247009277344
+      },
+      {
+        "seed": "YV.RR50.00.BDH",
+        "below": 28556,
+        "above": 88,
+        "minimum_db": -3076.526611328125,
+        "maximum_db": 125.49345397949219
+      },
+      {
+        "seed": "YV.RR50.00.BH1",
+        "below": 28677,
+        "above": 0,
+        "minimum_db": -3076.526611328125,
+        "maximum_db": -0.4320603013038635
+      },
+      {
+        "seed": "YV.RR50.00.BH2",
+        "below": 28677,
+        "above": 0,
+        "minimum_db": -3076.526611328125,
+        "maximum_db": 2.636829137802124
+      },
+      {
+        "seed": "YV.RR50.00.BHZ",
+        "below": 28556,
+        "above": 0,
+        "minimum_db": -3076.526611328125,
+        "maximum_db": -16.276962280273438
+      },
+      {
+        "seed": "YL.A02W..LDH",
+        "below": 0,
+        "above": 28,
+        "minimum_db": -24.955289840698242,
+        "maximum_db": 120.1204605102539
+      },
+      {
+        "seed": "YL.A06W..LDH",
+        "below": 0,
+        "above": 11,
+        "minimum_db": -25.404220581054688,
+        "maximum_db": 120.11349487304688
+      },
+      {
+        "seed": "YL.A08W..LDH",
+        "below": 0,
+        "above": 10,
+        "minimum_db": -24.487058639526367,
+        "maximum_db": 110.00322723388672
+      },
+      {
+        "seed": "YL.A10W..LDH",
+        "below": 0,
+        "above": 29,
+        "minimum_db": -26.58604621887207,
+        "maximum_db": 120.21283721923828
+      },
+      {
+        "seed": "YL.A12W..LDH",
+        "below": 0,
+        "above": 23,
+        "minimum_db": -27.031951904296875,
+        "maximum_db": 118.2732925415039
+      },
+      {
+        "seed": "YL.A14W..LDH",
+        "below": 0,
+        "above": 1473,
+        "minimum_db": -23.55657386779785,
+        "maximum_db": 120.06852722167969
+      },
+      {
+        "seed": "YL.B01W..LDH",
+        "below": 0,
+        "above": 13,
+        "minimum_db": -24.9881649017334,
+        "maximum_db": 104.77244567871094
+      },
+      {
+        "seed": "YL.B04W..LDH",
+        "below": 0,
+        "above": 26,
+        "minimum_db": -23.02932357788086,
+        "maximum_db": 120.08287048339844
+      },
+      {
+        "seed": "YL.B09W..LDH",
+        "below": 0,
+        "above": 20,
+        "minimum_db": -24.971778869628906,
+        "maximum_db": 120.09925079345703
+      },
+      {
+        "seed": "YL.B11W..LDH",
+        "below": 0,
+        "above": 4,
+        "minimum_db": -24.342069625854492,
+        "maximum_db": 103.5133056640625
+      },
+      {
+        "seed": "YL.B14W..LDH",
+        "below": 0,
+        "above": 41,
+        "minimum_db": -25.272510528564453,
+        "maximum_db": 120.06417083740234
+      },
+      {
+        "seed": "YL.C01W..LDH",
+        "below": 0,
+        "above": 32,
+        "minimum_db": -24.630632400512695,
+        "maximum_db": 119.97012329101562
+      },
+      {
+        "seed": "YL.C03W..LDH",
+        "below": 0,
+        "above": 31,
+        "minimum_db": -23.579397201538086,
+        "maximum_db": 120.06037902832031
+      },
+      {
+        "seed": "YL.C05W..LDH",
+        "below": 0,
+        "above": 30,
+        "minimum_db": -26.33396339416504,
+        "maximum_db": 120.08751678466797
+      },
+      {
+        "seed": "YL.C07W..LDH",
+        "below": 0,
+        "above": 26,
+        "minimum_db": -27.12091827392578,
+        "maximum_db": 115.14080810546875
+      },
+      {
+        "seed": "YL.C08W..LDH",
+        "below": 0,
+        "above": 19,
+        "minimum_db": -26.27765464782715,
+        "maximum_db": 119.78439331054688
+      },
+      {
+        "seed": "YL.C09W..LDH",
+        "below": 0,
+        "above": 29,
+        "minimum_db": -26.802995681762695,
+        "maximum_db": 120.02003479003906
+      },
+      {
+        "seed": "YL.C10W..LDH",
+        "below": 0,
+        "above": 59,
+        "minimum_db": -23.231359481811523,
+        "maximum_db": 122.45292663574219
+      },
+      {
+        "seed": "YL.C11W..LDH",
+        "below": 0,
+        "above": 1541,
+        "minimum_db": -24.7619571685791,
+        "maximum_db": 120.07869720458984
+      },
+      {
+        "seed": "YL.C16W..LDH",
+        "below": 0,
+        "above": 29,
+        "minimum_db": -24.006195068359375,
+        "maximum_db": 120.22284698486328
+      },
+      {
+        "seed": "YL.C17W..LDH",
+        "below": 0,
+        "above": 50,
+        "minimum_db": -25.68207359313965,
+        "maximum_db": 120.08592224121094
+      },
+      {
+        "seed": "YL.F02W..LDH",
+        "below": 0,
+        "above": 32,
+        "minimum_db": -24.662879943847656,
+        "maximum_db": 120.16722106933594
+      },
+      {
+        "seed": "YL.N02W..LDH",
+        "below": 0,
+        "above": 31,
+        "minimum_db": -26.395004272460938,
+        "maximum_db": 119.24805450439453
+      },
+      {
+        "seed": "YL.N03W..LDH",
+        "below": 0,
+        "above": 41,
+        "minimum_db": -26.02684783935547,
+        "maximum_db": 120.17202758789062
+      },
+      {
+        "seed": "YL.S01W..LDH",
+        "below": 0,
+        "above": 32,
+        "minimum_db": -24.915950775146484,
+        "maximum_db": 115.79326629638672
+      }
+    ],
+    "interpretation": "Saved arrays retain these values; ObsPy histogram bins collect under/overflow at their edges. Values at about -3076.53 dB reflect its zero-power floor, not measured ultra-low noise."
+  },
+  "post_fix_github_checks": {
+    "commit": "42c321b",
+    "conclusion": "success",
+    "url": "https://github.com/MohammadAmin-Aminian/bruit-fm/actions/runs/37952188324"
+  }
+}

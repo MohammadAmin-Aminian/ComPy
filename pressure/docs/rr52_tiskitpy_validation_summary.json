@@ -1,0 +1,924 @@
+{
+  "status": "unresolved",
+  "station": "YV.RR52",
+  "epoch_keys": [
+    {
+      "Seed_id": "YV.RR52.00.BDH",
+      "channel_start_time": "2012-10-19T09:00:00.000000Z",
+      "channel_end_time": "2013-11-25T05:17:31.000000Z",
+      "inventory_file": "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+    },
+    {
+      "Seed_id": "YV.RR52.00.BH1",
+      "channel_start_time": "2012-10-19T09:00:00.000000Z",
+      "channel_end_time": "2013-11-25T05:17:31.000000Z",
+      "inventory_file": "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+    },
+    {
+      "Seed_id": "YV.RR52.00.BH2",
+      "channel_start_time": "2012-10-19T09:00:00.000000Z",
+      "channel_end_time": "2013-11-25T05:17:31.000000Z",
+      "inventory_file": "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+    },
+    {
+      "Seed_id": "YV.RR52.00.BHZ",
+      "channel_start_time": "2012-10-19T09:00:00.000000Z",
+      "channel_end_time": "2013-11-25T05:17:31.000000Z",
+      "inventory_file": "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+    }
+  ],
+  "settings": {
+    "band_hz": [
+      0.02,
+      0.06
+    ],
+    "depth_m": 2918.0,
+    "density_kg_m3": 1028,
+    "sound_speed_m_s": 1500,
+    "coherence_squared_threshold": 0.95,
+    "phase_limit_deg": 20,
+    "window_seconds": 1800,
+    "segment_seconds": 200,
+    "tilt_method": "tiskitpy",
+    "pressure_sign": -1
+  },
+  "pressure_sign_assumption": {
+    "multiplier": -1,
+    "status": "assumed_needs_confirmation",
+    "reason": "User recalls opposite signs; old RR52 plot inverted pressure",
+    "source_responses_changed": false
+  },
+  "inputs": {
+    "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json": "1cd092f616724bebb8bec935e0acad7de69abca97038b6482ff8099ca76d1385",
+    "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
+  },
+  "source_inventory_sha256": {
+    "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml": "58afc2d6f0056e52cf954bdd5b9fb80e92f9572d44d067b30966a160d2044494"
+  },
+  "response_snapshot_sha256": {
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BH1__20121019T090000__58afc2d6f005/inventory.xml": "fd897ab736eee9aac5ad9d6517e54beaf49dc068ee40ddb5f1fd01ae90cc8e7f",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BHZ__20121019T090000__58afc2d6f005/inventory.xml": "6bb01e8992d3dc11a729e9720f34282428805ff35dc03d47bf7f7a8339f19336",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BH2__20121019T090000__58afc2d6f005/inventory.xml": "d225f60b1e91e2de8691412af914304ce1b2becc164eefd74df1d187fca88596",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/inventory.xml": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e"
+  },
+  "code_sha256": "4559a3bc877a1276f925cdd5bba1d8d1b15e1a255a11a66b8511c1c757c60537",
+  "limitations": [
+    "Candidate multiplier only; no response/master changes",
+    "Historical Earth model and homogeneous water properties are assumptions",
+    "Quiet rotation assumes orthogonal axes; azimuth metadata are incomplete",
+    "Vertical absolute calibration, clock and bathymetry are unverified",
+    "No time-constant calibration or extrapolation outside the fit band",
+    "Manual event isolation and uncertainty validation remain required"
+  ],
+  "events": [
+    {
+      "id": "ak0138esnzr",
+      "origin_utc": "2013-01-05T08:58:14.957000Z",
+      "latitude": 55.228,
+      "longitude": -134.8591,
+      "depth_km": 8.7,
+      "magnitude": 7.5,
+      "magnitude_type": "mw",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ak0138esnzr",
+      "status": "candidate",
+      "start_utc": "2013-01-05T09:49:48.214568Z",
+      "end_utc": "2013-01-05T10:19:48.214568Z",
+      "distance_km": 15696.208965112719,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [],
+      "predicted_first_p_utc": "2013-01-05T09:15:02.947083Z",
+      "predicted_first_s_utc": "2013-01-05T09:25:02.167931Z",
+      "group_arrival_range_seconds": [
+        3958.8479885585316,
+        4051.2344092259445
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/ak0138esnzr_arrival_review.png",
+        "spectra": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/ak0138esnzr_spectra.npz",
+        "table": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/ak0138esnzr_spectra.csv",
+        "plot": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/ak0138esnzr_comparison.png",
+        "waveform": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/ak0138esnzr_waveform.png"
+      },
+      "tilt": {
+        "method": "tiskitpy.CleanRotator",
+        "package_version": "2.3.1",
+        "angle_deg": 0.454340295567633,
+        "azimuth_sensor_basis_deg": 48.2185898356087,
+        "variance_reduction": 0.7243222870790111,
+        "constructor_filter_band_hz": [
+          0.001,
+          0.01
+        ],
+        "optimizer_filter_band_hz": [
+          0.001,
+          0.005
+        ],
+        "earthquake_screen": "preceding interval screened by supplied catalogue",
+        "implicit_catalog_download": false,
+        "horizontal_rotation": false,
+        "reference": "https://tiskitpy.readthedocs.io/latest/classes/clean_rotator.html",
+        "training_rate_hz": 1.0,
+        "response_output": "VEL",
+        "response_prefilter_hz": [
+          0.0003,
+          0.0005,
+          0.03,
+          0.05
+        ],
+        "anti_alias_resampling": "scipy.signal.resample_poly; Kaiser beta=5"
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "rotation_coefficients": [
+        -0.0052833592457220266,
+        -0.005912996507196623,
+        0.9999685604741324
+      ],
+      "tilt_angle_deg": 0.454340295567633,
+      "quiet_vertical_power_ratio": 0.27567771292098886,
+      "median_coherence_squared": 0.9859665472917899,
+      "mean_coherence_squared": 0.9659968811236964,
+      "accepted_bins": 8,
+      "raw_median_coherence_squared": 0.986309683408433,
+      "actual_start_utc": "2013-01-05T09:49:48.218400Z",
+      "segment_count": 9,
+      "diagnostic_pressure_amplitude_multiplier": 0.6764768564223603,
+      "grid_pressure_amplitude_multiplier": 0.676,
+      "diagnostic_relative_rms": 0.060657264409689535,
+      "diagnostic_h1_amplitude_multiplier": 0.6802595150733329,
+      "diagnostic_raw_amplitude_multiplier": 0.6768805988582031,
+      "pressure_multiplier": 0.6764768564223603,
+      "sensitivity_counts_per_pa_multiplier": 1.4782471721037667,
+      "grid_pressure_multiplier": 0.676,
+      "relative_rms": 0.060657264409689535,
+      "signed_pressure_multiplier": -0.6764768564223603,
+      "sign_status": "assumed_needs_confirmation"
+    },
+    {
+      "id": "usc000f1s0",
+      "origin_utc": "2013-02-06T01:12:25.830000Z",
+      "latitude": -10.799,
+      "longitude": 165.114,
+      "depth_km": 24,
+      "magnitude": 8,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usc000f1s0",
+      "status": "arrival_overlap_review",
+      "start_utc": "2013-02-06T01:41:10.893630Z",
+      "end_utc": "2013-02-06T02:11:10.893630Z",
+      "distance_km": 10318.279395239026,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [
+        "usc000f1se"
+      ],
+      "predicted_first_p_utc": "2013-02-06T01:25:36.150826Z",
+      "predicted_first_s_utc": "2013-02-06T01:36:07.878148Z",
+      "group_arrival_range_seconds": [
+        2602.4436677683852,
+        2663.17609703785
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f1s0_arrival_review.png",
+        "spectra": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f1s0_spectra.npz",
+        "table": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f1s0_spectra.csv",
+        "plot": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f1s0_comparison.png",
+        "waveform": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f1s0_waveform.png"
+      },
+      "tilt": {
+        "method": "tiskitpy.CleanRotator",
+        "package_version": "2.3.1",
+        "angle_deg": 0.3256076777075939,
+        "azimuth_sensor_basis_deg": 43.672802039048555,
+        "variance_reduction": 0.5504525442765972,
+        "constructor_filter_band_hz": [
+          0.001,
+          0.01
+        ],
+        "optimizer_filter_band_hz": [
+          0.001,
+          0.005
+        ],
+        "earthquake_screen": "preceding interval screened by supplied catalogue",
+        "implicit_catalog_download": false,
+        "horizontal_rotation": false,
+        "reference": "https://tiskitpy.readthedocs.io/latest/classes/clean_rotator.html",
+        "training_rate_hz": 1.0,
+        "response_output": "VEL",
+        "response_prefilter_hz": [
+          0.0003,
+          0.0005,
+          0.03,
+          0.05
+        ],
+        "anti_alias_resampling": "scipy.signal.resample_poly; Kaiser beta=5"
+      },
+      "quiet_start_utc": "2013-02-05T13:12:25.830000Z",
+      "rotation_coefficients": [
+        -0.004110378345803039,
+        -0.003924228619582672,
+        0.9999838523926967
+      ],
+      "tilt_angle_deg": 0.3256076777075939,
+      "quiet_vertical_power_ratio": 0.4495474557234028,
+      "median_coherence_squared": 0.9930208960061233,
+      "mean_coherence_squared": 0.9816655360552323,
+      "accepted_bins": 8,
+      "raw_median_coherence_squared": 0.9932439423675398,
+      "actual_start_utc": "2013-02-06T01:41:10.909000Z",
+      "segment_count": 9,
+      "diagnostic_pressure_amplitude_multiplier": 0.6635337213354984,
+      "grid_pressure_amplitude_multiplier": 0.664,
+      "diagnostic_relative_rms": 0.05889831311686129,
+      "diagnostic_h1_amplitude_multiplier": 0.6668385812440444,
+      "diagnostic_raw_amplitude_multiplier": 0.6635966146871388,
+      "reason": "Phase convention or arrival overlap needs review"
+    },
+    {
+      "id": "usc000f1se",
+      "origin_utc": "2013-02-06T01:23:19.760000Z",
+      "latitude": -11.183,
+      "longitude": 164.882,
+      "depth_km": 10,
+      "magnitude": 7.1,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usc000f1se",
+      "status": "excluded_cluster",
+      "reason": "Within 24 h of previous selected mainshock"
+    },
+    {
+      "id": "usc000f40j",
+      "origin_utc": "2013-02-08T15:26:38.470000Z",
+      "latitude": -10.928,
+      "longitude": 166.018,
+      "depth_km": 21,
+      "magnitude": 7.1,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usc000f40j",
+      "status": "rejected_qc",
+      "start_utc": "2013-02-08T15:55:45.594500Z",
+      "end_utc": "2013-02-08T16:25:45.594500Z",
+      "distance_km": 10404.993566027093,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [],
+      "predicted_first_p_utc": "2013-02-08T15:39:52.817722Z",
+      "predicted_first_s_utc": "2013-02-08T15:50:25.628888Z",
+      "group_arrival_range_seconds": [
+        2624.314440600658,
+        2685.5572613842814
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f40j_arrival_review.png",
+        "spectra": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f40j_spectra.npz",
+        "table": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f40j_spectra.csv",
+        "plot": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f40j_comparison.png",
+        "waveform": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usc000f40j_waveform.png"
+      },
+      "tilt": {
+        "method": "tiskitpy.CleanRotator",
+        "package_version": "2.3.1",
+        "angle_deg": 0.3593219561002621,
+        "azimuth_sensor_basis_deg": 46.92415538702036,
+        "variance_reduction": 0.9702108355310508,
+        "constructor_filter_band_hz": [
+          0.001,
+          0.01
+        ],
+        "optimizer_filter_band_hz": [
+          0.001,
+          0.005
+        ],
+        "earthquake_screen": "preceding interval screened by supplied catalogue",
+        "implicit_catalog_download": false,
+        "horizontal_rotation": false,
+        "reference": "https://tiskitpy.readthedocs.io/latest/classes/clean_rotator.html",
+        "training_rate_hz": 1.0,
+        "response_output": "VEL",
+        "response_prefilter_hz": [
+          0.0003,
+          0.0005,
+          0.03,
+          0.05
+        ],
+        "anti_alias_resampling": "scipy.signal.resample_poly; Kaiser beta=5"
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "rotation_coefficients": [
+        -0.004283045901886946,
+        -0.00458083816247612,
+        0.9999803353980994
+      ],
+      "tilt_angle_deg": 0.3593219561002621,
+      "quiet_vertical_power_ratio": 0.029789164468949192,
+      "median_coherence_squared": 0.9916069229804159,
+      "mean_coherence_squared": 0.8841872819306092,
+      "accepted_bins": 7,
+      "raw_median_coherence_squared": 0.9915861011257349,
+      "actual_start_utc": "2013-02-08T15:55:45.608200Z",
+      "segment_count": 9,
+      "reason": "Insufficient band coherence"
+    },
+    {
+      "id": "usb000g7x7",
+      "origin_utc": "2013-04-16T10:44:20.180000Z",
+      "latitude": 28.033,
+      "longitude": 61.996,
+      "depth_km": 80,
+      "magnitude": 7.7,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usb000g7x7",
+      "status": "candidate",
+      "start_utc": "2013-04-16T10:52:15.755787Z",
+      "end_utc": "2013-04-16T11:22:15.755787Z",
+      "distance_km": 5406.945238966728,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [],
+      "predicted_first_p_utc": "2013-04-16T10:52:55.696091Z",
+      "predicted_first_s_utc": "2013-04-16T10:59:52.274880Z",
+      "group_arrival_range_seconds": [
+        1363.7225607218998,
+        1395.5473356394052
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000g7x7_arrival_review.png",
+        "spectra": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000g7x7_spectra.npz",
+        "table": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000g7x7_spectra.csv",
+        "plot": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000g7x7_comparison.png",
+        "waveform": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000g7x7_waveform.png"
+      },
+      "tilt": {
+        "method": "tiskitpy.CleanRotator",
+        "package_version": "2.3.1",
+        "angle_deg": 0.3988960229407672,
+        "azimuth_sensor_basis_deg": 63.4900572756434,
+        "variance_reduction": 0.9973429951036733,
+        "constructor_filter_band_hz": [
+          0.001,
+          0.01
+        ],
+        "optimizer_filter_band_hz": [
+          0.001,
+          0.005
+        ],
+        "earthquake_screen": "preceding interval screened by supplied catalogue",
+        "implicit_catalog_download": false,
+        "horizontal_rotation": false,
+        "reference": "https://tiskitpy.readthedocs.io/latest/classes/clean_rotator.html",
+        "training_rate_hz": 1.0,
+        "response_output": "VEL",
+        "response_prefilter_hz": [
+          0.0003,
+          0.0005,
+          0.03,
+          0.05
+        ],
+        "anti_alias_resampling": "scipy.signal.resample_poly; Kaiser beta=5"
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "rotation_coefficients": [
+        -0.0031074467830259312,
+        -0.00622995727916706,
+        0.9999757652848027
+      ],
+      "tilt_angle_deg": 0.3988960229407672,
+      "quiet_vertical_power_ratio": 0.002657004896326698,
+      "median_coherence_squared": 0.9966767067785067,
+      "mean_coherence_squared": 0.9952387783235945,
+      "accepted_bins": 9,
+      "raw_median_coherence_squared": 0.9967031920888072,
+      "actual_start_utc": "2013-04-16T10:52:15.766300Z",
+      "segment_count": 9,
+      "diagnostic_pressure_amplitude_multiplier": 0.6643996738963195,
+      "grid_pressure_amplitude_multiplier": 0.664,
+      "diagnostic_relative_rms": 0.03379404275482601,
+      "diagnostic_h1_amplitude_multiplier": 0.6659662837985986,
+      "diagnostic_raw_amplitude_multiplier": 0.6640318035653372,
+      "pressure_multiplier": 0.6643996738963195,
+      "sensitivity_counts_per_pa_multiplier": 1.5051181379057261,
+      "grid_pressure_multiplier": 0.664,
+      "relative_rms": 0.03379404275482601,
+      "signed_pressure_multiplier": -0.6643996738963195,
+      "sign_status": "assumed_needs_confirmation"
+    },
+    {
+      "id": "usb000gbf8",
+      "origin_utc": "2013-04-19T03:05:52.650000Z",
+      "latitude": 46.221,
+      "longitude": 150.788,
+      "depth_km": 110,
+      "magnitude": 7.2,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usb000gbf8",
+      "status": "rejected_qc",
+      "start_utc": "2013-04-19T03:37:52.605796Z",
+      "end_utc": "2013-04-19T04:07:52.605796Z",
+      "distance_km": 11084.337710903941,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [],
+      "predicted_first_p_utc": "2013-04-19T03:19:23.592854Z",
+      "predicted_first_s_utc": "2013-04-19T03:29:51.637128Z",
+      "group_arrival_range_seconds": [
+        2795.6564638536856,
+        2860.8978408546755
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000gbf8_arrival_review.png",
+        "spectra": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000gbf8_spectra.npz",
+        "table": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000gbf8_spectra.csv",
+        "plot": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000gbf8_comparison.png",
+        "waveform": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000gbf8_waveform.png"
+      },
+      "tilt": {
+        "method": "tiskitpy.CleanRotator",
+        "package_version": "2.3.1",
+        "angle_deg": 0.4002462556138069,
+        "azimuth_sensor_basis_deg": 73.03757042197826,
+        "variance_reduction": 0.9970389757862375,
+        "constructor_filter_band_hz": [
+          0.001,
+          0.01
+        ],
+        "optimizer_filter_band_hz": [
+          0.001,
+          0.005
+        ],
+        "earthquake_screen": "preceding interval screened by supplied catalogue",
+        "implicit_catalog_download": false,
+        "horizontal_rotation": false,
+        "reference": "https://tiskitpy.readthedocs.io/latest/classes/clean_rotator.html",
+        "training_rate_hz": 1.0,
+        "response_output": "VEL",
+        "response_prefilter_hz": [
+          0.0003,
+          0.0005,
+          0.03,
+          0.05
+        ],
+        "anti_alias_resampling": "scipy.signal.resample_poly; Kaiser beta=5"
+      },
+      "quiet_start_utc": "2013-04-18T03:05:52.650000Z",
+      "rotation_coefficients": [
+        -0.002037953145410086,
+        -0.006681646428432743,
+        0.9999756008145222
+      ],
+      "tilt_angle_deg": 0.4002462556138069,
+      "quiet_vertical_power_ratio": 0.002961024213762542,
+      "median_coherence_squared": 0.9910149409690362,
+      "mean_coherence_squared": 0.8709321711535054,
+      "accepted_bins": 7,
+      "raw_median_coherence_squared": 0.9914614724665517,
+      "actual_start_utc": "2013-04-19T03:37:52.607100Z",
+      "segment_count": 9,
+      "reason": "Insufficient band coherence"
+    },
+    {
+      "id": "usb000ief9",
+      "origin_utc": "2013-07-15T14:03:39.880000Z",
+      "latitude": -60.857,
+      "longitude": -25.07,
+      "depth_km": 11,
+      "magnitude": 7.3,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usb000ief9",
+      "status": "rejected_qc",
+      "start_utc": "2013-07-15T14:23:28.321501Z",
+      "end_utc": "2013-07-15T14:53:28.321501Z",
+      "distance_km": 8208.990693872958,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [],
+      "predicted_first_p_utc": "2013-07-15T14:15:14.474211Z",
+      "predicted_first_s_utc": "2013-07-15T14:24:46.534481Z",
+      "group_arrival_range_seconds": [
+        2070.445568657176,
+        2118.7629215405814
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000ief9_arrival_review.png",
+        "spectra": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000ief9_spectra.npz",
+        "table": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000ief9_spectra.csv",
+        "plot": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000ief9_comparison.png",
+        "waveform": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000ief9_waveform.png"
+      },
+      "tilt": {
+        "method": "tiskitpy.CleanRotator",
+        "package_version": "2.3.1",
+        "angle_deg": 0.5045456931193084,
+        "azimuth_sensor_basis_deg": 67.49955239664577,
+        "variance_reduction": 0.9865157282353595,
+        "constructor_filter_band_hz": [
+          0.001,
+          0.01
+        ],
+        "optimizer_filter_band_hz": [
+          0.001,
+          0.005
+        ],
+        "earthquake_screen": "preceding interval screened by supplied catalogue",
+        "implicit_catalog_download": false,
+        "horizontal_rotation": false,
+        "reference": "https://tiskitpy.readthedocs.io/latest/classes/clean_rotator.html",
+        "training_rate_hz": 1.0,
+        "response_output": "VEL",
+        "response_prefilter_hz": [
+          0.0003,
+          0.0005,
+          0.03,
+          0.05
+        ],
+        "anti_alias_resampling": "scipy.signal.resample_poly; Kaiser beta=5"
+      },
+      "quiet_start_utc": "2013-07-15T08:03:39.880000Z",
+      "rotation_coefficients": [
+        -0.00336981249798564,
+        -0.008135490319364365,
+        0.9999612280783207
+      ],
+      "tilt_angle_deg": 0.5045456931193084,
+      "quiet_vertical_power_ratio": 0.01348427176464051,
+      "median_coherence_squared": 0.9951617638944648,
+      "mean_coherence_squared": 0.8889213348131187,
+      "accepted_bins": 7,
+      "raw_median_coherence_squared": 0.9954204461013577,
+      "actual_start_utc": "2013-07-15T14:23:28.332900Z",
+      "segment_count": 9,
+      "reason": "Insufficient band coherence"
+    },
+    {
+      "id": "usb000jyiv",
+      "origin_utc": "2013-09-24T11:29:47.970000Z",
+      "latitude": 26.951,
+      "longitude": 65.5009,
+      "depth_km": 15,
+      "magnitude": 7.7,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usb000jyiv",
+      "status": "unresolved",
+      "start_utc": "2013-09-24T11:37:04.735352Z",
+      "end_utc": "2013-09-24T12:07:04.735352Z",
+      "distance_km": 5254.393924241579,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [],
+      "predicted_first_p_utc": "2013-09-24T11:38:20.338824Z",
+      "predicted_first_s_utc": "2013-09-24T11:45:13.722755Z",
+      "group_arrival_range_seconds": [
+        1325.2465524836089,
+        1356.1734246038918
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000jyiv_arrival_review.png"
+      },
+      "timing_review": {
+        "context": "quiet_training",
+        "channels": [
+          {
+            "seed_id": "YV.RR52.00.BDH",
+            "actual_start_utc": "2013-09-23T23:29:47.971700Z",
+            "offset_from_earliest_seconds": 0.0,
+            "offset_samples": 0.0
+          },
+          {
+            "seed_id": "YV.RR52.00.BH1",
+            "actual_start_utc": "2013-09-23T23:29:47.971800Z",
+            "offset_from_earliest_seconds": 0.0001,
+            "offset_samples": 0.00625
+          },
+          {
+            "seed_id": "YV.RR52.00.BH2",
+            "actual_start_utc": "2013-09-23T23:29:47.971700Z",
+            "offset_from_earliest_seconds": 0.0,
+            "offset_samples": 0.0
+          },
+          {
+            "seed_id": "YV.RR52.00.BHZ",
+            "actual_start_utc": "2013-09-23T23:29:47.971700Z",
+            "offset_from_earliest_seconds": 0.0,
+            "offset_samples": 0.0
+          }
+        ],
+        "phase_bound_deg_at_band_max": 0.00216,
+        "decision": "excluded; investigate offsets before correcting"
+      },
+      "reason": "Unaligned sample grids: start spread 0.0001 s"
+    },
+    {
+      "id": "usb000jzma",
+      "origin_utc": "2013-09-25T16:42:43.170000Z",
+      "latitude": -15.8385,
+      "longitude": -74.5112,
+      "depth_km": 40,
+      "magnitude": 7.1,
+      "magnitude_type": "mww",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usb000jzma",
+      "status": "unresolved",
+      "start_utc": "2013-09-25T17:28:18.794270Z",
+      "end_utc": "2013-09-25T17:58:18.794270Z",
+      "distance_km": 14290.467692783472,
+      "window_review": "needs_visual_review",
+      "window_note": "",
+      "other_predicted_arrival_ids": [],
+      "predicted_first_p_utc": "2013-09-25T16:58:30.331091Z",
+      "predicted_first_s_utc": "2013-09-25T17:08:49.216685Z",
+      "group_arrival_range_seconds": [
+        3604.2963881839637,
+        3688.40874695378
+      ],
+      "files": {
+        "arrival_review": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/usb000jzma_arrival_review.png"
+      },
+      "timing_review": {
+        "context": "quiet_training",
+        "channels": [
+          {
+            "seed_id": "YV.RR52.00.BDH",
+            "actual_start_utc": "2013-09-23T16:42:43.171700Z",
+            "offset_from_earliest_seconds": 0.0,
+            "offset_samples": 0.0
+          },
+          {
+            "seed_id": "YV.RR52.00.BH1",
+            "actual_start_utc": "2013-09-23T16:42:43.171800Z",
+            "offset_from_earliest_seconds": 0.0001,
+            "offset_samples": 0.00625
+          },
+          {
+            "seed_id": "YV.RR52.00.BH2",
+            "actual_start_utc": "2013-09-23T16:42:43.171700Z",
+            "offset_from_earliest_seconds": 0.0,
+            "offset_samples": 0.0
+          },
+          {
+            "seed_id": "YV.RR52.00.BHZ",
+            "actual_start_utc": "2013-09-23T16:42:43.171700Z",
+            "offset_from_earliest_seconds": 0.0,
+            "offset_samples": 0.0
+          }
+        ],
+        "phase_bound_deg_at_band_max": 0.00216,
+        "decision": "excluded; investigate offsets before correcting"
+      },
+      "reason": "Unaligned sample grids: start spread 0.0001 s"
+    }
+  ],
+  "files": {
+    "window_review_template": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/window_review_template.json",
+    "result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0fa112ac43c/comparison.json"
+  },
+  "source_files": [
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.005",
+      "size": 10809344,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.005",
+      "size": 5894144,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.005",
+      "size": 5894144,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.005",
+      "size": 6004736,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.005",
+      "size": 10809344,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.005",
+      "size": 5894144,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.005",
+      "size": 5894144,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.005",
+      "size": 6004736,
+      "mtime_ns": 1715764828000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.036",
+      "size": 9359360,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.036",
+      "size": 5873664,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.036",
+      "size": 5873664,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.036",
+      "size": 5906432,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.037",
+      "size": 9318400,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.037",
+      "size": 5885952,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.037",
+      "size": 5890048,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.037",
+      "size": 6000640,
+      "mtime_ns": 1715764839000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.038",
+      "size": 9056256,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.038",
+      "size": 5881856,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.038",
+      "size": 5881856,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.038",
+      "size": 6004736,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.039",
+      "size": 8200192,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.039",
+      "size": 5869568,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.039",
+      "size": 5869568,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.039",
+      "size": 5890048,
+      "mtime_ns": 1715764840000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.106",
+      "size": 11218944,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.106",
+      "size": 5898240,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.106",
+      "size": 5898240,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.106",
+      "size": 7008256,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.106",
+      "size": 11218944,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.106",
+      "size": 5898240,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.106",
+      "size": 5898240,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.106",
+      "size": 7008256,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.108",
+      "size": 10149888,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.108",
+      "size": 5881856,
+      "mtime_ns": 1715764864000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.108",
+      "size": 5881856,
+      "mtime_ns": 1715764865000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.108",
+      "size": 6201344,
+      "mtime_ns": 1715764865000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.109",
+      "size": 10305536,
+      "mtime_ns": 1715764865000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.109",
+      "size": 5877760,
+      "mtime_ns": 1715764865000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.109",
+      "size": 5885952,
+      "mtime_ns": 1715764865000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.109",
+      "size": 6336512,
+      "mtime_ns": 1715764865000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.196",
+      "size": 11149312,
+      "mtime_ns": 1715764897000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.196",
+      "size": 5976064,
+      "mtime_ns": 1715764897000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.196",
+      "size": 5931008,
+      "mtime_ns": 1715764897000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.196",
+      "size": 6688768,
+      "mtime_ns": 1715764897000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.196",
+      "size": 11149312,
+      "mtime_ns": 1715764897000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH1.D/YV.RR52.00.BH1.D.2013.196",
+      "size": 5976064,
+      "mtime_ns": 1715764897000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BH2.D/YV.RR52.00.BH2.D.2013.196",
+      "size": 5931008,
+      "mtime_ns": 1715764897000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.196",
+      "size": 6688768,
+      "mtime_ns": 1715764897000000000
+    }
+  ],
+  "amplitude_review_events": 3,
+  "diagnostic_median_pressure_amplitude_multiplier": 0.6643996738963195,
+  "diagnostic_event_multiplier_std": 0.007235709565316268,
+  "candidate_events": 2,
+  "reason": "Fewer than three QC-accepted independent events; no station-level estimate",
+  "production_master_unchanged": true,
+  "validation_counts": {
+    "full_bruitfm_suite": 84
+  },
+  "historical_comparison": "docs/rr52_rayleigh_validation_summary.json"
+}

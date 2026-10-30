@@ -1,0 +1,72 @@
+{
+  "source_run": "/Users/mohammadamin/Projects/bruit-fm/results/VALIDATION/YV_HELDOUT/run_20261013T213126Z_87e24fe6",
+  "source_result_sha256": "52aef804ee2d99cc0a5fbf4ccd755aa18512f88404933ea200bc5e5e7ea104e1",
+  "source_code_commit": "026ebf1",
+  "selected_events": 50,
+  "source_hashes_checked": 71,
+  "raw_file_stats_checked": 2208,
+  "sources_unchanged": true,
+  "gain_refitted": false,
+  "gains_applied": false,
+  "summary": [
+    {
+      "station": "RR01",
+      "frozen_gain": 1.0413799616596953,
+      "isolated_usable_events": 0,
+      "isolated_median_error_percent": null,
+      "qc_usable_including_body_review": 1,
+      "qc_only_median_error_percent": -2.0583678440274755,
+      "status": "insufficient_heldout_events"
+    },
+    {
+      "station": "RR06",
+      "frozen_gain": 1.1396787894514488,
+      "isolated_usable_events": 1,
+      "isolated_median_error_percent": -1.0410988955193323,
+      "qc_usable_including_body_review": 3,
+      "qc_only_median_error_percent": -0.5260343686473212,
+      "status": "insufficient_heldout_events"
+    },
+    {
+      "station": "RR48",
+      "frozen_gain": 1.3867103370013885,
+      "isolated_usable_events": 0,
+      "isolated_median_error_percent": null,
+      "qc_usable_including_body_review": 0,
+      "qc_only_median_error_percent": null,
+      "status": "insufficient_heldout_events"
+    },
+    {
+      "station": "RR52",
+      "frozen_gain": 0.6787278140712512,
+      "isolated_usable_events": 14,
+      "isolated_median_error_percent": 0.6641401376585199,
+      "qc_usable_including_body_review": 22,
+      "qc_only_median_error_percent": 0.6375182607714969,
+      "status": "heldout_review"
+    }
+  ],
+  "status_counts": {
+    "RR01": {
+      "input_review": 10,
+      "coherence_review": 39,
+      "arrival_isolation_review": 1
+    },
+    "RR06": {
+      "input_review": 10,
+      "arrival_isolation_review": 2,
+      "isolated_heldout_usable": 1,
+      "coherence_review": 37
+    },
+    "RR48": {
+      "input_review": 41,
+      "coherence_review": 9
+    },
+    "RR52": {
+      "coherence_review": 24,
+      "isolated_heldout_usable": 14,
+      "arrival_isolation_review": 8,
+      "input_review": 4
+    }
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "review_root": "/Users/mohammadamin/Projects/bruit-fm/results/VALIDATION/YV_ARRIVAL_REVIEW/review_20261013T215958Z_fee6a2d2",
+  "replacement_run": "/Users/mohammadamin/Projects/bruit-fm/results/VALIDATION/YV_HELDOUT/RR05_replacement_20261013T215958Z_fee6a2d2",
+  "replacement_selection": {
+    "selection_rule": "Maximize epoch-valid, P/Z header-covered unused windows; break ties by latest joint epoch end, then alphabetical station ID. No new waveform samples or errors examined.",
+    "candidate_pool_rule": "Four newly estimated, non-RR55 stations with response epochs extending beyond 2013-10-28; long coverage and at least four training events. RR48 retained as coverage comparator.",
+    "candidates": [
+      {
+        "station": "RR05",
+        "frozen_gain": 1.1201435166537377,
+        "training_events": 4,
+        "epoch_end_utc": "2013-11-03T00:35:38.000000Z",
+        "eligible_events": 50,
+        "origin_guard_failures": 3,
+        "within_response_epochs": 42,
+        "header_covered_windows": 42
+      },
+      {
+        "station": "RR26",
+        "frozen_gain": 1.088702813782616,
+        "training_events": 4,
+        "epoch_end_utc": "2013-11-02T07:24:09.000000Z",
+        "eligible_events": 50,
+        "origin_guard_failures": 3,
+        "within_response_epochs": 41,
+        "header_covered_windows": 41
+      },
+      {
+        "station": "RR20",
+        "frozen_gain": 1.3415307469704698,
+        "training_events": 7,
+        "epoch_end_utc": "2013-10-30T19:51:39.000000Z",
+        "eligible_events": 50,
+        "origin_guard_failures": 3,
+        "within_response_epochs": 40,
+        "header_covered_windows": 40
+      },
+      {
+        "station": "RR16",
+        "frozen_gain": 1.078308697242057,
+        "training_events": 8,
+        "epoch_end_utc": "2013-10-28T22:38:16.000000Z",
+        "eligible_events": 50,
+        "origin_guard_failures": 2,
+        "within_response_epochs": 40,
+        "header_covered_windows": 40
+      },
+      {
+        "station": "RR48",
+        "frozen_gain": 1.3867103370013885,
+        "training_events": 5,
+        "epoch_end_utc": "2013-06-10T23:28:43.000000Z",
+        "eligible_events": 50,
+        "origin_guard_failures": 3,
+        "within_response_epochs": 9,
+        "header_covered_windows": 9
+      }
+    ],
+    "replacement_station": "RR05",
+    "limitations": [
+      "Headers do not certify sample-grid alignment, finite samples, coherence or mode isolation.",
+      "Not all 15 new-gain stations screened; other eligible stations may have equal or better coverage."
+    ]
+  },
+  "visual_reviews": [
+    {
+      "station": "RR01",
+      "event_id": "usb000k1gb",
+      "original_status": "arrival_isolation_review",
+      "plot": "/Users/mohammadamin/Projects/bruit-fm/results/VALIDATION/YV_ARRIVAL_REVIEW/review_20261013T215958Z_fee6a2d2/waveforms/RR01_usb000k1gb_waveforms.png",
+      "overview_start_utc": "2013-09-28T07:29:06.456200Z",
+      "overview_seconds": 3180.0,
+      "native_rate_hz": 50.0,
+      "predicted_arrivals": [
+        {
+          "phase": "P",
+          "time_utc": "2013-09-28T07:42:44.786550Z"
+        },
+        {
+          "phase": "S",
+          "time_utc": "2013-09-28T07:49:43.056534Z"
+        }
+      ],
+      "original_window_start_utc": "2013-09-28T07:41:43.219689Z",
+      "original_window_end_utc": "2013-09-28T08:11:43.219689Z",
+      "gains_refitted_or_applied": false,
+      "original_qc_changed": false,
+      "curated_plot": "docs/figures/yv_heldout_arrival_review/RR01_usb000k1gb_waveforms.png",
+      "visual_observation": "Large raw-count energy begins near P; the strongest 0.03\u20130.07 Hz packet is later, around/after the reference group arrival. P/S occur early inside the original window; isolated acceptance remains unproven."
+    },
+    {
+      "station": "RR06",
+      "event_id": "usb000kdb4",
+      "original_status": "arrival_isolation_review",
+      "plot": "/Users/mohammadamin/Projects/bruit-fm/results/VALIDATION/YV_ARRIVAL_REVIEW/review_20261013T215958Z_fee6a2d2/waveforms/RR06_usb000kdb4_waveforms.png",
+      "overview_start_utc": "2013-10-15T00:07:32.060000Z",
+      "overview_seconds": 3900.0,
+      "native_rate_hz": 50.0,
+      "predicted_arrivals": [
+        {
+          "phase": "P",
+          "time_utc": "2013-10-15T00:23:59.763977Z"
+        },
+        {
+          "phase": "S",
+          "time_utc": "2013-10-15T00:33:25.780878Z"
+        },
+        {
+          "phase": "SKS",
+          "time_utc": "2013-10-15T00:34:03.775584Z"
+        }
+      ],
+      "original_window_start_utc": "2013-10-15T00:31:53.821653Z",
+      "original_window_end_utc": "2013-10-15T01:01:53.821653Z",
+      "gains_refitted_or_applied": false,
+      "original_qc_changed": false,
+      "curated_plot": "docs/figures/yv_heldout_arrival_review/RR06_usb000kdb4_waveforms.png",
+      "visual_observation": "Predicted S/SKS occur near the window start, with a smaller band-limited pulse. The strongest later packet begins around/after the reference group arrival and continues past the original window. Original arrival-review status retained."
+    },
+    {
+      "station": "RR06",
+      "event_id": "usb000k1gb",
+      "original_status": "arrival_isolation_review",
+      "plot": "/Users/mohammadamin/Projects/bruit-fm/results/VALIDATION/YV_ARRIVAL_REVIEW/review_20261013T215958Z_fee6a2d2/waveforms/RR06_usb000k1gb_waveforms.png",
+      "overview_start_utc": "2013-09-28T07:29:06.460000Z",
+      "overview_seconds": 3180.0,
+      "native_rate_hz": 50.0,
+      "predicted_arrivals": [
+        {
+          "phase": "P",
+          "time_utc": "2013-09-28T07:42:47.773509Z"
+        },
+        {
+          "phase": "S",
+          "time_utc": "2013-09-28T07:49:48.523175Z"
+        }
+      ],
+      "original_window_start_utc": "2013-09-28T07:41:54.146439Z",
+      "original_window_end_utc": "2013-09-28T08:11:54.146439Z",
+      "gains_refitted_or_applied": false,
+      "original_qc_changed": false,
+      "curated_plot": "docs/figures/yv_heldout_arrival_review/RR06_usb000k1gb_waveforms.png",
+      "visual_observation": "Raw body arrivals precede the strongest band-limited P/Z packet; predicted P/S lie inside the original window. Original arrival-review status retained."
+    }
+  ],
+  "replacement_result": {
+    "station": "RR05",
+    "frozen_gain": 1.1201435166537377,
+    "isolated_summary": {
+      "usable_events": 0,
+      "status": "insufficient_heldout_events",
+      "uncertainty_kind": "conditional event spread; systematics omitted"
+    },
+    "qc_only_summary": {
+      "usable_events": 0,
+      "status": "insufficient_heldout_events",
+      "uncertainty_kind": "conditional event spread; systematics omitted"
+    },
+    "status_counts": {
+      "input_review": 10,
+      "coherence_review": 40
+    },
+    "input_reasons": {
+      "Requested window crosses response epoch": 5,
+      "Within-channel sample-grid offset: YV.RR05.00.BDH; 0.0024 s; merge refused": 1,
+      "Within-channel sample-grid offset: YV.RR05.00.BDH; 0.0023 s; merge refused": 1,
+      "Predicted window fails original origin/duration guard": 3
+    },
+    "large_event_coherence_diagnostics": [
+      {
+        "event_id": "usb000kdb4",
+        "source_spectra_sha256": "f8db2588c3b5eb36b3b914b1f6bc8a9e2f8ab60aa4c7954409cfcac5f16eafbd",
+        "mean_coherence_squared": 0.9416751560532224,
+        "median_coherence_squared": 0.9578540896520464,
+        "frequencies_hz": [
+          0.03,
+          0.035,
+          0.04,
+          0.045,
+          0.05,
+          0.055,
+          0.06,
+          0.065,
+          0.07
+        ],
+        "coherence_squared": [
+          0.8108273238155702,
+          0.9178280049103592,
+          0.9578540896520464,
+          0.9901684667562862,
+          0.9957311759462004,
+          0.9806941280186835,
+          0.9891336276913218,
+          0.9462662048509751,
+          0.8865733828375578
+        ],
+        "threshold_unchanged": 0.95
+      },
+      {
+        "event_id": "usc000kn4n",
+        "source_spectra_sha256": "f3874e2c762ac38801bfe51ab0e900779226c41638f5e06651b8efb1ef30249e",
+        "mean_coherence_squared": 0.9018094743754559,
+        "median_coherence_squared": 0.9407341165990685,
+        "frequencies_hz": [
+          0.03,
+          0.035,
+          0.04,
+          0.045,
+          0.05,
+          0.055,
+          0.06,
+          0.065,
+          0.07
+        ],
+        "coherence_squared": [
+          0.6829837297605832,
+          0.8416951136275181,
+          0.9581929671820931,
+          0.9699181352232434,
+          0.9629388181061906,
+          0.9587546220884571,
+          0.9021399142622012,
+          0.8989278525297482,
+          0.9407341165990685
+        ],
+        "threshold_unchanged": 0.95
+      },
+      {
+        "event_id": "usb000jdt7",
+        "source_spectra_sha256": "b58db4017ab579966d80ab668be6634f5d410b4736ef57f5d9c0a8c9b31227d6",
+        "mean_coherence_squared": 0.47822762327394863,
+        "median_coherence_squared": 0.4360769844479615,
+        "frequencies_hz": [
+          0.03,
+          0.035,
+          0.04,
+          0.045,
+          0.05,
+          0.055,
+          0.06,
+          0.065,
+          0.07
+        ],
+        "coherence_squared": [
+          0.36755611994746573,
+          0.28553327007522866,
+          0.3525433376999062,
+          0.42783879306826506,
+          0.6534275137060866,
+          0.4360769844479615,
+          0.6015006853797689,
+          0.5578235937838061,
+          0.6217483113570489
+        ],
+        "threshold_unchanged": 0.95
+      }
+    ]
+  },
+  "source_result_sha256": "6fa96824d7d261452d1ae404624f4f1cf76bffdde8bfd0d9d767761fbae36533",
+  "source_review_sha256": "d72e7f27f397c9a8382f26fff300106465881c368715cc2c3725c4c7acd7b3ab",
+  "source_selection_sha256": "6215f25e58a22e634e510678b82cc335fdef0677deb1dc03db8ed3dbb814d27a",
+  "preservation_checks": [
+    {
+      "study": "coverage selection",
+      "protected_hashes": 66,
+      "raw_file_stats": 2754
+    },
+    {
+      "study": "three waveform reviews",
+      "protected_hashes": 61,
+      "raw_file_stats": 1228
+    },
+    {
+      "study": "RR05 replacement",
+      "protected_hashes": 62,
+      "raw_file_stats": 612
+    },
+    {
+      "study": "original four-station validation recheck",
+      "protected_hashes": 71,
+      "raw_file_stats": 2208
+    }
+  ],
+  "all_checked_inputs_unchanged": true,
+  "gains_refitted_or_applied": false,
+  "qc_labels_or_thresholds_changed": false,
+  "conclusion": "Later strong packets justify prospective window-isolation research; current flags remain. Longer RR05 coverage did not overcome poor coherence. Do not keep selecting stations or windows until errors improve."
+}

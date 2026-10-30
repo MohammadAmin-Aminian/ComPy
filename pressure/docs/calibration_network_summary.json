@@ -1,0 +1,1815 @@
+{
+  "checkpoint_date": "2026-10-12",
+  "scope": "Read-only summary of saved results; no waveform processing, refitting, score edits or applied gains",
+  "unique_networks": 4,
+  "unique_stations": 89,
+  "provisional_gain_estimates": 46,
+  "networks": [
+    {
+      "network": "YV",
+      "workflow": "results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json",
+      "workflow_sha256": "cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2",
+      "execution_status": "complete",
+      "options": {
+        "band": [
+          0.03,
+          0.07
+        ],
+        "pressure_sign": -1,
+        "tilt_method": "none",
+        "min_events": 3,
+        "max_events": 8,
+        "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json",
+        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv"
+      },
+      "station_count": 43,
+      "status_counts": {
+        "unresolved": 25,
+        "candidate_comparison_under_assumed_sign": 16,
+        "reference_band_unusable": 2
+      },
+      "stations": [
+        {
+          "station": "RR01",
+          "seed_id": "YV.RR01.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 1,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 4,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 19
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BDH__20121005T055307__58afc2d6f005/rayleigh_calibration/run_137d70d92d6c/comparison.json",
+          "result_sha256": "5b391ba7776aa50aa2e0025ff0e0fb2bd3ade2efceab0dd5df55e9a25556be1f"
+        },
+        {
+          "station": "RR03",
+          "seed_id": "YV.RR03.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.1240555699483565,
+          "sensitivity_multiplier": 0.8896357321960016,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1,
+            "Insufficient band coherence": 2
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_1da215e232e6/comparison.json",
+          "result_sha256": "44698ac80999918c7bfb2a87ff7c9614f1009a907c226b1beef5251bb8880f74"
+        },
+        {
+          "station": "RR05",
+          "seed_id": "YV.RR05.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 19
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BDH__20121002T160728__58afc2d6f005/rayleigh_calibration/run_b61b43e1d070/comparison.json",
+          "result_sha256": "0c5e483cb9448f86f307cff06069c4dead73b57f6db0335e10d902567912a909"
+        },
+        {
+          "station": "RR06",
+          "seed_id": "YV.RR06.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 7,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 17
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BDH__20121002T113410__58afc2d6f005/rayleigh_calibration/run_1082cdb70987/comparison.json",
+          "result_sha256": "334e996bc08fc9c5663a31c9fc1b67543325c0d8b5c24034a88ef5057dfe2142"
+        },
+        {
+          "station": "RR07",
+          "seed_id": "YV.RR07.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.0791871659768566,
+          "sensitivity_multiplier": 0.9266233249677519,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_c3cef78b9fb4/comparison.json",
+          "result_sha256": "8b6ff0d7272d1ef9ea87d3655dbab278fa7be3f424c36b55344e787d096a4487"
+        },
+        {
+          "station": "RR08",
+          "seed_id": "YV.RR08.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.1596505188461836,
+          "sensitivity_multiplier": 0.862328765217101,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_f4958aebec25/comparison.json",
+          "result_sha256": "def617c894d8fb431fce3a3f597874761773921a01413b4ffa1650f130b4d535"
+        },
+        {
+          "station": "RR09",
+          "seed_id": "YV.RR09.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.1937250435214037,
+          "sensitivity_multiplier": 0.8377138482829105,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 0.0001 s": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_1e2a34b22357/comparison.json",
+          "result_sha256": "37a70499c842aa806f75c879ff1d602731ae9be0aa19421077ca9818d083ea01"
+        },
+        {
+          "station": "RR10",
+          "seed_id": "YV.RR10.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 7,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 17
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR10/YV.RR10.00.BDH__20120930T060536__58afc2d6f005/rayleigh_calibration/run_deb2ff7b8e21/comparison.json",
+          "result_sha256": "e987aa173509ede4b4fd82477097258c2027a94893522c1266cf6763bdf63ace"
+        },
+        {
+          "station": "RR11",
+          "seed_id": "YV.RR11.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.0826583507802883,
+          "sensitivity_multiplier": 0.9236524147061581,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR11/YV.RR11.00.BDH__20120930T091725__58afc2d6f005/rayleigh_calibration/run_06f3462d5f27/comparison.json",
+          "result_sha256": "41a34e56c29eb44b4faf7e556b1eb36aa36cfc03bb675b48fa1525291f8b1e09"
+        },
+        {
+          "station": "RR12",
+          "seed_id": "YV.RR12.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Missing, gapped, nonfinite or flat window": 24,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR12/YV.RR12.00.BDH__20120930T093206__58afc2d6f005/rayleigh_calibration/run_c51d133167b0/comparison.json",
+          "result_sha256": "e086dbb526140d0a6f3291b6421500647bc4510ab194e9f339bb7e044379adaf"
+        },
+        {
+          "station": "RR13",
+          "seed_id": "YV.RR13.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.2236136664429182,
+          "sensitivity_multiplier": 0.8172514147435359,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 2,
+            "Within 24 h of a previously attempted mainshock": 1,
+            "Insufficient band coherence": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR13/YV.RR13.00.BDH__20121001T054221__58afc2d6f005/rayleigh_calibration/run_64ce0b3dae31/comparison.json",
+          "result_sha256": "d94ff099ef66ae59dcec53a5e230a978aa7e5512be97325564003b584feea9a5"
+        },
+        {
+          "station": "RR14",
+          "seed_id": "YV.RR14.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.0956568229260422,
+          "sensitivity_multiplier": 0.9126945400015101,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR14/YV.RR14.00.BDH__20121001T074339__58afc2d6f005/rayleigh_calibration/run_c9c9f900c294/comparison.json",
+          "result_sha256": "ccee0bc137b596dde651fc5ff912b64f27cbb37bc9c878af72e2bddad36efd6b"
+        },
+        {
+          "station": "RR16",
+          "seed_id": "YV.RR16.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 9,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 15
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR16/YV.RR16.00.BDH__20121001T090913__58afc2d6f005/rayleigh_calibration/run_63a96ea877cd/comparison.json",
+          "result_sha256": "11e07d27f0ed95a3c9e1b3aee692e3cbf13774ee1e0d4d4bdb357a4c0b37d3e8"
+        },
+        {
+          "station": "RR17",
+          "seed_id": "YV.RR17.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 11,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 12,
+            "Unaligned sample grids: start spread 0.0001 s": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/rayleigh_calibration/run_4f84bae01f9f/comparison.json",
+          "result_sha256": "5f9065d1177a13d299e5947149ec591ad61d2743115d16a76d48fca8d771edd5"
+        },
+        {
+          "station": "RR18",
+          "seed_id": "YV.RR18.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 4,
+            "Insufficient band coherence": 20,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/rayleigh_calibration/run_483529232689/comparison.json",
+          "result_sha256": "028dca0e2684f3355bdab512a9c6ce7dd17631d7e87dee074c9902f5aab225c8"
+        },
+        {
+          "station": "RR19",
+          "seed_id": "YV.RR19.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 4,
+            "Insufficient band coherence": 20,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR19/YV.RR19.00.BDH__20121008T153852__58afc2d6f005/rayleigh_calibration/run_41a73456ccbc/comparison.json",
+          "result_sha256": "1761776eadaea251a747ea26a31d469fb7c20a0f9178d0c4e46b896e165c818b"
+        },
+        {
+          "station": "RR20",
+          "seed_id": "YV.RR20.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 8,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 16
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR20/YV.RR20.00.BDH__20121005T085236__58afc2d6f005/rayleigh_calibration/run_22f7a13209f5/comparison.json",
+          "result_sha256": "f81e29d8bf9f2f7745d3b3a8700a4769f48dc0a7007792dc9a8d8f4be442df5d"
+        },
+        {
+          "station": "RR21",
+          "seed_id": "YV.RR21.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 7,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 17
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR21/YV.RR21.00.BDH__20121006T061529__58afc2d6f005/rayleigh_calibration/run_6fcbb99a75f1/comparison.json",
+          "result_sha256": "caa87f2251bfef7feb99c6b858829f44c3574280ba1b393907546d69674072b2"
+        },
+        {
+          "station": "RR22",
+          "seed_id": "YV.RR22.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 7,
+            "Insufficient band coherence": 16,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Unaligned sample grids: start spread 0.0001 s": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/rayleigh_calibration/run_15757e4983e5/comparison.json",
+          "result_sha256": "9f280f20117c4ec2b8c4550a5fc443c3c9f1c7a4acbd1d2059c59f01d2e6e2f4"
+        },
+        {
+          "station": "RR25",
+          "seed_id": "YV.RR25.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.1625814466578428,
+          "sensitivity_multiplier": 0.8601547899072125,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 2,
+            "Within 24 h of a previously attempted mainshock": 1,
+            "Insufficient band coherence": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR25/YV.RR25.00.BDH__20121002T162910__58afc2d6f005/rayleigh_calibration/run_1a4302f9168a/comparison.json",
+          "result_sha256": "4444eb954ba3cae4d7487b286219f42f97049bcdc89a672ccf3ea0c56d6a2bd4"
+        },
+        {
+          "station": "RR26",
+          "seed_id": "YV.RR26.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 19
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR26/YV.RR26.00.BDH__20121003T152058__58afc2d6f005/rayleigh_calibration/run_49b68e49cba5/comparison.json",
+          "result_sha256": "d4e9bff0d124dbe4b583557445a18d118e025dc7e1f499370ff7ea766f1c1f5b"
+        },
+        {
+          "station": "RR28",
+          "seed_id": "YV.RR28.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.8195128791834925,
+          "sensitivity_multiplier": 1.2202370766843016,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR28/YV.RR28.00.BDH__20121010T200000__58afc2d6f005/rayleigh_calibration/run_1301d8126b37/comparison.json",
+          "result_sha256": "920aac2a7d91adc89cd3f2873a5b69b46562d077de390b250da81ec65e29d7db"
+        },
+        {
+          "station": "RR29",
+          "seed_id": "YV.RR29.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.7299131673781379,
+          "sensitivity_multiplier": 1.370025976640508,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR29/YV.RR29.00.BDH__20121011T095959__58afc2d6f005/rayleigh_calibration/run_9e624ac0eb78/comparison.json",
+          "result_sha256": "cca2f5ab54725612452791f7f1eaa929f5dfd7519e705bc875979533589f5552"
+        },
+        {
+          "station": "RR30",
+          "seed_id": "YV.RR30.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Insufficient band coherence": 15,
+            "Phase convention or arrival overlap needs review": 9,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR30/YV.RR30.00.BDH__20121010T111228__58afc2d6f005/rayleigh_calibration/run_633e242ffac6/comparison.json",
+          "result_sha256": "29cb50186e939669c07752fdad366ce5b3565d5d958c22513da2eb092b006278"
+        },
+        {
+          "station": "RR31",
+          "seed_id": "YV.RR31.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Insufficient band coherence": 21,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR31/YV.RR31.00.BDH__20121130T011100__58afc2d6f005/rayleigh_calibration/run_6ae9117dac91/comparison.json",
+          "result_sha256": "7be080a2910fc642db213558c492188ea0e763f4fca1775c9abfdeb37227789b"
+        },
+        {
+          "station": "RR34",
+          "seed_id": "YV.RR34.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5852564043561718,
+          "sensitivity_multiplier": 1.7086528102158556,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR34/YV.RR34.00.BDH__20121115T142100__58afc2d6f005/rayleigh_calibration/run_fe046fdd3929/comparison.json",
+          "result_sha256": "a60d2ab73d00700b7d5d44251f15333b63b44d4ed76f99f2c41991a7f0f8a85b"
+        },
+        {
+          "station": "RR36",
+          "seed_id": "YV.RR36.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6535727798235094,
+          "sensitivity_multiplier": 1.5300514814433364,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR36/YV.RR36.00.BDH__20121014T080000__58afc2d6f005/rayleigh_calibration/run_5c5d8c54d64d/comparison.json",
+          "result_sha256": "ce8b451b7fee1058bbda832ff95f549bd9d4a68293fa8b433a3b58d0ea7cf979"
+        },
+        {
+          "station": "RR38",
+          "seed_id": "YV.RR38.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6364844374276042,
+          "sensitivity_multiplier": 1.5711303233769063,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR38/YV.RR38.00.BDH__20121015T110000__58afc2d6f005/rayleigh_calibration/run_77b523f588eb/comparison.json",
+          "result_sha256": "438cdcbd85ee4f069dea34885f21593117c35e451ff8f76e0a4cc21f4d08b931"
+        },
+        {
+          "station": "RR40",
+          "seed_id": "YV.RR40.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.7425859807590932,
+          "sensitivity_multiplier": 1.3466454066070175,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR40/YV.RR40.00.BDH__20121016T060000__58afc2d6f005/rayleigh_calibration/run_186cae3fb586/comparison.json",
+          "result_sha256": "08004c3b4b520387127cec73c3a5a09c6810e7aa88b8a5e61b0bc9ea1037e832"
+        },
+        {
+          "station": "RR41",
+          "seed_id": "YV.RR41.00.BDH",
+          "status": "reference_band_unusable",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Band approaches first water-column resonance",
+          "rejection_counts": {},
+          "result_file": "results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh_unresolved/ac5efee3688e43eb_92743361.json",
+          "result_sha256": "115df3253691319ef6084028aa1acba47d37a34e45d3d36c65b1e6ca28d3ff6d"
+        },
+        {
+          "station": "RR42",
+          "seed_id": "YV.RR42.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Missing, gapped, nonfinite or flat window": 22,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR42/YV.RR42.00.BDH__20121015T102842__58afc2d6f005/rayleigh_calibration/run_b7115f0556c0/comparison.json",
+          "result_sha256": "4c581ef2994ff1eb398646c07bf6147966e15ed3658a3e35366c9e0766039095"
+        },
+        {
+          "station": "RR43",
+          "seed_id": "YV.RR43.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 16
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR43/YV.RR43.00.BDH__20121015T114927__58afc2d6f005/rayleigh_calibration/run_28144c61feaa/comparison.json",
+          "result_sha256": "f1d460929fb426a527dbe6f471e050df125f10dcf81409481312ac2c31209d19"
+        },
+        {
+          "station": "RR44",
+          "seed_id": "YV.RR44.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Insufficient band coherence": 16,
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR44/YV.RR44.00.BDH__20121015T092154__58afc2d6f005/rayleigh_calibration/run_3a4cfe565cb4/comparison.json",
+          "result_sha256": "fea90fd501b67871bd33691d1b397aec5353b6f24727564e3859ca30efcded53"
+        },
+        {
+          "station": "RR45",
+          "seed_id": "YV.RR45.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 2,
+            "Insufficient band coherence": 11,
+            "Within 24 h of a previously attempted mainshock": 18
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR45/YV.RR45.00.BDH__20121015T121401__58afc2d6f005/rayleigh_calibration/run_1356a5ebe669/comparison.json",
+          "result_sha256": "98383690f4ed2ab1c3d8b7150b531d3658a8e43ea0a05f172478e16fceadd16b"
+        },
+        {
+          "station": "RR46",
+          "seed_id": "YV.RR46.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 8,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 13
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR46/YV.RR46.00.BDH__20121015T120437__58afc2d6f005/rayleigh_calibration/run_c7d4b0d201e3/comparison.json",
+          "result_sha256": "9d65176b0e6315c1833c39b19e29a428afb2aa008f8501f665e516a9a2be58dc"
+        },
+        {
+          "station": "RR47",
+          "seed_id": "YV.RR47.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 7,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 14
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR47/YV.RR47.00.BDH__20121016T051340__58afc2d6f005/rayleigh_calibration/run_f7d656f65eb4/comparison.json",
+          "result_sha256": "db3c7e7b7d087243c24e35c9da7278edda6a110ff041d736b5371967c35d17aa"
+        },
+        {
+          "station": "RR48",
+          "seed_id": "YV.RR48.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 8,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 13
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR48/YV.RR48.00.BDH__20121016T050436__58afc2d6f005/rayleigh_calibration/run_7e5a788286dc/comparison.json",
+          "result_sha256": "a546ddbe7bd08ef1b74538d2647fa6e1ddb9325a8be617227a2fb7267bf84eec"
+        },
+        {
+          "station": "RR50",
+          "seed_id": "YV.RR50.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.716796868576758,
+          "sensitivity_multiplier": 1.3950953803489103,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR50/YV.RR50.00.BDH__20121018T030000__58afc2d6f005/rayleigh_calibration/run_a6a0896467b7/comparison.json",
+          "result_sha256": "60c93923c7dbaa6f503957020727b8a30feca055a5a55b1ad9c09e6a90af20a5"
+        },
+        {
+          "station": "RR52",
+          "seed_id": "YV.RR52.00.BDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6787278140712512,
+          "sensitivity_multiplier": 1.4733446593291113,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json",
+          "result_sha256": "0d6f7552d45fe1ad59194a6c45dd00501b3bf6ca6c54c8f8f0a324d93a5314e9"
+        },
+        {
+          "station": "RR53",
+          "seed_id": "YV.RR53.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 10,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 14
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR53/YV.RR53.00.BDH__20121018T064614__58afc2d6f005/rayleigh_calibration/run_756a1d4962f1/comparison.json",
+          "result_sha256": "029c399bc33eb5dc9a4322a41d94ca16f571afe1ffdf72e47ef8f8e59af5bf20"
+        },
+        {
+          "station": "RR55",
+          "seed_id": "YV.RR55.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Grid minimum lies on a boundary; expand justified search bounds": 4,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Phase convention or arrival overlap needs review": 5,
+            "Insufficient band coherence": 15
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR55/YV.RR55.00.BDH__20121019T115937__58afc2d6f005/rayleigh_calibration/run_24aa9c4f1527/comparison.json",
+          "result_sha256": "9e4b34ba0b9cecd4bd9e30f8e5c64d26e9d04ef504e66fb181c7fcd7907e30de"
+        },
+        {
+          "station": "RR56",
+          "seed_id": "YV.RR56.00.BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 18,
+            "Insufficient band coherence": 16
+          },
+          "result_file": "results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/rayleigh_calibration/run_701e1afcb0e1/comparison.json",
+          "result_sha256": "566bdf041f502d974cfdb0a06b3123f718f24cff96fb5cb579a57bdb6c495aca"
+        },
+        {
+          "station": "RR57",
+          "seed_id": "YV.RR57.00.BDH",
+          "status": "reference_band_unusable",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Band approaches first water-column resonance",
+          "rejection_counts": {},
+          "result_file": "results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh_unresolved/5dc5365bb566abe7_a99fce55.json",
+          "result_sha256": "d42e59d0fadebdf99fb670b32140e2eb5a6738d51593d0f4696ffcc593998583"
+        }
+      ]
+    },
+    {
+      "network": "YL",
+      "workflow": "results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json",
+      "workflow_sha256": "be73eb2b080abc093c31a8c323cd9c86ba0d71e90ef05d57a6872315b6fb5cf4",
+      "execution_status": "complete",
+      "options": {
+        "band": [
+          0.03,
+          0.07
+        ],
+        "pressure_sign": 1,
+        "tilt_method": "none",
+        "min_events": 3,
+        "max_events": 8,
+        "event_sampling": "all",
+        "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_YL_ALL_20091120_20101204.json",
+        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+        "earth_model_file": null
+      },
+      "station_count": 25,
+      "status_counts": {
+        "candidate_comparison_under_assumed_sign": 22,
+        "unresolved": 3
+      },
+      "stations": [
+        {
+          "station": "A02W",
+          "seed_id": "YL.A02W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6962199558732434,
+          "sensitivity_multiplier": 1.4363276886335963,
+          "accepted_events": 8,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 15,
+            "Phase convention or arrival overlap needs review": 6,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 9.9e-05 s": 2,
+            "Unaligned sample grids: start spread 0.0001 s": 8,
+            "Missing, gapped, nonfinite or flat window": 7,
+            "Insufficient band coherence": 39,
+            "Within-channel sample-grid offset: YL.A02W..LDH; 0.0024 s; merge refused": 1,
+            "Unaligned sample grids: start spread 3e-06 s": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 3,
+            "Unaligned sample grids: start spread 0.000101 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_FIVE_NO_TILT/YL/A02W/YL.A02W..LDH__20091121T000000__8bfea72e5856/rayleigh_calibration/run_bd88e60be2c6/comparison.json",
+          "result_sha256": "b12d3801f9a35d64347d6c87c2ad171fa946f3b522689994eded77847ba721a0"
+        },
+        {
+          "station": "A06W",
+          "seed_id": "YL.A06W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6916805133773274,
+          "sensitivity_multiplier": 1.4457541894844121,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 15,
+            "Phase convention or arrival overlap needs review": 2,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 2e-06 s": 24,
+            "Unaligned sample grids: start spread 0.0001 s": 3,
+            "Unaligned sample grids: start spread 9.8e-05 s": 1,
+            "Unaligned sample grids: start spread 4e-06 s": 12,
+            "Unaligned sample grids: start spread 3e-06 s": 2,
+            "Within-channel sample-grid offset: YL.A06W..LDH; 0.000997 s; merge refused": 1,
+            "Insufficient band coherence": 20,
+            "Unaligned sample grids: start spread 0.000102 s": 1,
+            "Missing, gapped, nonfinite or flat window": 5,
+            "Unaligned sample grids: start spread 9.7e-05 s": 1,
+            "Unaligned sample grids: start spread 0.000103 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_FIVE_NO_TILT/YL/A06W/YL.A06W..LDH__20091122T000000__d9caed0ac097/rayleigh_calibration/run_22878f90143a/comparison.json",
+          "result_sha256": "2c4c1696f80c5197818e42063f579a405fa90c5ffc62b8acffe039f39433b344"
+        },
+        {
+          "station": "A08W",
+          "seed_id": "YL.A08W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.7302359652536082,
+          "sensitivity_multiplier": 1.3694203621602008,
+          "accepted_events": 9,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 15,
+            "Unaligned sample grids: start spread 2e-06 s": 20,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 3e-06 s": 1,
+            "Missing, gapped, nonfinite or flat window": 13,
+            "Unaligned sample grids: start spread 4e-06 s": 6,
+            "Insufficient band coherence": 18,
+            "Within-channel sample-grid offset: YL.A08W..LDH; 0.001298 s; merge refused": 1,
+            "Unaligned sample grids: start spread 5e-06 s": 2,
+            "Phase convention or arrival overlap needs review": 1,
+            "Unaligned sample grids: start spread 9.8e-05 s": 3,
+            "Unaligned sample grids: start spread 0.000101 s": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_FIVE_NO_TILT/YL/A08W/YL.A08W..LDH__20091122T000000__a16dd0a45c0d/rayleigh_calibration/run_57a3e62d752f/comparison.json",
+          "result_sha256": "72494024125bce3494489176db1b43565760a7c7b60595115bdc61bf33285460"
+        },
+        {
+          "station": "A10W",
+          "seed_id": "YL.A10W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5850303714758279,
+          "sensitivity_multiplier": 1.7093129669103302,
+          "accepted_events": 9,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 18,
+            "Phase convention or arrival overlap needs review": 3,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 2e-06 s": 6,
+            "Missing, gapped, nonfinite or flat window": 10,
+            "Insufficient band coherence": 35,
+            "Within-channel sample-grid offset: YL.A10W..LDH; 0.0015 s; merge refused": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 9
+          },
+          "result_file": "results/NETWORKS/YL_FIVE_NO_TILT/YL/A10W/YL.A10W..LDH__20091122T000000__14ba80b6daa0/rayleigh_calibration/run_e52cc1df8f02/comparison.json",
+          "result_sha256": "83030344e0b80e93572765e0e586e366316cf8d12c43e94b476ee7f62e46a0b1"
+        },
+        {
+          "station": "A12W",
+          "seed_id": "YL.A12W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6394006168044105,
+          "sensitivity_multiplier": 1.5639647096335145,
+          "accepted_events": 19,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 19,
+            "Phase convention or arrival overlap needs review": 4,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 0.0001 s": 7,
+            "Missing, gapped, nonfinite or flat window": 14,
+            "Insufficient band coherence": 23,
+            "Within-channel sample-grid offset: YL.A12W..LDH; 0.0017 s; merge refused": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 3,
+            "Unaligned sample grids: start spread 9.8e-05 s": 1,
+            "Unaligned sample grids: start spread 3e-06 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_FIVE_NO_TILT/YL/A12W/YL.A12W..LDH__20091123T000000__4bb2d10157f3/rayleigh_calibration/run_221fcf985bd3/comparison.json",
+          "result_sha256": "3b603dc1e4784ba5874250fd9dce2e65a43ab9aab34a01c3615c1ec3f36aa035"
+        },
+        {
+          "station": "A14W",
+          "seed_id": "YL.A14W..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 19,
+            "Insufficient band coherence": 52,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 0.0001 s": 9,
+            "Missing, gapped, nonfinite or flat window": 7,
+            "Unaligned sample grids: start spread 2e-06 s": 3,
+            "Within-channel sample-grid offset: YL.A14W..LDH; 0.0027 s; merge refused": 1,
+            "Unaligned sample grids: start spread 0.000102 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/A14W/YL.A14W..LDH__20091123T000000__62a9f83c601a/rayleigh_calibration/run_7202450f7045/comparison.json",
+          "result_sha256": "59affdf0898e371d40d055f96c74dcdc74b680e580a56a8135071905c111ac96"
+        },
+        {
+          "station": "B01W",
+          "seed_id": "YL.B01W..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 14,
+            "Grid minimum lies on a boundary; expand justified search bounds": 4,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 0.0001 s": 14,
+            "Unaligned sample grids: start spread 9.9e-05 s": 3,
+            "Missing, gapped, nonfinite or flat window": 7,
+            "Insufficient band coherence": 35,
+            "Unaligned sample grids: start spread 0.000103 s": 1,
+            "Unaligned sample grids: start spread 9.8e-05 s": 1,
+            "Unaligned sample grids: start spread 0.000101 s": 6,
+            "Within-channel sample-grid offset: YL.B01W..LDH; 0.004799 s; merge refused": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 3,
+            "Unaligned sample grids: start spread 0.0002 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/B01W/YL.B01W..LDH__20091127T000000__bd171fb03356/rayleigh_calibration/run_e3049c70ac68/comparison.json",
+          "result_sha256": "e8d418ed9bb015560f0f994fba341c63aa69c3ad3cffc2ad41295ff960e98856"
+        },
+        {
+          "station": "B04W",
+          "seed_id": "YL.B04W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.7386818107595899,
+          "sensitivity_multiplier": 1.3537628589658859,
+          "accepted_events": 11,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 14,
+            "Unaligned sample grids: start spread 0.000102 s": 4,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 4e-06 s": 5,
+            "Insufficient band coherence": 18,
+            "Unaligned sample grids: start spread 0.0001 s": 4,
+            "Unaligned sample grids: start spread 3e-06 s": 4,
+            "Unaligned sample grids: start spread 2e-06 s": 18,
+            "Within-channel sample-grid offset: YL.B04W..LDH; 0.002703 s; merge refused": 1,
+            "Unaligned sample grids: start spread 9.8e-05 s": 4,
+            "Unaligned sample grids: start spread 9.9e-05 s": 1,
+            "Unaligned sample grids: start spread 5e-06 s": 1,
+            "Unaligned sample grids: start spread 0.000104 s": 1,
+            "Unaligned sample grids: start spread 0.000101 s": 1,
+            "Phase convention or arrival overlap needs review": 1,
+            "Missing, gapped, nonfinite or flat window": 2
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/B04W/YL.B04W..LDH__20091127T000000__c8afb61ab312/rayleigh_calibration/run_d2a12dbc98f1/comparison.json",
+          "result_sha256": "90bb43f4bc55a0b475efb8baf3722b873c28dc3c67fbba97fdf0b3ab80a21789"
+        },
+        {
+          "station": "B09W",
+          "seed_id": "YL.B09W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.793131481220515,
+          "sensitivity_multiplier": 1.2608250002397385,
+          "accepted_events": 12,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 17,
+            "Phase convention or arrival overlap needs review": 1,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 2e-06 s": 19,
+            "Unaligned sample grids: start spread 9.8e-05 s": 3,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Unaligned sample grids: start spread 0.000102 s": 5,
+            "Unaligned sample grids: start spread 0.0001 s": 14,
+            "Within-channel sample-grid offset: YL.B09W..LDH; 0.005302 s; merge refused": 1,
+            "Insufficient band coherence": 10
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/B09W/YL.B09W..LDH__20091127T000000__02424d73ac0f/rayleigh_calibration/run_eafc6df2e132/comparison.json",
+          "result_sha256": "ff0a3c036c185a78e0b1bd7945f52c522548e69f1f7aff46db8e68ddbd82067c"
+        },
+        {
+          "station": "B11W",
+          "seed_id": "YL.B11W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5594242527120012,
+          "sensitivity_multiplier": 1.7875521040644136,
+          "accepted_events": 6,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 17,
+            "Phase convention or arrival overlap needs review": 6,
+            "Within 24 h of a previously attempted mainshock": 53,
+            "Insufficient band coherence": 45,
+            "Missing, gapped, nonfinite or flat window": 6,
+            "Within-channel sample-grid offset: YL.B11W..LDH; 0.0002 s; merge refused": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 6,
+            "Unaligned sample grids: start spread 4e-06 s": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/B11W/YL.B11W..LDH__20091129T000000__31c8b4896280/rayleigh_calibration/run_6672d944ee1a/comparison.json",
+          "result_sha256": "4bc4fc7d8231628b9295510e1caa9c726e8640227e1aa6cc7c90298be81680fe"
+        },
+        {
+          "station": "B14W",
+          "seed_id": "YL.B14W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6497952922760349,
+          "sensitivity_multiplier": 1.5389462064234178,
+          "accepted_events": 15,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 17,
+            "Phase convention or arrival overlap needs review": 4,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Insufficient band coherence": 39,
+            "Missing, gapped, nonfinite or flat window": 7,
+            "Unaligned sample grids: start spread 3e-06 s": 1,
+            "Within-channel sample-grid offset: YL.B14W..LDH; 0.000599 s; merge refused": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 3,
+            "Unaligned sample grids: start spread 0.000101 s": 1,
+            "Unaligned sample grids: start spread 9.7e-05 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/B14W/YL.B14W..LDH__20091127T000000__ca39fc357868/rayleigh_calibration/run_c81c68b54c6f/comparison.json",
+          "result_sha256": "4d5d08f1674c4da18a269ce69a181aed44effbff5cb2ca59a9a9262fc81b6b9f"
+        },
+        {
+          "station": "C01W",
+          "seed_id": "YL.C01W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5760430505111097,
+          "sensitivity_multiplier": 1.7359813630469512,
+          "accepted_events": 5,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 14,
+            "Phase convention or arrival overlap needs review": 3,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Insufficient band coherence": 49,
+            "Missing, gapped, nonfinite or flat window": 7,
+            "Unaligned sample grids: start spread 0.0001 s": 4,
+            "Unaligned sample grids: start spread 2e-06 s": 7,
+            "Within-channel sample-grid offset: YL.C01W..LDH; 0.0008 s; merge refused": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C01W/YL.C01W..LDH__20091126T000000__d233642da3a4/rayleigh_calibration/run_0f859a8abe55/comparison.json",
+          "result_sha256": "6a868519c96ad8a0e330187948c2c7fa1843da14f81aefab4c7277a501ea2ec4"
+        },
+        {
+          "station": "C03W",
+          "seed_id": "YL.C03W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6879419793040048,
+          "sensitivity_multiplier": 1.45361095860396,
+          "accepted_events": 7,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 14,
+            "Phase convention or arrival overlap needs review": 3,
+            "Within 24 h of a previously attempted mainshock": 56,
+            "Unaligned sample grids: start spread 3e-06 s": 14,
+            "Unaligned sample grids: start spread 0.0001 s": 5,
+            "Insufficient band coherence": 28,
+            "Unaligned sample grids: start spread 0.000103 s": 2,
+            "Unaligned sample grids: start spread 0.000101 s": 3,
+            "Unaligned sample grids: start spread 9.9e-05 s": 3,
+            "Within-channel sample-grid offset: YL.C03W..LDH; 0.002703 s; merge refused": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 3,
+            "Missing, gapped, nonfinite or flat window": 6,
+            "Unaligned sample grids: start spread 0.000102 s": 1,
+            "Unaligned sample grids: start spread 5e-06 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C03W/YL.C03W..LDH__20091125T000000__d64cf978f644/rayleigh_calibration/run_524211b9656f/comparison.json",
+          "result_sha256": "f3ed1cfc8ee6397c30f07a6c2ed2eebcb19c872d00eb1986fef07cd2cd97a0f9"
+        },
+        {
+          "station": "C05W",
+          "seed_id": "YL.C05W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5846554732077656,
+          "sensitivity_multiplier": 1.7104090286086073,
+          "accepted_events": 20,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 14,
+            "Unaligned sample grids: start spread 2e-06 s": 2,
+            "Within 24 h of a previously attempted mainshock": 56,
+            "Unaligned sample grids: start spread 0.0001 s": 10,
+            "Missing, gapped, nonfinite or flat window": 13,
+            "Phase convention or arrival overlap needs review": 3,
+            "Insufficient band coherence": 25,
+            "Within-channel sample-grid offset: YL.C05W..LDH; 0.002 s; merge refused": 1,
+            "Unaligned sample grids: start spread 9.8e-05 s": 1,
+            "Unaligned sample grids: start spread 0.000102 s": 2
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C05W/YL.C05W..LDH__20091125T000000__79c42390b572/rayleigh_calibration/run_f5d0ed7cf634/comparison.json",
+          "result_sha256": "b573e5fc7606dde5335be3e5b5bdbace4cc9e7173fc6985d0fddbfc7cd28c834"
+        },
+        {
+          "station": "C07W",
+          "seed_id": "YL.C07W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.2690709084103596,
+          "sensitivity_multiplier": 3.7164924514057898,
+          "accepted_events": 21,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 17,
+            "Phase convention or arrival overlap needs review": 6,
+            "Within 24 h of a previously attempted mainshock": 56,
+            "Unaligned sample grids: start spread 0.000102 s": 3,
+            "Unaligned sample grids: start spread 2e-06 s": 24,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Within-channel sample-grid offset: YL.C07W..LDH; 0.000502 s; merge refused": 1,
+            "Unaligned sample grids: start spread 3e-06 s": 2,
+            "Insufficient band coherence": 10
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C07W/YL.C07W..LDH__20091124T000000__5b494ac9f526/rayleigh_calibration/run_621bf2f89b89/comparison.json",
+          "result_sha256": "16a90c072c2d216abf828a01b507e95361eead2456d4a455ab92f315b9b3c8d7"
+        },
+        {
+          "station": "C08W",
+          "seed_id": "YL.C08W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5926242219216802,
+          "sensitivity_multiplier": 1.6874099353504954,
+          "accepted_events": 10,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 15,
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 56,
+            "Unaligned sample grids: start spread 0.0001 s": 5,
+            "Unaligned sample grids: start spread 2e-06 s": 9,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Insufficient band coherence": 36,
+            "Unaligned sample grids: start spread 9.7e-05 s": 1,
+            "Within-channel sample-grid offset: YL.C08W..LDH; 0.0011 s; merge refused": 1,
+            "Unaligned sample grids: start spread 0.000101 s": 1,
+            "Unaligned sample grids: start spread 0.000102 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C08W/YL.C08W..LDH__20091124T000000__d1f52db80541/rayleigh_calibration/run_6f2fec9b30c3/comparison.json",
+          "result_sha256": "8008c443bbf81fae7db5a8d9a71d4de9afe6f9adc165093c9048c83ee312f6a7"
+        },
+        {
+          "station": "C09W",
+          "seed_id": "YL.C09W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5753031014637088,
+          "sensitivity_multiplier": 1.7382141647694245,
+          "accepted_events": 31,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 15,
+            "Phase convention or arrival overlap needs review": 6,
+            "Within 24 h of a previously attempted mainshock": 56,
+            "Unaligned sample grids: start spread 2e-06 s": 2,
+            "Unaligned sample grids: start spread 0.0001 s": 12,
+            "Unaligned sample grids: start spread 0.000101 s": 2,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Within-channel sample-grid offset: YL.C09W..LDH; 0.0022 s; merge refused": 1,
+            "Insufficient band coherence": 15
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C09W/YL.C09W..LDH__20091124T000000__b03e50938908/rayleigh_calibration/run_fcfb5a46632c/comparison.json",
+          "result_sha256": "1c9500a2184bb6b035ea67573a230b33e17b8d26183ccd375c1b15fac1443b12"
+        },
+        {
+          "station": "C10W",
+          "seed_id": "YL.C10W..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 1,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 14,
+            "Phase convention or arrival overlap needs review": 2,
+            "Within 24 h of a previously attempted mainshock": 56,
+            "Insufficient band coherence": 51,
+            "Unaligned sample grids: start spread 2e-06 s": 8,
+            "Unaligned sample grids: start spread 9.9e-05 s": 1,
+            "Missing, gapped, nonfinite or flat window": 10,
+            "Within-channel sample-grid offset: YL.C10W..LDH; 0.0014 s; merge refused": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 3
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C10W/YL.C10W..LDH__20091125T000000__80851e783255/rayleigh_calibration/run_e8ad60922538/comparison.json",
+          "result_sha256": "69cc8aa2ab75bf7aad3657f5cbf10bdcecf172ac0f983beae0fe0b0f413b1c3e"
+        },
+        {
+          "station": "C11W",
+          "seed_id": "YL.C11W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5777985073077174,
+          "sensitivity_multiplier": 1.7307071364021909,
+          "accepted_events": 14,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 14,
+            "Phase convention or arrival overlap needs review": 4,
+            "Within 24 h of a previously attempted mainshock": 56,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Insufficient band coherence": 35,
+            "Unaligned sample grids: start spread 2e-06 s": 5,
+            "Within-channel sample-grid offset: YL.C11W..LDH; 0.0011 s; merge refused": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 10
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C11W/YL.C11W..LDH__20091125T000000__e6794b64c948/rayleigh_calibration/run_ad5fd0541ad6/comparison.json",
+          "result_sha256": "bd42ab330f8c0c2ab9116349d2ca982ae39d9276b76091da4b8b5c086f975453"
+        },
+        {
+          "station": "C16W",
+          "seed_id": "YL.C16W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5911584759662192,
+          "sensitivity_multiplier": 1.6915937784120403,
+          "accepted_events": 14,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 19,
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 2e-06 s": 6,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Insufficient band coherence": 33,
+            "Within-channel sample-grid offset: YL.C16W..LDH; 0.000499 s; merge refused": 1,
+            "Unaligned sample grids: start spread 9.9e-05 s": 2,
+            "Unaligned sample grids: start spread 0.000101 s": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 3
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C16W/YL.C16W..LDH__20091124T000000__391aff5163ab/rayleigh_calibration/run_03fe13689868/comparison.json",
+          "result_sha256": "0a51ec2b5e89aef9ca6f404cf0405f9de85cb544b36a7237683c404d68523de2"
+        },
+        {
+          "station": "C17W",
+          "seed_id": "YL.C17W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.7311201527288865,
+          "sensitivity_multiplier": 1.3677642399372067,
+          "accepted_events": 24,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 19,
+            "Phase convention or arrival overlap needs review": 3,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 0.0001 s": 8,
+            "Missing, gapped, nonfinite or flat window": 7,
+            "Unaligned sample grids: start spread 2e-06 s": 8,
+            "Insufficient band coherence": 22,
+            "Within-channel sample-grid offset: YL.C17W..LDH; 0.0018 s; merge refused": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/C17W/YL.C17W..LDH__20091123T000000__4c1e1a3c4748/rayleigh_calibration/run_fd1fa8bc3a78/comparison.json",
+          "result_sha256": "49d77737c757b77a6125175bb1a63c00eaa3d7a4a06b18cff75e49046de62efc"
+        },
+        {
+          "station": "F02W",
+          "seed_id": "YL.F02W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.7316405333007057,
+          "sensitivity_multiplier": 1.3667914152987448,
+          "accepted_events": 17,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 15,
+            "Phase convention or arrival overlap needs review": 4,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Missing, gapped, nonfinite or flat window": 9,
+            "Unaligned sample grids: start spread 0.000101 s": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 2,
+            "Insufficient band coherence": 37,
+            "Within-channel sample-grid offset: YL.F02W..LDH; 0.0006 s; merge refused": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 4,
+            "Unaligned sample grids: start spread 3e-06 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/F02W/YL.F02W..LDH__20091120T000000__8f3ad6fb1de3/rayleigh_calibration/run_a2003c25c5c0/comparison.json",
+          "result_sha256": "f35e1397c257788ece086e174a4c3ef0623fb1bac36c98b6e1c6dda3effcd5b0"
+        },
+        {
+          "station": "N02W",
+          "seed_id": "YL.N02W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.6101424391420693,
+          "sensitivity_multiplier": 1.6389615536433024,
+          "accepted_events": 16,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 17,
+            "Phase convention or arrival overlap needs review": 5,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 9.8e-05 s": 3,
+            "Unaligned sample grids: start spread 9.9e-05 s": 2,
+            "Unaligned sample grids: start spread 2e-06 s": 6,
+            "Unaligned sample grids: start spread 3e-06 s": 11,
+            "Within-channel sample-grid offset: YL.N02W..LDH; 0.003198 s; merge refused": 1,
+            "Unaligned sample grids: start spread 0.0001 s": 5,
+            "Unaligned sample grids: start spread 0.000101 s": 4,
+            "Missing, gapped, nonfinite or flat window": 4,
+            "Insufficient band coherence": 11,
+            "Unaligned sample grids: start spread 0.000103 s": 2,
+            "Unaligned sample grids: start spread 9.7e-05 s": 1,
+            "Unaligned sample grids: start spread 9.5e-05 s": 1,
+            "Unaligned sample grids: start spread 3.1e-05 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/N02W/YL.N02W..LDH__20091128T000000__f9dff5786e51/rayleigh_calibration/run_5b2e40be7119/comparison.json",
+          "result_sha256": "339c51e86482c9314edb7c403bc098642a6ab50c68f3a58fadb825d67421e157"
+        },
+        {
+          "station": "N03W",
+          "seed_id": "YL.N03W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5810293801069992,
+          "sensitivity_multiplier": 1.7210833638323855,
+          "accepted_events": 20,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 17,
+            "Unaligned sample grids: start spread 0.0001 s": 7,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Insufficient band coherence": 25,
+            "Phase convention or arrival overlap needs review": 4,
+            "Within-channel sample-grid offset: YL.N03W..LDH; 0.0023 s; merge refused": 1,
+            "Unaligned sample grids: start spread 2e-06 s": 7,
+            "Unaligned sample grids: start spread 9.9e-05 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/N03W/YL.N03W..LDH__20091128T000000__4f9f84d1185d/rayleigh_calibration/run_e88ea28accf8/comparison.json",
+          "result_sha256": "782e87574b950579f48ebc15e80c8d321c14efc628266ccdbe5d4eb676cdba98"
+        },
+        {
+          "station": "S01W",
+          "seed_id": "YL.S01W..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.5942956646498185,
+          "sensitivity_multiplier": 1.6826641341717306,
+          "accepted_events": 5,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 15,
+            "Phase convention or arrival overlap needs review": 3,
+            "Within 24 h of a previously attempted mainshock": 55,
+            "Unaligned sample grids: start spread 2e-06 s": 7,
+            "Unaligned sample grids: start spread 9.8e-05 s": 1,
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Insufficient band coherence": 40,
+            "Unaligned sample grids: start spread 0.0001 s": 10,
+            "Within-channel sample-grid offset: YL.S01W..LDH; 0.0019 s; merge refused": 1,
+            "Unaligned sample grids: start spread 9.7e-05 s": 1
+          },
+          "result_file": "results/NETWORKS/YL_ALL_PPSD/YL/S01W/YL.S01W..LDH__20091122T000000__d3985066d8f9/rayleigh_calibration/run_a124efe977d7/comparison.json",
+          "result_sha256": "d70cfd21162092670fd26b71884c1d1b2685bc597ae9954f88c590327609b8ac"
+        }
+      ]
+    },
+    {
+      "network": "7D",
+      "workflow": "results/NETWORKS/7D_ALL_NO_TILT/_workflow/rayleigh.json",
+      "workflow_sha256": "c5ba5da08acc61bebcf897a5d73c631926eca9152289e9b59c35c93122ac7569",
+      "execution_status": "complete",
+      "options": {
+        "band": [
+          0.03,
+          0.07
+        ],
+        "pressure_sign": 1,
+        "tilt_method": "none",
+        "min_events": 3,
+        "max_events": 8,
+        "event_sampling": "all",
+        "catalog": "results/NETWORKS/7D_ALL_NO_TILT/_inputs/catalog_usgs_m5p5.json",
+        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+        "earth_model_file": null
+      },
+      "station_count": 15,
+      "status_counts": {
+        "unresolved": 11,
+        "candidate_comparison_under_assumed_sign": 4
+      },
+      "stations": [
+        {
+          "station": "J28A",
+          "seed_id": "7D.J28A..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 0.0291 s": 1,
+            "Unaligned sample grids: start spread 0.029001 s": 2,
+            "Unaligned sample grids: start spread 0.029 s": 7,
+            "Within 24 h of a previously attempted mainshock": 2
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J28A/7D.J28A..LDH__20111116T000000__8eddb0417931/rayleigh_calibration/run_882d82ed55f0/comparison.json",
+          "result_sha256": "42d1f8926d8969748cc54bfbd525ba21402b8e923a90c4284de03a4c92ab02c1"
+        },
+        {
+          "station": "J29A",
+          "seed_id": "7D.J29A..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 2,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 2e-06 s": 6,
+            "Within 24 h of a previously attempted mainshock": 2,
+            "Insufficient band coherence": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J29A/7D.J29A..LDH__20111120T000000__8eddb0417931/rayleigh_calibration/run_10dcdc81e6b8/comparison.json",
+          "result_sha256": "a72d35eaf2582d083f74985401ded184b456ab8eb396827e7ef151ea1d7c874c"
+        },
+        {
+          "station": "J30A",
+          "seed_id": "7D.J30A..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.9806128162341341,
+          "sensitivity_multiplier": 1.0197704776491896,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 2e-06 s": 1,
+            "Insufficient band coherence": 5,
+            "Within 24 h of a previously attempted mainshock": 2
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J30A/7D.J30A..LDH__20111120T000000__8eddb0417931/rayleigh_calibration/run_30c3fa590c5d/comparison.json",
+          "result_sha256": "36faf1baebd63e790c78b251f3784dc19b544278c8b9a0171a394d2863b660ef"
+        },
+        {
+          "station": "J35A",
+          "seed_id": "7D.J35A..BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Phase convention or arrival overlap needs review": 5,
+            "Missing, gapped, nonfinite or flat window": 1,
+            "Reviewed window must follow origin and span at most 2 h": 1,
+            "Insufficient band coherence": 9,
+            "Within-channel sample-grid offset: 7D.J35A..BDH; 0.0022 s; merge refused": 1,
+            "Within 24 h of a previously attempted mainshock": 2
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J35A/7D.J35A..BDH__20111019T232500__8eddb0417931/rayleigh_calibration/run_61fa62875c3e/comparison.json",
+          "result_sha256": "90eddfafec99ef787e59bc4dd132bd7e2195d78a004b46919bcefcc6fa08c506"
+        },
+        {
+          "station": "J36A",
+          "seed_id": "7D.J36A..BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Within-channel sample-grid offset: 7D.J36A..BDH; 0.0004 s; merge refused": 1,
+            "Phase convention or arrival overlap needs review": 6,
+            "Missing, gapped, nonfinite or flat window": 1,
+            "Reviewed window must follow origin and span at most 2 h": 1,
+            "Insufficient band coherence": 6,
+            "Unaligned sample grids: start spread 0.0001 s": 1,
+            "Within-channel sample-grid offset: 7D.J36A..BDH; 0.0006 s; merge refused": 1,
+            "Within 24 h of a previously attempted mainshock": 2
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J36A/7D.J36A..BDH__20111019T200700__8eddb0417931/rayleigh_calibration/run_d38609040eee/comparison.json",
+          "result_sha256": "2dcd11318886976ae900de0ddac68eb6ac981fb46d1de989b119b2ed1511c68b"
+        },
+        {
+          "station": "J38A",
+          "seed_id": "7D.J38A..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.7796598236728061,
+          "sensitivity_multiplier": 1.2826106586962758,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Insufficient band coherence": 3,
+            "Within 24 h of a previously attempted mainshock": 2,
+            "Unaligned sample grids: start spread 2e-06 s": 3
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J38A/7D.J38A..LDH__20111123T000000__8eddb0417931/rayleigh_calibration/run_35e30fc4112e/comparison.json",
+          "result_sha256": "e9a33e6421ce346505610182fcf1314661faca662b7d7b11b964939c06b94208"
+        },
+        {
+          "station": "J43A",
+          "seed_id": "7D.J43A..BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Missing, gapped, nonfinite or flat window": 8,
+            "Phase convention or arrival overlap needs review": 3,
+            "Reviewed window must follow origin and span at most 2 h": 1,
+            "Within-channel sample-grid offset: 7D.J43A..BDH; 0.0009 s; merge refused": 1,
+            "Insufficient band coherence": 4,
+            "Within 24 h of a previously attempted mainshock": 2
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J43A/7D.J43A..BDH__20111019T212500__8eddb0417931/rayleigh_calibration/run_e3bcf9300f96/comparison.json",
+          "result_sha256": "e7c72836ddd26ae656bafc6ff3e0b8da12153a82fe4c22d3026c3641bff4d9c0"
+        },
+        {
+          "station": "J44A",
+          "seed_id": "7D.J44A..BDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Within-channel sample-grid offset: 7D.J44A..BDH; 0.0035 s; merge refused": 1,
+            "Phase convention or arrival overlap needs review": 4,
+            "Missing, gapped, nonfinite or flat window": 3,
+            "Reviewed window must follow origin and span at most 2 h": 1,
+            "Insufficient band coherence": 7,
+            "Within-channel sample-grid offset: 7D.J44A..BDH; 0.0001 s; merge refused": 1,
+            "Within 24 h of a previously attempted mainshock": 2
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J44A/7D.J44A..BDH__20111019T191200__8eddb0417931/rayleigh_calibration/run_230cd914d275/comparison.json",
+          "result_sha256": "91108ded46f4d77c402d8d80715a0f382ea2a23cd4277b46830c47d7976d6553"
+        },
+        {
+          "station": "J45A",
+          "seed_id": "7D.J45A..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.8286626965003557,
+          "sensitivity_multiplier": 1.2067636255659189,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Missing, gapped, nonfinite or flat window": 1,
+            "Insufficient band coherence": 4,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J45A/7D.J45A..LDH__20111128T000000__8eddb0417931/rayleigh_calibration/run_2cfb3fc76689/comparison.json",
+          "result_sha256": "99ae5199d8ca9fb7d635ed3308025a6ea6dd67244500045568df4b9948f12b7f"
+        },
+        {
+          "station": "J52A",
+          "seed_id": "7D.J52A..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Insufficient band coherence": 7,
+            "Grid minimum lies on a boundary; expand justified search bounds": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J52A/7D.J52A..LDH__20111128T000000__8eddb0417931/rayleigh_calibration/run_cd28b0fa5db1/comparison.json",
+          "result_sha256": "ecb219f2086f2dc24b2cdc8195ada5ab3fa015bdcd70f77a8aba2b817f7c5ac0"
+        },
+        {
+          "station": "J53A",
+          "seed_id": "7D.J53A..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 0.029 s": 3,
+            "Unaligned sample grids: start spread 0.971 s": 1,
+            "Unaligned sample grids: start spread 0.0291 s": 3,
+            "Unaligned sample grids: start spread 0.028998 s": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J53A/7D.J53A..LDH__20111128T000000__8eddb0417931/rayleigh_calibration/run_445aaab3a763/comparison.json",
+          "result_sha256": "27186e98d1d872c14f1f5d4e941750b2bc38b49f0a24f200f0a55759175610cd"
+        },
+        {
+          "station": "J54A",
+          "seed_id": "7D.J54A..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 1.0796238515163448,
+          "sensitivity_multiplier": 0.9262485249797768,
+          "accepted_events": 3,
+          "reason": null,
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 2e-06 s": 4,
+            "Within 24 h of a previously attempted mainshock": 1,
+            "Insufficient band coherence": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J54A/7D.J54A..LDH__20111127T000000__8eddb0417931/rayleigh_calibration/run_a0fa0766c192/comparison.json",
+          "result_sha256": "30ffb6edf893c328eeaa9ff08952e4cdb0230355828dbd08c4a9b974ee1a85f7"
+        },
+        {
+          "station": "J55A",
+          "seed_id": "7D.J55A..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 2,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 2e-06 s": 4,
+            "Missing, gapped, nonfinite or flat window": 1,
+            "Insufficient band coherence": 2,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J55A/7D.J55A..LDH__20111124T000000__8eddb0417931/rayleigh_calibration/run_51413de5db86/comparison.json",
+          "result_sha256": "dd1114cbfe1b5387c18b0d65b6c2bf0df6e1cd6952f08857456f21ca1ec1c91b"
+        },
+        {
+          "station": "J63A",
+          "seed_id": "7D.J63A..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 0.0291 s": 1,
+            "Unaligned sample grids: start spread 0.029 s": 4,
+            "Unaligned sample grids: start spread 0.028998 s": 1,
+            "Unaligned sample grids: start spread 0.028898 s": 1,
+            "Unaligned sample grids: start spread 0.029001 s": 1,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J63A/7D.J63A..LDH__20111125T000000__8eddb0417931/rayleigh_calibration/run_b2534e504ad3/comparison.json",
+          "result_sha256": "0d16e1b6d2d3e9ea3bbe13f8a127d5fa88595a658f4766a262b6d0bf4ce66c70"
+        },
+        {
+          "station": "J67A",
+          "seed_id": "7D.J67A..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 2,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Unaligned sample grids: start spread 2e-06 s": 3,
+            "Insufficient band coherence": 3,
+            "Within 24 h of a previously attempted mainshock": 1
+          },
+          "result_file": "results/NETWORKS/7D_ALL_NO_TILT/7D/J67A/7D.J67A..LDH__20111126T000000__8eddb0417931/rayleigh_calibration/run_1492483ff83e/comparison.json",
+          "result_sha256": "c4a5d1a7343524398c1f0976a9ec2b18f69f840351c8db91c964f30962cf9ddf"
+        }
+      ]
+    },
+    {
+      "network": "XO",
+      "workflow": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_workflow/rayleigh.json",
+      "workflow_sha256": "31b21fa34cb452e7dabdcc1be1a96da794928f0e46e66d54344cb6f79eda3fd1",
+      "execution_status": "complete",
+      "options": {
+        "band": [
+          0.03,
+          0.07
+        ],
+        "pressure_sign": 1,
+        "tilt_method": "none",
+        "min_events": 3,
+        "max_events": 8,
+        "event_sampling": "all",
+        "catalog": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_inputs/catalog_usgs_m5p5.json",
+        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+        "earth_model_file": null,
+        "event_resample_rate": 1.0,
+        "native_rate_tolerance_ppm": 0.1
+      },
+      "station_count": 6,
+      "status_counts": {
+        "candidate_comparison_under_assumed_sign": 4,
+        "unresolved": 2
+      },
+      "stations": [
+        {
+          "station": "LA33",
+          "seed_id": "XO.LA33..HDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.9342752751107151,
+          "sensitivity_multiplier": 1.0703483508985039,
+          "accepted_events": 7,
+          "reason": null,
+          "rejection_counts": {
+            "Insufficient band coherence": 29,
+            "Reviewed window must follow origin and span at most 2 h": 11,
+            "Phase convention or arrival overlap needs review": 2,
+            "Within 24 h of a previously attempted mainshock": 23,
+            "Missing or gapped native window; resampling refused": 2
+          },
+          "result_file": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_responses/XO.LA33..HDH_a1a0dd3d61a79750/rayleigh_calibration/run_22bb84802335/comparison.json",
+          "result_sha256": "82f6d465ba9731c97bc913401b29661aa9cbc014c41ac093f7e214aefa418293"
+        },
+        {
+          "station": "LA34",
+          "seed_id": "XO.LA34..HDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.9626801225360608,
+          "sensitivity_multiplier": 1.0387666438625787,
+          "accepted_events": 8,
+          "reason": null,
+          "rejection_counts": {
+            "Insufficient band coherence": 27,
+            "Reviewed window must follow origin and span at most 2 h": 11,
+            "Phase convention or arrival overlap needs review": 2,
+            "Missing native window": 1,
+            "Within 24 h of a previously attempted mainshock": 23,
+            "Missing or gapped native window; resampling refused": 2
+          },
+          "result_file": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_responses/XO.LA34..HDH_9b42d24ba98a552d/rayleigh_calibration/run_fd99fafea8ea/comparison.json",
+          "result_sha256": "89b22b316b816fd58c5b4212632edc3e38effa84adc1fbe381129c10e6cc9abc"
+        },
+        {
+          "station": "LT02",
+          "seed_id": "XO.LT02..HDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Insufficient band coherence": 40,
+            "Reviewed window must follow origin and span at most 2 h": 11,
+            "Within 24 h of a previously attempted mainshock": 23
+          },
+          "result_file": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_responses/XO.LT02..HDH_18e6993c9de4a582/rayleigh_calibration/run_186db8875e8f/comparison.json",
+          "result_sha256": "b678a0c87396c597a8e1c9914558724416c651156f11ac3558b08eb660a30702"
+        },
+        {
+          "station": "WD48",
+          "seed_id": "XO.WD48..LDH",
+          "status": "unresolved",
+          "pressure_multiplier": null,
+          "sensitivity_multiplier": null,
+          "accepted_events": 0,
+          "reason": "Fewer than 3 QC-accepted independent events; no station-level estimate",
+          "rejection_counts": {
+            "Missing native window": 29,
+            "Reviewed window must follow origin and span at most 2 h": 9,
+            "Insufficient band coherence": 7,
+            "Within 24 h of a previously attempted mainshock": 22
+          },
+          "result_file": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_responses/XO.WD48..LDH_b1e0a9c7ab6a2c1e/rayleigh_calibration/run_fcab6bd4df9e/comparison.json",
+          "result_sha256": "6299f80977837769e098323259f1ad800d7e01bc8c4ae1ea7275158bb993c136"
+        },
+        {
+          "station": "WD66",
+          "seed_id": "XO.WD66..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.9094978846512478,
+          "sensitivity_multiplier": 1.0995077799256847,
+          "accepted_events": 16,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 10,
+            "Insufficient band coherence": 19,
+            "Within 24 h of a previously attempted mainshock": 22,
+            "Phase convention or arrival overlap needs review": 1,
+            "Missing native window": 1
+          },
+          "result_file": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_responses/XO.WD66..LDH_6bf94faecc86fa16/rayleigh_calibration/run_7abb94cf3c25/comparison.json",
+          "result_sha256": "187ede688aabb03f6a37cf4ed232a4cccd991127b405cc4bec0fcaae6c03eb72"
+        },
+        {
+          "station": "WD70",
+          "seed_id": "XO.WD70..LDH",
+          "status": "candidate_comparison_under_assumed_sign",
+          "pressure_multiplier": 0.9298885005256161,
+          "sensitivity_multiplier": 1.0753977486921857,
+          "accepted_events": 21,
+          "reason": null,
+          "rejection_counts": {
+            "Reviewed window must follow origin and span at most 2 h": 9,
+            "Phase convention or arrival overlap needs review": 2,
+            "Within 24 h of a previously attempted mainshock": 22,
+            "Insufficient band coherence": 13
+          },
+          "result_file": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_responses/XO.WD70..LDH_4dbea1d312952396/rayleigh_calibration/run_fe58ff28bbbf/comparison.json",
+          "result_sha256": "87aa6a755d633164901d3035a2287e630c34289c7c2ee0dc71994741ae7deb34"
+        }
+      ]
+    }
+  ],
+  "xo_processing_comparisons": [
+    {
+      "station": "LA33",
+      "previous_run": "XO_APG_NO_TILT",
+      "previous_g": 0.9342750422907299,
+      "current_g": 0.9342752751107151,
+      "gain_change_percent": 2.4919854935134822e-05,
+      "previous_accepted": 7,
+      "current_accepted": 7,
+      "retained_events": 7,
+      "added_events": 0,
+      "lost_events": 0
+    },
+    {
+      "station": "LA34",
+      "previous_run": "XO_APG_NO_TILT",
+      "previous_g": 0.9626799971777169,
+      "current_g": 0.9626801225360608,
+      "gain_change_percent": 1.3021808320523576e-05,
+      "previous_accepted": 8,
+      "current_accepted": 8,
+      "retained_events": 8,
+      "added_events": 0,
+      "lost_events": 0
+    },
+    {
+      "station": "WD66",
+      "previous_run": "XO_ALL_NO_TILT",
+      "previous_g": 0.9076893658278965,
+      "current_g": 0.9094978846512478,
+      "gain_change_percent": 0.199244244940755,
+      "previous_accepted": 10,
+      "current_accepted": 16,
+      "retained_events": 10,
+      "added_events": 6,
+      "lost_events": 0
+    },
+    {
+      "station": "WD70",
+      "previous_run": "XO_ALL_NO_TILT",
+      "previous_g": 0.9299621719812257,
+      "current_g": 0.9298885005256161,
+      "gain_change_percent": -0.00792198412249423,
+      "previous_accepted": 16,
+      "current_accepted": 21,
+      "retained_events": 16,
+      "added_events": 5,
+      "lost_events": 0
+    }
+  ],
+  "scientific_score_checks": [
+    {
+      "master_file": "exports/master_inventory.csv",
+      "sha256": "d929f43ad006decd638ac64b9bb9388f5c0b9d82e9402c82a33b5c9b3e8c45f8",
+      "nonblank_scientific_scores": 0
+    },
+    {
+      "master_file": "results/NETWORKS/XO_APG_NO_TILT/_master/master_inventory.csv",
+      "sha256": "e5a545262c42c75efef1f9dbc450f901a1d97ab115e47d9ea714ef6566933453",
+      "nonblank_scientific_scores": 0
+    },
+    {
+      "master_file": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_master/master_inventory.csv",
+      "sha256": "72ce7a233999307ab8a1d596a26086b5588959b0b43b9751217fae891aae46e8",
+      "nonblank_scientific_scores": 0
+    }
+  ],
+  "external_comparison_limits": {
+    "YL": "21 of 22 reciprocal comparisons are 3.4\u20137.0% below Zha & Webb; C07W is +86.8%; see yl_all_zha_comparison.json",
+    "7D": "Ruan computed scale factors; original numeric fitted values have not been located",
+    "XO": "Deng calibrates body waves in separate bands; coefficient direction and exact values unverified",
+    "YV": "Station-matched published numerical comparison unverified"
+  },
+  "sources_preserved_during_summary": true
+}

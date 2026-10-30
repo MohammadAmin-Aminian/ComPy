@@ -64,6 +64,7 @@ STAGES = (
     "pressure",
     "nearby",
     "infragravity",
+    "pilot",
     "paired",
 )
 KEYS = EPOCH_COLUMNS + ["inventory_file"]
@@ -74,6 +75,7 @@ UPDATE_FUNCTIONS = {
     "plots": update_processing_results,
     "pressure": update_pressure_test_results,
     "infragravity": update_infragravity_test_results,
+    "pilot": update_infragravity_test_results,
     "nearby": update_nearby_test_results,
     "paired": update_paired_results,
 }
@@ -81,6 +83,7 @@ PREFIXES = {
     "plots": "ppsd_plot",
     "pressure": "pressure_expected",
     "infragravity": "infragravity",
+    "pilot": "infragravity_pilot",
     "nearby": "nearby",
     "paired": "paired",
 }
@@ -262,6 +265,7 @@ def fingerprint(stage, row, paths, options, code):
     }
     if stage in {
         "ppsd",
+        "pilot",
         "paired",
     }:
         inputs["waveforms"] = [
@@ -378,6 +382,21 @@ def diagnostic_job(
             paths = list(summaries[0]["files"].values()) + [
                 updates[0]["infragravity_result_file"]
             ]
+        elif stage == "pilot":
+            # The raw-data Godin pilot is imported only when this stage runs.
+            from compy_pressure.godin_pilot import run_godin_pilot
+
+            summary, updates = run_godin_pilot(
+                master_directory,
+                records=index_waveform_files(paths),
+                start=options["start"],
+                days=options["days"],
+                **common,
+            )
+            summaries = [summary]
+            paths = list(summary["files"].values()) + [
+                updates[0]["infragravity_pilot_result_file"]
+            ]
         else:
             raise ValueError(f"Unknown diagnostic stage: {stage}")
         return summaries[0]["status"], updates, paths
@@ -427,6 +446,7 @@ def run_stage(
     if pressure_only or stage in {
         "pressure",
         "infragravity",
+        "pilot",
         "nearby",
         "paired",
     }:
@@ -437,6 +457,8 @@ def run_stage(
     rows = selected.to_dict("records")
     code = code_digest()
     options = options or {}
+    if stage == "pilot":
+        options = {"start": None, "days": 7} | options
     references, dataset_cache = None, {}
     if stage == "paired":
         assert_workflows_finished(results_directory, ignore_stage="paired")
@@ -631,6 +653,7 @@ def view_plots(master_directory, files, kind, *, show=True, workflow_path=None):
         "ppsd": "ppsd_",
         "pressure": "pressure_expected_",
         "infragravity": "infragravity_",
+        "pilot": "infragravity_pilot_",
         "nearby": "nearby_",
         "paired": "paired_",
         "rayleigh": "rayleigh_",
@@ -721,11 +744,16 @@ def main():
     parser.add_argument("--chunk-seconds", type=float, default=86400)
     parser.add_argument("--rebuild-ppsd", action="store_true")
     parser.add_argument(
+        "--pilot-start", help="Default interval lies near each channel epoch's middle"
+    )
+    parser.add_argument("--pilot-days", type=int, default=7)
+    parser.add_argument(
         "--view-kind",
         choices=(
             "ppsd",
             "pressure",
             "infragravity",
+            "pilot",
             "nearby",
             "paired",
             "rayleigh",
@@ -882,6 +910,8 @@ def main():
                     chunk_seconds=args.chunk_seconds,
                     rebuild=args.rebuild_ppsd,
                 )
+            elif stage == "pilot":
+                options = dict(start=args.pilot_start, days=args.pilot_days)
             elif stage == "paired":
                 options = dict(
                     start=args.paired_start,

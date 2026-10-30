@@ -1,0 +1,151 @@
+{
+  "created_utc": "2026-10-19T09:28:53.182597+00:00",
+  "plan_id": "ac046156fadf1625",
+  "plan_summary": {
+    "networks": [
+      "7D",
+      "XO",
+      "YL",
+      "YV"
+    ],
+    "stations": 89,
+    "channel_epochs_with_data": 566,
+    "channel_epochs_by_class": {
+      "pressure": 123,
+      "horizontal": 252,
+      "vertical": 126,
+      "other": 65
+    },
+    "pressure_epochs": 123,
+    "ppsd_decisions": {
+      "pressure:compute": 15,
+      "horizontal:blocked": 100,
+      "vertical:not_planned_out_of_scope": 13,
+      "vertical:blocked": 24,
+      "pressure:blocked": 19,
+      "other:blocked": 65,
+      "pressure:reuse_existing": 88,
+      "vertical:reuse_existing": 88,
+      "pressure:reuse_existing_partial": 1,
+      "vertical:reuse_existing_partial": 1,
+      "horizontal:not_planned_out_of_scope": 66,
+      "horizontal:reuse_existing": 86
+    },
+    "check_decisions": {
+      "expected_pressure:compute": 61,
+      "nearby:compute": 61,
+      "infragravity:compute": 61,
+      "rayleigh:deferred": 34,
+      "microseism:deferred": 34,
+      "local_p:reuse_historical": 66,
+      "expected_pressure:blocked": 19,
+      "nearby:blocked": 19,
+      "infragravity:blocked": 19,
+      "local_p:deferred": 18,
+      "rayleigh:reuse_historical": 89,
+      "microseism:reuse_historical": 89,
+      "local_p:not_applicable": 39,
+      "expected_pressure:reuse_existing": 43,
+      "nearby:reuse_existing": 43,
+      "infragravity:reuse_existing": 43
+    },
+    "tasks_by_kind": {
+      "ppsd": 15,
+      "expected_pressure": 61,
+      "nearby": 61,
+      "infragravity": 61
+    },
+    "planned_ppsd_days": 1190.1559092486457,
+    "inventory_only_epochs": 6316,
+    "unmatched_streams": 4,
+    "files_with_issues": 677,
+    "excluded_duplicate_copies": 1152,
+    "products_seen": 264,
+    "evidence_errors": 0
+  },
+  "task_states": {
+    "not_started": 198
+  },
+  "heatmap_sources": {
+    "pending": 15,
+    "none": 19,
+    "historical": 88,
+    "historical_partial": 1
+  },
+  "heatmap_groups": [
+    {
+      "network": "7D",
+      "channel": "BDH",
+      "sensor_family": "dpg",
+      "stations": 4,
+      "windows": 3854,
+      "zero_power_floor_values": 20296,
+      "below_saved_histogram_values": 0,
+      "above_saved_histogram_values": 0
+    },
+    {
+      "network": "7D",
+      "channel": "LDH",
+      "sensor_family": "dpg",
+      "stations": 11,
+      "windows": 6580,
+      "zero_power_floor_values": 0,
+      "below_saved_histogram_values": 0,
+      "above_saved_histogram_values": 17
+    },
+    {
+      "network": "XO",
+      "channel": "EDH",
+      "sensor_family": "hydrophone",
+      "stations": 3,
+      "windows": 10692,
+      "zero_power_floor_values": 0,
+      "below_saved_histogram_values": 0,
+      "above_saved_histogram_values": 474
+    },
+    {
+      "network": "XO",
+      "channel": "LDH",
+      "sensor_family": "dpg",
+      "stations": 3,
+      "windows": 5727,
+      "zero_power_floor_values": 0,
+      "below_saved_histogram_values": 0,
+      "above_saved_histogram_values": 0
+    },
+    {
+      "network": "YL",
+      "channel": "LDH",
+      "sensor_family": "dpg",
+      "stations": 25,
+      "windows": 127447,
+      "zero_power_floor_values": 0,
+      "below_saved_histogram_values": 0,
+      "above_saved_histogram_values": 3660
+    },
+    {
+      "network": "YV",
+      "channel": "BDH",
+      "sensor_family": "dpg",
+      "stations": 9,
+      "windows": 40973,
+      "zero_power_floor_values": 28556,
+      "below_saved_histogram_values": 0,
+      "above_saved_histogram_values": 88
+    },
+    {
+      "network": "YV",
+      "channel": "BDH",
+      "sensor_family": "hydrophone",
+      "stations": 34,
+      "windows": 140602,
+      "zero_power_floor_values": 562742,
+      "below_saved_histogram_values": 0,
+      "above_saved_histogram_values": 3758
+    }
+  ],
+  "gain_applied": false,
+  "scores_or_thresholds_assigned": false,
+  "config_sha256": "b288978d3cb229c0d04b0df0d0efc6fa51eb50ffb4caaa8435ad97e5b692f9d3",
+  "scope": "pressure"
+}

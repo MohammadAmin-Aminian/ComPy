@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "seafloor-compy"
 version = "2.4.0"
-description = "Seafloor compliance processing, pressure calibration and layered elastic inversion"
+description = "Seafloor compliance, pressure-gauge QC and calibration, and layered elastic inversion"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "GPL-3.0-only"
@@ -24,10 +24,12 @@ maps = ["cartopy>=0.24"]
 [project.scripts]
 compy-pressure = "compy_pressure.network:main"
 compy-pressure-inventory = "compy_pressure.inventory:main"
+compy-pressure-tilt = "compy_pressure.tilt:main"
 compy-pressure-local-p = "compy_pressure.local_p_check:main"
 compy-pressure-microseism = "compy_pressure.microseism_check:main"
 compy-pressure-paired = "compy_pressure.paired_spectra:main"
 compy-pressure-noise-model = "compy_pressure.group_noise_model:main"
+compy-pressure-approved-noise-model = "compy_pressure.noise_model:main"
 
 [project.urls]
 Repository = "https://github.com/MohammadAmin-Aminian/ComPy"
@@ -42,8 +44,9 @@ packages = ["compy_pressure", "compy_pressure.reference_data"]
 "compy_pressure.reference_data" = ["*.csv", "*.json"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["."]
+# pressure/ is BRUIT-FM's project folder: its tests import its scripts/.
+testpaths = ["tests", "pressure/tests"]
+pythonpath = [".", "pressure"]
 
 [tool.ruff.lint]
 select = ["E9", "F63", "F7", "F82", "F811"]

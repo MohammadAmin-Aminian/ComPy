@@ -1,0 +1,2670 @@
+{
+  "scope": "Saved station gains only; reciprocal convention comparison, not calibration acceptance",
+  "published_source": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015JB012688",
+  "workflow": "results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json",
+  "options": {
+    "band": [
+      0.03,
+      0.07
+    ],
+    "pressure_sign": 1,
+    "tilt_method": "none",
+    "min_events": 3,
+    "max_events": 8,
+    "event_sampling": "all",
+    "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_YL_ALL_20091120_20101204.json",
+    "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+    "earth_model_file": null
+  },
+  "statistics": {
+    "stations": 25,
+    "numerical_comparisons": 22,
+    "unresolved": [
+      "A14W",
+      "B01W",
+      "C10W"
+    ],
+    "peer_count_excluding_C07W": 21,
+    "peer_difference_range_percent": [
+      -7.035130708744175,
+      -3.366721547536311
+    ],
+    "peer_median_difference_percent": -5.425839540863886
+  },
+  "stations": [
+    {
+      "station": "A02W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.6962199558732434,
+      "reciprocal_comparison_coefficient": 1.4363276886335963,
+      "published_coefficient": 1.5,
+      "published_standard_deviation": 0.01,
+      "relative_difference_percent": -4.244820757760248,
+      "candidate_events": 8,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 3,
+      "saved_M_ge_7_subset_reciprocal": 1.420239094562538,
+      "depth_m": 2015.0,
+      "published_depth_m": 2015
+    },
+    {
+      "station": "A06W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.6916805133773274,
+      "reciprocal_comparison_coefficient": 1.4457541894844121,
+      "published_coefficient": 1.53,
+      "published_standard_deviation": 0.03,
+      "relative_difference_percent": -5.506262125201822,
+      "candidate_events": 3,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 2,
+      "saved_M_ge_7_subset_reciprocal": null,
+      "depth_m": 2137.0,
+      "published_depth_m": 2137
+    },
+    {
+      "station": "A08W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.7302359652536082,
+      "reciprocal_comparison_coefficient": 1.3694203621602008,
+      "published_coefficient": 1.43,
+      "published_standard_deviation": 0.02,
+      "relative_difference_percent": -4.236338310475462,
+      "candidate_events": 9,
+      "published_events": 17,
+      "candidate_M_ge_7_events": 3,
+      "saved_M_ge_7_subset_reciprocal": 1.3488537418553161,
+      "depth_m": 2290.0,
+      "published_depth_m": 2290
+    },
+    {
+      "station": "A10W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5850303714758279,
+      "reciprocal_comparison_coefficient": 1.7093129669103302,
+      "published_coefficient": 1.82,
+      "published_standard_deviation": 0.01,
+      "relative_difference_percent": -6.0817051148170265,
+      "candidate_events": 9,
+      "published_events": 17,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.7160595387298625,
+      "depth_m": 1879.0,
+      "published_depth_m": 1879
+    },
+    {
+      "station": "A12W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.6394006168044105,
+      "reciprocal_comparison_coefficient": 1.5639647096335145,
+      "published_coefficient": 1.67,
+      "published_standard_deviation": 0.03,
+      "relative_difference_percent": -6.349418584819489,
+      "candidate_events": 19,
+      "published_events": 17,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.5661474700538367,
+      "depth_m": 2574.0,
+      "published_depth_m": 2574
+    },
+    {
+      "station": "A14W",
+      "status": "unresolved",
+      "pressure_multiplier": null,
+      "reciprocal_comparison_coefficient": null,
+      "published_coefficient": 1.97,
+      "published_standard_deviation": 0.1,
+      "relative_difference_percent": null,
+      "candidate_events": 0,
+      "published_events": 9,
+      "candidate_M_ge_7_events": 0,
+      "saved_M_ge_7_subset_reciprocal": null,
+      "depth_m": 884.0,
+      "published_depth_m": 884
+    },
+    {
+      "station": "B01W",
+      "status": "unresolved",
+      "pressure_multiplier": null,
+      "reciprocal_comparison_coefficient": null,
+      "published_coefficient": 0.19,
+      "published_standard_deviation": 0.02,
+      "relative_difference_percent": null,
+      "candidate_events": 0,
+      "published_events": 18,
+      "candidate_M_ge_7_events": 0,
+      "saved_M_ge_7_subset_reciprocal": null,
+      "depth_m": 1723.0,
+      "published_depth_m": 1723
+    },
+    {
+      "station": "B04W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.7386818107595899,
+      "reciprocal_comparison_coefficient": 1.3537628589658859,
+      "published_coefficient": 1.41,
+      "published_standard_deviation": 0.06,
+      "relative_difference_percent": -3.9884497187314905,
+      "candidate_events": 11,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.3570934654271185,
+      "depth_m": 2197.0,
+      "published_depth_m": 2197
+    },
+    {
+      "station": "B09W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.793131481220515,
+      "reciprocal_comparison_coefficient": 1.2608250002397385,
+      "published_coefficient": 1.32,
+      "published_standard_deviation": 0.01,
+      "relative_difference_percent": -4.482954527292538,
+      "candidate_events": 12,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 1,
+      "saved_M_ge_7_subset_reciprocal": null,
+      "depth_m": 2626.0,
+      "published_depth_m": 2626
+    },
+    {
+      "station": "B11W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5594242527120012,
+      "reciprocal_comparison_coefficient": 1.7875521040644136,
+      "published_coefficient": 1.9,
+      "published_standard_deviation": 0.09,
+      "relative_difference_percent": -5.918310312399278,
+      "candidate_events": 6,
+      "published_events": 17,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.8073639234502459,
+      "depth_m": 2060.0,
+      "published_depth_m": 2060
+    },
+    {
+      "station": "B14W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.6497952922760349,
+      "reciprocal_comparison_coefficient": 1.5389462064234178,
+      "published_coefficient": 1.62,
+      "published_standard_deviation": 0.04,
+      "relative_difference_percent": -5.0033205911470535,
+      "candidate_events": 15,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 5,
+      "saved_M_ge_7_subset_reciprocal": 1.5855954746474679,
+      "depth_m": 2219.0,
+      "published_depth_m": 2219
+    },
+    {
+      "station": "C01W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5760430505111097,
+      "reciprocal_comparison_coefficient": 1.7359813630469512,
+      "published_coefficient": 1.85,
+      "published_standard_deviation": 0.08,
+      "relative_difference_percent": -6.163169565029669,
+      "candidate_events": 5,
+      "published_events": 17,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.7294603811581668,
+      "depth_m": 1655.0,
+      "published_depth_m": 1655
+    },
+    {
+      "station": "C03W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.6879419793040048,
+      "reciprocal_comparison_coefficient": 1.45361095860396,
+      "published_coefficient": 1.55,
+      "published_standard_deviation": 0.02,
+      "relative_difference_percent": -6.218647832002578,
+      "candidate_events": 7,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 3,
+      "saved_M_ge_7_subset_reciprocal": 1.4926296140536122,
+      "depth_m": 2084.0,
+      "published_depth_m": 2084
+    },
+    {
+      "station": "C05W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5846554732077656,
+      "reciprocal_comparison_coefficient": 1.7104090286086073,
+      "published_coefficient": 1.77,
+      "published_standard_deviation": 0.01,
+      "relative_difference_percent": -3.366721547536311,
+      "candidate_events": 20,
+      "published_events": 18,
+      "candidate_M_ge_7_events": 5,
+      "saved_M_ge_7_subset_reciprocal": 1.7074782411040312,
+      "depth_m": 2289.0,
+      "published_depth_m": 2289
+    },
+    {
+      "station": "C07W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.2690709084103596,
+      "reciprocal_comparison_coefficient": 3.7164924514057898,
+      "published_coefficient": 1.99,
+      "published_standard_deviation": 0.01,
+      "relative_difference_percent": 86.75841464350702,
+      "candidate_events": 21,
+      "published_events": 11,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 3.708470166205238,
+      "depth_m": 2648.0,
+      "published_depth_m": 2648
+    },
+    {
+      "station": "C08W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5926242219216802,
+      "reciprocal_comparison_coefficient": 1.6874099353504954,
+      "published_coefficient": 1.78,
+      "published_standard_deviation": 0.02,
+      "relative_difference_percent": -5.2016890252530645,
+      "candidate_events": 10,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 3,
+      "saved_M_ge_7_subset_reciprocal": 1.6879732599714903,
+      "depth_m": 2785.0,
+      "published_depth_m": 2785
+    },
+    {
+      "station": "C09W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5753031014637088,
+      "reciprocal_comparison_coefficient": 1.7382141647694245,
+      "published_coefficient": 1.84,
+      "published_standard_deviation": 0.02,
+      "relative_difference_percent": -5.531838871226935,
+      "candidate_events": 31,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 3,
+      "saved_M_ge_7_subset_reciprocal": 1.7278239362872563,
+      "depth_m": 2537.0,
+      "published_depth_m": 2537
+    },
+    {
+      "station": "C10W",
+      "status": "unresolved",
+      "pressure_multiplier": null,
+      "reciprocal_comparison_coefficient": null,
+      "published_coefficient": 1.51,
+      "published_standard_deviation": 0.08,
+      "relative_difference_percent": null,
+      "candidate_events": 1,
+      "published_events": 7,
+      "candidate_M_ge_7_events": 1,
+      "saved_M_ge_7_subset_reciprocal": null,
+      "depth_m": 2162.0,
+      "published_depth_m": 2162
+    },
+    {
+      "station": "C11W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5777985073077174,
+      "reciprocal_comparison_coefficient": 1.7307071364021909,
+      "published_coefficient": 1.83,
+      "published_standard_deviation": 0.03,
+      "relative_difference_percent": -5.425839540863886,
+      "candidate_events": 14,
+      "published_events": 16,
+      "candidate_M_ge_7_events": 6,
+      "saved_M_ge_7_subset_reciprocal": 1.7305438652257359,
+      "depth_m": 2214.0,
+      "published_depth_m": 2214
+    },
+    {
+      "station": "C16W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5911584759662192,
+      "reciprocal_comparison_coefficient": 1.6915937784120403,
+      "published_coefficient": 1.79,
+      "published_standard_deviation": 0.03,
+      "relative_difference_percent": -5.497554278656969,
+      "candidate_events": 14,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.687305435509952,
+      "depth_m": 2213.0,
+      "published_depth_m": 2213
+    },
+    {
+      "station": "C17W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.7311201527288865,
+      "reciprocal_comparison_coefficient": 1.3677642399372067,
+      "published_coefficient": 1.43,
+      "published_standard_deviation": 0.01,
+      "relative_difference_percent": -4.35215105334218,
+      "candidate_events": 24,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 5,
+      "saved_M_ge_7_subset_reciprocal": 1.3664384019576643,
+      "depth_m": 2822.0,
+      "published_depth_m": 2822
+    },
+    {
+      "station": "F02W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.7316405333007057,
+      "reciprocal_comparison_coefficient": 1.3667914152987448,
+      "published_coefficient": 1.47,
+      "published_standard_deviation": 0.04,
+      "relative_difference_percent": -7.020992156547967,
+      "candidate_events": 17,
+      "published_events": 17,
+      "candidate_M_ge_7_events": 6,
+      "saved_M_ge_7_subset_reciprocal": 1.3788606318124963,
+      "depth_m": 2602.0,
+      "published_depth_m": 2602
+    },
+    {
+      "station": "N02W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.6101424391420693,
+      "reciprocal_comparison_coefficient": 1.6389615536433024,
+      "published_coefficient": 1.73,
+      "published_standard_deviation": 0.03,
+      "relative_difference_percent": -5.262337939693495,
+      "candidate_events": 16,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.6336549609150226,
+      "depth_m": 2717.0,
+      "published_depth_m": 2717
+    },
+    {
+      "station": "N03W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5810293801069992,
+      "reciprocal_comparison_coefficient": 1.7210833638323855,
+      "published_coefficient": 1.8,
+      "published_standard_deviation": 0.02,
+      "relative_difference_percent": -4.384257564867477,
+      "candidate_events": 20,
+      "published_events": 19,
+      "candidate_M_ge_7_events": 4,
+      "saved_M_ge_7_subset_reciprocal": 1.7152829880283498,
+      "depth_m": 2304.0,
+      "published_depth_m": 2304
+    },
+    {
+      "station": "S01W",
+      "status": "candidate_comparison_under_assumed_sign",
+      "pressure_multiplier": 0.5942956646498185,
+      "reciprocal_comparison_coefficient": 1.6826641341717306,
+      "published_coefficient": 1.81,
+      "published_standard_deviation": 0.1,
+      "relative_difference_percent": -7.035130708744175,
+      "candidate_events": 5,
+      "published_events": 16,
+      "candidate_M_ge_7_events": 3,
+      "saved_M_ge_7_subset_reciprocal": 1.738131166918781,
+      "depth_m": 1980.0,
+      "published_depth_m": 1980
+    }
+  ],
+  "event_details": [
+    {
+      "station": "A02W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A02W/YL.A02W..LDH__20091121T000000__8bfea72e5856/rayleigh_calibration/run_bd88e60be2c6/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 15,
+        "Phase convention or arrival overlap needs review": 6,
+        "Unaligned sample grids: start spread 9.9e-05 s": 2,
+        "Unaligned sample grids: start spread 0.0001 s": 8,
+        "Missing, gapped, nonfinite or flat window": 7,
+        "Insufficient band coherence": 39,
+        "Within-channel sample-grid offset: YL.A02W..LDH; 0.0024 s; merge refused": 1,
+        "Unaligned sample grids: start spread 3e-06 s": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 3,
+        "Unaligned sample grids: start spread 0.000101 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.6959334746178488
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.7065569084158694
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.7041067971080038
+        },
+        {
+          "event": "nc71338066",
+          "origin_utc": "2010-01-10T00:27:39.320000Z",
+          "magnitude": 6.5,
+          "gain": 0.690030769319953
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.6965064371286379
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.6951767472373296
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.6886766753455963
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.7036942680177416
+        }
+      ]
+    },
+    {
+      "station": "A06W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A06W/YL.A06W..LDH__20091122T000000__d9caed0ac097/rayleigh_calibration/run_22878f90143a/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 15,
+        "Phase convention or arrival overlap needs review": 2,
+        "Unaligned sample grids: start spread 2e-06 s": 24,
+        "Unaligned sample grids: start spread 0.0001 s": 3,
+        "Unaligned sample grids: start spread 9.8e-05 s": 1,
+        "Unaligned sample grids: start spread 4e-06 s": 12,
+        "Unaligned sample grids: start spread 3e-06 s": 2,
+        "Within-channel sample-grid offset: YL.A06W..LDH; 0.000997 s; merge refused": 1,
+        "Insufficient band coherence": 20,
+        "Unaligned sample grids: start spread 0.000102 s": 1,
+        "Missing, gapped, nonfinite or flat window": 5,
+        "Unaligned sample grids: start spread 9.7e-05 s": 1,
+        "Unaligned sample grids: start spread 0.000103 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.6916805133773274
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.6702333760903955
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.7007488913666002
+        }
+      ]
+    },
+    {
+      "station": "A08W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A08W/YL.A08W..LDH__20091122T000000__a16dd0a45c0d/rayleigh_calibration/run_57a3e62d752f/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 15,
+        "Unaligned sample grids: start spread 2e-06 s": 20,
+        "Unaligned sample grids: start spread 3e-06 s": 1,
+        "Missing, gapped, nonfinite or flat window": 13,
+        "Unaligned sample grids: start spread 4e-06 s": 6,
+        "Insufficient band coherence": 18,
+        "Within-channel sample-grid offset: YL.A08W..LDH; 0.001298 s; merge refused": 1,
+        "Unaligned sample grids: start spread 5e-06 s": 2,
+        "Phase convention or arrival overlap needs review": 1,
+        "Unaligned sample grids: start spread 9.8e-05 s": 3,
+        "Unaligned sample grids: start spread 0.000101 s": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.7296237234848395
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.7413702234495223
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.7989219688901634
+        },
+        {
+          "event": "usp000hbws",
+          "origin_utc": "2010-04-26T02:59:52.150000Z",
+          "magnitude": 6.5,
+          "gain": 0.7237100164265231
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.7301909188293927
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.7207715888998198
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.7375496750230636
+        },
+        {
+          "event": "usp000h8vq",
+          "origin_utc": "2010-03-07T07:05:24.640000Z",
+          "magnitude": 6.3,
+          "gain": 0.7399162130704121
+        },
+        {
+          "event": "usp000hjda",
+          "origin_utc": "2010-08-18T16:28:15.440000Z",
+          "magnitude": 6.3,
+          "gain": 0.7302359652536082
+        }
+      ]
+    },
+    {
+      "station": "A10W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A10W/YL.A10W..LDH__20091122T000000__14ba80b6daa0/rayleigh_calibration/run_e52cc1df8f02/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 18,
+        "Phase convention or arrival overlap needs review": 3,
+        "Unaligned sample grids: start spread 2e-06 s": 6,
+        "Missing, gapped, nonfinite or flat window": 10,
+        "Insufficient band coherence": 35,
+        "Within-channel sample-grid offset: YL.A10W..LDH; 0.0015 s; merge refused": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 9
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5855506581621178
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.5850303714758279
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5804303569324041
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.5720739137140778
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.5906444504351663
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.5853825025498949
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.5874959429341688
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.574337697927985
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.577501170175795
+        }
+      ]
+    },
+    {
+      "station": "A12W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A12W/YL.A12W..LDH__20091123T000000__4bb2d10157f3/rayleigh_calibration/run_221fcf985bd3/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 19,
+        "Phase convention or arrival overlap needs review": 4,
+        "Unaligned sample grids: start spread 0.0001 s": 7,
+        "Missing, gapped, nonfinite or flat window": 14,
+        "Insufficient band coherence": 23,
+        "Within-channel sample-grid offset: YL.A12W..LDH; 0.0017 s; merge refused": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 3,
+        "Unaligned sample grids: start spread 9.8e-05 s": 1,
+        "Unaligned sample grids: start spread 3e-06 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.6394006168044105
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.6488062295584244
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.6376183346301241
+        },
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.6443873566311868
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.6325462051634622
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.6429103672530343
+        },
+        {
+          "event": "usp000hbws",
+          "origin_utc": "2010-04-26T02:59:52.150000Z",
+          "magnitude": 6.5,
+          "gain": 0.6347310124553343
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.6374062662605543
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.6347668528726916
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.6345220330994028
+        },
+        {
+          "event": "usp000h56g",
+          "origin_utc": "2009-12-19T13:02:15.570000Z",
+          "magnitude": 6.4,
+          "gain": 0.6544990115523518
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.6573735498680284
+        },
+        {
+          "event": "usp000h5m6",
+          "origin_utc": "2010-01-02T08:45:33.020000Z",
+          "magnitude": 6.1,
+          "gain": 0.6418361335404845
+        },
+        {
+          "event": "usp000hbjw",
+          "origin_utc": "2010-04-17T23:15:22.020000Z",
+          "magnitude": 6.2,
+          "gain": 0.6431872893973163
+        },
+        {
+          "event": "usp000hc8w",
+          "origin_utc": "2010-05-03T10:27:45.090000Z",
+          "magnitude": 6.1,
+          "gain": 0.6333575075986969
+        },
+        {
+          "event": "usp000he7r",
+          "origin_utc": "2010-06-18T02:23:05.580000Z",
+          "magnitude": 6.2,
+          "gain": 0.6236501520782215
+        },
+        {
+          "event": "usp000heww",
+          "origin_utc": "2010-07-04T21:55:51.980000Z",
+          "magnitude": 6.3,
+          "gain": 0.6426808853612674
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.6473233805513572
+        },
+        {
+          "event": "usp000hjda",
+          "origin_utc": "2010-08-18T16:28:15.440000Z",
+          "magnitude": 6.3,
+          "gain": 0.6382137516248029
+        }
+      ]
+    },
+    {
+      "station": "A14W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/A14W/YL.A14W..LDH__20091123T000000__62a9f83c601a/rayleigh_calibration/run_7202450f7045/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 19,
+        "Insufficient band coherence": 52,
+        "Unaligned sample grids: start spread 0.0001 s": 9,
+        "Missing, gapped, nonfinite or flat window": 7,
+        "Unaligned sample grids: start spread 2e-06 s": 3,
+        "Within-channel sample-grid offset: YL.A14W..LDH; 0.0027 s; merge refused": 1,
+        "Unaligned sample grids: start spread 0.000102 s": 1
+      },
+      "candidate_pressure_multipliers": []
+    },
+    {
+      "station": "B01W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B01W/YL.B01W..LDH__20091127T000000__bd171fb03356/rayleigh_calibration/run_e3049c70ac68/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 14,
+        "Grid minimum lies on a boundary; expand justified search bounds": 4,
+        "Unaligned sample grids: start spread 0.0001 s": 14,
+        "Unaligned sample grids: start spread 9.9e-05 s": 3,
+        "Missing, gapped, nonfinite or flat window": 7,
+        "Insufficient band coherence": 35,
+        "Unaligned sample grids: start spread 0.000103 s": 1,
+        "Unaligned sample grids: start spread 9.8e-05 s": 1,
+        "Unaligned sample grids: start spread 0.000101 s": 6,
+        "Within-channel sample-grid offset: YL.B01W..LDH; 0.004799 s; merge refused": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 3,
+        "Unaligned sample grids: start spread 0.0002 s": 1
+      },
+      "candidate_pressure_multipliers": []
+    },
+    {
+      "station": "B04W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B04W/YL.B04W..LDH__20091127T000000__c8afb61ab312/rayleigh_calibration/run_d2a12dbc98f1/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 14,
+        "Unaligned sample grids: start spread 0.000102 s": 4,
+        "Unaligned sample grids: start spread 4e-06 s": 5,
+        "Insufficient band coherence": 18,
+        "Unaligned sample grids: start spread 0.0001 s": 4,
+        "Unaligned sample grids: start spread 3e-06 s": 4,
+        "Unaligned sample grids: start spread 2e-06 s": 18,
+        "Within-channel sample-grid offset: YL.B04W..LDH; 0.002703 s; merge refused": 1,
+        "Unaligned sample grids: start spread 9.8e-05 s": 4,
+        "Unaligned sample grids: start spread 9.9e-05 s": 1,
+        "Unaligned sample grids: start spread 5e-06 s": 1,
+        "Unaligned sample grids: start spread 0.000104 s": 1,
+        "Unaligned sample grids: start spread 0.000101 s": 1,
+        "Phase convention or arrival overlap needs review": 1,
+        "Missing, gapped, nonfinite or flat window": 2
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.7384653505748583
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.7524047628406514
+        },
+        {
+          "event": "usp000hnj4",
+          "origin_utc": "2010-10-25T14:42:22.460000Z",
+          "magnitude": 7.8,
+          "gain": 0.7352724950130572
+        },
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.7438804522369209
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.7242416953158476
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.7471668950505951
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.7346352102516753
+        },
+        {
+          "event": "usp000hncm",
+          "origin_utc": "2010-10-21T17:53:13.570000Z",
+          "magnitude": 6.7,
+          "gain": 0.72501002760349
+        },
+        {
+          "event": "usp000he7r",
+          "origin_utc": "2010-06-18T02:23:05.580000Z",
+          "magnitude": 6.2,
+          "gain": 0.7585102688524362
+        },
+        {
+          "event": "usp000hf3t",
+          "origin_utc": "2010-07-10T11:43:32.790000Z",
+          "magnitude": 6.3,
+          "gain": 0.7386818107595899
+        },
+        {
+          "event": "usp000hh4n",
+          "origin_utc": "2010-07-30T03:56:13.710000Z",
+          "magnitude": 6.3,
+          "gain": 0.7479493277638698
+        }
+      ]
+    },
+    {
+      "station": "B09W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B09W/YL.B09W..LDH__20091127T000000__02424d73ac0f/rayleigh_calibration/run_eafc6df2e132/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 17,
+        "Phase convention or arrival overlap needs review": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 19,
+        "Unaligned sample grids: start spread 9.8e-05 s": 3,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Unaligned sample grids: start spread 0.000102 s": 5,
+        "Unaligned sample grids: start spread 0.0001 s": 14,
+        "Within-channel sample-grid offset: YL.B09W..LDH; 0.005302 s; merge refused": 1,
+        "Insufficient band coherence": 10
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.7936830865198552
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.7918329996627308
+        },
+        {
+          "event": "usp000h9fs",
+          "origin_utc": "2010-03-16T02:21:57.940000Z",
+          "magnitude": 6.7,
+          "gain": 0.7988751653275874
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.7905978395929794
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.7633917589641049
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.7629771640497718
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.792579875921175
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.7892893386685199
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.7957605218250088
+        },
+        {
+          "event": "usp000h8vq",
+          "origin_utc": "2010-03-07T07:05:24.640000Z",
+          "magnitude": 6.3,
+          "gain": 0.8201593642924521
+        },
+        {
+          "event": "usp000hbtp",
+          "origin_utc": "2010-04-23T10:03:06.180000Z",
+          "magnitude": 6,
+          "gain": 0.8019669447693336
+        },
+        {
+          "event": "usp000he7r",
+          "origin_utc": "2010-06-18T02:23:05.580000Z",
+          "magnitude": 6.2,
+          "gain": 0.7999884469754436
+        }
+      ]
+    },
+    {
+      "station": "B11W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B11W/YL.B11W..LDH__20091129T000000__31c8b4896280/rayleigh_calibration/run_6672d944ee1a/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 17,
+        "Phase convention or arrival overlap needs review": 6,
+        "Insufficient band coherence": 45,
+        "Missing, gapped, nonfinite or flat window": 6,
+        "Within-channel sample-grid offset: YL.B11W..LDH; 0.0002 s; merge refused": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 6,
+        "Unaligned sample grids: start spread 4e-06 s": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5696445948860276
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.5478581816806979
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5572927407065885
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.5492912593668517
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.5615557647174141
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.5708868957786289
+        }
+      ]
+    },
+    {
+      "station": "B14W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B14W/YL.B14W..LDH__20091127T000000__ca39fc357868/rayleigh_calibration/run_c81c68b54c6f/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 17,
+        "Phase convention or arrival overlap needs review": 4,
+        "Insufficient band coherence": 39,
+        "Missing, gapped, nonfinite or flat window": 7,
+        "Unaligned sample grids: start spread 3e-06 s": 1,
+        "Within-channel sample-grid offset: YL.B14W..LDH; 0.000599 s; merge refused": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 3,
+        "Unaligned sample grids: start spread 0.000101 s": 1,
+        "Unaligned sample grids: start spread 9.7e-05 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.6421371792770703
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.6539873093548508
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.6270041614659332
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.6306778847374891
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.6636271470647563
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.6497071577458114
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.6497952922760349
+        },
+        {
+          "event": "usp000hf8z",
+          "origin_utc": "2010-07-14T08:32:21.490000Z",
+          "magnitude": 6.6,
+          "gain": 0.6455876694692568
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.6290422562112471
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.6582736900870975
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.6434981391562031
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.666453390764429
+        },
+        {
+          "event": "usp000hf3t",
+          "origin_utc": "2010-07-10T11:43:32.790000Z",
+          "magnitude": 6.3,
+          "gain": 0.6525793766304642
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.6642350063023003
+        },
+        {
+          "event": "usp000hjda",
+          "origin_utc": "2010-08-18T16:28:15.440000Z",
+          "magnitude": 6.3,
+          "gain": 0.6557072033373794
+        }
+      ]
+    },
+    {
+      "station": "C01W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C01W/YL.C01W..LDH__20091126T000000__d233642da3a4/rayleigh_calibration/run_0f859a8abe55/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 14,
+        "Phase convention or arrival overlap needs review": 3,
+        "Insufficient band coherence": 49,
+        "Missing, gapped, nonfinite or flat window": 7,
+        "Unaligned sample grids: start spread 0.0001 s": 4,
+        "Unaligned sample grids: start spread 2e-06 s": 7,
+        "Within-channel sample-grid offset: YL.C01W..LDH; 0.0008 s; merge refused": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5760430505111097
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.5676624654781762
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.5926526038940333
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5803870254763268
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.5747452971020838
+        }
+      ]
+    },
+    {
+      "station": "C03W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C03W/YL.C03W..LDH__20091125T000000__d64cf978f644/rayleigh_calibration/run_524211b9656f/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 14,
+        "Phase convention or arrival overlap needs review": 3,
+        "Unaligned sample grids: start spread 3e-06 s": 14,
+        "Unaligned sample grids: start spread 0.0001 s": 5,
+        "Insufficient band coherence": 28,
+        "Unaligned sample grids: start spread 0.000103 s": 2,
+        "Unaligned sample grids: start spread 0.000101 s": 3,
+        "Unaligned sample grids: start spread 9.9e-05 s": 3,
+        "Within-channel sample-grid offset: YL.C03W..LDH; 0.002703 s; merge refused": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 3,
+        "Missing, gapped, nonfinite or flat window": 6,
+        "Unaligned sample grids: start spread 0.000102 s": 1,
+        "Unaligned sample grids: start spread 5e-06 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.6699585688134967
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.6926987448140438
+        },
+        {
+          "event": "usp000hnj4",
+          "origin_utc": "2010-10-25T14:42:22.460000Z",
+          "magnitude": 7.8,
+          "gain": 0.669076311774211
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.6879419793040048
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.6885890282139288
+        },
+        {
+          "event": "usp000hncm",
+          "origin_utc": "2010-10-21T17:53:13.570000Z",
+          "magnitude": 6.7,
+          "gain": 0.6917065816017145
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.673453583987059
+        }
+      ]
+    },
+    {
+      "station": "C05W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C05W/YL.C05W..LDH__20091125T000000__79c42390b572/rayleigh_calibration/run_f5d0ed7cf634/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 14,
+        "Unaligned sample grids: start spread 2e-06 s": 2,
+        "Unaligned sample grids: start spread 0.0001 s": 10,
+        "Missing, gapped, nonfinite or flat window": 13,
+        "Phase convention or arrival overlap needs review": 3,
+        "Insufficient band coherence": 25,
+        "Within-channel sample-grid offset: YL.C05W..LDH; 0.002 s; merge refused": 1,
+        "Unaligned sample grids: start spread 9.8e-05 s": 1,
+        "Unaligned sample grids: start spread 0.000102 s": 2
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5881570273079093
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.5840498844110745
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.594397857384545
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5856590004645764
+        },
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.5913103984156913
+        },
+        {
+          "event": "usp000h8rt",
+          "origin_utc": "2010-03-05T11:47:06.820000Z",
+          "magnitude": 6.6,
+          "gain": 0.5757513989457788
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.5887575181607365
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.5880278096173435
+        },
+        {
+          "event": "usp000hf8z",
+          "origin_utc": "2010-07-14T08:32:21.490000Z",
+          "magnitude": 6.6,
+          "gain": 0.5833935116667752
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.5655715970506997
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.5768838968754296
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.5804465512119273
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.5777839841035084
+        },
+        {
+          "event": "usp000h5m6",
+          "origin_utc": "2010-01-02T08:45:33.020000Z",
+          "magnitude": 6.1,
+          "gain": 0.5697410629163289
+        },
+        {
+          "event": "usp000h8vq",
+          "origin_utc": "2010-03-07T07:05:24.640000Z",
+          "magnitude": 6.3,
+          "gain": 0.5924787951036992
+        },
+        {
+          "event": "usp000he7r",
+          "origin_utc": "2010-06-18T02:23:05.580000Z",
+          "magnitude": 6.2,
+          "gain": 0.6164398061193607
+        },
+        {
+          "event": "usp000hf3t",
+          "origin_utc": "2010-07-10T11:43:32.790000Z",
+          "magnitude": 6.3,
+          "gain": 0.5801939074455651
+        },
+        {
+          "event": "usp000hg73",
+          "origin_utc": "2010-07-20T19:18:20.370000Z",
+          "magnitude": 6.3,
+          "gain": 0.5641817574026313
+        },
+        {
+          "event": "usp000hh4n",
+          "origin_utc": "2010-07-30T03:56:13.710000Z",
+          "magnitude": 6.3,
+          "gain": 0.5852610620044565
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.593017059794632
+        }
+      ]
+    },
+    {
+      "station": "C07W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C07W/YL.C07W..LDH__20091124T000000__5b494ac9f526/rayleigh_calibration/run_621bf2f89b89/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 17,
+        "Phase convention or arrival overlap needs review": 6,
+        "Unaligned sample grids: start spread 0.000102 s": 3,
+        "Unaligned sample grids: start spread 2e-06 s": 24,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Within-channel sample-grid offset: YL.C07W..LDH; 0.000502 s; merge refused": 1,
+        "Unaligned sample grids: start spread 3e-06 s": 2,
+        "Insufficient band coherence": 10
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.2725226158858713
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.2667833270945296
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.2853731282659332
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.5246243314495495
+        },
+        {
+          "event": "usp000h9fs",
+          "origin_utc": "2010-03-16T02:21:57.940000Z",
+          "magnitude": 6.7,
+          "gain": 0.2690709084103596
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.26991269164124915
+        },
+        {
+          "event": "usp000hde8",
+          "origin_utc": "2010-05-31T19:51:45.870000Z",
+          "magnitude": 6.5,
+          "gain": 0.5426203249749514
+        },
+        {
+          "event": "usp000hf8z",
+          "origin_utc": "2010-07-14T08:32:21.490000Z",
+          "magnitude": 6.6,
+          "gain": 0.2765888121421756
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.2592174715820343
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.27073208270192683
+        },
+        {
+          "event": "usp000h68a",
+          "origin_utc": "2010-01-17T12:00:01.080000Z",
+          "magnitude": 6.3,
+          "gain": 0.26792225499739514
+        },
+        {
+          "event": "usp000h6z1",
+          "origin_utc": "2010-02-05T06:59:05.500000Z",
+          "magnitude": 6.2,
+          "gain": 0.2615464803818447
+        },
+        {
+          "event": "usp000h71c",
+          "origin_utc": "2010-02-07T06:10:00.230000Z",
+          "magnitude": 6.3,
+          "gain": 0.2654072994424016
+        },
+        {
+          "event": "usp000ha0a",
+          "origin_utc": "2010-03-26T14:52:07.230000Z",
+          "magnitude": 6.3,
+          "gain": 0.2642585389577962
+        },
+        {
+          "event": "usp000hbjw",
+          "origin_utc": "2010-04-17T23:15:22.020000Z",
+          "magnitude": 6.2,
+          "gain": 0.27540779910020874
+        },
+        {
+          "event": "usp000hc8w",
+          "origin_utc": "2010-05-03T10:27:45.090000Z",
+          "magnitude": 6.1,
+          "gain": 0.26353509860288105
+        },
+        {
+          "event": "usp000he7r",
+          "origin_utc": "2010-06-18T02:23:05.580000Z",
+          "magnitude": 6.2,
+          "gain": 0.5266146748995987
+        },
+        {
+          "event": "usp000heqj",
+          "origin_utc": "2010-06-30T07:22:27.690000Z",
+          "magnitude": 6.3,
+          "gain": 0.26685086351764187
+        },
+        {
+          "event": "usp000heww",
+          "origin_utc": "2010-07-04T21:55:51.980000Z",
+          "magnitude": 6.3,
+          "gain": 0.2673134229701976
+        },
+        {
+          "event": "usp000hh4n",
+          "origin_utc": "2010-07-30T03:56:13.710000Z",
+          "magnitude": 6.3,
+          "gain": 0.26021174133373537
+        },
+        {
+          "event": "usp000hm7a",
+          "origin_utc": "2010-09-26T12:12:41.710000Z",
+          "magnitude": 6,
+          "gain": 0.5259426181706223
+        }
+      ]
+    },
+    {
+      "station": "C08W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C08W/YL.C08W..LDH__20091124T000000__d1f52db80541/rayleigh_calibration/run_6f2fec9b30c3/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 15,
+        "Phase convention or arrival overlap needs review": 5,
+        "Unaligned sample grids: start spread 0.0001 s": 5,
+        "Unaligned sample grids: start spread 2e-06 s": 9,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Insufficient band coherence": 36,
+        "Unaligned sample grids: start spread 9.7e-05 s": 1,
+        "Within-channel sample-grid offset: YL.C08W..LDH; 0.0011 s; merge refused": 1,
+        "Unaligned sample grids: start spread 0.000101 s": 1,
+        "Unaligned sample grids: start spread 0.000102 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5878034083804264
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.6087576856287518
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.5924264463862952
+        },
+        {
+          "event": "usp000h8rt",
+          "origin_utc": "2010-03-05T11:47:06.820000Z",
+          "magnitude": 6.6,
+          "gain": 0.5837975071963781
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.5934073342424724
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.6018315837414013
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.6128672025014243
+        },
+        {
+          "event": "usp000h68a",
+          "origin_utc": "2010-01-17T12:00:01.080000Z",
+          "magnitude": 6.3,
+          "gain": 0.5912650808123632
+        },
+        {
+          "event": "usp000hbjw",
+          "origin_utc": "2010-04-17T23:15:22.020000Z",
+          "magnitude": 6.2,
+          "gain": 0.5797714491206581
+        },
+        {
+          "event": "usp000hf3t",
+          "origin_utc": "2010-07-10T11:43:32.790000Z",
+          "magnitude": 6.3,
+          "gain": 0.5928219974570651
+        }
+      ]
+    },
+    {
+      "station": "C09W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C09W/YL.C09W..LDH__20091124T000000__b03e50938908/rayleigh_calibration/run_fcfb5a46632c/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 15,
+        "Phase convention or arrival overlap needs review": 6,
+        "Unaligned sample grids: start spread 2e-06 s": 2,
+        "Unaligned sample grids: start spread 0.0001 s": 12,
+        "Unaligned sample grids: start spread 0.000101 s": 2,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Within-channel sample-grid offset: YL.C09W..LDH; 0.0022 s; merge refused": 1,
+        "Insufficient band coherence": 15
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.5944839271924899
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5787626730931842
+        },
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.5798441233976073
+        },
+        {
+          "event": "nc71338066",
+          "origin_utc": "2010-01-10T00:27:39.320000Z",
+          "magnitude": 6.5,
+          "gain": 0.5743414968921373
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.5945034687508725
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.568742699452931
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.5753031014637088
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.5854003624140149
+        },
+        {
+          "event": "usp000hf8z",
+          "origin_utc": "2010-07-14T08:32:21.490000Z",
+          "magnitude": 6.6,
+          "gain": 0.5740921287312588
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.5541536848338466
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.5717706627389898
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.5662113786573467
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.567837843284401
+        },
+        {
+          "event": "usp000h5cu",
+          "origin_utc": "2009-12-26T08:57:27.720000Z",
+          "magnitude": 6.1,
+          "gain": 0.5701995429445887
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.5776175391555428
+        },
+        {
+          "event": "usp000h68a",
+          "origin_utc": "2010-01-17T12:00:01.080000Z",
+          "magnitude": 6.3,
+          "gain": 0.570557292421165
+        },
+        {
+          "event": "usp000h6z1",
+          "origin_utc": "2010-02-05T06:59:05.500000Z",
+          "magnitude": 6.2,
+          "gain": 0.5767852541028659
+        },
+        {
+          "event": "usp000h71c",
+          "origin_utc": "2010-02-07T06:10:00.230000Z",
+          "magnitude": 6.3,
+          "gain": 0.5819987953730587
+        },
+        {
+          "event": "usp000h86y",
+          "origin_utc": "2010-02-28T11:25:35.920000Z",
+          "magnitude": 6.2,
+          "gain": 0.5807128340721094
+        },
+        {
+          "event": "usp000h8vq",
+          "origin_utc": "2010-03-07T07:05:24.640000Z",
+          "magnitude": 6.3,
+          "gain": 0.5841549040943174
+        },
+        {
+          "event": "usp000ha0a",
+          "origin_utc": "2010-03-26T14:52:07.230000Z",
+          "magnitude": 6.3,
+          "gain": 0.5779412270272569
+        },
+        {
+          "event": "usp000ha3d",
+          "origin_utc": "2010-03-28T21:38:28.000000Z",
+          "magnitude": 6,
+          "gain": 0.5741853339131751
+        },
+        {
+          "event": "usp000hbjw",
+          "origin_utc": "2010-04-17T23:15:22.020000Z",
+          "magnitude": 6.2,
+          "gain": 0.5774289142465717
+        },
+        {
+          "event": "usp000he7r",
+          "origin_utc": "2010-06-18T02:23:05.580000Z",
+          "magnitude": 6.2,
+          "gain": 0.5795448934495266
+        },
+        {
+          "event": "usp000heww",
+          "origin_utc": "2010-07-04T21:55:51.980000Z",
+          "magnitude": 6.3,
+          "gain": 0.5613279408040781
+        },
+        {
+          "event": "usp000hf3t",
+          "origin_utc": "2010-07-10T11:43:32.790000Z",
+          "magnitude": 6.3,
+          "gain": 0.568105562287108
+        },
+        {
+          "event": "usp000hh4n",
+          "origin_utc": "2010-07-30T03:56:13.710000Z",
+          "magnitude": 6.3,
+          "gain": 0.5722429194601563
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.5777100852291465
+        },
+        {
+          "event": "usp000hkg9",
+          "origin_utc": "2010-09-09T07:28:01.720000Z",
+          "magnitude": 6.2,
+          "gain": 0.5693511999431852
+        },
+        {
+          "event": "usp000hm7a",
+          "origin_utc": "2010-09-26T12:12:41.710000Z",
+          "magnitude": 6,
+          "gain": 0.571084039617671
+        },
+        {
+          "event": "usp000hmkj",
+          "origin_utc": "2010-10-04T13:28:38.860000Z",
+          "magnitude": 6.3,
+          "gain": 0.5826418424119084
+        }
+      ]
+    },
+    {
+      "station": "C10W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C10W/YL.C10W..LDH__20091125T000000__80851e783255/rayleigh_calibration/run_e8ad60922538/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 14,
+        "Phase convention or arrival overlap needs review": 2,
+        "Insufficient band coherence": 51,
+        "Unaligned sample grids: start spread 2e-06 s": 8,
+        "Unaligned sample grids: start spread 9.9e-05 s": 1,
+        "Missing, gapped, nonfinite or flat window": 10,
+        "Within-channel sample-grid offset: YL.C10W..LDH; 0.0014 s; merge refused": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 3
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.7057380433773798
+        }
+      ]
+    },
+    {
+      "station": "C11W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C11W/YL.C11W..LDH__20091125T000000__e6794b64c948/rayleigh_calibration/run_ad5fd0541ad6/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 14,
+        "Phase convention or arrival overlap needs review": 4,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Insufficient band coherence": 35,
+        "Unaligned sample grids: start spread 2e-06 s": 5,
+        "Within-channel sample-grid offset: YL.C11W..LDH; 0.0011 s; merge refused": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 10
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5891962258153199
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.5774556843122929
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.5841674227502537
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5782503571171254
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.5606547147805336
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.588702583505351
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.5738892593027882
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.5918268742182268
+        },
+        {
+          "event": "usp000hf8z",
+          "origin_utc": "2010-07-14T08:32:21.490000Z",
+          "magnitude": 6.6,
+          "gain": 0.5781413303031421
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.5589559732845883
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.5742007020550552
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.5728096745463706
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.5621659571003811
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.5906590366908333
+        }
+      ]
+    },
+    {
+      "station": "C16W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C16W/YL.C16W..LDH__20091124T000000__391aff5163ab/rayleigh_calibration/run_03fe13689868/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 19,
+        "Phase convention or arrival overlap needs review": 5,
+        "Unaligned sample grids: start spread 2e-06 s": 6,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Insufficient band coherence": 33,
+        "Within-channel sample-grid offset: YL.C16W..LDH; 0.000499 s; merge refused": 1,
+        "Unaligned sample grids: start spread 9.9e-05 s": 2,
+        "Unaligned sample grids: start spread 0.000101 s": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 3
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5905727826870427
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.6047084621886882
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5947490671151793
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.5848560923184772
+        },
+        {
+          "event": "usp000h8rt",
+          "origin_utc": "2010-03-05T11:47:06.820000Z",
+          "magnitude": 6.6,
+          "gain": 0.6076895729792564
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.60674857368013
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.5862078125452505
+        },
+        {
+          "event": "usp000hbws",
+          "origin_utc": "2010-04-26T02:59:52.150000Z",
+          "magnitude": 6.5,
+          "gain": 0.5987958120849811
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.5857352005583302
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.5873767252209059
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.5777257502973128
+        },
+        {
+          "event": "usp000h56g",
+          "origin_utc": "2009-12-19T13:02:15.570000Z",
+          "magnitude": 6.4,
+          "gain": 0.6041413405626768
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.5917441692453955
+        },
+        {
+          "event": "usp000hjda",
+          "origin_utc": "2010-08-18T16:28:15.440000Z",
+          "magnitude": 6.3,
+          "gain": 0.5863370542313764
+        }
+      ]
+    },
+    {
+      "station": "C17W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C17W/YL.C17W..LDH__20091123T000000__4c1e1a3c4748/rayleigh_calibration/run_fd1fa8bc3a78/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 19,
+        "Phase convention or arrival overlap needs review": 3,
+        "Unaligned sample grids: start spread 0.0001 s": 8,
+        "Missing, gapped, nonfinite or flat window": 7,
+        "Unaligned sample grids: start spread 2e-06 s": 8,
+        "Insufficient band coherence": 22,
+        "Within-channel sample-grid offset: YL.C17W..LDH; 0.0018 s; merge refused": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.7421275815646872
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.7437512925130304
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.7318295494091234
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.7205583217928052
+        },
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.7461894152915066
+        },
+        {
+          "event": "usp000h8rt",
+          "origin_utc": "2010-03-05T11:47:06.820000Z",
+          "magnitude": 6.6,
+          "gain": 0.7302540912070107
+        },
+        {
+          "event": "usp000ha59",
+          "origin_utc": "2010-03-30T16:54:46.730000Z",
+          "magnitude": 6.6,
+          "gain": 0.6931957421888048
+        },
+        {
+          "event": "usp000hcbx",
+          "origin_utc": "2010-05-05T16:29:03.210000Z",
+          "magnitude": 6.5,
+          "gain": 0.7348984242387433
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.7445062290772574
+        },
+        {
+          "event": "usp000hde8",
+          "origin_utc": "2010-05-31T19:51:45.870000Z",
+          "magnitude": 6.5,
+          "gain": 0.7219773803273662
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.71233147417386
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.7337684357195993
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.7307806176447602
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.7295738460254697
+        },
+        {
+          "event": "usp000h4gy",
+          "origin_utc": "2009-11-28T06:04:22.200000Z",
+          "magnitude": 6,
+          "gain": 0.7244067427331249
+        },
+        {
+          "event": "usp000h6z1",
+          "origin_utc": "2010-02-05T06:59:05.500000Z",
+          "magnitude": 6.2,
+          "gain": 0.7509374641315247
+        },
+        {
+          "event": "usp000h71c",
+          "origin_utc": "2010-02-07T06:10:00.230000Z",
+          "magnitude": 6.3,
+          "gain": 0.7317034417201403
+        },
+        {
+          "event": "usp000h7bg",
+          "origin_utc": "2010-02-15T21:51:47.790000Z",
+          "magnitude": 6.2,
+          "gain": 0.7392742475078595
+        },
+        {
+          "event": "usp000h8mn",
+          "origin_utc": "2010-03-03T17:44:25.040000Z",
+          "magnitude": 6.1,
+          "gain": 0.7213485538958454
+        },
+        {
+          "event": "usp000h8vq",
+          "origin_utc": "2010-03-07T07:05:24.640000Z",
+          "magnitude": 6.3,
+          "gain": 0.7314596878130128
+        },
+        {
+          "event": "usp000ha0a",
+          "origin_utc": "2010-03-26T14:52:07.230000Z",
+          "magnitude": 6.3,
+          "gain": 0.7257922421237265
+        },
+        {
+          "event": "usp000heww",
+          "origin_utc": "2010-07-04T21:55:51.980000Z",
+          "magnitude": 6.3,
+          "gain": 0.7375524945374444
+        },
+        {
+          "event": "usp000hg73",
+          "origin_utc": "2010-07-20T19:18:20.370000Z",
+          "magnitude": 6.3,
+          "gain": 0.7254053987564447
+        },
+        {
+          "event": "usp000hh4n",
+          "origin_utc": "2010-07-30T03:56:13.710000Z",
+          "magnitude": 6.3,
+          "gain": 0.7218345302249576
+        }
+      ]
+    },
+    {
+      "station": "F02W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/F02W/YL.F02W..LDH__20091120T000000__8f3ad6fb1de3/rayleigh_calibration/run_a2003c25c5c0/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 15,
+        "Phase convention or arrival overlap needs review": 4,
+        "Missing, gapped, nonfinite or flat window": 9,
+        "Unaligned sample grids: start spread 0.000101 s": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 2,
+        "Insufficient band coherence": 37,
+        "Within-channel sample-grid offset: YL.F02W..LDH; 0.0006 s; merge refused": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 4,
+        "Unaligned sample grids: start spread 3e-06 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.7292992241912272
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.7206468752175278
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.7373792222705585
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.7316405333007057
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.7211736908060071
+        },
+        {
+          "event": "nc71338066",
+          "origin_utc": "2010-01-10T00:27:39.320000Z",
+          "magnitude": 6.5,
+          "gain": 0.7084315085068947
+        },
+        {
+          "event": "usp000h8rt",
+          "origin_utc": "2010-03-05T11:47:06.820000Z",
+          "magnitude": 6.6,
+          "gain": 0.724446919639423
+        },
+        {
+          "event": "usp000h9cg",
+          "origin_utc": "2010-03-14T08:08:03.960000Z",
+          "magnitude": 6.5,
+          "gain": 0.7432966493800163
+        },
+        {
+          "event": "usp000ha59",
+          "origin_utc": "2010-03-30T16:54:46.730000Z",
+          "magnitude": 6.6,
+          "gain": 0.7370398445368294
+        },
+        {
+          "event": "usp000hbbt",
+          "origin_utc": "2010-04-13T23:49:38.330000Z",
+          "magnitude": 6.9,
+          "gain": 0.7440791867431846
+        },
+        {
+          "event": "usp000hhhx",
+          "origin_utc": "2010-08-04T22:01:43.620000Z",
+          "magnitude": 7,
+          "gain": 0.7170002004836058
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.7326250760728048
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.7478457449868527
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.7390522567192622
+        },
+        {
+          "event": "usp000h4gy",
+          "origin_utc": "2009-11-28T06:04:22.200000Z",
+          "magnitude": 6,
+          "gain": 0.730160349232067
+        },
+        {
+          "event": "usp000h5j2",
+          "origin_utc": "2009-12-31T09:23:24.010000Z",
+          "magnitude": 6,
+          "gain": 0.7392723115251739
+        },
+        {
+          "event": "usp000hh4n",
+          "origin_utc": "2010-07-30T03:56:13.710000Z",
+          "magnitude": 6.3,
+          "gain": 0.7127184186664992
+        }
+      ]
+    },
+    {
+      "station": "N02W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/N02W/YL.N02W..LDH__20091128T000000__f9dff5786e51/rayleigh_calibration/run_5b2e40be7119/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 17,
+        "Phase convention or arrival overlap needs review": 5,
+        "Unaligned sample grids: start spread 9.8e-05 s": 3,
+        "Unaligned sample grids: start spread 9.9e-05 s": 2,
+        "Unaligned sample grids: start spread 2e-06 s": 6,
+        "Unaligned sample grids: start spread 3e-06 s": 11,
+        "Within-channel sample-grid offset: YL.N02W..LDH; 0.003198 s; merge refused": 1,
+        "Unaligned sample grids: start spread 0.0001 s": 5,
+        "Unaligned sample grids: start spread 0.000101 s": 4,
+        "Missing, gapped, nonfinite or flat window": 4,
+        "Insufficient band coherence": 11,
+        "Unaligned sample grids: start spread 0.000103 s": 2,
+        "Unaligned sample grids: start spread 9.7e-05 s": 1,
+        "Unaligned sample grids: start spread 9.5e-05 s": 1,
+        "Unaligned sample grids: start spread 3.1e-05 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.6270237361546275
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.608224461057147
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.6142422265186521
+        },
+        {
+          "event": "usp000hnj4",
+          "origin_utc": "2010-10-25T14:42:22.460000Z",
+          "magnitude": 7.8,
+          "gain": 0.6100064966510097
+        },
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.6242718172813702
+        },
+        {
+          "event": "nc71338066",
+          "origin_utc": "2010-01-10T00:27:39.320000Z",
+          "magnitude": 6.5,
+          "gain": 0.6059112472472238
+        },
+        {
+          "event": "usp000h8rt",
+          "origin_utc": "2010-03-05T11:47:06.820000Z",
+          "magnitude": 6.6,
+          "gain": 0.6022367192747065
+        },
+        {
+          "event": "usp000h9fs",
+          "origin_utc": "2010-03-16T02:21:57.940000Z",
+          "magnitude": 6.7,
+          "gain": 0.610278381633129
+        },
+        {
+          "event": "usp000ha59",
+          "origin_utc": "2010-03-30T16:54:46.730000Z",
+          "magnitude": 6.6,
+          "gain": 0.5945454201134835
+        },
+        {
+          "event": "usp000hj6r",
+          "origin_utc": "2010-08-14T23:01:04.090000Z",
+          "magnitude": 6.6,
+          "gain": 0.6181458464582525
+        },
+        {
+          "event": "usp000h6z1",
+          "origin_utc": "2010-02-05T06:59:05.500000Z",
+          "magnitude": 6.2,
+          "gain": 0.6099474729663003
+        },
+        {
+          "event": "usp000he7r",
+          "origin_utc": "2010-06-18T02:23:05.580000Z",
+          "magnitude": 6.2,
+          "gain": 0.610294540013408
+        },
+        {
+          "event": "usp000heww",
+          "origin_utc": "2010-07-04T21:55:51.980000Z",
+          "magnitude": 6.3,
+          "gain": 0.6055915713293321
+        },
+        {
+          "event": "usp000hf3t",
+          "origin_utc": "2010-07-10T11:43:32.790000Z",
+          "magnitude": 6.3,
+          "gain": 0.6053191721767053
+        },
+        {
+          "event": "usp000hg73",
+          "origin_utc": "2010-07-20T19:18:20.370000Z",
+          "magnitude": 6.3,
+          "gain": 0.6108130962210672
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.6150645840160087
+        }
+      ]
+    },
+    {
+      "station": "N03W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/N03W/YL.N03W..LDH__20091128T000000__4f9f84d1185d/rayleigh_calibration/run_e88ea28accf8/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 17,
+        "Unaligned sample grids: start spread 0.0001 s": 7,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Insufficient band coherence": 25,
+        "Phase convention or arrival overlap needs review": 4,
+        "Within-channel sample-grid offset: YL.N03W..LDH; 0.0023 s; merge refused": 1,
+        "Unaligned sample grids: start spread 2e-06 s": 7,
+        "Unaligned sample grids: start spread 9.9e-05 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "ci14607652",
+          "origin_utc": "2010-04-04T22:40:42.360000Z",
+          "magnitude": 7.2,
+          "gain": 0.5890291655430305
+        },
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.5817144433941549
+        },
+        {
+          "event": "usp000hchk",
+          "origin_utc": "2010-05-09T05:59:41.620000Z",
+          "magnitude": 7.2,
+          "gain": 0.5775850963289801
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.5842739176860894
+        },
+        {
+          "event": "usp000h5ra",
+          "origin_utc": "2010-01-05T04:55:39.410000Z",
+          "magnitude": 6.8,
+          "gain": 0.5839800709749998
+        },
+        {
+          "event": "usp000h8rt",
+          "origin_utc": "2010-03-05T11:47:06.820000Z",
+          "magnitude": 6.6,
+          "gain": 0.5773903026156522
+        },
+        {
+          "event": "usp000h9fs",
+          "origin_utc": "2010-03-16T02:21:57.940000Z",
+          "magnitude": 6.7,
+          "gain": 0.5742212944983187
+        },
+        {
+          "event": "usp000ha59",
+          "origin_utc": "2010-03-30T16:54:46.730000Z",
+          "magnitude": 6.6,
+          "gain": 0.5838428584401785
+        },
+        {
+          "event": "usp000hbws",
+          "origin_utc": "2010-04-26T02:59:52.150000Z",
+          "magnitude": 6.5,
+          "gain": 0.5758159010277262
+        },
+        {
+          "event": "usp000hd6j",
+          "origin_utc": "2010-05-26T08:53:08.030000Z",
+          "magnitude": 6.5,
+          "gain": 0.5916336746792549
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.5808605039779325
+        },
+        {
+          "event": "usp000h5m6",
+          "origin_utc": "2010-01-02T08:45:33.020000Z",
+          "magnitude": 6.1,
+          "gain": 0.5827251148114702
+        },
+        {
+          "event": "usp000h71c",
+          "origin_utc": "2010-02-07T06:10:00.230000Z",
+          "magnitude": 6.3,
+          "gain": 0.5708468853350064
+        },
+        {
+          "event": "usp000h8vq",
+          "origin_utc": "2010-03-07T07:05:24.640000Z",
+          "magnitude": 6.3,
+          "gain": 0.5735841426113208
+        },
+        {
+          "event": "usp000hef3",
+          "origin_utc": "2010-06-24T05:32:27.400000Z",
+          "magnitude": 6.1,
+          "gain": 0.5801012273699021
+        },
+        {
+          "event": "usp000hf3t",
+          "origin_utc": "2010-07-10T11:43:32.790000Z",
+          "magnitude": 6.3,
+          "gain": 0.5798880863497328
+        },
+        {
+          "event": "usp000hg73",
+          "origin_utc": "2010-07-20T19:18:20.370000Z",
+          "magnitude": 6.3,
+          "gain": 0.5811982562360658
+        },
+        {
+          "event": "usp000hhe9",
+          "origin_utc": "2010-08-03T12:08:25.950000Z",
+          "magnitude": 6.3,
+          "gain": 0.5882696349514119
+        },
+        {
+          "event": "usp000hjda",
+          "origin_utc": "2010-08-18T16:28:15.440000Z",
+          "magnitude": 6.3,
+          "gain": 0.5867603668624749
+        },
+        {
+          "event": "usp000hmkj",
+          "origin_utc": "2010-10-04T13:28:38.860000Z",
+          "magnitude": 6.3,
+          "gain": 0.5759742039589437
+        }
+      ]
+    },
+    {
+      "station": "S01W",
+      "source_result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/S01W/YL.S01W..LDH__20091122T000000__d3985066d8f9/rayleigh_calibration/run_a124efe977d7/comparison.json",
+      "rejected_reasons": {
+        "Reviewed window must follow origin and span at most 2 h": 15,
+        "Phase convention or arrival overlap needs review": 3,
+        "Unaligned sample grids: start spread 2e-06 s": 7,
+        "Unaligned sample grids: start spread 9.8e-05 s": 1,
+        "Missing, gapped, nonfinite or flat window": 8,
+        "Insufficient band coherence": 40,
+        "Unaligned sample grids: start spread 0.0001 s": 10,
+        "Within-channel sample-grid offset: YL.S01W..LDH; 0.0019 s; merge refused": 1,
+        "Unaligned sample grids: start spread 9.7e-05 s": 1
+      },
+      "candidate_pressure_multipliers": [
+        {
+          "event": "usp000hat0",
+          "origin_utc": "2010-04-06T22:15:01.580000Z",
+          "magnitude": 7.8,
+          "gain": 0.5753305728777187
+        },
+        {
+          "event": "usp000hdwb",
+          "origin_utc": "2010-06-12T19:26:50.460000Z",
+          "magnitude": 7.5,
+          "gain": 0.6016355055918325
+        },
+        {
+          "event": "usp000hfku",
+          "origin_utc": "2010-07-18T13:34:59.360000Z",
+          "magnitude": 7.3,
+          "gain": 0.5752889473828017
+        },
+        {
+          "event": "usp000hj2j",
+          "origin_utc": "2010-08-13T21:19:34.090000Z",
+          "magnitude": 6.9,
+          "gain": 0.5959385091681157
+        },
+        {
+          "event": "usp000hk3k",
+          "origin_utc": "2010-09-03T11:16:06.600000Z",
+          "magnitude": 6.5,
+          "gain": 0.5942956646498185
+        }
+      ]
+    }
+  ],
+  "protected_sha256": {
+    "results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json": "be73eb2b080abc093c31a8c323cd9c86ba0d71e90ef05d57a6872315b6fb5cf4",
+    "exports/master_inventory.xlsx": "7041a9d0142d62764a591d3af62e56cc3acd5ea6a7b8ee4701d3ea470c3335e5",
+    "exports/master_inventory.csv": "d929f43ad006decd638ac64b9bb9388f5c0b9d82e9402c82a33b5c9b3e8c45f8",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A02W/YL.A02W..LDH__20091121T000000__8bfea72e5856/rayleigh_calibration/run_bd88e60be2c6/comparison.json": "b12d3801f9a35d64347d6c87c2ad171fa946f3b522689994eded77847ba721a0",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A06W/YL.A06W..LDH__20091122T000000__d9caed0ac097/rayleigh_calibration/run_22878f90143a/comparison.json": "2c4c1696f80c5197818e42063f579a405fa90c5ffc62b8acffe039f39433b344",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A08W/YL.A08W..LDH__20091122T000000__a16dd0a45c0d/rayleigh_calibration/run_57a3e62d752f/comparison.json": "72494024125bce3494489176db1b43565760a7c7b60595115bdc61bf33285460",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A10W/YL.A10W..LDH__20091122T000000__14ba80b6daa0/rayleigh_calibration/run_e52cc1df8f02/comparison.json": "83030344e0b80e93572765e0e586e366316cf8d12c43e94b476ee7f62e46a0b1",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_FIVE_NO_TILT/YL/A12W/YL.A12W..LDH__20091123T000000__4bb2d10157f3/rayleigh_calibration/run_221fcf985bd3/comparison.json": "3b603dc1e4784ba5874250fd9dce2e65a43ab9aab34a01c3615c1ec3f36aa035",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/A14W/YL.A14W..LDH__20091123T000000__62a9f83c601a/rayleigh_calibration/run_7202450f7045/comparison.json": "59affdf0898e371d40d055f96c74dcdc74b680e580a56a8135071905c111ac96",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B01W/YL.B01W..LDH__20091127T000000__bd171fb03356/rayleigh_calibration/run_e3049c70ac68/comparison.json": "e8d418ed9bb015560f0f994fba341c63aa69c3ad3cffc2ad41295ff960e98856",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B04W/YL.B04W..LDH__20091127T000000__c8afb61ab312/rayleigh_calibration/run_d2a12dbc98f1/comparison.json": "90bb43f4bc55a0b475efb8baf3722b873c28dc3c67fbba97fdf0b3ab80a21789",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B09W/YL.B09W..LDH__20091127T000000__02424d73ac0f/rayleigh_calibration/run_eafc6df2e132/comparison.json": "ff0a3c036c185a78e0b1bd7945f52c522548e69f1f7aff46db8e68ddbd82067c",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B11W/YL.B11W..LDH__20091129T000000__31c8b4896280/rayleigh_calibration/run_6672d944ee1a/comparison.json": "4bc4fc7d8231628b9295510e1caa9c726e8640227e1aa6cc7c90298be81680fe",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/B14W/YL.B14W..LDH__20091127T000000__ca39fc357868/rayleigh_calibration/run_c81c68b54c6f/comparison.json": "4d5d08f1674c4da18a269ce69a181aed44effbff5cb2ca59a9a9262fc81b6b9f",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C01W/YL.C01W..LDH__20091126T000000__d233642da3a4/rayleigh_calibration/run_0f859a8abe55/comparison.json": "6a868519c96ad8a0e330187948c2c7fa1843da14f81aefab4c7277a501ea2ec4",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C03W/YL.C03W..LDH__20091125T000000__d64cf978f644/rayleigh_calibration/run_524211b9656f/comparison.json": "f3ed1cfc8ee6397c30f07a6c2ed2eebcb19c872d00eb1986fef07cd2cd97a0f9",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C05W/YL.C05W..LDH__20091125T000000__79c42390b572/rayleigh_calibration/run_f5d0ed7cf634/comparison.json": "b573e5fc7606dde5335be3e5b5bdbace4cc9e7173fc6985d0fddbfc7cd28c834",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C07W/YL.C07W..LDH__20091124T000000__5b494ac9f526/rayleigh_calibration/run_621bf2f89b89/comparison.json": "16a90c072c2d216abf828a01b507e95361eead2456d4a455ab92f315b9b3c8d7",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C08W/YL.C08W..LDH__20091124T000000__d1f52db80541/rayleigh_calibration/run_6f2fec9b30c3/comparison.json": "8008c443bbf81fae7db5a8d9a71d4de9afe6f9adc165093c9048c83ee312f6a7",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C09W/YL.C09W..LDH__20091124T000000__b03e50938908/rayleigh_calibration/run_fcfb5a46632c/comparison.json": "1c9500a2184bb6b035ea67573a230b33e17b8d26183ccd375c1b15fac1443b12",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C10W/YL.C10W..LDH__20091125T000000__80851e783255/rayleigh_calibration/run_e8ad60922538/comparison.json": "69cc8aa2ab75bf7aad3657f5cbf10bdcecf172ac0f983beae0fe0b0f413b1c3e",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C11W/YL.C11W..LDH__20091125T000000__e6794b64c948/rayleigh_calibration/run_ad5fd0541ad6/comparison.json": "bd42ab330f8c0c2ab9116349d2ca982ae39d9276b76091da4b8b5c086f975453",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C16W/YL.C16W..LDH__20091124T000000__391aff5163ab/rayleigh_calibration/run_03fe13689868/comparison.json": "0a51ec2b5e89aef9ca6f404cf0405f9de85cb544b36a7237683c404d68523de2",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/C17W/YL.C17W..LDH__20091123T000000__4c1e1a3c4748/rayleigh_calibration/run_fd1fa8bc3a78/comparison.json": "49d77737c757b77a6125175bb1a63c00eaa3d7a4a06b18cff75e49046de62efc",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/F02W/YL.F02W..LDH__20091120T000000__8f3ad6fb1de3/rayleigh_calibration/run_a2003c25c5c0/comparison.json": "f35e1397c257788ece086e174a4c3ef0623fb1bac36c98b6e1c6dda3effcd5b0",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/N02W/YL.N02W..LDH__20091128T000000__f9dff5786e51/rayleigh_calibration/run_5b2e40be7119/comparison.json": "339c51e86482c9314edb7c403bc098642a6ab50c68f3a58fadb825d67421e157",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/N03W/YL.N03W..LDH__20091128T000000__4f9f84d1185d/rayleigh_calibration/run_e88ea28accf8/comparison.json": "782e87574b950579f48ebc15e80c8d321c14efc628266ccdbe5d4eb676cdba98",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YL_ALL_PPSD/YL/S01W/YL.S01W..LDH__20091122T000000__d3985066d8f9/rayleigh_calibration/run_a124efe977d7/comparison.json": "d70cfd21162092670fd26b71884c1d1b2685bc597ae9954f88c590327609b8ac"
+  },
+  "protected_inputs_preserved": true,
+  "correction_applied": false,
+  "caveats": [
+    "Nominal response versions must be reconciled before treating coefficients as identical",
+    "Reciprocal conversion does not make differently directed least-squares fits identical",
+    "Current band/model/windows and event selection differ from the paper",
+    "M>=7 subset is diagnostic from already accepted events, not the paper's event set"
+  ]
+}

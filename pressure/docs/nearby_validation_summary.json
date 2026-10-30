@@ -1,0 +1,111 @@
+{
+  "scope": "Isolated copies of five completed YV pressure products; production master untouched",
+  "status_counts": {
+    "exploratory_only": 4,
+    "no_suitable_neighbors": 1
+  },
+  "source_products_unchanged": true,
+  "scores_preserved": true,
+  "stations": [
+    {
+      "seed_id": "YV.RR43.00.BDH",
+      "status": "exploratory_only",
+      "criteria": {
+        "preferred_distance_km": 50,
+        "maximum_distance_km": 100,
+        "preferred_depth_fraction": 0.05,
+        "maximum_depth_fraction": 0.1,
+        "minimum_common_days": 30,
+        "minimum_daily_coverage_hours": 12,
+        "minimum_reference_stations": 2,
+        "response_loss_db": 3
+      },
+      "qualifying_target_days": 165,
+      "reference_stations": 2,
+      "joint_common_days": 153,
+      "compared_frequency_bins": 83,
+      "median_difference_db": -0.059009552001953125,
+      "score": null
+    },
+    {
+      "seed_id": "YV.RR44.00.BDH",
+      "status": "exploratory_only",
+      "criteria": {
+        "preferred_distance_km": 50,
+        "maximum_distance_km": 100,
+        "preferred_depth_fraction": 0.05,
+        "maximum_depth_fraction": 0.1,
+        "minimum_common_days": 30,
+        "minimum_daily_coverage_hours": 12,
+        "minimum_reference_stations": 2,
+        "response_loss_db": 3
+      },
+      "qualifying_target_days": 153,
+      "reference_stations": 3,
+      "joint_common_days": 153,
+      "compared_frequency_bins": 83,
+      "median_difference_db": -1.9903998374938965,
+      "score": null
+    },
+    {
+      "seed_id": "YV.RR47.00.BDH",
+      "status": "exploratory_only",
+      "criteria": {
+        "preferred_distance_km": 50,
+        "maximum_distance_km": 100,
+        "preferred_depth_fraction": 0.05,
+        "maximum_depth_fraction": 0.1,
+        "minimum_common_days": 30,
+        "minimum_daily_coverage_hours": 12,
+        "minimum_reference_stations": 2,
+        "response_loss_db": 3
+      },
+      "qualifying_target_days": 173,
+      "reference_stations": 3,
+      "joint_common_days": 161,
+      "compared_frequency_bins": 83,
+      "median_difference_db": 1.2615694999694824,
+      "score": null
+    },
+    {
+      "seed_id": "YV.RR48.00.BDH",
+      "status": "exploratory_only",
+      "criteria": {
+        "preferred_distance_km": 50,
+        "maximum_distance_km": 100,
+        "preferred_depth_fraction": 0.05,
+        "maximum_depth_fraction": 0.1,
+        "minimum_common_days": 30,
+        "minimum_daily_coverage_hours": 12,
+        "minimum_reference_stations": 2,
+        "response_loss_db": 3
+      },
+      "qualifying_target_days": 161,
+      "reference_stations": 2,
+      "joint_common_days": 153,
+      "compared_frequency_bins": 83,
+      "median_difference_db": 1.5301504135131836,
+      "score": null
+    },
+    {
+      "seed_id": "YV.RR52.00.BDH",
+      "status": "no_suitable_neighbors",
+      "criteria": {
+        "preferred_distance_km": 50,
+        "maximum_distance_km": 100,
+        "preferred_depth_fraction": 0.05,
+        "maximum_depth_fraction": 0.1,
+        "minimum_common_days": 30,
+        "minimum_daily_coverage_hours": 12,
+        "minimum_reference_stations": 2,
+        "response_loss_db": 3
+      },
+      "qualifying_target_days": 328,
+      "reference_stations": 0,
+      "joint_common_days": 0,
+      "compared_frequency_bins": 0,
+      "median_difference_db": null,
+      "score": null
+    }
+  ]
+}

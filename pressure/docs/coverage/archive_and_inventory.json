@@ -1,0 +1,742 @@
+{
+ "data_directory": "<DATA>",
+ "recognized_files": 97519,
+ "ignored_files": {
+  ".DS_Store": 75,
+  ".xml": 29
+ },
+ "layouts": {
+  "sds": 55945,
+  "daily": 33496,
+  "sds_mseed": 8078
+ },
+ "header_streams": 566,
+ "files_with_issues": [
+  {
+   "filename_seed_id": "7D.J43A..BDH",
+   "issue": "unreadable_header",
+   "files": 4
+  },
+  {
+   "filename_seed_id": "7D.J43A..BH1",
+   "issue": "unreadable_header",
+   "files": 4
+  },
+  {
+   "filename_seed_id": "7D.J43A..BH2",
+   "issue": "unreadable_header",
+   "files": 4
+  },
+  {
+   "filename_seed_id": "7D.J43A..BHZ",
+   "issue": "unreadable_header",
+   "files": 4
+  },
+  {
+   "filename_seed_id": "XO.LA33.00.RKO",
+   "issue": "filename_header_mismatch",
+   "files": 223
+  },
+  {
+   "filename_seed_id": "XO.LA34.00.RKO",
+   "issue": "filename_header_mismatch",
+   "files": 218
+  },
+  {
+   "filename_seed_id": "XO.LT02.00.RKO",
+   "issue": "filename_header_mismatch",
+   "files": 220
+  }
+ ],
+ "excluded_duplicate_copies_by_stream": {
+  "7D.J35A..BDH": 30,
+  "7D.J35A..BH1": 30,
+  "7D.J35A..BH2": 30,
+  "7D.J35A..BHZ": 30,
+  "7D.J36A..BDH": 31,
+  "7D.J36A..BH1": 31,
+  "7D.J36A..BH2": 31,
+  "7D.J43A..BDH": 26,
+  "7D.J43A..BH1": 27,
+  "7D.J43A..BH2": 26,
+  "7D.J43A..BHZ": 26,
+  "7D.J44A..BDH": 31,
+  "7D.J44A..BH1": 31,
+  "7D.J44A..BH2": 31,
+  "7D.J44A..BHZ": 31,
+  "7D.J67A..LDH": 30,
+  "7D.J67A..LH1": 30,
+  "7D.J67A..LH2": 30,
+  "7D.J67A..LHZ": 30,
+  "XO.LA33..HDH": 30,
+  "XO.LA33..HH1": 30,
+  "XO.LA33..HH2": 30,
+  "XO.LA33..HHZ": 30,
+  "XO.LA34..HDH": 30,
+  "XO.LA34..HH1": 29,
+  "XO.LA34..HH2": 29,
+  "XO.LA34..HHZ": 29,
+  "XO.LT02..HDH": 30,
+  "XO.LT02..HH1": 29,
+  "XO.LT02..HH2": 29,
+  "XO.LT02..HHZ": 29,
+  "XO.WD66..LDH": 30,
+  "XO.WD66..LH1": 30,
+  "XO.WD66..LH2": 30,
+  "XO.WD66..LHZ": 30,
+  "XO.WD70..LDH": 29,
+  "XO.WD70..LH1": 29,
+  "XO.WD70..LH2": 29,
+  "XO.WD70..LHZ": 29
+ },
+ "unmatched_streams": [
+  {
+   "seed_id": "YV.RR53.00.BDH",
+   "reason": "data_outside_inventory_epochs",
+   "seconds": 40260.90000009537,
+   "intervals": [
+    [
+     "2013-10-30T10:28:57.000000Z",
+     "2013-10-30T21:39:57.900000Z"
+    ]
+   ],
+   "files": 303
+  },
+  {
+   "seed_id": "YV.RR53.00.BH1",
+   "reason": "data_outside_inventory_epochs",
+   "seconds": 40260.859999895096,
+   "intervals": [
+    [
+     "2013-10-30T10:28:57.000000Z",
+     "2013-10-30T21:39:57.860000Z"
+    ]
+   ],
+   "files": 303
+  },
+  {
+   "seed_id": "YV.RR53.00.BH2",
+   "reason": "data_outside_inventory_epochs",
+   "seconds": 40293.88000011444,
+   "intervals": [
+    [
+     "2013-10-30T10:28:24.000000Z",
+     "2013-10-30T21:39:57.880000Z"
+    ]
+   ],
+   "files": 303
+  },
+  {
+   "seed_id": "YV.RR53.00.BHZ",
+   "reason": "data_outside_inventory_epochs",
+   "seconds": 40288.81999993324,
+   "intervals": [
+    [
+     "2013-10-30T10:28:29.000000Z",
+     "2013-10-30T21:39:57.820000Z"
+    ]
+   ],
+   "files": 303
+  }
+ ],
+ "inventory_sources": [
+  {
+   "network": "YV",
+   "path": "~/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml",
+   "sha256": "58afc2d6f0056e52cf954bdd5b9fb80e92f9572d44d067b30966a160d2044494",
+   "epochs": 227
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/A02W/inventory.xml",
+   "sha256": "8bfea72e58564bc06ce10119cc93de57f0662a6949562929900643399d2bada3",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/A06W/inventory.xml",
+   "sha256": "d9caed0ac0977d80133a736192ae6eec596a2fb246500d932822460ac377ed53",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/A08W/inventory.xml",
+   "sha256": "a16dd0a45c0d2b2aea9e78aa46c0900cbe9e064826c94cc2e805811605aa047b",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/A10W/inventory.xml",
+   "sha256": "14ba80b6daa0221793200c74c76772e95ba00767e65eb24281e92830515c1eab",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/A12W/inventory.xml",
+   "sha256": "4bb2d10157f3e17422dd9f759887dee46148cf1c965d382228180c427eb3079a",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/A14W/inventory.xml",
+   "sha256": "62a9f83c601aae207262e6b10110bb563394c0819de0c1b67ef33f2b42f7a269",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/B01W/inventory.xml",
+   "sha256": "bd171fb03356ea4a79f9991a3bde1e3649ed091180bf6dabaa067a3ead0e421f",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/B04W/inventory.xml",
+   "sha256": "c8afb61ab312763716b2e40e29234f3e0a7e2051e2d555dfdc5f895ac9bf3d79",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/B09W/inventory.xml",
+   "sha256": "02424d73ac0f6f37831d68b2e2fe332fdedbaaf8977be4b4290088bc53357745",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/B11W/inventory.xml",
+   "sha256": "31c8b4896280b71a86cb4a1f18845d6022f20bce6d2c807ff7deb2d90044e7d0",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/B14W/inventory.xml",
+   "sha256": "ca39fc357868595adf24b15c7824dd7a7c3d36a68e19c84776fde4417a83f89c",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C01W/inventory.xml",
+   "sha256": "d233642da3a47a20f8c732b9ff27ea1b30382646ceb4bcf6f2f217ae509db1ed",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C03W/inventory.xml",
+   "sha256": "d64cf978f644af81e3666888b05e50bcca2f0fa719ae809c840a9256e8cf4a04",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C05W/inventory.xml",
+   "sha256": "79c42390b5729f907924d9941e8c8dab8147840077a236cf882575948ad10f1c",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C07W/inventory.xml",
+   "sha256": "5b494ac9f526d29cd738cd0dcca58f15833e43f2a9227103927e01be0f472da8",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C08W/inventory.xml",
+   "sha256": "d1f52db805414692f76ed894bdf5bf2b933aa5b48992b31b35f90149e642142e",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C09W/inventory.xml",
+   "sha256": "b03e50938908e1dbcb68aaab486976e29b18855e2334bf35b8e2ceb783f69484",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C10W/inventory.xml",
+   "sha256": "80851e78325548e208dd551efcc4404e5553c8f79a39528b7b452e485a5545e3",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C11W/inventory.xml",
+   "sha256": "e6794b64c948d851f6b5a44e118eaac9b6a843246b86df3ed5128400f5069634",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C16W/inventory.xml",
+   "sha256": "391aff5163ab8c0a1b5d91b99f25dcdc6a18085c6cfedaf2ccdaf84056a69273",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/C17W/inventory.xml",
+   "sha256": "4c1e1a3c47489d5a8cfa0fec0c54c3ecce690e948663a0fd8d35b88139f57312",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/F02W/inventory.xml",
+   "sha256": "8f3ad6fb1de3d65ac614b50e80811d5887103f28dbdb0af897e6c1eb5aedcf7d",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/N02W/inventory.xml",
+   "sha256": "f9dff5786e51ee7fd1738fca394b2bdf222c647368ee8579b9cdce9df67c4547",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/N03W/inventory.xml",
+   "sha256": "4f9f84d1185d1d5f3d22403ee822905de347fa1a9b645d62cf49bbfeca2836ec",
+   "epochs": 4
+  },
+  {
+   "network": "YL",
+   "path": "<DATA>/YL/S01W/inventory.xml",
+   "sha256": "d3985066d8f93d86fa1bfddc2a4c2ce336fc9695fbbe57ad37f3784acb5b4051",
+   "epochs": 4
+  },
+  {
+   "network": "7D",
+   "path": "<SOURCE>/results/NETWORKS/7D_ALL_NO_TILT/_inputs/responses/7D.J28A,J29A,J30A,J35A,J36A,J38A,J43A,J44A,J45A,J52A,J53A,J54A,J55A,J63A,J67A.xml",
+   "sha256": "8eddb0417931d8c90ba2b1842c082a88c2ba45317703e678c7b7ac9c6c348419",
+   "epochs": 52
+  },
+  {
+   "network": "7D",
+   "path": "<SOURCE>/results/NETWORKS/7D_J67A_NO_TILT/_inputs/responses/7D.J67A.xml",
+   "sha256": "ea48b003f1661c8bd8a076fd6c7e16c3cda9ed409bee894d9341f6033b27736e",
+   "epochs": 2
+  },
+  {
+   "network": "7D",
+   "path": "~/Desktop/Data_Bruit_FM/INVENTORIES/7D.xml",
+   "sha256": "0199d728bf3cfc50e2450424d1a4dac48d7c359f027ebd5d84cf590d2ae91144",
+   "epochs": 5167
+  },
+  {
+   "network": "XO",
+   "path": "~/Desktop/Data_Bruit_FM/INVENTORIES/XO.xml",
+   "sha256": "5280b35c8981135b2a6eea59de96bbf7c806273fb720bbd43c8d9b38561971fe",
+   "epochs": 1388
+  },
+  {
+   "network": "XO",
+   "path": "<DATA>/XO/LA33/inventory.xml",
+   "sha256": "67add0aafb29a63c2eb2b7ca2a455c2e8ac6086a8482abaf9b5525fa09793eb2",
+   "epochs": 7
+  },
+  {
+   "network": "XO",
+   "path": "<DATA>/XO/LA34/inventory.xml",
+   "sha256": "644339d18b1f9b5c3ed0f51633a6026f39e7002dba9839f3c13513bbfe8f66fc",
+   "epochs": 7
+  },
+  {
+   "network": "XO",
+   "path": "<DATA>/XO/LT02/inventory.xml",
+   "sha256": "dd49b1a8e8736506231f02e965b10176c39a7d5a3e3eba85c5cbd9438be3126d",
+   "epochs": 7
+  },
+  {
+   "network": "XO",
+   "path": "<DATA>/XO/WD48/inventory.xml",
+   "sha256": "9d42b02a8b6c01b64241224aec0e468d1cc6b4fa82c275b4bac6b8ccc33fba5a",
+   "epochs": 36
+  }
+ ],
+ "inventory_epochs_without_local_data": {
+  "7D:horizontal": 1212,
+  "7D:other": 2605,
+  "7D:pressure": 502,
+  "7D:vertical": 606,
+  "XO:horizontal": 204,
+  "XO:other": 908,
+  "XO:pressure": 122,
+  "XO:vertical": 102,
+  "YV:horizontal": 27,
+  "YV:pressure": 14,
+  "YV:vertical": 14
+ },
+ "evidence_unjoined": [
+  {
+   "check": "local_p",
+   "seed_id": "7D.J28A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J28A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J29A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J29A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J30A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J30A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J35A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J36A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J38A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J38A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J43A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J44A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J45A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J45A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J52A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J52A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J53A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J53A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J54A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J54A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J55A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J55A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J63A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J63A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J67A..BXH",
+   "reason": "no_master_epoch",
+   "source_status": "no_full_pressure_response",
+   "note": "pressure files exist; no epoch with a full Pa response"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "7D.J67A..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "XO.WD48..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "XO.WD66..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "XO.WD70..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.A02W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.A06W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.A08W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.A10W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.A12W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.A14W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.B01W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.B04W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.B09W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.B11W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.B14W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C01W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C03W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C05W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C07W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C08W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C09W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C10W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C11W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C16W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.C17W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.F02W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.N02W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.N03W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  },
+  {
+   "check": "local_p",
+   "seed_id": "YL.S01W..LDH",
+   "reason": "no_master_epoch",
+   "source_status": "not_applicable_sample_rate",
+   "note": "usable band <= 0.40 Hz is below local-P frequencies"
+  }
+ ],
+ "evidence_errors": []
+}

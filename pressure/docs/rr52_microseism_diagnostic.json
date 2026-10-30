@@ -1,0 +1,200 @@
+{
+  "status": "diagnostic_only",
+  "station": "YV.RR52",
+  "source_comparison": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json",
+  "pressure_seed_id": "YV.RR52.00.BDH",
+  "vertical_seed_id": "YV.RR52.00.BHZ",
+  "input_interval_utc": [
+    "2013-06-10T00:00:00.000000Z",
+    "2013-06-17T00:00:00.000000Z"
+  ],
+  "retained_segments": 167,
+  "estimator": "S_dp = mean(D * conjugate(P))",
+  "transfer_direction": "pressure_to_upward_displacement",
+  "transfer_units": "m/Pa",
+  "pressure_gain_fit_performed": false,
+  "rayleigh_gain_refit_performed": false,
+  "fixed_reference_applied_to_original_data": false,
+  "identifiability": {
+    "equation": "H_nominal(f) = (g_pressure/g_vertical) * eta(f; structure, water)",
+    "conclusion": "not_identifiable_from_saved_PZ_spectra_alone",
+    "missing_constraints": [
+      "independently verified vertical amplitude response",
+      "station-specific coupled water/sediment/crust modal model",
+      "independently verified water depth"
+    ],
+    "interpretation": "The fixed Rayleigh pressure multiplier only rescales the displayed transfer by its reciprocal; it is not estimated by this diagnostic."
+  },
+  "method_limits": [
+    "saved pressure/vertical spectra only; no waveform recalculation",
+    "no horizontal spectra or tilt correction",
+    "no local-event/coda exclusion",
+    "one week rather than a seasonal or deployment-scale sample",
+    "published coherence rules are comparison references, not adopted scores",
+    "metadata response shape is not an independent field calibration",
+    "no modal prediction, gain estimate, uncertainty interval, or classification"
+  ],
+  "response_snapshot_metadata": {
+    "YV.RR52.00.BDH": {
+      "sensor_description": "DPG",
+      "input_units": "PA",
+      "sample_rate_hz": 62.5,
+      "sensitivity": 495.0,
+      "sensitivity_frequency_hz": 1.0,
+      "response_amplitude_relative_to_reference": {
+        "0.1": 1.0035527767506371,
+        "0.15": 1.0053535810662764,
+        "0.2": 1.005901075385893
+      },
+      "stationxml_elevation_m": -2918.0
+    },
+    "YV.RR52.00.BHZ": {
+      "sensor_description": "Trillium240OBS",
+      "input_units": "M/S",
+      "sample_rate_hz": 62.5,
+      "sensitivity": 692640000.0,
+      "sensitivity_frequency_hz": 1.0,
+      "response_amplitude_relative_to_reference": {
+        "0.1": 0.996824593661425,
+        "0.15": 0.9968777255427881,
+        "0.2": 0.9969455604452219
+      },
+      "stationxml_elevation_m": -2918.0
+    }
+  },
+  "results": {
+    "frequency_band_hz": [
+      0.1,
+      0.2
+    ],
+    "valid_bins": 361,
+    "median_coherence_squared": 0.8021421719900791,
+    "median_nominal_transfer_amplitude_m_pa": 4.985790411039408e-08,
+    "median_nominal_transfer_phase_deg": 4.1191171095913575,
+    "fixed_pressure_multiplier": 0.6787278140712512,
+    "fixed_reference_relation": "H_fixed = H_nominal / g_pressure",
+    "median_fixed_reference_transfer_amplitude_m_pa": 7.345787674639206e-08,
+    "ruan_high_coherence_reference": {
+      "coherence_squared_greater_than": 0.95,
+      "bins": 29,
+      "fraction_of_band": 0.08033240997229917,
+      "frequency_min_hz": 0.10055555555555555,
+      "frequency_max_hz": 0.12055555555555555,
+      "median_nominal_transfer_amplitude_m_pa": 2.536123050304157e-07,
+      "median_fixed_reference_transfer_amplitude_m_pa": 3.736583351567084e-07
+    },
+    "saikia_daily_reference": {
+      "band_mean_coherence_squared_greater_than": 0.8,
+      "selected_days": 6,
+      "available_days": 7,
+      "selected_dates_utc": [
+        "2013-06-10",
+        "2013-06-12",
+        "2013-06-13",
+        "2013-06-14",
+        "2013-06-15",
+        "2013-06-16"
+      ],
+      "selected_stack_median_nominal_transfer_amplitude_m_pa": 5.028785192146164e-08,
+      "selected_stack_median_fixed_reference_amplitude_m_pa": 7.409133805761871e-08
+    }
+  },
+  "daily": [
+    {
+      "date_utc": "2013-06-10",
+      "segments": 24,
+      "band_mean_coherence_squared": 0.8197506856839174,
+      "band_median_coherence_squared": 0.824162984644222,
+      "band_median_transfer_amplitude_m_pa": 5.144069680949351e-08,
+      "passes_saikia_reference": true
+    },
+    {
+      "date_utc": "2013-06-11",
+      "segments": 24,
+      "band_mean_coherence_squared": 0.7910764712770668,
+      "band_median_coherence_squared": 0.7939169789873167,
+      "band_median_transfer_amplitude_m_pa": 5.083880202309612e-08,
+      "passes_saikia_reference": false
+    },
+    {
+      "date_utc": "2013-06-12",
+      "segments": 24,
+      "band_mean_coherence_squared": 0.8052891375331817,
+      "band_median_coherence_squared": 0.8053527019050705,
+      "band_median_transfer_amplitude_m_pa": 5.039292046668224e-08,
+      "passes_saikia_reference": true
+    },
+    {
+      "date_utc": "2013-06-13",
+      "segments": 24,
+      "band_mean_coherence_squared": 0.83217720167659,
+      "band_median_coherence_squared": 0.8206074430844942,
+      "band_median_transfer_amplitude_m_pa": 4.8741666836004367e-08,
+      "passes_saikia_reference": true
+    },
+    {
+      "date_utc": "2013-06-14",
+      "segments": 24,
+      "band_mean_coherence_squared": 0.8078661907677818,
+      "band_median_coherence_squared": 0.8179126850918639,
+      "band_median_transfer_amplitude_m_pa": 5.037849249771144e-08,
+      "passes_saikia_reference": true
+    },
+    {
+      "date_utc": "2013-06-15",
+      "segments": 24,
+      "band_mean_coherence_squared": 0.8242115776062313,
+      "band_median_coherence_squared": 0.8394125079548459,
+      "band_median_transfer_amplitude_m_pa": 5.0670139352061295e-08,
+      "passes_saikia_reference": true
+    },
+    {
+      "date_utc": "2013-06-16",
+      "segments": 23,
+      "band_mean_coherence_squared": 0.8204636663923837,
+      "band_median_coherence_squared": 0.8394850018867231,
+      "band_median_transfer_amplitude_m_pa": 5.184872069360076e-08,
+      "passes_saikia_reference": true
+    }
+  ],
+  "provenance": {
+    "saved_input_artifacts": {
+      "comparison": {
+        "path": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json",
+        "sha256": "430976c5372c5e586b9551e386961f76cc247cc79390028858a082cbabc2ddc1"
+      },
+      "spectra": {
+        "path": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.npz",
+        "sha256": "5ffc9082882681d1305ae7f493da531ed745efa5058345b6d5a6855046c77b62"
+      },
+      "frequency_table": {
+        "path": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.csv",
+        "sha256": "b45972dbf45bdadc305b21779045333e0c6e3a0d4715b81fa2c11deb82885ee8"
+      },
+      "windows": {
+        "path": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/windows.csv",
+        "sha256": "42ab19863ab2ab5edd8c7bbeded528dfd85f138f49e1f990811961612b0a17a4"
+      },
+      "plot": {
+        "path": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra_coherence_transfer.png",
+        "sha256": "19a45d72e64b3c84dc5eab7c3ab231985e79a40d3954c916b001990b10d37b2d"
+      }
+    },
+    "analyzer_sha256": "d96582ba01b7cd4091639728b11d44bfdfbd7e74c1ddd49e14dff1f18f8eafb2",
+    "source_metadata_and_recorded_hashes_verified": true
+  },
+  "output_files": {
+    "frequency_table": {
+      "path": "/Users/mohammadamin/Projects/bruit-fm/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/frequency_diagnostic.csv",
+      "sha256": "9dda929234ae59fdab719b66f86d0ece102ae601c6e9b2753a888fabe01b4b95"
+    },
+    "daily_table": {
+      "path": "/Users/mohammadamin/Projects/bruit-fm/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/daily_diagnostic.csv",
+      "sha256": "cf974146fccca1e24a577dc77907aed48d4f7e4151f9d12a1a1320af324206fa"
+    },
+    "plot": {
+      "path": "/Users/mohammadamin/Projects/bruit-fm/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/microseism_pressure_vertical_diagnostic.png",
+      "sha256": "aed2186aca7ad2b02e531ab634b48a61aae151bfb22b3e231bd0f78509939a5e"
+    }
+  }
+}

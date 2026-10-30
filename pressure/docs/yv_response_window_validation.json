@@ -1,0 +1,913 @@
+{
+  "scope": "Saved response snapshots and candidate timing metadata only",
+  "convention_source": "https://docs.fdsn.org/projects/stationxml/en/latest/response.html",
+  "workflow_execution_status": "complete",
+  "workflow_status_counts": {
+    "unresolved": 25,
+    "candidate_comparison_under_assumed_sign": 16,
+    "reference_band_unusable": 2
+  },
+  "responses": [
+    {
+      "station": "RR03",
+      "inventory": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/inventory.xml",
+      "stage": 1,
+      "input_units": "PA",
+      "output_units": "V",
+      "frequency_hz": [
+        0.03,
+        0.05,
+        0.07
+      ],
+      "poles": [
+        [
+          0.047357,
+          0.0
+        ]
+      ],
+      "direct_phase_deg": [
+        -14.102912981953358,
+        -8.572339758646544,
+        -6.145524517441447
+      ],
+      "max_complex_relative_evalresp_error": 4.470295706891604e-16,
+      "original_over_reflected_amplitude": [
+        1.0000000000000002,
+        1.0,
+        1.0
+      ],
+      "original_over_reflected_phase_deg": [
+        -28.20582596390671,
+        -17.14467951729309,
+        -12.291049034882894
+      ]
+    },
+    {
+      "station": "RR22",
+      "inventory": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/inventory.xml",
+      "stage": 1,
+      "input_units": "PA",
+      "output_units": "V",
+      "frequency_hz": [
+        0.03,
+        0.05,
+        0.07
+      ],
+      "poles": [
+        [
+          0.099011,
+          0.0
+        ]
+      ],
+      "direct_phase_deg": [
+        -27.71158387643069,
+        -17.49286063577132,
+        -12.686686072525136
+      ],
+      "max_complex_relative_evalresp_error": 2.237135224443647e-16,
+      "original_over_reflected_amplitude": [
+        1.0,
+        0.9999999999999999,
+        0.9999999999999999
+      ],
+      "original_over_reflected_phase_deg": [
+        -55.42316775286138,
+        -34.98572127154264,
+        -25.373372145050276
+      ]
+    },
+    {
+      "station": "RR52",
+      "inventory": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/inventory.xml",
+      "stage": 1,
+      "input_units": "PA",
+      "output_units": "V",
+      "frequency_hz": [
+        0.03,
+        0.05,
+        0.07
+      ],
+      "poles": [
+        [
+          -0.0182,
+          0.0
+        ]
+      ],
+      "direct_phase_deg": [
+        5.515040716537117,
+        3.31557608548257,
+        2.36956382408847
+      ],
+      "max_complex_relative_evalresp_error": 2.369093745256871e-16,
+      "original_over_reflected_amplitude": [
+        1.0,
+        1.0,
+        0.9999999999999999
+      ],
+      "original_over_reflected_phase_deg": [
+        -3.72681194116552e-16,
+        -1.563435598749572e-16,
+        1.174856807528889e-16
+      ]
+    },
+    {
+      "station": "RR52",
+      "inventory": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/inventory.xml",
+      "stage": 2,
+      "input_units": "V",
+      "output_units": "V",
+      "frequency_hz": [
+        0.03,
+        0.05,
+        0.07
+      ],
+      "poles": [
+        [
+          -0.04838,
+          0.0
+        ],
+        [
+          -57.471,
+          0.0
+        ],
+        [
+          -100.0,
+          0.0
+        ],
+        [
+          -1655.6,
+          0.0
+        ]
+      ],
+      "direct_phase_deg": [
+        14.093511593805113,
+        8.252153475974582,
+        5.573699752373988
+      ],
+      "max_complex_relative_evalresp_error": 9.4635893878362e-17,
+      "original_over_reflected_amplitude": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "original_over_reflected_phase_deg": [
+        1.3255064494263135e-15,
+        7.101849480904308e-16,
+        1.0708210515123808e-16
+      ]
+    }
+  ],
+  "windows": [
+    {
+      "station": "RR03",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_5749ed2dd477/comparison.json",
+      "distance_km": 16172.02138487621,
+      "start_utc": "2013-01-05T09:51:49.265552Z",
+      "end_utc": "2013-01-05T10:21:49.265552Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 120.69735115354979
+    },
+    {
+      "station": "RR03",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_5749ed2dd477/comparison.json",
+      "distance_km": 5531.605422844715,
+      "start_utc": "2013-04-16T10:52:47.470465Z",
+      "end_utc": "2013-04-16T11:22:47.470465Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1359.4967420101166,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1359.496742,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 41.284271537529776
+    },
+    {
+      "station": "RR03",
+      "event": "usb000ief9",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_5749ed2dd477/comparison.json",
+      "distance_km": 7371.374438197366,
+      "start_utc": "2013-07-15T14:19:55.224348Z",
+      "end_utc": "2013-07-15T14:49:55.224348Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1596.9201147556305,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1596.920115,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 55.01509971310361
+    },
+    {
+      "station": "RR07",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_a411435db0be/comparison.json",
+      "distance_km": 15936.164706557902,
+      "start_utc": "2013-01-05T09:50:49.261480Z",
+      "end_utc": "2013-01-05T10:20:49.261480Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 118.93707173965322
+    },
+    {
+      "station": "RR07",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_a411435db0be/comparison.json",
+      "distance_km": 11291.802024553743,
+      "start_utc": "2013-02-08T15:59:31.206595Z",
+      "end_utc": "2013-02-08T16:29:31.206595Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 84.27459757062161
+    },
+    {
+      "station": "RR07",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_a411435db0be/comparison.json",
+      "distance_km": 5343.279068032302,
+      "start_utc": "2013-04-16T10:51:59.558537Z",
+      "end_utc": "2013-04-16T11:21:59.558537Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1335.3516409397125,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1335.351641,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 39.878727256001866
+    },
+    {
+      "station": "RR08",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_25e0313fc030/comparison.json",
+      "distance_km": 15858.530653753036,
+      "start_utc": "2013-01-05T09:50:29.510674Z",
+      "end_utc": "2013-01-05T10:20:29.510674Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 118.35766213402212
+    },
+    {
+      "station": "RR08",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_25e0313fc030/comparison.json",
+      "distance_km": 11110.40836531004,
+      "start_utc": "2013-02-08T15:58:45.058407Z",
+      "end_utc": "2013-02-08T16:28:45.058407Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 82.92079437770462
+    },
+    {
+      "station": "RR08",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_25e0313fc030/comparison.json",
+      "distance_km": 5306.805356620953,
+      "start_utc": "2013-04-16T10:51:50.279295Z",
+      "end_utc": "2013-04-16T11:21:50.279295Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1330.7102539539337,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1330.710254,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 39.606511417961656
+    },
+    {
+      "station": "RR09",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_02a4dca97477/comparison.json",
+      "distance_km": 15719.384131786188,
+      "start_utc": "2013-01-05T09:49:54.110540Z",
+      "end_utc": "2013-01-05T10:19:54.110540Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 117.31916383971975
+    },
+    {
+      "station": "RR09",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_02a4dca97477/comparison.json",
+      "distance_km": 10802.919023055794,
+      "start_utc": "2013-02-08T15:57:26.830336Z",
+      "end_utc": "2013-02-08T16:27:26.830336Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 80.62589578495727
+    },
+    {
+      "station": "RR09",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_02a4dca97477/comparison.json",
+      "distance_km": 5264.903661643139,
+      "start_utc": "2013-04-16T10:51:39.619124Z",
+      "end_utc": "2013-04-16T11:21:39.619124Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1325.392215013504,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1325.392215,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 39.29378467389506
+    },
+    {
+      "station": "RR11",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR11/YV.RR11.00.BDH__20120930T091725__58afc2d6f005/rayleigh_calibration/run_cfbae234adf0/comparison.json",
+      "distance_km": 15611.511786724424,
+      "start_utc": "2013-01-05T09:49:26.666840Z",
+      "end_utc": "2013-01-05T10:19:26.666840Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 116.51407547124563
+    },
+    {
+      "station": "RR11",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR11/YV.RR11.00.BDH__20120930T091725__58afc2d6f005/rayleigh_calibration/run_cfbae234adf0/comparison.json",
+      "distance_km": 5192.690761077266,
+      "start_utc": "2013-04-16T10:51:21.247509Z",
+      "end_utc": "2013-04-16T11:21:21.247509Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1316.2606599330902,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1316.26066,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 38.754834989746996
+    },
+    {
+      "station": "RR11",
+      "event": "usb000jyiv",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR11/YV.RR11.00.BDH__20120930T091725__58afc2d6f005/rayleigh_calibration/run_cfbae234adf0/comparison.json",
+      "distance_km": 5059.341653956019,
+      "start_utc": "2013-09-24T11:36:15.112290Z",
+      "end_utc": "2013-09-24T12:06:15.112290Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1286.535105228424,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1286.535105,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 37.759604794016695
+    },
+    {
+      "station": "RR13",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR13/YV.RR13.00.BDH__20121001T054221__58afc2d6f005/rayleigh_calibration/run_c6c9bc97c0ae/comparison.json",
+      "distance_km": 11225.195221824111,
+      "start_utc": "2013-02-08T15:59:14.261221Z",
+      "end_utc": "2013-02-08T16:29:14.261221Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 83.7774881204823
+    },
+    {
+      "station": "RR13",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR13/YV.RR13.00.BDH__20121001T054221__58afc2d6f005/rayleigh_calibration/run_c6c9bc97c0ae/comparison.json",
+      "distance_km": 5155.460095166844,
+      "start_utc": "2013-04-16T10:51:11.775691Z",
+      "end_utc": "2013-04-16T11:21:11.775691Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1311.5695888996124,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1311.569589,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 38.47696974024416
+    },
+    {
+      "station": "RR13",
+      "event": "usb000jyiv",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR13/YV.RR13.00.BDH__20121001T054221__58afc2d6f005/rayleigh_calibration/run_c6c9bc97c0ae/comparison.json",
+      "distance_km": 5061.418508591408,
+      "start_utc": "2013-09-24T11:36:15.640660Z",
+      "end_utc": "2013-09-24T12:06:15.640660Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1286.7940759658813,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1286.794076,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 37.77510507362035
+    },
+    {
+      "station": "RR14",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR14/YV.RR14.00.BDH__20121001T074339__58afc2d6f005/rayleigh_calibration/run_7384d339e29b/comparison.json",
+      "distance_km": 15601.918709339388,
+      "start_utc": "2013-01-05T09:49:24.226274Z",
+      "end_utc": "2013-01-05T10:19:24.226274Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 116.44247903922042
+    },
+    {
+      "station": "RR14",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR14/YV.RR14.00.BDH__20121001T074339__58afc2d6f005/rayleigh_calibration/run_7384d339e29b/comparison.json",
+      "distance_km": 11044.65785689008,
+      "start_utc": "2013-02-08T15:58:28.330882Z",
+      "end_utc": "2013-02-08T16:28:28.330882Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 82.43007574616058
+    },
+    {
+      "station": "RR14",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR14/YV.RR14.00.BDH__20121001T074339__58afc2d6f005/rayleigh_calibration/run_7384d339e29b/comparison.json",
+      "distance_km": 5076.229486558346,
+      "start_utc": "2013-04-16T10:50:51.618707Z",
+      "end_utc": "2013-04-16T11:20:51.618707Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1301.6256289482117,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1301.625629,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 37.885644490187815
+    },
+    {
+      "station": "RR25",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR25/YV.RR25.00.BDH__20121002T162910__58afc2d6f005/rayleigh_calibration/run_82fef795cf82/comparison.json",
+      "distance_km": 16329.359802172532,
+      "start_utc": "2013-01-05T09:52:29.293869Z",
+      "end_utc": "2013-01-05T10:22:29.293869Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 121.8716218121408
+    },
+    {
+      "station": "RR25",
+      "event": "usb000ief9",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR25/YV.RR25.00.BDH__20121002T162910__58afc2d6f005/rayleigh_calibration/run_82fef795cf82/comparison.json",
+      "distance_km": 7333.982737843004,
+      "start_utc": "2013-07-15T14:19:45.711561Z",
+      "end_utc": "2013-07-15T14:49:45.711561Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1591.499802827835,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1591.499803,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 54.73603260822574
+    },
+    {
+      "station": "RR25",
+      "event": "usb000jyiv",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR25/YV.RR25.00.BDH__20121002T162910__58afc2d6f005/rayleigh_calibration/run_82fef795cf82/comparison.json",
+      "distance_km": 5635.894018852566,
+      "start_utc": "2013-09-24T11:38:41.792428Z",
+      "end_utc": "2013-09-24T12:08:41.792428Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1359.8127479553223,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1359.812748,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 42.062613155692816
+    },
+    {
+      "station": "RR28",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR28/YV.RR28.00.BDH__20121010T200000__58afc2d6f005/rayleigh_calibration/run_cca6f1c0a73c/comparison.json",
+      "distance_km": 16334.03040956934,
+      "start_utc": "2013-01-05T09:52:30.482114Z",
+      "end_utc": "2013-01-05T10:22:30.482114Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 121.90648015963143
+    },
+    {
+      "station": "RR28",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR28/YV.RR28.00.BDH__20121010T200000__58afc2d6f005/rayleigh_calibration/run_cca6f1c0a73c/comparison.json",
+      "distance_km": 11821.448029233117,
+      "start_utc": "2013-02-08T16:01:45.953330Z",
+      "end_utc": "2013-02-08T16:31:45.953330Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 88.22752765230234
+    },
+    {
+      "station": "RR28",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR28/YV.RR28.00.BDH__20121010T200000__58afc2d6f005/rayleigh_calibration/run_cca6f1c0a73c/comparison.json",
+      "distance_km": 5694.809132327472,
+      "start_utc": "2013-04-16T10:53:28.990966Z",
+      "end_utc": "2013-04-16T11:23:28.990966Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1380.6657030582428,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1380.665703,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 42.50231688660574
+    },
+    {
+      "station": "RR29",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR29/YV.RR29.00.BDH__20121011T095959__58afc2d6f005/rayleigh_calibration/run_e438a283613c/comparison.json",
+      "distance_km": 16600.590034868423,
+      "start_utc": "2013-01-05T09:53:38.297294Z",
+      "end_utc": "2013-01-05T10:23:38.297294Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 123.89590621419848
+    },
+    {
+      "station": "RR29",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR29/YV.RR29.00.BDH__20121011T095959__58afc2d6f005/rayleigh_calibration/run_e438a283613c/comparison.json",
+      "distance_km": 11869.479736320453,
+      "start_utc": "2013-02-08T16:01:58.173031Z",
+      "end_utc": "2013-02-08T16:31:58.173031Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 88.58600478257904
+    },
+    {
+      "station": "RR29",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR29/YV.RR29.00.BDH__20121011T095959__58afc2d6f005/rayleigh_calibration/run_e438a283613c/comparison.json",
+      "distance_km": 5966.334463700856,
+      "start_utc": "2013-04-16T10:54:38.069466Z",
+      "end_utc": "2013-04-16T11:24:38.069466Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1416.3966991901398,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1416.396699,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 44.528803711468754
+    },
+    {
+      "station": "RR34",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR34/YV.RR34.00.BDH__20121115T142100__58afc2d6f005/rayleigh_calibration/run_5dbf25fe57af/comparison.json",
+      "distance_km": 17373.313202917874,
+      "start_utc": "2013-01-05T09:56:54.885059Z",
+      "end_utc": "2013-01-05T10:26:54.885059Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 129.663004670163
+    },
+    {
+      "station": "RR34",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR34/YV.RR34.00.BDH__20121115T142100__58afc2d6f005/rayleigh_calibration/run_5dbf25fe57af/comparison.json",
+      "distance_km": 11534.328207949773,
+      "start_utc": "2013-02-08T16:00:32.907450Z",
+      "end_utc": "2013-02-08T16:30:32.907450Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 86.08465379208155
+    },
+    {
+      "station": "RR34",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR34/YV.RR34.00.BDH__20121115T142100__58afc2d6f005/rayleigh_calibration/run_5dbf25fe57af/comparison.json",
+      "distance_km": 6732.890976367586,
+      "start_utc": "2013-04-16T10:57:53.088378Z",
+      "end_utc": "2013-04-16T11:27:53.088378Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1520.7921741008759,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1520.792174,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 50.249878299887314
+    },
+    {
+      "station": "RR36",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR36/YV.RR36.00.BDH__20121014T080000__58afc2d6f005/rayleigh_calibration/run_8100dcd39752/comparison.json",
+      "distance_km": 17470.46974629026,
+      "start_utc": "2013-01-05T09:57:19.602563Z",
+      "end_utc": "2013-01-05T10:27:19.602563Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 130.38811732944123
+    },
+    {
+      "station": "RR36",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR36/YV.RR36.00.BDH__20121014T080000__58afc2d6f005/rayleigh_calibration/run_8100dcd39752/comparison.json",
+      "distance_km": 11142.161054603897,
+      "start_utc": "2013-02-08T15:58:53.136578Z",
+      "end_utc": "2013-02-08T16:28:53.136578Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 83.15777560587412
+    },
+    {
+      "station": "RR36",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR36/YV.RR36.00.BDH__20121014T080000__58afc2d6f005/rayleigh_calibration/run_8100dcd39752/comparison.json",
+      "distance_km": 6862.338032219178,
+      "start_utc": "2013-04-16T10:58:26.020881Z",
+      "end_utc": "2013-04-16T11:28:26.020881Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1538.9423687458038,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1538.942369,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 51.21598614652453
+    },
+    {
+      "station": "RR38",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR38/YV.RR38.00.BDH__20121015T110000__58afc2d6f005/rayleigh_calibration/run_5c7a5c6b9ea3/comparison.json",
+      "distance_km": 17034.008127132445,
+      "start_utc": "2013-01-05T09:55:28.562778Z",
+      "end_utc": "2013-01-05T10:25:28.562778Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 127.13065432844542
+    },
+    {
+      "station": "RR38",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR38/YV.RR38.00.BDH__20121015T110000__58afc2d6f005/rayleigh_calibration/run_5c7a5c6b9ea3/comparison.json",
+      "distance_km": 10924.85750237666,
+      "start_utc": "2013-02-08T15:57:57.852588Z",
+      "end_utc": "2013-02-08T16:27:57.852588Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 81.5359645455319
+    },
+    {
+      "station": "RR38",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR38/YV.RR38.00.BDH__20121015T110000__58afc2d6f005/rayleigh_calibration/run_5c7a5c6b9ea3/comparison.json",
+      "distance_km": 6489.486474637539,
+      "start_utc": "2013-04-16T10:56:51.164071Z",
+      "end_utc": "2013-04-16T11:26:51.164071Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1487.0748999118805,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1487.0749,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 48.43326688697266
+    },
+    {
+      "station": "RR40",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR40/YV.RR40.00.BDH__20121016T060000__58afc2d6f005/rayleigh_calibration/run_d27ca1b2f748/comparison.json",
+      "distance_km": 16663.63447864118,
+      "start_utc": "2013-01-05T09:53:54.336371Z",
+      "end_utc": "2013-01-05T10:23:54.336371Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 124.36642855566879
+    },
+    {
+      "station": "RR40",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR40/YV.RR40.00.BDH__20121016T060000__58afc2d6f005/rayleigh_calibration/run_d27ca1b2f748/comparison.json",
+      "distance_km": 10666.579421447497,
+      "start_utc": "2013-02-08T15:56:52.144308Z",
+      "end_utc": "2013-02-08T16:26:52.144308Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 79.60834650154857
+    },
+    {
+      "station": "RR40",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR40/YV.RR40.00.BDH__20121016T060000__58afc2d6f005/rayleigh_calibration/run_d27ca1b2f748/comparison.json",
+      "distance_km": 6218.292340246277,
+      "start_utc": "2013-04-16T10:55:42.169830Z",
+      "end_utc": "2013-04-16T11:25:42.169830Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1450.1327698230743,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1450.13277,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 46.40925189896302
+    },
+    {
+      "station": "RR50",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR50/YV.RR50.00.BDH__20121018T030000__58afc2d6f005/rayleigh_calibration/run_7308e95e142b/comparison.json",
+      "distance_km": 16136.157960055838,
+      "start_utc": "2013-01-05T09:51:40.141573Z",
+      "end_utc": "2013-01-05T10:21:40.141573Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 120.42969009398894
+    },
+    {
+      "station": "RR50",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR50/YV.RR50.00.BDH__20121018T030000__58afc2d6f005/rayleigh_calibration/run_7308e95e142b/comparison.json",
+      "distance_km": 10089.739499712921,
+      "start_utc": "2013-02-08T15:54:25.391013Z",
+      "end_utc": "2013-02-08T16:24:25.391013Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 75.3031920044059
+    },
+    {
+      "station": "RR50",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR50/YV.RR50.00.BDH__20121018T030000__58afc2d6f005/rayleigh_calibration/run_7308e95e142b/comparison.json",
+      "distance_km": 5987.60537899309,
+      "start_utc": "2013-04-16T10:54:43.480980Z",
+      "end_utc": "2013-04-16T11:24:43.480980Z",
+      "body_arrivals_inside": [
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1419.2230429649353,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1419.223043,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 44.687555859470876
+    },
+    {
+      "station": "RR52",
+      "event": "ak0138esnzr",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_05217c692c80/comparison.json",
+      "distance_km": 15696.208965112719,
+      "start_utc": "2013-01-05T09:49:48.214568Z",
+      "end_utc": "2013-01-05T10:19:48.214568Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 117.14619960949358
+    },
+    {
+      "station": "RR52",
+      "event": "usc000f40j",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_05217c692c80/comparison.json",
+      "distance_km": 10404.993566027093,
+      "start_utc": "2013-02-08T15:55:45.594500Z",
+      "end_utc": "2013-02-08T16:25:45.594500Z",
+      "body_arrivals_inside": [],
+      "longest_first_arrival_free_span_seconds": 1800.0,
+      "can_avoid_first_arrival_instants_with_1600s": true,
+      "seconds_after_last_predicted_first_body_arrival": 1800.0,
+      "can_keep_1600s_after_last_first_body_arrival": true,
+      "predicted_group_range_width_seconds": 77.6560414002206
+    },
+    {
+      "station": "RR52",
+      "event": "usb000g7x7",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_05217c692c80/comparison.json",
+      "distance_km": 5406.945238966728,
+      "start_utc": "2013-04-16T10:52:15.755787Z",
+      "end_utc": "2013-04-16T11:22:15.755787Z",
+      "body_arrivals_inside": [
+        "P",
+        "S"
+      ],
+      "longest_first_arrival_free_span_seconds": 1343.4809069633484,
+      "can_avoid_first_arrival_instants_with_1600s": false,
+      "seconds_after_last_predicted_first_body_arrival": 1343.480907,
+      "can_keep_1600s_after_last_first_body_arrival": false,
+      "predicted_group_range_width_seconds": 40.353889760860966
+    }
+  ],
+  "limitations": [
+    "Stage PAZ agreement verifies interpretation, not physical calibration",
+    "Reflected-pole ratios are algebra only; no corrected response is created",
+    "First-arrival instants exclude neither body-wave duration nor coda",
+    "Group-arrival ranges are predictions, not observed packet durations",
+    "No new boundaries, event decisions, gains or scores are assigned"
+  ],
+  "counts": {
+    "candidate_windows": 48,
+    "with_first_body_arrival_inside": 20,
+    "flagged_without_1600s_first_arrival_free_span": 20,
+    "flagged_without_1600s_after_last_first_body_arrival": 20,
+    "candidate_windows_by_event": {
+      "ak0138esnzr": 15,
+      "usb000g7x7": 15,
+      "usb000ief9": 2,
+      "usc000f40j": 13,
+      "usb000jyiv": 3
+    }
+  },
+  "protected_products_preserved": true,
+  "protected_product_count": 2650,
+  "master_sha256": {
+    "exports/master_inventory.csv": "b095d0ee416f582d0c17b187e7724a96a87b6e877ad193a9877f571b1640a418",
+    "exports/master_inventory.xlsx": "7425fbf86fdcfa8bce82f7666fed93f0ee1b7dde93c81cf6132dbf62bdb7cf67"
+  },
+  "handoff_baseline_commit": "833cc05",
+  "local_audit_file": "results/VALIDATION/YV_rayleigh/conventions_22bf4b45f61d/validation.json"
+}

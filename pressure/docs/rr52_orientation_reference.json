@@ -1,0 +1,31 @@
+{
+  "station": "YV.RR52",
+  "status": "published_orientation_reference_found_native_frame_mapping_unverified",
+  "local_sensor_type": "Trillium240OBS",
+  "local_horizontal_channels": ["YV.RR52.00.BH1", "YV.RR52.00.BH2"],
+  "local_horizontal_azimuths_deg": [0.0, 0.0],
+  "local_horizontal_dips_deg": [0.0, 0.0],
+  "local_station_comments": [],
+  "local_sensor_serial_number": null,
+  "source": {
+    "authors": "Scholz, Barruol, Fontaine, Sigloch, Crawford and Deen",
+    "year": 2017,
+    "title": "Orienting ocean-bottom seismometers from P-wave and Rayleigh wave polarizations",
+    "doi": "10.1093/gji/ggw426",
+    "url": "https://academic.oup.com/gji/article/208/3/1277/2454291",
+    "download_url": "https://www.ipgp.fr/~crawford/2017_EuroOBS_workshop/Resources/Scholz%20et%20al%202017.pdf",
+    "local_pdf": "/Users/mohammadamin/Projects/bruit-fm/results/REFERENCES/scholz2017_orientation_ggw426.pdf",
+    "sha256": "f42259edc281ab3c4c2f0ba7059e0895e3cdbd13c8f16d3617421b8c19625a5b",
+    "method_page": 1279,
+    "table": "Table 1",
+    "table_page": 1284,
+    "table_visually_checked": true,
+    "orientation_definition": "clockwise from geographic north to BH1 in the paper's standardized convention",
+    "p_wave_circular_mean": {"events": 6, "angle_deg": 29.0, "reported_2std_deg": 10.0},
+    "rayleigh_circular_mean": {"events": 27, "angle_deg": 29.0, "reported_2std_deg": 17.0},
+    "native_frame_caveat": "The paper identifies different raw-to-SEED handedness for INSU-IPGP and DEPAS/GEOMAR in its supporting-information description. The exact mapping to this local archive was not independently established."
+  },
+  "xml_or_response_modified": false,
+  "geographic_rotation_performed": false,
+  "decision": "Use as cited external orientation evidence, not as an automatic XML replacement or proof of pressure/vertical calibration. Relative-basis projection testing does not require a geographic rotation."
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "bruitfm-coverage-sources-v1",
+  "networks": [
+    "YV",
+    "YL",
+    "7D",
+    "XO"
+  ],
+  "data_directory": "~/Desktop/Data_Bruit_FM/Data",
+  "inventory_sources": {
+    "YV": [
+      "~/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+    ],
+    "YL": [
+      "~/Desktop/Data_Bruit_FM/Data/YL/*/inventory.xml"
+    ],
+    "7D": [
+      "results/NETWORKS/7D_ALL_NO_TILT/_inputs/responses/7D.J28A,J29A,J30A,J35A,J36A,J38A,J43A,J44A,J45A,J52A,J53A,J54A,J55A,J63A,J67A.xml",
+      "results/NETWORKS/7D_J67A_NO_TILT/_inputs/responses/7D.J67A.xml",
+      "~/Desktop/Data_Bruit_FM/INVENTORIES/7D.xml"
+    ],
+    "XO": [
+      "~/Desktop/Data_Bruit_FM/INVENTORIES/XO.xml",
+      "~/Desktop/Data_Bruit_FM/Data/XO/*/inventory.xml"
+    ]
+  },
+  "inventory_source_note": "Per network and SEED ID, epochs of the first listed file defining that SEED ID are primary; later files are compared by response amplitude/phase and listed, never silently substituted. INVENTORIES/7D.xml has no response stages, so the full-response FDSN snapshots saved by the completed 7D runs (P/Z only) are listed first.",
+  "layout_preference": [
+    "sds",
+    "sds_mseed",
+    "daily"
+  ],
+  "allowed_location_aliases": [
+    [
+      "00",
+      ""
+    ]
+  ],
+  "gap_tolerance_seconds": 1.0,
+  "ppsd_parameters": {
+    "ppsd_length": 10800.0,
+    "overlap": 0.5,
+    "minimum_frequency": 0.001,
+    "chunk_seconds": 86400.0
+  },
+  "product_registries": [
+    "exports/master_inventory.csv",
+    "results/NETWORKS/7D_ALL_NO_TILT/_master/master_inventory.csv",
+    "results/NETWORKS/XO_ALL_NO_TILT/_master/master_inventory.csv"
+  ],
+  "product_roots": [
+    "results/NETWORKS/TEST",
+    "results/NETWORKS/YL_ALL_PPSD",
+    "results/NETWORKS/YL_FIVE_NO_TILT",
+    "results/NETWORKS/7D_ALL_NO_TILT",
+    "results/NETWORKS/XO_ALL_NO_TILT"
+  ],
+  "evidence": {
+    "masters": [
+      "exports/master_inventory.csv",
+      "results/NETWORKS/7D_ALL_NO_TILT/_master/master_inventory.csv",
+      "results/NETWORKS/XO_ALL_NO_TILT/_master/master_inventory.csv",
+      "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_master/master_inventory.csv"
+    ],
+    "rayleigh": "docs/calibration_network_summary.json",
+    "microseism": "docs/microseism_table_staging.csv",
+    "local_p": "docs/local_p_table_staging.csv"
+  }
+}

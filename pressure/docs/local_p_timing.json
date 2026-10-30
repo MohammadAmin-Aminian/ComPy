@@ -1,0 +1,25 @@
+{
+  "description": "Per-pressure-channel timing decisions for the local-P check. Decisions use timing evidence only (never gains). Channels not listed use timing mode 'none' (zero lag, independent pressure/vertical onset check).",
+  "decisions": {
+    "XO.LT02..HDH": {
+      "mode": "drift_model",
+      "drift": {
+        "reference_utc": "2018-06-01T00:00:00.000000Z",
+        "intercept_s": -4.593698420368707,
+        "slope_s_per_day": -0.4833930530201516,
+        "valid_from_utc": "2018-06-01T18:13:07.106000Z",
+        "valid_to_utc": "2018-12-30T00:36:17.380000Z",
+        "source": "scripts/fit_local_p_clock_drift.py on campaign all_v1 XO.LT02..HDH events.csv (sha256 c58ba5df7c21f292a6a513005897deb33f4de9b41767aff9952da02352d2253e): 16 inliers, residual RMS 0.090 s, max 0.207 s, one 1.05 s outlier excluded"
+      },
+      "evidence": "Separate LDEO APG logger. Per-event refined lags fall on a line (-5.6 ppm, about -107 s by 30 Dec 2018); the line predicts Deng et al. (2022) teleseismic offsets of 93.04-102.69 s within 0.3 s."
+    },
+    "XO.LA33..HDH": {
+      "mode": "none",
+      "evidence": "Wide-window plots of five M5.0-6.0 events (July-Dec 2018) show HDH and HHZ arrivals coincident within about a second; 2-10 Hz cross-correlation lags -0.02 to 0.00 s for all five. No drift like LT02. The lag search failed only because APG onset SNR in 2-10 Hz is low."
+    },
+    "XO.LA34..HDH": {
+      "mode": "none",
+      "evidence": "Wide-window plots of five M5.0-6.0 events show coincident arrivals within about a second; 0.5-2 Hz cross-correlation lags 0.00, -0.04, -0.06 s for the three highest-SNR events. 2-10 Hz APG SNR is too low for a sub-second check, which the per-event onset test still applies."
+    }
+  }
+}

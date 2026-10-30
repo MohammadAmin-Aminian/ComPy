@@ -1,0 +1,258 @@
+{
+  "purpose": "Figure 5/thesis Figure 3.13 comparison and magnitude-fallback verification",
+  "rayleigh_solver": "disba 0.7.0; prepared fundamental-mode phase/group dispersion table",
+  "tilt_method": "tiskitpy.CleanRotator 2.3.1",
+  "pressure_sign_status": "RR52 -1; assumed_needs_confirmation",
+  "full_bruitfm_suite": 87,
+  "runs": {
+    "original_pilot_band": {
+      "status": "unresolved",
+      "settings": {
+        "band_hz": [
+          0.02,
+          0.06
+        ],
+        "depth_m": 2918.0,
+        "density_kg_m3": 1028,
+        "sound_speed_m_s": 1500,
+        "coherence_squared_threshold": 0.95,
+        "phase_limit_deg": 20,
+        "window_seconds": 1800,
+        "segment_seconds": 200,
+        "tilt_method": "tiskitpy",
+        "pressure_sign": -1,
+        "minimum_candidate_events": 3,
+        "max_attempts_per_magnitude_level": 8,
+        "magnitude_fallback": true
+      },
+      "pressure_sign_assumption": {
+        "multiplier": -1,
+        "origin": "RR52_provisional_default",
+        "status": "assumed_needs_confirmation",
+        "reason": "User recalls opposite signs; old RR52 plot inverted pressure",
+        "source_responses_changed": false
+      },
+      "candidate_events": 2,
+      "median_pressure_multiplier": null,
+      "event_multiplier_std": null,
+      "diagnostic_median_pressure_amplitude_multiplier": 0.6643996738963195,
+      "magnitude_search": [
+        {
+          "minimum_magnitude": 7.0,
+          "strictly_greater": true,
+          "eligible_catalog_events": 12,
+          "attempted_events": 8,
+          "candidate_events_before": 0,
+          "candidate_events_after": 2,
+          "outcome": "attempt_limit_reached"
+        },
+        {
+          "minimum_magnitude": 6.5,
+          "strictly_greater": false,
+          "eligible_catalog_events": 46,
+          "attempted_events": 8,
+          "candidate_events_before": 2,
+          "candidate_events_after": 2,
+          "outcome": "attempt_limit_reached"
+        },
+        {
+          "minimum_magnitude": 6.0,
+          "strictly_greater": false,
+          "eligible_catalog_events": 112,
+          "attempted_events": 8,
+          "candidate_events_before": 2,
+          "candidate_events_after": 2,
+          "outcome": "attempt_limit_reached"
+        }
+      ],
+      "paper_comparison": {
+        "event_ids": [
+          "ak0138esnzr",
+          "usb000g7x7"
+        ],
+        "coherence_kind": "magnitude_squared",
+        "fit_kind": "gain of median event ratio; distinct from median event gains",
+        "candidate_pressure_multiplier": 0.6738605977178318,
+        "frequency_axis_hz": [
+          0.005,
+          0.1
+        ],
+        "fit_band_hz": [
+          0.02,
+          0.06
+        ],
+        "theory_frequency_coverage_hz": [
+          0.015,
+          0.085
+        ],
+        "outside_fit_band": "display only; no gain calibration is claimed there",
+        "reference_figures": "manuscript Figure 5; thesis Figure 3.13"
+      },
+      "inputs": {
+        "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json": "1cd092f616724bebb8bec935e0acad7de69abca97038b6482ff8099ca76d1385",
+        "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
+      },
+      "code_sha256": "e5bcaaa071a97973b565a3891bda6f92bac8bbd161e4b119d39ae562db0335ae",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_17ebfff58605/comparison.json",
+      "curated_plot": "docs/figures/rr52/rayleigh_paper_figure5_default_band.png",
+      "event_status_counts": {
+        "arrival_overlap_review": 1,
+        "candidate": 2,
+        "excluded_cluster": 18,
+        "rejected_qc": 18,
+        "unresolved": 3
+      },
+      "candidates": [
+        {
+          "id": "ak0138esnzr",
+          "origin_utc": "2013-01-05T08:58:14.957000Z",
+          "magnitude": 7.5,
+          "status": "candidate",
+          "pressure_multiplier": 0.6764768564223603,
+          "mean_coherence_squared": 0.9659968811236964,
+          "window_review": "needs_visual_review",
+          "start_utc": "2013-01-05T09:49:48.214568Z",
+          "end_utc": "2013-01-05T10:19:48.214568Z"
+        },
+        {
+          "id": "usb000g7x7",
+          "origin_utc": "2013-04-16T10:44:20.180000Z",
+          "magnitude": 7.7,
+          "status": "candidate",
+          "pressure_multiplier": 0.6643996738963195,
+          "mean_coherence_squared": 0.9952387783235945,
+          "window_review": "needs_visual_review",
+          "start_utc": "2013-04-16T10:52:15.755787Z",
+          "end_utc": "2013-04-16T11:22:15.755787Z"
+        }
+      ]
+    },
+    "paper_band": {
+      "status": "candidate_comparison_under_assumed_sign",
+      "settings": {
+        "band_hz": [
+          0.03,
+          0.07
+        ],
+        "depth_m": 2918.0,
+        "density_kg_m3": 1028,
+        "sound_speed_m_s": 1500,
+        "coherence_squared_threshold": 0.95,
+        "phase_limit_deg": 20,
+        "window_seconds": 1800,
+        "segment_seconds": 200,
+        "tilt_method": "tiskitpy",
+        "pressure_sign": -1,
+        "minimum_candidate_events": 3,
+        "max_attempts_per_magnitude_level": 8,
+        "magnitude_fallback": true
+      },
+      "pressure_sign_assumption": {
+        "multiplier": -1,
+        "origin": "RR52_provisional_default",
+        "status": "assumed_needs_confirmation",
+        "reason": "User recalls opposite signs; old RR52 plot inverted pressure",
+        "source_responses_changed": false
+      },
+      "candidate_events": 3,
+      "median_pressure_multiplier": 0.6789980661771229,
+      "event_multiplier_std": 0.004714863883938384,
+      "diagnostic_median_pressure_amplitude_multiplier": 0.6760502273454374,
+      "magnitude_search": [
+        {
+          "minimum_magnitude": 7.0,
+          "strictly_greater": true,
+          "eligible_catalog_events": 12,
+          "attempted_events": 4,
+          "candidate_events_before": 0,
+          "candidate_events_after": 3,
+          "outcome": "target_reached"
+        }
+      ],
+      "paper_comparison": {
+        "event_ids": [
+          "ak0138esnzr",
+          "usc000f40j",
+          "usb000g7x7"
+        ],
+        "coherence_kind": "magnitude_squared",
+        "fit_kind": "gain of median event ratio; distinct from median event gains",
+        "candidate_pressure_multiplier": 0.6743742561129035,
+        "frequency_axis_hz": [
+          0.005,
+          0.1
+        ],
+        "fit_band_hz": [
+          0.03,
+          0.07
+        ],
+        "theory_frequency_coverage_hz": [
+          0.015,
+          0.085
+        ],
+        "outside_fit_band": "display only; no gain calibration is claimed there",
+        "reference_figures": "manuscript Figure 5; thesis Figure 3.13"
+      },
+      "inputs": {
+        "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json": "1cd092f616724bebb8bec935e0acad7de69abca97038b6482ff8099ca76d1385",
+        "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
+      },
+      "code_sha256": "e5bcaaa071a97973b565a3891bda6f92bac8bbd161e4b119d39ae562db0335ae",
+      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0aaf7ced0d9/comparison.json",
+      "curated_plot": "docs/figures/rr52/rayleigh_paper_figure5.png",
+      "event_status_counts": {
+        "arrival_overlap_review": 1,
+        "candidate": 3,
+        "excluded_cluster": 1
+      },
+      "candidates": [
+        {
+          "id": "ak0138esnzr",
+          "origin_utc": "2013-01-05T08:58:14.957000Z",
+          "magnitude": 7.5,
+          "status": "candidate",
+          "pressure_multiplier": 0.6797874316024045,
+          "mean_coherence_squared": 0.9907323789098496,
+          "window_review": "needs_visual_review",
+          "start_utc": "2013-01-05T09:49:48.214568Z",
+          "end_utc": "2013-01-05T10:19:48.214568Z"
+        },
+        {
+          "id": "usc000f40j",
+          "origin_utc": "2013-02-08T15:26:38.470000Z",
+          "magnitude": 7.1,
+          "status": "candidate",
+          "pressure_multiplier": 0.6712550280171098,
+          "mean_coherence_squared": 0.99372357019023,
+          "window_review": "needs_visual_review",
+          "start_utc": "2013-02-08T15:55:45.594500Z",
+          "end_utc": "2013-02-08T16:25:45.594500Z"
+        },
+        {
+          "id": "usb000g7x7",
+          "origin_utc": "2013-04-16T10:44:20.180000Z",
+          "magnitude": 7.7,
+          "status": "candidate",
+          "pressure_multiplier": 0.6789980661771229,
+          "mean_coherence_squared": 0.9958925854499553,
+          "window_review": "needs_visual_review",
+          "start_utc": "2013-04-16T10:52:15.755787Z",
+          "end_utc": "2013-04-16T11:22:15.755787Z"
+        }
+      ]
+    }
+  },
+  "production_master_unchanged": true,
+  "production_master_sha256": {
+    "exports/master_inventory.xlsx": "7716946ee6567c703af9f0008efc075e6673e15b0bac547554392cf10efcfc1a",
+    "exports/master_inventory.csv": "3d4bea4f77dc2869c568ef0353f7f8672116ecc38d3a554c8af11330c6c2f470"
+  },
+  "limitations": [
+    "Candidate comparison only; source/master/response unchanged",
+    "Visual window isolation and Earth model/depth/uncertainty require review",
+    "Default 0.02-0.06 Hz preserved; paper-band run is an explicit separate comparison",
+    "Theory drawn only on supplied dispersion range 0.015-0.085 Hz; no extrapolation",
+    "Coherence is magnitude-squared; no frequency smoothing added",
+    "Display spans 0.005-0.1 Hz; fitted gain outside the chosen band is display only"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-16",
+  "phase": "local-P engineering review and bounded validation",
+  "branch": "codex/local-p-finish",
+  "production_main_pinned_at_initial_closeout": "ace6ee3",
+  "owner_decision": "Subsequently cancel the long batch, finish testing and documentation, integrate and push; preserve all contributor branches and partial products",
+  "final_integration": {
+    "target_branch": "main",
+    "reviewed_code_commit": "7dde4d40be12e76d4b36a3243468c94578faeaee",
+    "subsequent_changes": "documentation only",
+    "interrupted_session": "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/ALL_CALIBRATIONS/run_20261016T144245Z",
+    "batch_exit_verified_before_integration": true,
+    "completed_microseism_shifts": [-12, -6, -2],
+    "partial_microseism_shift": -1,
+    "local_p_stage_reached": false,
+    "partial_products_preserved": true,
+    "claude_branches_preserved": true,
+    "catalogue_files_copied_to_main_with_matching_hashes": 6,
+    "pytest_passed": 332,
+    "pytest_warnings": 78,
+    "pytest_elapsed_seconds": 62.50,
+    "read_only_review": "/Users/mohammadamin/Projects/bruit-fm-localp-finish/results/LOCAL_P/reviews/main_closeout_20261016/phase_report.json",
+    "read_only_review_matches_prior_sha256": true,
+    "report": "docs/local_p_integration_closeout.md"
+  },
+  "protocol_version": "local-p-v2-noise-guard-20261016",
+  "bounded_code_commit": "4c70941af73bdfad173ef4e14c1f48e9cdf9206a",
+  "bounded_campaign": "/Users/mohammadamin/Projects/bruit-fm-localp-finish/results/LOCAL_P/campaigns/validation_v2_apg",
+  "base_campaign": "/Users/mohammadamin/Projects/bruit-fm-localp-review/results/LOCAL_P/campaigns/user_all_20261016T120124Z_17172",
+  "phase_review": "/Users/mohammadamin/Projects/bruit-fm-localp-finish/results/LOCAL_P/reviews/phase_v2_final_20261016/phase_report.json",
+  "phase_review_sha256": "798eda5c2a5dcc67701476ed856cb95142755e29967436d10e1ddb93800ffe4f",
+  "full_campaign_rerun_by_codex": false,
+  "changed_thresholds": false,
+  "changed_signal_window": false,
+  "lt02": {
+    "outcome": "conditional_gain_candidate",
+    "accepted_events_before": 9,
+    "accepted_events_v2": 7,
+    "accepted_events_passing_noise_guard": 7,
+    "bands": [
+      {"band_hz": [0.5, 1.0], "events": 4, "gain_median": 0.9678052656372611, "gain_mad": 0.02231665485272455, "prior_gain": 0.9723496861195791, "change_pct": -0.46736483254843364},
+      {"band_hz": [1.0, 2.0], "events": 7, "gain_median": 0.9729505619439647, "gain_mad": 0.04294880301537107, "prior_gain": 1.0211971546770762, "change_pct": -4.724513039636125}
+    ],
+    "newly_rejected": {"us1000hhug": "overlapping_catalogue_event", "ak0188v8964i": "no_valid_band"}
+  },
+  "la33_la34_hdh": {"outcome": "unresolved", "accepted_events_each": 0},
+  "staging": {
+    "stations": 89,
+    "pairs": 120,
+    "executed_pairs": 66,
+    "v2_pairs": 3,
+    "legacy_executed_pairs_explicitly_flagged": 63,
+    "outcomes": {"conditional_gain_candidate": 1, "diagnostic_only": 17, "unresolved": 22, "no_suitable_events": 26, "not_applicable_sample_rate": 39, "no_full_pressure_response": 15},
+    "exact_7d_bdh_mappings": 15
+  },
+  "verification": {
+    "pytest_passed": 332,
+    "pytest_warnings": 78,
+    "pytest_elapsed_seconds": 64.22,
+    "ruff_check": "passed",
+    "ruff_format": "passed",
+    "shell_syntax": "passed",
+    "protected_phase_inputs": 144,
+    "protected_inputs_unchanged": true,
+    "resume_without_child_execution": 3,
+    "private_master_copy": {"rows": 16884, "original_columns": 140, "all_original_values_unchanged": true, "exact_diagnostic_updates": 66, "skipped_unresolved_or_not_run": 54}
+  },
+  "production_master_sha256": {
+    "csv": "d929f43ad006decd638ac64b9bb9388f5c0b9d82e9402c82a33b5c9b3e8c45f8",
+    "xlsx": "7041a9d0142d62764a591d3af62e56cc3acd5ea6a7b8ee4701d3ea470c3335e5"
+  },
+  "production_master_updated": false,
+  "score_assigned": false,
+  "gain_applied": false,
+  "absolute_field_calibration_accepted": false,
+  "late_peer_crosscheck": {
+    "implementation_commit": "438c4ca444b3e0014d1e7a11fe41d4ee7501373e",
+    "science_review_commit": "7ebd8726a759c5fb3071352b8dfb88f79522edd7",
+    "saved_summary": "/Users/mohammadamin/Projects/bruit-fm-localp/results/LOCAL_P/campaigns/lt02_noise_rule_v3/XO.LT02/XO.LT02..HDH__XO.LT02..HHZ/summary.json",
+    "saved_summary_sha256": "e8791da8966861cb9972567f525e2fb6193228bba3cc85c7ec60cc51d1efc91b",
+    "band_medians_and_counts_exactly_match": true,
+    "new_peer_code_wholesale_merged": false,
+    "independent_absolute_reference": false
+  }
+}

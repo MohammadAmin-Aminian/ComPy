@@ -1,7 +1,7 @@
-# Exported from BRUIT-FM 1.3.0 by its integration/export_to_compy.py.
+# Moved from BRUIT-FM 1.3.0.
 import sys
 
-sys.modules["bruitfm"] = None  # the exported core must not import BRUIT-FM
+sys.modules["bruitfm"] = None  # the moved code must not import BRUIT-FM
 
 """Saved pressure data shared by pressure and infragravity integration tests."""
 

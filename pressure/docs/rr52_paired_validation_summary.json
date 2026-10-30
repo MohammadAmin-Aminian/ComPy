@@ -1,0 +1,159 @@
+{
+  "pressure_epoch": {
+    "Seed_id": "YV.RR52.00.BDH",
+    "channel_start_time": "2012-10-19T09:00:00.000000Z",
+    "channel_end_time": "2013-11-25T05:17:31.000000Z",
+    "inventory_file": "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+  },
+  "status": "comparison_only",
+  "files": {
+    "windows": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/windows.csv",
+    "frequency_table": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra.csv",
+    "spectra": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra.npz",
+    "plot": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra_coherence_transfer.png",
+    "result": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/comparison.json"
+  },
+  "segment_seconds": 3600,
+  "days": 7,
+  "cross_convention": "S_dp = mean(D * conjugate(P))",
+  "transfer_direction": "pressure_to_upward_displacement",
+  "transfer_units": "m/Pa",
+  "pressure_psd_units": "Pa^2/Hz",
+  "vertical_psd_units": "m^2/Hz",
+  "code_sha256": {
+    "paired_spectra.py": "d12dff14e6438b4cff8917f69cef2a00f57e08b19bc0a9a1ba412f6c2fdd7592",
+    "archive.py": "df58c03de12f3c363fe778e55c7621f43647e289e803ff1c9ae94883bf054757",
+    "godin_pilot.py": "0f450d984bd44c7b2935fadd077b180fe78459987bdb2a0ecb173bc9b3d50810",
+    "ppsd.py": "2e1fdb199fe204079981e8937b69a50458e48894ec9aaf4a7efa552404ab9d18"
+  },
+  "numpy_version": "2.5.3",
+  "taper": "periodic Hann",
+  "detrend": "segment mean",
+  "overlap": 0,
+  "frequency_min_hz": 0.01,
+  "frequency_max_hz": 0.5,
+  "limitations": [
+    "No tilt correction or event selection",
+    "Sensor bands and depth unverified",
+    "Segments may be correlated; no confidence interval or calibration score",
+    "Timing/polarity follow metadata; no independent clock verification"
+  ],
+  "vertical_epoch": {
+    "Seed_id": "YV.RR52.00.BHZ",
+    "channel_start_time": "2012-10-19T09:00:00.000000Z",
+    "channel_end_time": "2013-11-25T05:17:31.000000Z",
+    "inventory_file": "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+  },
+  "vertical_seed_id": "YV.RR52.00.BHZ",
+  "start_utc": "2013-06-10T00:00:00.000000Z",
+  "end_utc": "2013-06-17T00:00:00.000000Z",
+  "sample_rate_hz": 62.5,
+  "vertical_dip_deg": -90.0,
+  "vertical_upward_sign": 1,
+  "source_files": [
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.161",
+      "size": 11182080,
+      "mtime_ns": 1715764884000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.162",
+      "size": 11001856,
+      "mtime_ns": 1715764884000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.163",
+      "size": 10797056,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.164",
+      "size": 10842112,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.165",
+      "size": 10924032,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.166",
+      "size": 10825728,
+      "mtime_ns": 1715764886000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.167",
+      "size": 10629120,
+      "mtime_ns": 1715764886000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.168",
+      "size": 10530816,
+      "mtime_ns": 1715764886000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.161",
+      "size": 6299648,
+      "mtime_ns": 1715764884000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.162",
+      "size": 6066176,
+      "mtime_ns": 1715764884000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.163",
+      "size": 6082560,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.164",
+      "size": 6225920,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.165",
+      "size": 6111232,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.166",
+      "size": 6074368,
+      "mtime_ns": 1715764886000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.167",
+      "size": 6107136,
+      "mtime_ns": 1715764886000000000
+    },
+    {
+      "path": "/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.168",
+      "size": 5943296,
+      "mtime_ns": 1715764887000000000
+    }
+  ],
+  "response_snapshots": {
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/inventory.xml": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e",
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BHZ__20121019T090000__58afc2d6f005/inventory.xml": "6bb01e8992d3dc11a729e9720f34282428805ff35dc03d47bf7f7a8339f19336"
+  },
+  "input_units": {
+    "pressure": "PA",
+    "vertical": "M/S"
+  },
+  "inventory_sha256": {
+    "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml": "58afc2d6f0056e52cf954bdd5b9fb80e92f9572d44d067b30966a160d2044494"
+  },
+  "requested_segments": 168,
+  "retained_segments": 167,
+  "microseism_bins": 361,
+  "microseism_median_coherence": 0.8021421719900791,
+  "valid_bins": 1765,
+  "microseism_median_transfer_amplitude_m_pa": 4.985790411039408e-08,
+  "microseism_median_phase_deg": 4.1191171095913575,
+  "independent_checks": [
+    "SciPy periodogram reproduces first pressure and displacement spectra",
+    "SciPy csd reproduces first complex cross-spectrum after response correction",
+    "Independent linear/complex means reproduce transfer and coherence"
+  ],
+  "production_master_unchanged": true
+}
