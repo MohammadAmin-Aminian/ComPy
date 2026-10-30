@@ -1,5 +1,56 @@
 # Changelog
 
+## 2.4.0 — 2026-10-30
+
+Integration release: every open pull request and branch is merged, the
+inversion is carried through to serpentinization, and an end-to-end pipeline
+is validated on a second network.
+
+### Merged
+
+- PR #6 (2.2, compliance-chain audit and YV compliance) and PR #7 (2.3,
+  Bayesian Vs inversion), including the `inversion-improvements` branch.
+- PR #5 (W. Crawford, `Pressure_calibration.py` and README). It was written
+  against the pre-2.0 code; its conventions are ported onto the 2.x function:
+  - explicit `zchan`/`pchan` channel codes;
+  - `filt_freq1`/`filt_freq2` pre-filter arguments checked against the band;
+  - Google-style docstrings;
+  - no network/station constants at module level;
+  - disba/Numba installation notes and a corrected README example.
+- `refactor/professionalize-compy` (PR #4, closed on 2026-10-07 as superseded)
+  was re-checked and is not merged. Its packaging metadata is older than main
+  (version 0.2.0, Python ≥ 3.9), and its tests target the legacy
+  `Roughness`/`liklihood` behaviour found defective in the 2.3 audit (V1, V2).
+
+### Added
+
+- `compy_inversion.serpentinization` and
+  `Posterior.serpentinization_quantiles`. The degree of serpentinization of a
+  peridotite crust is computed from Vs, linear between 4.2 km/s (0 %) and
+  2.2 km/s (100 %) as in Aminian et al. (2025, Fig. 10c; Miller & Christensen
+  1997), per posterior draw so that its credible interval follows.
+- `pipeline/`: config-driven end-to-end scripts.
+  - Stage 0: inventory and catalogue.
+  - Stage A: decimation, responses, and removal of clipped or dead spans.
+  - Stage B: cleaning, with optional glitch removal.
+  - Stage D: Rayleigh-wave DPG calibration.
+  - Stage C: compliance.
+  - Stage E: inversion.
+  - Schedulers that chain the stages per station. `a_fast.py` stages a slow USB archive through local disk.
+- `calculate_spectral_ratio(..., zchan=, pchan=, filt_freq1=, filt_freq2=)`.
+
+### Fixed
+
+- **F2.** The legacy serpentinization plots used (9000 − 2 Vs)/30, i.e. 0 % at 4.5 km/s and 100 % at 3.0 km/s. They now use the published caption relation: Vs = 3.5 km/s gives 35 %, not 67 %.
+- **F1.** The legacy heat-map depth ticks assumed 167-m rows for profiles averaged into 100-m rows, which labelled depths 5/3 too deep. The ticks now come from `LEGACY_HEATMAP_ROW_M`, and the CRUST1.0 reference arrays keep their own row depth.
+- CI was failing on the 2.3 branch:
+  - the YV report script used Python 3.12 f-string syntax;
+  - files added since 2.2 were not `ruff format`-ed.
+- `compy.__version__` was 2.2.0 while the package said 2.3.0.
+- Docstrings:
+  - `remove_coherent_noise`: the sequential, conditioned removal does not depend on the channel order;
+  - `legacy_wave_attraction_correction`: it gives the 2.0 estimator, not 2.2.
+
 ## 2.3.0 — 2026-10-29
 
 Shear-velocity inversion, audited and rebuilt on top of the 2.2 compliance

@@ -27,7 +27,7 @@ literature. The generations are:
 | V7 | The data uncertainty is the standard deviation of the per-window estimates (thesis §3.3.4: 1.25e-11 at RR52, 30–60 % of η). The thesis also describes annealing it during the run, but that code is commented out. | Errors were roughly √n too large for a stacked mean. The fit hardly constrained the model, so deep Vs came from the bounds. |
 | V8 | Compliance computed before ComPy 2.0 multiplied the wave-attraction term by ω²/(ω²+c), i.e. `k·γ·ad·(pa_ratio + |Z/P|)` in `Calculate_Compliance`, so the term was effectively dropped. The same line writes the free-air constant as `3.07 * 10e-6`, which is 3.07e-5, ten times too large. | The published η is low: by up to 25–30 % at 7 mHz at RR52 from the dropped term, plus 1.4 % at 7 mHz from the constant. Both bias deep Vs high. 2.0 fixed both. |
 
-Figure code (`plot_inversion_density_all`, `final_plot`, `start_model_plot*` in `inv_compy`):
+Figure code (`plot_inversion_density_all`, `final_plot`, `start_model_plot*` in `inv_compy`), both fixed in 2.4:
 
 | # | Finding | Effect |
 |---|---|---|

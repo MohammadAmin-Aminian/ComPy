@@ -1,4 +1,4 @@
-# ComPy 2.3
+# ComPy 2.4
 
 **Seafloor compliance processing, pressure-gauge calibration and layered elastic inversion.**
 
@@ -29,6 +29,15 @@ The figures below present the RHUM-RUM research workflow and its station results
 They are the existing research figures supplied with this repository. Their
 provenance is the original workflow; they have not been regenerated with v2.
 The [study](https://doi.org/10.1093/gji/ggaf253) provides the scientific context.
+
+> **Corrections (2.4).** These historical figures come from the legacy figure
+> code. Its heat-map depth ticks assume 167-m rows where the rows are 100 m,
+> so depths are labelled 5/3 too deep (F1). Its serpentinization uses
+> (9000 − 2 Vs)/30 instead of the 4.2/2.2 km/s relation in the paper's
+> caption (F2). The re-processed and re-inverted YV models, with true depths and
+> the corrected serpentinization, are in
+> [docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md).
+> The audit is in [docs/INVERSION.md](docs/INVERSION.md).
 
 ### Shear-velocity structure beneath RR52
 
@@ -386,6 +395,37 @@ Chains run in spawned processes: call `sample` from a notebook or from a script
 guarded by `if __name__ == "__main__":` (or pass `processes=1`).
 Results for the eight YV stations are in
 [docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md).
+
+### Serpentinization (2.4)
+
+Aminian et al. (2025, Fig. 10c) read low crustal Vs at the ridge stations as
+serpentinized peridotite. `serpentinization` applies the linear relation of
+Miller & Christensen (1997) used in that figure: 0 % at 4.2 km/s and 100 % at
+2.2 km/s. Apply it to posterior draws, so the credible interval is carried
+through:
+
+```python
+z = np.arange(0, 8001, 50.0)
+beta_q = post.serpentinization_quantiles(z)  # (5 quantiles, len(z)) in %
+beta = ci.serpentinization(post.vs_draws(z))  # or per draw, for custom statistics
+```
+
+The result is an upper bound on alteration: it assumes an ultramafic crust in
+which serpentinization alone lowers Vs. Porosity, basalt and gabbro also give
+low Vs, and compliance cannot tell them apart. The legacy figure code used
+`(9000 - 2 Vs)/30` (0 % at 4.5 km/s, 100 % at 3.0 km/s); 2.4 corrects it
+(`docs/INVERSION.md`, F2).
+
+### End-to-end pipeline for a network (2.4, `pipeline/`)
+
+`pipeline/` runs the whole chain unattended on any broadband OBS network
+stored as an SDS archive: decimation and responses, removal of clipped or
+dead data, earthquakes, glitches, tilt and coherent noise, Rayleigh-wave DPG
+calibration, stacked compliance with monthly stacks, Vs inversion and
+serpentinization. All network-specific values live in `pipeline/config.py`;
+see [pipeline/README.md](pipeline/README.md). The validation run on the XE
+(Pacific Array Young ORCA) network is in
+[docs/xe_young_orca_2026-10-29](docs/xe_young_orca_2026-10-29/README.md).
 
 ### Legacy forward model and inversion (`inv_compy`)
 
