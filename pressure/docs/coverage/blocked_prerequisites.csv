@@ -1,0 +1,16 @@
+network,class,decision,reason,epochs
+7D,horizontal,blocked,response_unusable: ValueError: Full response stages and instrument sensitivity are required,98
+7D,horizontal,blocked,"response_unusable: ValueError: Full response stages and instrument sensitivity are required; header_sample_rate_differs: StationXML 50.0 Hz, headers [50.0, 50.00000762939453] Hz (0.1526 ppm); existing PPSD code refuses this",2
+7D,other,blocked,response_unusable: ValueError: Full response stages and instrument sensitivity are required,48
+7D,pressure,blocked,response_unusable: ValueError: Full response stages and instrument sensitivity are required,18
+7D,pressure,reuse_existing_partial,"26.46 uncovered days; supplement blocked: header_sample_rate_differs: StationXML 50.0 Hz, headers [50.0, 50.00000762939453] Hz (0.1526 ppm); existing PPSD code refuses this",1
+7D,vertical,blocked,response_unusable: ValueError: Full response stages and instrument sensitivity are required,24
+7D,vertical,reuse_existing_partial,"26.46 uncovered days; supplement blocked: header_sample_rate_differs: StationXML 50.0 Hz, headers [50.0, 50.00000762939453] Hz (0.1526 ppm); existing PPSD code refuses this",1
+XO,other,blocked,response_unusable: ValueError: Unsupported response input units: A,2
+XO,other,blocked,response_unusable: ValueError: Unsupported response input units: V,5
+XO,other,blocked,response_unusable: ValueError: Unsupported response input units: celsius,1
+XO,other,blocked,response_unusable: ValueError: Unsupported response input units: degC,1
+XO,other,blocked,"response_unusable: ValueError: Unsupported response input units: degC; header_sample_rate_differs: StationXML 125.0 Hz, headers [125.00000762939453] Hz (0.06104 ppm); existing PPSD code refuses this",1
+XO,other,blocked,response_unusable: ValueError: Unsupported response input units: percent,3
+XO,other,blocked,response_unusable: ValueError: Unsupported response input units: s,4
+XO,pressure,blocked,"header_sample_rate_differs: StationXML 125.0 Hz, headers [125.00000762939453] Hz (0.06104 ppm); existing PPSD code refuses this",1

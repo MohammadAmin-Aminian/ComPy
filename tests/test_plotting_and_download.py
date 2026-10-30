@@ -4,35 +4,14 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
-from obspy import Stream, Trace, UTCDateTime
+from obspy import Stream, Trace
 from obspy.core.inventory import Channel, Inventory, Network, Station
 from obspy.core.inventory.response import (
     InstrumentSensitivity,
     PolesZerosResponseStage,
     Response,
 )
-
-from Pressure_calibration import _date_ticks, plot_spectrogram
-
-
-def test_short_spectrogram_does_not_divide_by_zero():
-    rng = np.random.default_rng(4)
-    stream = Stream(
-        [
-            Trace(rng.normal(size=20000), header={"channel": c, "sampling_rate": 2})
-            for c in ["BHZ", "BDH"]
-        ]
-    )
-    plot_spectrogram(stream)
-    plt.close("all")
-
-
-def test_single_bin_date_ticks():
-    positions, dates = _date_ticks(UTCDateTime(0), UTCDateTime(60), 1)
-    assert positions.tolist() == [0]
-    assert len(dates) == 1
 
 
 def test_decimated_response_includes_fir_filter():

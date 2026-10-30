@@ -1,0 +1,537 @@
+{
+  "status": "diagnostic_only",
+  "station": "YV.RR52",
+  "pressure_seed_id": "YV.RR52.00.BDH",
+  "vertical_seed_id": "YV.RR52.00.BHZ",
+  "interval_utc": [
+    "2013-06-10T00:00:00.000000Z",
+    "2013-06-17T00:00:00.000000Z"
+  ],
+  "retained_windows": 167,
+  "identifiability": "The P/Z ratio constrains g/g_z jointly with the horizontal slowness of the coherent wavefield. Below alpha/(4H) it fixes polarity and an upper bound on g without a structure model; a two-sided interval needs a minimum phase velocity, and a value needs a dispersion/mode model. Above alpha/(4H) the admissible range is unbounded.",
+  "reference": {
+    "path": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json",
+    "sha256": "0d6f7552d45fe1ad59194a6c45dd00501b3bf6ca6c54c8f8f0a324d93a5314e9",
+    "pressure_multiplier": 0.6787278140712512,
+    "pressure_sign": -1,
+    "pressure_sign_status": "assumed_needs_confirmation",
+    "role": "fixed comparison reference; not refitted or applied"
+  },
+  "water": {
+    "depth_m": 2918.0,
+    "density_kg_m3": 1028.0,
+    "sound_speed_m_s": 1500.0,
+    "first_resonance_hz": 0.1285126799177519,
+    "infragravity_cutoff_hz": 0.02312745048552246,
+    "source": "reference settings (inventory elevation); unverified bathymetry"
+  },
+  "model": {
+    "layers_file": "/Users/mohammadamin/Projects/bruit-fm-claude/src/bruitfm/reference_data/rr52_historical_rayleigh_layers.csv",
+    "layers_sha256": "f6a8ac05c5c21498a1e55c4982cacb8db3b9bc7053d90ed61d91ec494e186a53",
+    "water_layer_added": true,
+    "disba_version": "0.7.0",
+    "status": "historical model; not a validated local Earth model"
+  },
+  "estimators": {
+    "h1": "S_dp/S_pp; uncorrelated pressure noise biases |H| low",
+    "h2": "S_dd/conj(S_dp); uncorrelated vertical noise biases |H| high",
+    "multiplier": "g = (2 pi f)^2 rho_w L |H|; phase checked separately"
+  },
+  "expected_phase_deg": 0.0,
+  "bands": {
+    "long_wave": {
+      "frequency_hz": [
+        0.03469117572828369,
+        0.1156614119259767
+      ],
+      "bins": 292,
+      "median_coherence_squared": 0.9576027269499658,
+      "median_phase_deg": -1.0309985464411193,
+      "fraction_phase_within_90deg_of_expected": 1.0,
+      "median_reference_height_over_depth": {
+        "h1": 1.3571679430519834,
+        "h2": 1.2757011523867285
+      },
+      "median_apparent_phase_velocity_m_s": {
+        "h1": 3537.097990262477,
+        "h2": 2979.5978845560403
+      },
+      "apparent_phase_velocity_defined_fraction": {
+        "h1": 0.8047945205479452,
+        "h2": 0.9897260273972602
+      },
+      "median_model_phase_velocity_m_s": {
+        "mode0_water": 3839.1761302883583,
+        "mode1_water": 4445.8887279447745,
+        "mode2_water": 4567.213142007207,
+        "mode0_no_water": 3937.943830483705
+      },
+      "model_conditional_multiplier": {
+        "mode0_water_h1": {
+          "median": 0.6809184272518294,
+          "vs_reference_pct": 0.32275282302609565
+        },
+        "mode0_water_h2": {
+          "median": 0.718995540895768,
+          "vs_reference_pct": 5.932824026022554
+        },
+        "mode1_water_h1": {
+          "median": 0.6930628536405361,
+          "vs_reference_pct": 2.1120453990677523
+        },
+        "mode1_water_h2": {
+          "median": 0.7394956366521295,
+          "vs_reference_pct": 8.9531946858596
+        },
+        "mode2_water_h1": {
+          "median": 0.6943925469128078,
+          "vs_reference_pct": 2.307955047192478
+        },
+        "mode2_water_h2": {
+          "median": 0.7416237147683,
+          "vs_reference_pct": 9.266733938569116
+        },
+        "mode0_no_water_h1": {
+          "median": 0.6835286063882625,
+          "vs_reference_pct": 0.7073221720816925
+        },
+        "mode0_no_water_h2": {
+          "median": 0.724601001972512,
+          "vs_reference_pct": 6.758701640072351
+        }
+      },
+      "structure_free_upper_bound": {
+        "bins": 292,
+        "median_upper_bound_h1": 0.7320526734083914,
+        "median_upper_bound_h2": 0.7851940248779392,
+        "fraction_reference_consistent": 0.8047945205479452,
+        "fraction_reference_violates": 0.010273972602739725,
+        "fraction_inconclusive": 0.18493150684931506
+      },
+      "lower_bound_if_c_at_least_water_speed": {
+        "median_h1": 0.5001060141808311,
+        "fraction_reference_above": 0.9965753424657534
+      }
+    },
+    "literature_0p1_0p2": {
+      "frequency_hz": [
+        0.1,
+        0.2
+      ],
+      "bins": 361,
+      "median_coherence_squared": 0.8021421719900791,
+      "median_phase_deg": 4.1191171095913575,
+      "fraction_phase_within_90deg_of_expected": 1.0,
+      "median_reference_height_over_depth": {
+        "h1": 4.240244394108298,
+        "h2": 3.1864647049500463
+      },
+      "median_apparent_phase_velocity_m_s": {
+        "h1": 2424.0381654705893,
+        "h2": 2319.9632600686305
+      },
+      "apparent_phase_velocity_defined_fraction": {
+        "h1": 1.0,
+        "h2": 1.0
+      },
+      "median_model_phase_velocity_m_s": {
+        "mode0_water": 2243.4449291165056,
+        "mode1_water": 4069.857233804175,
+        "mode2_water": 4412.048347085432,
+        "mode0_no_water": 3797.8815746243745
+      },
+      "model_conditional_multiplier": {
+        "mode0_water_h1": {
+          "median": 0.46262582761322013,
+          "vs_reference_pct": -31.83927076183519
+        },
+        "mode0_water_h2": {
+          "median": 0.596679868449167,
+          "vs_reference_pct": -12.088490249122309
+        },
+        "mode1_water_h1": {
+          "median": -0.13235269515878906,
+          "vs_reference_pct": -119.50011365600157
+        },
+        "mode1_water_h2": {
+          "median": -0.17615357460540434,
+          "vs_reference_pct": -125.95349283666046
+        },
+        "mode2_water_h1": {
+          "median": -0.11804612743429627,
+          "vs_reference_pct": -117.39226314098042
+        },
+        "mode2_water_h2": {
+          "median": -0.1590330537138299,
+          "vs_reference_pct": -123.4310500346071
+        },
+        "mode0_no_water_h1": {
+          "median": -0.130628759517121,
+          "vs_reference_pct": -119.2461185189337
+        },
+        "mode0_no_water_h2": {
+          "median": -0.17751676240347314,
+          "vs_reference_pct": -126.1543373828552
+        }
+      },
+      "structure_free_upper_bound": {
+        "bins": 103,
+        "median_upper_bound_h1": 1.1896487574125754,
+        "median_upper_bound_h2": 1.2982647339836,
+        "fraction_reference_consistent": 1.0,
+        "fraction_reference_violates": 0.0,
+        "fraction_inconclusive": 0.0
+      },
+      "lower_bound_if_c_at_least_water_speed": {
+        "median_h1": 0.2955671872962425,
+        "fraction_reference_above": 1.0
+      }
+    },
+    "above_resonance": {
+      "frequency_hz": [
+        0.1285126799177519,
+        0.2570253598355038
+      ],
+      "bins": 463,
+      "median_coherence_squared": 0.7681432999357943,
+      "median_phase_deg": 5.839005119067718,
+      "fraction_phase_within_90deg_of_expected": 1.0,
+      "median_reference_height_over_depth": {
+        "h1": 3.89212145997309,
+        "h2": 2.982978104804491
+      },
+      "median_apparent_phase_velocity_m_s": {
+        "h1": 1866.6318390820684,
+        "h2": 1812.2795087877603
+      },
+      "apparent_phase_velocity_defined_fraction": {
+        "h1": 1.0,
+        "h2": 1.0
+      },
+      "median_model_phase_velocity_m_s": {
+        "mode0_water": 1764.2872142727886,
+        "mode1_water": 3802.6062572416863,
+        "mode2_water": 4406.003425210443,
+        "mode0_no_water": 3706.1139964993877
+      },
+      "model_conditional_multiplier": {
+        "mode0_water_h1": {
+          "median": 0.3907137697908526,
+          "vs_reference_pct": -42.43439539523034
+        },
+        "mode0_water_h2": {
+          "median": 0.5309279186679777,
+          "vs_reference_pct": -21.776018654181417
+        },
+        "mode1_water_h1": {
+          "median": -0.09662898257555443,
+          "vs_reference_pct": -114.23677954140989
+        },
+        "mode1_water_h2": {
+          "median": -0.1236786053829481,
+          "vs_reference_pct": -118.22212127142393
+        },
+        "mode2_water_h1": {
+          "median": -0.08499762010532359,
+          "vs_reference_pct": -112.52307896378633
+        },
+        "mode2_water_h2": {
+          "median": -0.10911022823226861,
+          "vs_reference_pct": -116.07569720441934
+        },
+        "mode0_no_water_h1": {
+          "median": -0.09396469255553301,
+          "vs_reference_pct": -113.84423779421964
+        },
+        "mode0_no_water_h2": {
+          "median": -0.11831788267067611,
+          "vs_reference_pct": -117.43230205359691
+        }
+      }
+    }
+  },
+  "long_wave_sensitivity_mode0_water": {
+    "depth_minus": {
+      "setting": {
+        "depth": 2859.64
+      },
+      "median_h1": 0.6565490383563655,
+      "vs_reference_pct": -3.267698074998504
+    },
+    "depth_plus": {
+      "setting": {
+        "depth": 2976.36
+      },
+      "median_h1": 0.704004683803208,
+      "vs_reference_pct": 3.7241541024136238
+    },
+    "sound_speed_low": {
+      "setting": {
+        "alpha": 1480.0
+      },
+      "median_h1": 0.6885448454771304,
+      "vs_reference_pct": 1.4463870792318367
+    },
+    "sound_speed_high": {
+      "setting": {
+        "alpha": 1540.0
+      },
+      "median_h1": 0.6639778756822314,
+      "vs_reference_pct": -2.173174295089564
+    },
+    "column_density": {
+      "setting": {
+        "density": 1035.0
+      },
+      "median_h1": 0.6855550313284468,
+      "vs_reference_pct": 1.005884408396862
+    },
+    "free_surface_gravity": {
+      "setting": {
+        "gravity": 9.80665
+      },
+      "median_h1": 0.671783187812343,
+      "vs_reference_pct": -1.0231828009598987
+    }
+  },
+  "long_wave_sub_bands": [
+    {
+      "frequency_hz": [
+        0.03469117572828369,
+        0.046877170146544675
+      ],
+      "bins": 44,
+      "median_coherence_squared": 0.8109489258739986,
+      "median_phase_deg": 0.23963912361028544,
+      "mode0_water_h1": 0.6193123672463964,
+      "mode0_water_h2": 0.7487705906691424,
+      "upper_bound_h1": 0.62716909234493,
+      "upper_bound_h2": 0.7618330375761809,
+      "daily_mode0_water_h1_h2": {
+        "2013-06-10": [
+          0.19858686498650524,
+          3.6300698231479798
+        ],
+        "2013-06-11": [
+          0.2502047984306909,
+          4.712315160982396
+        ],
+        "2013-06-12": [
+          0.19555733952085602,
+          3.583488366781147
+        ],
+        "2013-06-13": [
+          0.6924847330850168,
+          0.7482653226616838
+        ],
+        "2013-06-14": [
+          0.218092387435806,
+          1.815294229549374
+        ],
+        "2013-06-15": [
+          0.6405101206136561,
+          0.6758938777496516
+        ],
+        "2013-06-16": [
+          0.5398649148453472,
+          0.7766285064020451
+        ]
+      }
+    },
+    {
+      "frequency_hz": [
+        0.046877170146544675,
+        0.06334374764809439
+      ],
+      "bins": 60,
+      "median_coherence_squared": 0.9864303674938875,
+      "median_phase_deg": -0.28684169139748994,
+      "mode0_water_h1": 0.6709071913705653,
+      "mode0_water_h2": 0.6814010582315377,
+      "upper_bound_h1": 0.6917463446428187,
+      "upper_bound_h2": 0.7012243914472802,
+      "daily_mode0_water_h1_h2": {
+        "2013-06-10": [
+          0.28268808206547646,
+          1.4902328019806816
+        ],
+        "2013-06-11": [
+          0.34785540247699287,
+          1.462389169213354
+        ],
+        "2013-06-12": [
+          0.5095357357679994,
+          0.9274595814816547
+        ],
+        "2013-06-13": [
+          0.6741726474186758,
+          0.6786290783005546
+        ],
+        "2013-06-14": [
+          0.3500526699053779,
+          0.890432543103955
+        ],
+        "2013-06-15": [
+          0.667613013901229,
+          0.6756564034228786
+        ],
+        "2013-06-16": [
+          0.6504916321669227,
+          0.6790962595048233
+        ]
+      }
+    },
+    {
+      "frequency_hz": [
+        0.06334374764809439,
+        0.0855945517522077
+      ],
+      "bins": 80,
+      "median_coherence_squared": 0.9762584831867803,
+      "median_phase_deg": -0.9151707856532629,
+      "mode0_water_h1": 0.6825396687523285,
+      "mode0_water_h2": 0.702512028869446,
+      "upper_bound_h1": 0.7306742606864468,
+      "upper_bound_h2": 0.7505606115601628,
+      "daily_mode0_water_h1_h2": {
+        "2013-06-10": [
+          0.6114485279939077,
+          1.2729715496408378
+        ],
+        "2013-06-11": [
+          0.6256609736109982,
+          1.3386534192995878
+        ],
+        "2013-06-12": [
+          0.631472181536961,
+          1.240422273134324
+        ],
+        "2013-06-13": [
+          0.6871199326662896,
+          0.6912829775029286
+        ],
+        "2013-06-14": [
+          0.6236347459491632,
+          0.7241284908246198
+        ],
+        "2013-06-15": [
+          0.6676254005914459,
+          0.6819061181554745
+        ],
+        "2013-06-16": [
+          0.6731780171946583,
+          0.6916248753564609
+        ]
+      }
+    },
+    {
+      "frequency_hz": [
+        0.0855945517522077,
+        0.1156614119259767
+      ],
+      "bins": 108,
+      "median_coherence_squared": 0.9466818239732941,
+      "median_phase_deg": -2.3366749605185095,
+      "mode0_water_h1": 0.7034594489493504,
+      "mode0_water_h2": 0.751116739113069,
+      "upper_bound_h1": 0.8610940702108987,
+      "upper_bound_h2": 0.9331817186458962,
+      "daily_mode0_water_h1_h2": {
+        "2013-06-10": [
+          0.6245405037437942,
+          0.8708271830025957
+        ],
+        "2013-06-11": [
+          0.640561451169187,
+          1.1735153785224361
+        ],
+        "2013-06-12": [
+          0.7131059144949057,
+          1.5130770744310338
+        ],
+        "2013-06-13": [
+          0.7226637033734656,
+          0.7306503609650867
+        ],
+        "2013-06-14": [
+          0.5932665567878269,
+          0.7573736334095778
+        ],
+        "2013-06-15": [
+          0.6770236933179856,
+          0.7274446675104147
+        ],
+        "2013-06-16": [
+          0.6565108352076443,
+          0.7438074290934875
+        ]
+      }
+    }
+  ],
+  "daily_window_counts": {
+    "2013-06-10": 24,
+    "2013-06-11": 24,
+    "2013-06-12": 24,
+    "2013-06-13": 24,
+    "2013-06-14": 24,
+    "2013-06-15": 24,
+    "2013-06-16": 23
+  },
+  "nominal_pressure_response_long_wave_amplitude_range": 1.0251752598109176,
+  "inputs": {
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json": {
+      "sha256": "430976c5372c5e586b9551e386961f76cc247cc79390028858a082cbabc2ddc1",
+      "size": 6436,
+      "mtime_ns": 1791452501260847179
+    },
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.npz": {
+      "sha256": "5ffc9082882681d1305ae7f493da531ed745efa5058345b6d5a6855046c77b62",
+      "size": 9214969,
+      "mtime_ns": 1791452500786608696
+    },
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.csv": {
+      "sha256": "b45972dbf45bdadc305b21779045333e0c6e3a0d4715b81fa2c11deb82885ee8",
+      "size": 379007,
+      "mtime_ns": 1791452500802156232
+    },
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/windows.csv": {
+      "sha256": "42ab19863ab2ab5edd8c7bbeded528dfd85f138f49e1f990811961612b0a17a4",
+      "size": 15725,
+      "mtime_ns": 1791452500547461372
+    },
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra_coherence_transfer.png": {
+      "sha256": "19a45d72e64b3c84dc5eab7c3ab231985e79a40d3954c916b001990b10d37b2d",
+      "size": 245529,
+      "mtime_ns": 1791452501260122596
+    },
+    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json": {
+      "sha256": "0d6f7552d45fe1ad59194a6c45dd00501b3bf6ca6c54c8f8f0a324d93a5314e9",
+      "size": 22179,
+      "mtime_ns": 1791535779522929161
+    },
+    "/Users/mohammadamin/Projects/bruit-fm-claude/src/bruitfm/reference_data/rr52_historical_rayleigh_layers.csv": {
+      "sha256": "f6a8ac05c5c21498a1e55c4982cacb8db3b9bc7053d90ed61d91ec494e186a53",
+      "size": 3543,
+      "mtime_ns": 1791996270939507592
+    }
+  },
+  "inputs_unchanged": true,
+  "code_sha256": "528cb0d5e845c6f8a323b658deb1a7e7ded8795b55254455e790d5520f0f4b36",
+  "numpy_version": "2.5.3",
+  "files": {
+    "summary": "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check.json",
+    "bins": "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check_bins.csv",
+    "plot": "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check.png"
+  },
+  "gain_applied": false,
+  "master_or_scores_changed": false,
+  "limitations": [
+    "Vertical response assumed correct: results constrain g/g_z",
+    "Depth from inventory elevation; density/sound speed homogeneous",
+    "Single horizontally stratified water layer; plane waves, real slowness",
+    "Model dispersion is the historical RR52 layer model, not validated",
+    "Hourly windows over one week are correlated; no confidence interval",
+    "No tilt correction; incoherent tilt noise is bracketed by H1/H2 only",
+    "Pressure polarity follows the reference's assumed sign"
+  ]
+}

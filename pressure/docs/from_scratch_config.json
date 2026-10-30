@@ -1,0 +1,100 @@
+{
+  "schema": "bruitfm-from-scratch-v1",
+  "note": "Every setting reproduces a completed, reviewed run (see 'frozen_workflow'). Relative paths are below the source checkout; ~ is the user's home. Metadata come only from local saved copies; nothing is downloaded.",
+  "data_directory": "~/Desktop/Data_Bruit_FM/Data",
+  "coverage_template": "docs/coverage_sources.json",
+  "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+  "rayleigh_common": {
+    "band": [
+      0.03,
+      0.07
+    ],
+    "tilt_method": "none",
+    "min_events": 3,
+    "max_events": 8
+  },
+  "event_policies": [
+    "bounded",
+    "all"
+  ],
+  "identity_control": {
+    "network": "YV",
+    "seed_id": "YV.RR52.00.BDH",
+    "policy": "bounded",
+    "g": "0.6787278140712512"
+  },
+  "microseism_starts": {
+    "YV": "2013-06-10"
+  },
+  "local_p_catalogs": [
+    "results/LOCAL_P/catalogs/usgs_local_YV_20121231_20131127_m2p5.csv",
+    "results/LOCAL_P/catalogs/usgs_local_XO_20180520_20190101_m2p5.csv",
+    "results/LOCAL_P/catalogs/usgs_local_7D_20111019_20120101_m2p0.csv"
+  ],
+  "networks": {
+    "YV": {
+      "workspace": "inventory",
+      "inventories": [
+        "~/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+      ],
+      "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json",
+      "pressure_sign": -1,
+      "frozen_workflow": "results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json",
+      "frozen_policy": "bounded"
+    },
+    "YL": {
+      "workspace": "inventory",
+      "inventories": [
+        "~/Desktop/Data_Bruit_FM/Data/YL"
+      ],
+      "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_YL_ALL_20091120_20101204.json",
+      "pressure_sign": 1,
+      "frozen_workflow": "results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json",
+      "frozen_policy": "all"
+    },
+    "7D": {
+      "workspace": "prepare",
+      "prepare_script": "scripts/prepare_7d_run.py",
+      "prepare_args": [
+        "--fetch-responses",
+        "--exclude-incompatible-files"
+      ],
+      "source_inventories": [
+        "~/Desktop/Data_Bruit_FM/INVENTORIES/7D.xml"
+      ],
+      "local_responses": [
+        "results/NETWORKS/7D_ALL_NO_TILT/_inputs/responses/7D.J28A,J29A,J30A,J35A,J36A,J38A,J43A,J44A,J45A,J52A,J53A,J54A,J55A,J63A,J67A.xml"
+      ],
+      "local_catalog": "results/NETWORKS/7D_ALL_NO_TILT/_inputs/catalog_usgs_m5p5.json",
+      "pressure_sign": 1,
+      "frozen_workflow": "results/NETWORKS/7D_ALL_NO_TILT/_workflow/rayleigh.json",
+      "frozen_policy": "all"
+    },
+    "XO": {
+      "workspace": "prepare",
+      "prepare_script": "scripts/prepare_xo_run.py",
+      "prepare_args": [
+        "--pressure-kind",
+        "gauges",
+        "--event-resample-rate",
+        "1",
+        "--native-rate-tolerance-ppm",
+        "0.1",
+        "--fetch-responses",
+        "--exclude-incompatible-files"
+      ],
+      "source_inventories": [
+        "~/Desktop/Data_Bruit_FM/INVENTORIES/XO.xml"
+      ],
+      "local_responses": [
+        "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_inputs/responses/XO.LA33,LA34,LT02,WD48,WD66,WD70.xml"
+      ],
+      "local_catalog": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_inputs/catalog_usgs_m5p5.json",
+      "pressure_sign": 1,
+      "event_resample_rate": 1.0,
+      "native_rate_tolerance_ppm": 0.1,
+      "frozen_workflow": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_workflow/rayleigh.json",
+      "frozen_policy": "all"
+    }
+  }
+}

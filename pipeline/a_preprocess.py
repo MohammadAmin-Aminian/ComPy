@@ -283,18 +283,24 @@ def main():
                 tasks.append((station, run[i : i + CHUNK_DAYS]))
         print(f"{station}: {len(days)} days, {len(todo)} to do", flush=True)
     done = 0
+    failed = 0
     with ProcessPoolExecutor(args.workers) as pool:
         futures = [pool.submit(process_chunk, *t) for t in tasks]
         for future in as_completed(futures):
             done += 1
             try:
                 station, written, status = future.result()
+                if status != "ok":
+                    failed += 1
                 print(
                     f"[{done}/{len(tasks)}] {station} {status} {len(written)} files",
                     flush=True,
                 )
             except Exception as exc:
+                failed += 1
                 print(f"[{done}/{len(tasks)}] FAILED {exc!r}", flush=True)
+    if failed:
+        raise SystemExit(f"Stage A failed for {failed} preprocessing chunks")
 
 
 if __name__ == "__main__":

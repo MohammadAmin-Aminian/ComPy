@@ -1,5 +1,10 @@
 # YV broadband seafloor compliance, 28 October 2026
 
+> **Note.** `scripts/d_calibrate.py` imports `Pressure_calibration`, which
+> ComPy removed after 2.4.0. Rerun it with ComPy 2.4.0 (commit `7ad79c2`). The
+> gains here are those of that method; the pipeline's stage D now uses
+> `compy_pressure`.
+
 This folder holds the compliance functions of the eight RHUM-RUM (YV) broadband OBS stations
 (RR28, RR29, RR34, RR36, RR38, RR40, RR50, RR52), computed with ComPy 2.2 on this branch.
 The inversion was not run.

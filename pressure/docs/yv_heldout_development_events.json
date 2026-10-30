@@ -1,0 +1,13 @@
+{
+  "purpose": "Exclude native software-development probes from formal frozen-gain validation regardless of their outcome",
+  "events": [
+    {
+      "id": "usc000hpsd",
+      "origin_utc": "2013-06-13T16:47:23.320000Z",
+      "development_station": "RR01",
+      "development_outcome": "coherence_review",
+      "frozen_gain_changed": false,
+      "qc_thresholds_changed": false
+    }
+  ]
+}

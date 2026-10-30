@@ -1,0 +1,30 @@
+{
+  "status": "diagnostic_only_not_a_tilt_estimate_or_pressure_calibration",
+  "station": "YV.RR52",
+  "full_pilot_path": "/Users/mohammadamin/Projects/bruit-fm/results/REVIEWS/MICROSEISM_HORIZONTAL/run_20261015T155523Z_d3564085/pilot.json",
+  "full_pilot_sha256": "8f73cebe9ef37211cfe24b18b13542a3b83fc0b20220ad4347f37422493da10e",
+  "gain_band_audit": "docs/microseism_gain_band_audit.json",
+  "channel_order": ["YV.RR52.00.BDH", "YV.RR52.00.BH1", "YV.RR52.00.BH2", "YV.RR52.00.BHZ"],
+  "horizontal_azimuths_deg": [0.0, 0.0],
+  "horizontal_azimuths_distinct_in_metadata": false,
+  "hours_attempted": 48,
+  "hours_retained": 46,
+  "sample_grid_refusals": [
+    {"start_utc": "2013-06-10T23:00:00.000000Z", "offset_seconds": 0.0024},
+    {"start_utc": "2013-06-14T23:00:00.000000Z", "offset_seconds": 0.0024}
+  ],
+  "saved_pz_spectra_reproduced": true,
+  "protected_file_count": 2498,
+  "protected_inputs_unchanged": true,
+  "gain_applied": false,
+  "master_or_scores_changed": false,
+  "bands": [
+    {"day": "2013-06-10", "frequency_hz": [0.03469117572828369, 0.046877170146544675], "retained_windows": 23, "median_coherence_squared_pz": 0.06286763695724805, "median_z_power_predictable_from_h": 0.6752483171120349, "median_partial_coherence_squared_pz_given_h": 0.03621345547582393, "median_residual_transfer_amplitude_ratio": 0.44721479084328186},
+    {"day": "2013-06-10", "frequency_hz": [0.046877170146544675, 0.06334374764809439], "retained_windows": 23, "median_coherence_squared_pz": 0.20163547266288565, "median_z_power_predictable_from_h": 0.37048636884370056, "median_partial_coherence_squared_pz_given_h": 0.26730135146600753, "median_residual_transfer_amplitude_ratio": 0.8581852083305699},
+    {"day": "2013-06-10", "frequency_hz": [0.06334374764809439, 0.0855945517522077], "retained_windows": 23, "median_coherence_squared_pz": 0.48125640728598773, "median_z_power_predictable_from_h": 0.08390988563622132, "median_partial_coherence_squared_pz_given_h": 0.5028774874707462, "median_residual_transfer_amplitude_ratio": 0.9261140551895327},
+    {"day": "2013-06-14", "frequency_hz": [0.03469117572828369, 0.046877170146544675], "retained_windows": 23, "median_coherence_squared_pz": 0.11356094363354073, "median_z_power_predictable_from_h": 0.9690904761810186, "median_partial_coherence_squared_pz_given_h": 0.042558680808971426, "median_residual_transfer_amplitude_ratio": 0.09349321231886391},
+    {"day": "2013-06-14", "frequency_hz": [0.046877170146544675, 0.06334374764809439], "retained_windows": 23, "median_coherence_squared_pz": 0.3883219145689256, "median_z_power_predictable_from_h": 0.3803572142763024, "median_partial_coherence_squared_pz_given_h": 0.5632879160009263, "median_residual_transfer_amplitude_ratio": 0.8849410162146704},
+    {"day": "2013-06-14", "frequency_hz": [0.06334374764809439, 0.0855945517522077], "retained_windows": 23, "median_coherence_squared_pz": 0.865408209347378, "median_z_power_predictable_from_h": 0.09350872029713556, "median_partial_coherence_squared_pz_given_h": 0.8805908687020576, "median_residual_transfer_amplitude_ratio": 0.9136929106609025}
+  ],
+  "interpretation": "Horizontal-associated vertical motion is substantial in the lowest band on these days. The projection is not a physical tilt separation and must not be used as a gain correction. Original frozen gains and scores remain unchanged."
+}

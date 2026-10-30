@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-19",
+  "phase": "six-check evidence integration and conditional noise-model engineering",
+  "branch": "codex/six-check-integration",
+  "policy_version": "six-check-review-v1",
+  "policy_status": "draft",
+  "scientific_acceptance_adopted": false,
+  "real_review": "results/REVIEWS/SIX_CHECKS/final_20261019/review.json",
+  "real_review_sha256": "241e9ab125a718fe92958b2129a267ebeff43076287142d85c0beb6d8cea1fd2",
+  "real_noise_plan": "results/REVIEWS/SIX_CHECKS/final_20261019/noise_plan/noise_model_report.json",
+  "coverage": {
+    "stations": 89,
+    "networks": ["YV", "YL", "7D", "XO"],
+    "full_channel_epoch_source_rows": 118,
+    "rows_with_saved_pressure_ppsd": 89,
+    "local_p_rows_without_exact_epoch_join": 54,
+    "rayleigh_provisional_estimates": 46,
+    "microseism_conditional_estimates": 7,
+    "local_p_current_conditional_estimates": 1,
+    "local_p_legacy_executed_rows": 63,
+    "stations_with_three_numerical_methods": 2,
+    "stations_with_exactly_two_numerical_methods": 14,
+    "stations_with_one_numerical_method": 37,
+    "stations_without_numerical_method": 36,
+    "approved_noise_channels": 0
+  },
+  "verification": {
+    "pytest_passed": 388,
+    "pytest_warnings": 78,
+    "pytest_elapsed_seconds": 62.74,
+    "new_review_and_model_focused_tests": 36,
+    "new_plot_focused_tests": 20,
+    "ruff_check": "passed",
+    "ruff_format": "passed; 167 files",
+    "shell_syntax": "passed",
+    "real_wrapper_run": "passed; saved evidence plus selection plan only",
+    "protected_review_inputs": 353,
+    "protected_noise_plan_inputs": 356,
+    "protected_input_hashes_unchanged": true,
+    "synthetic_approved_model_path": "passed; no real approval created",
+    "stale_and_tampered_review_rejection": "passed",
+    "station_balancing_and_frequency_coverage": "passed"
+  },
+  "production_master_sha256": {
+    "csv": "d929f43ad006decd638ac64b9bb9388f5c0b9d82e9402c82a33b5c9b3e8c45f8",
+    "xlsx": "7041a9d0142d62764a591d3af62e56cc3acd5ea6a7b8ee4701d3ea470c3335e5"
+  },
+  "production_master_updated": false,
+  "production_score_or_status_changed": false,
+  "gain_applied": false,
+  "raw_waveform_processing_launched": false,
+  "calibration_campaign_rerun": false,
+  "real_noise_model_generated": false,
+  "limitations": [
+    "No numerical scientific pass thresholds or independent-reference standard was adopted",
+    "Zero approved channels is intentional; calculation completion is not acceptance",
+    "The conditional model builder supports nominal-response pressure spectra only",
+    "Environmental and seasonal grouping, uncertainty and final global validation remain future work",
+    "Human approvals are explicit records, not digitally authenticated scientific measurements"
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "RR12": {
+    "default_start": "2013-05-26T00:00:00Z",
+    "windows": [
+      {
+        "start": "2013-05-26T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-26T05:47:24.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-26T11:34:48.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-27T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-27T05:47:24.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-27T11:34:48.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-28T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-28T05:47:24.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-28T11:34:48.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-29T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-29T05:47:24.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-29T11:34:48.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-30T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-30T05:47:24.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-30T11:34:48.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-31T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-31T05:47:24.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-05-31T11:34:48.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-06-01T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-06-01T05:47:24.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-06-01T11:34:48.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      }
+    ],
+    "alternative_samples": [
+      {
+        "start": "2013-03-27T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-04-26T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-06-25T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      },
+      {
+        "start": "2013-07-25T00:00:00.000000Z",
+        "trace_count": 1,
+        "flat": true,
+        "complete_nonflat": false,
+        "sample_min": -8268016.0,
+        "sample_max": -8268016.0
+      }
+    ],
+    "current_archive_file_count": 299
+  },
+  "RR42": {
+    "source_files": 1,
+    "start_utc": "2013-05-08T23:58:42.300000Z",
+    "end_utc": "2013-05-10T00:00:01.060000Z",
+    "seven_day_pilot": "insufficient_coverage",
+    "current_archive_file_count": 1
+  },
+  "method": "Header index of saved pressure source files; bounded 12.42-hour raw reads; no FFT or pilot rerun",
+  "calibration_conclusion": "No calibration score or instrument correction assigned"
+}

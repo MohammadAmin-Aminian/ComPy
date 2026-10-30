@@ -1,0 +1,13 @@
+{
+  "version": "six-check-review-v1",
+  "status": "draft",
+  "classification_rule": "all_reviewed_checks_v1",
+  "approved_by": "",
+  "approved_utc": "",
+  "rationale": "",
+  "description": "Draft implementation of the recorded project categories; no automatic numerical pass thresholds are adopted.",
+  "noise_model_requires_explicit_channel_approval": true,
+  "noise_model_requires_independent_reference_record": true,
+  "production_master_updates_allowed": false,
+  "gain_application_allowed": false
+}

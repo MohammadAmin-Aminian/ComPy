@@ -1,0 +1,15 @@
+[
+  {
+    "source_inventory": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/7D_ALL_NO_TILT/_inputs/responses/7D.J28A,J29A,J30A,J35A,J36A,J38A,J43A,J44A,J45A,J52A,J53A,J54A,J55A,J63A,J67A.xml",
+    "source_sha256": "8eddb0417931d8c90ba2b1842c082a88c2ba45317703e678c7b7ac9c6c348419",
+    "master_inventory": "/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/7D.xml",
+    "master_sha256": "0199d728bf3cfc50e2450424d1a4dac48d7c359f027ebd5d84cf590d2ae91144",
+    "seed_ids": [
+      "7D.J28A..BDH", "7D.J29A..BDH", "7D.J30A..BDH", "7D.J35A..BDH",
+      "7D.J36A..BDH", "7D.J38A..BDH", "7D.J43A..BDH", "7D.J44A..BDH",
+      "7D.J45A..BDH", "7D.J52A..BDH", "7D.J53A..BDH", "7D.J54A..BDH",
+      "7D.J55A..BDH", "7D.J63A..BDH", "7D.J67A..BDH"
+    ],
+    "basis": "Explicit epoch identity mapping only. Fetched full responses supplement missing original stages; no absolute response calibration is asserted."
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "seed_id": "YV.RR52.00.BDH",
+  "status": "comparison_only",
+  "score": null,
+  "reference": {
+    "doi": "10.1002/grl.50418",
+    "equation": 6,
+    "url": "https://doi.org/10.1002/grl.50418",
+    "normalization_pa2_hz": 2000.0
+  },
+  "depth_m": 2918.0,
+  "depth_basis": "inventory_elevation_estimate",
+  "depth_independently_verified": false,
+  "gravity_m_s2": 9.81,
+  "psd_units": "Pa^2/Hz",
+  "psd_windows": 5249,
+  "model_band_min_hz": 0.001,
+  "model_band_max_hz": 0.02,
+  "sensor_band": {
+    "minimum_hz": 0.008567123122607042,
+    "maximum_hz": 7.394719190050065,
+    "basis": "nominal_response",
+    "nominal_minimum_hz": 0.008567123122607042,
+    "nominal_maximum_hz": 7.394719190050065,
+    "reference_frequency_hz": 1.0,
+    "maximum_attenuation_db": 3,
+    "independently_verified": false
+  },
+  "effective_band_min_hz": 0.008567123122607042,
+  "effective_band_max_hz": 0.02,
+  "compared_bins": 2,
+  "diagnostic_bins": 27,
+  "residual_definition": "Observed window median minus PSD-bin-averaged model, in dB.",
+  "spectral_spread_definition": "Empirical 5th\u201395th window percentiles; not confidence intervals.",
+  "smoothing_definition": "Exact ObsPy period mask over the FFT grid; average model dB values.",
+  "median_residual_db": 16.126578838286072,
+  "median_absolute_residual_db": 16.126578838286072,
+  "source_npz_sha256": "2c9f4cf7999964e6ffc8b73483d7778893e8cd3935f984b88a7c5f30d4713221",
+  "response_snapshot_sha256": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e",
+  "files": {
+    "frequency_csv": "rr52_infragravity_comparison.csv",
+    "model_comparison": "figures/rr52/BDH_godin_model_comparison.png",
+    "ppsd_with_model": "figures/rr52/BDH_godin_ppsd_with_model.png",
+    "model_residuals": "figures/rr52/BDH_godin_model_residuals.png"
+  },
+  "limitations": [
+    "Depth and sensor band need independent validation.",
+    "Default 0.001\u20130.02 Hz band is a conservative workflow choice, not a universal validity limit.",
+    "No acceptance tolerance, pass/fail score or correction factor is inferred.",
+    "Existing 3-hour PPSD windows differ from the original 12.42-hour Hann-window and transient-screening procedure.",
+    "Model normalization fitted a different ocean region; local departures need interpretation.",
+    "Overlapping windows and frequency smoothing produce correlated samples."
+  ]
+}

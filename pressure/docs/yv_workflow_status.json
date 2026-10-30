@@ -1,0 +1,98 @@
+{
+  "scope": "Snapshot of local YV workflow summaries; re-read live _workflow files before continuing",
+  "source": "results/NETWORKS/TEST/_workflow/",
+  "code_before_handoff": "220458b",
+  "stages": {
+    "ppsd": {
+      "selected_epochs": 172,
+      "final_status_counts": {
+        "complete": 172
+      },
+      "processing_failures": []
+    },
+    "plots": {
+      "selected_epochs": 172,
+      "final_status_counts": {
+        "complete": 172
+      },
+      "processing_failures": []
+    },
+    "pressure": {
+      "selected_epochs": 43,
+      "final_status_counts": {
+        "comparison_only": 43
+      },
+      "processing_failures": []
+    },
+    "nearby": {
+      "selected_epochs": 43,
+      "final_status_counts": {
+        "no_suitable_neighbors": 36,
+        "insufficient_reference_stations": 2,
+        "insufficient_common_days": 1,
+        "exploratory_only": 4
+      },
+      "processing_failures": []
+    },
+    "infragravity": {
+      "selected_epochs": 43,
+      "final_status_counts": {
+        "comparison_only": 19,
+        "no_comparable_bins": 24
+      },
+      "processing_failures": []
+    },
+    "pilot": {
+      "selected_epochs": 43,
+      "final_status_counts": {
+        "comparison_only": 39,
+        "failed": 2,
+        "no_comparable_bins": 2
+      },
+      "processing_failures": [
+        {
+          "seed_id": "YV.RR12.00.BDH",
+          "error": "ValueError: No complete continuous windows in selected interval"
+        },
+        {
+          "seed_id": "YV.RR42.00.BDH",
+          "error": "ValueError: Requested pilot interval is outside waveform coverage"
+        }
+      ]
+    },
+    "paired": {
+      "selected_epochs": 1,
+      "final_status_counts": {
+        "comparison_only": 1
+      },
+      "processing_failures": []
+    },
+    "rayleigh": {
+      "selected_epochs": 43,
+      "completed_epochs": 43,
+      "execution_status": "complete",
+      "final_status_counts": {
+        "unresolved": 25,
+        "candidate_comparison_under_assumed_sign": 16,
+        "reference_band_unusable": 2
+      },
+      "master_updated": true,
+      "previous_master_columns_preserved": true,
+      "note": "Candidate gains remain provisional; no response/source corrections or scientific scores were applied."
+    }
+  },
+  "scientific_status": "All six YV calibration scores remain blank. Diagnostic statuses are not calibration acceptance or correction factors.",
+  "historical_initial_snapshot_code": "5919df9",
+  "latest_validation": {
+    "report": "docs/yv_rayleigh_independent_validation.md",
+    "software_tests_passed": 98,
+    "independent_raw_event_checks": 7,
+    "candidate_arrival_plots_reviewed": 48,
+    "candidate_windows_with_predicted_body_arrivals": 20,
+    "quiet_intervals_passing_independent_continuity": 46,
+    "quiet_intervals_with_fractional_grids": 2,
+    "pressure_stations_with_positive_real_laplace_poles": 34,
+    "field_acceptance": "pending",
+    "gains_applied": false
+  }
+}

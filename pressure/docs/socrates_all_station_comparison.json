@@ -1,0 +1,15 @@
+{
+  "source_experiment": "/Users/mohammadamin/Projects/bruit-fm/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/experiment.json",
+  "source_experiment_sha256": "446b8e36b94c9952736b9a2c9b2353f0dfb0c95e05e8cc3719b9cea72fcc20cf",
+  "trial_code_commit": "e79f773",
+  "distinct_stations": 89,
+  "protected_source_hashes": 2432,
+  "protected_hash_check": "unchanged at run completion and read-only comparison",
+  "previous_station_estimates": 46,
+  "pole_trial_station_estimates_including_C07W_normal_subset": 61,
+  "unresolved": 26,
+  "reference_band_exclusions": 2,
+  "main_scientific_defaults_changed": false,
+  "gains_applied": false,
+  "table": "docs/socrates_all_station_comparison.csv"
+}

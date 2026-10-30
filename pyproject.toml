@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "seafloor-compy"
-version = "2.4.0"
-description = "Seafloor compliance processing, pressure calibration and layered elastic inversion"
+version = "2.5.0"
+description = "Seafloor compliance, pressure-gauge QC and calibration, and layered elastic inversion"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "GPL-3.0-only"
@@ -14,20 +14,39 @@ authors = [{name = "Mohammad-Amin Aminian"}]
 dependencies = ["numpy>=1.24", "scipy>=1.10", "matplotlib>=3.7", "obspy>=1.4", "tiskitpy>=2.3,<3", "disba>=0.7,<1"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.9", "build>=1", "arviz>=0.19,<0.23"]
+dev = ["pytest>=8", "ruff>=0.9", "build>=1", "arviz>=0.19,<0.23", "pandas>=2.2", "openpyxl>=3.1"]
 diagnostics = ["arviz>=0.19,<0.23"]
 fast = ["numba>=0.59"]
+# compy_pressure: pressure-gauge QC, calibration and noise models (docs/PRESSURE.md)
+pressure = ["pandas>=2.2", "openpyxl>=3.1"]
+maps = ["cartopy>=0.24"]
+
+[project.scripts]
+compy-pressure = "compy_pressure.network:main"
+compy-pressure-inventory = "compy_pressure.inventory:main"
+compy-pressure-tilt = "compy_pressure.tilt:main"
+compy-pressure-local-p = "compy_pressure.local_p_check:main"
+compy-pressure-microseism = "compy_pressure.microseism_check:main"
+compy-pressure-paired = "compy_pressure.paired_spectra:main"
+compy-pressure-noise-model = "compy_pressure.group_noise_model:main"
+compy-pressure-approved-noise-model = "compy_pressure.noise_model:main"
 
 [project.urls]
 Repository = "https://github.com/MohammadAmin-Aminian/ComPy"
 Publication = "https://doi.org/10.1093/gji/ggaf253"
 
 [tool.setuptools]
-py-modules = ["compy", "inv_compy", "Pressure_calibration", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
+py-modules = ["compy", "inv_compy", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
+# reference_data is listed as a (data-only) package so that setuptools ships it.
+packages = ["compy_pressure", "compy_pressure.reference_data"]
+
+[tool.setuptools.package-data]
+"compy_pressure.reference_data" = ["*.csv", "*.json"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["."]
+# pressure/ is BRUIT-FM's project folder: its tests import its scripts/.
+testpaths = ["tests", "pressure/tests"]
+pythonpath = [".", "pressure"]
 
 [tool.ruff.lint]
 select = ["E9", "F63", "F7", "F82", "F811"]

@@ -1,0 +1,13 @@
+{
+  "networks": ["YV", "YL", "7D", "XO"],
+  "masters": [
+    "exports/master_inventory.csv",
+    "results/NETWORKS/7D_ALL_NO_TILT/_master/master_inventory.csv",
+    "results/NETWORKS/XO_ALL_NO_TILT/_master/master_inventory.csv",
+    "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_master/master_inventory.csv"
+  ],
+  "rayleigh": "docs/calibration_network_summary.json",
+  "microseism": "docs/microseism_table_staging.csv",
+  "local_p": "docs/local_p_table_staging.csv",
+  "policy": "docs/six_check_policy_v1.json"
+}

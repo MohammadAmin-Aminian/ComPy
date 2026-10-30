@@ -1,0 +1,117 @@
+{
+  "seed_id": "YV.RR52.00.BDH",
+  "channel_start_time": "2012-10-19T09:00:00.000000Z",
+  "channel_end_time": "2013-11-25T05:17:31.000000Z",
+  "status": "comparison_only",
+  "score": null,
+  "reference_url": "https://doi.org/10.1002/grl.50418",
+  "start_utc": "2013-06-10T00:00:00.000000Z",
+  "end_utc_exclusive": "2013-06-17T00:00:00.000000Z",
+  "days": 7,
+  "window_seconds": 44712.0,
+  "nfft": 2794500,
+  "frequency_resolution_hz": 2.2365360529611736e-05,
+  "hann_equivalent_noise_bandwidth_hz": 3.3548040794417606e-05,
+  "sample_rate_hz": 62.5,
+  "windows_per_day": 3,
+  "detrend": "constant",
+  "window": "periodic_hann",
+  "fft_padding": false,
+  "averaging": "arithmetic mean in linear power after counts-based screening",
+  "saved_frequency_max_hz": 0.06,
+  "units": "Pa^2/Hz",
+  "requested_windows": 21,
+  "complete_windows": 21,
+  "missing_windows": 0,
+  "retained_windows": 20,
+  "rejected_windows": 1,
+  "screening_band_hz": [
+    0.05,
+    0.06
+  ],
+  "screening_metric": "mean linear counts^2/Hz",
+  "screening_rule": "strictly above NumPy linear-interpolated 95th percentile; retain ties",
+  "screening_threshold_counts2_hz": 1005000.9231654907,
+  "actual_rejected_fraction": 0.047619047619047616,
+  "depth_m": 2918.0,
+  "depth_basis": "inventory_elevation_estimate",
+  "depth_independently_verified": false,
+  "sensor_band": {
+    "minimum_hz": 0.008567123122607042,
+    "maximum_hz": 7.394719190050065,
+    "basis": "nominal_response",
+    "nominal_minimum_hz": 0.008567123122607042,
+    "nominal_maximum_hz": 7.394719190050065,
+    "reference_frequency_hz": 1.0,
+    "maximum_attenuation_db": 3,
+    "independently_verified": false
+  },
+  "model_band_hz": [
+    0.001,
+    0.02
+  ],
+  "compared_fft_bins": 511,
+  "median_mean_minus_model_db": 17.791081513091395,
+  "same_interval_ppsd_windows": 110,
+  "response_snapshot_sha256": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e",
+  "source_ppsd_sha256": "2c9f4cf7999964e6ffc8b73483d7778893e8cd3935f984b88a7c5f30d4713221",
+  "source_files": [
+    {
+      "path": "YV.RR52.00.BDH.D.2013.161",
+      "size": 11182080,
+      "mtime_ns": 1715764884000000000
+    },
+    {
+      "path": "YV.RR52.00.BDH.D.2013.162",
+      "size": 11001856,
+      "mtime_ns": 1715764884000000000
+    },
+    {
+      "path": "YV.RR52.00.BDH.D.2013.163",
+      "size": 10797056,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "YV.RR52.00.BDH.D.2013.164",
+      "size": 10842112,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "YV.RR52.00.BDH.D.2013.165",
+      "size": 10924032,
+      "mtime_ns": 1715764885000000000
+    },
+    {
+      "path": "YV.RR52.00.BDH.D.2013.166",
+      "size": 10825728,
+      "mtime_ns": 1715764886000000000
+    },
+    {
+      "path": "YV.RR52.00.BDH.D.2013.167",
+      "size": 10629120,
+      "mtime_ns": 1715764886000000000
+    },
+    {
+      "path": "YV.RR52.00.BDH.D.2013.168",
+      "size": 10530816,
+      "mtime_ns": 1715764886000000000
+    }
+  ],
+  "files": {
+    "spectra.npz": "results/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/godin_pilot/20130610T000000__7days/spectra.npz",
+    "windows.csv": "docs/rr52_godin_pilot_windows.csv",
+    "frequency_comparison.csv": "docs/rr52_godin_pilot_frequency.csv",
+    "ppsd_comparison.csv": "docs/rr52_godin_pilot_ppsd_comparison.csv",
+    "pressure_model.png": "docs/figures/rr52/BDH_godin_pilot_pressure_model.png",
+    "screening.png": "docs/figures/rr52/BDH_godin_pilot_screening.png",
+    "ppsd_comparison.png": "docs/figures/rr52/BDH_godin_pilot_ppsd_comparison.png"
+  },
+  "limitations": [
+    "Short pilot differs from the original yearlong mean; no calibration acceptance test is assigned.",
+    "Depth, instrument band and regional model applicability remain unverified.",
+    "Overlapping Hann windows and adjacent FFT bins are correlated.",
+    "Finite-sample screening fraction can differ from 5%; ties remain retained.",
+    "Detrending and periodic-Hann convention are explicit implementation choices.",
+    "Same-week comparison changes window length, taper, internal averaging and screening together."
+  ]
+}

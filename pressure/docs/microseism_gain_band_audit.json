@@ -1,0 +1,236 @@
+{
+  "audit_id": "gain-band-phase-audit-v1",
+  "source_review": "/Users/mohammadamin/Projects/bruit-fm/docs/microseism_weeks.json",
+  "frozen_rule_id": "claude-frequency-v1-20261015",
+  "selection_policy": "reportable stations; passing weeks; exact eligible bands",
+  "thresholds": {
+    "coherence_squared": 0.5,
+    "minimum_bins": 10,
+    "fits_deg": 10.0,
+    "unexplained_deg": 20.0,
+    "role": "legacy descriptive cutoffs, not a new calibration rule"
+  },
+  "rows": [
+    {
+      "station": "YV.RR40",
+      "passing_weeks": 4,
+      "audited_bands": 13,
+      "consistent_bands": 10,
+      "worst_weekly_rms_deg": 11.894270281639917,
+      "daily_band_count": 91,
+      "consistent_daily_bands": 48,
+      "daily_status_counts": {
+        "insufficient_coherent_bins": 25,
+        "approximate_prescribed": 18,
+        "consistent_with_prescribed": 48
+      },
+      "frozen_conditional_g": 0.7485294450053961,
+      "fixed_rayleigh_g": 0.7425859807590932,
+      "difference_pct": 0.8003738826616758,
+      "median_dry_vs_water_h1_pct": 0.45753877260481524,
+      "maximum_dry_vs_water_h1_pct": 3.071036441949637,
+      "reference_inside_h1_h2_bands": 7,
+      "tilt_status": "not_assessed_requires_p_h1_h2_z",
+      "absolute_vertical_response_status": "not_independently_verified",
+      "scientific_score": null
+    },
+    {
+      "station": "YV.RR52",
+      "passing_weeks": 3,
+      "audited_bands": 9,
+      "consistent_bands": 9,
+      "worst_weekly_rms_deg": 4.364878899541457,
+      "daily_band_count": 63,
+      "consistent_daily_bands": 40,
+      "daily_status_counts": {
+        "insufficient_coherent_bins": 13,
+        "approximate_prescribed": 5,
+        "consistent_with_prescribed": 40,
+        "inconsistent_with_prescribed": 5
+      },
+      "frozen_conditional_g": 0.6853077835960946,
+      "fixed_rayleigh_g": 0.6787278140712512,
+      "difference_pct": 0.9694562957976327,
+      "median_dry_vs_water_h1_pct": 0.10519955506251844,
+      "maximum_dry_vs_water_h1_pct": 0.28294968409894317,
+      "reference_inside_h1_h2_bands": 7,
+      "tilt_status": "not_assessed_requires_p_h1_h2_z",
+      "absolute_vertical_response_status": "not_independently_verified",
+      "scientific_score": null
+    },
+    {
+      "station": "YL.C05W",
+      "passing_weeks": 3,
+      "audited_bands": 6,
+      "consistent_bands": 6,
+      "worst_weekly_rms_deg": 7.613666029870687,
+      "daily_band_count": 28,
+      "consistent_daily_bands": 17,
+      "daily_status_counts": {
+        "consistent_with_prescribed": 17,
+        "insufficient_coherent_bins": 10,
+        "approximate_prescribed": 1
+      },
+      "frozen_conditional_g": 0.5745504431427069,
+      "fixed_rayleigh_g": 0.5846554732077656,
+      "difference_pct": -1.7283734657637773,
+      "median_dry_vs_water_h1_pct": 0.03340533538277457,
+      "maximum_dry_vs_water_h1_pct": 0.08031098573300088,
+      "reference_inside_h1_h2_bands": 3,
+      "tilt_status": "not_assessed_requires_p_h1_h2_z",
+      "absolute_vertical_response_status": "not_independently_verified",
+      "scientific_score": null
+    },
+    {
+      "station": "YL.C09W",
+      "passing_weeks": 3,
+      "audited_bands": 8,
+      "consistent_bands": 8,
+      "worst_weekly_rms_deg": 6.566040741103297,
+      "daily_band_count": 44,
+      "consistent_daily_bands": 36,
+      "daily_status_counts": {
+        "consistent_with_prescribed": 36,
+        "approximate_prescribed": 1,
+        "insufficient_coherent_bins": 7
+      },
+      "frozen_conditional_g": 0.5843315153627646,
+      "fixed_rayleigh_g": 0.5753031014637088,
+      "difference_pct": 1.5693316924739964,
+      "median_dry_vs_water_h1_pct": 0.06954845859603598,
+      "maximum_dry_vs_water_h1_pct": 0.44295787380221885,
+      "reference_inside_h1_h2_bands": 3,
+      "tilt_status": "not_assessed_requires_p_h1_h2_z",
+      "absolute_vertical_response_status": "not_independently_verified",
+      "scientific_score": null
+    },
+    {
+      "station": "7D.J45A",
+      "passing_weeks": 3,
+      "audited_bands": 8,
+      "consistent_bands": 8,
+      "worst_weekly_rms_deg": 3.5937947189682298,
+      "daily_band_count": 56,
+      "consistent_daily_bands": 43,
+      "daily_status_counts": {
+        "consistent_with_prescribed": 43,
+        "insufficient_coherent_bins": 13
+      },
+      "frozen_conditional_g": 0.7943244445733635,
+      "fixed_rayleigh_g": 0.8286626965003557,
+      "difference_pct": -4.143815339101309,
+      "median_dry_vs_water_h1_pct": 0.09897091900310517,
+      "maximum_dry_vs_water_h1_pct": 0.31827244434805557,
+      "reference_inside_h1_h2_bands": 2,
+      "tilt_status": "not_assessed_requires_p_h1_h2_z",
+      "absolute_vertical_response_status": "not_independently_verified",
+      "scientific_score": null
+    },
+    {
+      "station": "7D.J54A",
+      "passing_weeks": 3,
+      "audited_bands": 7,
+      "consistent_bands": 7,
+      "worst_weekly_rms_deg": 4.180151956681882,
+      "daily_band_count": 47,
+      "consistent_daily_bands": 33,
+      "daily_status_counts": {
+        "approximate_prescribed": 1,
+        "insufficient_coherent_bins": 5,
+        "consistent_with_prescribed": 33,
+        "insufficient_averaged_windows": 8
+      },
+      "frozen_conditional_g": 1.0198414880818465,
+      "fixed_rayleigh_g": 1.0796238515163448,
+      "difference_pct": -5.537332595100897,
+      "median_dry_vs_water_h1_pct": 0.10689632112739211,
+      "maximum_dry_vs_water_h1_pct": 0.5886976236805896,
+      "reference_inside_h1_h2_bands": 1,
+      "tilt_status": "not_assessed_requires_p_h1_h2_z",
+      "absolute_vertical_response_status": "not_independently_verified",
+      "scientific_score": null
+    },
+    {
+      "station": "7D.J67A",
+      "passing_weeks": 3,
+      "audited_bands": 7,
+      "consistent_bands": 7,
+      "worst_weekly_rms_deg": 7.375440786983349,
+      "daily_band_count": 42,
+      "consistent_daily_bands": 28,
+      "daily_status_counts": {
+        "consistent_with_prescribed": 28,
+        "approximate_prescribed": 1,
+        "insufficient_coherent_bins": 3,
+        "insufficient_averaged_windows": 10
+      },
+      "frozen_conditional_g": 0.9730141409469314,
+      "fixed_rayleigh_g": null,
+      "difference_pct": null,
+      "median_dry_vs_water_h1_pct": 0.06041050947642734,
+      "maximum_dry_vs_water_h1_pct": 0.2821567912766554,
+      "reference_inside_h1_h2_bands": null,
+      "tilt_status": "not_assessed_requires_p_h1_h2_z",
+      "absolute_vertical_response_status": "not_independently_verified",
+      "scientific_score": null
+    }
+  ],
+  "protected_inputs_unchanged": true,
+  "gain_applied": false,
+  "master_or_scores_changed": false,
+  "status": "diagnostic_only; frozen selections unchanged; tilt/model/absolute response remain open",
+  "full_audit_path": "/Users/mohammadamin/Projects/bruit-fm/results/REVIEWS/MICROSEISM_GAIN_BANDS/run_20261015T144203Z_90633bfe/audit.json",
+  "full_audit_sha256": "6ed95183e80cdd121faedabbf5d002c966f9413cea649980ddee3152c3db7576",
+  "source_review_sha256": "195707ab5988663cc3a218653a9c3f45987323ed751977d00807f4053eaeb8fe",
+  "protected_file_count": 2466,
+  "audited_weeks": 22,
+  "weekly_band_status_counts": {
+    "consistent_with_prescribed": 55,
+    "approximate_prescribed": 3
+  },
+  "daily_band_status_counts": {
+    "insufficient_coherent_bins": 76,
+    "approximate_prescribed": 27,
+    "consistent_with_prescribed": 245,
+    "inconsistent_with_prescribed": 5,
+    "insufficient_averaged_windows": 18
+  },
+  "staging_status_counts": {
+    "no_passing_weeks": 42,
+    "insufficient_passing_weeks": 35,
+    "unresolved_pairing": 5,
+    "conditional_repeatable_unvalidated": 7
+  },
+  "weekly_phase_flags": [
+    {
+      "station": "YV.RR40",
+      "shift_weeks": 6,
+      "frequency_hz": [
+        0.02710489407170885,
+        0.03443477549934416
+      ],
+      "status": "approximate_prescribed",
+      "prescribed_rms_deg": 11.894270281639917
+    },
+    {
+      "station": "YV.RR40",
+      "shift_weeks": 6,
+      "frequency_hz": [
+        0.03443477549934416,
+        0.04374685105033786
+      ],
+      "status": "approximate_prescribed",
+      "prescribed_rms_deg": 10.462567109825912
+    },
+    {
+      "station": "YV.RR40",
+      "shift_weeks": 12,
+      "frequency_hz": [
+        0.02710489407170885,
+        0.03443477549934416
+      ],
+      "status": "approximate_prescribed",
+      "prescribed_rms_deg": 10.662973576590385
+    }
+  ]
+}

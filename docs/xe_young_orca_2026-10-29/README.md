@@ -1,5 +1,10 @@
 # XE (Pacific Array Young ORCA) compliance, Vs and serpentinization, 29–30 October 2026
 
+> **Note.** `scripts/d_calibrate.py` imports `Pressure_calibration`, which
+> ComPy removed after 2.4.0. Rerun it with ComPy 2.4.0 (commit `7ad79c2`). The
+> gains here are those of that method; the pipeline's stage D now uses
+> `compy_pressure`.
+
 This is the second network processed with ComPy, after YV (RHUM-RUM; Aminian et al. 2025). It is the validation run of
 the end-to-end `pipeline/` of ComPy 2.4.
 

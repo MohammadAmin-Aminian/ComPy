@@ -1,0 +1,1468 @@
+{
+  "scope": "Read-only rederivation from saved auto/cross power spectra, not a new raw-waveform estimator or final field validation",
+  "station_count": 43,
+  "spectral_event_products_checked": 481,
+  "candidate_event_count": 48,
+  "event_status_counts": {
+    "unresolved": 160,
+    "polarity_review": 118,
+    "excluded_cluster": 466,
+    "rejected_qc": 303,
+    "candidate": 48,
+    "arrival_overlap_review": 12
+  },
+  "reason_counts": {
+    "tilt_angle_limit": 72,
+    "Phase convention or arrival overlap needs review": 130,
+    "Insufficient band coherence": 303,
+    "no_quiet_training_interval": 25,
+    "invalid_tilt_projection": 9,
+    "sample_grid_offset": 6,
+    "missing_gapped_or_flat_window": 44,
+    "gain_grid_boundary": 4
+  },
+  "arithmetic_check_failures": {},
+  "max_gain_absolute_difference": 1.1102230246251565e-15,
+  "max_station_gain_absolute_difference": 4.440892098500626e-16,
+  "max_reference_relative_difference": 9.992007221626409e-16,
+  "depth_perturbations": "Illustrative +/-5% depth; not measured uncertainty; all other quantities held fixed",
+  "stations": [
+    {
+      "station": "RR01",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "tilt_angle_limit": 3,
+        "Phase convention or arrival overlap needs review": 4,
+        "Insufficient band coherence": 16,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 4,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.11904761904761904
+    },
+    {
+      "station": "RR03",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1,
+        "Insufficient band coherence": 1,
+        "tilt_angle_limit": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 1.1140766127662696,
+          "relative_rms": 0.05407667973508589,
+          "mean_coherence": 0.9793070816884946,
+          "median_coherence": 0.9872427492344051,
+          "accepted_bins": 5,
+          "tilt_deg": 2.410954294260814,
+          "raw_gain": 1.1166632977055242,
+          "h1_gain": 1.1261094817266322,
+          "depth_perturbation_gains": {
+            "0.95": 0.9850707740534181,
+            "1.05": 1.2743452575463114
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 1.1224363577552348,
+          "relative_rms": 0.07184026238435365,
+          "mean_coherence": 0.9923559016164654,
+          "median_coherence": 0.9947524106670365,
+          "accepted_bins": 3,
+          "tilt_deg": 2.2973874393021876,
+          "raw_gain": 1.1240555699483565,
+          "h1_gain": 1.1297256845815082,
+          "depth_perturbation_gains": {
+            "0.95": 0.9795436517203544,
+            "1.05": 1.303830380068378
+          }
+        },
+        {
+          "id": "usb000ief9",
+          "gain": 1.166215712846976,
+          "relative_rms": 0.08015126910204855,
+          "mean_coherence": 0.9847472635277423,
+          "median_coherence": 0.9859436062400289,
+          "accepted_bins": 6,
+          "tilt_deg": 0.8828508796360343,
+          "raw_gain": 1.1663594617650566,
+          "h1_gain": 1.1741507348770694,
+          "depth_perturbation_gains": {
+            "0.95": 1.0380344434305702,
+            "1.05": 1.3227462896841047
+          }
+        }
+      ],
+      "median_event_gain": 1.1224363577552348,
+      "event_gain_cv_percent": 2.4948394484109753,
+      "max_event_relative_rms": 0.08015126910204855,
+      "median_raw_gain": 1.1240555699483565,
+      "median_h1_gain": 1.1297256845815082,
+      "depth_minus_5pct_gain": 0.9850707740534181,
+      "depth_plus_5pct_gain": 1.303830380068378,
+      "gain_of_median_ratio": 1.1471208129206618,
+      "follow_up": "Review usb000ief9 window: selected interval includes predicted S arrival; narrow fundamental-mode isolation not established"
+    },
+    {
+      "station": "RR05",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "tilt_angle_limit": 6,
+        "Phase convention or arrival overlap needs review": 3,
+        "Insufficient band coherence": 13,
+        "no_quiet_training_interval": 1,
+        "invalid_tilt_projection": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 3,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR06",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 7,
+        "Insufficient band coherence": 16,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 7,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR07",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 1.0822263082831478,
+          "relative_rms": 0.047156727333892555,
+          "mean_coherence": 0.9688782002681108,
+          "median_coherence": 0.9747618957850996,
+          "accepted_bins": 5,
+          "tilt_deg": 9.583887985913176,
+          "raw_gain": 1.0619296266878404,
+          "h1_gain": 1.0945254567194531,
+          "depth_perturbation_gains": {
+            "0.95": 0.9611989080064842,
+            "1.05": 1.2326233217764544
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 1.151865704294702,
+          "relative_rms": 0.14188575102038165,
+          "mean_coherence": 0.9753676618166502,
+          "median_coherence": 0.992033104490136,
+          "accepted_bins": 6,
+          "tilt_deg": 5.788716981316719,
+          "raw_gain": 1.149245659001175,
+          "h1_gain": 1.1584836597657115,
+          "depth_perturbation_gains": {
+            "0.95": 1.025663508825151,
+            "1.05": 1.3060110810198529
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 1.0750875058703029,
+          "relative_rms": 0.068086365954656,
+          "mean_coherence": 0.9863833978477277,
+          "median_coherence": 0.9925778849150643,
+          "accepted_bins": 5,
+          "tilt_deg": 0.9697092889830679,
+          "raw_gain": 1.0791871659768566,
+          "h1_gain": 1.0871239338136156,
+          "depth_perturbation_gains": {
+            "0.95": 0.9503052888062273,
+            "1.05": 1.2301953732076178
+          }
+        }
+      ],
+      "median_event_gain": 1.0822263082831478,
+      "event_gain_cv_percent": 3.9194728736962574,
+      "max_event_relative_rms": 0.14188575102038165,
+      "median_raw_gain": 1.0791871659768566,
+      "median_h1_gain": 1.0945254567194531,
+      "depth_minus_5pct_gain": 0.9611989080064842,
+      "depth_plus_5pct_gain": 1.2326233217764544,
+      "gain_of_median_ratio": 1.0637297897621527,
+      "follow_up": "Prioritize scalar-fit shape and packet-window review; largest candidate relative RMS residuals"
+    },
+    {
+      "station": "RR08",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "tilt_angle_limit": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 1.1546651426282073,
+          "relative_rms": 0.04109747836000492,
+          "mean_coherence": 0.9868823087035933,
+          "median_coherence": 0.9890383783629406,
+          "accepted_bins": 7,
+          "tilt_deg": 0.5155110995263139,
+          "raw_gain": 1.1534629413113868,
+          "h1_gain": 1.164865186591849,
+          "depth_perturbation_gains": {
+            "0.95": 1.0392425942293821,
+            "1.05": 1.291262739182769
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 1.199689793707207,
+          "relative_rms": 0.0686760805361715,
+          "mean_coherence": 0.9784628566616829,
+          "median_coherence": 0.9888801245365492,
+          "accepted_bins": 3,
+          "tilt_deg": 0.5117714707734302,
+          "raw_gain": 1.1998492236782339,
+          "h1_gain": 1.2026379603888624,
+          "depth_perturbation_gains": {
+            "0.95": 1.0797238518565218,
+            "1.05": 1.3396108102138407
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 1.1578642259813186,
+          "relative_rms": 0.024037985378408785,
+          "mean_coherence": 0.9905184421347217,
+          "median_coherence": 0.9916270167819147,
+          "accepted_bins": 5,
+          "tilt_deg": 0.755469888384833,
+          "raw_gain": 1.1596505188461836,
+          "h1_gain": 1.1654044505058903,
+          "depth_perturbation_gains": {
+            "0.95": 1.0345026100067225,
+            "1.05": 1.305850405280953
+          }
+        }
+      ],
+      "median_event_gain": 1.1578642259813186,
+      "event_gain_cv_percent": 2.1697251686647623,
+      "max_event_relative_rms": 0.0686760805361715,
+      "median_raw_gain": 1.1596505188461836,
+      "median_h1_gain": 1.1654044505058903,
+      "depth_minus_5pct_gain": 1.0392425942293821,
+      "depth_plus_5pct_gain": 1.305850405280953,
+      "gain_of_median_ratio": 1.154606913945712,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR09",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "sample_grid_offset": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 1.2059220440330407,
+          "relative_rms": 0.019563470032921436,
+          "mean_coherence": 0.9825506948172991,
+          "median_coherence": 0.9833344599901593,
+          "accepted_bins": 6,
+          "tilt_deg": 2.5293909990606247,
+          "raw_gain": 1.2036204554837588,
+          "h1_gain": 1.2126186523378395,
+          "depth_perturbation_gains": {
+            "0.95": 1.1243534010149077,
+            "1.05": 1.2922847660631938
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 1.2348159203526528,
+          "relative_rms": 0.03048426701497376,
+          "mean_coherence": 0.9834506092940338,
+          "median_coherence": 0.9857007715766078,
+          "accepted_bins": 3,
+          "tilt_deg": 4.793189689533651,
+          "raw_gain": 1.2271453927041884,
+          "h1_gain": 1.2389196099901223,
+          "depth_perturbation_gains": {
+            "0.95": 1.1446215160824174,
+            "1.05": 1.3317038530682646
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 1.1593537441486663,
+          "relative_rms": 0.01979159386018455,
+          "mean_coherence": 0.994715149447006,
+          "median_coherence": 0.995592453180791,
+          "accepted_bins": 6,
+          "tilt_deg": 0.6217485908289591,
+          "raw_gain": 1.1609977137336556,
+          "h1_gain": 1.1624795404361872,
+          "depth_perturbation_gains": {
+            "0.95": 1.0808000236673625,
+            "1.05": 1.2425489874134583
+          }
+        }
+      ],
+      "median_event_gain": 1.2059220440330407,
+      "event_gain_cv_percent": 3.157293164303092,
+      "max_event_relative_rms": 0.03048426701497376,
+      "median_raw_gain": 1.2036204554837588,
+      "median_h1_gain": 1.2126186523378395,
+      "depth_minus_5pct_gain": 1.1243534010149077,
+      "depth_plus_5pct_gain": 1.2922847660631938,
+      "gain_of_median_ratio": 1.1769848454043381,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR10",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 7,
+        "Insufficient band coherence": 14,
+        "no_quiet_training_interval": 1,
+        "invalid_tilt_projection": 2
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 7,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR11",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 3,
+        "Insufficient band coherence": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 1.0940065492154456,
+          "relative_rms": 0.04316157070809703,
+          "mean_coherence": 0.9835384175516878,
+          "median_coherence": 0.982404924209399,
+          "accepted_bins": 4,
+          "tilt_deg": 3.0549090779189063,
+          "raw_gain": 1.0826583507802883,
+          "h1_gain": 1.1035727862832532,
+          "depth_perturbation_gains": {
+            "0.95": 1.0033391539486574,
+            "1.05": 1.1944508025841263
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 1.0493318696553702,
+          "relative_rms": 0.03135842121424902,
+          "mean_coherence": 0.9926579200221737,
+          "median_coherence": 0.9955045984379283,
+          "accepted_bins": 3,
+          "tilt_deg": 0.9332771191673435,
+          "raw_gain": 1.0506783489445202,
+          "h1_gain": 1.0538623296970147,
+          "depth_perturbation_gains": {
+            "0.95": 0.9594959367037403,
+            "1.05": 1.149570902696208
+          }
+        },
+        {
+          "id": "usb000jyiv",
+          "gain": 1.063698333873094,
+          "relative_rms": 0.01861365495603197,
+          "mean_coherence": 0.9945100698594493,
+          "median_coherence": 0.9973250998940417,
+          "accepted_bins": 3,
+          "tilt_deg": 0.6190465080860117,
+          "raw_gain": 1.0642590651120536,
+          "h1_gain": 1.0661081988208287,
+          "depth_perturbation_gains": {
+            "0.95": 0.9724766229191711,
+            "1.05": 1.1655254853342818
+          }
+        }
+      ],
+      "median_event_gain": 1.063698333873094,
+      "event_gain_cv_percent": 2.1440730331198443,
+      "max_event_relative_rms": 0.04316157070809703,
+      "median_raw_gain": 1.0642590651120536,
+      "median_h1_gain": 1.0661081988208287,
+      "depth_minus_5pct_gain": 0.9724766229191711,
+      "depth_plus_5pct_gain": 1.1655254853342818,
+      "polarity_review_event_count": 2,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.2222222222222222,
+      "gain_of_median_ratio": 1.0416116773982833,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR12",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "missing_gapped_or_flat_window": 23,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": []
+    },
+    {
+      "station": "RR13",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1,
+        "tilt_angle_limit": 2,
+        "Insufficient band coherence": 1
+      },
+      "candidate_events": [
+        {
+          "id": "usc000f40j",
+          "gain": 1.2267811136364912,
+          "relative_rms": 0.09730447128468024,
+          "mean_coherence": 0.9793927298627495,
+          "median_coherence": 0.9923362780163357,
+          "accepted_bins": 5,
+          "tilt_deg": 3.273908239688007,
+          "raw_gain": 1.2215576344971364,
+          "h1_gain": 1.2323387750552044,
+          "depth_perturbation_gains": {
+            "0.95": 1.1015572572661474,
+            "1.05": 1.374838450780331
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 1.1958950611154464,
+          "relative_rms": 0.01077411063413654,
+          "mean_coherence": 0.9912302578448465,
+          "median_coherence": 0.9934273176753964,
+          "accepted_bins": 4,
+          "tilt_deg": 2.4954467881432967,
+          "raw_gain": 1.1934316801306522,
+          "h1_gain": 1.2040144040403786,
+          "depth_perturbation_gains": {
+            "0.95": 1.066614928341503,
+            "1.05": 1.351008176306576
+          }
+        },
+        {
+          "id": "usb000jyiv",
+          "gain": 1.2087194550959381,
+          "relative_rms": 0.0564420832981774,
+          "mean_coherence": 0.9902995757867686,
+          "median_coherence": 0.9956285955593502,
+          "accepted_bins": 5,
+          "tilt_deg": 1.5654557883963842,
+          "raw_gain": 1.2070888031205478,
+          "h1_gain": 1.212072588341654,
+          "depth_perturbation_gains": {
+            "0.95": 1.0836119605954408,
+            "1.05": 1.3572081983326538
+          }
+        }
+      ],
+      "median_event_gain": 1.2087194550959381,
+      "event_gain_cv_percent": 1.2837433409457024,
+      "max_event_relative_rms": 0.09730447128468024,
+      "median_raw_gain": 1.2070888031205478,
+      "median_h1_gain": 1.212072588341654,
+      "depth_minus_5pct_gain": 1.0836119605954408,
+      "depth_plus_5pct_gain": 1.3572081983326538,
+      "polarity_review_event_count": 1,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.1111111111111111,
+      "gain_of_median_ratio": 1.1990770658226315,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR14",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 1.1060034664176703,
+          "relative_rms": 0.021994531037217536,
+          "mean_coherence": 0.9883321113133232,
+          "median_coherence": 0.990919005637856,
+          "accepted_bins": 5,
+          "tilt_deg": 0.5346088570731549,
+          "raw_gain": 1.105292338877067,
+          "h1_gain": 1.1119787995776615,
+          "depth_perturbation_gains": {
+            "0.95": 1.0191494305282016,
+            "1.05": 1.201124736585679
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 1.1034764218617565,
+          "relative_rms": 0.05831528014582461,
+          "mean_coherence": 0.9905774320062487,
+          "median_coherence": 0.9941033250101085,
+          "accepted_bins": 5,
+          "tilt_deg": 0.8652115984403342,
+          "raw_gain": 1.1028442836166676,
+          "h1_gain": 1.1075706699620653,
+          "depth_perturbation_gains": {
+            "0.95": 1.017171835674297,
+            "1.05": 1.1978942103851182
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 1.0237842615434223,
+          "relative_rms": 0.0237277751607864,
+          "mean_coherence": 0.9921658704495395,
+          "median_coherence": 0.9908651087965752,
+          "accepted_bins": 6,
+          "tilt_deg": 0.6065209053112428,
+          "raw_gain": 1.0247886682330583,
+          "h1_gain": 1.0282605385177472,
+          "depth_perturbation_gains": {
+            "0.95": 0.9450633355599944,
+            "1.05": 1.1096051225513868
+          }
+        }
+      ],
+      "median_event_gain": 1.1034764218617565,
+      "event_gain_cv_percent": 4.2372324020223875,
+      "max_event_relative_rms": 0.05831528014582461,
+      "median_raw_gain": 1.1028442836166676,
+      "median_h1_gain": 1.1075706699620653,
+      "depth_minus_5pct_gain": 1.017171835674297,
+      "depth_plus_5pct_gain": 1.1978942103851182,
+      "gain_of_median_ratio": 1.0549547318065933,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR16",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 7,
+        "Insufficient band coherence": 14,
+        "sample_grid_offset": 1,
+        "no_quiet_training_interval": 1,
+        "tilt_angle_limit": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 7,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR17",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 8,
+        "invalid_tilt_projection": 1,
+        "Insufficient band coherence": 13,
+        "no_quiet_training_interval": 1,
+        "sample_grid_offset": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 8,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR18",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 4,
+        "Insufficient band coherence": 19,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 4,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR19",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 4,
+        "Insufficient band coherence": 16,
+        "no_quiet_training_interval": 1,
+        "invalid_tilt_projection": 1,
+        "tilt_angle_limit": 2
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 4,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR20",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 8,
+        "Insufficient band coherence": 15,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 8,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR21",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 7,
+        "Insufficient band coherence": 15,
+        "invalid_tilt_projection": 1,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 7,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR22",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 11,
+        "Insufficient band coherence": 11,
+        "sample_grid_offset": 1,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 11,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR25",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 2,
+        "tilt_angle_limit": 1,
+        "Insufficient band coherence": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 1.1647913455182277,
+          "relative_rms": 0.02835620350377994,
+          "mean_coherence": 0.9733298559392917,
+          "median_coherence": 0.9801867624187843,
+          "accepted_bins": 5,
+          "tilt_deg": 0.9900899653289597,
+          "raw_gain": 1.1625814466578428,
+          "h1_gain": 1.1827251127413392,
+          "depth_perturbation_gains": {
+            "0.95": 1.0240963826554959,
+            "1.05": 1.342433308234583
+          }
+        },
+        {
+          "id": "usb000ief9",
+          "gain": 1.1777673447130994,
+          "relative_rms": 0.08440317424344652,
+          "mean_coherence": 0.9738125198662052,
+          "median_coherence": 0.9796554655150652,
+          "accepted_bins": 3,
+          "tilt_deg": 0.7821694929742046,
+          "raw_gain": 1.1787984139875873,
+          "h1_gain": 1.1857959209078428,
+          "depth_perturbation_gains": {
+            "0.95": 1.0248955185379884,
+            "1.05": 1.3748602291656487
+          }
+        },
+        {
+          "id": "usb000jyiv",
+          "gain": 1.1491104659986826,
+          "relative_rms": 0.025106308771551903,
+          "mean_coherence": 0.9877493549733701,
+          "median_coherence": 0.9901311299219859,
+          "accepted_bins": 5,
+          "tilt_deg": 1.9846981255457559,
+          "raw_gain": 1.1429319011557422,
+          "h1_gain": 1.1602316194671562,
+          "depth_perturbation_gains": {
+            "0.95": 0.9727416708421514,
+            "1.05": 1.400295902585122
+          }
+        }
+      ],
+      "median_event_gain": 1.1647913455182277,
+      "event_gain_cv_percent": 1.2319544993054052,
+      "max_event_relative_rms": 0.08440317424344652,
+      "median_raw_gain": 1.1625814466578428,
+      "median_h1_gain": 1.1827251127413392,
+      "depth_minus_5pct_gain": 1.0240963826554959,
+      "depth_plus_5pct_gain": 1.3748602291656487,
+      "polarity_review_event_count": 1,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.25,
+      "gain_of_median_ratio": 1.1533396659311128,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR26",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Insufficient band coherence": 16,
+        "tilt_angle_limit": 7,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": []
+    },
+    {
+      "station": "RR28",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.7753208103518319,
+          "relative_rms": 0.05831984637479113,
+          "mean_coherence": 0.9811843479955326,
+          "median_coherence": 0.9830665863313371,
+          "accepted_bins": 8,
+          "tilt_deg": 1.533332058101771,
+          "raw_gain": 0.7749623727386016,
+          "h1_gain": 0.7816889863473473,
+          "depth_perturbation_gains": {
+            "0.95": 0.6825326889298354,
+            "1.05": 0.8945924847778991
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.8195094076099886,
+          "relative_rms": 0.07871750649659127,
+          "mean_coherence": 0.989209018211162,
+          "median_coherence": 0.9920141902813576,
+          "accepted_bins": 9,
+          "tilt_deg": 0.1303472960214961,
+          "raw_gain": 0.8195128791834925,
+          "h1_gain": 0.8240385900119339,
+          "depth_perturbation_gains": {
+            "0.95": 0.7273262083270786,
+            "1.05": 0.9357819644823236
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.8280336649882885,
+          "relative_rms": 0.066839577867862,
+          "mean_coherence": 0.9900786526871337,
+          "median_coherence": 0.991092393986684,
+          "accepted_bins": 9,
+          "tilt_deg": 3.452705662828114,
+          "raw_gain": 0.8311494055548382,
+          "h1_gain": 0.8332819304459093,
+          "depth_perturbation_gains": {
+            "0.95": 0.7341839062915616,
+            "1.05": 0.9466297508359658
+          }
+        }
+      ],
+      "median_event_gain": 0.8195094076099886,
+      "event_gain_cv_percent": 3.452782523141169,
+      "max_event_relative_rms": 0.07871750649659127,
+      "median_raw_gain": 0.8195128791834925,
+      "median_h1_gain": 0.8240385900119339,
+      "depth_minus_5pct_gain": 0.7273262083270786,
+      "depth_plus_5pct_gain": 0.9357819644823236,
+      "gain_of_median_ratio": 0.814619960779258,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR29",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.7299436693477891,
+          "relative_rms": 0.03396029754815875,
+          "mean_coherence": 0.959543903612442,
+          "median_coherence": 0.9891947655480456,
+          "accepted_bins": 7,
+          "tilt_deg": 0.2177188726576043,
+          "raw_gain": 0.7299131673781379,
+          "h1_gain": 0.7340030155981775,
+          "depth_perturbation_gains": {
+            "0.95": 0.6603190377790872,
+            "1.05": 0.8113669961691858
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.7306741865954216,
+          "relative_rms": 0.11622800749349081,
+          "mean_coherence": 0.9519192831506764,
+          "median_coherence": 0.9933466436310115,
+          "accepted_bins": 8,
+          "tilt_deg": 0.4264393954759961,
+          "raw_gain": 0.7311008209368549,
+          "h1_gain": 0.7344232947767312,
+          "depth_perturbation_gains": {
+            "0.95": 0.6511675592085473,
+            "1.05": 0.8291782702855965
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.7197194118992055,
+          "relative_rms": 0.039917630155417105,
+          "mean_coherence": 0.9868824189483036,
+          "median_coherence": 0.9939072101662125,
+          "accepted_bins": 9,
+          "tilt_deg": 0.14219569906510882,
+          "raw_gain": 0.7196514596502566,
+          "h1_gain": 0.7273752269479887,
+          "depth_perturbation_gains": {
+            "0.95": 0.6181254921478972,
+            "1.05": 0.8645181813762368
+          }
+        }
+      ],
+      "median_event_gain": 0.7299436693477891,
+      "event_gain_cv_percent": 0.8390731046399386,
+      "max_event_relative_rms": 0.11622800749349081,
+      "median_raw_gain": 0.7299131673781379,
+      "median_h1_gain": 0.7340030155981775,
+      "depth_minus_5pct_gain": 0.6511675592085473,
+      "depth_plus_5pct_gain": 0.8291782702855965,
+      "gain_of_median_ratio": 0.7120635126517174,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR30",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Insufficient band coherence": 14,
+        "Phase convention or arrival overlap needs review": 9,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 9,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR31",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Insufficient band coherence": 19,
+        "no_quiet_training_interval": 1,
+        "sample_grid_offset": 1
+      },
+      "candidate_events": []
+    },
+    {
+      "station": "RR34",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.5678087966136794,
+          "relative_rms": 0.08627033930550806,
+          "mean_coherence": 0.987626577334064,
+          "median_coherence": 0.9916545676750447,
+          "accepted_bins": 9,
+          "tilt_deg": 2.021868751164793,
+          "raw_gain": 0.5669700952132716,
+          "h1_gain": 0.5724285967212636,
+          "depth_perturbation_gains": {
+            "0.95": 0.5112200922658255,
+            "1.05": 0.6352962510414036
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.5951998914672472,
+          "relative_rms": 0.1026941355271218,
+          "mean_coherence": 0.9914908086433252,
+          "median_coherence": 0.9946691807000985,
+          "accepted_bins": 9,
+          "tilt_deg": 0.2719748884067306,
+          "raw_gain": 0.5951572665639026,
+          "h1_gain": 0.5976783504475763,
+          "depth_perturbation_gains": {
+            "0.95": 0.5383490183564422,
+            "1.05": 0.6620923468644403
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.5848160998530781,
+          "relative_rms": 0.036241433788442065,
+          "mean_coherence": 0.9910819187151504,
+          "median_coherence": 0.9931149859280268,
+          "accepted_bins": 9,
+          "tilt_deg": 2.0743323029035254,
+          "raw_gain": 0.5852564043561718,
+          "h1_gain": 0.5877964045793024,
+          "depth_perturbation_gains": {
+            "0.95": 0.5273980732190058,
+            "1.05": 0.6529526255937788
+          }
+        }
+      ],
+      "median_event_gain": 0.5848160998530781,
+      "event_gain_cv_percent": 2.364567943393849,
+      "max_event_relative_rms": 0.1026941355271218,
+      "median_raw_gain": 0.5852564043561718,
+      "median_h1_gain": 0.5877964045793024,
+      "depth_minus_5pct_gain": 0.5273980732190058,
+      "depth_plus_5pct_gain": 0.6529526255937788,
+      "gain_of_median_ratio": 0.5846860780377146,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR36",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "sample_grid_offset": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.6575036432132138,
+          "relative_rms": 0.025477055062388385,
+          "mean_coherence": 0.993775591701442,
+          "median_coherence": 0.994703882977205,
+          "accepted_bins": 9,
+          "tilt_deg": 0.3283245108103491,
+          "raw_gain": 0.6575281516426684,
+          "h1_gain": 0.6596041861654937,
+          "depth_perturbation_gains": {
+            "0.95": 0.6084376452483297,
+            "1.05": 0.7108447188518587
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.6420100855602232,
+          "relative_rms": 0.08487184455649584,
+          "mean_coherence": 0.989423359662161,
+          "median_coherence": 0.9952010126925844,
+          "accepted_bins": 9,
+          "tilt_deg": 2.6520414336092903,
+          "raw_gain": 0.6420106871085064,
+          "h1_gain": 0.6457454415989632,
+          "depth_perturbation_gains": {
+            "0.95": 0.5946494248329057,
+            "1.05": 0.6933536329507525
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.6513338055925254,
+          "relative_rms": 0.04949580435471062,
+          "mean_coherence": 0.9871229706679794,
+          "median_coherence": 0.989343042877143,
+          "accepted_bins": 9,
+          "tilt_deg": 1.4156482282007272,
+          "raw_gain": 0.6535727798235094,
+          "h1_gain": 0.6552628860938887,
+          "depth_perturbation_gains": {
+            "0.95": 0.6027330408013349,
+            "1.05": 0.7041657556271562
+          }
+        }
+      ],
+      "median_event_gain": 0.6513338055925254,
+      "event_gain_cv_percent": 1.197557362340125,
+      "max_event_relative_rms": 0.08487184455649584,
+      "median_raw_gain": 0.6535727798235094,
+      "median_h1_gain": 0.6552628860938887,
+      "depth_minus_5pct_gain": 0.6027330408013349,
+      "depth_plus_5pct_gain": 0.7041657556271562,
+      "gain_of_median_ratio": 0.6473758257537215,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR38",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.636352063884827,
+          "relative_rms": 0.03223030345228057,
+          "mean_coherence": 0.9845913685748542,
+          "median_coherence": 0.9862452420205828,
+          "accepted_bins": 9,
+          "tilt_deg": 0.2755652855963661,
+          "raw_gain": 0.6364844374276042,
+          "h1_gain": 0.6418183889170295,
+          "depth_perturbation_gains": {
+            "0.95": 0.5631917280484291,
+            "1.05": 0.7294475484125967
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.6146250724463577,
+          "relative_rms": 0.0845145557848444,
+          "mean_coherence": 0.9845287440648237,
+          "median_coherence": 0.9882013186059712,
+          "accepted_bins": 8,
+          "tilt_deg": 0.14809444086352602,
+          "raw_gain": 0.6144711042704841,
+          "h1_gain": 0.6176989442942882,
+          "depth_perturbation_gains": {
+            "0.95": 0.5557783521288913,
+            "1.05": 0.6837977738535558
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.6399846232982991,
+          "relative_rms": 0.04401434197550471,
+          "mean_coherence": 0.9836530850064532,
+          "median_coherence": 0.9909297226081342,
+          "accepted_bins": 8,
+          "tilt_deg": 1.1572876012136128,
+          "raw_gain": 0.6381330555391701,
+          "h1_gain": 0.6444794637802602,
+          "depth_perturbation_gains": {
+            "0.95": 0.5778164292992914,
+            "1.05": 0.7133874553486098
+          }
+        }
+      ],
+      "median_event_gain": 0.636352063884827,
+      "event_gain_cv_percent": 2.1550215529429955,
+      "max_event_relative_rms": 0.0845145557848444,
+      "median_raw_gain": 0.6364844374276042,
+      "median_h1_gain": 0.6418183889170295,
+      "depth_minus_5pct_gain": 0.5631917280484291,
+      "depth_plus_5pct_gain": 0.7133874553486098,
+      "gain_of_median_ratio": 0.6303815664869484,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR40",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.7418766079958283,
+          "relative_rms": 0.047381403054072554,
+          "mean_coherence": 0.9843463113990308,
+          "median_coherence": 0.9876919658044354,
+          "accepted_bins": 8,
+          "tilt_deg": 0.10972311427384471,
+          "raw_gain": 0.7418619917611732,
+          "h1_gain": 0.7474084976499847,
+          "depth_perturbation_gains": {
+            "0.95": 0.6601940243704614,
+            "1.05": 0.8432371285058206
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.8055044839196477,
+          "relative_rms": 0.18167068349865995,
+          "mean_coherence": 0.987735346698132,
+          "median_coherence": 0.9960849382670877,
+          "accepted_bins": 9,
+          "tilt_deg": 0.9276629216453429,
+          "raw_gain": 0.8054162128662936,
+          "h1_gain": 0.810396910950352,
+          "depth_perturbation_gains": {
+            "0.95": 0.7020610661381758,
+            "1.05": 0.945995831871257
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.741880192578509,
+          "relative_rms": 0.0585087175286928,
+          "mean_coherence": 0.9803152065275239,
+          "median_coherence": 0.989536295147284,
+          "accepted_bins": 9,
+          "tilt_deg": 0.5947608020744835,
+          "raw_gain": 0.7425859807590932,
+          "h1_gain": 0.7506723842271816,
+          "depth_perturbation_gains": {
+            "0.95": 0.6394191133412049,
+            "1.05": 0.8853648029815576
+          }
+        }
+      ],
+      "median_event_gain": 0.741880192578509,
+      "event_gain_cv_percent": 4.951545670567187,
+      "max_event_relative_rms": 0.18167068349865995,
+      "median_raw_gain": 0.7425859807590932,
+      "median_h1_gain": 0.7506723842271816,
+      "depth_minus_5pct_gain": 0.6601940243704614,
+      "depth_plus_5pct_gain": 0.8853648029815576,
+      "gain_of_median_ratio": 0.7565454733738604,
+      "follow_up": "Prioritize scalar-fit shape and packet-window review; largest candidate relative RMS residuals"
+    },
+    {
+      "station": "RR41",
+      "status": "reference_band_unusable",
+      "candidate_count": 0,
+      "reasons": {},
+      "candidate_events": []
+    },
+    {
+      "station": "RR42",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "missing_gapped_or_flat_window": 21,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": []
+    },
+    {
+      "station": "RR43",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 4,
+        "tilt_angle_limit": 6,
+        "Insufficient band coherence": 9,
+        "invalid_tilt_projection": 1,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 4,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR44",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Insufficient band coherence": 12,
+        "tilt_angle_limit": 5,
+        "Phase convention or arrival overlap needs review": 3,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 3,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.037037037037037035
+    },
+    {
+      "station": "RR45",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "tilt_angle_limit": 12,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": []
+    },
+    {
+      "station": "RR46",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "tilt_angle_limit": 1,
+        "Phase convention or arrival overlap needs review": 6,
+        "Insufficient band coherence": 13,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 6,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR47",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 4,
+        "invalid_tilt_projection": 1,
+        "Insufficient band coherence": 12,
+        "no_quiet_training_interval": 1,
+        "tilt_angle_limit": 3
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 4,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR48",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 7,
+        "Insufficient band coherence": 12,
+        "no_quiet_training_interval": 1,
+        "tilt_angle_limit": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 7,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR50",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.7124325796234786,
+          "relative_rms": 0.030191484100650236,
+          "mean_coherence": 0.9907266454903052,
+          "median_coherence": 0.9931543150735561,
+          "accepted_bins": 9,
+          "tilt_deg": 1.8764960690782497,
+          "raw_gain": 0.7065701269708743,
+          "h1_gain": 0.7160121272867853,
+          "depth_perturbation_gains": {
+            "0.95": 0.6475872391194177,
+            "1.05": 0.7873633415183393
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.7198588150792092,
+          "relative_rms": 0.11760524812871427,
+          "mean_coherence": 0.9897643825192757,
+          "median_coherence": 0.9950468340367783,
+          "accepted_bins": 9,
+          "tilt_deg": 1.1338466391034783,
+          "raw_gain": 0.7187246215534061,
+          "h1_gain": 0.7233185178054156,
+          "depth_perturbation_gains": {
+            "0.95": 0.6561493079193842,
+            "1.05": 0.7928739994718961
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.7165185616094943,
+          "relative_rms": 0.06063232383056788,
+          "mean_coherence": 0.9898279233556884,
+          "median_coherence": 0.9897675112933462,
+          "accepted_bins": 9,
+          "tilt_deg": 0.7056938499579993,
+          "raw_gain": 0.716796868576758,
+          "h1_gain": 0.7203740154328874,
+          "depth_perturbation_gains": {
+            "0.95": 0.6517340561551602,
+            "1.05": 0.791181263274929
+          }
+        }
+      ],
+      "median_event_gain": 0.7165185616094943,
+      "event_gain_cv_percent": 0.5190867451708076,
+      "max_event_relative_rms": 0.11760524812871427,
+      "median_raw_gain": 0.716796868576758,
+      "median_h1_gain": 0.7203740154328874,
+      "depth_minus_5pct_gain": 0.6517340561551602,
+      "depth_plus_5pct_gain": 0.791181263274929,
+      "gain_of_median_ratio": 0.7181820881601159,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR52",
+      "status": "candidate_comparison_under_assumed_sign",
+      "candidate_count": 3,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 1
+      },
+      "candidate_events": [
+        {
+          "id": "ak0138esnzr",
+          "gain": 0.6797874316024044,
+          "relative_rms": 0.051773587933898524,
+          "mean_coherence": 0.9907323789098496,
+          "median_coherence": 0.9938156105044645,
+          "accepted_bins": 9,
+          "tilt_deg": 0.454340295567633,
+          "raw_gain": 0.6800948874899704,
+          "h1_gain": 0.6827937119676087,
+          "depth_perturbation_gains": {
+            "0.95": 0.6363773981940435,
+            "1.05": 0.7252422505100019
+          }
+        },
+        {
+          "id": "usc000f40j",
+          "gain": 0.6712550280171097,
+          "relative_rms": 0.06485847365968414,
+          "mean_coherence": 0.99372357019023,
+          "median_coherence": 0.9958646295873915,
+          "accepted_bins": 9,
+          "tilt_deg": 0.3593219561002621,
+          "raw_gain": 0.6716114995344519,
+          "h1_gain": 0.6733037505552376,
+          "depth_perturbation_gains": {
+            "0.95": 0.6286594503910979,
+            "1.05": 0.715798336097352
+          }
+        },
+        {
+          "id": "usb000g7x7",
+          "gain": 0.6789980661771227,
+          "relative_rms": 0.031249111058915563,
+          "mean_coherence": 0.9958925854499553,
+          "median_coherence": 0.9966767067785067,
+          "accepted_bins": 9,
+          "tilt_deg": 0.3988960229407672,
+          "raw_gain": 0.6787278140712512,
+          "h1_gain": 0.6803333264658726,
+          "depth_perturbation_gains": {
+            "0.95": 0.6356733764015792,
+            "1.05": 0.7243521481496689
+          }
+        }
+      ],
+      "median_event_gain": 0.6789980661771227,
+      "event_gain_cv_percent": 0.6943854657029969,
+      "max_event_relative_rms": 0.06485847365968414,
+      "median_raw_gain": 0.6787278140712512,
+      "median_h1_gain": 0.6803333264658726,
+      "depth_minus_5pct_gain": 0.6356733764015792,
+      "depth_plus_5pct_gain": 0.7243521481496689,
+      "gain_of_median_ratio": 0.6743742561129034,
+      "follow_up": "Review packet isolation and independent response/model uncertainty before acceptance"
+    },
+    {
+      "station": "RR53",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "tilt_angle_limit": 18,
+        "Phase convention or arrival overlap needs review": 2,
+        "Insufficient band coherence": 3,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 2,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR55",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "gain_grid_boundary": 4,
+        "Phase convention or arrival overlap needs review": 5,
+        "Insufficient band coherence": 14,
+        "no_quiet_training_interval": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 5,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.0,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.02222222222222222
+    },
+    {
+      "station": "RR56",
+      "status": "unresolved",
+      "candidate_count": 0,
+      "reasons": {
+        "Phase convention or arrival overlap needs review": 4,
+        "Insufficient band coherence": 13,
+        "no_quiet_training_interval": 1,
+        "tilt_angle_limit": 2,
+        "invalid_tilt_projection": 1
+      },
+      "candidate_events": [],
+      "polarity_review_event_count": 4,
+      "mean_fraction_coherent_bins_near_zero_nominal_sign": 0.2579365079365079,
+      "mean_fraction_coherent_bins_near_zero_assumed_sign": 0.0
+    },
+    {
+      "station": "RR57",
+      "status": "reference_band_unusable",
+      "candidate_count": 0,
+      "reasons": {},
+      "candidate_events": []
+    }
+  ],
+  "max_paper_gain_absolute_difference": 4.440892098500626e-16,
+  "visual_review": {
+    "combined_candidate_station_plots": 16,
+    "representative_arrival_and_waveform_events": {
+      "RR03": "usb000ief9",
+      "RR07": "usc000f40j",
+      "RR40": "usc000f40j",
+      "RR52": "usc000f40j"
+    },
+    "remaining": "All candidate-event packet/quiet-training inspections and independent raw spectral estimation remain pending"
+  },
+  "resonance_guard_review": {
+    "RR41": {
+      "inventory_depth_m": 5430,
+      "preflight_safe_upper_hz": 0.06690024752582369,
+      "x_fraction_of_first_pole_at_007_hz": 0.9375117582982995
+    },
+    "RR57": {
+      "inventory_depth_m": 5200,
+      "preflight_safe_upper_hz": 0.06985929693561974,
+      "x_fraction_of_first_pole_at_007_hz": 0.8978013154974508
+    },
+    "interpretation": "Preflight uses maximum phase speed of full table, a conservative bound. RR57 exact model is marginally inside 0.9 first-pole margin at 0.07 Hz; preserve flag pending depth/model validation. No band or guard changed."
+  },
+  "master_sha256_at_review": {
+    "exports/master_inventory.csv": "b095d0ee416f582d0c17b187e7724a96a87b6e877ad193a9877f571b1640a418",
+    "exports/master_inventory.xlsx": "7425fbf86fdcfa8bce82f7666fed93f0ee1b7dde93c81cf6132dbf62bdb7cf67"
+  }
+}

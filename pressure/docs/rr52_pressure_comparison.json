@@ -1,0 +1,99 @@
+{
+  "seed_id": "YV.RR52.00.BDH",
+  "psd_units": "Pa^2/Hz",
+  "psd_windows": 5249,
+  "sensor_band": {
+    "minimum_hz": 0.008567123122607042,
+    "maximum_hz": 7.394719190050065,
+    "basis": "nominal_response",
+    "nominal_minimum_hz": 0.008567123122607042,
+    "nominal_maximum_hz": 7.394719190050065,
+    "reference_frequency_hz": 1.0,
+    "maximum_attenuation_db": 3,
+    "independently_verified": false,
+    "fft_frequency_step_hz": 0.000476837158203125
+  },
+  "source_npz_sha256": "2c9f4cf7999964e6ffc8b73483d7778893e8cd3935f984b88a7c5f30d4713221",
+  "response_snapshot_sha256": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e",
+  "references": {
+    "brown": {
+      "title": "The IDC Seismic, Hydroacoustic and Infrasound Global Low and High Noise Models",
+      "doi": "10.1007/s00024-012-0573-6",
+      "figure_url": "https://link.springer.com/article/10.1007/s00024-012-0573-6/figures/8",
+      "provenance": "Approximate digitization of the solid IDC hydroacoustic curves, not official numerical model data.",
+      "original_units": "dB re 1 microPa^2/Hz",
+      "conversion_to_db_pa2_hz": -120,
+      "figure_license": "CC BY 2.0; Brown, Ceranna, Prior, Mialle and Le Bras",
+      "figure_raster_sha256": "60b9dde6b87b3ec5120a4887bbd4915a6fa523b340ac5666568d6e496880baae",
+      "pixel_axes": {
+        "frequency_min_x": 123,
+        "frequency_max_x": 831,
+        "frequency_min_hz": 0.01,
+        "frequency_max_hz": 100,
+        "amplitude_max_y": 15,
+        "amplitude_min_y": 723,
+        "amplitude_max_db_micro_pa2_hz": 190,
+        "amplitude_min_db_micro_pa2_hz": 40
+      },
+      "digitization_tolerance_db": 2,
+      "comparison_band": "Above 1 Hz, restricted to fully supported smoothing bins; no extrapolation."
+    },
+    "webb": {
+      "title": "Infragravity waves in the deep ocean",
+      "doi": "10.1029/90JC02212",
+      "provenance": "Bounds transcribed from the user-supplied instructions attributed to Webb; publisher full text unavailable for independent verification.",
+      "units": "dB re 1 Pa^2/Hz",
+      "comparison_band": "At the supplied points up to 1 Hz; no continuous interpolation or extrapolation.",
+      "points": [
+        {
+          "frequency_hz": 0.005,
+          "low_db_pa2_hz": 10,
+          "high_db_pa2_hz": 50
+        },
+        {
+          "frequency_hz": 0.05,
+          "low_db_pa2_hz": -50,
+          "high_db_pa2_hz": 10
+        },
+        {
+          "frequency_hz": 0.1,
+          "low_db_pa2_hz": -9,
+          "high_db_pa2_hz": 20
+        },
+        {
+          "frequency_hz": 0.2,
+          "low_db_pa2_hz": 10,
+          "high_db_pa2_hz": 34
+        },
+        {
+          "frequency_hz": 1,
+          "low_db_pa2_hz": -25,
+          "high_db_pa2_hz": -2
+        }
+      ]
+    }
+  },
+  "tested_frequency_bins": 19,
+  "median_in_range_fraction": 0.8421052631578947,
+  "score": null,
+  "status": "comparison_only",
+  "score_definition": "Equal-weight fraction of included median bins inside bounds; no statistical significance or calibration acceptance implied.",
+  "reference_coverage": {
+    "webb_instructions": 4,
+    "brown_figure8": 15
+  },
+  "near_digitization_boundaries": 4,
+  "limitations": [
+    "Nominal response band is an operational estimate; user-supplied bounds are not independently validated by this code.",
+    "Webb points come from supplied instructions; Brown Figure 8 is digitized, not official model data.",
+    "Overlapping PSD windows are correlated; occupancy fractions are descriptive.",
+    "Three-hour smoothed spectra retain the existing processing settings, not Brown's original windowing.",
+    "No complete reference coverage is claimed between discrete Webb points."
+  ],
+  "files": {
+    "frequency_csv": "rr52_pressure_comparison.csv",
+    "plot": "figures/rr52/BDH_pressure_comparison.png",
+    "ppsd_with_limits_plot": "figures/rr52/BDH_ppsd_with_limits.png",
+    "test_details_plot": "figures/rr52/BDH_test_details.png"
+  }
+}

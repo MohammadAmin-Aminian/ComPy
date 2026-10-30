@@ -1,0 +1,277 @@
+{
+  "networks": {
+    "YV": {
+      "stations": 43,
+      "gains": 16,
+      "accepted_events": 49,
+      "max_saved_gain_error": 0.0,
+      "status_counts": {
+        "unresolved": 25,
+        "candidate_comparison_under_assumed_sign": 16,
+        "reference_band_unusable": 2
+      }
+    },
+    "YL": {
+      "stations": 25,
+      "gains": 22,
+      "accepted_events": 297,
+      "max_saved_gain_error": 0.0,
+      "status_counts": {
+        "candidate_comparison_under_assumed_sign": 22,
+        "unresolved": 3
+      }
+    },
+    "7D": {
+      "stations": 15,
+      "gains": 4,
+      "accepted_events": 18,
+      "max_saved_gain_error": 0.0,
+      "status_counts": {
+        "unresolved": 11,
+        "candidate_comparison_under_assumed_sign": 4
+      }
+    },
+    "XO": {
+      "stations": 6,
+      "gains": 4,
+      "accepted_events": 52,
+      "max_saved_gain_error": 0.0,
+      "status_counts": {
+        "candidate_comparison_under_assumed_sign": 4,
+        "unresolved": 2
+      }
+    }
+  },
+  "raw_probes": [
+    {
+      "network": "YV",
+      "station": "RR03",
+      "event": "ak0138esnzr",
+      "saved_status": "candidate",
+      "median_coherence": 0.9858008722986682,
+      "phase_valid_bins": 4,
+      "outcome": "candidate_reproduced",
+      "gain": 1.1114705710549801,
+      "gain_error": 0.0
+    },
+    {
+      "network": "YV",
+      "station": "RR52",
+      "event": "ak0138esnzr",
+      "saved_status": "candidate",
+      "median_coherence": 0.9937869940623114,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 0.6800948874899704,
+      "gain_error": 0.0
+    },
+    {
+      "network": "YV",
+      "station": "RR55",
+      "event": "ak0138esnzr",
+      "saved_status": "unresolved",
+      "median_coherence": 0.9697955384046988,
+      "phase_valid_bins": 0,
+      "outcome": "rejection_diagnostic",
+      "fit_reason": "Grid minimum lies on a boundary; expand justified search bounds"
+    },
+    {
+      "network": "YL",
+      "station": "A02W",
+      "event": "ci14607652",
+      "saved_status": "candidate",
+      "median_coherence": 0.9958981260227864,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 0.6959334746178488,
+      "gain_error": 0.0
+    },
+    {
+      "network": "YL",
+      "station": "C07W",
+      "event": "usp000hhhx",
+      "saved_status": "candidate",
+      "median_coherence": 0.9918085978461945,
+      "phase_valid_bins": 8,
+      "outcome": "candidate_reproduced",
+      "gain": 0.2592174715820343,
+      "gain_error": 0.0
+    },
+    {
+      "network": "YL",
+      "station": "C07W",
+      "event": "usp000hde8",
+      "saved_status": "candidate",
+      "median_coherence": 0.9770952039352542,
+      "phase_valid_bins": 8,
+      "outcome": "candidate_reproduced",
+      "gain": 0.5426203249749514,
+      "gain_error": 0.0
+    },
+    {
+      "network": "YL",
+      "station": "B01W",
+      "event": "official20100227063411530_30",
+      "saved_status": "unresolved",
+      "median_coherence": 0.9852138813057494,
+      "phase_valid_bins": 0,
+      "outcome": "rejection_diagnostic",
+      "fit_reason": "Grid minimum lies on a boundary; expand justified search bounds"
+    },
+    {
+      "network": "YL",
+      "station": "C08W",
+      "event": "ci14607652",
+      "saved_status": "candidate",
+      "median_coherence": 0.9906145397962011,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 0.5878034083804264,
+      "gain_error": 0.0
+    },
+    {
+      "network": "7D",
+      "station": "J30A",
+      "event": "usp000jc5z",
+      "saved_status": "candidate",
+      "median_coherence": 0.996396672760357,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 1.0076941339452148,
+      "gain_error": 0.0
+    },
+    {
+      "network": "7D",
+      "station": "J38A",
+      "event": "usp000jc1y",
+      "saved_status": "candidate",
+      "median_coherence": 0.9957810735569954,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 0.7582305022201143,
+      "gain_error": 0.0
+    },
+    {
+      "network": "7D",
+      "station": "J45A",
+      "event": "usp000jc5z",
+      "saved_status": "candidate",
+      "median_coherence": 0.9929129174518389,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 0.8363229561159623,
+      "gain_error": 0.0
+    },
+    {
+      "network": "7D",
+      "station": "J54A",
+      "event": "usp000jc5z",
+      "saved_status": "candidate",
+      "median_coherence": 0.9895688707967224,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 1.0796238515163448,
+      "gain_error": 0.0
+    },
+    {
+      "network": "XO",
+      "station": "LA33",
+      "event": "us1000gez7",
+      "saved_status": "candidate",
+      "median_coherence": 0.9768530162157031,
+      "phase_valid_bins": 7,
+      "outcome": "candidate_reproduced",
+      "gain": 0.9047213385861314,
+      "gain_error": 0.0
+    },
+    {
+      "network": "XO",
+      "station": "LA34",
+      "event": "us1000gez7",
+      "saved_status": "candidate",
+      "median_coherence": 0.9788656443840168,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 0.9612573466711191,
+      "gain_error": 8.812389706847057e-10
+    },
+    {
+      "network": "XO",
+      "station": "WD66",
+      "event": "us1000gez7",
+      "saved_status": "candidate",
+      "median_coherence": 0.9851432262379713,
+      "phase_valid_bins": 7,
+      "outcome": "candidate_reproduced",
+      "gain": 0.9131204842948317,
+      "gain_error": 1.2324541387442878e-10
+    },
+    {
+      "network": "XO",
+      "station": "WD70",
+      "event": "us1000gez7",
+      "saved_status": "candidate",
+      "median_coherence": 0.9948949875901576,
+      "phase_valid_bins": 9,
+      "outcome": "candidate_reproduced",
+      "gain": 0.9379329565738799,
+      "gain_error": 0.0
+    },
+    {
+      "network": "XO",
+      "station": "LT02",
+      "event": "us1000gez7",
+      "saved_status": "rejected_qc",
+      "median_coherence": 0.28655133372777586,
+      "phase_valid_bins": 0,
+      "outcome": "rejection_diagnostic",
+      "fit_reason": "At least three corresponding frequency bins required"
+    },
+    {
+      "network": "XO",
+      "station": "WD48",
+      "event": "us1000gez7",
+      "saved_status": "unresolved",
+      "outcome": "input_rejection",
+      "reason": "Missing native window"
+    }
+  ],
+  "protected_hashed_files": 557,
+  "raw_files_stat_checked": 34,
+  "sources_unchanged": true,
+  "scope": "saved-fit replay and bounded raw windows; no batch or applied gain",
+  "end_to_end_boundary_check": {
+    "station": "YL.B01W",
+    "event_id": "official20100227063411530_30",
+    "event_status": "polarity_review",
+    "fit_reason": "Grid minimum lies on a boundary; expand justified search bounds",
+    "phase_valid_bins": 0,
+    "candidate_events": 0,
+    "spectra_retained": true,
+    "original_files_unchanged": true
+  },
+  "c07w_daily_check": {
+    "raw_daily_checks": [
+      {
+        "day": "20100314",
+        "c07_over_c08": 0.9008131030976367,
+        "c08_over_c09": 0.8352491067638451
+      },
+      {
+        "day": "20100804",
+        "c07_over_c08": 0.4310470040155337,
+        "c08_over_c09": 0.8457414866050966
+      }
+    ],
+    "raw_files_hash_checked": 6,
+    "unchanged": true,
+    "band_hz": [
+      0.12,
+      0.3
+    ],
+    "units": "raw count RMS; relative state diagnostic"
+  },
+  "reviewed_main": "66a3d6a",
+  "reviewed_sentinel": "6f074c9d5a6f82f21b523f35f9b58a13b12cf990",
+  "pytest_passed": 155
+}

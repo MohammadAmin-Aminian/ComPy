@@ -1,0 +1,3067 @@
+{
+  "scope": "No response corrections/master updates; independent CSD still shares response metadata and saved rotation",
+  "candidate_event_reviews": [
+    {
+      "station": "RR03",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 2.410954294260814,
+      "quiet_vertical_power_ratio": 0.9913016196027128,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR03",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 2.2973874393021876,
+      "quiet_vertical_power_ratio": 0.6479562317514297,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR03",
+      "event": "usb000ief9",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-07-15T08:03:39.880000Z",
+      "tilt_angle_deg": 0.8828508796360343,
+      "quiet_vertical_power_ratio": 0.9235985817610767,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR07",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 9.583887985913176,
+      "quiet_vertical_power_ratio": 0.8689869008575216,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR07",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 5.788716981316719,
+      "quiet_vertical_power_ratio": 0.9089184630742345,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR07",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.9697092889830679,
+      "quiet_vertical_power_ratio": 0.9799733942365254,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR08",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.5155110995263139,
+      "quiet_vertical_power_ratio": 0.9976452337171655,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR08",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.5117714707734302,
+      "quiet_vertical_power_ratio": 0.9797370053960499,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR08",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.755469888384833,
+      "quiet_vertical_power_ratio": 0.8705368582628387,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR09",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 2.5293909990606247,
+      "quiet_vertical_power_ratio": 0.9770732570265803,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR09",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 4.793189689533651,
+      "quiet_vertical_power_ratio": 0.9943473099324948,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR09",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.6217485908289591,
+      "quiet_vertical_power_ratio": 0.9967724878462457,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR11",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 3.0549090779189063,
+      "quiet_vertical_power_ratio": 0.8601799317060913,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR11",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.9332771191673435,
+      "quiet_vertical_power_ratio": 0.3621994989630667,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR11",
+      "event": "usb000jyiv",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-09-23T23:29:47.970000Z",
+      "tilt_angle_deg": 0.6190465080860117,
+      "quiet_vertical_power_ratio": 0.9801791864497805,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR13",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 3.273908239688007,
+      "quiet_vertical_power_ratio": 0.9227991555690752,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR13",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 2.4954467881432967,
+      "quiet_vertical_power_ratio": 0.9221275916691947,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR13",
+      "event": "usb000jyiv",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-09-23T23:29:47.970000Z",
+      "tilt_angle_deg": 1.5654557883963842,
+      "quiet_vertical_power_ratio": 0.9250720275814319,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR14",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.5346088570731549,
+      "quiet_vertical_power_ratio": 0.9901721223324906,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR14",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.8652115984403342,
+      "quiet_vertical_power_ratio": 0.8373592381056841,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR14",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.6065209053112428,
+      "quiet_vertical_power_ratio": 0.9991738847147842,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR25",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.9900899653289597,
+      "quiet_vertical_power_ratio": 0.9980283052374791,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR25",
+      "event": "usb000ief9",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-07-15T08:03:39.880000Z",
+      "tilt_angle_deg": 0.7821694929742046,
+      "quiet_vertical_power_ratio": 0.8101539324387956,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR25",
+      "event": "usb000jyiv",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-09-23T23:29:47.970000Z",
+      "tilt_angle_deg": 1.9846981255457559,
+      "quiet_vertical_power_ratio": 0.7736509881563894,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR28",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 1.533332058101771,
+      "quiet_vertical_power_ratio": 0.8459761052182287,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR28",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.1303472960214961,
+      "quiet_vertical_power_ratio": 0.7774098293763716,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR28",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 3.452705662828114,
+      "quiet_vertical_power_ratio": 0.7388882140877527,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR29",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.2177188726576043,
+      "quiet_vertical_power_ratio": 0.8098749218223805,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR29",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.4264393954759961,
+      "quiet_vertical_power_ratio": 0.6397560342312262,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR29",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.14219569906510882,
+      "quiet_vertical_power_ratio": 0.8356454741220691,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR34",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 2.021868751164793,
+      "quiet_vertical_power_ratio": 0.741457017790429,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR34",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.2719748884067306,
+      "quiet_vertical_power_ratio": 0.9754258087711122,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR34",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 2.0743323029035254,
+      "quiet_vertical_power_ratio": 0.8113619813523193,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR36",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.3283245108103491,
+      "quiet_vertical_power_ratio": 0.8338351808411553,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR36",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 2.6520414336092903,
+      "quiet_vertical_power_ratio": 0.8481189742528933,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR36",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 1.4156482282007272,
+      "quiet_vertical_power_ratio": 0.6885704920134099,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR38",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.2755652855963661,
+      "quiet_vertical_power_ratio": 0.7647202818464693,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR38",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.14809444086352602,
+      "quiet_vertical_power_ratio": 0.9887676493338368,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR38",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 1.1572876012136128,
+      "quiet_vertical_power_ratio": 0.8021736541698741,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR40",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.10972311427384471,
+      "quiet_vertical_power_ratio": 0.9949108260555164,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR40",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.9276629216453429,
+      "quiet_vertical_power_ratio": 0.8769910501465994,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR40",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.5947608020744835,
+      "quiet_vertical_power_ratio": 0.7469330331755699,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR50",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 1.8764960690782497,
+      "quiet_vertical_power_ratio": 0.5523400933309653,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR50",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 1.1338466391034783,
+      "quiet_vertical_power_ratio": 0.2034923349485429,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR50",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.7056938499579993,
+      "quiet_vertical_power_ratio": 0.14084017779577307,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    },
+    {
+      "station": "RR52",
+      "event": "ak0138esnzr",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-01-05T02:58:14.957000Z",
+      "tilt_angle_deg": 0.454340295567633,
+      "quiet_vertical_power_ratio": 0.27567771292098886,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR52",
+      "event": "usc000f40j",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": false,
+        "predicted_first_s_utc": false
+      },
+      "quiet_start_utc": "2013-02-07T15:26:38.470000Z",
+      "tilt_angle_deg": 0.3593219561002621,
+      "quiet_vertical_power_ratio": 0.029789164468949192,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Body first-arrival markers precede window; later coherent packets visible, but coda/mode isolation unverified"
+    },
+    {
+      "station": "RR52",
+      "event": "usb000g7x7",
+      "body_arrival_inside_window": {
+        "predicted_first_p_utc": true,
+        "predicted_first_s_utc": true
+      },
+      "quiet_start_utc": "2013-04-16T04:44:20.180000Z",
+      "tilt_angle_deg": 0.3988960229407672,
+      "quiet_vertical_power_ratio": 0.002657004896326698,
+      "packet_review": "Inspection required; timing flags do not prove contamination",
+      "visual_inspected": true,
+      "visual_assessment": "Window includes body-arrival timing; isolated Rayleigh identification needs explicit review"
+    }
+  ],
+  "raw_estimator_checks": [
+    {
+      "station": "RR03",
+      "event": "usb000ief9",
+      "status": "candidate",
+      "differences": {
+        "pressure_psd": 4.9960036108132044e-15,
+        "acceleration_psd": 5.218048215738236e-15,
+        "psd_ratio_pa": 6.661338147750939e-16,
+        "coherence_abs": 1.2212453270876722e-15,
+        "phase_deg_abs": 1.5987211554602254e-14
+      },
+      "independent_gain": 1.166215712846976,
+      "saved_gain": 1.1662157128469761
+    },
+    {
+      "station": "RR07",
+      "event": "usc000f40j",
+      "status": "candidate",
+      "differences": {
+        "pressure_psd": 5.10702591327572e-15,
+        "acceleration_psd": 5.329070518200751e-15,
+        "psd_ratio_pa": 5.551115123125783e-16,
+        "coherence_abs": 8.881784197001252e-16,
+        "phase_deg_abs": 9.769962616701378e-15
+      },
+      "independent_gain": 1.151865704294702,
+      "saved_gain": 1.1518657042947023
+    },
+    {
+      "station": "RR09",
+      "event": "usc000f40j",
+      "status": "candidate",
+      "differences": {
+        "pressure_psd": 5.218048215738236e-15,
+        "acceleration_psd": 4.773959005888173e-15,
+        "psd_ratio_pa": 5.551115123125783e-16,
+        "coherence_abs": 9.992007221626409e-16,
+        "phase_deg_abs": 1.4210854715202004e-14
+      },
+      "independent_gain": 1.2348159203526539,
+      "saved_gain": 1.2348159203526539
+    },
+    {
+      "station": "RR22",
+      "event": "ak0138esnzr",
+      "status": "polarity_review",
+      "differences": {
+        "pressure_psd": 4.884981308350689e-15,
+        "acceleration_psd": 4.9960036108132044e-15,
+        "psd_ratio_pa": 4.440892098500626e-16,
+        "coherence_abs": 1.1102230246251565e-15,
+        "phase_deg_abs": 1.4210854715202004e-14
+      }
+    },
+    {
+      "station": "RR40",
+      "event": "usc000f40j",
+      "status": "candidate",
+      "differences": {
+        "pressure_psd": 2.1094237467877974e-15,
+        "acceleration_psd": 1.6653345369377348e-15,
+        "psd_ratio_pa": 3.3306690738754696e-16,
+        "coherence_abs": 8.881784197001252e-16,
+        "phase_deg_abs": 1.5987211554602254e-14
+      },
+      "independent_gain": 0.8055044839196479,
+      "saved_gain": 0.8055044839196479
+    },
+    {
+      "station": "RR52",
+      "event": "usc000f40j",
+      "status": "candidate",
+      "differences": {
+        "pressure_psd": 1.6653345369377348e-15,
+        "acceleration_psd": 1.6653345369377348e-15,
+        "psd_ratio_pa": 4.440892098500626e-16,
+        "coherence_abs": 1.1102230246251565e-15,
+        "phase_deg_abs": 9.547918011776346e-15
+      },
+      "independent_gain": 0.6712550280171097,
+      "saved_gain": 0.6712550280171098
+    },
+    {
+      "station": "RR55",
+      "event": "usb000g7x7",
+      "status": "polarity_review",
+      "differences": {
+        "pressure_psd": 4.551914400963142e-15,
+        "acceleration_psd": 4.9960036108132044e-15,
+        "psd_ratio_pa": 4.440892098500626e-16,
+        "coherence_abs": 5.551115123125783e-16,
+        "phase_deg_abs": 2.131628207280301e-14
+      }
+    }
+  ],
+  "response_flags": [
+    {
+      "station": "RR01",
+      "pressure_positive_real_poles": [
+        [
+          0.043098,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR03",
+      "pressure_positive_real_poles": [
+        [
+          0.047357,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR05",
+      "pressure_positive_real_poles": [
+        [
+          0.102613,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR06",
+      "pressure_positive_real_poles": [
+        [
+          0.113471,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR07",
+      "pressure_positive_real_poles": [
+        [
+          0.042893,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR08",
+      "pressure_positive_real_poles": [
+        [
+          0.043098,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR09",
+      "pressure_positive_real_poles": [
+        [
+          0.043098,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR10",
+      "pressure_positive_real_poles": [
+        [
+          0.102613,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR11",
+      "pressure_positive_real_poles": [
+        [
+          0.051838,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR12",
+      "pressure_positive_real_poles": [
+        [
+          0.093928,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR13",
+      "pressure_positive_real_poles": [
+        [
+          0.052261,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR14",
+      "pressure_positive_real_poles": [
+        [
+          0.041903,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR16",
+      "pressure_positive_real_poles": [
+        [
+          0.094194,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR17",
+      "pressure_positive_real_poles": [
+        [
+          0.747005,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR18",
+      "pressure_positive_real_poles": [
+        [
+          0.765683,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR19",
+      "pressure_positive_real_poles": [
+        [
+          0.095277,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR20",
+      "pressure_positive_real_poles": [
+        [
+          0.113947,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR21",
+      "pressure_positive_real_poles": [
+        [
+          0.09768,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR22",
+      "pressure_positive_real_poles": [
+        [
+          0.099011,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR25",
+      "pressure_positive_real_poles": [
+        [
+          0.043098,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR26",
+      "pressure_positive_real_poles": [
+        [
+          0.098119,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR28",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR29",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR30",
+      "pressure_positive_real_poles": [
+        [
+          0.099769,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR31",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG5004 with logger 21 (card #?),Cox-Webb Differen",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR34",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR36",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR38",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR40",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR42",
+      "pressure_positive_real_poles": [
+        [
+          0.094328,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR43",
+      "pressure_positive_real_poles": [
+        [
+          0.106536,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "cc6753f696a7"
+    },
+    {
+      "station": "RR44",
+      "pressure_positive_real_poles": [
+        [
+          0.102613,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "cc6753f696a7"
+    },
+    {
+      "station": "RR45",
+      "pressure_positive_real_poles": [
+        [
+          0.102613,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "cc6753f696a7"
+    },
+    {
+      "station": "RR46",
+      "pressure_positive_real_poles": [
+        [
+          0.092366,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "cc6753f696a7"
+    },
+    {
+      "station": "RR47",
+      "pressure_positive_real_poles": [
+        [
+          0.091985,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "cc6753f696a7"
+    },
+    {
+      "station": "RR48",
+      "pressure_positive_real_poles": [
+        [
+          0.094328,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "HTI-04-PCA/ULF,Hydrophone",
+      "digital_coefficient_pattern": "cc6753f696a7"
+    },
+    {
+      "station": "RR50",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR52",
+      "pressure_positive_real_poles": [],
+      "input_units": "PA",
+      "sensor_label": "DPG",
+      "digital_coefficient_pattern": "4f53cda18c2b"
+    },
+    {
+      "station": "RR53",
+      "pressure_positive_real_poles": [
+        [
+          0.107744,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR55",
+      "pressure_positive_real_poles": [
+        [
+          0.043098,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR56",
+      "pressure_positive_real_poles": [
+        [
+          0.102613,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "digital_coefficient_pattern": "c4de50238694"
+    },
+    {
+      "station": "RR41",
+      "pressure_positive_real_poles": [
+        [
+          0.114913,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "source": "Original StationXML exact epoch; event stage excluded before spectral processing"
+    },
+    {
+      "station": "RR57",
+      "pressure_positive_real_poles": [
+        [
+          0.043098,
+          0.0
+        ]
+      ],
+      "input_units": "PA",
+      "sensor_label": "Hydrophone",
+      "source": "Original StationXML exact epoch; event stage excluded before spectral processing"
+    }
+  ],
+  "quiet_checks": [
+    {
+      "station": "RR03",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.3955133457212183,
+        1.358560933223136,
+        1.7261621815940944,
+        1.3070362391688302
+      ],
+      "largest_first_difference_over_mad_counts": [
+        7.011532125205931,
+        7.163461538461538,
+        7.373015873015873,
+        8.144
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR03",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.6190075108459576,
+        1.8789497840482077,
+        3.05139041666881,
+        1.5064709526414684
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.5,
+        11.522427440633246,
+        25.254335260115607,
+        17.273076923076925
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR03",
+      "event": "usb000ief9",
+      "max_10min_variance_over_median_counts": [
+        2.202001568962095,
+        1.541418168452094,
+        2.5173772866197908,
+        1.2373420399795743
+      ],
+      "largest_first_difference_over_mad_counts": [
+        8.166189111747851,
+        11.541666666666666,
+        14.172932330827068,
+        12.730337078651685
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR07",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.3020346453759943,
+        1.2205177838756078,
+        1.5603634624664626,
+        1.2352189519551766
+      ],
+      "largest_first_difference_over_mad_counts": [
+        7.610069101678183,
+        26.35,
+        18.0,
+        12.873015873015873
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR07",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        12.226991363459403,
+        1.6859924616864899,
+        1.4639261480366141,
+        1.2239670585045515
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.569230769230769,
+        6.914285714285715,
+        10.15625,
+        7.363636363636363
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR07",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.2872068140445903,
+        3.4587624736524796,
+        3.990263592148764,
+        1.140790037921293
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.969948186528497,
+        18.13978494623656,
+        18.073684210526316,
+        16.1875
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR08",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.2648268203166297,
+        1.6557741246836646,
+        1.838104300000022,
+        1.2304820885938113
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.893714285714286,
+        18.758064516129032,
+        17.236363636363638,
+        8.967213114754099
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR08",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.3953260232983093,
+        2.397319055899239,
+        3.2974737809328745,
+        1.556569615631655
+      ],
+      "largest_first_difference_over_mad_counts": [
+        7.173652694610778,
+        10.911764705882353,
+        10.36,
+        13.115384615384615
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR08",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.1923324528807167,
+        4.436168079366357,
+        2.6341352937959606,
+        1.0302885206192378
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.451692815854665,
+        7.783132530120482,
+        7.3428571428571425,
+        6.783132530120482
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR09",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.4211809810945826,
+        2.8643857091821103,
+        3.086452798970437,
+        1.776454327961454
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.185221674876847,
+        109.45679012345678,
+        132.89473684210526,
+        76.58461538461539
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR09",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.191384654944825,
+        1.4000899395899988,
+        2.1482492630170484,
+        1.7214298148225267
+      ],
+      "largest_first_difference_over_mad_counts": [
+        5.991379310344827,
+        17.605263157894736,
+        19.714285714285715,
+        12.24
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR09",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.376706258828481,
+        1.1037610586013564,
+        1.1881882647492819,
+        1.2092237144940738
+      ],
+      "largest_first_difference_over_mad_counts": [
+        5.9103881278538815,
+        6.721212121212122,
+        7.006134969325154,
+        7.675
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR11",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.2836065600378535,
+        2.561937898486131,
+        6.434034502856974,
+        1.5323281846120325
+      ],
+      "largest_first_difference_over_mad_counts": [
+        11.23090909090909,
+        201.47058823529412,
+        245.37777777777777,
+        197.02631578947367
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR11",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.197746835814773,
+        3.257886984745652,
+        1.7067833331237021,
+        1.2252839018839246
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.046783625730995,
+        163.72058823529412,
+        235.49056603773585,
+        161.4
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR13",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        17.33425519589243,
+        4.088692523950274,
+        4.212887821796672,
+        1.3175144595990236
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.640287769784172,
+        7.018518518518518,
+        10.134328358208956,
+        9.0
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR13",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.2397940930441336,
+        1.254639925087794,
+        1.2380780604467942,
+        1.172882575407447
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.183756345177665,
+        6.865013774104683,
+        6.202933985330073,
+        6.489130434782608
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR14",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.91352669219652,
+        1.5595428705410752,
+        1.4992933316213153,
+        1.7314312980426416
+      ],
+      "largest_first_difference_over_mad_counts": [
+        14.15188679245283,
+        44.47752808988764,
+        52.86046511627907,
+        52.13636363636363
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR14",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        2.6508534705996016,
+        4.98029796259451,
+        8.841688875537969,
+        1.3852325221057287
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.3782383419689115,
+        13.017857142857142,
+        14.901960784313726,
+        27.8125
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR14",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.0848655127628088,
+        1.1547443825607369,
+        1.1191922690569538,
+        1.0856460100332255
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.409993155373032,
+        8.631578947368421,
+        6.468493150684932,
+        7.596685082872928
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR25",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.097947065155082,
+        1.23626812022225,
+        1.0555773553981647,
+        1.2165265717403093
+      ],
+      "largest_first_difference_over_mad_counts": [
+        5.716223548562127,
+        6.518046709129512,
+        6.253465346534654,
+        6.622093023255814
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR25",
+      "event": "usb000ief9",
+      "max_10min_variance_over_median_counts": [
+        1.3645008532991785,
+        1.4112674032582537,
+        1.75345279896462,
+        1.238369611471334
+      ],
+      "largest_first_difference_over_mad_counts": [
+        11.34959349593496,
+        7.378378378378378,
+        9.187845303867404,
+        14.566666666666666
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR28",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.1108602725696906,
+        1.1823300600671083,
+        1.2235077758647002,
+        1.182079187937771
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.108796296296297,
+        9.9375,
+        16.0,
+        7.31
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR28",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.1409357921008931,
+        1.8016642079272849,
+        2.1734158490503903,
+        1.0788546498863487
+      ],
+      "largest_first_difference_over_mad_counts": [
+        7.313953488372093,
+        8.62962962962963,
+        8.681818181818182,
+        12.333333333333334
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR28",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.1333413512384127,
+        1.1914366156149812,
+        1.1797372886601278,
+        1.195809578565535
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.794007490636704,
+        8.545454545454545,
+        18.115384615384617,
+        7.0
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR29",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.2149143140057563,
+        1.468065674673727,
+        1.6681707377972341,
+        1.1689818623042865
+      ],
+      "largest_first_difference_over_mad_counts": [
+        5.527777777777778,
+        7.425531914893617,
+        6.355555555555555,
+        7.225352112676056
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR29",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.1395513397625092,
+        5.058979850090738,
+        7.329883509226326,
+        1.1697728129094207
+      ],
+      "largest_first_difference_over_mad_counts": [
+        7.655555555555556,
+        7.911764705882353,
+        7.294117647058823,
+        6.854166666666667
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR29",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.2932187458186828,
+        1.7520945017564642,
+        1.5460157577063467,
+        1.2758232738228723
+      ],
+      "largest_first_difference_over_mad_counts": [
+        5.765822784810126,
+        6.384615384615385,
+        6.761904761904762,
+        6.319148936170213
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR34",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.5089421871672297,
+        1.4098590099897927,
+        1.4376580088453423,
+        1.4975918400036028
+      ],
+      "largest_first_difference_over_mad_counts": [
+        5.7701149425287355,
+        9.333333333333334,
+        7.147058823529412,
+        7.450980392156863
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR34",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.2724398724197385,
+        2.0871214004726837,
+        3.090673602738997,
+        1.10566371452344
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.335664335664336,
+        21.272727272727273,
+        14.166666666666666,
+        25.37037037037037
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR34",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.265738059018788,
+        1.4026664840310616,
+        2.3681296766741626,
+        1.1728090635422863
+      ],
+      "largest_first_difference_over_mad_counts": [
+        5.955734406438632,
+        177.6,
+        63.4,
+        114.29310344827586
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR36",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.4483940460551397,
+        3.8548793652960396,
+        9.478337582351354,
+        1.2498162847287007
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.212041884816754,
+        307.8888888888889,
+        172.22222222222223,
+        46.111111111111114
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR36",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.1168198671539407,
+        7.720419235820839,
+        7.052386193903921,
+        1.1366040685309415
+      ],
+      "largest_first_difference_over_mad_counts": [
+        9.937931034482759,
+        200.66666666666666,
+        245.28571428571428,
+        87.41666666666667
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR36",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.2707973523771519,
+        1.578042366304922,
+        4.7611884222741905,
+        1.263424547751237
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.006993006993007,
+        24.22222222222222,
+        23.0,
+        9.787234042553191
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR38",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.3453881180025808,
+        4.117142171204787,
+        9.52730473445762,
+        1.2911402145136226
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.233883058470765,
+        8.428571428571429,
+        8.222222222222221,
+        8.24468085106383
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR38",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.1174233607595017,
+        1.9000759748107516,
+        3.040212161775973,
+        1.1621256775023812
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.863636363636363,
+        145.375,
+        72.875,
+        49.04
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR38",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.1306631922521928,
+        3.335175887888545,
+        1.4263956036543282,
+        1.1348927004363196
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.365234375,
+        54.09090909090909,
+        90.0,
+        24.27659574468085
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR40",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.2190462540899096,
+        3.643042151851978,
+        3.0689561555975016,
+        1.2104601227661003
+      ],
+      "largest_first_difference_over_mad_counts": [
+        179.10843373493975,
+        644.8235294117648,
+        210.1904761904762,
+        523.3777777777777
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR40",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.1190816878192804,
+        2.940109439378915,
+        4.364607429529762,
+        1.2114081276034365
+      ],
+      "largest_first_difference_over_mad_counts": [
+        29.66990291262136,
+        43.0,
+        17.80952380952381,
+        113.67441860465117
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR40",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.0944066932393377,
+        1.5747513442075227,
+        3.676291835812454,
+        1.1234717425616294
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.5767790262172285,
+        7.083333333333333,
+        6.75,
+        6.935064935064935
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR50",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.3135910093344312,
+        6.447546142138931,
+        7.163351457168846,
+        1.5620734644813208
+      ],
+      "largest_first_difference_over_mad_counts": [
+        138.4047619047619,
+        250.33333333333334,
+        179.42857142857142,
+        215.4
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR50",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.3177002848331107,
+        2.8095429060880908,
+        4.7164299818919035,
+        5.545259434658962
+      ],
+      "largest_first_difference_over_mad_counts": [
+        1878.5297297297298,
+        9446.142857142857,
+        9433.555555555555,
+        2804.7083333333335
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR50",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.2821766747892531,
+        2.111847857320611,
+        2.2644477330249577,
+        1.1931596172254704
+      ],
+      "largest_first_difference_over_mad_counts": [
+        17.007792207792207,
+        197.75,
+        164.1,
+        87.09375
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR52",
+      "event": "ak0138esnzr",
+      "max_10min_variance_over_median_counts": [
+        1.8914342079154352,
+        10.263058126111096,
+        9.285019927936164,
+        1.8850779699229974
+      ],
+      "largest_first_difference_over_mad_counts": [
+        9.476744186046512,
+        66.55555555555556,
+        60.0,
+        66.375
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR52",
+      "event": "usc000f40j",
+      "max_10min_variance_over_median_counts": [
+        1.177397473637227,
+        4.40521956130513,
+        5.937662017459391,
+        1.433999667075776
+      ],
+      "largest_first_difference_over_mad_counts": [
+        20.707070707070706,
+        220.16666666666666,
+        317.3333333333333,
+        629.5714285714286
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR52",
+      "event": "usb000g7x7",
+      "max_10min_variance_over_median_counts": [
+        1.1482379019674531,
+        62.910574368179745,
+        83.24560609381223,
+        1.2541106214797773
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.041009463722397,
+        14.266666666666667,
+        11.4375,
+        13.964912280701755
+      ],
+      "interpretation": "Screening metrics, not acceptance cutoffs; instrument responses differ between channels"
+    },
+    {
+      "station": "RR13",
+      "event": "usb000jyiv",
+      "max_10min_variance_over_median_counts": [
+        1.3773827859855794,
+        1.2070089743318722,
+        1.3613252137957332,
+        1.221394886040862
+      ],
+      "largest_first_difference_over_mad_counts": [
+        6.594142259414226,
+        6.802197802197802,
+        6.942583732057416,
+        7.357142857142857
+      ],
+      "interpretation": "Identical exact-grid overlapping samples verified and accepted; not a quietness certificate"
+    }
+  ],
+  "errors": [
+    {
+      "station": "RR11",
+      "event": "usb000jyiv",
+      "stage": "quiet",
+      "reason": "Gap/overlap in independent read of YV.RR11.00.BDH"
+    },
+    {
+      "station": "RR25",
+      "event": "usb000jyiv",
+      "stage": "quiet",
+      "reason": "Gap/overlap in independent read of YV.RR25.00.BDH"
+    }
+  ],
+  "master_hashes_preserved": true,
+  "master_sha256": {
+    "exports/master_inventory.xlsx": "7425fbf86fdcfa8bce82f7666fed93f0ee1b7dde93c81cf6132dbf62bdb7cf67",
+    "exports/master_inventory.csv": "b095d0ee416f582d0c17b187e7724a96a87b6e877ad193a9877f571b1640a418"
+  },
+  "event_status_counts": {
+    "candidate": 5,
+    "polarity_review": 2
+  },
+  "independent_reader_policy": "Exact aligned duplicate samples accepted; fractional grids/conflicting overlap rejected; no interpolation",
+  "visual_arrival_plots_inspected": 48,
+  "positive_real_pressure_pole_stations": [
+    "RR01",
+    "RR03",
+    "RR05",
+    "RR06",
+    "RR07",
+    "RR08",
+    "RR09",
+    "RR10",
+    "RR11",
+    "RR12",
+    "RR13",
+    "RR14",
+    "RR16",
+    "RR17",
+    "RR18",
+    "RR19",
+    "RR20",
+    "RR21",
+    "RR22",
+    "RR25",
+    "RR26",
+    "RR30",
+    "RR42",
+    "RR43",
+    "RR44",
+    "RR45",
+    "RR46",
+    "RR47",
+    "RR48",
+    "RR53",
+    "RR55",
+    "RR56",
+    "RR41",
+    "RR57"
+  ],
+  "candidate_body_timing_flag_count": 20,
+  "tilt_stability": [
+    {
+      "station": "RR52",
+      "event": "usb000g7x7",
+      "saved_tilt_angle_deg": 0.3988960229407672,
+      "saved_gain": 0.6789980661771229,
+      "fits": [
+        {
+          "interval": "full",
+          "angle_deg": 0.3988960229407672,
+          "gain_on_original_accepted_bins": 0.6789980661771227,
+          "median_coherence": 0.9966767067785073,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        },
+        {
+          "interval": "first_half",
+          "angle_deg": 0.39362119659475947,
+          "gain_on_original_accepted_bins": 0.6789920424914625,
+          "median_coherence": 0.9966803385771557,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        },
+        {
+          "interval": "second_half",
+          "angle_deg": 0.4469599070996988,
+          "gain_on_original_accepted_bins": 0.6790315377075612,
+          "median_coherence": 0.9966692383653276,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        }
+      ]
+    },
+    {
+      "station": "RR03",
+      "event": "usb000ief9",
+      "saved_tilt_angle_deg": 0.8828508796360343,
+      "saved_gain": 1.1662157128469761,
+      "fits": [
+        {
+          "interval": "full",
+          "angle_deg": 0.8828508796360343,
+          "gain_on_original_accepted_bins": 1.166215712846976,
+          "median_coherence": 0.9859436062400292,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        },
+        {
+          "interval": "first_half",
+          "angle_deg": 4.0549271538877605,
+          "gain_on_original_accepted_bins": 1.1635923519128155,
+          "median_coherence": 0.982105173127235,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        },
+        {
+          "interval": "second_half",
+          "angle_deg": 1.30753594631008,
+          "gain_on_original_accepted_bins": 1.166051255744759,
+          "median_coherence": 0.9855257645880955,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        }
+      ]
+    },
+    {
+      "station": "RR07",
+      "event": "usc000f40j",
+      "saved_tilt_angle_deg": 5.788716981316719,
+      "saved_gain": 1.1518657042947023,
+      "fits": [
+        {
+          "interval": "full",
+          "angle_deg": 5.788716981316719,
+          "gain_on_original_accepted_bins": 1.1518657042947023,
+          "median_coherence": 0.9920331044901354,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        },
+        {
+          "interval": "first_half",
+          "angle_deg": 1.3295133351418258,
+          "gain_on_original_accepted_bins": 1.1508795607802975,
+          "median_coherence": 0.9908478379258556,
+          "note": "Fixed original fit bins; diagnostic sensitivity, not a new accepted gain"
+        },
+        {
+          "interval": "second_half",
+          "error": "Invalid synchronized counts, projection or band",
+          "angle_deg": 9.863309608346054,
+          "projection": [
+            -0.15086816470168185,
+            -0.07930873371804081,
+            0.9853178150236076
+          ],
+          "projection_norm": 0.9999511362898235
+        }
+      ]
+    }
+  ],
+  "grid_boundary_checks": [
+    {
+      "station": "RR11",
+      "event": "usb000jyiv",
+      "residual_seconds": 0.0016000000000531145,
+      "residual_samples": 0.08000000000265572,
+      "phase_bound_degrees_at_007Hz": 0.04032000000133849,
+      "new_guard": "rejects before merge"
+    },
+    {
+      "station": "RR25",
+      "event": "usb000jyiv",
+      "residual_seconds": 0.001099999999951251,
+      "residual_samples": 0.054999999997562554,
+      "phase_bound_degrees_at_007Hz": 0.02771999999877153,
+      "new_guard": "rejects before merge"
+    }
+  ],
+  "model_band_sensitivity": [
+    {
+      "station": "RR03",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1224363577552348,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 2,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usb000g7x7",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "central_band": {
+          "events_with_fit": 2,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usb000g7x7",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1750239587563465,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0776719487051074,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1039705340866852,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1389177269272917,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR07",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0822263082831478,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0407272814032293,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0536651565170123,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1226548423647582,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.047756613402656,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0680358399954484,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.094884817472521,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR08",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1578642259813186,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 2,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usc000f40j",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1605839730011596,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.196236827518131,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1252884903251084,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1441959559091588,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1699663605821784,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR09",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2059220440330407,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 2,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usc000f40j",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "central_band": {
+          "events_with_fit": 2,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usc000f40j",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2174116367169434,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1953671538468538,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2016759452974834,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2096090938623112,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR11",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.063698333873094,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 0,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "ak0138esnzr",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            },
+            {
+              "event": "usb000g7x7",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            },
+            {
+              "event": "usb000jyiv",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "central_band": {
+          "events_with_fit": 1,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usb000g7x7",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            },
+            {
+              "event": "usb000jyiv",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0848905207154098,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.044614439318153,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.055950223009593,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0704749731008276,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR13",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2087194550959381,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 2,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usb000g7x7",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.181737893303857,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2463478074026484,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1758070471532327,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1952696159792786,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2206070052508549,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR14",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1034764218617565,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0605365838107392,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.081673181832888,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1206373111750971,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0879189333154804,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.0971872118156072,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1089637474951695,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR25",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1647913455182277,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 2,
+          "median_diagnostic_gain": null,
+          "unavailable": [
+            {
+              "event": "usb000ief9",
+              "reason": "Fewer than three original accepted bins in alternate band"
+            }
+          ]
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1647913455182277,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.2270903142057943,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1222783183480325,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1473342515985836,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 1.1803770348868248,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR28",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.8195094076099886,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7957287974729135,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.8031263093111053,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.8508743450313517,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7930284602065341,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.8085947455912881,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.8292797586547751,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR29",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7299436693477891,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7150023166581584,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7322683134509849,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7566397622083532,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7085540131650955,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7216108303955588,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.735962763363778,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR34",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.5848160998530781,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.5923391067531614,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.584724400649525,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.601357257680995,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.5704393362612257,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.5789385081117063,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.5900229150470538,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR36",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6513338055925254,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6519195800445516,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6488707603189449,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6601847593510097,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6433194800165123,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6480998614306296,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6541566698567006,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR38",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.636352063884827,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.631297009430702,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6349171273318313,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6576138127211494,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6149339714084925,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6275123844818448,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6442754627795589,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR40",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.741880192578509,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7538245128379647,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7555635298360247,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.784679579767263,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7189213336907216,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7324657895795912,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7549970086889338,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR50",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7165185616094943,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6953788700737038,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7028926253400861,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.733182114382347,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7018404563245533,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7105442380019361,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.7217856092655234,
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "station": "RR52",
+      "diagnostics": {
+        "baseline": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6789980661771227,
+          "unavailable": []
+        },
+        "lower_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6717332893582191,
+          "unavailable": []
+        },
+        "central_band": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6726396772085198,
+          "unavailable": []
+        },
+        "sound_speed_minus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6840331996299044,
+          "unavailable": []
+        },
+        "sound_speed_plus2pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6743567818816395,
+          "unavailable": []
+        },
+        "phase_speed_minus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.6771368607108634,
+          "unavailable": []
+        },
+        "phase_speed_plus5pct": {
+          "events_with_fit": 3,
+          "median_diagnostic_gain": 0.680612233938419,
+          "unavailable": []
+        }
+      }
+    }
+  ],
+  "authoritative_metadata_check": {
+    "iris_attempts": [
+      {
+        "station": "RR03",
+        "url": "https://service.iris.edu/fdsnws/station/1/query?net=YV&sta=RR03&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
+        "error": "Unknown format for file /private/tmp/bruitfm_authoritative_RR03.xml"
+      },
+      {
+        "station": "RR22",
+        "url": "https://service.iris.edu/fdsnws/station/1/query?net=YV&sta=RR22&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
+        "error": "Unknown format for file /private/tmp/bruitfm_authoritative_RR22.xml"
+      },
+      {
+        "station": "RR52",
+        "url": "https://service.iris.edu/fdsnws/station/1/query?net=YV&sta=RR52&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
+        "error": "Unknown format for file /private/tmp/bruitfm_authoritative_RR52.xml"
+      }
+    ],
+    "resif_attempts": [
+      {
+        "station": "RR03",
+        "url": "https://ws.resif.fr/fdsnws/station/1/query?net=YV&sta=RR03&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
+        "status": 200,
+        "epochs": [
+          {
+            "start": "2012-10-04T13:35:56.000000Z",
+            "end": "2013-11-05T23:22:46.000000Z",
+            "sensor": "Hydrophone",
+            "sensitivity": 2031.75,
+            "first_poles": [
+              [
+                0.047357,
+                0.0
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "station": "RR22",
+        "url": "https://ws.resif.fr/fdsnws/station/1/query?net=YV&sta=RR22&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
+        "status": 200,
+        "epochs": [
+          {
+            "start": "2012-10-08T15:49:42.000000Z",
+            "end": "2013-11-01T13:56:08.000000Z",
+            "sensor": "Hydrophone",
+            "sensitivity": 2008.5,
+            "first_poles": [
+              [
+                0.099011,
+                0.0
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "station": "RR52",
+        "url": "https://ws.resif.fr/fdsnws/station/1/query?net=YV&sta=RR52&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
+        "status": 200,
+        "epochs": [
+          {
+            "start": "2012-10-19T09:00:00.000000Z",
+            "end": "2013-11-25T05:17:31.000000Z",
+            "sensor": "DPG",
+            "sensitivity": 495.0,
+            "first_poles": [
+              [
+                -0.0182,
+                0.0
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "implementation_changes": [
+    "Calibration-only strict sample-grid guard before within-channel merge",
+    "Independent SciPy count-domain CSD audit helper and reader tests"
+  ],
+  "field_acceptance": "pending",
+  "gains_applied": false,
+  "scientific_scores_assigned": false,
+  "software_validation": {
+    "tests": 98,
+    "ruff": "passed"
+  },
+  "digital_coefficient_patterns": {
+    "c4de50238694": [
+      {
+        "stage": 3,
+        "dc_coefficient_sum": 32768.0
+      },
+      {
+        "stage": 4,
+        "dc_coefficient_sum": 16.0
+      },
+      {
+        "stage": 5,
+        "dc_coefficient_sum": 32.0
+      },
+      {
+        "stage": 6,
+        "dc_coefficient_sum": 64.0
+      },
+      {
+        "stage": 7,
+        "dc_coefficient_sum": 625.0
+      },
+      {
+        "stage": 8,
+        "dc_coefficient_sum": 32.0
+      },
+      {
+        "stage": 9,
+        "dc_coefficient_sum": 64.0
+      },
+      {
+        "stage": 10,
+        "dc_coefficient_sum": 39068768.0
+      },
+      {
+        "stage": 11,
+        "dc_coefficient_sum": 20775292.0
+      }
+    ],
+    "4f53cda18c2b": [],
+    "cc6753f696a7": [
+      {
+        "stage": 3,
+        "dc_coefficient_sum": 32768.0
+      },
+      {
+        "stage": 4,
+        "dc_coefficient_sum": 32.0
+      },
+      {
+        "stage": 5,
+        "dc_coefficient_sum": 64.0
+      },
+      {
+        "stage": 6,
+        "dc_coefficient_sum": 625.0
+      },
+      {
+        "stage": 7,
+        "dc_coefficient_sum": 32.0
+      },
+      {
+        "stage": 8,
+        "dc_coefficient_sum": 64.0
+      },
+      {
+        "stage": 9,
+        "dc_coefficient_sum": 39068768.0
+      },
+      {
+        "stage": 10,
+        "dc_coefficient_sum": 20775292.0
+      }
+    ]
+  },
+  "model_band_sensitivity_method": "Original selected events and QC bins held fixed; parameter/band sensitivity only; not new event or acceptance validation"
+}

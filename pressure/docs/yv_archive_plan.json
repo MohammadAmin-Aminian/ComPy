@@ -1,0 +1,1839 @@
+{
+  "data_directory": "~/Desktop/Data_Bruit_FM/Data",
+  "networks": [
+    "YV"
+  ],
+  "stations_by_network": {
+    "YV": [
+      "RR01",
+      "RR03",
+      "RR05",
+      "RR06",
+      "RR07",
+      "RR08",
+      "RR09",
+      "RR10",
+      "RR11",
+      "RR12",
+      "RR13",
+      "RR14",
+      "RR16",
+      "RR17",
+      "RR18",
+      "RR19",
+      "RR20",
+      "RR21",
+      "RR22",
+      "RR25",
+      "RR26",
+      "RR28",
+      "RR29",
+      "RR30",
+      "RR31",
+      "RR34",
+      "RR36",
+      "RR38",
+      "RR40",
+      "RR41",
+      "RR42",
+      "RR43",
+      "RR44",
+      "RR45",
+      "RR46",
+      "RR47",
+      "RR48",
+      "RR50",
+      "RR52",
+      "RR53",
+      "RR55",
+      "RR56",
+      "RR57"
+    ]
+  },
+  "station_count": 43,
+  "channel_count": 172,
+  "channel_epochs": 172,
+  "waveform_files": 45593,
+  "waveform_bytes": 370082705408,
+  "unmatched_seed_ids": [],
+  "inventory_only_seed_ids": [
+    "YV.RR02.00.BDH",
+    "YV.RR02.00.BH1",
+    "YV.RR02.00.BH2",
+    "YV.RR02.00.BHZ",
+    "YV.RR04.00.BDH",
+    "YV.RR04.00.BH1",
+    "YV.RR04.00.BH2",
+    "YV.RR04.00.BHZ",
+    "YV.RR15.00.BDH",
+    "YV.RR15.00.BH1",
+    "YV.RR15.00.BH2",
+    "YV.RR15.00.BHZ",
+    "YV.RR23.00.BDH",
+    "YV.RR23.00.BH1",
+    "YV.RR23.00.BH2",
+    "YV.RR23.00.BHZ",
+    "YV.RR24.00.BDH",
+    "YV.RR24.00.BH1",
+    "YV.RR24.00.BH2",
+    "YV.RR24.00.BHZ",
+    "YV.RR27.00.BDH",
+    "YV.RR27.00.BH1",
+    "YV.RR27.00.BH2",
+    "YV.RR27.00.BHZ",
+    "YV.RR32.00.BDH",
+    "YV.RR32.00.BH1",
+    "YV.RR32.00.BH2",
+    "YV.RR32.00.BHZ",
+    "YV.RR33.00.BDH",
+    "YV.RR33.00.BH1",
+    "YV.RR33.00.BH2",
+    "YV.RR33.00.BHZ",
+    "YV.RR35.00.BDH",
+    "YV.RR35.00.BH1",
+    "YV.RR35.00.BH2",
+    "YV.RR35.00.BHZ",
+    "YV.RR37.00.BDH",
+    "YV.RR37.00.BH2",
+    "YV.RR37.00.BHZ",
+    "YV.RR39.00.BDH",
+    "YV.RR39.00.BH1",
+    "YV.RR39.00.BH2",
+    "YV.RR39.00.BHZ",
+    "YV.RR49.00.BDH",
+    "YV.RR49.00.BH1",
+    "YV.RR49.00.BH2",
+    "YV.RR49.00.BHZ",
+    "YV.RR51.00.BDH",
+    "YV.RR51.00.BH1",
+    "YV.RR51.00.BH2",
+    "YV.RR51.00.BHZ",
+    "YV.RR54.00.BDH",
+    "YV.RR54.00.BH1",
+    "YV.RR54.00.BH2",
+    "YV.RR54.00.BHZ"
+  ],
+  "channels": [
+    {
+      "seed_id": "YV.RR01.00.BDH",
+      "files": 310,
+      "bytes": 2807173120,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR01.00.BH1",
+      "files": 310,
+      "bytes": 2565115904,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR01.00.BH2",
+      "files": 310,
+      "bytes": 3073810432,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR01.00.BHZ",
+      "files": 310,
+      "bytes": 2688208896,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR03.00.BDH",
+      "files": 309,
+      "bytes": 2784796672,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR03.00.BH1",
+      "files": 309,
+      "bytes": 2231701504,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR03.00.BH2",
+      "files": 309,
+      "bytes": 2239934464,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR03.00.BHZ",
+      "files": 309,
+      "bytes": 1941323776,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR05.00.BDH",
+      "files": 306,
+      "bytes": 2843586560,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR05.00.BH1",
+      "files": 306,
+      "bytes": 2694905856,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR05.00.BH2",
+      "files": 306,
+      "bytes": 2712961024,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR05.00.BHZ",
+      "files": 306,
+      "bytes": 2486226944,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR06.00.BDH",
+      "files": 304,
+      "bytes": 2794373120,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR06.00.BH1",
+      "files": 304,
+      "bytes": 2240110592,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR06.00.BH2",
+      "files": 304,
+      "bytes": 2459250688,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR06.00.BHZ",
+      "files": 304,
+      "bytes": 2074828800,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR07.00.BDH",
+      "files": 366,
+      "bytes": 3257409536,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR07.00.BH1",
+      "files": 366,
+      "bytes": 2559336448,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR07.00.BH2",
+      "files": 366,
+      "bytes": 2605309952,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR07.00.BHZ",
+      "files": 366,
+      "bytes": 2166910976,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR08.00.BDH",
+      "files": 297,
+      "bytes": 2668949504,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR08.00.BH1",
+      "files": 297,
+      "bytes": 2112950272,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR08.00.BH2",
+      "files": 288,
+      "bytes": 1997746176,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR08.00.BHZ",
+      "files": 284,
+      "bytes": 1810968576,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR09.00.BDH",
+      "files": 298,
+      "bytes": 2697244672,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR09.00.BH1",
+      "files": 298,
+      "bytes": 2247475200,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR09.00.BH2",
+      "files": 298,
+      "bytes": 2248310784,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR09.00.BHZ",
+      "files": 298,
+      "bytes": 1866510336,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR10.00.BDH",
+      "files": 298,
+      "bytes": 2752634880,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR10.00.BH1",
+      "files": 298,
+      "bytes": 1793552384,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR10.00.BH2",
+      "files": 298,
+      "bytes": 1825468416,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR10.00.BHZ",
+      "files": 298,
+      "bytes": 1803497472,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR11.00.BDH",
+      "files": 299,
+      "bytes": 2739548160,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR11.00.BH1",
+      "files": 299,
+      "bytes": 1894469632,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR11.00.BH2",
+      "files": 299,
+      "bytes": 1766850560,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR11.00.BHZ",
+      "files": 299,
+      "bytes": 1519128576,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR12.00.BDH",
+      "files": 299,
+      "bytes": 1403576320,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR12.00.BH1",
+      "files": 299,
+      "bytes": 2481147904,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR12.00.BH2",
+      "files": 299,
+      "bytes": 2541498368,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR12.00.BHZ",
+      "files": 299,
+      "bytes": 2134384640,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR13.00.BDH",
+      "files": 282,
+      "bytes": 2518368256,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR13.00.BH1",
+      "files": 282,
+      "bytes": 2309906432,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR13.00.BH2",
+      "files": 282,
+      "bytes": 2354532352,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR13.00.BHZ",
+      "files": 282,
+      "bytes": 2037481472,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR14.00.BDH",
+      "files": 300,
+      "bytes": 2723622912,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR14.00.BH1",
+      "files": 300,
+      "bytes": 2537422848,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR14.00.BH2",
+      "files": 300,
+      "bytes": 2602115072,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR14.00.BHZ",
+      "files": 300,
+      "bytes": 2230603776,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR16.00.BDH",
+      "files": 301,
+      "bytes": 2589483008,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR16.00.BH1",
+      "files": 301,
+      "bytes": 2311110656,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR16.00.BH2",
+      "files": 301,
+      "bytes": 2371887104,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR16.00.BHZ",
+      "files": 301,
+      "bytes": 1770414080,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR17.00.BDH",
+      "files": 296,
+      "bytes": 2677018624,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR17.00.BH1",
+      "files": 296,
+      "bytes": 2337062912,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR17.00.BH2",
+      "files": 296,
+      "bytes": 2457219072,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR17.00.BHZ",
+      "files": 296,
+      "bytes": 2194440192,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR18.00.BDH",
+      "files": 302,
+      "bytes": 2613231616,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR18.00.BH1",
+      "files": 302,
+      "bytes": 2438287360,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR18.00.BH2",
+      "files": 302,
+      "bytes": 2363150336,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR18.00.BHZ",
+      "files": 302,
+      "bytes": 2249400320,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR19.00.BDH",
+      "files": 303,
+      "bytes": 2673614848,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR19.00.BH1",
+      "files": 303,
+      "bytes": 2454429696,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR19.00.BH2",
+      "files": 303,
+      "bytes": 2494988288,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR19.00.BHZ",
+      "files": 303,
+      "bytes": 1967730688,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR20.00.BDH",
+      "files": 303,
+      "bytes": 2579206144,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR20.00.BH1",
+      "files": 303,
+      "bytes": 2412638208,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR20.00.BH2",
+      "files": 303,
+      "bytes": 2522005504,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR20.00.BHZ",
+      "files": 303,
+      "bytes": 2031046656,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR21.00.BDH",
+      "files": 304,
+      "bytes": 2609799168,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR21.00.BH1",
+      "files": 304,
+      "bytes": 2399047680,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR21.00.BH2",
+      "files": 304,
+      "bytes": 2480656384,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR21.00.BHZ",
+      "files": 304,
+      "bytes": 1931464704,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR22.00.BDH",
+      "files": 305,
+      "bytes": 2674380800,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR22.00.BH1",
+      "files": 305,
+      "bytes": 2558447616,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR22.00.BH2",
+      "files": 305,
+      "bytes": 2567929856,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR22.00.BHZ",
+      "files": 305,
+      "bytes": 2045620224,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR25.00.BDH",
+      "files": 308,
+      "bytes": 2760200192,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR25.00.BH1",
+      "files": 308,
+      "bytes": 2497773568,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR25.00.BH2",
+      "files": 308,
+      "bytes": 2545152000,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR25.00.BHZ",
+      "files": 308,
+      "bytes": 1943789568,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR26.00.BDH",
+      "files": 306,
+      "bytes": 2796044288,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR26.00.BH1",
+      "files": 306,
+      "bytes": 2275495936,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR26.00.BH2",
+      "files": 306,
+      "bytes": 2461188096,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR26.00.BHZ",
+      "files": 306,
+      "bytes": 1956761600,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR28.00.BDH",
+      "files": 317,
+      "bytes": 2967666688,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR28.00.BH1",
+      "files": 317,
+      "bytes": 1941102592,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR28.00.BH2",
+      "files": 317,
+      "bytes": 1965453312,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR28.00.BHZ",
+      "files": 317,
+      "bytes": 2048905216,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR29.00.BDH",
+      "files": 317,
+      "bytes": 3107905536,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR29.00.BH1",
+      "files": 317,
+      "bytes": 2184663040,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR29.00.BH2",
+      "files": 317,
+      "bytes": 2174087168,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR29.00.BHZ",
+      "files": 317,
+      "bytes": 2475921408,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR30.00.BDH",
+      "files": 281,
+      "bytes": 2594091008,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR30.00.BH1",
+      "files": 281,
+      "bytes": 2382458880,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR30.00.BH2",
+      "files": 281,
+      "bytes": 2463088640,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR30.00.BHZ",
+      "files": 281,
+      "bytes": 1797251072,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR31.00.BDH",
+      "files": 167,
+      "bytes": 976490496,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR31.00.BH1",
+      "files": 167,
+      "bytes": 1010954240,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR31.00.BH2",
+      "files": 167,
+      "bytes": 1005993984,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR31.00.BHZ",
+      "files": 167,
+      "bytes": 1407266816,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR34.00.BDH",
+      "files": 174,
+      "bytes": 1852289024,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR34.00.BH1",
+      "files": 174,
+      "bytes": 1035595776,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR34.00.BH2",
+      "files": 174,
+      "bytes": 1035034624,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR34.00.BHZ",
+      "files": 174,
+      "bytes": 1164951552,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR36.00.BDH",
+      "files": 321,
+      "bytes": 3291332608,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR36.00.BH1",
+      "files": 321,
+      "bytes": 1941041152,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR36.00.BH2",
+      "files": 321,
+      "bytes": 1972129792,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR36.00.BHZ",
+      "files": 321,
+      "bytes": 2440683520,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR38.00.BDH",
+      "files": 322,
+      "bytes": 3304230912,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR38.00.BH1",
+      "files": 322,
+      "bytes": 1896230912,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR38.00.BH2",
+      "files": 322,
+      "bytes": 1897328640,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR38.00.BHZ",
+      "files": 322,
+      "bytes": 2004033536,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR40.00.BDH",
+      "files": 324,
+      "bytes": 3341045760,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR40.00.BH1",
+      "files": 324,
+      "bytes": 1907511296,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR40.00.BH2",
+      "files": 324,
+      "bytes": 1907830784,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR40.00.BHZ",
+      "files": 324,
+      "bytes": 2134204416,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR41.00.BDH",
+      "files": 168,
+      "bytes": 2919411712,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR41.00.BH1",
+      "files": 168,
+      "bytes": 2532343808,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR41.00.BH2",
+      "files": 168,
+      "bytes": 2717593600,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR41.00.BHZ",
+      "files": 168,
+      "bytes": 1736175616,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR42.00.BDH",
+      "files": 1,
+      "bytes": 9326592,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR42.00.BH1",
+      "files": 1,
+      "bytes": 9256960,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR42.00.BH2",
+      "files": 1,
+      "bytes": 9248768,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR42.00.BHZ",
+      "files": 1,
+      "bytes": 9248768,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR43.00.BDH",
+      "files": 166,
+      "bytes": 2907971584,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR43.00.BH1",
+      "files": 166,
+      "bytes": 2289840128,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR43.00.BH2",
+      "files": 166,
+      "bytes": 2411089920,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR43.00.BHZ",
+      "files": 166,
+      "bytes": 1870876672,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR44.00.BDH",
+      "files": 154,
+      "bytes": 2641252352,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR44.00.BH1",
+      "files": 154,
+      "bytes": 1587228672,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR44.00.BH2",
+      "files": 154,
+      "bytes": 1533571072,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR44.00.BHZ",
+      "files": 154,
+      "bytes": 1486741504,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR45.00.BDH",
+      "files": 61,
+      "bytes": 1056505856,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR45.00.BH1",
+      "files": 61,
+      "bytes": 572919808,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR45.00.BH2",
+      "files": 61,
+      "bytes": 572919808,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR45.00.BHZ",
+      "files": 61,
+      "bytes": 638124032,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR46.00.BDH",
+      "files": 146,
+      "bytes": 2549907456,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR46.00.BH1",
+      "files": 146,
+      "bytes": 1578692608,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR46.00.BH2",
+      "files": 146,
+      "bytes": 1631801344,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR46.00.BHZ",
+      "files": 146,
+      "bytes": 1533276160,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR47.00.BDH",
+      "files": 173,
+      "bytes": 3002851328,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR47.00.BH1",
+      "files": 173,
+      "bytes": 1780187136,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR47.00.BH2",
+      "files": 173,
+      "bytes": 1769410560,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR47.00.BHZ",
+      "files": 172,
+      "bytes": 1695457280,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR48.00.BDH",
+      "files": 161,
+      "bytes": 2818109440,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR48.00.BH1",
+      "files": 161,
+      "bytes": 1836306432,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR48.00.BH2",
+      "files": 161,
+      "bytes": 1912229888,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR48.00.BHZ",
+      "files": 161,
+      "bytes": 1844830208,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "100.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR50.00.BDH",
+      "files": 327,
+      "bytes": 3428732928,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR50.00.BH1",
+      "files": 327,
+      "bytes": 1952489472,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR50.00.BH2",
+      "files": 327,
+      "bytes": 1953869824,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR50.00.BHZ",
+      "files": 327,
+      "bytes": 2240274432,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR52.00.BDH",
+      "files": 329,
+      "bytes": 3403874304,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR52.00.BH1",
+      "files": 329,
+      "bytes": 1936080896,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR52.00.BH2",
+      "files": 329,
+      "bytes": 1936973824,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR52.00.BHZ",
+      "files": 329,
+      "bytes": 2050830336,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "62.5"
+      ]
+    },
+    {
+      "seed_id": "YV.RR53.00.BDH",
+      "files": 303,
+      "bytes": 2775990272,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR53.00.BH1",
+      "files": 303,
+      "bytes": 1546579968,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR53.00.BH2",
+      "files": 303,
+      "bytes": 1617502208,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR53.00.BHZ",
+      "files": 303,
+      "bytes": 1581076480,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR55.00.BDH",
+      "files": 312,
+      "bytes": 2748764160,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR55.00.BH1",
+      "files": 312,
+      "bytes": 2861367296,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR55.00.BH2",
+      "files": 312,
+      "bytes": 2861559808,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR55.00.BHZ",
+      "files": 312,
+      "bytes": 2608697344,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR56.00.BDH",
+      "files": 180,
+      "bytes": 1594179584,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR56.00.BH1",
+      "files": 180,
+      "bytes": 1631281152,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR56.00.BH2",
+      "files": 180,
+      "bytes": 1628471296,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR56.00.BHZ",
+      "files": 180,
+      "bytes": 1451520000,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR57.00.BDH",
+      "files": 304,
+      "bytes": 1444753408,
+      "inventory_epochs": 1,
+      "pressure": true,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR57.00.BH1",
+      "files": 304,
+      "bytes": 2732826624,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR57.00.BH2",
+      "files": 304,
+      "bytes": 1429491712,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    },
+    {
+      "seed_id": "YV.RR57.00.BHZ",
+      "files": 304,
+      "bytes": 2712678400,
+      "inventory_epochs": 1,
+      "pressure": false,
+      "sample_rates_hz": [
+        "50.0"
+      ]
+    }
+  ],
+  "note": "Filename availability only; processing validates actual headers, response epochs and sample rates. No missing channel is fabricated."
+}

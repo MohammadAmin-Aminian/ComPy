@@ -323,11 +323,12 @@ def fig05_calibration(station):
     f = d["frequencies"]
     band = (f >= d["band"][0] - 1e-9) & (f <= d["band"][1] + 1e-9)
     fig, axes = plt.subplots(1, 2, figsize=(15, 5.5))
+    positive = f > 0  # skip a DC bin; stage D's grid starts in the band
     for coh in d["coherences"]:
-        axes[0].semilogx(f[1:], coh[1:], color="0.6", lw=0.8)
+        axes[0].semilogx(f[positive], coh[positive], color="0.6", lw=0.8)
     axes[0].semilogx(
-        f[1:],
-        np.median(d["coherences"], axis=0)[1:],
+        f[positive],
+        np.median(d["coherences"], axis=0)[positive],
         color="blue",
         lw=2.5,
         label="Median",
@@ -336,7 +337,7 @@ def fig05_calibration(station):
         axes[0].axvline(x, color="red", ls="--")
     axes[0].set(xlim=(0.005, 0.1), ylim=(0, 1), xlabel="Frequency [Hz]",
                 ylabel="Magnitude-squared coherence",
-                title=f"(a) {station}: P–Z coherence, {len(d['coherences'])} events M≥7")  # fmt: skip
+                title=f"(a) {station}: P–Z coherence, {len(d['coherences'])} events")  # fmt: skip
     axes[0].legend()
     axes[1].semilogx(
         f[band],

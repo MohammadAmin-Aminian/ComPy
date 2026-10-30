@@ -1,0 +1,126 @@
+{
+  "tool": "scripts/confirm_yv_responses.py fetch",
+  "code_sha256": "08751cba3df03b694c7dc8408997da160300fda100a50e25959aded8e5e15e2e",
+  "created_utc": "2026-10-21T11:35:04+00:00",
+  "note": "Fresh official downloads; never written over the local YV.xml.",
+  "queries": [
+    {
+      "name": "eida_routing",
+      "provider": "EIDA routing service (ORFEUS)",
+      "purpose": "which EIDA data centre serves these YV streams",
+      "url": "https://www.orfeus-eu.org/eidaws/routing/1/query?network=YV&station=RR17%2CRR18%2CRR22%2CRR56&channel=BDH%2CBHZ&starttime=2012-01-01T00%3A00%3A00&endtime=2014-01-01T00%3A00%3A00&service=station&format=json",
+      "method": "GET",
+      "request_utc": "2026-10-21T11:35:04+00:00",
+      "http_status": 200,
+      "response_utc": "2026-10-21T11:35:04+00:00",
+      "headers": {
+        "Date": "Wed, 21 Oct 2026 11:35:04 GMT",
+        "Content-Type": "application/json",
+        "Content-Length": "1178"
+      },
+      "outcome": "saved",
+      "bytes": 1178,
+      "sha256": "1d9a5e9d69a725b78e3ceeb0f63c57f5afd68e1e5ec29daa9c510f176376535f",
+      "file": "eida_routing.json"
+    },
+    {
+      "name": "fedcatalog",
+      "provider": "EarthScope/IRIS FDSN federator catalogue",
+      "purpose": "which FDSN data centres list these YV streams",
+      "url": "https://service.iris.edu/irisws/fedcatalog/1/query?net=YV&sta=RR17%2CRR18%2CRR22%2CRR56&cha=BDH%2CBHZ&starttime=2012-01-01T00%3A00%3A00&endtime=2014-01-01T00%3A00%3A00&format=text",
+      "method": "GET",
+      "request_utc": "2026-10-21T11:35:04+00:00",
+      "http_status": 200,
+      "response_utc": "2026-10-21T11:35:05+00:00",
+      "headers": {
+        "Date": "Wed, 21 Oct 2026 11:35:05 GMT",
+        "Content-Type": "text/plain",
+        "Content-Length": "1234"
+      },
+      "outcome": "saved",
+      "bytes": 1234,
+      "sha256": "6534ae7c471a73cc050257d14fbf3bfe8254e9e319c75ba692e29ab62131c79a",
+      "file": "fedcatalog.txt"
+    },
+    {
+      "name": "resif_RR17",
+      "provider": "RESIF data centre FDSN station service",
+      "purpose": "official StationXML responses for YV.RR17",
+      "url": "https://ws.resif.fr/fdsnws/station/1/query?network=YV&station=RR17&channel=BDH%2CBHZ&starttime=2012-01-01T00%3A00%3A00&endtime=2014-01-01T00%3A00%3A00&level=response&format=xml",
+      "station": "RR17",
+      "method": "GET",
+      "request_utc": "2026-10-21T11:35:05+00:00",
+      "http_status": 200,
+      "response_utc": "2026-10-21T11:35:05+00:00",
+      "headers": {
+        "Date": "Wed, 21 Oct 2026 11:35:05 GMT",
+        "Content-Type": "application/xml; charset=utf-8; charset=utf-8",
+        "Content-Length": "48550"
+      },
+      "outcome": "saved",
+      "bytes": 48550,
+      "sha256": "000fe5eab0c64e9c0e57cb5064f5f1802fafcffd8b1490a753ece6f808573590",
+      "file": "YV.RR17.response.xml"
+    },
+    {
+      "name": "resif_RR18",
+      "provider": "RESIF data centre FDSN station service",
+      "purpose": "official StationXML responses for YV.RR18",
+      "url": "https://ws.resif.fr/fdsnws/station/1/query?network=YV&station=RR18&channel=BDH%2CBHZ&starttime=2012-01-01T00%3A00%3A00&endtime=2014-01-01T00%3A00%3A00&level=response&format=xml",
+      "station": "RR18",
+      "method": "GET",
+      "request_utc": "2026-10-21T11:35:05+00:00",
+      "http_status": 200,
+      "response_utc": "2026-10-21T11:35:05+00:00",
+      "headers": {
+        "Date": "Wed, 21 Oct 2026 11:35:05 GMT",
+        "Content-Type": "application/xml; charset=utf-8; charset=utf-8",
+        "Content-Length": "48550"
+      },
+      "outcome": "saved",
+      "bytes": 48550,
+      "sha256": "ae47590a8fcda0345277f8ec5f14d182e78747cd258e2338dfd290a5dc726103",
+      "file": "YV.RR18.response.xml"
+    },
+    {
+      "name": "resif_RR22",
+      "provider": "RESIF data centre FDSN station service",
+      "purpose": "official StationXML responses for YV.RR22",
+      "url": "https://ws.resif.fr/fdsnws/station/1/query?network=YV&station=RR22&channel=BDH%2CBHZ&starttime=2012-01-01T00%3A00%3A00&endtime=2014-01-01T00%3A00%3A00&level=response&format=xml",
+      "station": "RR22",
+      "method": "GET",
+      "request_utc": "2026-10-21T11:35:05+00:00",
+      "http_status": 200,
+      "response_utc": "2026-10-21T11:35:05+00:00",
+      "headers": {
+        "Date": "Wed, 21 Oct 2026 11:35:05 GMT",
+        "Content-Type": "application/xml; charset=utf-8; charset=utf-8",
+        "Content-Length": "48831"
+      },
+      "outcome": "saved",
+      "bytes": 48831,
+      "sha256": "8475a409ea18a74575b551a7e89a4dcb9c33d712555bd7a29c0ddd029bc96111",
+      "file": "YV.RR22.response.xml"
+    },
+    {
+      "name": "resif_RR56",
+      "provider": "RESIF data centre FDSN station service",
+      "purpose": "official StationXML responses for YV.RR56",
+      "url": "https://ws.resif.fr/fdsnws/station/1/query?network=YV&station=RR56&channel=BDH%2CBHZ&starttime=2012-01-01T00%3A00%3A00&endtime=2014-01-01T00%3A00%3A00&level=response&format=xml",
+      "station": "RR56",
+      "method": "GET",
+      "request_utc": "2026-10-21T11:35:05+00:00",
+      "http_status": 200,
+      "response_utc": "2026-10-21T11:35:05+00:00",
+      "headers": {
+        "Date": "Wed, 21 Oct 2026 11:35:05 GMT",
+        "Content-Type": "application/xml; charset=utf-8; charset=utf-8",
+        "Content-Length": "48458"
+      },
+      "outcome": "saved",
+      "bytes": 48458,
+      "sha256": "a9c5372e98a341fd8cad61ca10fcae07082860f4fca33100526e0ca8fa5116b0",
+      "file": "YV.RR56.response.xml"
+    }
+  ]
+}
