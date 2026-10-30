@@ -81,13 +81,13 @@ python -m pytest -q
 
 On Windows, activate with `.venv\Scripts\activate`.
 The distribution is named `seafloor-compy`; the existing module imports remain
-`compy`, `inv_compy`, `Pressure_calibration` and `ffplot`. This repository is
+`compy`, `inv_compy` and `ffplot`, with the `compy_pressure` package. This repository is
 installed from source; the installation command does not assume a PyPI release.
 
 Runtime dependencies are NumPy, SciPy, Matplotlib, ObsPy, TiSKitPy 2.3 and disba.
-The pressure calibration needs the `disba` Rayleigh-wave mode calculator, which
-uses Numba; install Numba with conda rather than pip (`conda install numba`,
-then `pip install disba`). Numba also speeds up the 2.3 inversion forward model.
+Rayleigh-wave dispersion from a layered model (`compy_pressure`) uses the
+`disba` mode calculator, which uses Numba; install Numba with conda rather than
+pip (`conda install numba`, then `pip install disba`). Numba also speeds up the 2.3 inversion forward model.
 No external CPS executable is required by the built-in compliance propagator.
 Imports do not contact station services. Data download, automatic earthquake
 catalog retrieval and station-depth lookup require network access.
@@ -97,10 +97,10 @@ catalog retrieval and station-depth lookup require network access.
 | Operation | Vertical channel | Pressure channel | Other inputs |
 |---|---|---|---|
 | `Calculate_Compliance*` | response-corrected **displacement, m** | nominal response-corrected pressure, **Pa** | positive water depth, m; multiplicative pressure gain |
-| `calculate_spectral_ratio` | raw counts; response removed internally to acceleration | raw counts; response removed internally to pressure | response inventory, earthquake windows |
+| `compy_pressure` Rayleigh calibration | raw counts in an SDS archive; response removed internally to acceleration | raw counts; response removed internally to pressure | StationXML with full responses, ComCat GeoJSON catalogue |
 | `Rotate` | physically consistent seismic channels | passed through cleaning workflow | `*1`, `*2`, `*Z` seismic channels |
 | `calc_norm_compliance` / inversion | measured normalized compliance, **1/Pa** | not used directly | Hz, m; model columns below |
-| `phase_dispersion` | not used | not used | disba model in **km, km/s, km/s, g/cm³** |
+| `compy_pressure.rayleigh_dispersion` | not used | not used | layer CSV in **km, km/s, km/s, g/cm³**, or phase/group velocities in m/s |
 
 `*Z` denotes the vertical component and `*H` the pressure channel (normally
 `BDH`), not a horizontal seismometer. ComPy expects exactly one of each for
@@ -233,62 +233,74 @@ how the inferred orientation and effectiveness vary between processing windows.
 
 ### Pressure calibration
 
-```python
-import Pressure_calibration as dpg
+ComPy calibrates pressure gauges with `compy_pressure`, BRUIT-FM's
+Rayleigh-wave method. It replaces `Pressure_calibration.py`, which was
+removed after ComPy 2.4.0; use 2.4.0 (commit `7ad79c2`) for scripts that
+import it. For one station:
 
-gain = dpg.calculate_spectral_ratio(
-    raw_stream,  # raw counts, vertical and pressure
-    mag=7,
-    f_min=0.03,
-    f_max=0.07,
-    inventory=inventory,  # StationXML with both responses
-    event_spans=spans,
-    zchan="BHZ",  # explicit channel codes (optional)
-    pchan="BDH",
-    filt_freq1=0.005,  # band-pass pre-filter, below f_min ...
-    filt_freq2=0.1,  # ... and above f_max
-    plot_condition=True,
+```bash
+python _Example/3_DPG_Calibration.py SDS/ stationxml/ YV RR52 events.geojson
+```
+
+or from Python:
+
+```python
+from compy_pressure.network import apply_location_aliases, scan_files
+from compy_pressure.rayleigh_network import calibration_master, run_network
+
+master_dir, master = calibration_master("stationxml/", "cal/master", "YV", "RR52")
+files = scan_files("SDS/", ["YV"], ["RR52"])
+files = apply_location_aliases(files, set(master.Seed_id))
+report = run_network(
+    master_dir,
+    "cal/results",
+    files,
+    update_master=False,
+    data_dir="SDS/",
+    options=dict(
+        catalog="events.geojson",  # USGS ComCat GeoJSON
+        band=[0.02, 0.06],
+        dispersion_file="compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv",
+    ),
 )
 ```
 
-`return_details=True` returns a dict with the per-event gains and their
-standard deviation (the ±5 % of Aminian et al. 2025, Table 1).
+The calibration works as follows:
 
-Omitting `inventory` downloads response metadata; omitting `event_spans`
-retrieves earthquake windows using TiSKitPy. Supply both for offline processing.
-Each event is processed independently, including a single-event dataset.
-Calibration compares measured P/a divided by `rho * water_depth` with the
-water-column theoretical ratio. The positive least-squares gain is fitted
-analytically rather than searched in increments of 0.01. The strongest vertical
-amplitude is used as a window-selection heuristic; this is not a seismic travel
-time calculation. Visually check that the selected energy is Rayleigh-wave
-energy. A calibration band crossing an invalid theoretical response is rejected.
+- **Events and windows.** Every Mw ≥ 6 teleseism at most 150 km deep, with a
+  magnitude schedule, gets a window centred on the Rayleigh-wave group arrival.
+- **Spectra.** The full responses are removed from the native-rate pressure and
+  vertical channels. TiSKitPy then removes tilt noise from the vertical using
+  the horizontals; `tilt_method="none"` uses pressure and vertical only.
+- **Fit.** In the band, the bins whose magnitude-squared coherence is at least
+  0.95 are compared with the water-layer prediction for the station depth.
+  The prediction uses the phase velocities of the dispersion file, a
+  homogeneous 1028 kg/m³ water column and a sound speed of 1500 m/s. A gain is
+  fitted analytically per event.
+- **Station gain.** It is the median of at least three accepted events. The
+  result records the event scatter (`event_multiplier_std`) and every event's
+  gain, spectra and figures, in `comparison.json` and next to it.
+
+The gain multiplies the nominal pressure and is never applied to the data.
+Over a whole archive, `compy-pressure rayleigh` runs the same calibration
+station by station, next to the microseism and local-P checks
+([`docs/PRESSURE.md`](docs/PRESSURE.md)). The end-to-end pipeline uses it as
+stage D.
+
+| `calculate_spectral_ratio` (up to 2.4.0) | `compy_pressure` |
+|---|---|
+| raw stream and inventory | SDS archive at the native rate, StationXML file or folder |
+| `mag=7`, `event_spans` | ComCat GeoJSON catalogue; Mw ≥ 6 with a magnitude schedule |
+| `f_min`, `f_max` | `band` |
+| `coh_trsh`, `mean_trsh` (0.97) | squared coherence ≥ 0.95 per bin (`threshold`) |
+| `zchan`, `pchan` | pairing from the StationXML; `calibration_master(channels=...)` |
+| `filt_freq1`, `filt_freq2` | none: responses are removed in the frequency domain |
+| `water_density` | `density` (1028 kg/m³); depth from the StationXML elevation |
+| `return_details=True` | `comparison.json`: per-event gains, median and scatter |
 
 Calibration coherence thresholds use **magnitude-squared coherence**. Compliance
 outputs use **amplitude coherence**, its square root. These thresholds are not
 interchangeable.
-
-<p align="center"><a href="_Images/DPGCalibration_Signal.png"><img src="_Images/DPGCalibration_Signal.png" width="750" alt="Teleseismic waveform selection, pressure and acceleration comparison, coherence and spectral ratio"></a></p>
-
-**Calibration event.** Waveform and spectral panels document the selected
-Rayleigh-wave interval and the pressure–acceleration comparison used for calibration.
-
-<p align="center"><a href="_Images/DPGCalibration.png"><img src="_Images/DPGCalibration.png" width="850" alt="High-coherence teleseismic events and measured, theoretical and corrected pressure spectral ratios"></a></p>
-
-**Pressure-gauge calibration.** Coherence identifies useful frequency intervals;
-the spectral-ratio comparison shows how the gain correction aligns the measured
-ratio with the theoretical response in the calibration band.
-
-<details>
-<summary>Reference model and Rayleigh-wave dispersion</summary>
-
-<p align="center"><a href="_Images/DPG_Dispersion.png"><img src="_Images/DPG_Dispersion.png" width="750" alt="Reference velocity and density models with Rayleigh-wave phase dispersion curves"></a></p>
-
-**Dispersion diagnostic.** The reference velocity and density profiles are shown
-with Rayleigh-wave phase-velocity curves. This is model context for the calibration
-workflow, rather than an additional compliance-inversion result.
-
-</details>
 
 ### Compliance
 
@@ -578,9 +590,8 @@ compy-pressure pressure --data-dir $SDS --inventory-dir $XML --master-dir run/ma
 ```
 
 Commands, outputs, the Python interface and how the package stays in step with
-BRUIT-FM are in [`docs/PRESSURE.md`](docs/PRESSURE.md). For one station and
-one event, `Pressure_calibration.calculate_spectral_ratio` (see
-[Pressure calibration](#pressure-calibration)) is still available.
+BRUIT-FM are in [`docs/PRESSURE.md`](docs/PRESSURE.md). For one station, see
+[Pressure calibration](#pressure-calibration).
 
 ## Plotting and diagnostics
 

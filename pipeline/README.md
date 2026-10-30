@@ -17,7 +17,7 @@ Young ORCA) run in [`docs/xe_young_orca_2026-10-29`](../docs/xe_young_orca_2026-
 | 0 | `fetch_inventory.py`, `fetch_catalog.py` | StationXML with Z, 1, 2 and pressure responses; USGS catalogue M ≥ 5.85 | `metadata/<NET>.xml`, `work/catalog_*.qml` |
 | A | `a_preprocess.py` (`a_fast.py` for slow disks) | Decimation to 1.25 Hz with FIR filters. Clipped (≥ 99 % of 2²³ counts) or dead (σ < 5 counts) 10-min blocks are cut from all channels (±5 min). Responses are removed with no water level and an explicit pre-filter. | `work/<STA>/{counts,phys,qc}/` |
 | B | `b_clean.py` | Earthquake spans (1.5 d per magnitude unit above 5.85), optional hourly-glitch removal, hourly tilt smoothed over 24 h and applied per sample, STA/LTA local events, horizontal-coherent noise removed in ≤ 24 h windows | `work/<STA>/clean/` |
-| D | `d_calibrate.py` | DPG gain from Rayleigh-wave P/a of M ≥ 7 events (per-event gains and their spread) | `work/<STA>/calibration/` |
+| D | `d_calibrate.py` | DPG gain from Rayleigh-wave P/a with `compy_pressure`: native-rate SDS data, Mw ≥ 6 events by magnitude level, bins with squared coherence ≥ 0.95, median of ≥ 3 event gains and their spread | `work/<STA>/calibration/` |
 | C | `c_compliance.py` | Non-overlapping 35-min windows. Gates: median coherence ≥ 0.9, or 0.8 if fewer than 500 windows pass; pressure 10–50 dB; acceleration −170 to −150 dB. Coherent band, stacked gravity-corrected compliance, B&P error, monthly stacks | `results/<STA>/<STA>_compliance_*.{npz,csv}`, `_summary.json` |
 | E | `e_invert.py` | Bayesian Vs inversion with DRAM and tempering: free crustal Vp/Vs, gain sampled within ±5 %, CRUST1.0 Moho. Adds a prior-only run, the Vp/Vs 1.85 variant (`main`) and the H2 bracket | `results/<STA>/inversion/` |
 
@@ -54,6 +54,15 @@ Stage E spawns processes. Run it from these scripts, not from stdin.
   mass-position glitch of the INSU-IPGP BBOBS). The fold strength in
   `clean/deglitch.json` shows whether one is present.
 - **Gain source.** Stage E inverts the ComPy Rayleigh gain where it exists. Otherwise it uses the BRUIT-FM gain with a wider prior (±15 %).
+- **Stage D settings** (`CALIBRATION_BAND`, `CALIBRATION_TILT`, `CALIBRATION_DISPERSION`):
+  - `CALIBRATION_TILT = "tiskitpy"` removes tilt noise from the vertical but
+    needs horizontals with valid StationXML orientations;
+  - `"none"` uses pressure and vertical only, which XE needs (its BH1 and BH2
+    have a dip of −90°);
+  - the default dispersion is RR52's, BRUIT-FM's default for every network.
+
+  After ComPy 2.4.0, stage D is no longer `Pressure_calibration`'s method,
+  so gains of new runs can differ from those of 2.4 runs.
 - **Clipping thresholds** (`a_preprocess.CLIP_COUNTS`, `DEAD_STD_COUNTS`) assume 24-bit digitizers.
 - **Stations without any calibration** are computed with the nominal response (`nominal`), and stage E samples the gain over 0.6–1.4. Report them separately.
 - **The 500-window minimum** of the paper is applied when the results are collected (`f_figures.MIN_WINDOWS`). Stage C itself always returns its best attempt.

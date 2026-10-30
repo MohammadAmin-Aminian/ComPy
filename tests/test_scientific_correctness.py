@@ -6,8 +6,8 @@ import pytest
 import compy
 import ffplot
 import inv_compy
-import Pressure_calibration as calibration
 from compy_numerics import log_likelihood
+from compy_pressure.rayleigh_calibration import fit_multiplier
 
 
 def test_gaussian_likelihood_uses_squared_normalized_residual():
@@ -79,26 +79,11 @@ def test_amplitude_coherence_uncertainty():
 
 
 def test_calibration_gain_matches_known_scale_without_quantization():
+    """The Rayleigh-wave gain is fitted analytically (compy_pressure)."""
     d = np.array([1.0, 2.0, 3.0])
-    assert np.isclose(calibration.grid_search(d, d * 0.6637), 0.6637)
-    assert calibration.grid_search(d, d * 7) == 7
+    fit, _, _ = fit_multiplier(d, d * 0.6637)
+    assert fit["pressure_multiplier"] == pytest.approx(0.6637, rel=1e-12)
+    with pytest.raises(ValueError):  # outside the justified 0.1-3 search range
+        fit_multiplier(d, d * 7)
     with pytest.raises(ValueError):
-        calibration.grid_search(np.zeros(3), d)
-
-
-def test_mackenzie_reference_values():
-    assert calibration.calculate_speed_of_sound_in_water(0, 35, 0) == 1448.96
-    # Direct substitution into Mackenzie's published nine-term polynomial.
-    t, s, d = 10, 37, 1000
-    expected = (
-        1448.96
-        + 4.591 * t
-        - 0.05304 * t * t
-        + 0.0002374 * t**3
-        + 1.34 * (s - 35)
-        + 0.0163 * d
-        + 1.675e-7 * d * d
-        - 0.01025 * t * (s - 35)
-        - 7.139e-13 * t * d**3
-    )
-    assert np.isclose(calibration.calculate_speed_of_sound_in_water(t, s, d), expected)
+        fit_multiplier(np.zeros(3), d)

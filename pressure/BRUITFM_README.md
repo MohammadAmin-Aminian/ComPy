@@ -10,7 +10,7 @@ SDS waveform archive and its StationXML to a scored table of every channel.**
 [![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 
 > **BRUIT-FM is now part of [ComPy](https://github.com/MohammadAmin-Aminian/ComPy)**
-> (from ComPy 3.0). The code is ComPy's `compy_pressure` package and its
+> The code is ComPy's `compy_pressure` package and its
 > commands are `compy-pressure*`. The tests, scripts and documentation are in
 > ComPy's `pressure/` folder. This repository is kept as a backup and holds the
 > dated reports (`docs/reports/`). Version 1.3.0 is the last release; see

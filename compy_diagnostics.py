@@ -196,7 +196,6 @@ def save_run(output, arrays, *, settings, diagnostics=None):
         "compy_numerics",
         "compy_streams",
         "compy_processing",
-        "Pressure_calibration",
         "ffplot",
         "compy_diagnostics",
     ):

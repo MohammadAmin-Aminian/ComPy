@@ -54,6 +54,18 @@ DEGLITCH = False  # YV: True
 CATALOG_SPAN = ("2018-04-01", "2019-06-30")
 CATALOG = WORK / f"catalog_usgs_M5.85_{CATALOG_SPAN[0]}_{CATALOG_SPAN[1]}.qml"
 
+# --- stage D: Rayleigh-wave calibration (compy_pressure) ----------------------
+CALIBRATION_BAND = (0.02, 0.06)  # Hz
+# "tiskitpy" removes tilt noise from the vertical, which needs horizontals with
+# valid orientations; the XE StationXML gives BH1 and BH2 a dip of -90 degrees,
+# so XE uses pressure and vertical only.
+CALIBRATION_TILT = "none"  # YV: "tiskitpy"
+# Rayleigh phase velocities for the water-layer prediction (BRUIT-FM's default
+# for every network; a layered model can be given with compy-pressure instead).
+CALIBRATION_DISPERSION = (
+    COMPY / "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv"
+)
+
 # --- gains ----------------------------------------------------------------------
 # Optional BRUIT-FM gain table (columns Seed_id, gain_status, gain_applied),
 # compared with ComPy's own Rayleigh-wave calibration. None to skip.

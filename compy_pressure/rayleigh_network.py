@@ -1,8 +1,8 @@
 """Bounded, restartable network Rayleigh comparisons; no response or score edits."""
 
-import fcntl
 import hashlib
 import json
+import shutil
 from collections import Counter
 from pathlib import Path
 from uuid import uuid4
@@ -10,7 +10,13 @@ from uuid import uuid4
 import matplotlib.pyplot as plt
 
 from compy_pressure.archive import index_waveform_files
-from compy_pressure.inventory import load_master_dataset, update_rayleigh_results
+from compy_pressure.inventory import (
+    _lock_file,
+    build_master_dataset,
+    load_master_dataset,
+    save_master_dataset,
+    update_rayleigh_results,
+)
 from compy_pressure.paired_spectra import (
     KEYS,
     assert_workflows_finished,
@@ -114,6 +120,46 @@ def patch_for(row, summary):
     }
 
 
+def calibration_master(inventory, master_dir, network, station, *, channels=None):
+    """Master table for a calibration without PPSDs; return (master_dir, master).
+
+    The calibration reads each channel's response from a saved snapshot,
+    which the PPSD stage normally writes. Here each channel's own StationXML
+    file is copied as its snapshot. ``inventory`` is a StationXML file or a
+    folder of them. ``channels`` keeps only these channel codes of the
+    station, e.g. the pressure and vertical codes without tilt cleaning, which
+    also avoids pairing errors from wrong horizontal dips. A saved table is
+    reused; a changed StationXML needs a new ``master_dir``.
+    """
+    inventory, master_dir = Path(inventory), Path(master_dir)
+    sources = sorted(inventory.glob("*.xml")) if inventory.is_dir() else [inventory]
+    copies = master_dir / "stationxml"
+    if (master_dir / "master_inventory.csv").exists():
+        if any((copies / s.name).read_bytes() != s.read_bytes() for s in sources):
+            raise ValueError(f"{inventory} changed; use a new master folder")
+        return master_dir, load_master_dataset(master_dir)
+    copies.mkdir(parents=True, exist_ok=True)
+    for source in sources:
+        shutil.copy2(source, copies / source.name)
+    master = build_master_dataset(copies).astype(object).fillna("")
+    rows = master.Seed_id.str.startswith(f"{network}.{station}.")
+    if not rows.any():
+        raise ValueError(f"{network}.{station} is not in {inventory}")
+    if channels is not None:
+        code = master.Seed_id.str.rsplit(".", n=1).str[-1]
+        master = master[~rows | code.isin(channels)].reset_index(drop=True)
+        rows = master.Seed_id.str.startswith(f"{network}.{station}.")
+    master["rayleigh_response_snapshot_file"] = ""
+    for index in master.index[rows]:
+        snapshot = master_dir / "responses" / master.at[index, "Seed_id"]
+        snapshot.mkdir(parents=True, exist_ok=True)
+        snapshot = snapshot / "inventory.xml"
+        shutil.copy2(master.at[index, "inventory_file"], snapshot)
+        master.at[index, "rayleigh_response_snapshot_file"] = str(snapshot)
+    save_master_dataset(master, master_dir)
+    return master_dir, master
+
+
 def run_network(
     master_dir,
     results_dir,
@@ -130,10 +176,8 @@ def run_network(
     workflow.mkdir(parents=True, exist_ok=True)
     # Prevent two Rayleigh writers; a leftover lock file is harmless after release.
     with (workflow / "rayleigh.lock").open("a+") as lock:
-        try:
-            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
-            raise RuntimeError("Another Rayleigh network run is active") from exc
+        if not _lock_file(lock, wait=False):
+            raise RuntimeError("Another Rayleigh network run is active")
         return _run_network(
             master_dir,
             results_dir,

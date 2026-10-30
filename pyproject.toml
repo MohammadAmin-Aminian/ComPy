@@ -36,7 +36,7 @@ Repository = "https://github.com/MohammadAmin-Aminian/ComPy"
 Publication = "https://doi.org/10.1093/gji/ggaf253"
 
 [tool.setuptools]
-py-modules = ["compy", "inv_compy", "Pressure_calibration", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
+py-modules = ["compy", "inv_compy", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
 # reference_data is listed as a (data-only) package so that setuptools ships it.
 packages = ["compy_pressure", "compy_pressure.reference_data"]
 

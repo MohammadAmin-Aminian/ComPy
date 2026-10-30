@@ -4,7 +4,7 @@ Start here next session, together with
 [`integration/README.md`](https://github.com/MohammadAmin-Aminian/bruit-fm/blob/v1.3.0/integration/README.md).
 
 **30 October.** BRUIT-FM 1.3.0 is the last release: the owner moved
-everything into ComPy (3.0.0, PR #10), and this repository is kept as a
+everything into ComPy (PR #10), and this repository is kept as a
 backup with the dated reports. See `integration/README.md`. The notes below
 are from 29 October.
 

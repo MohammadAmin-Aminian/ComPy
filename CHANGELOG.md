@@ -2,43 +2,93 @@
 
 ## Unreleased
 
-### New package `compy_pressure`: pressure-gauge QC and calibration
+ComPy becomes the complete package for seafloor pressure gauges: all of
+BRUIT-FM moves in, and its calibration replaces `Pressure_calibration.py`.
+The version number is chosen at release; the changes below include breaking
+ones.
 
-BRUIT-FM's core, exported from BRUIT-FM 1.3.0 by its
-`integration/export_to_compy.py`. It runs pressure-gauge QC and calibration
-over a whole SDS archive and its StationXML. Guide: `docs/PRESSURE.md`.
+### Breaking changes
 
-- Master table of every channel epoch. Response-corrected PPSDs, checkpointed
-  and run in parallel.
-- QC tests:
-  - Webb/Brown seafloor limits;
-  - nearby gauges at a similar depth;
-  - Godin et al. (2013) infragravity model.
-- Gain estimates from Rayleigh waves, microseisms and local P waves. They are
-  recorded, never applied.
-- Percentile noise models by ocean basin, sensor type, water depth and season.
+- **`Pressure_calibration.py` is removed.** Use the Rayleigh-wave calibration
+  of `compy_pressure` instead (README, "Pressure calibration", has a
+  migration table). Scripts that import the old module need ComPy 2.4.0
+  (commit `7ad79c2`), the last version that has it:
+  - `docs/yv_compliance_2026-10-28/scripts/d_calibrate.py`;
+  - `docs/xe_young_orca_2026-10-29/scripts/d_calibrate.py`.
+- **Pipeline stage D (`pipeline/d_calibrate.py`) now uses `compy_pressure`.**
+  New runs can give gains that differ from 2.4 runs: on XE CC11, WC03 and
+  EE04 they are 1.4–1.9 % higher (`docs/PRESSURE.md`). Its outputs keep their
+  names and keys (`compy_gain.json`, `<STA>_compy_calibration.npz` and
+  `.png`), so stages C and G are unchanged. Stage F's calibration figure no
+  longer assumes M ≥ 7 events or a 0 Hz first bin. New `config.py` settings:
+  `CALIBRATION_BAND`, `CALIBRATION_TILT` and `CALIBRATION_DISPERSION`.
+
+### New: `compy_pressure` and `pressure/`, all of BRUIT-FM
+
+BRUIT-FM 1.3.0 (its last release; the repository is kept as a backup with
+its dated reports), moved by its `integration/export_to_compy.py`:
+
+- `compy_pressure/`, the package, holds all 40 modules and their reference
+  data:
+  - inventory and master table;
+  - response-corrected PPSDs and plots;
+  - QC tests against the Webb/Brown limits, nearby gauges and the Godin
+    et al. (2013) infragravity model;
+  - Rayleigh-wave, microseism and local-P calibrations;
+  - tilt-corrected vertical PPSDs;
+  - percentile noise models;
+  - maps and network figures;
+  - whole-drive coverage runs and quality review.
+- `pressure/` is BRUIT-FM's project folder:
+  - `tests/` (503 tests);
+  - `scripts/` (59 run and review scripts);
+  - `docs/` (methods, validation notes, reviews and policies; the dated
+    reports are linked);
+  - BRUIT-FM's README and changelog.
+
+  It is laid out like BRUIT-FM's checkout, so its relative paths still hold.
 - Commands: `compy-pressure` (stages `inventory` … `rayleigh`, `all`, `view`),
-  `compy-pressure-inventory`, `-paired`, `-microseism`, `-local-p` and
-  `-noise-model`.
+  `compy-pressure-inventory`, `-tilt`, `-local-p`, `-microseism`, `-paired`,
+  `-noise-model` (group noise model) and `-approved-noise-model`.
 - New extras: `pressure` (pandas, openpyxl) and `maps` (Cartopy). `dev` now
   includes pandas and openpyxl.
-- Differences from BRUIT-FM:
-  - no Godin pilot stage;
-  - no tilt module (ComPy has `Rotate`);
-  - default output folders in the current directory;
-  - the master-table lock also works on Windows.
-- `_Example/5_Pressure_QC.py`: inventory, PPSDs, plots and QC tests 1 and 3 on
-  a synthetic gauge (offline, seconds), or on real data. CI runs it from the
-  installed wheel.
-- `Pressure_calibration.py` (including the 2.4.0 changes from PR #5) is not
-  modified by this package.
+- `compy_pressure.rayleigh_network.calibration_master`: a calibration without
+  PPSDs, with each channel's StationXML as its response snapshot. It is used
+  by example 3 and stage D.
+- The Rayleigh network lock and the master-table lock also work on Windows.
+- `_Example/3_DPG_Calibration.py` is rewritten for `compy_pressure`.
+- New `_Example/5_Pressure_QC.py`: inventory, PPSDs, plots and QC tests 1 and
+  3 on a synthetic gauge (offline, seconds) or on real data.
+- Guide: `docs/PRESSURE.md`.
+
+### Fixed (in `compy_pressure`, since the move)
+
+- The tilt-cleaned Rayleigh calibration read the channel responses from the
+  PPSD folder (`<PPSD folder>/inventory.xml`) instead of the response
+  snapshot. It therefore failed for a calibration without PPSDs (explicit
+  snapshots, as with `calibration_master` and stage D) once tilt cleaning was
+  on. This was inherited from BRUIT-FM 1.3.0; it is now fixed, with a test.
 
 ### Tests
 
-- `tests/pressure/`: 225 tests on synthetic StationXML and waveforms; 3 skip
-  without BRUIT-FM's campaign scripts. They pass on Python 3.10 and 3.13.
-- The wheel check also imports `compy_pressure` outside the checkout. It loads
-  the packaged reference data and runs the console scripts and the example.
+- `pressure/tests/`: 503 tests on synthetic StationXML and waveforms. They
+  pass on Python 3.10 and 3.13; pytest finds them through `testpaths` and
+  `pythonpath` in `pyproject.toml`.
+- Removed with the old module:
+  - `tests/test_calibration.py`;
+  - the Mackenzie sound-speed and plotting-helper tests.
+- The gain-without-quantization test now checks `compy_pressure`'s fit.
+- New `tests/test_pressure_calibration.py` covers:
+  - `calibration_master` (snapshots, channel filter, reuse, changed
+    StationXML);
+  - the band check;
+  - tilt training from explicit snapshots;
+  - stage D's catalogue conversion and figure arrays.
+- The wheel check also runs `compy_pressure` outside the checkout: packaged
+  reference data, console scripts and `5_Pressure_QC.py`.
+- Reproduction check against BRUIT-FM (90 gain-corrected epochs, the
+  gain-corrected noise model): every output file is identical. Details are in
+  BRUIT-FM's `integration/README.md`.
 
 ## 2.4.0 — 2026-10-30
 

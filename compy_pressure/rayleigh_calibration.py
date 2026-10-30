@@ -648,9 +648,7 @@ def physical_quiet_stream(arrays, rows, channels, rate, start):
                 sampling_rate=rate,
             ),
         )
-        inventory = read_inventory(
-            str(Path(row.ppsd_npz_file).parent / "inventory.xml")
-        )
+        inventory = read_inventory(str(response_snapshot_path(row)))
         trace.remove_response(
             inventory=inventory,
             output="VEL",
