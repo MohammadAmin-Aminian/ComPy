@@ -17,7 +17,7 @@ ones.
   - `docs/xe_young_orca_2026-10-29/scripts/d_calibrate.py`.
 - **Pipeline stage D (`pipeline/d_calibrate.py`) now uses `compy_pressure`.**
   New runs can give gains that differ from 2.4 runs: on XE CC11, WC03 and
-  EE04 they are 1.4–1.9 % higher (`docs/PRESSURE.md`). Its outputs keep their
+  EE04 and YV RR52 they are 1.4–1.9 % higher (`docs/PRESSURE.md`). Its outputs keep their
   names and keys (`compy_gain.json`, `<STA>_compy_calibration.npz` and
   `.png`), so stages C and G are unchanged. Stage F's calibration figure no
   longer assumes M ≥ 7 events or a 0 Hz first bin. New `config.py` settings:

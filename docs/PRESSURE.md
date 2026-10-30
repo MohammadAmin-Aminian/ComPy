@@ -155,17 +155,20 @@ control it:
 The full run is in `work/<STA>/calibration/compy_pressure/`.
 
 Check against the 2.4 stage D (`Pressure_calibration`), 30 October 2026. The
-new stage D ran on the original SDS data and StationXML of the XE run, in a
-separate folder:
+new stage D ran on the original SDS data and StationXML of the XE and YV runs,
+in separate folders:
 
 | Station | New stage D (`compy_pressure`) | 2.4 stage D | Difference |
 |---|---|---|---|
 | XE.CC11 | 0.711 ± 0.011 (14 events) | 0.698 ± 0.012 (12) | +1.9 % |
 | XE.WC03 | 0.790 ± 0.010 (9) | 0.779 ± 0.008 (9) | +1.4 % |
 | XE.EE04 | 1.165 ± 0.015 (12) | 1.146 ± 0.015 (12) | +1.7 % |
+| YV.RR52 (TiSKitPy tilt cleaning) | 0.676 ± 0.017 (5) | 0.666 ± 0.028 (10) | +1.5 % |
 
 The new gains are consistently 1.4–1.9 % higher. That is within the ±5 % gain
-prior of the inversion (stage E). The likely cause is the Rayleigh phase
+prior of the inversion (stage E); RR52's published gain is 0.67. Fewer RR52
+events pass than in 2.4: the method refuses records whose sample grids do not
+line up (11 events) and tilt corrections beyond 10° (10 events). The likely cause is the Rayleigh phase
 velocity behind the water-layer prediction: RR52's dispersion here, against
 the old module's own model. BRUIT-FM's microseism method gave 0.702, 0.778 and
 1.159 for these gauges. These XE gauges are BRUIT-FM's first Rayleigh-wave
