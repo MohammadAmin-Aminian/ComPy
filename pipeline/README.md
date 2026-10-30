@@ -22,7 +22,14 @@ Young ORCA) run in [`docs/xe_young_orca_2026-10-29`](../docs/xe_young_orca_2026-
 | E | `e_invert.py` | Bayesian Vs inversion with DRAM and tempering: free crustal Vp/Vs, gain sampled within ±5 %, CRUST1.0 Moho. Adds a prior-only run, the Vp/Vs 1.85 variant (`main`) and the H2 bracket | `results/<STA>/inversion/` |
 
 `run_bdc.py` starts B, D and C for each station as soon as its stage A is
-done, and `run_inversions.py` runs E as compliance results arrive.
+done, and `run_inversions.py` runs E as compliance results arrive. Several
+inversion queues can run at once (`--reverse` takes stations from the end;
+lock files give each station to one queue). `f_figures.py` draws the figures
+of Aminian et al. (2025) for the network (map, PSD stages, tilt, calibration,
+coherogram, selected windows, compliance, Vs heat maps, profiles and
+serpentinization), and `g_report.py` collects the numbers of a report.
+`a_download.py` replaces `a_fast.py` when the raw data must come from an FDSN
+dataselect service.
 Serpentinization is computed from the posterior draws with
 `compy_inversion.serpentinization` (0 % at 4.2 km/s, 100 % at 2.2 km/s).
 
@@ -48,3 +55,5 @@ Stage E spawns processes. Run it from these scripts, not from stdin.
   `clean/deglitch.json` shows whether one is present.
 - **Gain source.** Stage E inverts the ComPy Rayleigh gain where it exists. Otherwise it uses the BRUIT-FM gain with a wider prior (±15 %).
 - **Clipping thresholds** (`a_preprocess.CLIP_COUNTS`, `DEAD_STD_COUNTS`) assume 24-bit digitizers.
+- **Stations without any calibration** are computed with the nominal response (`nominal`), and stage E samples the gain over 0.6–1.4. Report them separately.
+- **The 500-window minimum** of the paper is applied when the results are collected (`f_figures.MIN_WINDOWS`). Stage C itself always returns its best attempt.

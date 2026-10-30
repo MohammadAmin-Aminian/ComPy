@@ -1,0 +1,344 @@
+\documentclass[10pt,a4paper,twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[margin=1.8cm,columnsep=0.7cm]{geometry}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{microtype}
+\captionsetup{font=small,labelfont=bf,labelsep=period}
+\titleformat{\section}{\normalfont\bfseries\MakeUppercase}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\itshape}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalfont\itshape\small}{\thesubsubsection}{0.6em}{}
+\setlength{\parskip}{0pt}
+\renewcommand{\arraystretch}{1.05}
+
+\begin{document}
+\twocolumn[{
+\begin{center}
+{\small Draft report, <<DATE>> \hfill ComPy <<COMPY_VERSION>>}\\[10pt]
+{\LARGE\bfseries Shallow crustal shear velocity of $\sim$40\,Ma Pacific lithosphere\\[3pt]
+from seafloor compliance at the Young ORCA array}\\[12pt]
+{\large M.\,A. Aminian}\\[2pt]
+{\small Institut de Physique du Globe de Paris, Universit\'e Paris Cit\'e. Processing, figures and first draft
+prepared with Claude Code from the ComPy pipeline; to be checked by the author.}\\[12pt]
+\begin{minipage}{0.86\textwidth}
+\small
+\textbf{SUMMARY}\\
+We apply the compliance method of Aminian et al.\ (2025), now implemented end to end in ComPy <<COMPY_VERSION>>,
+to a second broad-band ocean-bottom network: the <<NSTA_TOTAL>>-station Young ORCA array (FDSN code XE, 2018--2019)
+on $\sim$40\,Ma Pacific seafloor formed at the fast-spreading Pacific--Farallon ridge, at water depths of
+<<DEPTH_MIN>>--<<DEPTH_MAX>>\,m. The stations carry Nanometrics Trillium 240 seismometers and differential pressure gauges,
+as do the RHUM-RUM stations of the earlier study. After removing clipped and dead data, earthquakes, tilt and
+horizontal-coherent noise, and calibrating each pressure gauge on Rayleigh waves of $M\geq7$ earthquakes
+(gain factors <<GAIN_RANGE>>, $\pm$<<GAIN_SPREAD>>\,per\,cent between events), we measure the normalized compliance
+between <<BAND_LO>> and <<BAND_HI>>\,mHz at <<N_OK>> stations from <<WIN_MEDIAN>> 35-min windows per station
+(median), with coherence above 0.9 and month-to-month variations of a few per cent. A Bayesian inversion
+(delayed-rejection adaptive Metropolis with parallel tempering, free crustal Vp/Vs, pressure gain sampled within
+$\pm$5\,per\,cent) fits every station (median $\chi^2/N$ = <<CHI2N>>). Below <<SED_RANGE>>\,m of sediment,
+consistent with CRUST1.0, the network-pooled shear velocity rises from <<VS300>>\,km\,s$^{-1}$ at 0.3\,km to
+<<VS1000>>\,km\,s$^{-1}$ at 1\,km and <<VS2000>>\,km\,s$^{-1}$ at 2\,km below the seafloor, slower than CRUST1.0
+in the upper crust. Lower-crustal Vs depends on the Vp/Vs assumption (<<VS4000>> with Vp/Vs free,
+<<VS4000_MAIN>>\,km\,s$^{-1}$ with Vp/Vs = 1.85). Converted with the relation used for the Indian Ocean ridges,
+the upper-crustal velocities would imply <<SERP1000>>\,per\,cent serpentinization at 1\,km; on magmatic crust formed at a fast-spreading
+ridge they instead record the porosity of the extrusive section. This normal-crust reference shows that
+compliance-derived Vs alone cannot identify serpentinite, and it calibrates the interpretation of the
+low velocities found at the South-West Indian Ridge.\\[4pt]
+\textbf{Key words:} Oceanic crust; Seafloor compliance; Inversion; Pacific Ocean; Monte Carlo methods.
+\end{minipage}
+\end{center}
+\vspace{14pt}
+}]
+
+\section{Introduction}
+Seafloor compliance, the transfer function between vertical seafloor displacement and the pressure of
+infragravity waves, constrains the shear velocity (Vs) of the upper few kilometres beneath a single broad-band
+ocean-bottom seismometer (OBS) equipped with a differential pressure gauge (DPG) (Crawford et al.\ 1991, 1998).
+Aminian et al.\ (2025) measured it at eight RHUM-RUM stations in the Indian Ocean and interpreted very low upper-crustal Vs
+beneath the ultraslow South-West Indian Ridge (SWIR) as serpentinized mantle-derived peridotite.
+
+Two questions follow. Is the processing reproducible on another network without manual tuning? And what does
+the same analysis give on crust that is \emph{not} expected to contain serpentinite? The Young ORCA experiment
+(Eilon et al.\ 2022) answers both. Its <<NSTA_TOTAL>> broad-band OBS were deployed for about 13 months in 2018--2019 on
+$\sim$40\,Ma Pacific lithosphere, formed at the fast-spreading Pacific--Farallon ridge, a setting where the crust is
+fully magmatic and layered in the classical way (e.g.\ Christeson et al.\ 2019).
+
+This report applies ComPy <<COMPY_VERSION>>, which now runs from the raw archive to compliance, Vs and
+serpentinization unattended, to the whole network, using the method of Aminian et al.\ (2025) with the corrections
+of ComPy 2.2--2.4 (Section~4). We present the compliance functions, the Vs models and their resolution, and
+discuss what they imply for the serpentinization interpretation.
+
+\section{Theory}
+The vertical compliance $\zeta(\omega)$ is the ratio of the spectra of vertical displacement and vertical
+stress at the seafloor (Sorrells \& Goforth 1973). We use the normalized compliance $\eta(\omega) = k(\omega)\zeta(\omega)$,
+with $k$ the infragravity wavenumber from $\omega^2 = gk\tanh(kH)$ for water depth $H$. The measured compliance is
+\begin{equation}
+\hat\eta(\omega) = k\,\frac{\omega^2\,|\hat S_{pz}|/\hat S_{pp} + a_w/p}{\omega^2 + 2g/R},
+\end{equation}
+where $\hat S_{pz}$ and $\hat S_{pp}$ are the cross- and pressure spectra stacked over the selected windows,
+$a_w/p = 2\pi (G/g)\,e^{-kH}\cosh kH$ is the gravitational attraction of the passing water mass per unit pressure, and $2g/R$
+the free-air gradient (Crawford et al.\ 1998). The ratio $|\hat S_{pz}|/\hat S_{pp}$ equals the coherence times
+$\sqrt{\hat S_{zz}/\hat S_{pp}}$ used in the paper's eq.~(6). The wave-attraction term is deterministic and is not
+multiplied by the coherence: earlier ComPy versions did so (2.0--2.1) or dropped it (before 2.0), which biased $\eta$
+low at the lowest frequencies. The random error follows Bendat \& Piersol (1993),
+\begin{equation}
+\epsilon[\hat\eta] = \frac{\sqrt{1-\hat\gamma^2}}{|\hat\gamma|\sqrt{2n_d}}\,|\hat\eta|,
+\end{equation}
+with $n_d$ the number of independent spectral averages over all accepted windows.
+
+The forward model is the minor-vector propagator of Crawford et al.\ (1991) for a layered elastic half-space.
+The likelihood is Gaussian with a full data covariance $\mathbf{C}$,
+\begin{equation}
+L(\mathbf{m}) \propto \exp\!\left[-\tfrac12\,(\hat{\boldsymbol\eta} - \boldsymbol\eta(\mathbf{m}))^{\mathsf T}\mathbf{C}^{-1}(\hat{\boldsymbol\eta} - \boldsymbol\eta(\mathbf{m}))\right],
+\end{equation}
+where $\mathbf{C}$ sums the random error, the covariance of monthly stacks (which measures non-stationarity and
+correlates neighbouring frequencies), and a 1\,per\,cent floor for 2-D structure. The pressure gain is a parameter
+of the model, so the 5\,per\,cent calibration uncertainty is shared by all frequencies and is not counted once per frequency.
+
+Serpentinization $\beta$ is converted from Vs with the linear relation of Miller \& Christensen (1997) used in
+Aminian et al.\ (2025, Fig.~10):
+\begin{equation}
+\beta = 100\,\frac{4.2 - V_s}{4.2 - 2.2}\ \text{per cent}\quad (V_s \text{ in km\,s}^{-1}),
+\end{equation}
+clipped to 0--100 and evaluated on every posterior draw.
+
+\section{Data set}
+Young ORCA (Gaherty et al.\ 2019; Eilon et al.\ 2022) deployed 30 Scripps broad-band OBS between
+4$^\circ$S and 8$^\circ$S, 130$^\circ$--136$^\circ$W (Fig.~\ref{fig:map}), in water <<DEPTH_MIN>>--<<DEPTH_MAX>>\,m deep.
+Each carries a Trillium 240 seismometer and a DPG, recorded at 50\,Hz. The data come from the BRUIT-FM archive
+(SDS, 587\,GB for XE), with responses from the EarthScope/IRIS DMC. Because reading the archive disk in parallel was slow,
+the raw files of most stations were first copied to local disk station by station; the processing is identical.
+
+Three stations were not processed: CC02, whose pressure channel does not work, and CC10 and CC12, which recorded for
+50 and 17 days. Of the <<N_PROCESSED>> processed stations, <<N_NOSEG>> have no 13-h span in which all four channels are usable
+(<<NOSEG_LIST>>; the seismometer is clipped or dead most of the time, Section~4.1), at <<GATES_LIST>> no window passes
+the quality gates, and <<N_REJECTED>> do not reach the 500 windows required by Aminian et al.\ (2025): <<REJ_LIST>>. Table~\ref{tab:stations} lists the <<N_MEASURED>> stations with a compliance measurement; <<N_OK>> of them are inverted.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{fig01_map.png}
+\caption{Young ORCA (XE) stations on bathymetry (ETOPO1). Red: compliance measured and inverted; orange: compliance
+measured but rejected or not inverted; grey: not processed or no usable data. Inset: location in the Pacific.}
+\label{fig:map}
+\end{figure}
+
+\section{Data processing, compliance measurement and inversion}
+The processing follows the flowchart of Aminian et al.\ (2025, Fig.~2), run unattended by \texttt{ComPy/pipeline}.
+
+\subsection{Pre-processing}
+\textit{Decimation, clipping and responses.} The raw data are decimated to 1.25\,Hz with FIR filters (factors 5, 4, 2).
+Many Young ORCA seismometers sat at full scale ($2^{23}$ counts) for weeks, presumably while the sensor was off level, and
+some channels went flat. Following the paper's rule that windows with a saturated component are discarded, every
+10-min block in which any channel has a sample within 1\,per\,cent of full scale, or a standard deviation below 5 counts, is
+cut from all channels, with 5 minutes on each side, before decimation. This removed <<CUT_FRACTION>> of the record at the
+processed stations. Responses are removed after decimation without a water level and with an explicit pre-filter
+(0.8--600\,mHz corners), giving displacement and pressure.
+
+\textit{Earthquakes and local events.} Spans after $M\geq5.85$ earthquakes in the USGS catalogue (1.5\,d per magnitude unit;
+Deen et al.\ 2017) and local events detected with a recursive STA/LTA trigger (0.1--0.5\,Hz) are excluded from the spectral
+estimates.
+
+\textit{Glitches.} The hourly mass-position glitch of the RHUM-RUM instruments is absent here: folding 15-day blocks at
+trial periods around 1\,h gave fold strengths of 1.15 (median) and 1.76 (maximum) at six stations, below the 2.0 needed to
+subtract a template, so the step was switched off for the rest of the network.
+
+\textit{Tilt and coherent noise.} Hourly tilt angles that minimize the variance of the vertical (Harmon et al.\ 2022) are
+median-smoothed over 24\,h and applied per sample, so the rotation adds no steps at hour boundaries (Fig.~\ref{fig:tilt}).
+The remaining horizontal-coherent noise is then removed from the vertical with transfer functions estimated over
+$\leq$24\,h windows (Crawford \& Webb 2000). Fig.~\ref{fig:psd} shows the vertical acceleration PSD at <<REF_STA>> before
+and after cleaning; the compliance bump near 0.01\,Hz stands at <<BUMP_DB>>\,dB.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.92\textwidth]{fig03_psd_stages.png}
+\caption{(a) Vertical acceleration PSD at <<REF_STA>> after response removal (blue) and after tilt and coherent-noise
+removal (orange); median and 10--90 per cent range of 1-h windows; green: compliance band. (b) Calibrated pressure PSD.}
+\label{fig:psd}
+\end{figure*}
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{fig04_tilt.png}
+\caption{Hourly tilt azimuth (a) and incidence angle (b) at <<REF_STA>>, coloured by the logarithm of the variance reduction.}
+\label{fig:tilt}
+\end{figure}
+
+\subsection{Pressure gauge calibration}
+Each DPG is calibrated in situ on the Rayleigh waves of $M\geq7$ earthquakes (Zha \& Webb 2016; Aminian et al.\ 2025): the measured
+pressure-to-acceleration ratio, normalized by $\rho_w H$, is fitted to its theoretical value between 0.02 and 0.06\,Hz for events
+whose magnitude-squared coherence exceeds 0.97 (Fig.~\ref{fig:cal}). Gains were obtained at <<N_CAL>> of the <<N_MEASURED>> stations with a compliance measurement,
+from <<CAL_EVENTS>> events each, and range from <<GAIN_RANGE>> with an event-to-event spread of <<GAIN_SPREAD_RANGE>>\,per\,cent.
+Where the BRUIT-FM microseism calibration exists, the ratio of the two gains is <<GAIN_RATIO>>. Gains from a single event
+(Table~\ref{tab:stations}) are less certain than the $\pm$5\,per\,cent prior assumes.
+<<UNCAL_TEXT>>
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.92\textwidth]{fig05_calibration.png}
+\caption{DPG calibration at <<REF_STA>>. (a) Pressure--vertical coherence of the accepted events and its median; dashed: fitted band.
+(b) Measured, theoretical and corrected normalized pressure/acceleration ratio.}
+\label{fig:cal}
+\end{figure*}
+
+\subsection{Compliance measurement}
+Compliance is computed on non-overlapping 35-min windows. A window is kept if, in the compliance band, its median coherence is
+at least 0.9 (0.8 if fewer than 500 windows pass), the mean calibrated pressure PSD is 10--50\,dB re 1\,Pa$^2$\,Hz$^{-1}$, and the
+mean vertical acceleration PSD is between $-170$ and $-150$\,dB re 1\,(m\,s$^{-2}$)$^2$\,Hz$^{-1}$ (Aminian et al.\ 2025).
+The band is the widest run of frequencies where the mean coherence of the kept windows reaches the threshold, below the
+infragravity cut-off $\sqrt{g/2\pi H}$. Spectra of the kept windows are stacked before the ratio is formed (eq.~1).
+Fig.~\ref{fig:coh} shows one month at <<REF_STA>>; the coherence is high whenever the vertical noise is low.
+Fig.~\ref{fig:windows} shows the selected windows and the stacked compliance. Monthly stacks with the same band test the
+temporal stability.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.95\textwidth]{fig06_coherogram.png}
+\caption{One month at <<REF_STA>>: spectrograms of calibrated pressure (a) and corrected vertical acceleration (b) for 35-min
+windows, coherogram (c), and their band averages (right). Dashed lines: compliance band; shading: windows above the coherence threshold.}
+\label{fig:coh}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.85\textwidth]{fig07_windows.png}
+\caption{Selected windows at <<REF_STA>> (grey, a random subset): (a) vertical acceleration, (b) pressure, (c) coherence,
+(d) compliance, with the stacked estimate (red; error bars: window scatter). Dashed: band and coherence threshold.}
+\label{fig:windows}
+\end{figure*}
+
+\subsection{Shear-velocity inversion}
+The inversion follows the parameterization of Zha \& Webb (2016) as implemented in ComPy 2.3. A sediment layer of free thickness
+(0--1000\,m) has Hamilton (1976, 1979) Vs and Vp profiles. Below it, crustal layers 100, 200, 400, 800 and 1600\,m thick reach
+the CRUST1.0 Moho at the station, above a mantle half-space. Crustal Vs is uniform on 0.5--4.7\,km\,s$^{-1}$ with a hierarchical
+second-difference smoothing prior. Crustal Vp/Vs is free on 1.7--2.4 with density from Christensen \& Shaw (1970), and the
+pressure gain is sampled within $\pm$5\,per\,cent of the Rayleigh value. Eight chains of delayed-rejection adaptive Metropolis
+(Haario et al.\ 2006), each a parallel-tempering ladder of eight temperatures, run 80\,000 iterations (30\,000 burn-in) from
+independent prior draws; a prior-only run shows what the data add. Convergence is assessed with the rank-normalized $\hat R$
+and effective sample size (Vehtari et al.\ 2021). The variant with Vp/Vs fixed at 1.85 brackets the effect of that
+assumption. This differs from the published workflow, whose code is audited in \texttt{ComPy/docs/INVERSION.md}.
+
+\section{Results}
+\subsection{Compliance functions}
+Table~\ref{tab:stations} and Fig.~\ref{fig:compliance} summarize the measurements. At the <<N_CAL_INV>> calibrated stations the band
+is <<BAND_LO>>--<<BAND_HI>>\,mHz, the median coherence <<COH_RANGE>>, and the random error about <<REL_ERR>>\,per\,cent.
+The functions are remarkably similar across the array: $\eta$ at the lowest frequency is <<ETA_LO_RANGE>>\,GPa$^{-1}$ and rises
+monotonically with frequency, the signature of Vs increasing with depth. Monthly stacks agree with the full stack to within
+<<MONTHLY_TYPICAL>>\,per\,cent at most stations; CC07 is the exception (<<CC07_DEV>>\,per\,cent), with a drift that the
+Rayleigh-wave gain does not show and which therefore enters its covariance as non-stationarity.
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{fig08_compliance.png}
+\caption{Normalized compliance by sub-array, west to east; shading: $\pm1\sigma$ from the full covariance.}
+\label{fig:compliance}
+\end{figure*}
+
+<<TABLE1>>
+
+\subsection{Shear-velocity profiles}
+All inversions converged ($\hat R\leq$ <<RHAT_MAX>>) and fit to $\chi^2$ below the number of data. Fig.~\ref{fig:heat} shows the
+posteriors and Table~\ref{tab:vs} the values at fixed depths. The sediment is <<SED_RANGE>>\,m thick, in line with CRUST1.0
+(<<C1SED_RANGE>>\,m). Below it, Vs rises steeply to <<VS500_RANGE>>\,km\,s$^{-1}$ at 0.5\,km and <<VS1000_RANGE>>\,km\,s$^{-1}$
+at 1\,km, then more slowly to <<VS2000_RANGE>>\,km\,s$^{-1}$ at 2--3\,km. The posterior is <<WR1000>> times as wide as the prior at 1\,km and
+<<WR2000>> at 2\,km, so these depths are resolved. Half of the sensitivity of the lowest frequency lies above <<SENS50>>\,km and
+90\,per\,cent above <<SENS90>>\,km. Below about 3\,km the posterior width reflects the layer geometry as much as the data.
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{fig09_heatmaps.png}
+\caption{Vs posterior heat maps (rows normalized). Red: median; white dashed: CRUST1.0 at the station. Depths are true depths below the seafloor.}
+\label{fig:heat}
+\end{figure*}
+
+<<TABLE2>>
+
+\subsection{Vp/Vs and the lower crust}
+The crustal Vp/Vs posteriors lean towards high values (medians <<VPVS_RANGE>> on a 1.7--2.4 prior) but remain wide.
+Compliance depends on both Lam\'e parameters, so a higher Vp/Vs is traded for a lower Vs. With Vp/Vs fixed at 1.85 the
+upper 2\,km barely change, while Vs at 4\,km rises from <<VS4000>> to <<VS4000_MAIN>>\,km\,s$^{-1}$ (network median), close to
+CRUST1.0 (<<C1_4000>>\,km\,s$^{-1}$). Both models fit. Lower-crustal Vs is therefore set by the Vp/Vs assumption,
+whereas upper-crustal Vs is a robust result.
+
+\subsection{Serpentinization}
+Applied to the pooled posterior, eq.~(4) gives <<SERP500>> at 0.5\,km, <<SERP1000>> at 1\,km and <<SERP2000>>\,per\,cent at
+2\,km below the seafloor (median and 5--95\,per\,cent range; Fig.~\ref{fig:prof}c).
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{fig10_profiles.png}
+\caption{(a) Median Vs by sub-array (thin lines: stations) and the mean CRUST1.0 profile. (b) Pooled posterior of the calibrated
+stations with Vp/Vs free (blue) and the median with Vp/Vs = 1.85 (orange). (c) Serpentinization from eq.~(4) applied to the
+pooled draws: the value that \emph{would} follow if the crust were peridotite.}
+\label{fig:prof}
+\end{figure*}
+
+\section{Discussion}
+\textit{A consistent normal-crust signal.} The Young ORCA compliance is uniform across a 600\,km by 500\,km array, and the Vs
+profiles agree between stations to within their uncertainties. This is expected from crust formed at a fast-spreading ridge,
+where crustal thickness and layering vary little (e.g.\ Christeson et al.\ 2019). The velocity structure is the classical one:
+a thin pelagic sediment cover; a steep gradient through the extrusive section (layer 2A--2B), where Vs climbs from
+$\sim$2.3 to $\sim$3\,km\,s$^{-1}$ in the first kilometre as porosity and crack density decrease (Carlson 2014); and a gentler
+gradient in the dikes and gabbros. Upper-crustal Vs is lower than in CRUST1.0, which averages refraction models and smooths
+the steep gradient at the top of the crust.
+
+\textit{What this means for serpentinization.} Fed through the Miller \& Christensen (1997) relation, the upper-crustal
+velocities at Young ORCA would read as <<SERP1000_MED>>\,per\,cent serpentinization at 1\,km, comparable with the values now
+obtained beneath the SWIR stations of RHUM-RUM (30--55\,per\,cent at 2\,km with the corrected relation and models;
+ComPy 2.4 report). Serpentinite is not expected in this magmatic crust; the low Vs is the porosity of the extrusives.
+Vs from compliance alone therefore cannot distinguish serpentinized peridotite from porous basalt. The SWIR interpretation
+has to rest on the geological setting (exhumed mantle in oblique, magma-poor sections; Sauter \& Cannat 2010) and, where possible,
+on independent constraints: Vp/Vs, which is high in serpentinite ($\geq$2.0; Christensen 2004) but is poorly resolved by
+compliance (Section~5.3), density, or active-source data. A useful diagnostic is the \emph{difference} between ridge and normal
+crust at equal depth. At 2\,km below the seafloor, Young ORCA gives <<VS2000_MED>>\,km\,s$^{-1}$; the corrected models of RR36 and
+RR40 give 3.09 and 3.56\,km\,s$^{-1}$ and RR52 (CIR) 3.59\,km\,s$^{-1}$. <<RIDGE_COMPARISON>>
+
+\textit{Limitations.} (i) The upper bound of the Vp/Vs prior is reached by several posteriors, so a wider prior could lower
+lower-crustal Vs further. (ii) The compliance of CC07 drifts slowly; the drift widens its covariance and posterior. CC01 and CC09 have no
+Rayleigh-wave calibration (gain sampled over 0.6--1.4); their profiles are shown but not pooled. EC01 and CC03 rest on a single
+calibration event. (iii) A 1-D model ignores the abyssal-hill topography, partly covered by the
+1\,per\,cent covariance floor (Hulme et al.\ 2005). (iv) Stations with long clipped spans have short records.
+
+\section{Conclusions}
+ComPy <<COMPY_VERSION>> processed a second broad-band OBS network from the raw archive to compliance, shear velocity and
+serpentinization without manual intervention, after adding the removal of clipped data that this network required. At
+<<N_OK>> Young ORCA stations it measures compliance with coherence above 0.9 over <<BAND_LO>>--<<BAND_HI>>\,mHz, and its
+Rayleigh-wave DPG calibration agrees with an independent microseism calibration. The inverted crust of $\sim$40\,Ma Pacific
+lithosphere has <<SED_RANGE>>\,m of sediment and upper-crustal Vs of <<VS500_RANGE>>\,km\,s$^{-1}$ at 0.5\,km. Lower-crustal Vs depends
+on Vp/Vs. These normal-crust velocities would translate into substantial ``serpentinization'' if read like the SWIR results, so
+compliance-derived Vs must be combined with geological and independent geophysical constraints before it is interpreted as alteration.
+
+\section*{Data and software}
+Young ORCA data (FDSN network XE, 2018--2019) are distributed by the EarthScope Consortium (IRIS DMC). ComPy
+<<COMPY_VERSION>>, including the pipeline and the scripts of this run, is at \url{https://github.com/MohammadAmin-Aminian/ComPy}.
+Run folder: \texttt{BRUIT-FM/compliance\_xe\_2026-10-29}.
+
+\footnotesize
+\section*{References}
+\begin{description}\setlength{\itemsep}{0pt}
+\item Aminian, M.A., Crawford, W., Stutzmann, \'E., Montagner, J.-P., Cannat, M. \& Hadziioannou, C., 2025. Shallow crustal structures of the Indian ocean derived from compliance function analysis, \textit{Geophys. J. Int.}, 242, ggaf253.
+\item Bendat, J.S. \& Piersol, A.G., 1993. \textit{Engineering Applications of Correlation and Spectral Analysis}, Wiley.
+\item Carlson, R.L., 2014. The effects of alteration and porosity on seismic velocities in oceanic basalts and diabases, \textit{Geochem. Geophys. Geosyst.}, 15.
+\item Christensen, N.I., 2004. Serpentinites, peridotites, and seismology, \textit{Int. Geol. Rev.}, 46, 795--816.
+\item Christensen, N.I. \& Shaw, G.H., 1970. Elasticity of mafic rocks from the Mid-Atlantic Ridge, \textit{Geophys. J. R. astr. Soc.}, 20, 271--284.
+\item Christeson, G.L., Goff, J.A. \& Reece, R.S., 2019. Synthesis of oceanic crustal structure from two-dimensional seismic profiles, \textit{Rev. Geophys.}, 57, 504--529.
+\item Crawford, W.C. \& Webb, S.C., 2000. Identifying and removing tilt noise from low-frequency ($<$0.1\,Hz) seafloor vertical seismic data, \textit{Bull. seism. Soc. Am.}, 90, 952--963.
+\item Crawford, W.C., Webb, S.C. \& Hildebrand, J.A., 1991. Seafloor compliance observed by long-period pressure and displacement measurements, \textit{J. geophys. Res.}, 96, 16\,151--16\,160.
+\item Crawford, W.C., Webb, S.C. \& Hildebrand, J.A., 1998. Estimating shear velocities in the oceanic crust from compliance measurements by two-dimensional finite difference modeling, \textit{J. geophys. Res.}, 103, 9895--9916.
+\item Deen, M. et al., 2017. First observation of the Earth's permanent free oscillations on ocean bottom seismometers, \textit{Geophys. Res. Lett.}, 44, 10\,988--10\,996.
+\item Eilon, Z.C. et al., 2022. The Pacific OBS Research into Convecting Asthenosphere (ORCA) experiment, \textit{Seismol. Res. Lett.}
+\item Gaherty, J., Eilon, Z., Forsyth, D. \& Ekstr\"om, G., 2019. PacificORCA, International Federation of Digital Seismograph Networks, network XE.
+\item Haario, H., Laine, M., Mira, A. \& Saksman, E., 2006. DRAM: efficient adaptive MCMC, \textit{Stat. Comput.}, 16, 339--354.
+\item Hamilton, E.L., 1976. Shear-wave velocity versus depth in marine sediments: a review, \textit{Geophysics}, 41, 985--996.
+\item Harmon, N., Laske, G., Crawford, W. \& Rychert, C., 2022. Tilt corrections for normal mode observations on ocean bottom seismic data, \textit{Seismica}, 1.
+\item Hulme, T., Crawford, W.C. \& Singh, S.C., 2005. The sensitivity of seafloor compliance to two-dimensional low-velocity anomalies, \textit{Geophys. J. Int.}, 163, 547--558.
+\item Laske, G., Masters, G., Ma, Z. \& Pasyanos, M., 2013. Update on CRUST1.0, \textit{EGU General Assembly}, 15, 2658.
+\item Miller, D.J. \& Christensen, N.I., 1997. Seismic velocities of lower crustal and upper mantle rocks from the slow-spreading Mid-Atlantic Ridge, \textit{Proc. ODP Sci. Results}, 153, 437--454.
+\item Sauter, D. \& Cannat, M., 2010. The ultraslow spreading Southwest Indian Ridge, \textit{Geophys. Monogr.}, 188, AGU.
+\item Sorrells, G.G. \& Goforth, T.T., 1973. Low-frequency earth motion generated by slowly propagating partially organized pressure fields, \textit{Bull. seism. Soc. Am.}, 63, 1583--1601.
+\item Vehtari, A., Gelman, A., Simpson, D., Carpenter, B. \& B\"urkner, P.-C., 2021. Rank-normalization, folding, and localization: an improved $\hat R$, \textit{Bayesian Anal.}, 16, 667--718.
+\item Zha, Y. \& Webb, S.C., 2016. Crustal shear velocity structure in the Southern Lau Basin constrained by seafloor compliance, \textit{J. geophys. Res.}, 121, 3220--3237.
+\end{description}
+\end{document}
