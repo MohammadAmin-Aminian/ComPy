@@ -4,8 +4,10 @@
 Created on Thu Jun  1 16:33:13 2023
 
 @author: Mohammad-Amin Aminian
+Modified 2025 by W. Crawford (explicit channels, pre-filter arguments,
+Google-style docstrings) and merged into ComPy 2.4.
 
-DFG Calibration
+DPG Calibration
 
 """
 
@@ -23,6 +25,9 @@ import obspy
 import tiskitpy as tiskit
 from disba import PhaseDispersion
 
+#: Seawater density [kg/m³] used to normalize measured P/a by rho*h (v1 value).
+WATER_DENSITY = 1028.0
+
 
 def calculate_spectral_ratio(
     stream,
@@ -38,25 +43,79 @@ def calculate_spectral_ratio(
     client=None,
     nseg=512,
     velocity_model=None,
+    water_density=WATER_DENSITY,
+    return_details=False,
+    zchan=None,
+    pchan=None,
+    filt_freq1=0.005,
+    filt_freq2=0.1,
 ):
-    """Estimate pressure gain from response-corrected teleseismic P/a ratios.
+    """Calculate the pressure gauge gain from the P/a ratio of Rayleigh waves.
 
-    Input is raw counts. Supply inventory and event_spans to operate offline.
-    Coherence thresholds here are magnitude-squared coherence, as in v1.
-    Each event is processed independently; incomplete/low-coherence events
-    are excluded and an empty accepted set raises ValueError.
+    Input is raw counts. Supply ``inventory`` and ``event_spans`` to operate
+    offline. Coherence thresholds are magnitude-squared coherence, as in v1.
+    Each event is processed independently; incomplete or low-coherence events
+    are excluded. The gain is proportional to ``water_density`` because the
+    measured P/a is normalized by rho*h before fitting the dimensionless
+    theory.
+
+    Args:
+        stream (:class:`obspy.core.stream.Stream`): Raw seismometer vertical
+            and pressure records [counts].
+        mag (float): Minimum magnitude of the earthquakes used.
+        coh_trsh (float): Minimum band-median coherence of an accepted event.
+        mean_trsh (float): Minimum band-mean coherence of an accepted event.
+        f_min (float): Low frequency limit of the fitted band [Hz].
+        f_max (float): High frequency limit of the fitted band [Hz].
+        plot_condition (bool): Plot coherences and the fitted ratio.
+        inventory (:class:`obspy.core.inventory.Inventory` or None): Channel
+            responses. If None, they are requested from ``client``.
+        event_spans (:class:`tiskitpy.TimeSpans` or None): Event windows
+            (start times are used, 2 h each). If None, they come from the
+            USGS catalogue.
+        client (:class:`obspy.clients.fdsn.Client` or None): FDSN client
+            used when ``inventory`` is None (default RESIF).
+        nseg (int): Welch segment length [samples].
+        velocity_model (array or None): Crustal model for the Rayleigh
+            dispersion, rows of thickness [km], Vp, Vs [km/s], density [g/cc].
+        water_density (float): Seawater density [kg/m³].
+        return_details (bool): If True, return a dict with the gain fitted to
+            the median ratio (``gain``), per-event gains, their standard
+            deviation, accepted event start times and the band used.
+        zchan (str or None): Seismometer vertical channel code (e.g. "BHZ");
+            if None, the single *Z channel of ``stream``.
+        pchan (str or None): Pressure channel code (e.g. "BDH"); if None, the
+            single *H channel of ``stream``.
+        filt_freq1 (float): Low corner of the band-pass pre-filter [Hz];
+            must be below ``f_min``.
+        filt_freq2 (float): High corner of the band-pass pre-filter [Hz];
+            must be above ``f_max`` (capped at 0.45 times the sampling rate).
+
+    Returns:
+        float or dict: Gain factor multiplying the nominal pressure, or the
+        details described under ``return_details``.
+
+    Raises:
+        ValueError: On inconsistent arguments or if no event passes.
     """
     from compy_numerics import integer
     from compy_processing import channel_pair, spectra
     from compy_streams import trim_streams_to_same_length
 
-    channel_pair(stream)
+    if zchan is not None or pchan is not None:
+        stream = stream.select(channel=zchan or "*Z") + stream.select(
+            channel=pchan or "*H"
+        )
+    z, p = channel_pair(stream)
     nseg = integer(nseg, "nseg", minimum=2)
     if not 0 < f_min < f_max < stream[0].stats.sampling_rate / 2:
         raise ValueError("calibration band must be positive and below Nyquist")
+    if not 0 < filt_freq1 < f_min or not filt_freq2 > f_max:
+        raise ValueError(
+            "pre-filter must satisfy filt_freq1 < f_min and filt_freq2 > f_max"
+        )
     if not 0 <= coh_trsh <= 1 or not 0 <= mean_trsh <= 1:
         raise ValueError("coherence thresholds must be in [0, 1]")
-    z, p = channel_pair(stream)
     if inventory is None:
         client = Client("RESIF") if client is None else client
         inventory = client.get_stations(
@@ -78,7 +137,7 @@ def calculate_spectral_ratio(
     start_times = list(event_spans.start_times)
     if not start_times:
         raise ValueError("no earthquake windows were found")
-    ratios, coherences = [], []
+    ratios, coherences, accepted_starts = [], [], []
     for start in start_times:
         event = (
             (stream.select(id=z.id) + stream.select(id=p.id))
@@ -92,11 +151,11 @@ def calculate_spectral_ratio(
         event.select(id=p.id).remove_response(inventory=inventory, output="DEF")
         event.filter(
             "bandpass",
-            freqmin=0.005,
-            freqmax=min(0.1, event[0].stats.sampling_rate * 0.45),
+            freqmin=filt_freq1,
+            freqmax=min(filt_freq2, event[0].stats.sampling_rate * 0.45),
         )
         event, _, _ = rayleigh_arrival(
-            event, timelag=-5, window=20, plot_condition=False
+            event, timelag=-5, window=20, plot_condition=False, zchan=z.stats.channel
         )
         if min(len(tr) for tr in event) < nseg:
             continue
@@ -114,8 +173,9 @@ def calculate_spectral_ratio(
             continue
         ratio = np.zeros_like(f)
         np.divide(pp, aa, out=ratio, where=aa > 0)
-        ratios.append(np.sqrt(ratio) / (1028 * depth))
+        ratios.append(np.sqrt(ratio) / (water_density * depth))
         coherences.append(coherence)
+        accepted_starts.append(start)
     if not ratios:
         raise ValueError("no earthquake windows passed calibration quality thresholds")
     measured = np.median(ratios, axis=0)
@@ -150,26 +210,47 @@ def calculate_spectral_ratio(
         axes[1].semilogx(f[band], measured[band] * gain, label="Calibrated")
         axes[1].set(xlabel="Frequency [Hz]", ylabel="P/a / ρh")
         axes[1].legend()
+    if return_details:
+        event_gains = np.array([grid_search(r[band], target) for r in ratios])
+        return {
+            "gain": gain,
+            "event_gains": event_gains,
+            "gain_std": float(np.std(event_gains, ddof=1)) if len(ratios) > 1 else None,
+            "event_starts": accepted_starts,
+            "band": (float(f[band][0]), float(f[band][-1])),
+            "depth": depth,
+            "frequencies": f,
+            "measured_ratio": measured,
+            "theoretical_ratio": target,
+            "coherences": np.asarray(coherences),
+        }
     return gain
 
 
 # %%
-def rayleigh_arrival(stream, window=20, timelag=-2, plot_condition=False):
+def rayleigh_arrival(stream, window=20, timelag=-2, plot_condition=False, zchan="*Z"):
+    """Cut the Rayleigh wave around the largest vertical amplitude.
 
-    max_index = np.argmax(
-        np.abs(stream.select(channel="*Z")[0].data)
-    )  # Find the maximum value in the trace
+    Args:
+        stream (:class:`obspy.core.stream.Stream`): Event record.
+        window (float): Window length [min].
+        timelag (float): Window start relative to the maximum [min].
+        plot_condition (bool): Plot the vertical before and after cutting.
+        zchan (str): Vertical channel code or pattern.
 
-    fs = stream.select(channel="*Z")[0].stats.sampling_rate
+    Returns:
+        tuple: (cut stream, window start [s], window end [s]) with times
+        relative to the vertical start time.
+    """
+    ztrace = stream.select(channel=zchan)[0]
+    max_index = np.argmax(np.abs(ztrace.data))  # Find the maximum value in the trace
+
+    fs = ztrace.stats.sampling_rate
 
     max_time = max_index / fs  # Calculate the time of the maximum value
 
-    ray_arr = stream.select(channel="*Z")[0].stats.starttime + max_time + (timelag * 60)
-    end_time = (
-        stream.select(channel="*Z")[0].stats.starttime
-        + max_time
-        + ((timelag + window) * 60)
-    )
+    ray_arr = ztrace.stats.starttime + max_time + (timelag * 60)
+    end_time = ztrace.stats.starttime + max_time + ((timelag + window) * 60)
 
     print(f"Fundamental Rayleigh arrival at {ray_arr} seconds.")
 
@@ -180,22 +261,22 @@ def rayleigh_arrival(stream, window=20, timelag=-2, plot_condition=False):
     if plot_condition:
         plt.figure(dpi=300, figsize=(12, 6))
         plt.subplot(211)
-        plt.plot(stream.select(channel="*Z")[0].data)
+        plt.plot(ztrace.data)
         plt.vlines(
             max_index + (timelag * 60) * fs,
-            np.min(stream.select(channel="*Z")[0].data),
-            np.max(stream.select(channel="*Z")[0].data),
+            np.min(ztrace.data),
+            np.max(ztrace.data),
             color="r",
         )
         plt.vlines(
             max_index + ((timelag + window) * 60 * fs),
-            np.min(stream.select(channel="*Z")[0].data),
-            np.max(stream.select(channel="*Z")[0].data),
+            np.min(ztrace.data),
+            np.max(ztrace.data),
             color="r",
         )
 
         plt.subplot(212)
-        plt.plot(st.select(channel="*Z")[0].data)
+        plt.plot(st.select(channel=zchan)[0].data)
 
     return (st, (max_time + (timelag * 60)), (max_time + ((timelag + window) * 60)))
 
@@ -388,7 +469,16 @@ def cut_signal_above_zero(signal):
 
 # %%
 def calculate_speed_of_sound_in_water(temperature=4, salinity=35, depth=4760):
-    """Calculate the speed of sound in water using Mackenzie's formula."""
+    """Calculate the speed of sound in water using Mackenzie's formula.
+
+    Args:
+        temperature (float): Water temperature [°C].
+        salinity (float): Salinity [parts per thousand].
+        depth (float): Depth [m].
+
+    Returns:
+        float: Speed of sound [m/s].
+    """
     # Constants
     a1 = 1448.96
     a2 = 4.591
@@ -446,16 +536,14 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
 
 # %%
-# Calibrating via P-wave Arrival
-# start =UTCDateTime("2012-10-12")
-net = "YV"
-sta = "RR38"
+# Calibrating via P-wave Arrival (legacy, requests responses from RESIF).
 
 
 def pressure_calibration(stream, mag=7, i=1):
-    """
-    Pressure gauge calibration using p wave arrival
+    """Pressure gauge calibration using the P-wave arrival (legacy).
 
+    Not used by the ComPy workflow; kept for reproducibility of v1 results.
+    Requests BHZ/BDH responses from RESIF.
     """
     client = Client("RESIF")
     stream = stream.copy()

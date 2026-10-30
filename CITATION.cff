@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: Aminian
     given-names: Mohammad-Amin
-version: 2.1.0
+version: 2.4.0
 repository-code: "https://github.com/MohammadAmin-Aminian/ComPy"
 license: GPL-3.0-only
 preferred-citation:

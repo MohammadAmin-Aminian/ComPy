@@ -102,8 +102,15 @@ def main():
     stream.merge(method=0)
     stream, inventory = decimate_with_responses(stream, inventory, args.factors)
     for trace in stream:
+        # No water level: obspy's default 60 dB level is relative to the
+        # response maximum; for displacement at the original rate that maximum
+        # is near Nyquist and clipping reaches the compliance band (a 22 dB
+        # error was measured at 62.5 Hz). The pre-filter bounds the inverse.
+        nyquist = trace.stats.sampling_rate / 2
         trace.remove_response(
-            output="DEF" if trace.stats.channel.endswith("H") else "DISP"
+            output="DEF" if trace.stats.channel.endswith("H") else "DISP",
+            water_level=None,
+            pre_filt=(0.0008, 0.0015, 0.7 * nyquist, 0.95 * nyquist),
         )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     stream.write(str(args.output), format="MSEED")

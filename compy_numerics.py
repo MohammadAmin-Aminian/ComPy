@@ -9,6 +9,18 @@ import operator
 import numpy as np
 from scipy.optimize import brentq
 
+#: Gravitational acceleration [m/s²] used by the gravity-wave dispersion solver.
+GRAVITY = 9.79329
+#: Newtonian gravitational constant [m³/(kg s²)] (CODATA 2018).
+GRAVITATIONAL_CONSTANT = 6.6743e-11
+#: Free-air gravity gradient 2g/R [1/s²]; apparent acceleration per metre of
+#: vertical seafloor displacement (Crawford et al. 1998).
+FREE_AIR_GRADIENT = 3.07e-6
+#: Equivalent number of independent averages contributed by each Hann window
+#: at 50 % overlap, relative to non-overlapping segments (Welch 1967, eq. 17
+#: with c(0.5) = 0.167): 1 / (1 + 2 c²) = 0.947.
+HANN_HALF_OVERLAP_DOF = 1 / (1 + 2 * 0.167**2)
+
 
 def positive(value, name):
     value = float(value)
@@ -62,7 +74,7 @@ def roughness(vs, order=2):
     return float(np.sum(values * values))
 
 
-def wavenumber(omega, depth, gravity=9.79329):
+def wavenumber(omega, depth, gravity=GRAVITY):
     """Solve omega**2 = g*k*tanh(k*depth), including DC and scalar inputs.
 
     A dimensionless bracketed solve avoids the previous first-bin assumption
@@ -103,6 +115,22 @@ def sliding_window(a, ws, ss=None, hann=True):
     if hann:
         out = out * np.hanning(ws)
     return out, len(out)
+
+
+def welch_averages(n_samples, nseg):
+    """Effective independent averages of a 50 %-overlap Hann Welch estimate.
+
+    Args:
+        n_samples (int): Samples in the record.
+        nseg (int): Samples per Welch segment.
+
+    Returns:
+        float: Segment count multiplied by ``HANN_HALF_OVERLAP_DOF``.
+    """
+    n_samples, nseg = integer(n_samples, "n_samples"), integer(nseg, "nseg", 2)
+    if n_samples < nseg:
+        raise ValueError("record is shorter than one Welch segment")
+    return (1 + (n_samples - nseg) // (nseg - nseg // 2)) * HANN_HALF_OVERLAP_DOF
 
 
 def compliance_uncertainty(compliance, coherence, n_windows):
@@ -149,3 +177,40 @@ def plot_smooth(data, window_length, polyorder, **kwargs):
     if width <= polyorder:
         return values.copy()
     return savgol_filter(values, width, polyorder, **kwargs)
+
+
+def legacy_wave_attraction_correction(freq, depth, coherence=1.0):
+    """Compliance missing from estimates made with ComPy before 2.0 (1/Pa).
+
+    Before 2.0, the wave-attraction term (gravitational acceleration of the
+    passing water mass per unit pressure, 2*pi*(G/g)*exp(-kH)*cosh(kH)) was
+    added to the displacement/pressure ratio before the free-air factor
+    omega**2/(omega**2 + 2g/R) was applied, so it entered multiplied by
+    omega**2 and was effectively dropped. Version 2.0 adds it in
+    acceleration/pressure units. The difference is largest at low frequency
+    (tens of per cent near 7 mHz at 3 km water depth). Add the returned value
+    to a pre-2.0 normalized compliance to obtain the 2.0 estimator; pass the
+    amplitude coherence used in that estimate (scalar or per frequency).
+
+    The 2.0 estimator still multiplied the wave-attraction term by the
+    coherence (fixed in 2.2, docs/AUDIT_2026-10.md D1). To reach the 2.2
+    estimator, also add ``k (1 - coherence) a_w/p / (omega**2 + 2g/R)`` with
+    a_w/p the first output of ``compy.gravitational_attraction``.
+    """
+    freq = np.asarray(freq, dtype=float)
+    depth = positive(depth, "depth")
+    coherence = np.asarray(coherence, dtype=float)
+    if np.any(~np.isfinite(freq)) or np.any(freq <= 0):
+        raise ValueError("frequencies must be finite and positive")
+    if (
+        np.any(~np.isfinite(coherence))
+        or np.any(coherence < 0)
+        or np.any(coherence > 1)
+    ):
+        raise ValueError("coherence must lie in [0, 1]")
+    omega2 = (2 * np.pi * freq) ** 2
+    k = wavenumber(2 * np.pi * freq, depth)
+    kh = k * depth
+    pa = 2 * np.pi * (6.6743e-11 / 9.8) * (1 + np.exp(-2 * kh)) / 2
+    # new - old = k*gamma*pa/(w2+c) - k*gamma*w2*pa/(w2+c)  (legacy unit mix)
+    return k * coherence * pa * (1 - omega2) / (omega2 + 3.07e-6)

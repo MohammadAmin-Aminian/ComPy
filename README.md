@@ -1,4 +1,4 @@
-# ComPy 2.1
+# ComPy 2.4
 
 **Seafloor compliance processing, pressure-gauge calibration and layered elastic inversion.**
 
@@ -29,6 +29,15 @@ The figures below present the RHUM-RUM research workflow and its station results
 They are the existing research figures supplied with this repository. Their
 provenance is the original workflow; they have not been regenerated with v2.
 The [study](https://doi.org/10.1093/gji/ggaf253) provides the scientific context.
+
+> **Corrections (2.4).** These historical figures come from the legacy figure
+> code. Its heat-map depth ticks assume 167-m rows where the rows are 100 m,
+> so depths are labelled 5/3 too deep (F1). Its serpentinization uses
+> (9000 − 2 Vs)/30 instead of the 4.2/2.2 km/s relation in the paper's
+> caption (F2). The re-processed and re-inverted YV models, with true depths and
+> the corrected serpentinization, are in
+> [docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md).
+> The audit is in [docs/INVERSION.md](docs/INVERSION.md).
 
 ### Shear-velocity structure beneath RR52
 
@@ -76,6 +85,9 @@ The distribution is named `seafloor-compy`; the existing module imports remain
 installed from source; the installation command does not assume a PyPI release.
 
 Runtime dependencies are NumPy, SciPy, Matplotlib, ObsPy, TiSKitPy 2.3 and disba.
+The pressure calibration needs the `disba` Rayleigh-wave mode calculator, which
+uses Numba; install Numba with conda rather than pip (`conda install numba`,
+then `pip install disba`). Numba also speeds up the 2.3 inversion forward model.
 No external CPS executable is required by the built-in compliance propagator.
 Imports do not contact station services. Data download, automatic earthquake
 catalog retrieval and station-depth lookup require network access.
@@ -125,6 +137,35 @@ once. Instrument-response removal is separate from pressure calibration.
 7. Supply defensible observation uncertainties and a starting model to inversion.
 8. Inspect multiple chains, burn-in, mixing and model sensitivity before
    reporting a scientific result.
+
+### Compliance with the 2.2 tools
+
+Version 2.2 adds an unattended chain that follows Aminian et al. (2025, §4).
+The audit behind it is in [docs/AUDIT_2026-10.md](docs/AUDIT_2026-10.md).
+
+```python
+import compy, compy_cleaning as cleaning
+from compy_processing import GJI2025, coherent_band, stacked_compliance
+
+rotated = cleaning.rotate_smoothly(
+    st, hour_centres, angles, azimuths
+)  # hourly CleanRotator angles
+spans = cleaning.sta_lta_spans(
+    rotated.select(component="Z")[0]
+)  # plus TimeSpans.from_eqs
+cleaned = compy.remove_coherent_noise(rotated, 24, avoid_spans=..., cover_all=True)
+pair = cleaned.select(channel="BHZ") + cleaned.select(channel="BDH")
+windows = compy.split_stream(pair, 2100)  # 35-min, non-overlapping
+result = stacked_compliance(
+    windows, depth, gain, band=(0.007, 0.019), criteria=GJI2025, nseg=1024
+)
+result.compliance, result.uncertainty, result.phase_deg, result.n_windows
+```
+
+`stacked_compliance` returns k·|S_pz|/S_pp from cross-spectra stacked over
+the windows, with the gravity correction applied, together with the Bendat &
+Piersol error. The legacy `Calculate_Compliance*` functions keep their
+historical gates.
 
 The files in [`_Example/`](./_Example/) show command-line workflows and a runnable
 offline synthetic example. Paths and network/station selection must match your
@@ -196,15 +237,22 @@ how the inferred orientation and effectiveness vary between processing windows.
 import Pressure_calibration as dpg
 
 gain = dpg.calculate_spectral_ratio(
-    raw_stream,
+    raw_stream,  # raw counts, vertical and pressure
     mag=7,
     f_min=0.03,
     f_max=0.07,
-    inventory=inventory,
+    inventory=inventory,  # StationXML with both responses
     event_spans=spans,
+    zchan="BHZ",  # explicit channel codes (optional)
+    pchan="BDH",
+    filt_freq1=0.005,  # band-pass pre-filter, below f_min ...
+    filt_freq2=0.1,  # ... and above f_max
     plot_condition=True,
 )
 ```
+
+`return_details=True` returns a dict with the per-event gains and their
+standard deviation (the ±5 % of Aminian et al. 2025, Table 1).
 
 Omitting `inventory` downloads response metadata; omitting `event_spans`
 retrieves earthquake windows using TiSKitPy. Supply both for offline processing.
@@ -307,7 +355,79 @@ pressure–vertical coherence, and the ensemble of selected compliance curves wi
 a median summary. The dispersion between curves is a useful quality diagnostic;
 it is not automatically the uncertainty of the median or an independent sample count.
 
-### Forward model and inversion
+### Bayesian Vs inversion (2.3, `compy_inversion`)
+
+The recommended path from a compliance estimate to a shear-velocity model.
+It follows Zha & Webb (2016) for the parameterization and the sampler, and
+Aminian et al. (2025) for the CRUST1.0 Moho and the 5 % gain uncertainty.
+The method, the audit of the earlier inversion code and the validation are in
+[docs/INVERSION.md](docs/INVERSION.md).
+
+```python
+import compy_inversion as ci
+
+column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")  # CRUST1.0 files
+data = ci.ComplianceData.from_npz(
+    "RR52_compliance_compy.npz",  # stacked_compliance output (2.2)
+    subsets=monthly_estimates,  # (n_months, n_freqs), optional
+    gain_rel=0.05,  # pressure-gain error, common to all f
+    floor_rel=0.01,  # independent 1-D model error
+)
+model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
+post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000, thin=10)
+prior = ci.sample(data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000)
+print(post.summary()["max_rhat"], post.summary()["chi2"])
+vs_q = post.vs_quantiles(depths)  # (5 quantiles, len(depths)) in m/s
+post.save("RR52_main")  # .npz draws and .json summary
+```
+
+The pieces:
+
+- **Data.** `ComplianceData` holds a full covariance: the random error, the monthly scatter, a gain error shared by all frequencies, and a floor.
+- **Model.** `CrustalModel` is a Hamilton sediment of free thickness over crustal layers that double in thickness to the Moho, above a mantle half-space. Vp/Vs is 1.85 by default; alternatives are Brocher (2005) or Vp fixed from a reference.
+- **Sampler.** `sample` runs independent DRAM chains with a Gibbs-sampled smoothing weight; `temperatures=` adds parallel tempering.
+- **Results.** `Posterior` gives R-hat/ESS, the χ² and Vs-depth quantiles.
+- **Sensitivity.** `vs_kernels` and `sensitivity_depth` show which depths the data see.
+- **Gain.** `sample(..., gain_bounds=(0.95, 1.05))` samples the pressure gain within ±5 %, as in the paper; use `gain_rel=0` in the data then. `ComplianceData.join` inverts epochs with different gains together.
+
+The forward model is the `raydep` propagator compiled with Numba if it is installed (`pip install numba`); this is about 140 times faster.
+Chains run in spawned processes: call `sample` from a notebook or from a script
+guarded by `if __name__ == "__main__":` (or pass `processes=1`).
+Results for the eight YV stations are in
+[docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md).
+
+### Serpentinization (2.4)
+
+Aminian et al. (2025, Fig. 10c) read low crustal Vs at the ridge stations as
+serpentinized peridotite. `serpentinization` applies the linear relation of
+Miller & Christensen (1997) used in that figure: 0 % at 4.2 km/s and 100 % at
+2.2 km/s. Apply it to posterior draws, so the credible interval is carried
+through:
+
+```python
+z = np.arange(0, 8001, 50.0)
+beta_q = post.serpentinization_quantiles(z)  # (5 quantiles, len(z)) in %
+beta = ci.serpentinization(post.vs_draws(z))  # or per draw, for custom statistics
+```
+
+The result is an upper bound on alteration: it assumes an ultramafic crust in
+which serpentinization alone lowers Vs. Porosity, basalt and gabbro also give
+low Vs, and compliance cannot tell them apart. The legacy figure code used
+`(9000 - 2 Vs)/30` (0 % at 4.5 km/s, 100 % at 3.0 km/s); 2.4 corrects it
+(`docs/INVERSION.md`, F2).
+
+### End-to-end pipeline for a network (2.4, `pipeline/`)
+
+`pipeline/` runs the whole chain unattended on any broadband OBS network
+stored as an SDS archive: decimation and responses, removal of clipped or
+dead data, earthquakes, glitches, tilt and coherent noise, Rayleigh-wave DPG
+calibration, stacked compliance with monthly stacks, Vs inversion and
+serpentinization. All network-specific values live in `pipeline/config.py`;
+see [pipeline/README.md](pipeline/README.md). The validation run on the XE
+(Pacific Array Young ORCA) network is in
+[docs/xe_young_orca_2026-10-29](docs/xe_young_orca_2026-10-29/README.md).
+
+### Legacy forward model and inversion (`inv_compy`)
 
 ```python
 import numpy as np
@@ -359,7 +479,10 @@ rate counts proposals, excluding the initial state. `seed` controls a local RNG
 and does not reset NumPy's global generator.
 
 The Gaussian data term is `sum(((observed-predicted)/s)**2)`; roughness is the
-squared second-derivative energy on a fixed 1-m grid. The data term is a sum,
+squared second-derivative energy on a fixed 1-m grid. A unit Vs step has
+roughness 0.25 there, so `alpha=0.25` is a Gaussian prior on Vs jumps with a
+4 m/s standard deviation, far stiffer than any compliance data. Use
+`alpha_bounds` or `compy_inversion`. The data term is a sum,
 whereas the manuscript describes a mean chi-square: alpha values therefore
 need retuning rather than copying unchanged. The basic sampler bounds Vs to
 50–110% of its initial value. Beta uses 15–120% in shallow layers and 90–110%
@@ -374,6 +497,55 @@ RHUM-RUM stations. Supply a custom model to control sediment properties;
 legacy `sediment_thickness` arguments do not modify station templates.
 Historical misspellings `invert_compliace*`, `liklihood`, `Roughness` and
 `Comliance_uncertainty` remain available for existing notebooks.
+
+### Verified deep-crust workflow (unreleased)
+
+Opt-in additions, following the compliance literature; every default above is
+unchanged and reproduces earlier chains draw for draw.
+
+| Addition | Purpose |
+|---|---|
+| `sigma_v`/`sigma_h` arrays, `adapt_until` | Per-layer steps tuned during burn-in to ~30 % acceptance, then frozen |
+| `initial_state`, `vs_bounds` | Dispersed chain starts under an explicit prior that no longer depends on the starting model |
+| `vary_thickness=False` | Fixed-geometry minimum-structure grid (Crawford et al. 1991) |
+| `alpha_bounds` | Smoothing weight sampled from the data (hierarchical Bayes, Malinverno & Briggs 2004) |
+| `data_covariance` | Correlated errors, e.g. a pressure-gain error common to all frequencies |
+| `interface_move="adjacent"` | Move one interface at a time in free-interface runs |
+| `invert_occam` | Occam minimum-structure inversion (Constable et al. 1987) as a cross-check |
+| `invert_tempered` | Parallel tempering for multimodal posteriors (Geyer 1991; Sambridge 2014) |
+| `compliance_kernels`, `resample_model` | Numerical Vs sensitivity kernels on an interface-exact slicing |
+| `compy_diagnostics.rank_rhat_ess` | Rank-normalized split R̂ and bulk ESS without ArviZ |
+
+The propagator is tested against an independent Aki & Richards solver
+(agreement ~1e-6). Points worth knowing before interpreting a model:
+
+- Compliance senses structure to roughly λmax/6 of the longest water wave
+  (Crawford et al. 1991): about 9 km at 4.2 km water depth and 3.5 mHz, but
+  only about 3.6 km at 2.9 km depth and 7.1 mHz. Deeper Vs mostly reflects the
+  prior; compare posterior and prior-only widths (`s` scaled up, as in the
+  example) before interpreting it.
+- With Vp held fixed, raising Vs also lowers λ, so thin shallow layers can
+  have weak or even positive Vs kernels: their Vs is poorly resolved.
+- A thin low-velocity zone beneath a slow upper crust trades off against a
+  smoother, slower upper crust; at 3 % errors the synthetic test cannot
+  separate them.
+- Compliance measured with ComPy before 2.0 lacks the wave-attraction term
+  (see the changelog); add `compy_numerics.legacy_wave_attraction_correction`
+  before inverting such values. The missing term is largest at the lowest
+  frequencies and biases low-frequency compliance low, i.e. the deep crust fast.
+- Random-walk Metropolis is most efficient near 23–44 % acceptance (Roberts et
+  al. 1997), not 70–90 %. Free-interface parameterizations remain slow to
+  mix even with adjacent moves; check R̂ and ESS, or prefer the fixed grid
+  with `alpha_bounds`.
+- Above the resolution depth the posterior can be multimodal: slow-over-fast
+  and fast-over-slow layering may fit equally well (RR50, 4.1 km water). Single
+  chains then stick in one mode (R̂ well above 1); `invert_tempered` swaps
+  states with chains run on a flattened likelihood so both modes are sampled.
+
+```bash
+python _Example/deep_crust_inversion.py --output deep-crust   # ~25 min, 2 cores
+python _Example/plot_deep_posterior.py deep-crust
+```
 
 ## Plotting and diagnostics
 
