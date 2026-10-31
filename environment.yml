@@ -1,0 +1,18 @@
+name: compy
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy>=1.24
+  - scipy>=1.10
+  - matplotlib>=3.7
+  - obspy>=1.4
+  - numba>=0.59
+  - pandas>=2.2
+  - openpyxl>=3.1
+  - pytest>=8
+  - pip
+  - pip:
+      - "tiskitpy>=2.3,<3"
+      - "disba>=0.7,<1"
+      - "-e .[dev,pressure]"

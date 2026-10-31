@@ -7,7 +7,7 @@ reports remain linked to their archived source.
 ## Migration and complete runs
 
 `Pressure_calibration.py` has been removed. Use the
-[calibration migration table](../README.md#pressure-calibration). The tag
+[calibration migration table](USER_GUIDE.md#pressure-gauge-qc-and-calibration-compy_pressure). The tag
 `v2.4.0` preserves commit `7ad79c2`, including the old calibration module
 needed by the historical YV/XE scripts. The release stays in the 2.x series
 at the owner's request despite this documented API removal.

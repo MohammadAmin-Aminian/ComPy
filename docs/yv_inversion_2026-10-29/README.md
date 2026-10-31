@@ -127,7 +127,7 @@ sensitivity lie; deeper Vs reflects the prior and the layer geometry.
   - `e_report.py`: HTML report;
   - `run_all.sh`, `run_fixedvp.sh`, `run_vpvs.sh`: runners.
 - `results/<STA>/<STA>_<variant>.json`: parameter quantiles, R-hat/ESS, χ², sampler settings and the CRUST1.0
-  column. The draws (`.npz`, about 3 MB each) are kept in `~/Desktop/BRUIT-FM/inversion_yv_2026-10-29/results`.
+  column. The posterior draws (`.npz`, about 3 MB each) are not distributed with the repository.
 - `results/tables/`: `inversion_summary.{csv,json}`, `main.md`, `variants.{md,json}`.
 - `figures/`:
   - `<STA>_inversion.png`: data fit, Vs posterior, sensitivity, sediment;

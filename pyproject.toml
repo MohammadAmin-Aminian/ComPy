@@ -11,6 +11,18 @@ requires-python = ">=3.10"
 license = "GPL-3.0-only"
 license-files = ["LICENSE"]
 authors = [{name = "Mohammad-Amin Aminian"}]
+keywords = ["seafloor compliance", "ocean-bottom seismometer", "OBS", "differential pressure gauge", "shear velocity", "Bayesian inversion", "seismology", "ObsPy"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Physics",
+]
 dependencies = ["numpy>=1.24", "scipy>=1.10", "matplotlib>=3.7", "obspy>=1.4", "tiskitpy>=2.3,<3", "disba>=0.7,<1"]
 
 [project.optional-dependencies]
@@ -34,6 +46,8 @@ compy-pressure-approved-noise-model = "compy_pressure.noise_model:main"
 [project.urls]
 Repository = "https://github.com/MohammadAmin-Aminian/ComPy"
 Publication = "https://doi.org/10.1093/gji/ggaf253"
+Documentation = "https://github.com/MohammadAmin-Aminian/ComPy/blob/main/docs/USER_GUIDE.md"
+Changelog = "https://github.com/MohammadAmin-Aminian/ComPy/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 py-modules = ["compy", "inv_compy", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]

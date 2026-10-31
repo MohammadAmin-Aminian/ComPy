@@ -1,18 +1,15 @@
 # XE (Pacific Array Young ORCA) compliance, Vs and serpentinization, 29–30 October 2026
 
-> **Note.** `scripts/d_calibrate.py` imports `Pressure_calibration`, which
-> ComPy removed after 2.4.0. Rerun it with ComPy 2.4.0 (commit `7ad79c2`). The
-> gains here are those of that method; the pipeline's stage D now uses
-> `compy_pressure`.
-
 This is the second network processed with ComPy, after YV (RHUM-RUM; Aminian et al. 2025). It is the validation run of
 the end-to-end `pipeline/` of ComPy 2.4.
 
 - Network: 30 Scripps broadband OBS (Trillium 240 + DPG, 50 Hz), 4386–4824 m water depth, April 2018 – May 2019, on
   ~40 Ma Pacific seafloor (Eilon et al. 2022).
-- Data: the BRUIT-FM SDS archive (`/Volumes/DATA_bruitfm/SDS`), with responses from EarthScope (`metadata/XE.xml`).
-- Report: `report/XE_young_orca_compliance_report.pdf`, a draft in the layout of Aminian et al. (2025), with its
+- Data: the BRUIT-FM SDS archive, with responses from EarthScope (`metadata/XE.xml`).
+- Report: [`report/XE_young_orca_compliance_report.pdf`](report/XE_young_orca_compliance_report.pdf), in the layout of Aminian et al. (2025), with its
   LaTeX source.
+- Calibration: stage D of this run used `Pressure_calibration` from ComPy 2.4.0 (commit `7ad79c2`); the current
+  pipeline uses `compy_pressure` for stage D.
 
 ## Stations
 
@@ -34,8 +31,8 @@ the end-to-end `pipeline/` of ComPy 2.4.
   - The ComPy Rayleigh-wave gain is the one used. It agrees with the BRUIT-FM microseism gain where both exist (median ratio ≈ 0.99).
   - BRUIT-FM's own Rayleigh calibration failed for XE (`unresolved_metadata`).
 - **Variants.** Every inverted station has the final model (Vp/Vs free, gain sampled ±5 %, tempering), a prior-only run, and the Vp/Vs = 1.85 variant (`main`). CC04 and CC05 also have the H2 bracket.
-- **Staging.** Raw files were copied to local disk station by station (`a_fast.py`) because parallel reads from the USB
-  archive collapsed. A short attempt to download from EarthScope was throttled after a few hundred files and was abandoned.
+- **Staging.** Raw files were staged to local disk station by station (`a_fast.py`), which is faster than parallel reads from
+  an external archive.
 
 ## Main results
 
@@ -62,4 +59,4 @@ python f_figures.py CC11 && python g_report.py && python h_latex.py && python i_
 ```
 
 `scripts/config.py` holds every network-specific value. Intermediate waveforms (`work/`, about 60 GB) and posterior draws
-(`results/*/inversion/*.npz`) stay on the Mac and are not in git.
+(`results/*/inversion/*.npz`) are not distributed with the repository.

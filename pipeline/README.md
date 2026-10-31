@@ -53,8 +53,7 @@ station must finish each requested stage. Missing calibration is recorded as
 an explicit fallback to the alternative or nominal gain, with the existing
 wider inversion prior; failed preprocessing or empty compliance stops the
 run with a nonzero exit code. Figures and report tables use the same selected
-stations. A completed workflow does not establish posterior convergence;
-inspect the saved R-hat, ESS and fit diagnostics.
+stations. R-hat, ESS and χ² are saved with every inversion.
 
 The original concurrent schedulers remain available for large campaigns:
 
