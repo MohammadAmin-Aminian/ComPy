@@ -21,8 +21,8 @@ serpentinization. It was developed for the RHUM-RUM experiment in the Indian
 Ocean ([Aminian et al. 2025, *GJI*](https://doi.org/10.1093/gji/ggaf253)) and
 runs unattended on any broadband OBS network stored as an SDS archive.
 
-<p align="center"><a href="docs/yv_inversion_2026-10-29/figures/paper_fig9_heatmaps.png"><img src="docs/yv_inversion_2026-10-29/figures/paper_fig9_heatmaps.png" width="900" alt="Shear-velocity posteriors beneath the eight RHUM-RUM stations"></a></p>
-<p align="center"><sub><b>Shear-velocity posteriors beneath the eight RHUM-RUM (YV) stations</b>, from the Somali plate to the Southwest, Central and Rodrigues ridges. Colour: posterior probability per depth row; red: median; white dashed: CRUST1.0.</sub></p>
+<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png" width="900" alt="Shear-velocity posteriors beneath the 20 inverted Pacific Array Young ORCA stations"></a></p>
+<p align="center"><sub><b>Shear-velocity posteriors beneath 20 Pacific Array Young ORCA (XE) stations.</b> Colour: posterior probability per depth row; red: median; white dashed: CRUST1.0.</sub></p>
 
 ## Contents
 
@@ -119,28 +119,27 @@ manifest. All network-specific values live in `pipeline/config.py`; see the
 
 ## Workflow, step by step
 
-Each step names its pipeline stage and the main function. Figures come from
-station **XE.CC11** (Pacific Array Young ORCA, 4636 m) and station **YV.RR52**
-(RHUM-RUM, Central Indian Ridge, 2918 m).
+The figures follow one station through the whole pipeline: **XE.CC11**
+(Pacific Array Young ORCA, 7.54°S 133.42°W, 4636 m water depth, April 2018 –
+May 2019). Steps 1 and 8 place it within the XE network.
 
 | Step | Stage | What it does |
 |---|---|---|
 | [1. Network and data](#1-network-and-data) | A | Read waveforms and StationXML responses |
-| [2. Response removal and spectra](#2-response-removal-and-spectra) | A | Decimate, remove responses, drop clipped data |
-| [3. Earthquakes and transients](#3-earthquakes-and-transients) | B | Mask earthquakes, remove periodic glitches |
-| [4. Tilt and coherent noise](#4-tilt-and-coherent-noise) | B | Remove tilt and horizontal-coherent noise from Z |
-| [5. Pressure-gauge calibration](#5-pressure-gauge-calibration) | D | Rayleigh-wave gain of each DPG |
-| [6. Coherence and window selection](#6-coherence-and-window-selection) | C | Select windows with high Z–P coherence |
-| [7. Compliance](#7-compliance) | C | Stacked compliance with errors and monthly stacks |
-| [8. Bayesian Vs inversion](#8-bayesian-vs-inversion) | E | Multi-chain inversion for Vs and Vp/Vs |
-| [9. Vs profiles and serpentinization](#9-vs-profiles-and-serpentinization) | F | Network profiles and serpentinization |
+| [2. Response removal and cleaning](#2-response-removal-and-cleaning) | A, B | Decimate, remove responses, drop clipped data, mask earthquakes |
+| [3. Tilt and coherent noise](#3-tilt-and-coherent-noise) | B | Remove tilt and horizontal-coherent noise from Z |
+| [4. Pressure-gauge calibration](#4-pressure-gauge-calibration) | D | Rayleigh-wave gain of the DPG |
+| [5. Coherence and window selection](#5-coherence-and-window-selection) | C | Select windows with high Z–P coherence |
+| [6. Compliance](#6-compliance) | C | Stacked compliance with errors and monthly stacks |
+| [7. Bayesian Vs inversion](#7-bayesian-vs-inversion) | E | Multi-chain inversion for Vs, Vp/Vs and gain |
+| [8. Vs profiles and serpentinization](#8-vs-profiles-and-serpentinization) | F | Station values and network profiles |
 
 ### 1. Network and data
 
 Waveforms are read from an SDS archive with their full StationXML responses;
-response epochs, units, timing and gaps are checked per station. The XE network
-has 30 Scripps broadband OBS (Trillium 240 + DPG, 50 Hz) at 4386–4824 m water
-depth, deployed April 2018 – May 2019 on ~40 Ma Pacific seafloor.
+response epochs, units, timing and gaps are checked per station. XE has 30
+Scripps broadband OBS (Trillium 240 + DPG, 50 Hz) at 4386–4824 m water depth on
+~40 Ma Pacific seafloor. CC11 is in the central (CC) line.
 
 ```bash
 python pipeline/fetch_inventory.py && python pipeline/fetch_catalog.py
@@ -148,22 +147,17 @@ python pipeline/a_preprocess.py CC11 --workers 8
 ```
 
 <p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig01_map.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig01_map.png" width="600" alt="XE broadband OBS network map with compliance status"></a></p>
-<p align="center"><sub><b>XE network.</b> Red: inverted (20 stations); orange: compliance only; grey: not processed.</sub></p>
+<p align="center"><sub><b>XE network.</b> Red: inverted (20 stations, including CC11); orange: compliance only; grey: not processed.</sub></p>
 
-### 2. Response removal and spectra
+### 2. Response removal and cleaning
 
 Each channel is decimated with an anti-alias filter and the instrument response
-is removed (displacement or acceleration for the seismometer, pascals for the
-DPG) with an explicit pre-filter. Ten-minute blocks containing clipped or flat
-samples are removed from all channels before decimation.
-
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png" width="850" alt="CC11 vertical and pressure PSDs before and after cleaning"></a></p>
-<p align="center"><sub><b>XE.CC11 spectra.</b> (a) Vertical acceleration after response removal (blue) and after cleaning (orange), median and 10–90 %, with the Peterson noise models. (b) Calibrated pressure. Green: compliance band.</sub></p>
-
-### 3. Earthquakes and transients
-
-Earthquake intervals are masked from a global catalogue with TiSKitPy, and
-periodic instrumental glitches are stacked and subtracted.
+is removed with an explicit pre-filter: acceleration or displacement for the
+seismometer, pascals for the DPG. Ten-minute blocks containing a clipped or
+flat sample are removed from all channels. Earthquakes are masked from the
+global catalogue with TiSKitPy, and STA/LTA picks local events. No hourly
+glitches were found on XE (fold strength below 2.0), so glitch removal is off
+for this network.
 
 ```python
 import tiskitpy
@@ -174,35 +168,33 @@ spans = tiskitpy.TimeSpans.from_eqs(
 )
 ```
 
-<p align="center"><a href="_Images/EQ_Removal.png"><img src="_Images/EQ_Removal.png" width="800" alt="Earthquake intervals excluded from processing"></a></p>
-<p align="center"><sub><b>YV.RR52 earthquake masking.</b> Intervals excluded before the transient estimate.</sub></p>
+<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png" width="850" alt="CC11 vertical and pressure PSDs before and after cleaning"></a></p>
+<p align="center"><sub><b>XE.CC11 spectra.</b> (a) Vertical acceleration after response removal (blue) and after cleaning (orange), median and 10–90 %, with the Peterson noise models. (b) Calibrated pressure. Green: compliance band.</sub></p>
 
-<p align="center"><a href="_Images/Glitch_Stack.png"><img src="_Images/Glitch_Stack.png" width="800" alt="RR52 periodic transient slices aligned and stacked"></a></p>
-<p align="center"><sub><b>YV.RR52 glitch stack.</b> Aligned slices of the hourly instrumental pulse; the clipping bounds define the samples used for its template.</sub></p>
-
-### 4. Tilt and coherent noise
+### 3. Tilt and coherent noise
 
 Hourly tilt angles from TiSKitPy's `CleanRotator` are median-smoothed and
-interpolated per sample, then horizontal-coherent noise is removed from the
-vertical only, in 24-h windows that avoid earthquakes.
+interpolated per sample. Horizontal-coherent noise is then removed from the
+vertical only, in 24-h windows that avoid the earthquake spans.
 
 ```python
 import compy, compy_cleaning as cleaning
 
 rotated = cleaning.rotate_smoothly(st, hour_centres, angles, azimuths)
-spans = cleaning.sta_lta_spans(rotated.select(component="Z")[0])
+local = cleaning.sta_lta_spans(rotated.select(component="Z")[0])
 cleaned = compy.remove_coherent_noise(rotated, 24, avoid_spans=spans, cover_all=True)
 ```
 
 <p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig04_tilt.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig04_tilt.png" width="800" alt="CC11 hourly tilt azimuth and incidence angle"></a></p>
 <p align="center"><sub><b>XE.CC11 tilt.</b> Hourly azimuth and incidence angle that minimize vertical variance, coloured by variance reduction.</sub></p>
 
-### 5. Pressure-gauge calibration
+### 4. Pressure-gauge calibration
 
-The DPG gain is fitted per teleseism (Mw ≥ 6) by comparing the measured
+The DPG gain is fitted per teleseism by comparing the measured
 pressure-to-acceleration ratio of the Rayleigh wave with the water-layer
-prediction, in bins with squared coherence ≥ 0.95. The station gain is the
-median of the accepted events.
+prediction, in bins of high coherence. The station gain is the median of the
+accepted events. For CC11 it is 0.698 ± 0.012 from 12 events, against 0.702
+from the independent BRUIT-FM microseism method.
 
 ```bash
 python _Example/3_DPG_Calibration.py SDS/ stationxml/ XE CC11 events.geojson
@@ -211,87 +203,104 @@ python _Example/3_DPG_Calibration.py SDS/ stationxml/ XE CC11 events.geojson
 <p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig05_calibration.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig05_calibration.png" width="850" alt="CC11 Rayleigh-wave DPG calibration"></a></p>
 <p align="center"><sub><b>XE.CC11 calibration.</b> (a) P–Z coherence of 12 teleseisms (M ≥ 7). (b) Measured, theoretical and corrected spectral ratios; gain g = 0.698 ± 0.012.</sub></p>
 
-<p align="center"><a href="docs/yv_compliance_2026-10-28/figures/gain_comparison.png"><img src="docs/yv_compliance_2026-10-28/figures/gain_comparison.png" width="650" alt="YV DPG gains from three methods"></a></p>
-<p align="center"><sub><b>YV gains.</b> ComPy Rayleigh-wave gains against the BRUIT-FM gains and Table 1 of Aminian et al. (2025).</sub></p>
+### 5. Coherence and window selection
 
-### 6. Coherence and window selection
-
-The record is cut into non-overlapping 35-min windows. A window is kept when
-its median Z–P coherence in the compliance band exceeds the threshold
-(0.9, or 0.8 for short records) and its pressure and acceleration levels lie inside the selection gates.
+The cleaned record is cut into non-overlapping 35-min windows. A window is kept
+when its median Z–P coherence in the compliance band exceeds 0.9 and its
+pressure and acceleration levels lie inside the selection gates. CC11 keeps
+7314 windows over 14 months.
 
 <p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png" width="800" alt="CC11 pressure and vertical spectrograms and Z–P coherogram"></a></p>
 <p align="center"><sub><b>XE.CC11, February 2019.</b> Pressure and vertical spectrograms and the Z–P coherogram; dashed lines bound the compliance band.</sub></p>
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig07_windows.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig07_windows.png" width="800" alt="CC11 selected windows: spectra, coherence and compliance"></a></p>
-<p align="center"><sub><b>XE.CC11 selected windows</b> (150 of 7314 shown): vertical and pressure spectra, coherence and per-window compliance with the stacked estimate.</sub></p>
-
-### 7. Compliance
+### 6. Compliance
 
 Compliance comes from cross-spectra stacked over all selected windows, with
 the gravity and wave-attraction corrections and the Bendat & Piersol error.
-Monthly stacks give the data covariance and track changes in time.
+Monthly stacks give the data covariance and track changes in time. For CC11
+the band is 4.9–14.6 mHz, the mean coherence 0.97, and the monthly stacks stay
+within −0.9 % and +1.2 % of the full stack.
 
 ```python
 from compy_processing import GJI2025, stacked_compliance
 
-windows = compy.split_stream(cleaned.select(channel="BHZ") + cleaned.select(channel="BDH"), 2100)
-result = stacked_compliance(windows, depth, gain, band=(0.007, 0.019), criteria=GJI2025, nseg=1024)
+pair = cleaned.select(channel="BHZ") + cleaned.select(channel="BDH")
+windows = compy.split_stream(pair, 2100)  # 35-min windows
+result = stacked_compliance(windows, 4636, 0.698, band=(0.0049, 0.0146), criteria=GJI2025, nseg=1024)
 result.compliance, result.uncertainty, result.n_windows
 ```
 
-<p align="center"><a href="docs/yv_compliance_2026-10-28/figures/RR52_compliance_panels.png"><img src="docs/yv_compliance_2026-10-28/figures/RR52_compliance_panels.png" width="800" alt="RR52 spectra, coherence and compliance"></a></p>
-<p align="center"><sub><b>YV.RR52 compliance</b> from 3366 windows, 7.3–17.1 mHz: vertical and pressure spectra, Z–P coherence and the stacked compliance.</sub></p>
+<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig07_windows.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig07_windows.png" width="800" alt="CC11 selected windows: spectra, coherence and compliance"></a></p>
+<p align="center"><sub><b>XE.CC11 selected windows</b> (150 of 7314 shown): corrected vertical acceleration, calibrated pressure, coherence and per-window compliance with the stacked estimate (red).</sub></p>
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig08_compliance.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig08_compliance.png" width="900" alt="Normalized compliance of the XE stations by sub-array"></a></p>
-<p align="center"><sub><b>XE network compliance</b> by sub-array, ±1σ of the full covariance.</sub></p>
+### 7. Bayesian Vs inversion
 
-### 8. Bayesian Vs inversion
-
-The model is a Hamilton sediment layer of free thickness over crustal layers
-that double in thickness down to the CRUST1.0 Moho, above a mantle half-space.
-Eight DRAM chains with parallel tempering sample Vs, crustal Vp/Vs (free in
-1.7–2.4), the smoothing weight and the pressure gain (±5 %).
+The model is a Hamilton sediment layer of free thickness over crustal layers of
+100, 200, 400, 800 and 1600 m and one more down to the CRUST1.0 Moho, above a
+mantle half-space. Eight DRAM chains with parallel tempering sample Vs, crustal
+Vp/Vs (1.7–2.4), the smoothing weight and the pressure gain (±5 %).
 
 ```python
 import compy_inversion as ci
 
-data = ci.ComplianceData.from_npz("RR52_compliance_compy.npz", gain_rel=0.0, floor_rel=0.01)
-model = ci.CrustalModel(moho_depth=moho, sediment_max=1000.0)
+data = ci.ComplianceData.from_npz("CC11_compliance_compy.npz", gain_rel=0.0, floor_rel=0.01)
+model = ci.CrustalModel(moho_depth=7010.0, sediment_max=1000.0)
 post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000, gain_bounds=(0.95, 1.05))
 post.summary()["max_rhat"], post.vs_quantiles(depths)
 ```
 
-<p align="center"><a href="docs/yv_inversion_2026-10-29/figures/RR52_paper.png"><img src="docs/yv_inversion_2026-10-29/figures/RR52_paper.png" width="900" alt="RR52 data fit, misfit and Vs posterior"></a></p>
-<p align="center"><sub><b>YV.RR52 inversion.</b> (a) Measured compliance and posterior predictions. (b) Misfit of each chain; χ²/N = 3.3/9, R-hat 1.007. (c) Vs posterior with the median and CRUST1.0.</sub></p>
+<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/CC11_inversion.png"><img src="docs/xe_young_orca_2026-10-29/figures/CC11_inversion.png" width="900" alt="CC11 data fit, misfit and Vs posterior"></a></p>
+<p align="center"><sub><b>XE.CC11 inversion.</b> (a) Measured compliance and posterior predictions. (b) Misfit of each chain; χ²/N = 3.2/9, R-hat 1.009, bulk ESS ≥ 1180. (c) Vs posterior with the median and CRUST1.0.</sub></p>
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png" width="900" alt="Vs posteriors of the 20 inverted XE stations"></a></p>
-<p align="center"><sub><b>XE Vs posteriors</b> for the 20 inverted stations.</sub></p>
+### 8. Vs profiles and serpentinization
 
-### 9. Vs profiles and serpentinization
-
-Posterior draws are pooled per region and converted to serpentinization with
-the Miller & Christensen (1997) relation used in Aminian et al. (2025, Fig. 10c):
-0 % at 4.2 km/s, 100 % at 2.2 km/s. The conversion attributes all of the
-Vs reduction to serpentinization, so it gives an upper bound.
+Posterior draws are converted to serpentinization with the Miller & Christensen
+(1997) relation used in Aminian et al. (2025, Fig. 10c): 0 % at 4.2 km/s and
+100 % at 2.2 km/s. The conversion attributes all of the Vs reduction to
+serpentinization, so it gives an upper bound.
 
 ```python
 beta_q = post.serpentinization_quantiles(z)   # (5 quantiles, len(z)) in %
 ```
 
-<p align="center"><a href="docs/yv_inversion_2026-10-29/figures/paper_fig10_profiles.png"><img src="docs/yv_inversion_2026-10-29/figures/paper_fig10_profiles.png" width="900" alt="YV median Vs profiles and serpentinization"></a></p>
-<p align="center"><sub><b>YV.</b> Median Vs on the oceanic plate and at the ridges, and the corresponding serpentinization.</sub></p>
+XE.CC11, median (5–95 %):
+
+| Depth | Vs [m/s] | Serpentinization upper bound [%] |
+|---|---|---|
+| 0.5 km | 2530 (1942–3428) | 84 (39–100) |
+| 1 km | 2848 (2387–3369) | 68 (42–91) |
+| 2 km | 3168 (2890–3482) | 52 (36–66) |
+| 4 km | 3496 (3261–3976) | 35 (11–47) |
+
+Sediment thickness 121 m (20–182), crustal Vp/Vs 2.17 (1.88–2.37).
 
 <p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig10_profiles.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig10_profiles.png" width="900" alt="XE Vs profiles by sub-array and pooled posterior"></a></p>
-<p align="center"><sub><b>XE.</b> Median Vs by sub-array, the pooled posterior (free Vp/Vs and Vp/Vs = 1.85) and the serpentinization upper bound.</sub></p>
+<p align="center"><sub><b>XE network.</b> (a) Median Vs by sub-array (CC11 in Central). (b) Pooled posterior with free Vp/Vs and with Vp/Vs = 1.85. (c) Serpentinization upper bound.</sub></p>
 
 ## Results
 
+### Pacific Array Young ORCA (XE), Pacific Ocean
+
+30 stations on ~40 Ma seafloor, 20 inverted, 18 with a Rayleigh-wave gain.
+
+- Compliance at 4.9–14.6 mHz with Z–P coherence 0.93–0.97 and thousands of
+  windows per station; month-to-month variation of 1–3 % (CC07: ±10–25 %).
+- 80–170 m of sediment, then Vs of about 2.4 km/s at 0.3 km, 2.9 km/s at 1 km
+  and 3.2 km/s at 2 km.
+- Rayleigh-wave gains agree with the independent BRUIT-FM microseism gains
+  (median ratio ≈ 0.99).
+
+<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig08_compliance.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig08_compliance.png" width="900" alt="Normalized compliance of the XE stations by sub-array"></a></p>
+<p align="center"><sub><b>XE compliance</b> by sub-array, ±1σ of the full covariance.</sub></p>
+
+Full report (PDF, LaTeX source and tables):
+[docs/xe_young_orca_2026-10-29](docs/xe_young_orca_2026-10-29/README.md).
+
 ### RHUM-RUM (YV), Indian Ocean
 
-Eight broadband stations, 2012–2013. Final inversion: free Vp/Vs, gain
-sampled, stable and post-jump epochs inverted together. Vs in m/s, median
-(5–95 %).
+Eight broadband stations, 2012–2013, the network of Aminian et al. (2025).
+Final inversion: free Vp/Vs, gain sampled, stable and post-jump epochs inverted
+together. Vs in m/s, median (5–95 %).
 
 | Station | Setting | χ²/N | R-hat | Sediment [m] | Vs 0.5 km | Vs 1 km | Vs 2 km |
 |---|---|---|---|---|---|---|---|
@@ -305,23 +314,9 @@ sampled, stable and post-jump epochs inverted together. Vs in m/s, median
 | RR52 | CIR | 3.3/9 | 1.007 | 46 (6–81) | 2823 (2332–3632) | 3193 (2779–3672) | 3590 (3283–4013) |
 
 RR38's pressure channel changes behaviour after its sensitivity jump, so RR38
-is excluded from the interpretation. Full tables, variants and figures:
+is excluded from the interpretation. Figures, variants and full tables:
 [docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md) and
 [docs/yv_compliance_2026-10-28](docs/yv_compliance_2026-10-28/README.md).
-
-### Pacific Array Young ORCA (XE), Pacific Ocean
-
-30 stations on ~40 Ma seafloor, 20 inverted, 18 with a Rayleigh-wave gain.
-
-- Compliance at 4.9–14.6 mHz with Z–P coherence 0.93–0.97 and thousands of
-  windows per station; month-to-month variation of 1–3 % (CC07: ±10–25 %).
-- 80–170 m of sediment, then Vs of about 2.4 km/s at 0.3 km, 2.9 km/s at 1 km
-  and 3.2 km/s at 2 km.
-- Rayleigh-wave gains agree with the independent BRUIT-FM microseism gains
-  (median ratio ≈ 0.99).
-
-Full report (PDF, LaTeX source and tables):
-[docs/xe_young_orca_2026-10-29](docs/xe_young_orca_2026-10-29/README.md).
 
 ## Repository structure
 

@@ -103,16 +103,8 @@ vertical channel's elevation. Spectra use a Hann window with 50 % overlap and
 The theoretical uncertainty is `|η|·sqrt(1−γ²)/(γ·sqrt(2n))` with amplitude
 coherence γ.
 
-<p align="center"><a href="../_Images/RR52_window_selection.png"><img src="../_Images/RR52_window_selection.png" width="900" alt="RR52 pressure and vertical spectrograms, coherogram and selected windows"></a></p>
-
-**Window selection (YV.RR52).** Pressure and vertical spectrograms, the
-pressure–vertical coherogram and the windows accepted by the window-based
-estimator.
-
-<p align="center"><a href="../_Images/Compliance.png"><img src="../_Images/Compliance.png" width="800" alt="RR52 spectra, coherence and compliance curves"></a></p>
-
-**Window-based compliance (YV.RR52).** Vertical and pressure PSDs, coherence and
-the ensemble of accepted compliance curves with their median.
+Figures of every processing step for one station are in the
+[README workflow](../README.md#workflow-step-by-step).
 
 ## Bayesian Vs inversion (`compy_inversion`)
 
@@ -281,11 +273,6 @@ terms; use `stacked_compliance` for quality selection and corrections.
 Export figures explicitly with `matplotlib.pyplot.savefig(...)`.
 `final_plot(..., image_dir=...)` expects `RR36.png`, `RR38.png`, `RR40.png`,
 `RR50.png`, `RR52.png` and `Rift_valley.png` in `image_dir`.
-
-<p align="center"><a href="../_Images/Transferfunction.png"><img src="../_Images/Transferfunction.png" width="800" alt="Transfer-function magnitude and phase versus frequency"></a></p>
-
-**Transfer function.** Magnitude and phase between the selected channels, used
-for coherent-noise removal.
 
 ## Testing and reproducible runs
 
