@@ -10,7 +10,7 @@ variant, plus network-pooled profiles. The LaTeX report reads this file.
 import json
 
 import numpy as np
-
+from config import RESULTS, STATIONS, WORK  # noqa: E402
 from f_figures import (
     MIN_WINDOWS,
     compliance_summary,
@@ -20,8 +20,7 @@ from f_figures import (
     usable,
 )
 
-import compy_inversion as ci  # noqa: E402  (on sys.path through f_figures/e_invert)
-from config import RESULTS, STATIONS, WORK  # noqa: E402
+import compy.inversion.dram as ci  # noqa: E402  (on sys.path through f_figures/e_invert)
 
 DEPTHS = np.array([100.0, 300.0, 500.0, 1000.0, 2000.0, 3000.0, 4000.0, 6000.0])
 

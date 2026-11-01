@@ -181,7 +181,7 @@ def common_intervals(z, one, two):
 
 def clean_windows(stream, rotate):
     """Apply compy.Rotate window by window; failed windows are dropped."""
-    from compy_streams import split_stream
+    from compy.streams import split_stream
 
     raw, clean, rows = Stream(), Stream(), []
     for window in split_stream(stream, WINDOW_HOURS * 3600):
@@ -290,7 +290,7 @@ def triplet_job(z, one, two, files):
             continue
         used_days += len(chunk)
         for triple in common_intervals(*streams):
-            raw, clean, window_rows = clean_windows(triple, compy.Rotate)
+            raw, clean, window_rows = clean_windows(triple, compy.correct_tilt)
             rows.extend(window_rows)
             for kind, traces in (("raw", raw), ("clean", clean)):
                 traces.merge(method=1, fill_value=None)

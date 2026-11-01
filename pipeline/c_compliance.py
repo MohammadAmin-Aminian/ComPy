@@ -25,19 +25,18 @@ import sys
 from pathlib import Path
 
 import numpy as np
+from config import BRUITFM_GAINS, COMPY, INVENTORY, RESULTS, WORK, P, Z, seed_id
 from obspy import UTCDateTime, read, read_inventory
-
-from config import BRUITFM_GAINS, COMPY, INVENTORY, P, RESULTS, WORK, Z, seed_id
 
 sys.path.insert(0, str(COMPY))
 
 import compy  # noqa: E402
-from compy_numerics import GRAVITY  # noqa: E402
-from compy_processing import (  # noqa: E402
+from compy.compliance import (  # noqa: E402
     SelectionCriteria,
     coherent_band,
     stacked_compliance,
 )
+from compy.numerics import GRAVITY  # noqa: E402
 
 WINDOW_S = 2100.0  # 35 min (paper section 4.2)
 NSEG = 1024  # 819.2 s Welch segments at 1.25 Hz, df = 1.22 mHz

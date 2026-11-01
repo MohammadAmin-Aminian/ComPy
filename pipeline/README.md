@@ -31,7 +31,7 @@ serpentinization), and `g_report.py` collects the numbers of a report.
 `a_download.py` replaces `a_fast.py` when the raw data must come from an FDSN
 dataselect service.
 Serpentinization is computed from the posterior draws with
-`compy_inversion.serpentinization` (0 % at 4.2 km/s, 100 % at 2.2 km/s).
+`compy.inversion.serpentinization` (0 % at 4.2 km/s, 100 % at 2.2 km/s).
 
 ## Running
 

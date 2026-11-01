@@ -30,14 +30,21 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
+from config import (  # noqa: E402
+    FIGURES,
+    INVENTORY,
+    NETWORK,
+    RESULTS,
+    ROOT,
+    STATIONS,
+    WORK,
+)
+from e_invert import build_model  # noqa: E402
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 from obspy import UTCDateTime, read, read_inventory  # noqa: E402
 
-from config import FIGURES, INVENTORY, NETWORK, RESULTS, ROOT, STATIONS, WORK  # noqa: E402
-from e_invert import build_model  # noqa: E402
-
-import compy_inversion as ci  # noqa: E402
-from compy_processing import spectra  # noqa: E402
+import compy.inversion.dram as ci  # noqa: E402
+from compy.compliance import spectra  # noqa: E402
 
 VIRIDIS = plt.get_cmap("viridis")
 CMAP = LinearSegmentedColormap.from_list(
@@ -440,7 +447,7 @@ def fig07_windows(station, summ):
     rng = np.random.default_rng(1)
     pick = sorted(rng.choice(starts, min(150, len(starts)), replace=False))
     gain, depth, band = float(d["gain"]), float(d["depth"]), d["band"]
-    from compy_processing import gravity_corrected_compliance
+    from compy.compliance import gravity_corrected_compliance
 
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
     segs = [

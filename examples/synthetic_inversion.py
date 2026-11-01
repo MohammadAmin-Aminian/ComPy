@@ -1,8 +1,9 @@
 """Small offline numerical example: python examples/synthetic_inversion.py."""
 
 import numpy as np
-import inv_compy as inv
+
 from compy import __version__
+from compy.inversion import metropolis, propagator
 
 
 def main():
@@ -14,8 +15,8 @@ def main():
         ]
     )
     f = np.array([0.005, 0.007, 0.01, 0.015])
-    observed = inv.calc_norm_compliance(4000, f, model)
-    result = inv.invert_compliance_beta(
+    observed = propagator.normalized_compliance(4000, f, model)
+    result = metropolis.invert_compliance_beta(
         observed,
         f,
         4000,

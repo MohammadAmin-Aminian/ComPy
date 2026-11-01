@@ -26,15 +26,15 @@ import warnings
 from pathlib import Path
 
 import numpy as np
+from config import CATALOG, CHANNELS, COMPY, DEGLITCH, WORK, P, Z
 from obspy import Stream, UTCDateTime, read
-
-from config import CATALOG, CHANNELS, COMPY, DEGLITCH, P, WORK, Z
 
 sys.path.insert(0, str(COMPY))
 
-import compy  # noqa: E402
-import compy_cleaning as cleaning  # noqa: E402
 import tiskitpy as tiskit  # noqa: E402
+
+import compy  # noqa: E402
+import compy.cleaning as cleaning  # noqa: E402
 
 MIN_SEGMENT_H = 13
 DEGLITCH_BLOCK_D = 15

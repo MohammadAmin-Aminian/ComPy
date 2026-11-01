@@ -10,14 +10,15 @@ defines the prior). Differences: per-layer adaptive step sizes during burn-in,
 dispersed chain starts, longer chains, rank-normalized R-hat and bulk ESS.
 """
 
-import sys
 import json
+import sys
 import time
 from multiprocessing import Pool
 
 import numpy as np
-import inv_compy as inv
-from compy_diagnostics import rank_rhat_ess
+
+from compy.diagnostics import rank_rhat_ess
+from compy.inversion import metropolis, propagator
 
 ITER, ADAPT, BURN = 60_000, 10_000, 15_000
 OUT = sys.argv[1]
@@ -33,7 +34,7 @@ START = TRUTH.copy()
 START[0, 3] = 1800.0  # biased prior-defining model, as in the repo
 F = np.linspace(0.005, 0.02, 12)
 DEPTH = 4000.0
-CLEAN = inv.calc_norm_compliance(DEPTH, F, TRUTH)
+CLEAN = propagator.normalized_compliance(DEPTH, F, TRUTH)
 UNC = 0.03 * np.abs(CLEAN)
 OBS = CLEAN + np.random.default_rng(2026).normal(0, UNC)
 
@@ -52,7 +53,7 @@ def run_chain(k):
     state = START.copy()
     state[0, 3], state[1, 3], state[0, 0], state[1, 0] = vs1, vs2, h1, 1100.0 - h1
     info = {}
-    out = inv.invert_compliance_beta(
+    out = metropolis.invert_compliance_beta(
         OBS,
         F,
         DEPTH,

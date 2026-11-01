@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
-import inv_compy as inv
+
+from compy.inversion import metropolis, models, occam, propagator
 
 
 @pytest.fixture
@@ -13,13 +14,13 @@ def problem():
         ]
     )
     f = np.array([0.005, 0.007, 0.01, 0.015])
-    return model, f, inv.calc_norm_compliance(4000, f, model)
+    return model, f, propagator.normalized_compliance(4000, f, model)
 
 
 def test_initial_state_and_every_saved_prediction_match_model(problem):
     model, f, data = problem
     chain, profiles, prior, misfits, predictions, likelihood, rate = (
-        inv.invert_compliance_beta(
+        metropolis.invert_compliance_beta(
             data,
             f,
             4000,
@@ -38,7 +39,7 @@ def test_initial_state_and_every_saved_prediction_match_model(problem):
     assert likelihood[0, 0] == 1
     for i in range(25):
         np.testing.assert_allclose(
-            predictions[i], inv.calc_norm_compliance(4000, f, chain[:, :, i])
+            predictions[i], propagator.normalized_compliance(4000, f, chain[:, :, i])
         )
         np.testing.assert_equal(chain[-1, :, i], model[-1])
         assert np.isclose(chain[:-1, 0, i].sum(), model[:-1, 0].sum())
@@ -54,9 +55,9 @@ def test_reproducible_sampler_does_not_reset_global_rng(problem):
     np.random.seed(8)
     expected = np.random.random(2)
     np.random.seed(8)
-    first = inv.invert_compliance(data, f, 4000, **kwargs)
+    first = metropolis.invert_compliance(data, f, 4000, **kwargs)
     np.testing.assert_equal(np.random.random(2), expected)
-    second = inv.invert_compliance(data, f, 4000, **kwargs)
+    second = metropolis.invert_compliance(data, f, 4000, **kwargs)
     np.testing.assert_equal(first[0], second[0])
     assert first[1] is None
 
@@ -64,11 +65,11 @@ def test_reproducible_sampler_does_not_reset_global_rng(problem):
 def test_required_uncertainties_and_invalid_frequency(problem):
     model, f, data = problem
     with pytest.raises(ValueError, match="s is required"):
-        inv.invert_compliance(data, f, 4000, starting_model=model, iteration=2)
+        metropolis.invert_compliance(data, f, 4000, starting_model=model, iteration=2)
     with pytest.raises(ValueError, match="frequencies"):
-        inv.calc_norm_compliance(4000, [0], model)
+        propagator.normalized_compliance(4000, [0], model)
     with pytest.raises(ValueError), pytest.warns(DeprecationWarning):
-        inv.Model_V2(1, n_layer=4)
+        models.rhumrum_starting_model(1, n_layer=4)
 
 
 def test_forward_layer_split_invariance(problem):
@@ -76,8 +77,8 @@ def test_forward_layer_split_invariance(problem):
     split = np.vstack([model[0], model[0], model[1:]])
     split[:2, 0] = model[0, 0] / 2
     np.testing.assert_allclose(
-        inv.calc_norm_compliance(4000, f, model),
-        inv.calc_norm_compliance(4000, f, split),
+        propagator.normalized_compliance(4000, f, model),
+        propagator.normalized_compliance(4000, f, split),
         rtol=1e-8,
     )
 
@@ -87,32 +88,34 @@ def test_homogeneous_halfspace_static_elastic_limit():
     rho, vs, nu = 3000.0, 3000.0, 0.25
     vp = vs * np.sqrt((1 - nu) / (0.5 - nu))
     model = np.array([[100.0, rho, vp, vs], [0.0, rho, vp, vs]])
-    result = inv.calc_norm_compliance(0.1, np.array([1e-4]), model)
+    result = propagator.normalized_compliance(0.1, np.array([1e-4]), model)
     np.testing.assert_allclose(result, (1 - nu) / (rho * vs**2), rtol=2e-7)
 
 
 def test_scalar_and_equivalent_per_layer_steps_give_identical_chains(problem):
     model, f, data = problem
     kwargs = dict(starting_model=model, s=0.03 * data, iteration=200, alpha=0, seed=1)
-    scalar = inv.invert_compliance_beta(data, f, 4000, sigma_v=40, sigma_h=9, **kwargs)
-    layered = inv.invert_compliance_beta(
+    scalar = metropolis.invert_compliance_beta(
+        data, f, 4000, sigma_v=40, sigma_h=9, **kwargs
+    )
+    layered = metropolis.invert_compliance_beta(
         data, f, 4000, sigma_v=[40, 40], sigma_h=[9], **kwargs
     )
     np.testing.assert_array_equal(scalar[0], layered[0])
     with pytest.raises(ValueError, match="sigma_v must be a scalar or have 2"):
-        inv.invert_compliance_beta(data, f, 4000, sigma_v=[40, 40, 40], **kwargs)
+        metropolis.invert_compliance_beta(data, f, 4000, sigma_v=[40, 40, 40], **kwargs)
     with pytest.raises(ValueError, match="sigma_h must be finite and positive"):
-        inv.invert_compliance_beta(data, f, 4000, sigma_h=[-1.0], **kwargs)
+        metropolis.invert_compliance_beta(data, f, 4000, sigma_h=[-1.0], **kwargs)
 
 
 def test_adaptation_tunes_steps_then_freezes(problem):
     model, f, data = problem
     kwargs = dict(starting_model=model, s=0.03 * data, alpha=0, seed=2, sigma_v=5)
     short, long = {}, {}
-    inv.invert_compliance_beta(
+    metropolis.invert_compliance_beta(
         data, f, 4000, iteration=600, adapt_until=400, diagnostics=short, **kwargs
     )
-    inv.invert_compliance_beta(
+    metropolis.invert_compliance_beta(
         data, f, 4000, iteration=900, adapt_until=400, diagnostics=long, **kwargs
     )
     # Same seed, same adaptation window: frozen scales do not depend on run length.
@@ -127,7 +130,7 @@ def test_initial_state_starts_chain_but_keeps_prior_from_starting_model(problem)
     model, f, data = problem
     state = model.copy()
     state[0, 3], state[0, 0], state[1, 0] = 900.0, 150.0, 950.0
-    chain, _, prior, *_ = inv.invert_compliance_beta(
+    chain, _, prior, *_ = metropolis.invert_compliance_beta(
         data,
         f,
         4000,
@@ -143,7 +146,7 @@ def test_initial_state_starts_chain_but_keeps_prior_from_starting_model(problem)
     outside = state.copy()
     outside[0, 3] = 1900.0  # above the beta prior bound 1.2 x 1500, below Vp
     with pytest.raises(ValueError, match="initial_state"):
-        inv.invert_compliance_beta(
+        metropolis.invert_compliance_beta(
             data,
             f,
             4000,
@@ -155,7 +158,7 @@ def test_initial_state_starts_chain_but_keeps_prior_from_starting_model(problem)
     thicker = state.copy()
     thicker[1, 0] += 10  # changes the conserved total finite thickness
     with pytest.raises(ValueError, match="initial_state"):
-        inv.invert_compliance_beta(
+        metropolis.invert_compliance_beta(
             data,
             f,
             4000,
@@ -231,7 +234,7 @@ def test_forward_model_matches_independent_propagator(H):
     f = np.geomspace(0.002, 1.5 * np.sqrt(9.81 / (2 * np.pi * H)), 9)
     for model in (crust_lvz, soft):
         np.testing.assert_allclose(
-            inv.calc_norm_compliance(H, f, model),
+            propagator.normalized_compliance(H, f, model),
             _reference_compliance(H, f, model),
             rtol=2e-5,
         )
@@ -239,23 +242,25 @@ def test_forward_model_matches_independent_propagator(H):
 
 def test_resampled_model_has_identical_compliance(problem):
     model, f, data = problem
-    fine, mid = inv.resample_model(model, 75, max_depth=3000)
+    fine, mid = propagator.resample_model(model, 75, max_depth=3000)
     assert np.isclose(fine[:-1, 0].sum(), 3000) and len(mid) == len(fine) - 1
-    np.testing.assert_allclose(inv.calc_norm_compliance(4000, f, fine), data, rtol=1e-8)
+    np.testing.assert_allclose(
+        propagator.normalized_compliance(4000, f, fine), data, rtol=1e-8
+    )
 
 
 def test_sensitivity_kernels_integrate_to_uniform_perturbation(problem):
     model, f, data = problem
-    z, K = inv.compliance_kernels(4000, f, model, dz=100, max_depth=12000)
+    z, K = propagator.compliance_kernels(4000, f, model, dz=100, max_depth=12000)
     assert K.shape == (len(f), len(z))
     # A uniformly stiffer crust lowers compliance. Individual slices can have
     # small positive kernels: with Vp fixed, raising Vs also lowers lambda
     # (confirmed with the independent propagator above).
     assert np.all(K.sum(axis=1) < 0)
-    fine, _ = inv.resample_model(model, 100, 12000)
+    fine, _ = propagator.resample_model(model, 100, 12000)
     scaled = fine.copy()
     scaled[:-1, 3] *= 1.01
-    direct = np.log(inv.calc_norm_compliance(4000, f, scaled) / data) / 0.01
+    direct = np.log(propagator.normalized_compliance(4000, f, scaled) / data) / 0.01
     np.testing.assert_allclose((K * 0.1).sum(axis=1), direct, rtol=0.03)
     # Longer water waves sense deeper: below 6 km the lowest frequency has the
     # largest sensitivity and the highest frequency the smallest.
@@ -274,7 +279,7 @@ def test_occam_reaches_target_smoothly_from_different_starts():
         float,
     )
     f = np.geomspace(0.004, 0.018, 10)
-    clean = inv.calc_norm_compliance(4200, f, truth)
+    clean = propagator.normalized_compliance(4200, f, truth)
     s = 0.02 * clean
     data = clean + np.random.default_rng(5).normal(0, s)
     thick = 200 * 1.3 ** np.arange(9)
@@ -289,7 +294,7 @@ def test_occam_reaches_target_smoothly_from_different_starts():
     results = []
     for start in (1500.0, 3000.0):
         grid[:-1, 3] = np.minimum(start, 0.9 * grid[:-1, 2])
-        res = inv.invert_occam(data, f, 4200, grid, s)
+        res = occam.invert_occam(data, f, 4200, grid, s)
         assert res["chi2"] <= len(f) + 1e-9
         assert all(
             np.diff([h["roughness"] for h in res["history"] if h["chi2"] <= len(f)])
@@ -311,7 +316,7 @@ def test_explicit_bounds_and_fixed_geometry(problem):
         sigma_v=300,
         adapt_until=200,
     )
-    chain = inv.invert_compliance_beta(
+    chain = metropolis.invert_compliance_beta(
         data, f, 4000, vs_bounds=(1000, [2900, 4000]), vary_thickness=False, **kwargs
     )[0]
     assert np.all(chain[:, 0, :] == model[:, 0, None])  # geometry fixed
@@ -321,7 +326,7 @@ def test_explicit_bounds_and_fixed_geometry(problem):
     assert chain[1, 3].max() > 3500 * 1.1 or chain[1, 3].min() < 3500 * 0.9
     for bad in [(3000, 1000), (0, 2000), ([1000], 3000), 5]:
         with pytest.raises(ValueError, match="vs_bounds"):
-            inv.invert_compliance_beta(data, f, 4000, vs_bounds=bad, **kwargs)
+            metropolis.invert_compliance_beta(data, f, 4000, vs_bounds=bad, **kwargs)
 
 
 def test_hierarchical_smoothing_weight_is_sampled_within_bounds(problem):
@@ -336,14 +341,14 @@ def test_hierarchical_smoothing_weight_is_sampled_within_bounds(problem):
         vary_thickness=False,
     )
     info = {}
-    inv.invert_compliance_beta(
+    metropolis.invert_compliance_beta(
         data, f, 4000, alpha=1e-5, alpha_bounds=(1e-7, 1e-3), diagnostics=info, **kwargs
     )
     trace = info["alpha"]
     assert trace.shape == (300,) and trace[0] == 1e-5
     assert np.all((trace >= 1e-7) & (trace <= 1e-3)) and np.ptp(trace) > 0
     again = {}
-    inv.invert_compliance_beta(
+    metropolis.invert_compliance_beta(
         data,
         f,
         4000,
@@ -355,7 +360,7 @@ def test_hierarchical_smoothing_weight_is_sampled_within_bounds(problem):
     np.testing.assert_array_equal(trace, again["alpha"])
     for bad in [(1e-3, 1e-7), (1e-4, 1e-3), (-1, 1)]:
         with pytest.raises(ValueError, match="alpha_bounds"):
-            inv.invert_compliance_beta(
+            metropolis.invert_compliance_beta(
                 data, f, 4000, alpha=1e-5, alpha_bounds=bad, **kwargs
             )
 
@@ -370,9 +375,9 @@ def test_hierarchical_alpha_conditional_matches_gamma():
         [[500.0, 2500, 5000, 1500], [500.0, 2600, 5200, 2500], [0, 3300, 8000, 4500]]
     )
     f = np.array([0.006, 0.012])
-    data = inv.calc_norm_compliance(4000, f, model)
+    data = propagator.normalized_compliance(4000, f, model)
     info = {}
-    inv.invert_compliance_beta(
+    metropolis.invert_compliance_beta(
         data,
         f,
         4000,
@@ -387,9 +392,9 @@ def test_hierarchical_alpha_conditional_matches_gamma():
         vary_thickness=False,
         diagnostics=info,
     )
-    from compy_numerics import roughness
+    from compy.numerics import roughness
 
-    R = roughness(inv._depth_profile(model, np.arange(1000)), 2)
+    R = roughness(models._depth_profile(model, np.arange(1000)), 2)
     draws = info["alpha"][1:]
     k = 1  # one interface between the two finite layers
     np.testing.assert_allclose(draws.mean(), (k / 2) / (R / 2), rtol=0.06)
@@ -406,8 +411,8 @@ def test_adjacent_interface_move_shifts_one_interface_only():
         ]
     )
     f = np.geomspace(0.004, 0.018, 6)
-    data = inv.calc_norm_compliance(4200, f, model)
-    chain = inv.invert_compliance_beta(
+    data = propagator.normalized_compliance(4200, f, model)
+    chain = metropolis.invert_compliance_beta(
         data,
         f,
         4200,
@@ -428,7 +433,7 @@ def test_adjacent_interface_move_shifts_one_interface_only():
     assert np.all(moved.sum(axis=0) <= 1)  # never more than one interface per step
     assert np.allclose(depths[-1], model[:-1, 0].sum())
     with pytest.raises(ValueError, match="interface_move"):
-        inv.invert_compliance_beta(
+        metropolis.invert_compliance_beta(
             data,
             f,
             4200,
@@ -451,8 +456,8 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
         return_profiles=False,
         vary_thickness=False,
     )
-    diag = inv.invert_compliance_beta(data, f, 4000, s=s, **kwargs)
-    full = inv.invert_compliance_beta(
+    diag = metropolis.invert_compliance_beta(data, f, 4000, s=s, **kwargs)
+    full = metropolis.invert_compliance_beta(
         data, f, 4000, s=None, data_covariance=np.diag(s**2), **kwargs
     )
     np.testing.assert_allclose(full[0], diag[0])  # same chain
@@ -463,7 +468,7 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
     cov = np.diag((0.01 * data) ** 2) + np.outer(g, g)
     trial = model.copy()
     trial[:, 3] *= 1.02  # ~4 % lower compliance
-    info_full = inv.invert_compliance_beta(
+    info_full = metropolis.invert_compliance_beta(
         data,
         f,
         4000,
@@ -475,7 +480,7 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
         return_profiles=False,
         vary_thickness=False,
     )[3][0, 0]
-    info_diag = inv.invert_compliance_beta(
+    info_diag = metropolis.invert_compliance_beta(
         data,
         f,
         4000,
@@ -489,14 +494,14 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
     assert info_full < info_diag
     for bad in (np.eye(3), -np.eye(len(f)), np.triu(np.ones((len(f), len(f))))):
         with pytest.raises(ValueError, match="data_covariance"):
-            inv.invert_compliance_beta(
+            metropolis.invert_compliance_beta(
                 data, f, 4000, s=None, data_covariance=bad, **kwargs
             )
 
 
 def test_brocher_coupling_keeps_vp_and_density_tied_to_vs(problem):
     model, f, data = problem
-    chain = inv.invert_compliance_beta(
+    chain = metropolis.invert_compliance_beta(
         data,
         f,
         4000,
@@ -509,14 +514,14 @@ def test_brocher_coupling_keeps_vp_and_density_tied_to_vs(problem):
         return_profiles=False,
         vary_thickness=False,
         vs_bounds=(200, 4800),
-        elastic_from_vs=inv.brocher_elastic,
+        elastic_from_vs=models.brocher_elastic,
     )[0]
-    vp, rho = inv.brocher_elastic(chain[:-1, 3, :])
+    vp, rho = models.brocher_elastic(chain[:-1, 3, :])
     np.testing.assert_allclose(chain[:-1, 2, :], vp)
     np.testing.assert_allclose(chain[:-1, 1, :], rho)
     assert np.all(chain[-1, :, :] == model[-1][:, None])  # half-space untouched
     assert np.ptp(chain[0, 3]) > 0  # Vs actually sampled
-    vp, rho = inv.brocher_elastic([1000.0, 3500.0])  # known Brocher values
+    vp, rho = models.brocher_elastic([1000.0, 3500.0])  # known Brocher values
     np.testing.assert_allclose(vp, [2458.2, 5956.8], atol=1)  # eq. 9 evaluated by hand
     assert 1900 < rho[0] < 2300 and 2600 < rho[1] < 2800
 
@@ -545,7 +550,7 @@ def _tempered(problem, **kw):
         model,
         f,
         data,
-        inv.invert_tempered(data, f, 4000, model, [model, start], **args),
+        metropolis.invert_tempered(data, f, 4000, model, [model, start], **args),
     )
 
 
@@ -561,7 +566,7 @@ def test_tempering_keeps_cold_chain_bookkeeping_consistent(problem):
         np.broadcast_to(model[None, :, :3, None], out["chain"][:, :, :3, :].shape),
     )
     for e, k in ((0, 0), (1, 17), (1, 49)):
-        pred = inv.calc_norm_compliance(4000, f, out["chain"][e, :, :, k])
+        pred = propagator.normalized_compliance(4000, f, out["chain"][e, :, :, k])
         np.testing.assert_allclose(out["predictions"][e, k], pred, rtol=1e-12)
         np.testing.assert_allclose(
             out["chi2"][e, k], np.sum(((data - pred) / (0.03 * data)) ** 2), rtol=1e-9
@@ -600,7 +605,7 @@ RR52_COLUMN = dict(
 
 
 def test_crust1_starting_model_matches_the_cell():
-    model = inv.crust1_starting_model(RR52_COLUMN)
+    model = models.crust1_starting_model(RR52_COLUMN)
     np.testing.assert_array_equal(
         model,
         [
@@ -611,21 +616,21 @@ def test_crust1_starting_model_matches_the_cell():
             [0, 3190, 7730, 4310],
         ],
     )
-    split = inv.crust1_starting_model(RR52_COLUMN, sublayers=3, mantle_layer=0)
+    split = models.crust1_starting_model(RR52_COLUMN, sublayers=3, mantle_layer=0)
     assert len(split) == 10 and split[:-1, 0].sum() == pytest.approx(6900.0)
     sediment = dict(
         RR52_COLUMN,
         layers=[("upper_sediments", 260.0, 1750.0, 340.0, 1820.0)]
         + RR52_COLUMN["layers"],
     )
-    assert inv.crust1_starting_model(sediment, sublayers=2)[0, 0] == 260.0
+    assert models.crust1_starting_model(sediment, sublayers=2)[0, 0] == 260.0
 
 
 def test_legacy_inversion_accepts_a_crust1_column():
     f = np.array([0.006, 0.009, 0.013])
-    start = inv.crust1_starting_model(RR52_COLUMN, sublayers=2)
-    data = inv.calc_norm_compliance(2918, f, start)
-    chain = inv.invert_compliance_beta(
+    start = models.crust1_starting_model(RR52_COLUMN, sublayers=2)
+    data = propagator.normalized_compliance(2918, f, start)
+    chain = metropolis.invert_compliance_beta(
         data,
         f,
         2918,
@@ -641,4 +646,4 @@ def test_legacy_inversion_accepts_a_crust1_column():
 
 def test_model_v2_is_deprecated():
     with pytest.warns(DeprecationWarning, match="crust1_starting_model"):
-        inv.Model_V2(1, n_layer=3, sta="RR52")
+        models.rhumrum_starting_model(1, n_layer=3, sta="RR52")

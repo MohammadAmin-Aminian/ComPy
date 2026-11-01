@@ -35,8 +35,10 @@ from pathlib import Path
 
 import numpy as np
 
-import inv_compy as inv
-from compy_diagnostics import rank_rhat_ess
+from compy import numerics
+from compy.diagnostics import rank_rhat_ess
+from compy.inversion import metropolis, propagator
+from compy.inversion import occam as occam_inversion
 
 H = 4200.0
 F = np.geomspace(0.0035, 0.0185, 16)
@@ -57,7 +59,9 @@ EDGES = np.concatenate([[0.0], np.cumsum(THICK)])
 MID = 0.5 * (EDGES[:-1] + EDGES[1:])
 VS_BOUNDS = (200.0, 4800.0)
 SIGMA_RANGE = (100.0, 5000.0)  # allowed Vs-jump scale, m/s
-STEP = inv.Roughness(np.r_[np.zeros(100), np.ones(100)], 2)  # roughness of a unit step
+STEP = numerics.roughness(
+    np.r_[np.zeros(100), np.ones(100)], 2
+)  # roughness of a unit step
 ALPHA_BOUNDS = (1 / (STEP * SIGMA_RANGE[1] ** 2), 1 / (STEP * SIGMA_RANGE[0] ** 2))
 ALPHA0 = 1 / (STEP * 600.0**2)
 
@@ -79,7 +83,7 @@ STARTS = {
     "constant": np.minimum(2500.0, 0.9 * VP),
     "generic": START_VS,
 }
-CLEAN = inv.calc_norm_compliance(H, F, TRUTH)
+CLEAN = propagator.normalized_compliance(H, F, TRUTH)
 UNC = NOISE * np.abs(CLEAN)
 OBS = CLEAN + np.random.default_rng(NOISE_SEED).normal(0, UNC)
 
@@ -88,7 +92,7 @@ def run_chain(args):
     k, iterations, adapt, prior_only = args
     name = list(STARTS)[k % len(STARTS)]
     info = {}
-    out = inv.invert_compliance_beta(
+    out = metropolis.invert_compliance_beta(
         OBS,
         F,
         H,
@@ -138,8 +142,8 @@ def main():
     misfit = np.stack([r[2] for r in res])
     alphas = np.stack([r[4] for r in res])
     B = args.burnin
-    occam = inv.invert_occam(OBS, F, H, grid_model(START_VS), UNC)
-    z_k, kernels = inv.compliance_kernels(H, F, TRUTH, dz=100, max_depth=20000)
+    occam = occam_inversion.invert_occam(OBS, F, H, grid_model(START_VS), UNC)
+    z_k, kernels = propagator.compliance_kernels(H, F, TRUTH, dz=100, max_depth=20000)
     layers = {}
     for j in range(N_LAYER):
         post = vs[:, j, B:].astype(float)

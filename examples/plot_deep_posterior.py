@@ -7,12 +7,12 @@ RR52 figure, sensitivity kernels, data fit, prior-versus-posterior widths) and
 deep_convergence.png (chain traces, sampled smoothness, misfit).
 """
 
-import sys
 import json
+import sys
 from types import SimpleNamespace
 
-import numpy as np
 import matplotlib
+import numpy as np
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -191,9 +191,9 @@ axd = fig.add_subplot(gs[1, 3])
 pr = z["preds"][:, BURN::5].reshape(-1, len(d.F)).astype(float)
 lo, md, hi = np.quantile(pr, [0.05, 0.5, 0.95], axis=0)
 fm, sc = d.F * 1e3, 1e11
-import inv_compy as inv
+from compy.inversion import propagator
 
-occ_pred = inv.calc_norm_compliance(d.H, d.F, z["occam"])
+occ_pred = propagator.normalized_compliance(d.H, d.F, z["occam"])
 axd.fill_between(
     fm,
     lo * sc,

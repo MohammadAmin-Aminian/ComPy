@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from obspy import Stream, Trace, UTCDateTime
 
-from compy_cleaning import (
+from compy.cleaning import (
     periodic_template,
     remove_periodic_transient,
     rotate_smoothly,
