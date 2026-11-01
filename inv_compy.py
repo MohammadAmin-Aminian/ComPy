@@ -247,6 +247,8 @@ def _inversion(
 
     if starting_model is None:
         initial = Model_V2(1, n_layer=n_layer, sta=sta)[0][:, :, 0]
+    elif isinstance(starting_model, dict):  # a compy_inversion.crust1_column
+        initial = crust1_starting_model(starting_model, sublayers=max(1, n_layer // 3))
     else:
         initial = np.asarray(starting_model, float)
         if initial.ndim == 3:
@@ -472,8 +474,10 @@ def invert_compliace(
 ):
     """Legacy name for the v2 sampler; see README for units and priors.
 
-    Supply a custom starting_model to control sediments. The station templates
-    do not use sediment_thickness or n_sediment_layer. s must be supplied.
+    starting_model is a layered model or a CRUST1.0 column
+    (``compy_inversion.crust1_column``), which ``crust1_starting_model``
+    turns into a model with n_layer // 3 sublayers per crustal layer. Without
+    it, the deprecated ``Model_V2`` template of ``sta`` is used. s must be supplied.
     Set return_profiles=False to avoid the large metre-grid profile array.
     adapt_until, target_acceptance, initial_state and diagnostics are optional
     sampler-tuning keywords documented in ``_inversion``.
@@ -653,8 +657,8 @@ def Model(
 ):
     """Generic sediment plus graded-crust starting model (SI units).
 
-    Use Model_V2 for the station-specific CRUST templates. The last row is
-    the elastic half-space, represented by zero thickness.
+    Use ``crust1_starting_model`` for a station's CRUST1.0 column. The last
+    row is the elastic half-space, represented by zero thickness.
     """
     iteration = integer(iteration, "iteration")
     n_layer = integer(n_layer, "n_layer")
@@ -683,7 +687,52 @@ def Model(
 
 
 # %%
+def crust1_starting_model(column, sublayers=1, mantle_layer=10000.0):
+    """Starting model ``[thickness, rho, vp, vs]`` from CRUST1.0 at a station.
+
+    Replaces the hard-coded ``Model_V2`` templates. Read the column with
+    ``compy_inversion.crust1_column(lat, lon, crust1_dir)``, which picks the
+    1x1 degree CRUST1.0 cell containing the station.
+
+    Args:
+        column (dict): ``crust1_column`` at the station.
+        sublayers (int): Equal sublayers per CRUST1.0 crystalline crustal
+            layer (1, 2, 3 and 4 give the 3, 6, 9 and 12 crustal layers of
+            the former templates). Sediment layers stay whole.
+        mantle_layer (float): Thickness of a finite mantle layer above the
+            half-space [m], as in the former templates; 0 omits it.
+
+    Returns:
+        ndarray: One row per layer; the last row is the mantle half-space
+        (thickness 0, ignored by the propagator).
+    """
+    sublayers = integer(sublayers, "sublayers")
+    rows = []
+    for name, thickness, vp, vs, rho in column["layers"]:
+        n = 1 if "sediment" in name else sublayers
+        rows += [[thickness / n, rho, vp, vs]] * n
+    vp, vs, rho = column["mantle"]
+    if mantle_layer:
+        rows.append([positive(mantle_layer, "mantle_layer"), rho, vp, vs])
+    rows.append([0.0, rho, vp, vs])
+    return _validate_model(np.array(rows, float))
+
+
+# %%
 def Model_V2(iteration, n_layer=3, sta="RR38"):
+    """Hard-coded RHUM-RUM starting templates (deprecated).
+
+    Most templates do not match CRUST1.0 at their station; use
+    ``crust1_starting_model`` instead.
+    """
+    import warnings
+
+    warnings.warn(
+        "Model_V2 templates do not match CRUST1.0 at most stations; use "
+        "crust1_starting_model(compy_inversion.crust1_column(lat, lon, dir))",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     iteration = integer(iteration, "iteration")
     if n_layer not in (3, 6, 9, 12):
         raise ValueError("n_layer must be 3, 6, 9, or 12")

@@ -8,6 +8,11 @@ failed, the BRUIT-FM gain is used, or else the nominal response, and the gain
 prior is widened (see GAIN_BOUNDS). Monthly stacks give the month-to-month covariance; the Moho
 depth below the seafloor comes from CRUST1.0 at the station.
 
+Every run starts from the CRUST1.0 model of the station's 1x1 degree cell
+(``ci.crust1_start``): the first chain exactly there, the others dispersed
+around it by START_SPREAD of each prior width, so that R-hat still detects
+chains that have not mixed.
+
 Variants:
   final     free crustal Vp/Vs in [1.7, 2.4], pressure gain sampled within the
             gain bounds, parallel tempering (8 replicas); adds a prior-only
@@ -35,6 +40,8 @@ MIN_MONTH_WINDOWS = 30
 #: the Rayleigh calibration, wider for the microseism (BRUIT-FM) gain.
 GAIN_BOUNDS = {"compy": (0.95, 1.05), "bruitfm": (0.85, 1.15), "nominal": (0.6, 1.4)}
 TEMPERATURES = 1.6 ** np.arange(8)
+#: Dispersion of the chain starts around the CRUST1.0 model (fraction of each prior width).
+START_SPREAD = 0.1
 
 
 def coordinates(station):
@@ -120,7 +127,9 @@ def run(station, variant, processes, seed=0):
         sampler["gain_bounds"] = GAIN_BOUNDS[info["gain_source"]]
     out = RESULTS / station / "inversion"
     out.mkdir(parents=True, exist_ok=True)
-    post = ci.sample(data, model, seed=seed, processes=processes, **SAMPLER, **sampler)
+    start = ci.crust1_start(model, column)
+    post = ci.sample(data, model, seed=seed, processes=processes, start=start,
+                     start_spread=START_SPREAD, **SAMPLER, **sampler)  # fmt: skip
     post.save(out / f"{station}_{variant}")
     record = json.loads((out / f"{station}_{variant}.json").read_text())
     record.update(input=info, crust1=column)
@@ -133,7 +142,7 @@ def run(station, variant, processes, seed=0):
     if variant == "final":  # tempering is pointless without a likelihood
         settings = {k: v for k, v in sampler.items() if k != "temperatures"}
         prior = ci.sample(data, model, seed=seed + 1, processes=processes, prior_only=True,
-                          **SAMPLER, **settings)  # fmt: skip
+                          start=start, start_spread=START_SPREAD, **SAMPLER, **settings)  # fmt: skip
         prior.save(out / f"{station}_final_prior")
 
 

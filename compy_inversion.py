@@ -331,6 +331,98 @@ def crust1_model(column):
     return np.array(rows + [[0.0, rho, vp, vs]])
 
 
+def _interval_mean(thickness, values, below, a, b):
+    """Thickness-weighted mean over depths [a, b] of a layered profile.
+
+    ``thickness`` and ``values`` describe the layers from the top (depth 0);
+    ``below`` is the value under the last layer.
+    """
+    edges = np.concatenate([[0.0], np.cumsum(thickness), [np.inf]])
+    vals = np.append(values, below)
+    if b <= a:
+        return float(vals[np.searchsorted(edges, a, side="right") - 1])
+    lo = np.clip(edges[:-1], a, b)
+    hi = np.clip(edges[1:], a, b)
+    return float(np.sum((hi - lo) * vals) / (b - a))
+
+
+def crust1_start(model, column):
+    """Parameter vector of ``model`` that represents a CRUST1.0 column.
+
+    This is the starting model at the station: the CRUST1.0 sediment
+    thickness, each crustal layer's thickness-weighted CRUST1.0 Vs over its
+    depth interval, the CRUST1.0 mantle Vs and, when Vp/Vs is free, the
+    thickness-weighted Vp/Vs of the CRUST1.0 crystalline crust. A sediment
+    Vs scale starts at 1 and a Moho shift at 0. Values are clipped to the
+    prior bounds of ``model``.
+
+    Args:
+        model (CrustalModel): Parameterization to fill.
+        column (dict): ``crust1_column`` at the station.
+
+    Returns:
+        ndarray: One value per ``model.names``.
+    """
+    lo, hi = model.bounds[:, 0], model.bounds[:, 1]
+    theta = np.clip(np.mean(model.bounds, axis=1), lo, hi)
+    defaults = dict(
+        sediment_thickness=column["sediment_thickness"],
+        sediment_vs_scale=1.0,
+        moho_shift=0.0,
+        vs_mantle=column["mantle"][1],
+    )
+    for name, value in defaults.items():
+        if name in model._index:
+            theta[model._index[name]] = value
+    theta = np.clip(theta, lo, hi)
+    layers = column["layers"]
+    thick = np.array([layer[1] for layer in layers], float)
+    vs = np.array([layer[3] for layer in layers], float)
+    h, bottoms = model.interfaces(theta)
+    edges = np.append(h, bottoms)
+    i = model._index["vs_crust_1"]
+    for k in range(model.n_crust):
+        theta[i + k] = _interval_mean(
+            thick, vs, column["mantle"][1], edges[k], edges[k + 1]
+        )
+    if "vp_vs" in model._index:
+        rock = [
+            layer for layer in layers if "sediment" not in layer[0] and layer[3] > 0
+        ]
+        if rock:
+            w = np.array([layer[1] for layer in rock])
+            ratio = np.array([layer[2] / layer[3] for layer in rock])
+            theta[model._index["vp_vs"]] = float(np.sum(w * ratio) / np.sum(w))
+    return np.clip(theta, lo, hi)
+
+
+def dispersed_starts(target, start, n_chains, rng, spread=0.1, max_tries=10000):
+    """Chain starts around ``start``: the first exactly, the others dispersed.
+
+    Chains 2..n start at ``start`` plus Gaussian noise of standard deviation
+    ``spread`` times each parameter's prior width, kept inside the prior and
+    redrawn until valid. ``spread=0`` starts every chain at ``start``.
+    Dispersed starts keep R-hat able to detect chains that have not mixed.
+    """
+    start = np.asarray(start, float)
+    if target(start) is None:
+        raise ValueError(
+            "the starting model is outside the prior or has Vp/Vs < sqrt(2)"
+        )
+    width = target.bounds[:, 1] - target.bounds[:, 0]
+    starts = [start]
+    while len(starts) < n_chains:
+        for _ in range(max_tries):
+            theta = start + spread * width * rng.standard_normal(len(start))
+            theta = np.clip(theta, target.bounds[:, 0], target.bounds[:, 1])
+            if target(theta) is not None:
+                starts.append(theta)
+                break
+        else:
+            raise ValueError("no valid dispersed start; reduce spread")
+    return starts
+
+
 # --------------------------------------------------------------------------
 # Data and covariance
 # --------------------------------------------------------------------------
@@ -1022,12 +1114,16 @@ def _chain_job(job):
 
 
 def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed=0,
-           prior_only=False, processes=None, starts=None, gain_bounds=None, **kwargs):  # fmt: skip
+           prior_only=False, processes=None, starts=None, gain_bounds=None,
+           start=None, start_spread=0.1, **kwargs):  # fmt: skip
     """Run independent DRAM chains and return a ``Posterior``.
 
-    Chains start from independent draws of the uniform prior (over-dispersed
-    starts, so that R-hat is meaningful) unless ``starts`` gives one
-    parameter vector per chain. Draws come from ``_Target``: the Gaussian
+    ``start`` is a starting model, one value per ``model.names``, e.g.
+    ``crust1_start(model, column)`` for CRUST1.0 at the station. The first
+    chain starts there and the others around it (``dispersed_starts`` with
+    ``start_spread``); sampled gains start at 1. Without ``start`` or
+    ``starts``, chains start from independent draws of the uniform prior.
+    ``starts`` gives one full parameter vector per chain. Draws come from ``_Target``: the Gaussian
     likelihood of ``data`` (or none with ``prior_only``) and the uniform and
     roughness priors of ``model``, with Vp/Vs >= sqrt(2). ``processes`` sets
     the worker count (1 runs serially). Worker processes are spawned, so call
@@ -1042,6 +1138,14 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     """
     rng = np.random.default_rng(seed)
     target = _Target(data, model, prior_only, gain_bounds)
+    start_record = None
+    if start is not None and starts is None:
+        start = np.asarray(start, float)
+        if len(start) != target.n_model:
+            raise ValueError(f"start needs {target.n_model} values ({model.names})")
+        full = np.append(start, np.ones(len(target.names) - target.n_model))
+        starts = dispersed_starts(target, full, n_chains, rng, start_spread)
+        start_record = dict(model=start.tolist(), spread=float(start_spread))
     if starts is None:
         starts = []
         while len(starts) < n_chains:
@@ -1071,6 +1175,7 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     settings["gain_bounds"] = (
         None if gain_bounds is None else [float(v) for v in gain_bounds]
     )
+    settings["start"] = start_record
     return Posterior(
         data=data, model=model, prior_only=prior_only, **stack,
         acceptance=np.array([c["acceptance"] for c in chains]),

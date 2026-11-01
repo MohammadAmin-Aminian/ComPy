@@ -6,8 +6,10 @@ Usage (repository root):
         --lat -20.4723 --lon 68.1094 --crust1 path/to/crust1.0
 
 The input file is the output of compy_processing.stacked_compliance saved as
-npz (keys freqs, compliance, uncertainty, band, depth). Without CRUST1.0 the
-Moho is put 7 km below the seafloor. About 15 s on 8 cores with Numba.
+npz (keys freqs, compliance, uncertainty, band, depth). With --crust1 the
+chains start from the CRUST1.0 model of the station's cell and the Moho is
+CRUST1.0's; without it the Moho is put 7 km below the seafloor and the chains
+start from prior draws. About 15 s on 8 cores with Numba.
 """
 
 import argparse
@@ -42,16 +44,25 @@ def main():
     parser.add_argument("--crust1")
     parser.add_argument("--output", default="vs_inversion")
     args = parser.parse_args()
+    column = None
     if args.npz is None:
         data, model = synthetic()
     else:
         data = ci.ComplianceData.from_npz(args.npz, gain_rel=0.05, floor_rel=0.01)
-        moho = 7000.0
+        column = None
         if args.crust1:
-            moho = ci.crust1_column(args.lat, args.lon, args.crust1)["moho_depth"]
-        model = ci.CrustalModel(moho_depth=moho)
+            column = ci.crust1_column(args.lat, args.lon, args.crust1)
+        model = ci.CrustalModel(moho_depth=column["moho_depth"] if column else 7000.0)
+    start = ci.crust1_start(model, column) if column else None
     post = ci.sample(
-        data, model, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed=0
+        data,
+        model,
+        n_chains=8,
+        n_iter=60000,
+        n_burn=20000,
+        thin=10,
+        seed=0,
+        start=start,
     )
     s = post.summary()
     print(f"chi2 median {s['chi2']['median']:.1f} for N={s['n_data']}, max R-hat {s['max_rhat']:.3f}, "

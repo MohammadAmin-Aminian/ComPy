@@ -122,7 +122,14 @@ the DRAM used by Zha & Webb (2016):
 - **Smoothing weight.** Gibbs-sampled after every step.
 - **Tempering.** `temperatures` turns each chain into a parallel-tempering ensemble (Geyer 1991; Sambridge 2014): likelihood^(1/T), prior untempered, adjacent swaps, and only T = 1 kept.
 
-Chains start from independent prior draws. `Posterior.diagnostics` gives the
+Chains start from the CRUST1.0 model of the station's 1×1° cell when `sample` gets
+`start=crust1_start(model, column)`, as the pipeline does: the first chain
+exactly there and the others dispersed by `start_spread` (10 % of each prior
+width), so that R-hat still detects unmixed chains. `crust1_start` uses the
+CRUST1.0 sediment thickness, the thickness-weighted CRUST1.0 Vs over each crustal
+layer, the CRUST1.0 mantle Vs and, with free Vp/Vs, the crystalline-crust Vp/Vs.
+Without `start`, chains start from independent prior draws (the setting of the
+2026-10 YV and XE runs). `Posterior.diagnostics` gives the
 rank-normalized split R-hat and bulk ESS (Vehtari et al. 2021) of every
 parameter and of log α.
 

@@ -67,7 +67,7 @@ def test_required_uncertainties_and_invalid_frequency(problem):
         inv.invert_compliance(data, f, 4000, starting_model=model, iteration=2)
     with pytest.raises(ValueError, match="frequencies"):
         inv.calc_norm_compliance(4000, [0], model)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError), pytest.warns(DeprecationWarning):
         inv.Model_V2(1, n_layer=4)
 
 
@@ -585,3 +585,60 @@ def test_tempering_single_temperature_and_covariance_input(problem):
         _tempered(problem, data_covariance=cov)  # both s and covariance
     with pytest.raises(ValueError):
         _tempered(problem, burn_rounds=6)
+
+
+RR52_COLUMN = dict(
+    layers=[
+        ("upper_crust", 1170.0, 4700.0, 2540.0, 2400.0),
+        ("middle_crust", 1170.0, 6300.0, 3590.0, 2760.0),
+        ("lower_crust", 4560.0, 6900.0, 3940.0, 2960.0),
+    ],
+    mantle=(7730.0, 4310.0, 3190.0),
+    moho_depth=6900.0,
+    sediment_thickness=0.0,
+)
+
+
+def test_crust1_starting_model_matches_the_cell():
+    model = inv.crust1_starting_model(RR52_COLUMN)
+    np.testing.assert_array_equal(
+        model,
+        [
+            [1170, 2400, 4700, 2540],
+            [1170, 2760, 6300, 3590],
+            [4560, 2960, 6900, 3940],
+            [10000, 3190, 7730, 4310],
+            [0, 3190, 7730, 4310],
+        ],
+    )
+    split = inv.crust1_starting_model(RR52_COLUMN, sublayers=3, mantle_layer=0)
+    assert len(split) == 10 and split[:-1, 0].sum() == pytest.approx(6900.0)
+    sediment = dict(
+        RR52_COLUMN,
+        layers=[("upper_sediments", 260.0, 1750.0, 340.0, 1820.0)]
+        + RR52_COLUMN["layers"],
+    )
+    assert inv.crust1_starting_model(sediment, sublayers=2)[0, 0] == 260.0
+
+
+def test_legacy_inversion_accepts_a_crust1_column():
+    f = np.array([0.006, 0.009, 0.013])
+    start = inv.crust1_starting_model(RR52_COLUMN, sublayers=2)
+    data = inv.calc_norm_compliance(2918, f, start)
+    chain = inv.invert_compliance_beta(
+        data,
+        f,
+        2918,
+        starting_model=RR52_COLUMN,
+        n_layer=6,
+        s=0.05 * data,
+        iteration=5,
+        return_profiles=False,
+        seed=0,
+    )[0]
+    np.testing.assert_array_equal(chain[:, :, 0], start)
+
+
+def test_model_v2_is_deprecated():
+    with pytest.warns(DeprecationWarning, match="crust1_starting_model"):
+        inv.Model_V2(1, n_layer=3, sta="RR52")
