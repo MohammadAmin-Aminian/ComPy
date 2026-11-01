@@ -228,8 +228,8 @@ Compliance measured with ComPy before 2.0 lacks the wave-attraction term; apply
 `compy_numerics.legacy_wave_attraction_correction` before inverting it.
 
 ```bash
-python _Example/deep_crust_inversion.py --output deep-crust   # ~25 min, 2 cores
-python _Example/plot_deep_posterior.py deep-crust
+python examples/deep_crust_inversion.py --output deep-crust   # ~25 min, 2 cores
+python examples/plot_deep_posterior.py deep-crust
 ```
 
 ## Pressure-gauge QC and calibration (`compy_pressure`)
@@ -252,7 +252,7 @@ Runs are parallel, checkpointed and restartable. The package comes from
 
 ```bash
 python -m pip install -e '.[pressure]'
-python _Example/5_Pressure_QC.py --output qc-example    # synthetic gauge, offline
+python examples/5_Pressure_QC.py --output qc-example    # synthetic gauge, offline
 compy-pressure inventory --inventory-dir $XML --master-dir run/master
 compy-pressure ppsd --data-dir $SDS --inventory-dir $XML --master-dir run/master \
     --results-dir run/results --network YV --pressure-only --workers max
@@ -308,7 +308,7 @@ software versions and checksums, and reports rank-normalized split R̂ and
 bulk/tail ESS:
 
 ```bash
-MPLBACKEND=Agg python _Example/reproducible_inversion.py --output synthetic-results
+MPLBACKEND=Agg python examples/reproducible_inversion.py --output synthetic-results
 ```
 
 See [REPRODUCIBLE_RUNS.md](REPRODUCIBLE_RUNS.md) for the run record format.

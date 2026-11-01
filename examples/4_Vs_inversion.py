@@ -1,8 +1,8 @@
 """Bayesian Vs inversion of a compliance estimate with compy_inversion (ComPy 2.3).
 
 Usage (repository root):
-    python _Example/4_Vs_inversion.py                      # offline synthetic
-    python _Example/4_Vs_inversion.py RR52_compliance_compy.npz \
+    python examples/4_Vs_inversion.py                      # offline synthetic
+    python examples/4_Vs_inversion.py RR52_compliance_compy.npz \
         --lat -20.4723 --lon 68.1094 --crust1 path/to/crust1.0
 
 The input file is the output of compy_processing.stacked_compliance saved as

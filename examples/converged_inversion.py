@@ -1,10 +1,10 @@
 """Converged 4-chain synthetic inversion with the tuned ComPy sampler.
 
 Usage (repository root):
-    mkdir converged && python _Example/converged_inversion.py converged
-    python _Example/plot_posterior_heatmap.py converged
+    mkdir converged && python examples/converged_inversion.py converged
+    python examples/plot_posterior_heatmap.py converged
 
-Same synthetic problem as _Example/reproducible_inversion.py (truth, 12
+Same synthetic problem as examples/reproducible_inversion.py (truth, 12
 frequencies, 3% noise with seed 2026, biased starting model Vs1 = 1800 m/s that
 defines the prior). Differences: per-layer adaptive step sizes during burn-in,
 dispersed chain starts, longer chains, rank-normalized R-hat and bulk ESS.

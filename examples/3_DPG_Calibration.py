@@ -3,7 +3,7 @@
 The Rayleigh-wave calibration of compy_pressure, which replaces
 Pressure_calibration.calculate_spectral_ratio (removed after ComPy 2.4.0):
 
-    python _Example/3_DPG_Calibration.py SDS STATIONXML YV RR52 events.geojson
+    python examples/3_DPG_Calibration.py SDS STATIONXML YV RR52 events.geojson
 
 - SDS: an SDS archive with the station's pressure and seismometer channels
   at their native sample rate;

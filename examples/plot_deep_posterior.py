@@ -1,6 +1,6 @@
-"""Seismology-style posterior figures for _Example/deep_crust_inversion.py.
+"""Seismology-style posterior figures for examples/deep_crust_inversion.py.
 
-Usage: python _Example/plot_deep_posterior.py <output directory of the run>
+Usage: python examples/plot_deep_posterior.py <output directory of the run>
 
 Writes deep_posterior.png (Vs-depth posterior density in the convention of the
 RR52 figure, sensitivity kernels, data fit, prior-versus-posterior widths) and

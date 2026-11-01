@@ -1,8 +1,8 @@
 """Deep-crust synthetic compliance inversion following the compliance literature.
 
 Usage (repository root; about 25 minutes on two cores):
-    python _Example/deep_crust_inversion.py --output deep-crust
-    python _Example/plot_deep_posterior.py deep-crust
+    python examples/deep_crust_inversion.py --output deep-crust
+    python examples/plot_deep_posterior.py deep-crust
 
 Set-up, with the paper behind each choice:
 * Water depth 4200 m, 16 frequencies 3.5-18.5 mHz, below the infragravity

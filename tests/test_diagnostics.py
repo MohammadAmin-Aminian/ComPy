@@ -96,7 +96,7 @@ def test_invalid_metadata_and_failed_write_leave_no_partial_run(tmp_path, monkey
 
 
 def test_offline_example_is_reproducible_and_preserves_forward_consistency(tmp_path):
-    example = Path(__file__).resolve().parents[1] / "_Example/reproducible_inversion.py"
+    example = Path(__file__).resolve().parents[1] / "examples/reproducible_inversion.py"
     spec = importlib.util.spec_from_file_location("reproducible_example", example)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

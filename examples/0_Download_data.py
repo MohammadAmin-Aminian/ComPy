@@ -1,6 +1,6 @@
 """Download a chosen station interval, decimate and remove channel responses.
 
-Example: python _Example/0_Download_data.py YV RR52 2012-12-01 2012-12-02 output.mseed
+Example: python examples/0_Download_data.py YV RR52 2012-12-01 2012-12-02 output.mseed
 Review the decimation factors for your input sampling rate before running.
 """
 

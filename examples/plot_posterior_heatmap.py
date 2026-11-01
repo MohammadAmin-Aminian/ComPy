@@ -1,6 +1,6 @@
 """Posterior Vs-depth heat map, data fit, marginals and chain traces.
 
-Usage: python _Example/plot_posterior_heatmap.py <run directory of converged_inversion.py>
+Usage: python examples/plot_posterior_heatmap.py <run directory of converged_inversion.py>
 """
 
 import sys

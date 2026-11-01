@@ -1,4 +1,4 @@
-<p align="center"><img src="_Images/ComPy.png" width="200" alt="ComPy logo"></p>
+<p align="center"><img src="docs/images/ComPy.png" width="200" alt="ComPy logo"></p>
 
 <h1 align="center">ComPy</h1>
 
@@ -21,7 +21,7 @@ serpentinization. It was developed for the RHUM-RUM experiment in the Indian
 Ocean ([Aminian et al. 2025, *GJI*](https://doi.org/10.1093/gji/ggaf253)) and
 runs unattended on any broadband OBS network stored as an SDS archive.
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png" width="900" alt="Shear-velocity posteriors beneath the 20 inverted Pacific Array Young ORCA stations"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png" width="900" alt="Shear-velocity posteriors beneath the 20 inverted Pacific Array Young ORCA stations"></a></p>
 <p align="center"><sub><b>Shear-velocity posteriors beneath 20 Pacific Array Young ORCA (XE) stations.</b> Colour: posterior probability per depth row; red: median; white dashed: CRUST1.0.</sub></p>
 
 ## Contents
@@ -102,7 +102,7 @@ TiSKitPy 2.3 and disba; Numba is optional and speeds up the inversion about
 Offline synthetic inversion (seconds):
 
 ```bash
-MPLBACKEND=Agg python _Example/synthetic_inversion.py
+MPLBACKEND=Agg python examples/synthetic_inversion.py
 ```
 
 A full network run from an SDS archive:
@@ -146,7 +146,7 @@ python pipeline/fetch_inventory.py && python pipeline/fetch_catalog.py
 python pipeline/a_preprocess.py CC11 --workers 8
 ```
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig01_map.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig01_map.png" width="600" alt="XE broadband OBS network map with compliance status"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig01_map.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig01_map.png" width="600" alt="XE broadband OBS network map with compliance status"></a></p>
 <p align="center"><sub><b>XE network.</b> Red: inverted (20 stations, including CC11); orange: compliance only; grey: not processed.</sub></p>
 
 ### 2. Response removal and cleaning
@@ -170,7 +170,7 @@ spans = tiskitpy.TimeSpans.from_eqs(
 )
 ```
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png" width="850" alt="CC11 vertical and pressure PSDs before and after cleaning"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png" width="850" alt="CC11 vertical and pressure PSDs before and after cleaning"></a></p>
 <p align="center"><sub><b>XE.CC11 spectra.</b> (a) Vertical acceleration after response removal (blue) and after cleaning (orange), median and 10–90 %, with the Peterson noise models. (b) Calibrated pressure. Green: compliance band.</sub></p>
 
 ### 3. Tilt and coherent noise
@@ -187,7 +187,7 @@ local = cleaning.sta_lta_spans(rotated.select(component="Z")[0])
 cleaned = compy.remove_coherent_noise(rotated, 24, avoid_spans=spans, cover_all=True)
 ```
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig04_tilt.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig04_tilt.png" width="800" alt="CC11 hourly tilt azimuth and incidence angle"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig04_tilt.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig04_tilt.png" width="800" alt="CC11 hourly tilt azimuth and incidence angle"></a></p>
 <p align="center"><sub><b>XE.CC11 tilt.</b> Hourly azimuth and incidence angle that minimize vertical variance, coloured by variance reduction.</sub></p>
 
 ### 4. Pressure-gauge calibration
@@ -199,10 +199,10 @@ accepted events. For CC11 it is 0.698 ± 0.012 from 12 events, against 0.702
 from the independent BRUIT-FM microseism method.
 
 ```bash
-python _Example/3_DPG_Calibration.py SDS/ stationxml/ XE CC11 events.geojson
+python examples/3_DPG_Calibration.py SDS/ stationxml/ XE CC11 events.geojson
 ```
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig05_calibration.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig05_calibration.png" width="850" alt="CC11 Rayleigh-wave DPG calibration"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig05_calibration.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig05_calibration.png" width="850" alt="CC11 Rayleigh-wave DPG calibration"></a></p>
 <p align="center"><sub><b>XE.CC11 calibration.</b> (a) P–Z coherence of 12 teleseisms (M ≥ 7). (b) Measured, theoretical and corrected spectral ratios; gain g = 0.698 ± 0.012.</sub></p>
 
 ### 5. Coherence and window selection
@@ -212,7 +212,7 @@ when its median Z–P coherence in the compliance band exceeds 0.9 and its
 pressure and acceleration levels lie inside the selection gates. CC11 keeps
 7314 windows over 14 months.
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png" width="800" alt="CC11 pressure and vertical spectrograms and Z–P coherogram"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png" width="800" alt="CC11 pressure and vertical spectrograms and Z–P coherogram"></a></p>
 <p align="center"><sub><b>XE.CC11, February 2019.</b> Pressure and vertical spectrograms and the Z–P coherogram; dashed lines bound the compliance band.</sub></p>
 
 ### 6. Compliance
@@ -234,7 +234,7 @@ result = stacked_compliance(
 result.compliance, result.uncertainty, result.n_windows
 ```
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig07_windows.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig07_windows.png" width="800" alt="CC11 selected windows: spectra, coherence and compliance"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig07_windows.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig07_windows.png" width="800" alt="CC11 selected windows: spectra, coherence and compliance"></a></p>
 <p align="center"><sub><b>XE.CC11 selected windows</b> (150 of 7314 shown): corrected vertical acceleration, calibrated pressure, coherence and per-window compliance with the stacked estimate (red).</sub></p>
 
 ### 7. Bayesian Vs inversion
@@ -257,7 +257,7 @@ post = ci.sample(
 post.summary()["max_rhat"], post.vs_quantiles(depths)
 ```
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/CC11_inversion.png"><img src="docs/xe_young_orca_2026-10-29/figures/CC11_inversion.png" width="900" alt="CC11 data fit, misfit and Vs posterior"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/CC11_inversion.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/CC11_inversion.png" width="900" alt="CC11 data fit, misfit and Vs posterior"></a></p>
 <p align="center"><sub><b>XE.CC11 inversion.</b> (a) Measured compliance and posterior predictions. (b) Misfit of each chain; χ²/N = 3.2/9, R-hat 1.009, bulk ESS ≥ 1180. (c) Vs posterior with the median and CRUST1.0.</sub></p>
 
 ### 8. Vs profiles and serpentinization
@@ -282,7 +282,7 @@ XE.CC11, median (5–95 %):
 
 Sediment thickness 121 m (20–182), crustal Vp/Vs 2.17 (1.88–2.37).
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig10_profiles.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig10_profiles.png" width="900" alt="XE Vs profiles by sub-array and pooled posterior"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig10_profiles.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig10_profiles.png" width="900" alt="XE Vs profiles by sub-array and pooled posterior"></a></p>
 <p align="center"><sub><b>XE network.</b> (a) Median Vs by sub-array (CC11 in Central). (b) Pooled posterior with free Vp/Vs and with Vp/Vs = 1.85. (c) Serpentinization upper bound.</sub></p>
 
 ## Results
@@ -298,11 +298,11 @@ Sediment thickness 121 m (20–182), crustal Vp/Vs 2.17 (1.88–2.37).
 - Rayleigh-wave gains agree with the independent BRUIT-FM microseism gains
   (median ratio ≈ 0.99).
 
-<p align="center"><a href="docs/xe_young_orca_2026-10-29/figures/fig08_compliance.png"><img src="docs/xe_young_orca_2026-10-29/figures/fig08_compliance.png" width="900" alt="Normalized compliance of the XE stations by sub-array"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig08_compliance.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig08_compliance.png" width="900" alt="Normalized compliance of the XE stations by sub-array"></a></p>
 <p align="center"><sub><b>XE compliance</b> by sub-array, ±1σ of the full covariance.</sub></p>
 
 Full report (PDF, LaTeX source and tables):
-[docs/xe_young_orca_2026-10-29](docs/xe_young_orca_2026-10-29/README.md).
+[docs/results/xe_young_orca_2026-10-29](docs/results/xe_young_orca_2026-10-29/README.md).
 
 ### RHUM-RUM (YV), Indian Ocean
 
@@ -323,8 +323,8 @@ together. Vs in m/s, median (5–95 %).
 
 RR38's pressure channel changes behaviour after its sensitivity jump, so RR38
 is excluded from the interpretation. Figures, variants and full tables:
-[docs/yv_inversion_2026-10-29](docs/yv_inversion_2026-10-29/README.md) and
-[docs/yv_compliance_2026-10-28](docs/yv_compliance_2026-10-28/README.md).
+[docs/results/yv_inversion_2026-10-29](docs/results/yv_inversion_2026-10-29/README.md) and
+[docs/results/yv_compliance_2026-10-28](docs/results/yv_compliance_2026-10-28/README.md).
 
 ## Repository structure
 
@@ -341,21 +341,28 @@ ComPy/
 ├── ffplot.py                # plotting
 ├── compy_pressure/          # DPG QC, Rayleigh/microseism/local-P calibration, noise models
 ├── pipeline/                # end-to-end network pipeline (stages A–G)
-├── _Example/                # runnable examples, including offline synthetic runs
+├── examples/                # offline synthetic examples and per-step scripts
 ├── tests/                   # pytest suite
-├── docs/                    # user guide, method notes and processed results
-│   ├── yv_compliance_2026-10-28/
-│   ├── yv_inversion_2026-10-29/
-│   └── xe_young_orca_2026-10-29/
-└── pressure/                # BRUIT-FM campaign scripts and tests
+├── docs/
+│   ├── USER_GUIDE.md        # API reference
+│   ├── INVERSION.md, PRESSURE.md, VALIDATION.md, ...
+│   ├── images/              # logos and figures used by the documentation
+│   ├── benchmark/           # CI inversion benchmark record
+│   └── results/             # processed networks: scripts, figures, tables
+│       ├── xe_young_orca_2026-10-29/
+│       ├── yv_compliance_2026-10-28/
+│       └── yv_inversion_2026-10-29/
+└── pressure/                # pressure-gauge campaign scripts, method notes and tests
 ```
 
 ## Documentation
 
 | Document | Content |
 |---|---|
+| [Documentation index](docs/README.md) | All guides, method notes and results |
 | [User guide](docs/USER_GUIDE.md) | Input conventions, estimators, inversion API, pressure QC, plotting |
 | [Pipeline guide](pipeline/README.md) | Running a whole network, stages and configuration |
+| [Examples](examples/README.md) | Offline synthetic examples and per-step scripts |
 | [Inversion notes](docs/INVERSION.md) | Parameterization, sampler and validation |
 | [Pressure tools](docs/PRESSURE.md) | `compy_pressure` commands and outputs |
 | [Validation](docs/VALIDATION.md) | Test coverage and scientific references |
@@ -394,8 +401,8 @@ SPIN Innovative Training Network, funded by the European Commission under
 Horizon 2020 Marie Skłodowska-Curie Actions.
 
 <p align="center">
-<img src="_Images/H2020_acknowledgment.png" width="260" alt="Horizon 2020 acknowledgment">
-<img src="_Images/IPGP_UPC.png" width="260" alt="IPGP and Université Paris Cité">
+<img src="docs/images/H2020_acknowledgment.png" width="260" alt="Horizon 2020 acknowledgment">
+<img src="docs/images/IPGP_UPC.png" width="260" alt="IPGP and Université Paris Cité">
 </p>
 
 ### Related software

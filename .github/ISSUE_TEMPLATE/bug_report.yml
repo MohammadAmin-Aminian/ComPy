@@ -1,0 +1,36 @@
+name: Bug report
+description: A wrong result, a crash or a failed install
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected and what you got.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal example
+      description: A short script, ideally on synthetic data. Include parameters and units.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: traceback
+    attributes:
+      label: Traceback or output
+      render: text
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: ComPy, Python, NumPy, ObsPy, TiSKitPy and the operating system.
+    validations:
+      required: true
+  - type: textarea
+    id: data
+    attributes:
+      label: Data
+      description: For real data, the network, station, channels and response epoch. Do not attach restricted waveforms.

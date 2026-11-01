@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copy scripts, figures, tables and JSON summaries (not the npz draws) into the ComPy repository.
 cd "$(dirname "$0")/.."
-DEST=../ComPy/docs/yv_inversion_2026-10-29
+DEST=../ComPy/docs/results/yv_inversion_2026-10-29
 mkdir -p $DEST/scripts $DEST/figures $DEST/results/tables
 cp scripts/*.py scripts/*.sh $DEST/scripts/
 cp figures/*.png $DEST/figures/

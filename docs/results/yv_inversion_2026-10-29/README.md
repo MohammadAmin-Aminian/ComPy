@@ -1,8 +1,8 @@
 # Vs inversion of the YV broadband compliance (2026-10-29)
 
 Bayesian shear-velocity inversion of the eight YV (RHUM-RUM) broadband compliance functions computed with ComPy 2.2 on
-2026-10-28 (`docs/yv_compliance_2026-10-28`). The method, the audit of the earlier inversion code and the validation are
-in [`docs/INVERSION.md`](../INVERSION.md).
+2026-10-28 (`docs/results/yv_compliance_2026-10-28`). The method, the audit of the earlier inversion code and the validation are
+in [`docs/INVERSION.md`](../../INVERSION.md).
 
 ## Second round: gain sampled, epochs joined, paper-style figures
 

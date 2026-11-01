@@ -6,7 +6,7 @@ After installing the development environment (`python -m pip install -e '.[dev]'
 run from the repository root:
 
 ```bash
-MPLBACKEND=Agg python _Example/reproducible_inversion.py --output synthetic-results
+MPLBACKEND=Agg python examples/reproducible_inversion.py --output synthetic-results
 ```
 
 The example uses a three-layer known model, 12 frequencies, 3% independent

@@ -2,7 +2,7 @@
 
 Every stage script imports this module, so a new network needs only new
 values here. The defaults are the validated XE run (Pacific Array Young ORCA,
-2018-2019, docs/xe_young_orca_2026-10-29); the YV values of Aminian et al.
+2018-2019, docs/results/xe_young_orca_2026-10-29); the YV values of Aminian et al.
 (2025) are given in comments.
 
 Two environment variables avoid editing this file:
