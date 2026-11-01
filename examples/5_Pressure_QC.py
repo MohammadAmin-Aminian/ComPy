@@ -5,7 +5,7 @@ Without arguments, this writes a small synthetic SDS archive and StationXML
 and runs every step offline in a few seconds. With --data-dir, --inventory-dir and --network
 it runs the same steps on real data:
 
-    python _Example/5_Pressure_QC.py --output qc_run \
+    python examples/5_Pressure_QC.py --output qc_run \
         --data-dir /path/to/SDS --inventory-dir /path/to/stationxml --network YV
 
 The command-line equivalent is ``compy-pressure inventory|ppsd|plots|pressure|

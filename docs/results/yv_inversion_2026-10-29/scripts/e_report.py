@@ -403,7 +403,7 @@ a:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
 
 <footer class="meta prose">
   Code: <code>compy_inversion.py</code>, <code>tests/test_compy_inversion.py</code>,
-  <code>_Example/4_Vs_inversion.py</code>, <code>docs/INVERSION.md</code>. Run folder:
+  <code>examples/4_Vs_inversion.py</code>, <code>docs/INVERSION.md</code>. Run folder:
   <code>~/Desktop/BRUIT-FM/inversion_yv_2026-10-29</code> (scripts a–e, results, figures).
 </footer>
 </main>

@@ -1,5 +1,28 @@
 # Changelog
 
+## Unreleased
+
+### Repository organisation
+
+No code or numerical changes. Update local paths as follows:
+
+| Before | After |
+|---|---|
+| `_Example/` | `examples/` (new index: `examples/README.md`) |
+| `_Images/` | `docs/images/` |
+| `docs/yv_compliance_2026-10-28/` | `docs/results/yv_compliance_2026-10-28/` |
+| `docs/yv_inversion_2026-10-29/` | `docs/results/yv_inversion_2026-10-29/` |
+| `docs/xe_young_orca_2026-10-29/` | `docs/results/xe_young_orca_2026-10-29/` |
+
+- README rewritten as a step-by-step workflow that follows station XE.CC11;
+  the API reference moved to `docs/USER_GUIDE.md`; new `docs/README.md` index.
+- `environment.yml` for conda; keywords, classifiers and project URLs in
+  `pyproject.toml`; DOI, ORCID, abstract and keywords in `CITATION.cff`.
+- GitHub issue and pull-request templates; Dependabot for workflow actions.
+- Ruff pinned to 0.16.9: newer releases also format Python code blocks in
+  Markdown, and the lint result should not change with each ruff release.
+- The session handoff note `docs/HANDOFF_2026-10-29.md` is removed.
+
 ## 2.5.0 — 2026-10-30
 
 ComPy becomes the complete package for seafloor pressure gauges: all of

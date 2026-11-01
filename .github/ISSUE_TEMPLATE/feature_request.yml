@@ -1,0 +1,20 @@
+name: Feature or method request
+description: A new processing option, estimator or output
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What you need
+      description: The analysis you want to run and what is missing.
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Method and reference
+      description: Equations, sign conventions, units and the paper it comes from.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current workaround

@@ -167,7 +167,7 @@ Compliance uses H1 = |S_pz|/S_pp, unbiased when the noise is on the vertical. No
 
 ## 4. Results for the YV broadband stations
 
-See `docs/yv_inversion_2026-10-29/` (README, figures, tables, scripts).
+See `docs/results/yv_inversion_2026-10-29/` (README, figures, tables, scripts).
 
 ## 5. Limits
 

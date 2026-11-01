@@ -15,7 +15,7 @@ from obspy.core.inventory.response import (
 
 
 def test_decimated_response_includes_fir_filter():
-    path = Path(__file__).parents[1] / "_Example/0_Download_data.py"
+    path = Path(__file__).parents[1] / "examples/0_Download_data.py"
     spec = importlib.util.spec_from_file_location("download_example", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

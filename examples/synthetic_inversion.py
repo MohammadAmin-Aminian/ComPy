@@ -1,4 +1,4 @@
-"""Small offline numerical example: python _Example/synthetic_inversion.py."""
+"""Small offline numerical example: python examples/synthetic_inversion.py."""
 
 import numpy as np
 import inv_compy as inv

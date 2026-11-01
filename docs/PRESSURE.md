@@ -93,10 +93,10 @@ directory.
 
 Two examples run from Python:
 
-- [`_Example/5_Pressure_QC.py`](../_Example/5_Pressure_QC.py) runs the
+- [`examples/5_Pressure_QC.py`](../examples/5_Pressure_QC.py) runs the
   inventory, PPSD, plot and QC stages. With no arguments it uses a synthetic
   gauge and finishes in seconds.
-- [`_Example/3_DPG_Calibration.py`](../_Example/3_DPG_Calibration.py) runs the
+- [`examples/3_DPG_Calibration.py`](../examples/3_DPG_Calibration.py) runs the
   Rayleigh calibration of one station. It needs no PPSDs:
   `rayleigh_network.calibration_master` uses each channel's StationXML as its
   response snapshot.
