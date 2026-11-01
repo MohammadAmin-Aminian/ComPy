@@ -119,16 +119,23 @@ column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")
 data = ci.ComplianceData.from_npz(
     "RR52_compliance_compy.npz",
     subsets=monthly_estimates,  # (n_months, n_freqs), optional
-    gain_rel=0.0,               # gain is sampled below
+    gain_rel=0.0,  # gain is sampled below
     floor_rel=0.01,
 )
 model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
-post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000,
-                 thin=10, gain_bounds=(0.95, 1.05))
+post = ci.sample(
+    data,
+    model,
+    n_chains=8,
+    n_iter=80000,
+    n_burn=30000,
+    thin=10,
+    gain_bounds=(0.95, 1.05),
+)
 prior = ci.sample(data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000)
 post.summary()["max_rhat"], post.summary()["chi2"]
 vs_q = post.vs_quantiles(depths)  # (5 quantiles, len(depths)) in m/s
-post.save("RR52_final")           # .npz draws and .json summary
+post.save("RR52_final")  # .npz draws and .json summary
 ```
 
 - **Data.** `ComplianceData` holds a full covariance: random error, monthly
@@ -158,9 +165,7 @@ import numpy as np
 import inv_compy as inv
 
 model = np.array(
-    [[100, 2200, 3000, 1500],
-     [1000, 2800, 6000, 3500],
-     [0, 3300, 8000, 4500]],
+    [[100, 2200, 3000, 1500], [1000, 2800, 6000, 3500], [0, 3300, 8000, 4500]],
     dtype=float,
 )
 f = np.array([0.005, 0.007, 0.010, 0.015])
@@ -168,10 +173,17 @@ prediction = inv.calc_norm_compliance(4000, f, model)
 
 chain, profiles, prior, misfit, predictions, likelihood, acceptance = (
     inv.invert_compliance_beta(
-        measured_compliance, f, 4000,
-        starting_model=model, s=measurement_uncertainty,
-        iteration=10000, sigma_v=5, sigma_h=5, alpha=0.25,
-        seed=0, return_profiles=False,
+        measured_compliance,
+        f,
+        4000,
+        starting_model=model,
+        s=measurement_uncertainty,
+        iteration=10000,
+        sigma_v=5,
+        sigma_h=5,
+        alpha=0.25,
+        seed=0,
+        return_profiles=False,
     )
 )
 ```

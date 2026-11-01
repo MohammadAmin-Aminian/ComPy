@@ -164,7 +164,9 @@ import tiskitpy
 
 spans = tiskitpy.TimeSpans.from_eqs(
     (z.stats.starttime, z.stats.endtime),
-    minmag=5.5, days_per_magnitude=0.5, save_eq_file=False,
+    minmag=5.5,
+    days_per_magnitude=0.5,
+    save_eq_file=False,
 )
 ```
 
@@ -226,7 +228,9 @@ from compy_processing import GJI2025, stacked_compliance
 
 pair = cleaned.select(channel="BHZ") + cleaned.select(channel="BDH")
 windows = compy.split_stream(pair, 2100)  # 35-min windows
-result = stacked_compliance(windows, 4636, 0.698, band=(0.0049, 0.0146), criteria=GJI2025, nseg=1024)
+result = stacked_compliance(
+    windows, 4636, 0.698, band=(0.0049, 0.0146), criteria=GJI2025, nseg=1024
+)
 result.compliance, result.uncertainty, result.n_windows
 ```
 
@@ -243,9 +247,13 @@ Vp/Vs (1.7–2.4), the smoothing weight and the pressure gain (±5 %).
 ```python
 import compy_inversion as ci
 
-data = ci.ComplianceData.from_npz("CC11_compliance_compy.npz", gain_rel=0.0, floor_rel=0.01)
+data = ci.ComplianceData.from_npz(
+    "CC11_compliance_compy.npz", gain_rel=0.0, floor_rel=0.01
+)
 model = ci.CrustalModel(moho_depth=7010.0, sediment_max=1000.0)
-post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000, gain_bounds=(0.95, 1.05))
+post = ci.sample(
+    data, model, n_chains=8, n_iter=80000, n_burn=30000, gain_bounds=(0.95, 1.05)
+)
 post.summary()["max_rhat"], post.vs_quantiles(depths)
 ```
 
@@ -260,7 +268,7 @@ Posterior draws are converted to serpentinization with the Miller & Christensen
 serpentinization, so it gives an upper bound.
 
 ```python
-beta_q = post.serpentinization_quantiles(z)   # (5 quantiles, len(z)) in %
+beta_q = post.serpentinization_quantiles(z)  # (5 quantiles, len(z)) in %
 ```
 
 XE.CC11, median (5–95 %):
