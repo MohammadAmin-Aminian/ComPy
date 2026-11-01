@@ -242,7 +242,9 @@ result.compliance, result.uncertainty, result.n_windows
 The model is a Hamilton sediment layer of free thickness over crustal layers of
 100, 200, 400, 800 and 1600 m and one more down to the CRUST1.0 Moho, above a
 mantle half-space. Eight DRAM chains with parallel tempering sample Vs, crustal
-Vp/Vs (1.7–2.4), the smoothing weight and the pressure gain (±5 %).
+Vp/Vs (1.7–2.4), the smoothing weight and the pressure gain (±5 %). The chains
+start from the CRUST1.0 model of the station's 1×1° cell: one exactly there,
+the others dispersed around it so that R-hat can detect unmixed chains.
 
 ```python
 import compy_inversion as ci
@@ -250,9 +252,17 @@ import compy_inversion as ci
 data = ci.ComplianceData.from_npz(
     "CC11_compliance_compy.npz", gain_rel=0.0, floor_rel=0.01
 )
-model = ci.CrustalModel(moho_depth=7010.0, sediment_max=1000.0)
+column = ci.crust1_column(-7.5368, -133.4166, "crust1.0/")  # CRUST1.0 cell of CC11
+model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
+start = ci.crust1_start(model, column)
 post = ci.sample(
-    data, model, n_chains=8, n_iter=80000, n_burn=30000, gain_bounds=(0.95, 1.05)
+    data,
+    model,
+    n_chains=8,
+    n_iter=80000,
+    n_burn=30000,
+    gain_bounds=(0.95, 1.05),
+    start=start,
 )
 post.summary()["max_rhat"], post.vs_quantiles(depths)
 ```

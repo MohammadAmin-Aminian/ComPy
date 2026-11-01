@@ -2,6 +2,40 @@
 
 ## Unreleased
 
+### Inversion starts from CRUST1.0 at the station
+
+- `compy_inversion.crust1_start(model, column)` maps the CRUST1.0 cell of the
+  station (`crust1_column`) onto a `CrustalModel`: sediment thickness,
+  thickness-weighted Vs of each crustal layer, mantle Vs and, with free
+  Vp/Vs, the crystalline-crust Vp/Vs, clipped to the prior.
+- `sample(..., start=, start_spread=0.1)`: the first chain starts at that
+  model and the others are dispersed around it by 10 % of each prior width
+  (`dispersed_starts`), so R-hat still detects unmixed chains; sampled gains
+  start at 1. The start is recorded in `settings["start"]`. Without `start`,
+  chains still start from prior draws.
+- Pipeline stage E and `examples/4_Vs_inversion.py --crust1` start every run,
+  including the prior-only run, from CRUST1.0. The results in `docs/results/`
+  were computed before this change, with prior-draw starts.
+- Legacy sampler: `inv_compy.crust1_starting_model(column, sublayers=1)`
+  builds the `[thickness, rho, Vp, Vs]` starting model from CRUST1.0, and the
+  `invert_compliance*` functions accept a `crust1_column` as `starting_model`.
+- `inv_compy.Model_V2` is deprecated. Its hard-coded templates differ from the
+  CRUST1.0 cell of their station:
+
+  | Station | Template versus the station's CRUST1.0 cell |
+  |---|---|
+  | RR28 | crust of RR38 (700/1540/4750 m) instead of 660/1460/4510 m; mantle Vs 4190 instead of 4510 m/s |
+  | RR29 | sediment 10 m instead of 80 m; crust of RR38; mantle Vs 4190 instead of 4510 m/s |
+  | RR34 | sediment 10 m instead of 410 m; crust of RR38; mantle Vs 4190 instead of 4500 m/s |
+  | RR36 | crust of RR38 (700/1540/4750 m) instead of 690/1530/4710 m |
+  | RR38 | half-space Vs 4370 m/s (RR36's mantle) instead of 4190 m/s |
+  | RR40 | crust of RR38 instead of 680/1510/4640 m; mantle Vs 4190 instead of 4360 m/s |
+  | RR50 | crust of RR38 (Vs 2700/3700/4050 m/s) instead of 1180/1180/4570 m with Vs 2540/3590/3940 m/s; half-space Vs 4370 instead of 4190 m/s |
+  | RR52 | crust matches; half-space Vs 4370 instead of 4310 m/s |
+
+  In the legacy sampler the starting model also sets the Vs prior, so
+  inversions run with these templates used these priors.
+
 ### Repository organisation
 
 No code or numerical changes. Update local paths as follows:

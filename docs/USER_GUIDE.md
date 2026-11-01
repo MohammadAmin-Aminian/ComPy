@@ -123,6 +123,7 @@ data = ci.ComplianceData.from_npz(
     floor_rel=0.01,
 )
 model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
+start = ci.crust1_start(model, column)  # CRUST1.0 starting model
 post = ci.sample(
     data,
     model,
@@ -131,8 +132,11 @@ post = ci.sample(
     n_burn=30000,
     thin=10,
     gain_bounds=(0.95, 1.05),
+    start=start,
 )
-prior = ci.sample(data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000)
+prior = ci.sample(
+    data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000, start=start
+)
 post.summary()["max_rhat"], post.summary()["chi2"]
 vs_q = post.vs_quantiles(depths)  # (5 quantiles, len(depths)) in m/s
 post.save("RR52_final")  # .npz draws and .json summary
@@ -145,6 +149,12 @@ post.save("RR52_final")  # .npz draws and .json summary
   layers that double in thickness to the Moho, above a mantle half-space.
   Vp/Vs is 1.85 by default, free within bounds, Brocher (2005), or Vp fixed
   from a reference.
+- **Starting model.** `crust1_start(model, column)` maps the CRUST1.0 cell of
+  the station onto the parameters: sediment thickness, thickness-weighted Vs
+  of each crustal layer, mantle Vs and crystalline-crust Vp/Vs. With
+  `start=`, the first chain starts there and the others are dispersed by
+  `start_spread` (default 0.1 of each prior width; 0 starts all chains at
+  CRUST1.0). Without it, chains start from prior draws.
 - **Sampler.** Independent DRAM chains with a Gibbs-sampled smoothing weight;
   `temperatures=` adds parallel tempering for multimodal posteriors.
 - **Results.** `Posterior` gives R-hat, ESS, χ² and Vs-depth quantiles;
@@ -197,8 +207,23 @@ Density and Vp are fixed; Vs and finite-layer thickness are sampled with a
 symmetric Gaussian random walk, and the half-space stays fixed. The data term
 is `sum(((observed - predicted)/s)**2)`; the roughness term is the squared
 second derivative on a 1-m grid. `s` must be finite and strictly positive.
-`seed` controls a local RNG. `Model_V2` provides station templates with
-3/6/9/12 subdivisions for the eight RHUM-RUM stations. The names
+`seed` controls a local RNG.
+
+The starting model comes from CRUST1.0 at the station, and it also sets the
+legacy prior (Vs bounds are fractions of the starting Vs):
+
+```python
+column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")
+start = inv.crust1_starting_model(column, sublayers=2)  # 6 crustal layers
+result = inv.invert_compliance_beta(data, f, depth, starting_model=start, s=sigma)
+# or starting_model=column, with n_layer // 3 sublayers per crustal layer
+```
+
+`crust1_starting_model` keeps the CRUST1.0 sediment layers, splits each
+crystalline layer into `sublayers` equal parts and adds a 10-km mantle layer
+above the half-space, the structure of the former `Model_V2` templates.
+`Model_V2` is deprecated: its hard-coded RHUM-RUM templates do not match the
+CRUST1.0 cell at RR28, RR29, RR34, RR36, RR38, RR40 and RR50. The names
 `invert_compliace*`, `liklihood`, `Roughness` and `Comliance_uncertainty`
 remain available as aliases for existing notebooks.
 

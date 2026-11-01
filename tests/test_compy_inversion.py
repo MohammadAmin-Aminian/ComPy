@@ -478,3 +478,91 @@ def test_legacy_heatmap_ticks_use_100_m_rows():
     np.testing.assert_allclose(rows, [0, 20, 40, 60, 80])
     # CRUST1.0 reference arrays: element 42 (Moho) at 7 km, i.e. row 70.
     assert inv_compy._LEGACY_REFERENCE_ROWS[42] == pytest.approx(70.0)
+
+
+# CRUST1.0 cell of XE.CC11 (-7.5, -133.5), as read by crust1_column.
+CC11_COLUMN = dict(
+    cell=(-7.5, -133.5),
+    water_depth=4610.0,
+    layers=[
+        ("upper_sediments", 90.0, 1930.0, 550.0, 2000.0),
+        ("upper_crust", 690.0, 5000.0, 2700.0, 2550.0),
+        ("middle_crust", 1520.0, 6500.0, 3700.0, 2850.0),
+        ("lower_crust", 4710.0, 7100.0, 4050.0, 3050.0),
+    ],
+    mantle=(8080.0, 4490.0, 3330.0),
+    moho_depth=7010.0,
+    sediment_thickness=90.0,
+)
+
+
+def test_crust1_start_follows_the_column():
+    model = ci.CrustalModel(
+        moho_depth=7010.0, sediment_max=1000.0, vp_vs_range=(1.7, 2.4)
+    )
+    theta = dict(zip(model.names, ci.crust1_start(model, CC11_COLUMN)))
+    assert theta["sediment_thickness"] == 90.0
+    # model layers 90-190-390-790-1590-3190-7010 m; CRUST1.0 interfaces 90, 780, 2300 m
+    assert theta["vs_crust_1"] == theta["vs_crust_2"] == 2700.0
+    assert theta["vs_crust_3"] == pytest.approx((390 * 2700 + 10 * 3700) / 400)
+    assert theta["vs_crust_4"] == 3700.0
+    assert theta["vs_crust_5"] == pytest.approx((710 * 3700 + 890 * 4050) / 1600)
+    assert theta["vs_crust_6"] == 4050.0
+    assert theta["vs_mantle"] == 4490.0
+    ratio = (690 * 5000 / 2700 + 1520 * 6500 / 3700 + 4710 * 7100 / 4050) / 6920
+    assert theta["vp_vs"] == pytest.approx(ratio)
+
+
+def test_crust1_start_is_clipped_to_the_prior():
+    column = dict(CC11_COLUMN, sediment_thickness=1500.0)
+    model = ci.CrustalModel(
+        moho_depth=7010.0, sediment_max=1000.0, vs_mantle=(3800.0, 4400.0)
+    )
+    theta = dict(zip(model.names, ci.crust1_start(model, column)))
+    assert theta["sediment_thickness"] == 1000.0 and theta["vs_mantle"] == 4400.0
+    bare = ci.CrustalModel(moho_depth=7010.0, sediment_max=0.0)
+    start = ci.crust1_start(bare, CC11_COLUMN)
+    assert len(start) == len(bare.names) and bare.in_bounds(start)
+    assert start[0] == pytest.approx((90 * 550 + 10 * 2700) / 100)  # top 100 m
+
+
+def _cc11_target(gain_bounds=None):
+    depth, f = 4636.0, np.arange(4, 13) * 1.220703125e-3
+    model = ci.CrustalModel(moho_depth=7010.0, sediment_max=1000.0)
+    truth = np.array([120.0, 1900, 2200, 2500, 2850, 3170, 3500, 4550])
+    clean = ci.forward(depth, f, model.layers(truth))
+    gain_rel = 0.0 if gain_bounds else 0.05
+    data = ci.ComplianceData.build(f, clean, depth, random=0.003 * clean,
+                                   gain_rel=gain_rel, floor_rel=0.01)  # fmt: skip
+    return data, model
+
+
+def test_dispersed_starts_begin_at_the_start():
+    data, model = _cc11_target((0.95, 1.05))
+    target = ci._Target(data, model, False, (0.95, 1.05))
+    start = np.append(ci.crust1_start(model, CC11_COLUMN), 1.0)
+    rng = np.random.default_rng(0)
+    starts = ci.dispersed_starts(target, start, 6, rng, spread=0.1)
+    np.testing.assert_array_equal(starts[0], start)
+    assert all(target(s) is not None for s in starts)
+    assert np.ptp([s[3] for s in starts]) > 0
+    same = ci.dispersed_starts(target, start, 3, rng, spread=0.0)
+    assert all(np.array_equal(s, start) for s in same)
+    with pytest.raises(ValueError, match="starting model"):
+        ci.dispersed_starts(target, start + 1e6, 2, rng)
+
+
+def test_sample_records_the_crust1_start():
+    data, model = _cc11_target((0.95, 1.05))
+    start = ci.crust1_start(model, CC11_COLUMN)
+    post = ci.sample(data, model, n_chains=2, n_iter=400, n_burn=100, thin=10, seed=1,
+                     processes=1, gain_bounds=(0.95, 1.05), start=start,
+                     start_spread=0.05)  # fmt: skip
+    assert post.settings["start"] == dict(model=start.tolist(), spread=0.05)
+    assert post.theta.shape[-1] == len(model.names) + 1
+    with pytest.raises(ValueError, match="start needs"):
+        ci.sample(data, model, n_chains=2, n_iter=10, n_burn=5, processes=1,
+                  start=start[:-1])  # fmt: skip
+    prior_start = ci.sample(data, model, n_chains=2, n_iter=200, n_burn=50, thin=10,
+                            seed=1, processes=1)  # fmt: skip
+    assert prior_start.settings["start"] is None
