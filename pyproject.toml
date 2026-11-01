@@ -50,9 +50,10 @@ Documentation = "https://github.com/MohammadAmin-Aminian/ComPy/blob/main/docs/US
 Changelog = "https://github.com/MohammadAmin-Aminian/ComPy/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
-py-modules = ["compy", "inv_compy", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
+# The compy package, plus ComPy 2.x module names kept as deprecated aliases.
+py-modules = ["inv_compy", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
 # reference_data is listed as a (data-only) package so that setuptools ships it.
-packages = ["compy_pressure", "compy_pressure.reference_data"]
+packages = ["compy", "compy.inversion", "compy.plotting", "compy_pressure", "compy_pressure.reference_data"]
 
 [tool.setuptools.package-data]
 "compy_pressure.reference_data" = ["*.csv", "*.json"]
