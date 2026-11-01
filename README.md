@@ -91,9 +91,10 @@ python -m pip install -e '.[dev,pressure,fast]'
 python -m pytest -q
 ```
 
-The distribution is `seafloor-compy`; the import names are `compy`,
-`compy_processing`, `compy_inversion`, `inv_compy`, `ffplot` and the
-`compy_pressure` package. Dependencies: NumPy, SciPy, Matplotlib, ObsPy,
+The distribution is `seafloor-compy`; it installs the `compy` package and
+the `compy_pressure` package. The ComPy 2.x module names (`inv_compy`,
+`ffplot`, `compy_processing`, ...) still import, with a deprecation warning
+that names the new location. Dependencies: NumPy, SciPy, Matplotlib, ObsPy,
 TiSKitPy 2.3 and disba; Numba is optional and speeds up the inversion about
 140×.
 
@@ -180,7 +181,8 @@ interpolated per sample. Horizontal-coherent noise is then removed from the
 vertical only, in 24-h windows that avoid the earthquake spans.
 
 ```python
-import compy, compy_cleaning as cleaning
+import compy
+from compy import cleaning
 
 rotated = cleaning.rotate_smoothly(st, hour_centres, angles, azimuths)
 local = cleaning.sta_lta_spans(rotated.select(component="Z")[0])
@@ -224,7 +226,7 @@ the band is 4.9–14.6 mHz, the mean coherence 0.97, and the monthly stacks stay
 within −0.9 % and +1.2 % of the full stack.
 
 ```python
-from compy_processing import GJI2025, stacked_compliance
+from compy.compliance import GJI2025, stacked_compliance
 
 pair = cleaned.select(channel="BHZ") + cleaned.select(channel="BDH")
 windows = compy.split_stream(pair, 2100)  # 35-min windows
@@ -247,7 +249,7 @@ start from the CRUST1.0 model of the station's 1×1° cell: one exactly there,
 the others dispersed around it so that R-hat can detect unmixed chains.
 
 ```python
-import compy_inversion as ci
+from compy.inversion import dram as ci
 
 data = ci.ComplianceData.from_npz(
     "CC11_compliance_compy.npz", gain_rel=0.0, floor_rel=0.01
@@ -340,15 +342,21 @@ is excluded from the interpretation. Figures, variants and full tables:
 
 ```text
 ComPy/
-├── compy.py                 # stream handling, rotation, coherent noise, legacy compliance
-├── compy_processing.py      # stacked compliance, selection criteria, errors
-├── compy_cleaning.py        # smooth tilt rotation, STA/LTA event spans
-├── compy_inversion.py       # Bayesian Vs inversion, CRUST1.0, serpentinization
-├── compy_numerics.py        # gravity-wave dispersion, constants
-├── compy_diagnostics.py     # R-hat and ESS
-├── compy_streams.py         # window splitting and stream checks
-├── inv_compy.py             # forward propagator and legacy samplers
-├── ffplot.py                # plotting
+├── compy/                   # the package
+│   ├── streams.py           #   window splitting and stream checks
+│   ├── cleaning.py          #   smooth tilt rotation, periodic transients, STA/LTA spans
+│   ├── preprocessing.py     #   tilt correction, coherent-noise removal
+│   ├── compliance.py        #   spectra, window selection, stacked compliance, errors
+│   ├── inversion/           #   Vs inversion
+│   │   ├── dram.py          #     Bayesian DRAM inversion, CRUST1.0, serpentinization
+│   │   ├── metropolis.py    #     Metropolis sampler of the GJI paper, tempering
+│   │   ├── occam.py         #     Occam smooth-model inversion
+│   │   ├── propagator.py    #     forward model (Crawford's raydep) and kernels
+│   │   └── models.py        #     starting and reference models
+│   ├── diagnostics.py       #   R-hat, ESS, reproducible run records
+│   ├── plotting/            #   style, spectra, inversion and QC figures
+│   └── numerics.py          #   constants, gravity-wave dispersion, shared maths
+├── inv_compy.py, ffplot.py, compy_*.py   # ComPy 2.x names (deprecated aliases)
 ├── compy_pressure/          # DPG QC, Rayleigh/microseism/local-P calibration, noise models
 ├── pipeline/                # end-to-end network pipeline (stages A–G)
 ├── examples/                # offline synthetic examples and per-step scripts

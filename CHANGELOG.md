@@ -2,6 +2,39 @@
 
 ## Unreleased
 
+### One `compy` package with consistent names
+
+- The nine top-level modules are now one package, one module per processing
+  step: `compy.streams`, `compy.cleaning`, `compy.preprocessing`,
+  `compy.compliance`, `compy.inversion` (`dram`, `metropolis`, `occam`,
+  `propagator`, `models`), `compy.diagnostics`, `compy.plotting` (`style`,
+  `spectra`, `inversion`, `qc`) and `compy.numerics`. `compy_pressure` is
+  unchanged.
+- Misspelled, non-PEP 8 and misleading names are renamed, e.g.
+  `Calculate_Compliance` → `compliance.calculate_compliance`,
+  `Rotate` → `preprocessing.correct_tilt`, `calc_norm_compliance` →
+  `inversion.propagator.normalized_compliance`, `liklihood` →
+  `inversion.metropolis.likelihood`, `final_plot` →
+  `plotting.inversion.plot_publication_figure`, `ffplot.psd` →
+  `plotting.spectra.plot_psd`. Names that come from Crawford's MATLAB code
+  (`raydep`, `argdtray`, `gravd`, `dtanh`) keep their names. Full table in
+  `docs/USER_GUIDE.md`.
+- Duplicates are merged: one `rms`, one `compliance_uncertainty`, one plot
+  style (`set_plot_style`, `set_plot_style_large`, which set the same
+  `rcParams` as the two former `plt_params`), and the `ffplot` wrappers of
+  inversion functions now point to the originals.
+- Commented-out code, empty `# %%` cells and loop-progress `print` calls are
+  removed. No equation, default or order of operations changed: a seeded run
+  of the Metropolis and DRAM samplers, the propagator and the kernels gives
+  bit-identical arrays before and after.
+- Compatibility: every ComPy 2.x import keeps working (`import inv_compy`,
+  `from compy_processing import estimate`, `compy.Calculate_Compliance`, ...)
+  and warns with the new location. `compy_numerics` and the other one-to-one
+  modules are the new module objects, so private names and monkeypatching
+  still work. The aliases will be removed in 3.0.
+- `save_run` records the SHA-256 of every file in the package, keyed by path
+  (`compy/diagnostics.py`, ...).
+
 ### Inversion starts from CRUST1.0 at the station
 
 - `compy_inversion.crust1_start(model, column)` maps the CRUST1.0 cell of the

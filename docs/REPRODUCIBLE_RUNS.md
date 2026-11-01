@@ -50,7 +50,7 @@ software/platform environment; UTC timestamps naturally differ between runs.
 ## Apply the helpers to your own inversion
 
 ```python
-from compy_diagnostics import save_run, summarize_chains
+from compy.diagnostics import save_run, summarize_chains
 
 # Draws from independent chains targeting the same posterior:
 # shape = (chains, iterations, parameters).
