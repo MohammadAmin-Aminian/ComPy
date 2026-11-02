@@ -87,6 +87,14 @@ def compliance_summary(station):
     return json.loads(path.read_text()) if path.exists() else None
 
 
+def result_label(summ):
+    """Gain label of the compliance result used downstream (as in stage E), or None."""
+    for label in ("compy", "bruitfm", "nominal"):
+        if summ and "n_windows" in summ["results"].get(label, {}):
+            return label
+    return None
+
+
 def load_posterior(station, variant="final"):
     path = RESULTS / station / "inversion" / f"{station}_{variant}.npz"
     if not path.exists():
@@ -260,9 +268,9 @@ def fig03_psd(station):
                 ylabel="PSD [dB re 1 (m/s²)²/Hz]", title=f"(a) {station} vertical, median and 10–90 %")  # fmt: skip
     axes[0].legend(fontsize=10, loc="upper right")
     _, praw = _psd_windows(phys, "BDH", starts)
-    gain = json.loads(
-        (WORK / station / "calibration" / "compy_gain.json").read_text()
-    ).get("gain", 1.0)
+    summ = compliance_summary(station)
+    label = result_label(summ)
+    gain = summ["results"][label]["gain"] if label else 1.0
     db = 10 * np.log10(praw * gain**2)
     axes[1].semilogx(
         f,
@@ -391,7 +399,7 @@ def _clean_windows(station, t_start, t_end, width=2100.0):
 
 
 def fig06_coherogram(station, summ):
-    r = summ["results"]["compy"]
+    r = summ["results"][result_label(summ)]
     band = r["band_hz"]
     months = sorted(r["monthly"], key=lambda k: -r["monthly"][k]["n"])
     year, month = map(int, months[0].split("-"))
@@ -442,7 +450,8 @@ def fig06_coherogram(station, summ):
 
 
 def fig07_windows(station, summ):
-    d = np.load(RESULTS / station / f"{station}_compliance_compy.npz")
+    label = result_label(summ)
+    d = np.load(RESULTS / station / f"{station}_compliance_{label}.npz")
     starts = d["window_starts"]
     rng = np.random.default_rng(1)
     pick = sorted(rng.choice(starts, min(150, len(starts)), replace=False))
@@ -481,7 +490,7 @@ def fig07_windows(station, summ):
     inb = (d["freqs"] >= band[0]) & (d["freqs"] <= band[1])
     axes[1, 1].errorbar(d["freqs"][inb], d["compliance"][inb], yerr=d["window_std"][inb], fmt="o",
                         color="red", capsize=4, label="Stacked (error bars: window scatter)")  # fmt: skip
-    axes[1, 0].axhline(summ["results"]["compy"]["threshold"], color="black", ls="--")
+    axes[1, 0].axhline(summ["results"][label]["threshold"], color="black", ls="--")
     for ax in axes.ravel():
         for x in band:
             ax.axvline(x, color="black", ls="--")
@@ -830,8 +839,9 @@ def main():
     fig03_psd(ref)
     fig04_tilt(ref)
     fig05_calibration(ref)
-    fig06_coherogram(ref, summ)
-    fig07_windows(ref, summ)
+    if result_label(summ):  # the reference station has a compliance result
+        fig06_coherogram(ref, summ)
+        fig07_windows(ref, summ)
     if store:
         fig08_compliance(store, c)
         fig09_heatmaps(store, c)

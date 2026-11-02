@@ -1,6 +1,38 @@
 # Changelog
 
-## Unreleased
+## 2.6.0 — 2026-11-02
+
+One `compy` package with consistent names, inversions started from CRUST1.0,
+a reorganised repository, and an end-to-end check of the pipeline from raw
+data. Every ComPy 2.x import keeps working, with a deprecation warning, and
+numerical results are unchanged.
+
+### Verified for this release
+
+- The PR #16 restructure gives bit-identical results to 2.5 on XE CC11. Compared were:
+  - stacked compliance and its errors;
+  - the data covariance and forward model;
+  - a seeded DRAM run;
+  - the legacy solver;
+  - serpentinization.
+- 824 tests pass on Python 3.10 and 3.13.
+- `pipeline/run_pipeline.py --fetch` was run from one month of raw CC11 SDS data
+  through stages 0, A, B, D, C, E, F and G in a new run folder. The figure
+  stage was also run on the full XE results.
+
+### Fixed
+
+- **Pipeline stage F** crashed when the reference station had no Rayleigh-wave
+  calibration (`KeyError: 'compy'`), for example when its record contains no
+  M ≥ 7 event. It now uses the same gain as stages C and E (`compy`, then
+  `bruitfm`, then `nominal`; `f_figures.result_label`). It skips the window
+  figures when the station has no compliance at all. Regression test:
+  `tests/test_pipeline_figures.py`.
+
+### Documentation
+
+- The README no longer opens with the all-station Vs heat map.
+
 
 ### One `compy` package with consistent names
 
