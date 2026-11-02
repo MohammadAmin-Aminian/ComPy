@@ -39,7 +39,7 @@ from config import (  # noqa: E402
     STATIONS,
     WORK,
 )
-from e_invert import build_model  # noqa: E402
+from e_invert import build_model, result_label  # noqa: E402,F401  (result_label re-exported)
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 from obspy import UTCDateTime, read, read_inventory  # noqa: E402
 
@@ -85,14 +85,6 @@ def title(station, c):
 def compliance_summary(station):
     path = RESULTS / station / f"{station}_summary.json"
     return json.loads(path.read_text()) if path.exists() else None
-
-
-def result_label(summ):
-    """Gain label of the compliance result used downstream (as in stage E), or None."""
-    for label in ("compy", "bruitfm", "nominal"):
-        if summ and "n_windows" in summ["results"].get(label, {}):
-            return label
-    return None
 
 
 def load_posterior(station, variant="final"):
@@ -233,6 +225,9 @@ def _welch(x, fs=1.25):
 
 def fig03_psd(station):
     clean_dir = WORK / station / "clean"
+    if not list(clean_dir.glob(f"{station}_seg*.mseed")):
+        print(f"fig03: {station} has no stage B output; skipped")
+        return
     rng = np.random.default_rng(0)
     phys = sorted((WORK / station / "phys").glob(f"{station}.*.mseed"))
     phys = [
@@ -268,23 +263,34 @@ def fig03_psd(station):
                 ylabel="PSD [dB re 1 (m/s²)²/Hz]", title=f"(a) {station} vertical, median and 10–90 %")  # fmt: skip
     axes[0].legend(fontsize=10, loc="upper right")
     _, praw = _psd_windows(phys, "BDH", starts)
+    # The gain of the stage C result (what compliance and inversion used); without
+    # one, the Rayleigh-wave gain of stage D; otherwise the nominal response.
     summ = compliance_summary(station)
     label = result_label(summ)
-    gain = summ["results"][label]["gain"] if label else 1.0
+    cal_path = WORK / station / "calibration" / "compy_gain.json"
+    cal_gain = (
+        json.loads(cal_path.read_text()).get("gain") if cal_path.exists() else None
+    )
+    if label:
+        gain, source = summ["results"][label]["gain"], label
+    elif cal_gain:
+        gain, source = cal_gain, "compy"
+    else:
+        gain, source = 1.0, "nominal"
     db = 10 * np.log10(praw * gain**2)
     axes[1].semilogx(
         f,
         np.median(db, axis=0),
         lw=2.5,
         color="tab:purple",
-        label=f"Pressure × gain ({gain:.3f})",
+        label=f"Pressure × gain {gain:.3f} ({source})",
     )
     axes[1].fill_between(
         f, *np.percentile(db, [10, 90], axis=0), color="tab:purple", alpha=0.2
     )
     axes[1].axvspan(0.005, 0.015, color="palegreen", alpha=0.35)
     axes[1].set(xlim=(0.002, 0.6), xlabel="Frequency [Hz]", ylabel="PSD [dB re 1 Pa²/Hz]",
-                title="(b) Calibrated pressure")  # fmt: skip
+                title="(b) Pressure" + (" (uncalibrated)" if source == "nominal" else ""))  # fmt: skip
     axes[1].legend(fontsize=10)
     fig.tight_layout()
     fig.savefig(FIGURES / "fig03_psd_stages.png", dpi=140)
@@ -305,7 +311,11 @@ def _nlnm(f):
 
 
 def fig04_tilt(station):
-    rows = list(csv.DictReader(open(WORK / station / "clean" / "tilt_hourly.csv")))
+    path = WORK / station / "clean" / "tilt_hourly.csv"
+    rows = list(csv.DictReader(open(path))) if path.exists() else []
+    if not rows:
+        print(f"fig04: {station} has no hourly tilt estimates; skipped")
+        return
     t = np.array([UTCDateTime(r["centre_utc"]).matplotlib_date for r in rows])
     ang = np.array([float(r["angle_deg"]) for r in rows])
     az = np.array([float(r["azimuth_deg"]) for r in rows])
@@ -399,9 +409,16 @@ def _clean_windows(station, t_start, t_end, width=2100.0):
 
 
 def fig06_coherogram(station, summ):
-    r = summ["results"][result_label(summ)]
+    label = result_label(summ)
+    r = summ["results"][label]
     band = r["band_hz"]
     months = sorted(r["monthly"], key=lambda k: -r["monthly"][k]["n"])
+    if not months:  # no month reached 20 windows: busiest month of the accepted windows
+        starts = np.load(RESULTS / station / f"{station}_compliance_{label}.npz")[
+            "window_starts"
+        ]
+        keys = [f"{t.year}-{t.month:02d}" for t in map(UTCDateTime, starts)]
+        months = sorted(set(keys), key=lambda k: -keys.count(k))
     year, month = map(int, months[0].split("-"))
     t0 = UTCDateTime(year, month, 1)
     t1 = UTCDateTime(year + (month == 12), month % 12 + 1, 1)
@@ -412,6 +429,9 @@ def fig06_coherogram(station, summ):
         f, zz, pp, zp, coh = spectra(w, NSEG)
         rows.append((w[0].stats.starttime.matplotlib_date, 10 * np.log10(pp * gain**2),
                      10 * np.log10(zz * (2 * np.pi * f) ** 4), coh))  # fmt: skip
+    if not rows:
+        print(f"fig06: no clean windows for {station} in {months[0]}; skipped")
+        return
     t = np.array([r_[0] for r_ in rows])
     P, A, C = (np.array([r_[i] for r_ in rows]).T for i in (1, 2, 3))
     sel = (f >= band[0]) & (f <= band[1])
@@ -757,11 +777,7 @@ def tables(c, store):
         row = dict(station=s, lat=lat, lon=lon, depth_m=depth, gain_compy=cal.get("gain"),
                    gain_compy_std=cal.get("gain_std"), gain_events=len(cal.get("events_used", [])),
                    gain_bruitfm=(summ or {}).get("gains", {}).get("bruitfm"))  # fmt: skip
-        label = None
-        for lab in ("compy", "bruitfm", "nominal"):
-            if summ and "n_windows" in summ["results"].get(lab, {}):
-                label = lab
-                break
+        label = result_label(summ)
         if label:
             r = summ["results"][label]
             row.update(gain_used=label, band_lo=r["band_hz"][0], band_hi=r["band_hz"][1], threshold=r["threshold"],

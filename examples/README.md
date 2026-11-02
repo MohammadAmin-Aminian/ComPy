@@ -26,14 +26,16 @@ python examples/5_Pressure_QC.py --output qc-example
 | Step | Script | Input |
 |---|---|---|
 | 0 | [`0_Download_data.py`](0_Download_data.py) | FDSN download, decimation and response removal for one station and interval |
-| 1 | [`1_Transients_EQ.py`](1_Transients_EQ.py) | Earthquake masking and periodic-transient removal on the vertical |
-| 2 | [`2_Rotation.py`](2_Rotation.py) | Tilt correction of response-corrected displacement |
+| 1 | [`1_Transients_EQ.py`](1_Transients_EQ.py) | Periodic-transient (glitch) removal on every channel, outside earthquake spans; unattended, as in pipeline stage B (`--interactive` for TiSKitPy's fitter) |
+| 2 | [`2_Rotation.py`](2_Rotation.py) | Hourly tilt rotation, then horizontal-coherent noise removal in ≤ 24 h windows (Aminian et al. 2025, §4.1.1 and §4.1.4); hours beyond TiSKitPy's tilt limit are kept and reported |
 | 3 | [`3_DPG_Calibration.py`](3_DPG_Calibration.py) | Rayleigh-wave DPG gain from an SDS archive, StationXML and a ComCat catalogue |
 | 4 | [`4_Vs_inversion.py`](4_Vs_inversion.py) | Vs inversion of a `stacked_compliance` result (`.npz`) |
 | 5 | [`5_Pressure_QC.py`](5_Pressure_QC.py) | QC of every pressure gauge in an SDS archive |
 
 ```bash
-python examples/0_Download_data.py YV RR52 2012-12-01 2012-12-02 output.mseed
+python examples/0_Download_data.py YV RR52 2012-12-01 2012-12-02 day.mseed
+python examples/1_Transients_EQ.py day.mseed day_noglitch.mseed
+python examples/2_Rotation.py day_noglitch.mseed day_clean.mseed
 python examples/3_DPG_Calibration.py SDS/ stationxml/ YV RR52 events.geojson
 python examples/4_Vs_inversion.py RR52_compliance_compy.npz \
     --lat -20.4723 --lon 68.1094 --crust1 path/to/crust1.0

@@ -1,5 +1,58 @@
 # Changelog
 
+## 2.7.0 — 2026-11-02
+
+A correctness pass before full-data reprocessing: a code review of the
+package, a test of every real-data example, and a pipeline run from raw data.
+Results of the existing workflows are unchanged.
+
+### Fixed
+
+- **`correct_tilt`, `remove_coherent_noise` and `estimate_tilt_angles`
+  failed on float32 traces.** TiSKitPy needs complex128 cross-spectra. Float32
+  traces are what stage A writes, and what FLOAT32 MiniSEED holds. Inputs are now
+  copied to float64; float64 input gives bit-identical results.
+- **`correct_tilt` per-hour cleaning (`clean_horizontals=True`, the default)
+  failed at 1.25 Hz:** TiSKitPy's default spectral segment does not fit a 1-h
+  window. When it does not fit, the segment falls back to one sixth of the
+  window (with a warning), and `spectral_window_s=` sets it explicitly.
+- **Pipeline stage F:**
+  - it crashed on a reference station without stage B/C output (`fig04_tilt`);
+  - it crashed on a short record without a monthly stack (`fig06`, IndexError) or without clean windows (NameError);
+  - Fig. 3 now states the gain and its source, and says "uncalibrated" for the nominal response.
+- **One rule for the gain source** (`e_invert.result_label`: Rayleigh,
+  BRUIT-FM, nominal) is now shared by stages E, F and G, which each had a copy.
+- `plot_coherogram_daily` took every channel's sampling rate from `st[3]`.
+- `compy.compliance` no longer imports Matplotlib or the FDSN client at load
+  time. They are imported only where used.
+- Stale provenance string `compy.Rotate` in `compy_pressure/tilt.py` summaries.
+
+### Added
+
+- `correct_tilt(..., skip_failed=True)` keeps windows that TiSKitPy cannot
+  rotate (e.g. tilt above its 20° limit, as on XE CC11 before it clipped). They
+  stay uncorrected, with NaN angles and a warning, instead of aborting the
+  record. The default still raises.
+- Example 1 runs unattended with the method of stage B (periodic template with
+  a fold-strength test, outside earthquake spans) on every channel.
+  `--interactive` keeps TiSKitPy's PeriodicTransient, which prompts for clip
+  levels.
+- Example 2 follows the paper: hourly rotation without per-hour cleaning, then
+  `remove_coherent_noise` in windows of up to 24 h.
+
+### Verified
+
+- 830 tests pass on Python 3.10 and 3.13; ruff 0.16.9 clean.
+- Examples run with a fresh wheel install:
+  - synthetic, reproducible and Vs inversions;
+  - pressure QC;
+  - FDSN download (RESIF YV.RR52);
+  - transients (RR52);
+  - rotation (XE CC11);
+  - Vs inversion of CC11;
+  - calibration (CC11; correctly unresolved with one usable event).
+- `run_pipeline.py --fetch` was run from raw SDS (CC11) through stages 0–G.
+
 ## 2.6.0 — 2026-11-02
 
 One `compy` package with consistent names, inversions started from CRUST1.0,

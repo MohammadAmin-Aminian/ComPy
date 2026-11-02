@@ -15,9 +15,7 @@ kept with the estimator they serve. All quantities are SI: m, Pa, Hz.
 
 from dataclasses import dataclass, field
 
-import matplotlib.pyplot as plt
 import numpy as np
-from obspy.clients.fdsn import Client
 from scipy import signal
 
 from compy._deprecation import renamed
@@ -455,6 +453,8 @@ def _water_depth(stream, depth):
     if len(z) != 1:
         raise ValueError("exactly one vertical trace is required")
     stats = z[0].stats
+    from obspy.clients.fdsn import Client  # network access only when depth is not given
+
     inventory = Client("RESIF").get_stations(
         network=stats.network,
         station=stats.station,
@@ -471,6 +471,8 @@ def _water_depth(stream, depth):
 
 def _plot_compliance(result, stream):
     curves, coherence, _, fc, f, scatter, _, pressure, vertical = result
+    import matplotlib.pyplot as plt  # computation modules do not import plotting at load time
+
     fig, axes = plt.subplots(2, 2, figsize=(14, 10), constrained_layout=True)
     fig.suptitle(f"{stream[0].stats.network}.{stream[0].stats.station}")
     for ax, values, label in zip(

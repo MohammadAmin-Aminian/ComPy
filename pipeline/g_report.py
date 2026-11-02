@@ -17,6 +17,7 @@ from f_figures import (
     coords,
     load_posterior,
     n_windows,
+    result_label,
     usable,
 )
 
@@ -41,14 +42,7 @@ def station_record(s, c):
         rec["status"] = "no compliance (stage B: no usable segments)"
         return rec
     rec["gain_bruitfm"] = summ.get("gains", {}).get("bruitfm")
-    label = next(
-        (
-            lab
-            for lab in ("compy", "bruitfm", "nominal")
-            if "n_windows" in summ["results"].get(lab, {})
-        ),
-        None,
-    )
+    label = result_label(summ)
     if label is None:
         rec["status"] = "no compliance (gates)"
         return rec

@@ -1374,28 +1374,28 @@ def plot_coherogram_daily(st, nseg=2**12, data_indetvarl=7):
 
     f, t, Sz = scipy.signal.spectrogram(
         st.select(component="Z")[0].data,
-        fs=st[3].stats.sampling_rate,
+        fs=st.select(component="Z")[0].stats.sampling_rate,
         nperseg=nseg,
         noverlap=(nseg / 2),
         window="hann",
     )
     f, t, Sh1 = scipy.signal.spectrogram(
         st.select(component="1")[0].data,
-        fs=st[3].stats.sampling_rate,
+        fs=st.select(component="1")[0].stats.sampling_rate,
         nperseg=nseg,
         noverlap=(nseg / 2),
         window="hann",
     )
     f, t, Sh2 = scipy.signal.spectrogram(
         st.select(component="2")[0].data,
-        fs=st[3].stats.sampling_rate,
+        fs=st.select(component="2")[0].stats.sampling_rate,
         nperseg=nseg,
         noverlap=(nseg / 2),
         window="hann",
     )
     f, t, Sp = scipy.signal.spectrogram(
         st.select(component="H")[0].data,
-        fs=st[0].stats.sampling_rate,
+        fs=st.select(component="H")[0].stats.sampling_rate,
         nperseg=nseg,
         noverlap=(nseg / 2),
         window="hann",
