@@ -3,7 +3,7 @@
 For one station location, a vertical and two horizontal channels of one band
 are read day by day, low-passed and resampled to 1 Hz, corrected to
 acceleration in chunks of several days (tapered ends discarded) and cleaned of
-tilt and horizontal-coherent noise by ``compy.Rotate`` in WINDOW_HOURS windows.
+tilt and horizontal-coherent noise by ``compy.correct_tilt`` in WINDOW_HOURS windows.
 A window whose rotation fails is dropped and counted. Two PPSDs with identical
 windows are saved: the 1 Hz vertical before and after cleaning, in ``tilt/``
 beside the vertical channel's saved PPSD. Raw data and saved PPSDs are only
@@ -180,7 +180,7 @@ def common_intervals(z, one, two):
 
 
 def clean_windows(stream, rotate):
-    """Apply compy.Rotate window by window; failed windows are dropped."""
+    """Apply compy.correct_tilt window by window; failed windows are dropped."""
     from compy.streams import split_stream
 
     raw, clean, rows = Stream(), Stream(), []
@@ -304,7 +304,7 @@ def triplet_job(z, one, two, files):
         "channels": seeds,
         "method": (
             f"1 Hz, response removed to acceleration (pre_filt {PRE_FILT}), "
-            f"compy.Rotate in {WINDOW_HOURS} h windows; failed windows dropped"
+            f"compy.correct_tilt in {WINDOW_HOURS} h windows; failed windows dropped"
         ),
         "compy_version": getattr(compy, "__version__", ""),
         "days_with_all_three_channels": len(days),

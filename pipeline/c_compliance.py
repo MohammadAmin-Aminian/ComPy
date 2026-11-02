@@ -30,7 +30,6 @@ from obspy import UTCDateTime, read, read_inventory
 
 sys.path.insert(0, str(COMPY))
 
-import compy  # noqa: E402
 from compy.compliance import (  # noqa: E402
     SelectionCriteria,
     coherent_band,

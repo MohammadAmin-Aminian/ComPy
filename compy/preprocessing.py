@@ -18,7 +18,28 @@ from compy.numerics import positive
 from compy.streams import split_stream
 
 
-def correct_tilt(stream, time_window=1, *, plot=True, clean_horizontals=True):
+def _as_float64(stream):
+    """Copy of ``stream`` with float64 samples.
+
+    TiSKitPy's spectral densities require complex128 cross-spectra, so float32
+    traces (as written by stage A or stored in MiniSEED) would fail inside
+    CleanRotator/DataCleaner. Float64 input is copied unchanged.
+    """
+    out = stream.copy()
+    for tr in out:
+        tr.data = np.asarray(tr.data, dtype=np.float64)
+    return out
+
+
+def correct_tilt(
+    stream,
+    time_window=1,
+    *,
+    plot=True,
+    clean_horizontals=True,
+    skip_failed=False,
+    spectral_window_s=None,
+):
     """Rotate and remove horizontal coherent noise in complete hour windows.
 
     Return (stream, azimuth_deg, angle_deg, variance_after_over_before).
@@ -31,7 +52,16 @@ def correct_tilt(stream, time_window=1, *, plot=True, clean_horizontals=True):
     high and part of the uncorrelated vertical signal is removed. Use
     ``clean_horizontals=False`` with :func:`remove_coherent_noise` to follow
     Aminian et al. (2025): hourly rotation, then 12–24 h transfer functions.
+
+    Args:
+        skip_failed (bool): Keep a window that TiSKitPy cannot rotate (e.g. a
+            tilt above its 20° limit) uncorrected, with NaN angle, azimuth and
+            variance ratio and a warning, instead of raising.
+        spectral_window_s (float or None): Welch segment [s] for the per-window
+            cleaning. None uses TiSKitPy's default, and if that does not fit in
+            the window (1-h windows at 1.25 Hz) one sixth of the window.
     """
+    stream = _as_float64(stream)
     windows = split_stream(stream, positive(time_window, "time_window") * 3600)
     if not windows:
         raise ValueError("no complete rotation windows")
@@ -44,15 +74,20 @@ def correct_tilt(stream, time_window=1, *, plot=True, clean_horizontals=True):
             rotator = tiskit.CleanRotator(window, remove_eqs=False, verbose=False)
             rotated = rotator.apply(window, set_dtype=False)
             if clean_horizontals:
-                cleaner = tiskit.DataCleaner(
-                    rotated, ["*1", "*2"], n_to_reject=0, remove_eqs=False
-                )
-                rotated = cleaner.apply(rotated, set_dtype=False)
+                rotated = _clean_window(rotated, spectral_window_s)
             after = np.var(rotated.select(component="Z")[0].data)
         except Exception as exc:
-            raise RuntimeError(
+            message = (
                 f"rotation failed in window {i} starting {window[0].stats.starttime}"
-            ) from exc
+            )
+            if not skip_failed:
+                raise RuntimeError(message) from exc
+            warnings.warn(f"{message} ({exc!r}); window kept uncorrected")
+            azimuth.append(np.nan)
+            angles.append(np.nan)
+            variance_ratio.append(np.nan)
+            cleaned.extend(window.copy())
+            continue
         azimuth.append(rotator.azimuth % 360)
         angles.append(rotator.angle)
         variance_ratio.append(after / before)
@@ -70,6 +105,29 @@ def correct_tilt(stream, time_window=1, *, plot=True, clean_horizontals=True):
             ax.set(xlabel="Hours since first complete window", ylabel=label)
             fig.colorbar(points, ax=ax, label="Variance after/before")
     return output, np.asarray(azimuth), np.asarray(angles), np.asarray(variance_ratio)
+
+
+def _clean_window(stream, spectral_window_s):
+    """TiSKitPy DataCleaner on one window, removing *1 then *2 from all channels."""
+
+    def clean(**kwargs):
+        cleaner = tiskit.DataCleaner(
+            stream, ["*1", "*2"], n_to_reject=0, remove_eqs=False, **kwargs
+        )
+        return cleaner.apply(stream, set_dtype=False)
+
+    if spectral_window_s is not None:
+        return clean(window_s=positive(spectral_window_s, "spectral_window_s"))
+    try:
+        return clean()
+    except ValueError:
+        # TiSKitPy's default segment does not fit (e.g. 1-h window at 1.25 Hz).
+        length = stream[0].stats.npts * stream[0].stats.delta
+        warnings.warn(
+            f"TiSKitPy default spectral window does not fit a {length:.0f}-s window; "
+            f"using {length / 6:.0f} s"
+        )
+        return clean(window_s=length / 6)
 
 
 def remove_coherent_noise(
@@ -109,6 +167,7 @@ def remove_coherent_noise(
         Stream: Cleaned copy.
     """
     window_s = positive(window_hours, "window_hours") * 3600
+    stream = _as_float64(stream)
     if cover_all:
         start = max(tr.stats.starttime for tr in stream)
         end = min(tr.stats.endtime for tr in stream)
@@ -175,6 +234,7 @@ def remove_coherent_noise(
 
 def estimate_tilt_angles(stream, time_window=1):
     """Estimate angles and fractional variance reduction without applying cleaning."""
+    stream = _as_float64(stream)
     windows = split_stream(stream, positive(time_window, "time_window") * 3600)
     if not windows:
         raise ValueError("no complete rotation windows")

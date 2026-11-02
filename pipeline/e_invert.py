@@ -48,12 +48,27 @@ def coordinates(station):
     return s.latitude, s.longitude
 
 
+#: Order in which stage C results are used: Rayleigh-wave gain, BRUIT-FM gain, nominal.
+GAIN_SOURCES = ("compy", "bruitfm", "nominal")
+
+
+def result_label(summary):
+    """Gain label of the stage C result that stages E, F and G use, or None.
+
+    The one place that defines the choice; f_figures and g_report call it.
+    """
+    for label in GAIN_SOURCES:
+        if summary and "n_windows" in summary["results"].get(label, {}):
+            return label
+    return None
+
+
 def gain_label(station):
     summary = json.loads((RESULTS / station / f"{station}_summary.json").read_text())
-    for label in ("compy", "bruitfm", "nominal"):
-        if "n_windows" in summary["results"].get(label, {}):
-            return label, summary
-    raise SystemExit(f"{station}: no compliance result")
+    label = result_label(summary)
+    if label is None:
+        raise SystemExit(f"{station}: no compliance result")
+    return label, summary
 
 
 def h2_result(stored):
