@@ -21,9 +21,6 @@ serpentinization. It was developed for the RHUM-RUM experiment in the Indian
 Ocean ([Aminian et al. 2025, *GJI*](https://doi.org/10.1093/gji/ggaf253)) and
 runs unattended on any broadband OBS network stored as an SDS archive.
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig09_heatmaps.png" width="900" alt="Shear-velocity posteriors beneath the 20 inverted Pacific Array Young ORCA stations"></a></p>
-<p align="center"><sub><b>Shear-velocity posteriors beneath 20 Pacific Array Young ORCA (XE) stations.</b> Colour: posterior probability per depth row; red: median; white dashed: CRUST1.0.</sub></p>
-
 ## Contents
 
 - [Highlights](#highlights)
