@@ -1,7 +1,7 @@
 # Shear-velocity inversion in ComPy 2.3
 
 This note covers the inversion half of ComPy: what was wrong with the earlier
-code, what `compy_inversion` does instead, how it was checked, and its limits.
+code, what `compy.inversion.dram` does instead, how it was checked, and its limits.
 The compliance half is covered in `docs/AUDIT_2026-10.md`.
 
 ## 1. Audit of the earlier inversion code
@@ -61,10 +61,10 @@ Remaining issues:
 The legacy functions are kept unchanged for reproducibility. The new workflow
 is a separate module.
 
-## 2. The 2.3 workflow (`compy_inversion`)
+## 2. The 2.3 workflow (`compy.inversion.dram`)
 
 ```python
-import compy_inversion as ci
+from compy.inversion import dram as ci
 
 column = ci.crust1_column(lat, lon, "path/to/crust1")  # CRUST1.0 cell
 data = ci.ComplianceData.from_npz(
@@ -135,7 +135,7 @@ parameter and of log α.
 
 ### Forward model and sensitivity
 
-`Forward` is the minor-vector propagator of `inv_compy.raydep` (Crawford et al.
+`Forward` is the minor-vector propagator of `compy.inversion.propagator.raydep` (Crawford et al.
 1991, from W. C. Crawford's code), evaluated at the seafloor only. With the
 surface vector (0, −1/y₃, 0, 0), the downward pass gives v = 1 and
 σ_zz = y₅/y₃, so η = −k y₃/(ω y₅). Numba compiles it when available: 2 µs

@@ -63,7 +63,7 @@ def test_decimated_response_includes_fir_filter():
 
 
 def test_display_smoothing_handles_short_arrays():
-    from compy_numerics import plot_smooth
+    from compy.numerics import plot_smooth
 
     for count in [1, 2, 3, 4, 7, 20]:
         data = np.arange(count, dtype=float)

@@ -8,8 +8,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-import inv_compy as inv
-from compy_diagnostics import save_run, summarize_chains
+from compy.diagnostics import save_run, summarize_chains
+from compy.inversion import metropolis, propagator
 
 
 def run(output, *, iterations=1000, burnin=250, chains=4):
@@ -38,11 +38,11 @@ def run(output, *, iterations=1000, burnin=250, chains=4):
     starting = truth.copy()
     starting[0, 3] = 1800
     frequency = np.linspace(0.005, 0.02, 12)
-    clean = inv.calc_norm_compliance(4000, frequency, truth)
+    clean = propagator.normalized_compliance(4000, frequency, truth)
     uncertainty = 0.03 * np.abs(clean)
     observed = clean + np.random.default_rng(2026).normal(0, uncertainty)
     results = [
-        inv.invert_compliance_beta(
+        metropolis.invert_compliance_beta(
             observed,
             frequency,
             4000,

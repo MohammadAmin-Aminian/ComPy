@@ -25,7 +25,7 @@ jobs:
           python -m venv --system-site-packages /tmp/compy-wheel
           /tmp/compy-wheel/bin/python -m pip install --no-deps --force-reinstall dist/*.whl
           cd /tmp
-          /tmp/compy-wheel/bin/python -c "import compy, inv_compy, compy_diagnostics; assert '/tmp/compy-wheel/' in compy.__file__, compy.__file__"
+          /tmp/compy-wheel/bin/python -c "import compy, compy.inversion, compy.plotting.spectra, inv_compy, ffplot, compy_diagnostics; assert '/tmp/compy-wheel/' in compy.__file__, compy.__file__"
           /tmp/compy-wheel/bin/python "$GITHUB_WORKSPACE/examples/synthetic_inversion.py"
           # compy_pressure: package data in the wheel, console scripts on PATH
           /tmp/compy-wheel/bin/python -c "import compy_pressure.network as n, compy_pressure.pressure_test as t; assert '/tmp/compy-wheel/' in n.__file__, n.__file__; assert len(t.load_references()[1]) > 10"

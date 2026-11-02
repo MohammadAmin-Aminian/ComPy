@@ -12,7 +12,7 @@ CI runs `synthetic_inversion.py`, `reproducible_inversion.py` and
 | [`reproducible_inversion.py`](reproducible_inversion.py) | Four-chain benchmark with saved arrays, checksums and diagnostics |
 | [`converged_inversion.py`](converged_inversion.py) | Converged four-chain run with adaptive steps; plot with `plot_posterior_heatmap.py` |
 | [`deep_crust_inversion.py`](deep_crust_inversion.py) | Deep-crust test (4200 m water, 3.5–18.5 mHz; about 25 min on two cores); plot with `plot_deep_posterior.py` |
-| [`4_Vs_inversion.py`](4_Vs_inversion.py) | Bayesian Vs inversion with `compy_inversion` (synthetic without arguments) |
+| [`4_Vs_inversion.py`](4_Vs_inversion.py) | Bayesian Vs inversion with `compy.inversion.dram` (synthetic without arguments) |
 | [`5_Pressure_QC.py`](5_Pressure_QC.py) | Pressure-gauge QC on a generated SDS archive (synthetic without arguments, a few seconds) |
 
 ```bash

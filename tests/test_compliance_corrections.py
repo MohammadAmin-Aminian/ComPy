@@ -5,7 +5,16 @@ import pytest
 from obspy import Stream, Trace, UTCDateTime
 
 import compy
-from compy_numerics import (
+from compy.compliance import (
+    GJI2025,
+    SelectionCriteria,
+    _covered_samples,
+    coherent_band,
+    estimate_compliance,
+    gravity_corrected_compliance,
+    stacked_compliance,
+)
+from compy.numerics import (
     FREE_AIR_GRADIENT,
     GRAVITATIONAL_CONSTANT,
     GRAVITY,
@@ -13,16 +22,7 @@ from compy_numerics import (
     compliance_uncertainty,
     welch_averages,
 )
-from compy_processing import (
-    GJI2025,
-    SelectionCriteria,
-    _covered_samples,
-    coherent_band,
-    estimate,
-    gravity_corrected_compliance,
-    stacked_compliance,
-)
-from compy_streams import split_stream
+from compy.streams import split_stream
 
 DEPTH = 4000.0
 
@@ -80,11 +80,11 @@ def test_gravity_correction_formula_and_sign():
 
 
 def test_legacy_estimator_does_not_scale_gravity_by_coherence():
-    from compy_processing import spectra
+    from compy.compliance import spectra
 
     coupling = 6.6e-9  # omega² * coupling ~ gravity term near 0.01 Hz
     st = coupled_stream(3600, coupling, 40 * coupling, seed=1)
-    curves, _, windows, fc, f, *_ = estimate(
+    curves, _, windows, fc, f, *_ = estimate_compliance(
         st, DEPTH, 1.0, 1, 0.005, 0.02, True, nseg=512
     )
     _, zz, pp, _, coh = spectra(windows[0], 512)
@@ -211,10 +211,10 @@ def test_welch_averages_and_overlap_coverage():
 def test_legacy_theory_uses_all_windows_not_the_first():
     coupling = 1e-8
     st = coupled_stream(4 * 3600, coupling, 30 * coupling, seed=7)
-    *_, fc, f, scatter, theory, _, _ = estimate(
+    *_, fc, f, scatter, theory, _, _ = estimate_compliance(
         st, DEPTH, 1.0, 1, 0.005, 0.02, True, 512
     )
-    curves = estimate(st, DEPTH, 1.0, 1, 0.005, 0.02, True, 512)[0]
+    curves = estimate_compliance(st, DEPTH, 1.0, 1, 0.005, 0.02, True, 512)[0]
     assert theory.shape == fc.shape
     # Overlapping 1-h windows over 4 h: the error reflects 4 h of data, which
     # is smaller than a single window's error.
@@ -240,13 +240,13 @@ def test_rotate_without_per_window_cleaning(monkeypatch):
         def apply(self, stream, **kwargs):
             return stream.copy()
 
-    monkeypatch.setattr(compy.tiskit, "DataCleaner", Spy)
-    monkeypatch.setattr(compy.tiskit, "CleanRotator", Rotator)
+    monkeypatch.setattr(compy.preprocessing.tiskit, "DataCleaner", Spy)
+    monkeypatch.setattr(compy.preprocessing.tiskit, "CleanRotator", Rotator)
     rng = np.random.default_rng(8)
     st = make_stream(("BHZ", "BH1", "BH2", "BDH"), 7200)
     for tr in st:
         tr.data = rng.normal(size=7200) * (0.01 if tr.stats.channel[-1] in "12" else 1)
-    compy.Rotate(st, 1, plot=False, clean_horizontals=False)
+    compy.correct_tilt(st, 1, plot=False, clean_horizontals=False)
     assert not calls
 
 

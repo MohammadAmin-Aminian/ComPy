@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from compy_numerics import legacy_wave_attraction_correction, wavenumber
+from compy.numerics import legacy_wave_attraction_correction, wavenumber
 
 
 def _estimators(f, depth, ratio, gamma):

@@ -4,9 +4,9 @@ import numpy as np
 import pytest
 
 import compy
-import ffplot
-import inv_compy
-from compy_numerics import log_likelihood
+from compy import numerics
+from compy.inversion import metropolis, propagator
+from compy.numerics import log_likelihood
 from compy_pressure.rayleigh_calibration import fit_multiplier
 
 
@@ -14,26 +14,26 @@ def test_gaussian_likelihood_uses_squared_normalized_residual():
     d, m, s = np.array([1.0, 2.0]), np.zeros(2), np.array([1.0, 2.0])
     expected = -0.5 * np.sum(((d - m) / s) ** 2)
     assert log_likelihood(d, m, s) == expected
-    assert np.isclose(inv_compy.liklihood(d, m, s=s), np.exp(expected))
+    assert np.isclose(metropolis.likelihood(d, m, s=s), np.exp(expected))
 
 
 @pytest.mark.parametrize("s", [0, -1, np.nan, [1, 0], [1, 2, 3]])
 def test_invalid_uncertainty_rejected(s):
     with pytest.raises(ValueError):
-        inv_compy.liklihood([1, 2], [0, 0], s=s)
+        metropolis.likelihood([1, 2], [0, 0], s=s)
 
 
 def test_log_likelihood_remains_usable_when_probability_underflows():
     assert np.isfinite(log_likelihood([1e3], [0], 1))
-    assert inv_compy.liklihood([1e3], [0], s=1) == 0
+    assert metropolis.likelihood([1e3], [0], s=1) == 0
 
 
 def test_roughness_energy():
-    assert inv_compy.Roughness(np.ones(20), 1) == 0
-    assert inv_compy.Roughness(np.linspace(0, 1, 20) ** 2, 2) > 0
-    assert inv_compy.Roughness([1], 2) == 0
+    assert numerics.roughness(np.ones(20), 1) == 0
+    assert numerics.roughness(np.linspace(0, 1, 20) ** 2, 2) > 0
+    assert numerics.roughness([1], 2) == 0
     with pytest.raises(ValueError):
-        inv_compy.Roughness([1, 2], 1.5)
+        numerics.roughness([1, 2], 1.5)
 
 
 @pytest.mark.parametrize("depth", [1.0, 4000.0, 10000.0])
@@ -43,8 +43,8 @@ def test_wavenumber_satisfies_dispersion_relation(depth):
     np.testing.assert_allclose(9.79329 * k * np.tanh(k * depth), omega**2, rtol=1e-11)
     assert compy.wavenumber([0.1], depth)[0] > 0  # first bin need not be DC
     assert np.isclose(compy.wavenumber(0.1, depth), compy.wavenumber([0.1], depth)[0])
-    np.testing.assert_equal(k, ffplot.wavenumber(omega, depth))
-    np.testing.assert_equal(k, inv_compy.gravd(omega, depth))
+    np.testing.assert_equal(k, numerics.wavenumber(omega, depth))
+    np.testing.assert_equal(k, propagator.gravd(omega, depth))
 
 
 @pytest.mark.parametrize("omega,depth", [([1], 0), ([-1], 4), ([np.nan], 4)])
@@ -55,7 +55,7 @@ def test_invalid_wavenumber_arguments(omega, depth):
 
 def test_dtanh_zero_and_negative_extremes():
     x = np.array([-1e3, -1, 0, 1, 1e3])
-    np.testing.assert_equal(inv_compy.dtanh(x), np.tanh(x))
+    np.testing.assert_equal(propagator.dtanh(x), np.tanh(x))
 
 
 def test_gravity_ratio_avoids_overflow():
@@ -70,12 +70,12 @@ def test_gravity_ratio_avoids_overflow():
 
 def test_amplitude_coherence_uncertainty():
     expected = 2 * np.sqrt(1 - 0.8**2) / (0.8 * np.sqrt(20))
-    assert np.isclose(compy.Comliance_uncertainty(2, 0.8, 10), expected)
-    assert np.isclose(ffplot.compliance_uncertainty(2, 0.8, 10), expected)
-    assert compy.Comliance_uncertainty(2, 1, 10) == 0
-    assert np.isinf(compy.Comliance_uncertainty(2, 0, 10))
+    assert np.isclose(compy.compliance_uncertainty(2, 0.8, 10), expected)
+    assert np.isclose(numerics.compliance_uncertainty(2, 0.8, 10), expected)
+    assert compy.compliance_uncertainty(2, 1, 10) == 0
+    assert np.isinf(compy.compliance_uncertainty(2, 0, 10))
     with pytest.raises(ValueError):
-        compy.Comliance_uncertainty(2, 1.01, 10)
+        compy.compliance_uncertainty(2, 1.01, 10)
 
 
 def test_calibration_gain_matches_known_scale_without_quantization():

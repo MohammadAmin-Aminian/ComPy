@@ -26,13 +26,12 @@ import json
 import sys
 
 import numpy as np
-from obspy import read_inventory
-
 from config import COMPY, CRUST1, INVENTORY, RESULTS, ROOT
+from obspy import read_inventory
 
 sys.path.insert(0, str(COMPY))
 
-import compy_inversion as ci  # noqa: E402
+import compy.inversion.dram as ci  # noqa: E402
 
 SAMPLER = dict(n_chains=8, n_iter=80000, n_burn=30000, thin=10)
 MIN_MONTH_WINDOWS = 30
@@ -59,7 +58,7 @@ def gain_label(station):
 
 def h2_result(stored):
     """The stored result with compliance scaled to the H2 estimate."""
-    from compy_processing import gravity_corrected_compliance
+    from compy.compliance import gravity_corrected_compliance
 
     d = dict(stored)
     f, depth = d["all_freqs"], float(d["depth"])

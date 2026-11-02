@@ -6,21 +6,66 @@ The step-by-step workflow with figures is in the [README](../README.md).
 
 - [Input conventions](#input-conventions)
 - [Compliance estimators](#compliance-estimators)
-- [Bayesian Vs inversion (`compy_inversion`)](#bayesian-vs-inversion-compy_inversion)
-- [Legacy forward model and inversion (`inv_compy`)](#legacy-forward-model-and-inversion-inv_compy)
+- [Module layout and ComPy 2.x names](#module-layout-and-compy-2x-names)
+- [Bayesian Vs inversion (`compy.inversion.dram`)](#bayesian-vs-inversion-compyinversiondram)
+- [Metropolis forward model and inversion (`compy.inversion.metropolis`)](#metropolis-forward-model-and-inversion-compyinversionmetropolis)
 - [Deep-crust inversion tools](#deep-crust-inversion-tools)
 - [Pressure-gauge QC and calibration (`compy_pressure`)](#pressure-gauge-qc-and-calibration-compy_pressure)
 - [Plotting](#plotting)
 - [Testing and reproducible runs](#testing-and-reproducible-runs)
 
+## Module layout and ComPy 2.x names
+
+| Module | Contents |
+|---|---|
+| `compy.streams` | window splitting, trimming, stream checks |
+| `compy.cleaning` | smooth tilt rotation, periodic transients, STA/LTA event spans |
+| `compy.preprocessing` | `correct_tilt`, `remove_coherent_noise`, `estimate_tilt_angles` |
+| `compy.compliance` | spectra, window selection, `stacked_compliance`, `estimate_compliance`, `calculate_compliance*` |
+| `compy.inversion.dram` | Bayesian DRAM inversion, CRUST1.0, serpentinization |
+| `compy.inversion.metropolis` | Metropolis sampler of the paper, likelihoods, `invert_tempered`, `l_curve` |
+| `compy.inversion.occam` | `invert_occam` |
+| `compy.inversion.propagator` | forward model (`raydep`, `normalized_compliance`), kernels |
+| `compy.inversion.models` | starting and reference models, Vp/density relations |
+| `compy.diagnostics` | R-hat, ESS, reproducible run records |
+| `compy.plotting` | `style`, `spectra`, `inversion`, `qc` figures |
+| `compy.numerics` | constants, dispersion relation, shared maths |
+
+Scripts written for ComPy 2.x keep running: `inv_compy`, `ffplot`,
+`compy_processing`, `compy_inversion`, `compy_numerics`, `compy_streams`,
+`compy_cleaning`, `compy_diagnostics` and the old names on `compy`
+(`compy.Calculate_Compliance`, `compy.Rotate`, ...) all resolve, with a
+`DeprecationWarning` naming the replacement. They will be removed in ComPy
+3.0. Main renames:
+
+| ComPy 2.x | Now |
+|---|---|
+| `compy.Calculate_Compliance`, `Calculate_Compliance_beta` | `compy.compliance.calculate_compliance`, `calculate_compliance_gated` |
+| `compy.Rotate`, `Rotate_angles` | `compy.preprocessing.correct_tilt`, `estimate_tilt_angles` |
+| `compy.optimizer`, `optimizer_rms` | `compy.compliance.select_coherent_windows`, `select_windows_by_rms` |
+| `compy.overlap_checker` | `compy.plotting.qc.plot_window_starts` |
+| `compy.plt_params`, `ffplot.plt_params` | `compy.plotting.style.set_plot_style`, `set_plot_style_large` |
+| `compy_processing.estimate` | `compy.compliance.estimate_compliance` |
+| `inv_compy.calc_norm_compliance` | `compy.inversion.propagator.normalized_compliance` |
+| `inv_compy.invert_compliace*`, `Lcurve` | `compy.inversion.metropolis.invert_compliance*`, `l_curve` |
+| `inv_compy.liklihood`, `liklihood_all`, `liklihood_roughness` | `metropolis.likelihood`, `regularized_likelihood`, `roughness_likelihood` |
+| `inv_compy.Model`, `model_exp`, `Model_V2` | `compy.inversion.models.sediment_crust_model`, `exponential_model`, `rhumrum_starting_model` |
+| `inv_compy.velp`, `density`, `refrence_models` | `models.vp_from_vs`, `gardner_density`, `reference_models` |
+| `inv_compy.start_model_plot`, `start_model_plot_mean` | `models.station_starting_model`, `station_starting_model_mean` |
+| `inv_compy.final_plot`, `autocorreletion` | `compy.plotting.inversion.plot_publication_figure`, `plot_autocorrelation` |
+| `ffplot.psd`, `coh`, `spectrogram`, `coherogram_spectrogram`, ... | `compy.plotting.spectra.plot_psd`, `plot_coherence`, `plot_spectrogram`, `plot_coherogram`, ... |
+| `ffplot.compl`, `rms` | `compy.compliance.uncorrected_compliance`, `compy.numerics.rms` |
+
+The full table is `compy._legacy.LEGACY`.
+
 ## Input conventions
 
 | Operation | Vertical channel | Pressure channel | Other inputs |
 |---|---|---|---|
-| `stacked_compliance`, `Calculate_Compliance*` | response-corrected **displacement, m** | nominal response-corrected pressure, **Pa** | positive water depth, m; multiplicative pressure gain |
+| `stacked_compliance`, `calculate_compliance*` | response-corrected **displacement, m** | nominal response-corrected pressure, **Pa** | positive water depth, m; multiplicative pressure gain |
 | `compy_pressure` Rayleigh calibration | raw counts in an SDS archive; response removed internally to acceleration | raw counts; response removed internally to pressure | StationXML with full responses, ComCat GeoJSON catalogue |
-| `Rotate`, `rotate_smoothly` | physically consistent seismic channels | passed through the cleaning workflow | `*1`, `*2`, `*Z` seismic channels |
-| `calc_norm_compliance` / inversion | measured normalized compliance, **1/Pa** | not used directly | Hz, m; model columns below |
+| `correct_tilt`, `rotate_smoothly` | physically consistent seismic channels | passed through the cleaning workflow | `*1`, `*2`, `*Z` seismic channels |
+| `normalized_compliance` / inversion | measured normalized compliance, **1/Pa** | not used directly | Hz, m; model columns below |
 | `compy_pressure.rayleigh_dispersion` | not used | not used | layer CSV in **km, km/s, km/s, g/cm³**, or phase/group velocities in m/s |
 
 `*Z` denotes the vertical component and `*H` the pressure channel (normally
@@ -52,7 +97,7 @@ use **amplitude coherence**, its square root.
 
 ```python
 import compy
-from compy_processing import GJI2025, stacked_compliance
+from compy.compliance import GJI2025, stacked_compliance
 
 pair = cleaned.select(channel="BHZ") + cleaned.select(channel="BDH")
 windows = compy.split_stream(pair, 2100)  # 35-min, non-overlapping
@@ -77,7 +122,7 @@ units before it is combined with Z/P.
 
 ```python
 curves, coherence, windows, frequency, full_frequency, scatter = (
-    compy.Calculate_Compliance_beta(
+    compy.calculate_compliance_gated(
         displacement_pressure_stream,
         depth=4000,
         gain_factor=gain,
@@ -92,10 +137,10 @@ curves, coherence, windows, frequency, full_frequency, scatter = (
 
 | Function | Return tuple | Processing-window step |
 |---|---|---|
-| `Calculate_Compliance_beta` | curves, amplitude coherence, selected streams, selected frequencies, full frequencies, standard deviation across curves | 5 minutes |
-| `Calculate_Compliance` | same first five items, peak-to-peak scatter, theoretical uncertainty estimate | 1 minute |
+| `calculate_compliance_gated` | curves, amplitude coherence, selected streams, selected frequencies, full frequencies, standard deviation across curves | 5 minutes |
+| `calculate_compliance` | same first five items, peak-to-peak scatter, theoretical uncertainty estimate | 1 minute |
 
-`curves` has shape `(accepted_windows, frequency_bins)`. Beta returns
+`curves` has shape `(accepted_windows, frequency_bins)`. The gated estimator returns
 frequencies from 0.001–0.1 Hz; the older estimator returns 0.005–0.025 Hz.
 Providing `depth` avoids station-service calls; otherwise it is read from the
 vertical channel's elevation. Spectra use a Hann window with 50 % overlap and
@@ -106,14 +151,14 @@ coherence γ.
 Figures of every processing step for one station are in the
 [README workflow](../README.md#workflow-step-by-step).
 
-## Bayesian Vs inversion (`compy_inversion`)
+## Bayesian Vs inversion (`compy.inversion.dram`)
 
 Parameterization and sampler follow Zha & Webb (2016); the CRUST1.0 Moho and the
 ±5 % gain range follow Aminian et al. (2025). Method and validation:
 [INVERSION.md](INVERSION.md).
 
 ```python
-import compy_inversion as ci
+from compy.inversion import dram as ci
 
 column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")
 data = ci.ComplianceData.from_npz(
@@ -168,21 +213,24 @@ installed (about 140 times faster). Chains run in spawned processes: call
 `sample` from a script guarded by `if __name__ == "__main__":` or from a
 notebook, or pass `processes=1`.
 
-## Legacy forward model and inversion (`inv_compy`)
+## Metropolis forward model and inversion (`compy.inversion.metropolis`)
+
+The sampler of Aminian et al. (2025) and the forward model it uses
+(`compy.inversion.propagator`, ported from Crawford's MATLAB `raydep`).
 
 ```python
 import numpy as np
-import inv_compy as inv
+from compy.inversion import metropolis, propagator
 
 model = np.array(
     [[100, 2200, 3000, 1500], [1000, 2800, 6000, 3500], [0, 3300, 8000, 4500]],
     dtype=float,
 )
 f = np.array([0.005, 0.007, 0.010, 0.015])
-prediction = inv.calc_norm_compliance(4000, f, model)
+prediction = propagator.normalized_compliance(4000, f, model)
 
 chain, profiles, prior, misfit, predictions, likelihood, acceptance = (
-    inv.invert_compliance_beta(
+    metropolis.invert_compliance_beta(
         measured_compliance,
         f,
         4000,
@@ -213,23 +261,26 @@ The starting model comes from CRUST1.0 at the station, and it also sets the
 legacy prior (Vs bounds are fractions of the starting Vs):
 
 ```python
+from compy.inversion.models import crust1_starting_model
+
 column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")
-start = inv.crust1_starting_model(column, sublayers=2)  # 6 crustal layers
-result = inv.invert_compliance_beta(data, f, depth, starting_model=start, s=sigma)
+start = crust1_starting_model(column, sublayers=2)  # 6 crustal layers
+result = metropolis.invert_compliance_beta(
+    data, f, depth, starting_model=start, s=sigma
+)
 # or starting_model=column, with n_layer // 3 sublayers per crustal layer
 ```
 
 `crust1_starting_model` keeps the CRUST1.0 sediment layers, splits each
 crystalline layer into `sublayers` equal parts and adds a 10-km mantle layer
-above the half-space, the structure of the former `Model_V2` templates.
-`Model_V2` is deprecated: its hard-coded RHUM-RUM templates do not match the
-CRUST1.0 cell at RR28, RR29, RR34, RR36, RR38, RR40 and RR50. The names
-`invert_compliace*`, `liklihood`, `Roughness` and `Comliance_uncertainty`
-remain available as aliases for existing notebooks.
+above the half-space, the structure of the RHUM-RUM templates
+(`models.rhumrum_starting_model`, formerly `Model_V2`). Those templates are
+deprecated: they do not match the CRUST1.0 cell at RR28, RR29, RR34, RR36,
+RR38, RR40 and RR50.
 
 ## Deep-crust inversion tools
 
-Opt-in additions to `inv_compy`; all defaults reproduce earlier chains draw
+Opt-in additions to the Metropolis sampler; all defaults reproduce earlier chains draw
 for draw.
 
 | Addition | Purpose |
@@ -243,14 +294,14 @@ for draw.
 | `invert_occam` | Occam minimum-structure inversion (Constable et al. 1987) |
 | `invert_tempered` | Parallel tempering (Geyer 1991; Sambridge 2014) |
 | `compliance_kernels`, `resample_model` | Numerical Vs sensitivity kernels |
-| `compy_diagnostics.rank_rhat_ess` | Rank-normalized split R̂ and bulk ESS without ArviZ |
+| `compy.diagnostics.rank_rhat_ess` | Rank-normalized split R̂ and bulk ESS without ArviZ |
 
 The propagator agrees with an independent Aki & Richards solver to about 1e-6.
 Compliance senses structure to roughly λmax/6 of the longest water wave
 (Crawford et al. 1991): about 9 km at 4.2 km water depth and 3.5 mHz. Compare
 posterior and prior-only widths to see which depths the data resolve.
 Compliance measured with ComPy before 2.0 lacks the wave-attraction term; apply
-`compy_numerics.legacy_wave_attraction_correction` before inverting it.
+`compy.numerics.legacy_wave_attraction_correction` before inverting it.
 
 ```bash
 python examples/deep_crust_inversion.py --output deep-crust   # ~25 min, 2 cores
@@ -304,11 +355,13 @@ Scripts that import `Pressure_calibration` run with ComPy 2.4.0 (commit `7ad79c2
 
 ## Plotting
 
-`ffplot` contains PSD, coherence, spectrogram and publication plotting
-routines. `ffplot.compl` is a quick compliance diagnostic without the gravity
-terms; use `stacked_compliance` for quality selection and corrections.
-Export figures explicitly with `matplotlib.pyplot.savefig(...)`.
-`final_plot(..., image_dir=...)` expects `RR36.png`, `RR38.png`, `RR40.png`,
+`compy.plotting.spectra` draws PSDs, coherence, spectrograms and coherograms;
+`compy.plotting.inversion` draws posteriors, misfits and the paper figures;
+`compy.plotting.style.set_plot_style()` applies the figure style.
+`compy.compliance.uncorrected_compliance` is a quick compliance diagnostic
+without the gravity terms; use `stacked_compliance` for quality selection and
+corrections. Export figures explicitly with `matplotlib.pyplot.savefig(...)`.
+`plot_publication_figure(..., image_dir=...)` expects `RR36.png`, `RR38.png`, `RR40.png`,
 `RR50.png`, `RR52.png` and `Rift_valley.png` in `image_dir`.
 
 ## Testing and reproducible runs

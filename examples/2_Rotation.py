@@ -5,6 +5,7 @@ from pathlib import Path
 
 import numpy as np
 from obspy import read
+
 import compy
 
 
@@ -16,7 +17,7 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         raise FileExistsError(args.output)
-    rotated, azimuth, angle, variance_ratio = compy.Rotate(
+    rotated, azimuth, angle, variance_ratio = compy.correct_tilt(
         read(args.input), args.hours, plot=False
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)

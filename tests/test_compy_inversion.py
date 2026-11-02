@@ -3,8 +3,8 @@
 import numpy as np
 import pytest
 
-import compy_inversion as ci
-import inv_compy as inv
+import compy.inversion.dram as ci
+from compy.inversion import propagator
 
 
 def random_model(rng):
@@ -26,7 +26,7 @@ def test_forward_matches_legacy_propagator():
     for _ in range(120):
         model, depth = random_model(rng), rng.uniform(800, 5500)
         try:
-            legacy = inv.calc_norm_compliance(depth, f, model)
+            legacy = propagator.normalized_compliance(depth, f, model)
         except ValueError:
             with pytest.raises(ValueError):
                 ci.forward(depth, f, model)
@@ -56,7 +56,7 @@ def test_forward_rejects_half_space_slower_than_forcing():
 
 
 def test_attraction_term_matches_gravity_correction():
-    from compy_processing import gravity_corrected_compliance
+    from compy.compliance import gravity_corrected_compliance
 
     f, depth = np.array([0.006, 0.01, 0.015]), 4000.0
     zero = gravity_corrected_compliance(f, depth, np.zeros(3), np.ones(3))
@@ -64,7 +64,7 @@ def test_attraction_term_matches_gravity_correction():
 
 
 def test_gain_vector_is_derivative_of_corrected_compliance():
-    from compy_processing import gravity_corrected_compliance
+    from compy.compliance import gravity_corrected_compliance
 
     f, depth = np.array([0.006, 0.01, 0.015]), 4000.0
     ratio = np.array([3e-9, 1.5e-9, 1e-9])
@@ -471,13 +471,13 @@ def test_serpentinization_quantiles_map_vs_quantiles():
 
 
 def test_legacy_heatmap_ticks_use_100_m_rows():
-    import inv_compy
+    from compy.plotting import inversion as inversion_plots
 
-    rows, labels = inv_compy._legacy_depth_ticks(8000)
+    rows, labels = inversion_plots._legacy_depth_ticks(8000)
     assert labels == [0, -2000, -4000, -6000, -8000]
     np.testing.assert_allclose(rows, [0, 20, 40, 60, 80])
     # CRUST1.0 reference arrays: element 42 (Moho) at 7 km, i.e. row 70.
-    assert inv_compy._LEGACY_REFERENCE_ROWS[42] == pytest.approx(70.0)
+    assert inversion_plots._LEGACY_REFERENCE_ROWS[42] == pytest.approx(70.0)
 
 
 # CRUST1.0 cell of XE.CC11 (-7.5, -133.5), as read by crust1_column.

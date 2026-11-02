@@ -16,7 +16,7 @@ import argparse
 
 import numpy as np
 
-import compy_inversion as ci
+import compy.inversion.dram as ci
 
 
 def synthetic():

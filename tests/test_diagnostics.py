@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from compy_diagnostics import save_run, summarize_chains
+from compy.diagnostics import save_run, summarize_chains
 
 
 def test_diagnostics_detect_location_scale_and_serial_correlation():
@@ -67,7 +67,7 @@ def test_run_roundtrip_provenance_checksums_and_overwrite_protection(tmp_path):
     assert metadata["settings"]["seed"] == 3
     assert metadata["arrays"]["models"]["shape"] == [3, 4]
     assert metadata["dependencies"]["numpy"] == np.__version__
-    assert len(metadata["source_sha256"]["compy_diagnostics.py"]) == 64
+    assert len(metadata["source_sha256"]["compy/diagnostics.py"]) == 64
     manifest = json.loads((output / "manifest.json").read_text())
     for name, expected in manifest.items():
         assert hashlib.sha256((output / name).read_bytes()).hexdigest() == expected
@@ -103,7 +103,7 @@ def test_offline_example_is_reproducible_and_preserves_forward_consistency(tmp_p
     first, second = tmp_path / "first", tmp_path / "second"
     module.run(first, iterations=30, burnin=10, chains=2)
     module.run(second, iterations=30, burnin=10, chains=2)
-    import inv_compy as inv
+    from compy.inversion import propagator
 
     with (
         np.load(first / "arrays.npz", allow_pickle=False) as a,
@@ -113,13 +113,15 @@ def test_offline_example_is_reproducible_and_preserves_forward_consistency(tmp_p
             np.testing.assert_array_equal(a[name], b[name])
         np.testing.assert_allclose(
             a["predictions"][0, -1],
-            inv.calc_norm_compliance(4000, a["frequency"], a["models"][0, :, :, -1]),
+            propagator.normalized_compliance(
+                4000, a["frequency"], a["models"][0, :, :, -1]
+            ),
         )
     assert (first / "diagnostics.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
 
 
 def test_dependency_free_rank_rhat_and_ess():
-    from compy_diagnostics import rank_rhat_ess
+    from compy.diagnostics import rank_rhat_ess
 
     iid = np.random.default_rng(3).normal(size=(4, 4000))
     r, ess = rank_rhat_ess(iid)

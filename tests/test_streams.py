@@ -3,7 +3,7 @@ import pytest
 from obspy import Stream, Trace, UTCDateTime
 
 import compy
-from compy_processing import spectra
+from compy.compliance import spectra
 
 
 def make_stream(n=100, fs=10):
@@ -94,7 +94,7 @@ def test_empty_quality_selection_has_clear_error():
     for tr in st:
         tr.data = rng.normal(size=len(tr))
     with pytest.raises(ValueError, match="no windows passed"):
-        compy.Calculate_Compliance_beta(
+        compy.calculate_compliance_gated(
             st, time_window=1, depth=4000, nseg=1024, plot=False
         )
 
@@ -104,7 +104,7 @@ def test_compliance_known_transfer_and_gravity_units():
     p = np.random.default_rng(3).normal(0, 100, 7200)
     st.select(channel="BDH")[0].data = p
     st.select(channel="BHZ")[0].data = p * 1e-7
-    curves, coherences, windows, fc, f, scatter = compy.Calculate_Compliance_beta(
+    curves, coherences, windows, fc, f, scatter = compy.calculate_compliance_gated(
         st, time_window=1, depth=4000, gain_factor=1, nseg=1024, plot=False
     )
     omega2 = (2 * np.pi * fc) ** 2
@@ -123,10 +123,10 @@ def test_rotation_reports_failure_instead_of_returning_unclean_data(monkeypatch)
     def fail(*args, **kwargs):
         raise ValueError("synthetic failure")
 
-    monkeypatch.setattr(compy.tiskit, "CleanRotator", fail)
+    monkeypatch.setattr(compy.preprocessing.tiskit, "CleanRotator", fail)
     st = make_stream(7200, 2)
     with pytest.raises(RuntimeError, match="rotation failed in window 0"):
-        compy.Rotate(st, time_window=1, plot=False)
+        compy.correct_tilt(st, time_window=1, plot=False)
     assert len(st[0]) == 7200
 
 
@@ -152,7 +152,7 @@ def test_rotation_with_real_tiskitpy_api():
         )
     stream = Stream(traces)
     original = stream.copy()
-    rotated, azimuth, angle, variance = compy.Rotate(stream, 1, plot=False)
+    rotated, azimuth, angle, variance = compy.correct_tilt(stream, 1, plot=False)
     assert stream == original
     assert len(rotated.select(component="Z")[0]) == 7200
     assert variance.shape == (1,)
