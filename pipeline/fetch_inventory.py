@@ -18,6 +18,7 @@ from config import CHANNELS, INVENTORY, NETWORK, STATIONS, YEARS
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--client", default="iris-federator",
                         help="FDSN client name, or iris-federator / eida-routing")  # fmt: skip

@@ -92,7 +92,7 @@ def run_chain(args):
     k, iterations, adapt, prior_only = args
     name = list(STARTS)[k % len(STARTS)]
     info = {}
-    out = metropolis.invert_compliance_beta(
+    out = metropolis.invert_compliance_broad_bounds(
         OBS,
         F,
         H,

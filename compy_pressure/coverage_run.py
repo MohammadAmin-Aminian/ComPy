@@ -99,19 +99,23 @@ def campaign_lock(campaign_dir):
 
 
 def state_path(campaign_dir, task):
+    """Path of a task's state file."""
     return campaign_dir / "tasks" / task["task_id"] / "state.json"
 
 
 def log_path(campaign_dir, task):
+    """Path of a task's log file."""
     return campaign_dir / "tasks" / task["task_id"] / "log.txt"
 
 
 def read_state(campaign_dir, task):
+    """Read a task's state, or None if it has not run."""
     path = state_path(campaign_dir, task)
     return json.loads(path.read_text()) if path.is_file() else None
 
 
 def write_state(campaign_dir, task, **fields):
+    """Update a task's state file."""
     path = state_path(campaign_dir, task)
     path.parent.mkdir(parents=True, exist_ok=True)
     previous = read_state(campaign_dir, task) or {
@@ -126,6 +130,7 @@ def write_state(campaign_dir, task, **fields):
 
 
 def outputs_valid(state):
+    """True if a state lists outputs and all still match their checksums."""
     return bool(state.get("outputs")) and all(
         Path(item["path"]).is_file() and digest(item["path"]) == item["sha256"]
         for item in state["outputs"]
@@ -145,6 +150,7 @@ def is_done(campaign_dir, task, pool=None):
 
 
 def record_outputs(paths):
+    """Paths and checksums of the existing output files."""
     return [
         {"path": str(Path(p).resolve()), "sha256": digest(p)}
         for p in dict.fromkeys(paths)
@@ -189,6 +195,7 @@ def protected_snapshot(plan):
 
 
 def compare_snapshots(before, after):
+    """Paths whose checksum or file status changed between two snapshots."""
     changed = [p for p, h in before["sha256"].items() if after["sha256"].get(p) != h]
     changed += [p for p, s in before["stat"].items() if after["stat"].get(p) != s]
     return changed
@@ -292,6 +299,7 @@ def ppsd_worker(row, paths, results_directory, options, log):
 
 
 def run_ppsd_tasks(campaign_dir, pending, channels, workers):
+    """Run the pending PPSD tasks in parallel."""
     jobs = []
     for task in pending:
         channel = channels[tuple(task["key"][k] for k in KEYS)]
@@ -393,6 +401,7 @@ def run_ppsd_tasks(campaign_dir, pending, channels, workers):
 
 
 def task_output_npz(campaign_dir, task_id):
+    """PPSD file produced by a task that has run."""
     path = campaign_dir / "tasks" / task_id / "state.json"
     if not path.is_file():
         raise RuntimeError(f"Dependency {task_id} has not run")
@@ -448,6 +457,7 @@ def run_merge(campaign_dir, task):
 
 
 def check_row(channel, npz, registry_scores):
+    """Row for a spectral check from a channel, its PPSD and registry scores."""
     row = {k: v for k, v in channel.items() if not k.startswith("_")}
     row = {k: v for k, v in row.items() if not isinstance(v, (list, dict))}
     row.update(registry_scores)
@@ -507,6 +517,7 @@ def reference_pool(campaign_dir, plan, channels):
 
 
 def run_check(campaign_dir, task, channel, references, cache):
+    """Run one spectral check task."""
     npz = resolve_target(campaign_dir, task)
     row = check_row(channel, npz, registry_scores(channel))
     options = {"criteria": asdict(Criteria())} if task["stage"] == "nearby" else {}
@@ -530,12 +541,14 @@ def run_check(campaign_dir, task, channel, references, cache):
 
 
 def selected(task, only_kinds=None, only_seeds=None):
+    """True if a task passes the kind and SEED id filters."""
     return (not only_kinds or task["kind"] in only_kinds) and (
         not only_seeds or task["seed_id"] in only_seeds
     )
 
 
 def classify_tasks(campaign_dir, plan, only_kinds=None, only_seeds=None):
+    """Split a plan's tasks into done, pending and skipped."""
     done, pending, skipped = [], [], []
     channels = {tuple(c[k] for k in KEYS): c for c in plan["channels"]}
     pool = None
@@ -563,6 +576,7 @@ def run_campaign(
     only_kinds=None,
     only_seeds=None,
 ):
+    """Plan a coverage campaign and execute it when ``execute`` is set."""
     campaign_dir = Path(campaign_dir)
     if workers < 1:
         raise ValueError("Workers must be positive")
@@ -622,6 +636,7 @@ def run_campaign(
 
 
 def execute_plan(campaign_dir, plan, workers, only_kinds, only_seeds, report):
+    """Run a plan's selected tasks in dependency order."""
     channels = {tuple(c[k] for k in KEYS): c for c in plan["channels"]}
     by_id = {t["task_id"]: t for t in plan["tasks"]}
     outcome = report["tasks"]

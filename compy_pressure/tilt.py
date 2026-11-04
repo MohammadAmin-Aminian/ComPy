@@ -58,6 +58,7 @@ THREAD_VARIABLES = (
 
 
 def is_seismometer(code):
+    """True if a channel code is a seismometer component."""
     return len(code) == 3 and code[1] == "H" and code[2] in VERTICAL + "12NE"
 
 
@@ -101,6 +102,7 @@ def choose_triplets(master):
 
 
 def day_key(path):
+    """YEAR.DAY key from an SDS file name."""
     parts = Path(path).name.split(".")
     return f"{int(parts[5]):04d}.{int(parts[6]):03d}"
 
@@ -128,6 +130,7 @@ def to_target_rate(stream):
 
 
 def read_day(paths, station, code):
+    """Read one channel's day files at the target rate."""
     stream = Stream()
     for path in paths:
         if Path(path).stat().st_size:
@@ -211,6 +214,7 @@ def clean_windows(stream, rotate):
 
 
 def new_ppsd(trace):
+    """PPSD for data that are already acceleration."""
     return PPSD(
         trace.stats,
         # Data are already acceleration: "ringlaser" handling only divides by
@@ -341,6 +345,7 @@ def triplet_job(z, one, two, files):
 
 
 def safe_job(z, one, two, files):
+    """Run a component triplet, returning an error record if it fails."""
     try:
         return triplet_job(z, one, two, files)
     except Exception as exc:
@@ -402,6 +407,7 @@ def run_tilt(master_dir, data_dir, results_dir, *, networks=None, workers=4):
 
 
 def main():
+    """Command-line entry point."""
     from compy_pressure.network import worker_count
 
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])

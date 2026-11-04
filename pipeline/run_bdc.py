@@ -27,6 +27,7 @@ ENV = {
 
 
 def expected_chunks(station):
+    """First day of each stage A chunk of a station."""
     days = station_days(station)
     runs, run = [], []
     for day in days:
@@ -39,6 +40,7 @@ def expected_chunks(station):
 
 
 def stage_a_done(station, chunks):
+    """True when a station has finished stage A."""
     if (WORK / station / "stageA.done").exists():  # written by a_fast.py
         return True
     qc = WORK / station / "qc"
@@ -54,6 +56,7 @@ def stage_a_done(station, chunks):
 
 
 def chain(station):
+    """Start stages B, D and C of a station as one process."""
     steps = [("b_clean", ["b_clean.py", station]), ("d_calibrate", ["d_calibrate.py", station]),
              ("c_compliance", ["c_compliance.py", station])]  # fmt: skip
     (ROOT / "logs").mkdir(exist_ok=True)
@@ -66,6 +69,7 @@ def chain(station):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--jobs", type=int, default=6)
     parser.add_argument("stations", nargs="*", default=list(STATIONS))

@@ -41,6 +41,7 @@ FINISHED = {
 
 
 def digest(path):
+    """SHA-256 hex digest of a file, or 'missing'."""
     path = Path(path)
     return (
         hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else "missing"
@@ -48,6 +49,7 @@ def digest(path):
 
 
 def epoch_key(row):
+    """Checksum key of a channel epoch."""
     return hashlib.sha256(json.dumps([str(row[k]) for k in KEYS]).encode()).hexdigest()
 
 

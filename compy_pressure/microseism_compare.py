@@ -644,6 +644,7 @@ def markdown_report(rows, statistics, source_summary):
 
 
 def write_csv(path, rows):
+    """Write the comparison rows to CSV."""
     with Path(path).open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=CSV_FIELDS)
         writer.writeheader()
@@ -726,6 +727,7 @@ def run_comparison(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--log-root",

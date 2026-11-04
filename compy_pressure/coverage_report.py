@@ -52,10 +52,12 @@ SENSOR_FAMILIES = (
 
 
 def sensor_label(channel):
+    """Sensor description of a channel, or its type if there is none."""
     return str(channel.get("sensor_description") or channel.get("sensor_type") or "")
 
 
 def sensor_family(label):
+    """Sensor family of a label from keywords, or 'unclassified'."""
     upper = str(label).upper()
     for family, keywords in SENSOR_FAMILIES:
         if any(word in upper for word in keywords):
@@ -64,6 +66,7 @@ def sensor_family(label):
 
 
 def campaign_npz(campaign_dir, task_id, tasks):
+    """PPSD file of a completed task, or None."""
     task = tasks.get(task_id)
     if not task:
         return None
@@ -112,6 +115,7 @@ def pressure_sources(plan, campaign_dir):
 
 
 def coverage_tables(plan, campaign_dir, sources):
+    """Build the channel and station coverage tables of a campaign."""
     tasks = {t["task_id"]: t for t in plan["tasks"]}
     by_key = {tuple(s[k] for k in KEYS): s for s in sources}
     channel_rows, stations = [], defaultdict(Counter)
@@ -209,6 +213,7 @@ def map_counts(state, edges, lo, hi):
 
 
 def draw(path_stub, edges, lo, hi, occurrence, title, note, max_percentage):
+    """Draw one percentage heat map and save it."""
     figure, axis = plt.subplots(figsize=(14, 8))
     figure.subplots_adjust(left=0.08, right=0.97, bottom=0.2, top=0.86)
     db_edges = np.arange(lo, hi + 1)
@@ -249,6 +254,7 @@ def draw(path_stub, edges, lo, hi, occurrence, title, note, max_percentage):
 
 
 def heatmaps(sources, output, max_percentage=30.0):
+    """Draw the coverage heat maps and return their manifest."""
     output.mkdir(parents=True, exist_ok=False)
     groups = defaultdict(list)
     for source in sources:
@@ -400,6 +406,7 @@ def task_state(complete, state):
 
 
 def write_report(plan, campaign_dir, output=None, *, max_percentage=30.0):
+    """Write the coverage report of a campaign to a new folder."""
     campaign_dir = Path(campaign_dir)
     output = Path(output or campaign_dir / "reports" / fresh_name(plan["plan_id"]))
     output.mkdir(parents=True, exist_ok=False)

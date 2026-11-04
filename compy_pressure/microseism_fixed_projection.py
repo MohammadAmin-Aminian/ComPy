@@ -56,6 +56,7 @@ def prior_projections(events, test_start):
 
 
 def validate_weights(weights):
+    """Check and return three finite projection weights."""
     w = np.asarray(weights, dtype=float)
     if (
         w.shape != (3,)

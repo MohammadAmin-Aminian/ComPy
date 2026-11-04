@@ -44,6 +44,7 @@ START_SPREAD = 0.1
 
 
 def coordinates(station):
+    """Station latitude and longitude from the StationXML."""
     s = read_inventory(str(INVENTORY)).select(station=station)[0][0]
     return s.latitude, s.longitude
 
@@ -64,6 +65,7 @@ def result_label(summary):
 
 
 def gain_label(station):
+    """Label of the gain used for a station, with its summary."""
     summary = json.loads((RESULTS / station / f"{station}_summary.json").read_text())
     label = result_label(summary)
     if label is None:
@@ -95,6 +97,7 @@ def h2_result(stored):
 
 
 def load_data(station, gain_rel=0.05, estimator="h1"):
+    """Compliance data of a station for the inversion."""
     label, summary = gain_label(station)
     path = RESULTS / station / f"{station}_compliance_{label}.npz"
     stored = dict(np.load(path))
@@ -117,6 +120,7 @@ def load_data(station, gain_rel=0.05, estimator="h1"):
 
 
 def build_model(station, **overrides):
+    """Crustal model of a station from its CRUST1.0 column."""
     column = ci.crust1_column(*coordinates(station), CRUST1)
     settings = dict(moho_depth=column["moho_depth"], sediment_max=1000.0)
     settings.update(overrides)
@@ -133,6 +137,7 @@ VARIANTS = {
 
 
 def run(station, variant, processes, seed=0):
+    """Run one inversion variant of a station."""
     spec = VARIANTS[variant]
     data, info = load_data(station, **spec.get("data", {}))
     model, column = build_model(station, **spec.get("model", {}))

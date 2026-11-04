@@ -23,6 +23,7 @@ def alias_seed_id(seed_id):
 
 
 def same_channel(filename_seed, header_seed):
+    """True if a file header SEED id matches the id in its file name, or that id's alias."""
     return header_seed in {filename_seed, alias_seed_id(filename_seed)}
 
 
@@ -41,6 +42,8 @@ class SampleGridError(ValueError):
 
 @dataclass(frozen=True)
 class WaveformFile:
+    """One waveform file: path, SEED id and time span."""
+
     path: Path
     seed_id: str
     start: UTCDateTime

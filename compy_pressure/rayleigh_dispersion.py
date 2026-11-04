@@ -12,6 +12,7 @@ DISPERSION_COLUMNS = "frequency_hz,phase_velocity_m_s,group_velocity_m_s"
 
 
 def validate_dispersion(table, band):
+    """Check a frequency, phase and group velocity table."""
     table = np.asarray(table, dtype=float)
     if table.ndim != 2 or table.shape[1] != 3 or len(table) < 2:
         raise ValueError("Expected frequency, phase velocity, group velocity CSV")
@@ -27,6 +28,7 @@ def validate_dispersion(table, band):
 
 
 def dispersion_from_layers(path, band):
+    """Compute a Rayleigh dispersion table from a layered model file."""
     path = Path(path)
     content = path.read_bytes()
     lines = content.decode().splitlines()
@@ -89,6 +91,7 @@ def dispersion_from_layers(path, band):
 
 
 def load_dispersion(*, dispersion_file=None, earth_model_file=None, band):
+    """Load a dispersion table from a table file or an Earth model file."""
     if len(band) != 2 or not np.isfinite(band).all() or not 0 < band[0] < band[1]:
         raise ValueError("Invalid dispersion band")
     if bool(dispersion_file) == bool(earth_model_file):

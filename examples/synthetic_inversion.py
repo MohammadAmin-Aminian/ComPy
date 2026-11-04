@@ -16,7 +16,7 @@ def main():
     )
     f = np.array([0.005, 0.007, 0.01, 0.015])
     observed = propagator.normalized_compliance(4000, f, model)
-    result = metropolis.invert_compliance_beta(
+    result = metropolis.invert_compliance_broad_bounds(
         observed,
         f,
         4000,

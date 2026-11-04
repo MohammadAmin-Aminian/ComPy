@@ -125,6 +125,7 @@ def figure_arrays(summary, depth):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("station")
     args = parser.parse_args()

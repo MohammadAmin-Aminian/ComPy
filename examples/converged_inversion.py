@@ -53,7 +53,7 @@ def run_chain(k):
     state = START.copy()
     state[0, 3], state[1, 3], state[0, 0], state[1, 0] = vs1, vs2, h1, 1100.0 - h1
     info = {}
-    out = metropolis.invert_compliance_beta(
+    out = metropolis.invert_compliance_broad_bounds(
         OBS,
         F,
         DEPTH,

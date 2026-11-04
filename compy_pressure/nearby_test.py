@@ -53,6 +53,8 @@ REFERENCES = [
 
 @dataclass(frozen=True)
 class Criteria:
+    """Thresholds for choosing and comparing nearby stations."""
+
     preferred_distance_km: float = 50
     maximum_distance_km: float = 100
     preferred_depth_fraction: float = 0.05
@@ -92,14 +94,17 @@ class Criteria:
 
 
 def row_key(row):
+    """The key columns of a row as strings."""
     return tuple(str(row[name]) for name in KEYS)
 
 
 def station_key(row):
+    """NETWORK.STATION of a row."""
     return ".".join(row["Seed_id"].split(".")[:2])
 
 
 def pressure_rows(master):
+    """Pressure channels of the master table with PPSD results."""
     needed = {"ppsd_status", "ppsd_units", "ppsd_npz_file"}
     if not needed.issubset(master):
         raise ValueError("Run the PPSD stage before comparing nearby stations")
@@ -115,6 +120,7 @@ def pressure_rows(master):
 
 
 def metadata(row):
+    """Validated latitude, longitude and depth of a row."""
     latitude, longitude, depth = [
         float(row[name]) for name in ("Lat", "Lon", "Profondeur")
     ]
@@ -133,6 +139,7 @@ def declared_sensor(row):
 
 
 def known_failure(row):
+    """True if a row already has a result of zero."""
     for name in RESULT_COLUMNS:
         try:
             if str(row.get(name, "")).strip() and float(row[name]) == 0:
@@ -244,6 +251,8 @@ def daily_spectra(times, values, duration, minimum_hours):
 
 @dataclass
 class DailyPressure:
+    """Daily pressure spectra of one channel."""
+
     row: dict
     frequencies: np.ndarray
     lower: np.ndarray
@@ -258,6 +267,7 @@ class DailyPressure:
 
 
 def load_daily(row, criteria):
+    """Load a channel's daily pressure spectra from its PPSD."""
     source = Path(row["ppsd_npz_file"])
     blob = source.read_bytes()
     ppsd = PPSD.load_npz(BytesIO(blob))
@@ -391,6 +401,7 @@ def reference_group(target, pairs, criteria):
 
 
 def finite_percentiles(values):
+    """5th, 50th and 95th percentile of the finite values."""
     finite = np.asarray(values)[np.isfinite(values)]
     return (
         tuple(map(float, np.percentile(finite, [5, 50, 95])))
@@ -406,6 +417,7 @@ def finite_rms(values):
 
 
 def comparison_plots(target, audits, pairs, group, status, criteria):
+    """Draw the comparison figures of a target station."""
     figure, axes = plt.subplots(
         2, 1, figsize=(11, 8), sharex=True, layout="constrained"
     )
@@ -641,6 +653,7 @@ def comparison_plots(target, audits, pairs, group, status, criteria):
 
 
 def write_csv(path, rows, fieldnames=None):
+    """Write dictionaries to a CSV file."""
     with path.open("w", newline="") as stream:
         writer = csv.DictWriter(
             stream,
@@ -1044,6 +1057,7 @@ def run_nearby_test(
 
 
 def add_criteria_arguments(parser):
+    """Add the comparison thresholds as command-line arguments."""
     for name, default in [
         ("preferred-distance-km", 50),
         ("maximum-distance-km", 100),
@@ -1058,12 +1072,14 @@ def add_criteria_arguments(parser):
 
 
 def criteria_from_args(args):
+    """Criteria from parsed command-line arguments."""
     return Criteria(
         **{name: getattr(args, name) for name in Criteria.__dataclass_fields__}
     )
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-dir", type=Path, default=OUTPUT_DIRECTORY)
     parser.add_argument("--network")

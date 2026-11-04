@@ -375,6 +375,7 @@ def plot_diagnostic(arrays, daily, metrics, pressure_multiplier, station):
 
 
 def write_csv(path, rows, fieldnames):
+    """Write dictionaries to a CSV file."""
     with Path(path).open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
@@ -532,6 +533,7 @@ def run_diagnostic(
 
 
 def main():
+    """Command-line entry point."""
     root = Path(__file__).resolve().parents[1] / "pressure"
     default_summary = root / (
         "results/NETWORKS/TEST/YV/RR52/"

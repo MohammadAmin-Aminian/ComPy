@@ -21,6 +21,7 @@ STAGES = ("A", "B", "D", "C", "E", "F", "G")
 
 
 def positive_int(value):
+    """Parse a positive integer command-line value."""
     value = int(value)
     if value < 1:
         raise argparse.ArgumentTypeError("must be a positive integer")
@@ -28,6 +29,7 @@ def positive_int(value):
 
 
 def main(argv=None):
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stations", nargs="*", default=list(config.STATIONS))
     parser.add_argument("--workers", type=positive_int, default=4)

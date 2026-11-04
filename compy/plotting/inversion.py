@@ -6,6 +6,8 @@ use the fixed depth sampling of those figures (``LEGACY_HEATMAP_ROW_M``).
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+from compy._deprecation import renamed
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 from compy.inversion.dram import serpentinization
@@ -44,7 +46,7 @@ def _legacy_depth_ticks(max_depth_m=14000.0, step_m=2000.0):
     return list(depths / LEGACY_HEATMAP_ROW_M), [int(-d) for d in depths]
 
 
-def plot_inversion_v2(
+def plot_inversion_summary(
     starting_model,
     vs,
     mis_fit,
@@ -67,7 +69,6 @@ def plot_inversion_v2(
     depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
 
     # for i in range(0, vs.shape[0]):
-    layer_number = -2
     Vs_final = np.zeros(vs[0].shape)
     N = 0
     vs_filtered = []
@@ -200,7 +201,6 @@ def plot_inversion_v2(
 
     plt.tight_layout()
 
-    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc="lower left")
     plt.tight_layout()
 
@@ -229,7 +229,6 @@ def plot_inversion(
     depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
 
     # for i in range(0, vs.shape[0]):
-    layer_number = -2
     Vs_final = np.zeros(vs[0].shape)
     N = 0
     for i in range(burnin, iteration):
@@ -370,12 +369,11 @@ def plot_inversion(
 
     plt.tight_layout()
 
-    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc="lower left")
     plt.tight_layout()
 
 
-def plot_inversion_beta(
+def plot_inversion_with_start(
     starting_model,
     vs,
     vs0,
@@ -400,7 +398,6 @@ def plot_inversion_beta(
     depth = np.arange(0, -int(np.sum(starting_model[0:-1, 0, 0])), -1)
 
     # for i in range(0, vs.shape[0]):
-    layer_number = -2
     Vs_final = np.zeros(vs[0].shape)
     N = 0
     for i in range(burnin, iteration):
@@ -550,7 +547,6 @@ def plot_inversion_beta(
 
     plt.tight_layout()
 
-    vs_burnin = np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc="lower left")
     plt.tight_layout()
 
@@ -559,7 +555,6 @@ def plot_inversion_density(
     vs, vs0, mis_fit, Data, s, freq, sta, burnin, ncompl, iteration, mis_fit_trsh=8
 ):
     """Posterior Vs probability versus depth for one station, with the measured and predicted compliance."""
-    start_model = station_starting_model(sta) / 50
     bins = 100
     jj = 0
     vs_good = []
@@ -641,8 +636,6 @@ def plot_inversion_density(
     selected_labels = b[selected_indices]
     selected_labels = selected_labels.astype(int)
 
-    depth = np.arange(0, 100, 1)
-
     ff = plt.imshow(
         c, aspect="auto", cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1)
     )
@@ -677,12 +670,6 @@ def plot_inversion_density_all(Inversion_container):
         mis_fit = Inversion_container[ii]["Misfit Fucntion"]
         sta = Inversion_container[ii]["Station"]
         mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
-
-        start_model = station_starting_model(sta) / 50
-
-        start_model = (
-            station_starting_model_mean(sta) / 50
-        )  # mean of all models,sedimental models differ from rocky models
 
         bins = 100
         jj = 0
@@ -1119,7 +1106,7 @@ def plot_publication_figure(Inversion_container, *, image_dir):
 
 def plot_inversion_all(Inversion_container):
     """Median Vs profiles of every station with the SWIR reference profiles."""
-    refrence_model = reference_models() / 50
+    reference_model = reference_models() / 50
 
     plt.figure(dpi=300, figsize=(15, 25))
 
@@ -1128,12 +1115,6 @@ def plot_inversion_all(Inversion_container):
         mis_fit = Inversion_container[ii]["Misfit Fucntion"]
         sta = Inversion_container[ii]["Station"]
         mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
-
-        start_model = station_starting_model(sta) / 50
-
-        start_model = (
-            station_starting_model_mean(sta) / 50
-        )  # mean of all models,sedimental models differ from rocky models
 
         bins = 100
         jj = 0
@@ -1189,7 +1170,7 @@ def plot_inversion_all(Inversion_container):
     plt.ylabel("Depth [m]")
     plt.xlabel("Shear Velocity [m/s]")
     plt.plot(
-        refrence_model[0],
+        reference_model[0],
         _LEGACY_REFERENCE_ROWS,
         color="red",
         linewidth=5,
@@ -1197,7 +1178,7 @@ def plot_inversion_all(Inversion_container):
         label="SWIR 64°30'E (EW)",
     )
     plt.plot(
-        refrence_model[1],
+        reference_model[1],
         _LEGACY_REFERENCE_ROWS,
         color="purple",
         linewidth=5,
@@ -1205,7 +1186,7 @@ def plot_inversion_all(Inversion_container):
         label="SWIR 64°30'E (NS) ",
     )
     plt.plot(
-        refrence_model[2],
+        reference_model[2],
         _LEGACY_REFERENCE_ROWS,
         color="green",
         linewidth=5,
@@ -1229,7 +1210,7 @@ def plot_inversion_density_mean_all(Inversion_container):
         mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
 
         start_model = station_starting_model(sta) / 50
-        refrence_model = reference_models() / 50
+        reference_model = reference_models() / 50
 
         bins = 100
         jj = 0
@@ -1288,7 +1269,7 @@ def plot_inversion_density_mean_all(Inversion_container):
         )
         if sta == "RR40":
             plt.plot(
-                refrence_model[0],
+                reference_model[0],
                 _LEGACY_REFERENCE_ROWS,
                 color="red",
                 linewidth=5,
@@ -1296,7 +1277,7 @@ def plot_inversion_density_mean_all(Inversion_container):
                 label="SWIR 64°30'E (EW)",
             )
             plt.plot(
-                refrence_model[1],
+                reference_model[1],
                 _LEGACY_REFERENCE_ROWS,
                 color="purple",
                 linewidth=5,
@@ -1304,7 +1285,7 @@ def plot_inversion_density_mean_all(Inversion_container):
                 label="SWIR 64°30'E (NS) ",
             )
             plt.plot(
-                refrence_model[2],
+                reference_model[2],
                 _LEGACY_REFERENCE_ROWS,
                 color="green",
                 linewidth=5,
@@ -1314,7 +1295,7 @@ def plot_inversion_density_mean_all(Inversion_container):
 
         if sta == "RR36" or sta == "RR38":
             plt.plot(
-                refrence_model[4],
+                reference_model[4],
                 _LEGACY_REFERENCE_ROWS,
                 color="red",
                 linewidth=5,
@@ -1438,7 +1419,7 @@ def plot_inversion_serpentinization(Inversion_container):
 
 
 # Assuming Inversion_container is predefined somewhere in your code with the necessary data
-def plot_inversion_serpentinization1(Inversion_container):
+def plot_inversion_serpentinization_panels(Inversion_container):
     """Variant of ``plot_inversion_serpentinization`` with a different panel layout."""
 
     plt.figure(dpi=300, figsize=(45, 25))
@@ -1485,7 +1466,6 @@ def plot_inversion_serpentinization1(Inversion_container):
         # Define the colors for the colormap (from white to red to black)
 
         # Define the transition points for the colors
-        n_bins = [0, 0.4, 1]  # You can adjust these thresholds based on your data
 
         # Create the custom colormap
         plt.subplot(2, len(Inversion_container), int(ii + 1))
@@ -1722,3 +1702,13 @@ def plot_autocorrelation(starting_model, N):
         plt.tight_layout()
 
     return Neff
+
+
+__getattr__ = renamed(
+    __name__,
+    {
+        "plot_inversion_v2": "plot_inversion_summary",
+        "plot_inversion_beta": "plot_inversion_with_start",
+        "plot_inversion_serpentinization1": "plot_inversion_serpentinization_panels",
+    },
+)

@@ -185,10 +185,12 @@ def drop_uninventoried(files, master_directory, results_directory):
 
 
 def select_rows(master, files):
+    """Master rows of the channels with files, without duplicates."""
     return master[master.Seed_id.isin(files)].drop_duplicates(KEYS).copy()
 
 
 def is_pressure(row):
+    """True if a row has pressure input units."""
     return is_pressure_unit(row.get("input_units", ""))
 
 
@@ -232,11 +234,13 @@ def build_plan(master, files, data_directory):
 
 
 def epoch_key(row):
+    """Checksum key of a channel epoch."""
     encoded = json.dumps([str(row[name]) for name in KEYS]).encode()
     return hashlib.sha256(encoded).hexdigest()
 
 
 def code_digest():
+    """Checksum of the package code and reference data."""
     digest = hashlib.sha256()
     directory = Path(__file__).parent
     for path in sorted([*directory.glob("*.py"), *directory.glob("reference_data/*")]):
@@ -247,6 +251,7 @@ def code_digest():
 
 
 def file_digest(path):
+    """SHA-256 hex digest of a file, or 'missing'."""
     path = Path(path)
     if not path.is_file():
         return "missing"
@@ -699,6 +704,7 @@ def view_plots(master_directory, files, kind, *, show=True, workflow_path=None):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=(*STAGES, "rayleigh", "all", "view"))
     parser.add_argument("--data-dir", type=Path, default=DATA_DIRECTORY)

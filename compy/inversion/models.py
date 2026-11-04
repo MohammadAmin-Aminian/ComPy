@@ -153,7 +153,6 @@ def rhumrum_starting_model(iteration, n_layer=3, sta="RR38"):
         "RR52",
     ) and n_layer not in (3, 6):
         raise ValueError("generic station template supports only 3 or 6 layers")
-    dep = 0
     if sta == "RR28":
         if n_layer == 3:
             starting_model = np.zeros([n_layer + 3, 4, iteration])
@@ -672,7 +671,6 @@ def rhumrum_starting_model(iteration, n_layer=3, sta="RR38"):
                 ]
             )
     elif sta == "RR52":
-        sediment_thickness = 0
         if n_layer == 3:
             starting_model = np.zeros([n_layer + 3, 4, iteration])
 

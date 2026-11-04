@@ -1,5 +1,6 @@
 """Independent physical and gain checks plus real raw-waveform integration."""
 
+from importlib.metadata import version
 import hashlib
 import json
 from pathlib import Path
@@ -361,7 +362,7 @@ def test_raw_response_rotation_fit_preservation_and_phase_guard(
     item = result["events"][0]
     assert item["status"] == "candidate"
     assert item["tilt"]["method"] == "tiskitpy.CleanRotator"
-    assert item["tilt"]["package_version"] == "2.3.1"
+    assert item["tilt"]["package_version"] == version("tiskitpy")
     assert item["tilt"]["training_rate_hz"] == 1
     assert "arrival_review" in item["files"]
     assert Path(result["files"]["paper_comparison"]).is_file()

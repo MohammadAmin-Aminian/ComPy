@@ -20,7 +20,7 @@ def problem():
 def test_initial_state_and_every_saved_prediction_match_model(problem):
     model, f, data = problem
     chain, profiles, prior, misfits, predictions, likelihood, rate = (
-        metropolis.invert_compliance_beta(
+        metropolis.invert_compliance_broad_bounds(
             data,
             f,
             4000,
@@ -95,27 +95,31 @@ def test_homogeneous_halfspace_static_elastic_limit():
 def test_scalar_and_equivalent_per_layer_steps_give_identical_chains(problem):
     model, f, data = problem
     kwargs = dict(starting_model=model, s=0.03 * data, iteration=200, alpha=0, seed=1)
-    scalar = metropolis.invert_compliance_beta(
+    scalar = metropolis.invert_compliance_broad_bounds(
         data, f, 4000, sigma_v=40, sigma_h=9, **kwargs
     )
-    layered = metropolis.invert_compliance_beta(
+    layered = metropolis.invert_compliance_broad_bounds(
         data, f, 4000, sigma_v=[40, 40], sigma_h=[9], **kwargs
     )
     np.testing.assert_array_equal(scalar[0], layered[0])
     with pytest.raises(ValueError, match="sigma_v must be a scalar or have 2"):
-        metropolis.invert_compliance_beta(data, f, 4000, sigma_v=[40, 40, 40], **kwargs)
+        metropolis.invert_compliance_broad_bounds(
+            data, f, 4000, sigma_v=[40, 40, 40], **kwargs
+        )
     with pytest.raises(ValueError, match="sigma_h must be finite and positive"):
-        metropolis.invert_compliance_beta(data, f, 4000, sigma_h=[-1.0], **kwargs)
+        metropolis.invert_compliance_broad_bounds(
+            data, f, 4000, sigma_h=[-1.0], **kwargs
+        )
 
 
 def test_adaptation_tunes_steps_then_freezes(problem):
     model, f, data = problem
     kwargs = dict(starting_model=model, s=0.03 * data, alpha=0, seed=2, sigma_v=5)
     short, long = {}, {}
-    metropolis.invert_compliance_beta(
+    metropolis.invert_compliance_broad_bounds(
         data, f, 4000, iteration=600, adapt_until=400, diagnostics=short, **kwargs
     )
-    metropolis.invert_compliance_beta(
+    metropolis.invert_compliance_broad_bounds(
         data, f, 4000, iteration=900, adapt_until=400, diagnostics=long, **kwargs
     )
     # Same seed, same adaptation window: frozen scales do not depend on run length.
@@ -130,7 +134,7 @@ def test_initial_state_starts_chain_but_keeps_prior_from_starting_model(problem)
     model, f, data = problem
     state = model.copy()
     state[0, 3], state[0, 0], state[1, 0] = 900.0, 150.0, 950.0
-    chain, _, prior, *_ = metropolis.invert_compliance_beta(
+    chain, _, prior, *_ = metropolis.invert_compliance_broad_bounds(
         data,
         f,
         4000,
@@ -146,7 +150,7 @@ def test_initial_state_starts_chain_but_keeps_prior_from_starting_model(problem)
     outside = state.copy()
     outside[0, 3] = 1900.0  # above the beta prior bound 1.2 x 1500, below Vp
     with pytest.raises(ValueError, match="initial_state"):
-        metropolis.invert_compliance_beta(
+        metropolis.invert_compliance_broad_bounds(
             data,
             f,
             4000,
@@ -158,7 +162,7 @@ def test_initial_state_starts_chain_but_keeps_prior_from_starting_model(problem)
     thicker = state.copy()
     thicker[1, 0] += 10  # changes the conserved total finite thickness
     with pytest.raises(ValueError, match="initial_state"):
-        metropolis.invert_compliance_beta(
+        metropolis.invert_compliance_broad_bounds(
             data,
             f,
             4000,
@@ -316,7 +320,7 @@ def test_explicit_bounds_and_fixed_geometry(problem):
         sigma_v=300,
         adapt_until=200,
     )
-    chain = metropolis.invert_compliance_beta(
+    chain = metropolis.invert_compliance_broad_bounds(
         data, f, 4000, vs_bounds=(1000, [2900, 4000]), vary_thickness=False, **kwargs
     )[0]
     assert np.all(chain[:, 0, :] == model[:, 0, None])  # geometry fixed
@@ -326,7 +330,9 @@ def test_explicit_bounds_and_fixed_geometry(problem):
     assert chain[1, 3].max() > 3500 * 1.1 or chain[1, 3].min() < 3500 * 0.9
     for bad in [(3000, 1000), (0, 2000), ([1000], 3000), 5]:
         with pytest.raises(ValueError, match="vs_bounds"):
-            metropolis.invert_compliance_beta(data, f, 4000, vs_bounds=bad, **kwargs)
+            metropolis.invert_compliance_broad_bounds(
+                data, f, 4000, vs_bounds=bad, **kwargs
+            )
 
 
 def test_hierarchical_smoothing_weight_is_sampled_within_bounds(problem):
@@ -341,14 +347,14 @@ def test_hierarchical_smoothing_weight_is_sampled_within_bounds(problem):
         vary_thickness=False,
     )
     info = {}
-    metropolis.invert_compliance_beta(
+    metropolis.invert_compliance_broad_bounds(
         data, f, 4000, alpha=1e-5, alpha_bounds=(1e-7, 1e-3), diagnostics=info, **kwargs
     )
     trace = info["alpha"]
     assert trace.shape == (300,) and trace[0] == 1e-5
     assert np.all((trace >= 1e-7) & (trace <= 1e-3)) and np.ptp(trace) > 0
     again = {}
-    metropolis.invert_compliance_beta(
+    metropolis.invert_compliance_broad_bounds(
         data,
         f,
         4000,
@@ -360,7 +366,7 @@ def test_hierarchical_smoothing_weight_is_sampled_within_bounds(problem):
     np.testing.assert_array_equal(trace, again["alpha"])
     for bad in [(1e-3, 1e-7), (1e-4, 1e-3), (-1, 1)]:
         with pytest.raises(ValueError, match="alpha_bounds"):
-            metropolis.invert_compliance_beta(
+            metropolis.invert_compliance_broad_bounds(
                 data, f, 4000, alpha=1e-5, alpha_bounds=bad, **kwargs
             )
 
@@ -377,7 +383,7 @@ def test_hierarchical_alpha_conditional_matches_gamma():
     f = np.array([0.006, 0.012])
     data = propagator.normalized_compliance(4000, f, model)
     info = {}
-    metropolis.invert_compliance_beta(
+    metropolis.invert_compliance_broad_bounds(
         data,
         f,
         4000,
@@ -412,7 +418,7 @@ def test_adjacent_interface_move_shifts_one_interface_only():
     )
     f = np.geomspace(0.004, 0.018, 6)
     data = propagator.normalized_compliance(4200, f, model)
-    chain = metropolis.invert_compliance_beta(
+    chain = metropolis.invert_compliance_broad_bounds(
         data,
         f,
         4200,
@@ -433,7 +439,7 @@ def test_adjacent_interface_move_shifts_one_interface_only():
     assert np.all(moved.sum(axis=0) <= 1)  # never more than one interface per step
     assert np.allclose(depths[-1], model[:-1, 0].sum())
     with pytest.raises(ValueError, match="interface_move"):
-        metropolis.invert_compliance_beta(
+        metropolis.invert_compliance_broad_bounds(
             data,
             f,
             4200,
@@ -456,8 +462,8 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
         return_profiles=False,
         vary_thickness=False,
     )
-    diag = metropolis.invert_compliance_beta(data, f, 4000, s=s, **kwargs)
-    full = metropolis.invert_compliance_beta(
+    diag = metropolis.invert_compliance_broad_bounds(data, f, 4000, s=s, **kwargs)
+    full = metropolis.invert_compliance_broad_bounds(
         data, f, 4000, s=None, data_covariance=np.diag(s**2), **kwargs
     )
     np.testing.assert_allclose(full[0], diag[0])  # same chain
@@ -468,7 +474,7 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
     cov = np.diag((0.01 * data) ** 2) + np.outer(g, g)
     trial = model.copy()
     trial[:, 3] *= 1.02  # ~4 % lower compliance
-    info_full = metropolis.invert_compliance_beta(
+    info_full = metropolis.invert_compliance_broad_bounds(
         data,
         f,
         4000,
@@ -480,7 +486,7 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
         return_profiles=False,
         vary_thickness=False,
     )[3][0, 0]
-    info_diag = metropolis.invert_compliance_beta(
+    info_diag = metropolis.invert_compliance_broad_bounds(
         data,
         f,
         4000,
@@ -494,14 +500,14 @@ def test_data_covariance_matches_diagonal_and_handles_common_gain(problem):
     assert info_full < info_diag
     for bad in (np.eye(3), -np.eye(len(f)), np.triu(np.ones((len(f), len(f))))):
         with pytest.raises(ValueError, match="data_covariance"):
-            metropolis.invert_compliance_beta(
+            metropolis.invert_compliance_broad_bounds(
                 data, f, 4000, s=None, data_covariance=bad, **kwargs
             )
 
 
 def test_brocher_coupling_keeps_vp_and_density_tied_to_vs(problem):
     model, f, data = problem
-    chain = metropolis.invert_compliance_beta(
+    chain = metropolis.invert_compliance_broad_bounds(
         data,
         f,
         4000,
@@ -630,7 +636,7 @@ def test_legacy_inversion_accepts_a_crust1_column():
     f = np.array([0.006, 0.009, 0.013])
     start = models.crust1_starting_model(RR52_COLUMN, sublayers=2)
     data = propagator.normalized_compliance(2918, f, start)
-    chain = metropolis.invert_compliance_beta(
+    chain = metropolis.invert_compliance_broad_bounds(
         data,
         f,
         2918,

@@ -31,6 +31,7 @@ HERE = Path(__file__).resolve().parent
 
 
 def processed_days(station):
+    """Days listed in a station's QC files."""
     days = set()
     for path in (WORK / station / "qc").glob("*.json"):
         days.update(json.loads(path.read_text())["days"])
@@ -38,6 +39,7 @@ def processed_days(station):
 
 
 def remaining(station):
+    """Days of a station not yet processed."""
     done = processed_days(station)  # str(UTCDateTime), as written by stage A
     return [d for d in A.station_days(station) if str(d) not in done]
 
@@ -74,6 +76,7 @@ def copy_station(station, days):
 
 
 def process(station, workers):
+    """Run stage A on the local cache."""
     env = dict(os.environ, COMPY_SDS=str(CACHE), OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1",
                VECLIB_MAXIMUM_THREADS="1")  # fmt: skip
     log = open(ROOT / "logs" / f"a_fast_{station}.log", "w")
@@ -82,6 +85,7 @@ def process(station, workers):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stations", nargs="+")
     parser.add_argument("--workers", type=int, default=8)

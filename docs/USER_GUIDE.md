@@ -230,7 +230,7 @@ f = np.array([0.005, 0.007, 0.010, 0.015])
 prediction = propagator.normalized_compliance(4000, f, model)
 
 chain, profiles, prior, misfit, predictions, likelihood, acceptance = (
-    metropolis.invert_compliance_beta(
+    metropolis.invert_compliance_broad_bounds(
         measured_compliance,
         f,
         4000,
@@ -265,7 +265,7 @@ from compy.inversion.models import crust1_starting_model
 
 column = ci.crust1_column(-20.4723, 68.1094, "crust1.0/")
 start = crust1_starting_model(column, sublayers=2)  # 6 crustal layers
-result = metropolis.invert_compliance_beta(
+result = metropolis.invert_compliance_broad_bounds(
     data, f, depth, starting_model=start, s=sigma
 )
 # or starting_model=column, with n_layer // 3 sublayers per crustal layer

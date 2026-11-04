@@ -23,7 +23,6 @@ import argparse
 import json
 import sys
 import warnings
-from pathlib import Path
 
 import numpy as np
 from config import CATALOG, CHANNELS, COMPY, DEGLITCH, WORK, P, Z
@@ -47,11 +46,15 @@ EQ_DAYS_PER_MAG = 1.5
 
 
 def load_segments(station):
+    """Load a station's stage A data as segments common to all channels."""
     files = sorted((WORK / station / "phys").glob(f"{station}.*.mseed"))
     st = Stream()
     for f in files:
         st += read(str(f))
     st.merge(method=0)
+    for tr in st:  # non-finite samples from response removal become gaps
+        if not np.all(np.isfinite(tr.data)):
+            tr.data = np.ma.masked_invalid(tr.data)
     intervals = None
     for channel in CHANNELS:
         parts = [
@@ -81,10 +84,12 @@ def load_segments(station):
 
 
 def overlaps(t0, t1, spans):
+    """True if a time span overlaps any of ``spans``."""
     return any(s < t1 and e > t0 for s, e in spans)
 
 
 def deglitch(seg, eq_spans):
+    """Detect periodic transients per block and subtract those that are strong enough."""
     report = []
     t_start, t_end = seg[0].stats.starttime, seg[0].stats.endtime
     block = DEGLITCH_BLOCK_D * 86400
@@ -137,6 +142,7 @@ def deglitch(seg, eq_spans):
 
 
 def hourly_tilt(seg, eq_spans):
+    """Hourly tilt angle, azimuth and variance reduction, skipping earthquakes."""
     rows = []
     for window in compy.split_stream(seg.select(component="[Z12]"), 3600):
         t0 = window[0].stats.starttime
@@ -155,6 +161,7 @@ def hourly_tilt(seg, eq_spans):
 
 
 def as_timespans(spans):
+    """TiSKitPy TimeSpans from pairs, or None if empty."""
     if not spans:
         return None
     return tiskit.TimeSpans(
@@ -163,6 +170,7 @@ def as_timespans(spans):
 
 
 def main():
+    """Command-line entry point."""
     import logging
 
     parser = argparse.ArgumentParser(description=__doc__)
@@ -210,6 +218,8 @@ def main():
         print(
             f"  coherent-noise removal done {UTCDateTime() - clock:.0f} s", flush=True
         )
+        # MiniSEED cannot store gaps left between cleaning windows.
+        cleaned = cleaned.split()
         for tr in cleaned:
             tr.data = tr.data.astype(np.float32)
         path = out_dir / f"{station}_seg{k:02d}.mseed"

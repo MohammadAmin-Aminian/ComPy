@@ -895,7 +895,7 @@ def plot_compliance_coherence(st, nseg=2**12, TP=5):
     plt.tight_layout()
 
 
-def plot_coherence_windows(st, tw=1, nseg=2**12, lim=[0.005, 0.1], TP=5):
+def plot_coherence_windows(st, tw=1, nseg=2**12, lim=(0.005, 0.1), TP=5):
     """
      Coherence Over time
      Coherogram
@@ -1189,7 +1189,6 @@ def plot_coherogram(st, nseg=2**12, tw=1):
     ]
 
     t2 = np.arange(0, len(t))
-    t1 = np.arange(0, len(t))
 
     plt.set_cmap("viridis")
     norm_z = mpl.colors.Normalize(vmin=-190, vmax=-150)
@@ -1245,16 +1244,6 @@ def plot_coherogram(st, nseg=2**12, tw=1):
     plt.ylim([0, nd])
     plt.tick_params(axis="both", which="minor", length=10, width=1)
     plt.tick_params(axis="both", which="major", length=10, width=2)
-
-    Dzz_smoothed = 10 * np.log10(
-        (
-            plot_smooth(
-                np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1), 10, 1
-            )
-        )
-    )
-    Dpp_smoothed = 10 * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1))
-    Czp_smoothed = plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
     bad_windows = []
@@ -1476,9 +1465,6 @@ def plot_coherogram_processing_stages(st, st1, st2, st3, nseg=2**11, tw=1):
     """Z-P coherograms of four processing stages (raw, event removal, tilt and glitch removal, coherent-noise removal)."""
     f_min = 0.008
     f_max = 0.020
-    Tresh_coh = 0.8
-    Tresh_Dz = -170
-    Tresh_Dp = 25
 
     TP = 5
 
@@ -1563,13 +1549,8 @@ def plot_coherogram_processing_stages(st, st1, st2, st3, nseg=2**11, tw=1):
         for i in range(len(dates))
     ]
 
-    t2 = np.arange(0, len(t))
-    t1 = np.arange(0, len(t))
-
     plt.set_cmap("viridis")
 
-    norm_z = mpl.colors.Normalize(vmin=-190, vmax=-150)
-    norm_p = mpl.colors.Normalize(vmin=-60, vmax=50)
     norm_coh = mpl.colors.Normalize(vmin=0, vmax=1)
 
     plt.figure(
@@ -1729,23 +1710,12 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
     ]
 
     t2 = np.arange(0, len(t))
-    t1 = np.arange(0, len(t))
 
     plt.set_cmap("viridis")
 
     norm_z = mpl.colors.Normalize(vmin=-190, vmax=-150)
     norm_p = mpl.colors.Normalize(vmin=-60, vmax=50)
     norm_coh = mpl.colors.Normalize(vmin=0, vmax=1)
-
-    Dzz_smoothed = 10 * np.log10(
-        (
-            plot_smooth(
-                np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1), 10, 1
-            )
-        )
-    )
-    Dpp_smoothed = 10 * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1))
-    Czp_smoothed = plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
     bad_windows = []
@@ -1761,11 +1731,6 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
         else:
             bad_windows.append(i)
 
-    tick_positions_2 = [
-        int(i * max(0, len(Dpp) - 1) / max(1, len(dates) - 1))
-        for i in range(len(dates))
-    ]
-
     import matplotlib.gridspec as gridspec
 
     plt.figure(
@@ -1776,7 +1741,7 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
     )  # Adjust ratios as needed
 
     # Subplot 1 (twice the width)
-    ax1 = plt.subplot(gs[0])
+    plt.subplot(gs[0])
     # Your plotting commands for subplot 1...
     plt.pcolormesh(f, t2, 10 * np.log10(Sp.T), norm=norm_p)
     plt.xlabel("Frequency [Hz]")
@@ -1792,7 +1757,7 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
     plt.colorbar(label="Pressure $(Pa^2/Hz)$[dB]", orientation="vertical")
     plt.tight_layout()
     # Subplot 2 (half the width of subplot 1)
-    ax2 = plt.subplot(gs[1])
+    plt.subplot(gs[1])
     # Your plotting commands for subplot 2...
     f1 = np.argmin(np.abs(f - f_min))
     f2 = np.argmin(np.abs(f - f_max))
@@ -1812,7 +1777,7 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
     plt.tight_layout()
     plt.yticks([])
     # Subplot 3 (twice the width, next to subplot 2)
-    ax3 = plt.subplot(gs[2])
+    plt.subplot(gs[2])
     # Your plotting commands for subplot 3...
     plt.pcolormesh(f, t2, 10 * np.log10(Sz.T * (2 * np.pi * f) ** 4), norm=norm_z)
     plt.xlabel("Frequency [Hz]")
@@ -1825,7 +1790,7 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
     plt.vlines(f[f2], 0, t2[-1], linewidth=7, linestyle="dashed", color="red")
 
     # Subplot 4 (half the width of subplot 3)
-    ax4 = plt.subplot(gs[3])
+    plt.subplot(gs[3])
     # Your plotting commands for subplot 4...
     plt.plot(
         10 * np.log10((np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1))),
@@ -1855,7 +1820,7 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
     plt.xlim([-180, -140])
 
     # Subplot 5 (twice the width, next to subplot 4)
-    ax5 = plt.subplot(gs[4])
+    plt.subplot(gs[4])
     # Your plotting commands for subplot 5...
     plt.pcolormesh(f, np.arange(0, len(Czp)), Czp, norm=norm_coh)
     plt.xscale("log")
@@ -1872,7 +1837,7 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
 
     plt.ylim([0, nd])
     # Subplot 6 (half the width of subplot 5)
-    ax6 = plt.subplot(gs[5])
+    plt.subplot(gs[5])
     # Your plotting commands for subplot 6...
     f1 = np.argmin(np.abs(f - f_min))
     f2 = np.argmin(np.abs(f - f_max))
