@@ -26,7 +26,7 @@ from compy.inversion.dram import (
 )
 from compy.inversion.metropolis import (
     invert_compliance,
-    invert_compliance_beta,
+    invert_compliance_broad_bounds,
     invert_tempered,
     l_curve,
 )
@@ -45,7 +45,7 @@ __all__ = [
     "crust1_starting_model",
     "forward",
     "invert_compliance",
-    "invert_compliance_beta",
+    "invert_compliance_broad_bounds",
     "invert_occam",
     "invert_tempered",
     "l_curve",

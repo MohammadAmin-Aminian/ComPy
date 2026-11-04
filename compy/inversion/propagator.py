@@ -73,7 +73,6 @@ def raydep(P, om, d, ro, vp2, vs2):
     mu = ro * vs2
     n = len(d)
     ist = n - 1
-    ysav = 0
     psq = P * P
     r2 = 2 * mu[ist] * P
     # % R and S are the "Wavenumbers" of compress and shear waves in botlayer
@@ -118,7 +117,7 @@ def raydep(P, om, d, ro, vp2, vs2):
         y[5 - 1] = ro[i] * g3 - r2 * (y[2 - 1] - b1)
         ym[i, :] = y
 
-    de = y[5 - 1] / np.sqrt(y[1 - 1] * y[1 - 1] + y[2 - 1] * y[2 - 1])
+    y[5 - 1] / np.sqrt(y[1 - 1] * y[1 - 1] + y[2 - 1] * y[2 - 1])
     ynorm = 1 / y[3 - 1]
     y[1 - 1 : 4] = np.array([0, -ynorm, 0, 0])
     # %*****PROPAGATE BACK DOWN LAYERS*********
@@ -138,7 +137,7 @@ def raydep(P, om, d, ro, vp2, vs2):
         ls = i
         if i >= 2 - 1:
             sum = np.hypot(x[i, 0], x[i, 1])
-            pbsq = 1 / vs2[i]
+            1 / vs2[i]
             if sum < 1e-4:
                 break
 

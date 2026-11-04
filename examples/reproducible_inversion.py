@@ -42,7 +42,7 @@ def run(output, *, iterations=1000, burnin=250, chains=4):
     uncertainty = 0.03 * np.abs(clean)
     observed = clean + np.random.default_rng(2026).normal(0, uncertainty)
     results = [
-        metropolis.invert_compliance_beta(
+        metropolis.invert_compliance_broad_bounds(
             observed,
             frequency,
             4000,
@@ -105,7 +105,7 @@ def run(output, *, iterations=1000, burnin=250, chains=4):
         sigma_v_m_s=35,
         sigma_h_m=8,
         alpha=0,
-        sampler="invert_compliance_beta",
+        sampler="invert_compliance_broad_bounds",
         return_profiles=False,
         units=dict(
             frequency="Hz",

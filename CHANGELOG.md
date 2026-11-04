@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased
+
+Fixes from running every OBS network of the archive. Results of stations that
+already worked are unchanged, sample for sample.
+
+- Stage A: a piece ending before the next 0.8 s grid point no longer fails its
+  chunk ("startime is larger than endtime"); invalid day files such as day 366
+  of a non-leap year are skipped; sampling rates within 1e-5 of a nominal value
+  are snapped to it so segments can merge; channels exceeding 2^23 counts in over
+  half of their blocks (32-bit digitizers, absolute gauges) use a 32-bit clip
+  level; data outside every StationXML epoch loses only its segment, listed under
+  `no_response` in the QC file.
+- Stage B: non-finite samples become gaps; gaps left between cleaning windows
+  can be written to MiniSEED.
+- Version-tagged names replaced, old names still work with a DeprecationWarning:
+  `invert_compliance_beta` -> `invert_compliance_broad_bounds`,
+  `plot_inversion_v2` -> `plot_inversion_summary`,
+  `plot_inversion_beta` -> `plot_inversion_with_start`,
+  `plot_inversion_serpentinization1` -> `plot_inversion_serpentinization_panels`.
+- Unused variables and imports removed; mutable default argument removed.
+
 ## 2.7.0 — 2026-11-02
 
 A correctness pass before full-data reprocessing: a code review of the

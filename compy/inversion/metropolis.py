@@ -9,6 +9,8 @@ uses. For the newer DRAM sampler see ``compy.inversion.dram``.
 import matplotlib.pyplot as plt
 import numpy as np
 
+from compy._deprecation import renamed
+
 from compy.inversion.models import (
     _depth_profile,
     _validate_model,
@@ -473,7 +475,7 @@ def invert_compliance(
     return chain, profiles, misfits, prediction, likelihood, rate
 
 
-def invert_compliance_beta(
+def invert_compliance_broad_bounds(
     Data,
     f,
     depth_s,
@@ -501,7 +503,7 @@ def invert_compliance_beta(
     data_covariance=None,
     elastic_from_vs=None,
 ):
-    """V2 sampler with broader shallow Vs bounds; returns legacy seven-tuple.
+    """Metropolis sampler with broader shallow Vs bounds; returns the seven-tuple of ``invert_compliance``.
 
     adapt_until, target_acceptance, initial_state and diagnostics are optional
     sampler-tuning keywords documented in ``_inversion``.
@@ -532,13 +534,6 @@ def invert_compliance_beta(
         data_covariance=data_covariance,
         elastic_from_vs=elastic_from_vs,
     )
-
-
-# Correctly spelled aliases; historical names remain available.
-invert_compliance = invert_compliance
-
-
-invert_compliance_beta = invert_compliance_beta
 
 
 def l_curve(
@@ -821,3 +816,8 @@ def invert_tempered(
         sigma_v=[sv[(0, j)] for j in range(len(temps))],
         sigma_h=[sh[(0, j)] for j in range(len(temps))],
     )
+
+
+__getattr__ = renamed(
+    __name__, {"invert_compliance_beta": "invert_compliance_broad_bounds"}
+)
