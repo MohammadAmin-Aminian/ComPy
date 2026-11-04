@@ -35,6 +35,7 @@ NO_TANH_LABEL = r"Godin Eq. 6 without tanh$^{-3/2}$ (2000 cosh$^{-2}$kH)"
 
 
 def positive(value, name):
+    """Value as a float, or ValueError unless it is finite and positive."""
     try:
         value = float(value)
     except (TypeError, ValueError) as exc:
@@ -617,6 +618,7 @@ def run_infragravity_test(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-dir", type=Path, default=OUTPUT_DIRECTORY)
     parser.add_argument("--network", default="YV")

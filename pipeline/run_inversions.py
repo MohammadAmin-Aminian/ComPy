@@ -22,12 +22,14 @@ ENV = dict(os.environ, MPLBACKEND="Agg", OMP_NUM_THREADS="1", OPENBLAS_NUM_THREA
 
 
 def run(args, log):
+    """Run a script with its output in a log file; return the exit code."""
     with open(ROOT / "logs" / log, "w") as fh:
         return subprocess.run([sys.executable, *args], cwd=HERE, env=ENV, stdout=fh,
                               stderr=subprocess.STDOUT).returncode  # fmt: skip
 
 
 def ready(station):
+    """True when a station's compliance result is finished."""
     summary = RESULTS / station / f"{station}_summary.json"
     log = ROOT / "logs" / f"c_compliance_{station}.log"
     return (
@@ -36,6 +38,7 @@ def ready(station):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--processes", type=int, default=6)
     parser.add_argument("--redo-dc", nargs="*", default=[])

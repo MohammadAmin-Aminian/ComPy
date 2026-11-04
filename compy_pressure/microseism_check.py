@@ -58,6 +58,7 @@ MODES = (0, 1, 2)
 
 
 def sha256(path):
+    """SHA-256 hex digest of a file."""
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
@@ -148,6 +149,7 @@ def phase_velocity_from_height(f, height, depth, sound_speed):
 
 
 def load_layers(path):
+    """Read and validate a layered Earth model from CSV."""
     layers = np.loadtxt(path, delimiter=",", skiprows=1, ndmin=2)
     if layers.shape[1] != 4 or not np.isfinite(layers).all() or layers[-1, 0] != 0:
         raise ValueError("Expected km, km/s, km/s, g/cm3 layers ending in half-space")
@@ -649,6 +651,7 @@ def plot_check(
     destination,
     show,
 ):
+    """Save the microseism check figure."""
     figure, axes = plt.subplots(3, 2, figsize=(13, 12), sharex=True)
     axes = axes.ravel()
     for axis in axes[:5]:
@@ -763,6 +766,7 @@ def plot_check(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--paired-run", type=Path, required=True)
     parser.add_argument("--reference-result", type=Path, required=True)

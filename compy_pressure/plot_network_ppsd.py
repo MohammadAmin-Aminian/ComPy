@@ -100,6 +100,7 @@ def station_distribution(states):
 
 
 def sha256(path):
+    """SHA-256 hex digest of a file."""
     # hashlib.file_digest needs Python 3.11; ComPy supports 3.10
     digest = hashlib.sha256()
     with Path(path).open("rb") as stream:
@@ -249,6 +250,7 @@ def plot_network(
     max_percentage=30.0,
     min_percentage=0.0,
 ):
+    """Draw the PPSD figures of a network and return a report."""
     if (
         not np.isfinite([min_percentage, max_percentage]).all()
         or not 0 <= min_percentage < max_percentage <= 100
@@ -523,6 +525,7 @@ def plot_network(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-csv", type=Path, default=MASTER_CSV)
     parser.add_argument("--network", default="YV")

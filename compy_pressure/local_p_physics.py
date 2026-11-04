@@ -237,6 +237,7 @@ def polarity_class(phase_deg, tolerance_deg=45.0):
 
 
 def circular_mean_deg(phase_deg):
+    """Circular mean of phases in degrees; NaN if empty."""
     phase = np.deg2rad(np.asarray(phase_deg, dtype=float))
     if not phase.size:
         return float("nan")

@@ -120,6 +120,7 @@ def channel_histograms(row):
 
 
 def safe_histograms(row):
+    """Histograms of one channel, or an error record if it fails."""
     try:
         return channel_histograms(row)
     except Exception as exc:
@@ -127,6 +128,7 @@ def safe_histograms(row):
 
 
 def percentile_curves(probability, db_edges, coverage):
+    """Percentile curves from a probability table."""
     cdf = probability.cumsum(axis=0)
     levels = (db_edges[:-1] + db_edges[1:]) / 2
     curves = {}
@@ -138,6 +140,7 @@ def percentile_curves(probability, db_edges, coverage):
 
 
 def group_order(grouping, names):
+    """Group names in display order."""
     order = {"season": SEASONS, "depth_bin": DEPTH_ORDER}.get(grouping)
     return [n for n in order if n in names] if order else sorted(names)
 
@@ -178,6 +181,7 @@ def build_models(results, rows, grouping):
 
 
 def plot_references(axis):
+    """Draw the reference noise levels on an axis."""
     metadata, brown = load_references()
     brown = brown[brown[:, 0] >= 0.2]  # used at and above 0.2 Hz, as in Test 1
     axis.fill_between(
@@ -202,6 +206,7 @@ def plot_references(axis):
 
 
 def plot_grouping(grouping, models, path, title):
+    """Save the heat maps of one grouping."""
     n = len(models)
     cols = min(n, 3)
     rows = int(np.ceil(n / cols))
@@ -242,6 +247,7 @@ def plot_grouping(grouping, models, path, title):
 
 
 def plot_medians(grouping, models, path, title):
+    """Save the group medians on one panel."""
     fig, axis = plt.subplots(figsize=(9, 5.5), layout="constrained")
     plot_references(axis)
     colors = plt.cm.viridis(np.linspace(0, 0.9, len(models)))
@@ -264,6 +270,7 @@ def plot_medians(grouping, models, path, title):
 
 
 def panel_grid(n):
+    """Figure and axes for ``n`` panels, at most three per row."""
     cols = min(n, 3)
     rows = int(np.ceil(n / cols))
     fig, axes = plt.subplots(
@@ -386,6 +393,7 @@ def plot_lines(models, path, title):
 
 
 def write_curves(path, models):
+    """Write the percentile curves of each group to CSV."""
     with path.open("w", newline="") as stream:
         writer = csv.writer(stream)
         writer.writerow(
@@ -413,6 +421,7 @@ def write_curves(path, models):
 def run(
     table_path, output, *, select_column, select_value, band_columns, workers, label
 ):
+    """Build the group noise models from a table and write them to a new folder."""
     output = Path(output)
     if output.exists() and any(output.iterdir()):
         raise FileExistsError(f"{output} is not empty; choose a new folder")
@@ -509,6 +518,7 @@ def run(
 
 
 def main():
+    """Command-line entry point."""
     from compy_pressure.network import worker_count
 
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])

@@ -34,6 +34,7 @@ HERE = Path(__file__).resolve().parent
 
 
 def remaining(station):
+    """Days of a station not yet processed."""
     done = set()
     for path in (WORK / station / "qc").glob("*.json"):
         done.update(json.loads(path.read_text())["days"])
@@ -41,6 +42,7 @@ def remaining(station):
 
 
 def fetch(station, channel, day):
+    """Download one channel-day file."""
     rel = (
         Path(str(day.year))
         / NETWORK
@@ -75,6 +77,7 @@ def fetch(station, channel, day):
 
 
 def download_station(station, days, connections):
+    """Download a station's files with parallel connections."""
     import obspy
 
     wanted = sorted({(d + k * A.DAY).timestamp for d in days for k in (-1, 0, 1)})
@@ -84,6 +87,7 @@ def download_station(station, days, connections):
 
 
 def process(station, workers):
+    """Run stage A on the downloaded files."""
     env = dict(os.environ, COMPY_SDS=str(CACHE), OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1",
                VECLIB_MAXIMUM_THREADS="1")  # fmt: skip
     with open(ROOT / "logs" / f"a_download_{station}.log", "w") as log:
@@ -92,6 +96,7 @@ def process(station, workers):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stations", nargs="+")
     parser.add_argument("--connections", type=int, default=6)

@@ -126,6 +126,7 @@ def averaged_products(pp, zz, zp):
 
 
 def source_metadata(records, start, end):
+    """Path, size and modification time of the files overlapping a time span."""
     return [
         {"path": str(p), "size": p.stat().st_size, "mtime_ns": p.stat().st_mtime_ns}
         for p in sorted({r.path for r in records if r.start < end and r.end >= start})
@@ -133,6 +134,7 @@ def source_metadata(records, start, end):
 
 
 def response_snapshot_path(row):
+    """Path of a row's saved response."""
     explicit = row.get("rayleigh_response_snapshot_file", "")
     return (
         Path(explicit)
@@ -180,6 +182,7 @@ def checked_response(row, channel, frequency, output):
 
 
 def plot_products(f, pp, zz, h, coherence, valid, title):
+    """Save the figure of the paired-spectra products."""
     fig, axes = plt.subplots(4, 1, figsize=(10, 11), sharex=True)
     axes[0].loglog(f[valid], pp[valid], label="Pressure (Pa²/Hz)")
     twin = axes[0].twinx()
@@ -623,6 +626,7 @@ def view_saved(summary_path, *, show=True):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-dir", type=Path, default=OUTPUT_DIRECTORY)
     parser.add_argument("--data-dir", type=Path)

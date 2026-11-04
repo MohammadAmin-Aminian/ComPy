@@ -231,6 +231,7 @@ def test_details_plot(ppsd, diagnostics):
 
 
 def load_references():
+    """Load the Webb and Brown reference levels."""
     directory = files("compy_pressure").joinpath("reference_data")
     metadata = json.loads(directory.joinpath("pressure_references.json").read_text())
     with directory.joinpath(metadata["brown"]["data_file"]).open() as stream:
@@ -247,6 +248,7 @@ def load_references():
 
 
 def validate_pressure(ppsd, row):
+    """Check a saved PPSD against its master row and return its PSD values."""
     if row["ppsd_units"] != "Pa^2/Hz" or ppsd.special_handling != "hydrophone":
         raise ValueError("This comparison requires pressure PSDs in Pa^2/Hz")
     if ppsd.id != row["Seed_id"]:
@@ -463,6 +465,7 @@ def summarize(values, frequencies, lower_edges, upper_edges, band, metadata, bro
 def comparison_plot(
     ppsd, percentiles, diagnostics, band, response_f, response_db, metadata, brown
 ):
+    """Draw a pressure PPSD against the references, with its response."""
     figure, (axis, response_axis) = plt.subplots(
         2,
         1,
@@ -728,6 +731,7 @@ def run_pressure_test(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-dir", type=Path, default=OUTPUT_DIRECTORY)
     parser.add_argument("--network", default="YV")

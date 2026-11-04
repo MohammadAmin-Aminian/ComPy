@@ -66,15 +66,18 @@ GROUPS = getattr(__import__("config"), "GROUPS", {
 
 
 def sub_array(station):
+    """Sub-array label of a station."""
     return GROUPS.get(station[:2], station[:2])
 
 
 def coords():
+    """Latitude, longitude and depth of each station."""
     inv = read_inventory(str(INVENTORY))
     return {s.code: (s.latitude, s.longitude, -s.elevation) for s in inv[0]}
 
 
 def title(station, c):
+    """Station title with its coordinates."""
     lat, lon, _ = c[station]
     return f"{station} ({abs(lat):.1f}°{'S' if lat < 0 else 'N'} - {abs(lon):.1f}°{'W' if lon < 0 else 'E'})"
 
@@ -83,11 +86,13 @@ def title(station, c):
 
 
 def compliance_summary(station):
+    """A station's compliance summary, or None."""
     path = RESULTS / station / f"{station}_summary.json"
     return json.loads(path.read_text()) if path.exists() else None
 
 
 def load_posterior(station, variant="final"):
+    """A station's saved posterior and CRUST1.0 column, or None."""
     path = RESULTS / station / "inversion" / f"{station}_{variant}.npz"
     if not path.exists():
         return None, None
@@ -111,6 +116,7 @@ MIN_WINDOWS = (
 
 
 def n_windows(station):
+    """Largest number of accepted windows of a station."""
     summ = compliance_summary(station)
     if not summ:
         return 0
@@ -134,6 +140,7 @@ def usable(station):
 
 
 def crust1_steps(column, zmax=8000.0):
+    """CRUST1.0 Vs as a step profile for plotting."""
     m = ci.crust1_model(column)
     tops = np.concatenate([[0.0], np.cumsum(m[:-1, 0])])
     z = np.repeat(np.append(tops, zmax), 2)[1:-1]
@@ -141,6 +148,7 @@ def crust1_steps(column, zmax=8000.0):
 
 
 def crust1_vs_at(column, z):
+    """CRUST1.0 Vs at the given depths."""
     m = ci.crust1_model(column)
     tops = np.concatenate([[0.0], np.cumsum(m[:-1, 0])])
     return m[np.searchsorted(tops, z, side="right") - 1, 3]
@@ -150,6 +158,7 @@ def crust1_vs_at(column, z):
 
 
 def fig01_map(c, status):
+    """Figure 1: station map."""
     from scipy.io import netcdf_file
 
     lats = [v[0] for v in c.values()]
@@ -224,6 +233,7 @@ def _welch(x, fs=1.25):
 
 
 def fig03_psd(station):
+    """Figure 3: PSD at each processing stage."""
     clean_dir = WORK / station / "clean"
     if not list(clean_dir.glob(f"{station}_seg*.mseed")):
         print(f"fig03: {station} has no stage B output; skipped")
@@ -311,6 +321,7 @@ def _nlnm(f):
 
 
 def fig04_tilt(station):
+    """Figure 4: hourly tilt."""
     path = WORK / station / "clean" / "tilt_hourly.csv"
     rows = list(csv.DictReader(open(path))) if path.exists() else []
     if not rows:
@@ -341,6 +352,7 @@ def fig04_tilt(station):
 
 
 def fig05_calibration(station):
+    """Figure 5: pressure gain calibration."""
     path = WORK / station / "calibration" / f"{station}_compy_calibration.npz"
     if not path.exists():
         return
@@ -409,6 +421,7 @@ def _clean_windows(station, t_start, t_end, width=2100.0):
 
 
 def fig06_coherogram(station, summ):
+    """Figure 6: coherogram."""
     label = result_label(summ)
     r = summ["results"][label]
     band = r["band_hz"]
@@ -470,6 +483,7 @@ def fig06_coherogram(station, summ):
 
 
 def fig07_windows(station, summ):
+    """Figure 7: selected windows."""
     label = result_label(summ)
     d = np.load(RESULTS / station / f"{station}_compliance_{label}.npz")
     starts = d["window_starts"]
@@ -539,6 +553,7 @@ def fig07_windows(station, summ):
 
 
 def heat(post):
+    """Normalized Vs histogram with depth, and the median profile."""
     vs = post.vs_draws(Z, max_draws=8000)
     h = np.array([np.histogram(v, VS_BINS)[0] for v in vs.T], float)
     h /= np.maximum(h.max(axis=1, keepdims=True), 1)
@@ -546,6 +561,7 @@ def heat(post):
 
 
 def heat_axis(ax, post, column, cbar=True, legend=False):
+    """Draw a posterior Vs heat map on an axis."""
     h, med = heat(post)
     im = ax.imshow(h, extent=(0, 5000, -Z[-1], 0), aspect="auto", cmap=CMAP, vmin=0, vmax=1,
                    origin="upper", interpolation="nearest")  # fmt: skip
@@ -568,6 +584,7 @@ def heat_axis(ax, post, column, cbar=True, legend=False):
 
 
 def fig08_compliance(store, c):
+    """Figure 8: compliance by sub-array."""
     groups = {}
     for s in store:
         groups.setdefault(sub_array(s), []).append(s)
@@ -596,6 +613,7 @@ def fig08_compliance(store, c):
 
 
 def fig09_heatmaps(store, c):
+    """Figure 9: Vs heat maps of all stations."""
     prefixes = list(GROUPS)
     names = sorted(
         store,
@@ -629,6 +647,7 @@ def fig09_heatmaps(store, c):
 
 
 def fig10_profiles(store, c):
+    """Figure 10: Vs profiles by sub-array."""
     groups = {}
     for s in store:
         groups.setdefault(sub_array(s), []).append(s)
@@ -691,6 +710,7 @@ def fig10_profiles(store, c):
 
 
 def misfit_axis(ax, post, title_=None):
+    """Draw the misfit traces of a posterior on an axis."""
     n = len(post.data.eta)
     it = np.arange(1, post.trace_chi2.shape[1] + 1)
     keep = np.unique(np.geomspace(1, len(it), 2000).astype(int)) - 1
@@ -707,6 +727,7 @@ def misfit_axis(ax, post, title_=None):
 
 
 def figS_misfit(store, c):
+    """Supplementary figure: misfit traces of all stations."""
     names = sorted(store)
     ncol = 6
     nrow = int(np.ceil(len(names) / ncol))
@@ -725,6 +746,7 @@ def figS_misfit(store, c):
 
 
 def station_figure(s, post, column, c):
+    """Summary figure of one inverted station."""
     fig, axes = plt.subplots(
         1, 3, figsize=(19, 6), gridspec_kw=dict(width_ratios=[1, 1, 0.9])
     )
@@ -762,11 +784,13 @@ def station_figure(s, post, column, c):
 
 
 def q3(x):
+    """5th, 50th and 95th percentile."""
     a = np.quantile(x, [0.05, 0.5, 0.95])
     return a
 
 
 def tables(c, store):
+    """Write the result tables and return their rows."""
     TABLES.mkdir(parents=True, exist_ok=True)
     rows = []
     for s in STATIONS:
@@ -840,6 +864,7 @@ def tables(c, store):
 
 
 def main():
+    """Command-line entry point."""
     FIGURES.mkdir(exist_ok=True)
     c = coords()
     store = {}

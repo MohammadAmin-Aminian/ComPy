@@ -34,6 +34,7 @@ VERDICTS = {"pass", "fail", "partial", "unresolved", "not_tested", "not_applicab
 
 
 def digest(path):
+    """SHA-256 hex digest of a file."""
     with Path(path).open("rb") as stream:
         # hashlib.file_digest needs Python 3.11; ComPy supports 3.10
         checksum = hashlib.sha256()
@@ -43,12 +44,14 @@ def digest(path):
 
 
 def json_hash(value):
+    """SHA-256 hex digest of a value as canonical JSON."""
     return hashlib.sha256(
         json.dumps(value, sort_keys=True, allow_nan=False).encode()
     ).hexdigest()
 
 
 def full_key(row):
+    """Validated key of a row."""
     key = tuple(str(row.get(k, "")) for k in KEYS)
     parts = key[0].split(".")
     if (
@@ -63,10 +66,12 @@ def full_key(row):
 
 
 def resolve(path, root=ROOT):
+    """Absolute path of ``path`` relative to ``root``."""
     return (Path(root) / Path(path).expanduser()).resolve()
 
 
 def fresh_output(path, root=ROOT):
+    """Validate a new output folder below results/REVIEWS."""
     path = resolve(path, root)
     allowed = resolve("results/REVIEWS", root)
     if allowed not in path.parents:
@@ -77,11 +82,14 @@ def fresh_output(path, root=ROOT):
 
 
 class Inputs:
+    """Input files of a review, checked for changes by checksum."""
+
     def __init__(self, root=ROOT):
         self.root = Path(root)
         self.hashes = {}
 
     def protect(self, path, expected=None):
+        """Resolve a path and record its checksum, failing if it changed."""
         path = resolve(path, self.root)
         current = digest(path)
         if (expected and current != expected) or (
@@ -92,18 +100,22 @@ class Inputs:
         return path
 
     def document(self, path, expected=None):
+        """Read a protected JSON file."""
         return json.loads(self.protect(path, expected).read_text())
 
     def table(self, path):
+        """Read a protected CSV file."""
         with self.protect(path).open(newline="") as stream:
             return list(csv.DictReader(stream))
 
     def verify(self):
+        """Raise if any protected input changed."""
         if any(digest(p) != value for p, value in self.hashes.items()):
             raise RuntimeError("Protected review input changed")
 
 
 def evidence_state(status, flags=""):
+    """State of one piece of evidence from its status and flags."""
     status = status or "not_tested"
     if status in {"failed", "processing_failed", "processing_error"}:
         return "processing_error"
@@ -132,6 +144,7 @@ def evidence_state(status, flags=""):
 def evidence(
     status="not_tested", *, flags="", metrics=None, sources=None, binding="none"
 ):
+    """Evidence record from a status, flags, metrics and sources."""
     return {
         "state": evidence_state(status, flags),
         "source_status": status,
@@ -145,11 +158,13 @@ def evidence(
 
 
 def source_record(inputs, path, expected=None):
+    """Path and checksum of a protected input."""
     path = inputs.protect(path, expected)
     return {"path": str(path), "sha256": inputs.hashes[str(path)]}
 
 
 def pressure(row):
+    """True if a row is a pressure channel."""
     return (
         str(row.get("input_units", "")).upper().replace(" ", "")
         in {"PA", "PASCAL", "PASCALS"}
@@ -158,6 +173,7 @@ def pressure(row):
 
 
 def load_masters(inputs, paths, networks=None):
+    """Load the master tables of the selected networks."""
     records = {}
     for name in paths:
         table = inputs.table(name)
@@ -187,6 +203,7 @@ def load_masters(inputs, paths, networks=None):
 
 
 def base_review(key, record):
+    """Initial review record of a channel."""
     metadata = {
         k: record.get(k, "")
         for k in ("Lat", "Lon", "Profondeur", "sample_rate_hz", "input_units")
@@ -230,6 +247,7 @@ def pressure_reference_warnings(summary):
 
 
 def add_master_evidence(inputs, item, record):
+    """Add the checks stored in the master rows to a review record."""
     for check, prefix in zip(CHECKS[:3], PREFIXES, strict=True):
         candidates = [
             (m, m["row"].get(prefix + "_result_file"))
@@ -291,6 +309,7 @@ def add_master_evidence(inputs, item, record):
 
 
 def attach_staging(inputs, items, records, path, kind, networks, unjoined):
+    """Attach staging results to the review records."""
     seen = set()
     for row in inputs.table(path):
         if row["Seed_id"].split(".")[0] not in networks:
@@ -331,6 +350,7 @@ def attach_staging(inputs, items, records, path, kind, networks, unjoined):
 
 
 def attach_rayleigh(inputs, items, records, path, networks, unjoined):
+    """Attach Rayleigh results to the review records."""
     document = inputs.document(path)
     for network in document["networks"]:
         if network["network"] not in networks:
@@ -378,6 +398,7 @@ def attach_rayleigh(inputs, items, records, path, networks, unjoined):
 
 
 def aware_time(value):
+    """Parse an ISO time that must include a time zone."""
     dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
     if dt.tzinfo is None:
         raise ValueError("Reviewer timestamps must include a time zone")
@@ -385,6 +406,7 @@ def aware_time(value):
 
 
 def validate_policy(policy):
+    """Check the review policy document."""
     if (
         policy.get("version") != POLICY_VERSION
         or policy.get("classification_rule") != "all_reviewed_checks_v1"
@@ -402,6 +424,7 @@ def validate_policy(policy):
 
 
 def classify(verdicts):
+    """Overall class of a channel from its verdicts."""
     performed = [v for v in verdicts if v not in {"not_tested", "not_applicable"}]
     if not performed:
         return "not_assessed"
@@ -498,6 +521,7 @@ def apply_decisions(items, decisions, policy):
 
 
 def write_csv(path, rows, fields):
+    """Write dictionaries to a new CSV file."""
     with Path(path).open("x", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields)
         writer.writeheader()
@@ -547,6 +571,7 @@ def station_summary(rows):
 
 
 def build_review(config, output, *, root=ROOT, decisions=None):
+    """Build the quality review in a new output folder."""
     inputs = Inputs(root)
     for code in (Path(__file__), ROOT / "../compy_pressure/inventory.py"):
         inputs.protect(code)
@@ -732,6 +757,7 @@ def validate_review(report):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--sources", type=Path, default=ROOT / "docs/quality_review_sources.json"

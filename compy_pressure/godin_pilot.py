@@ -89,6 +89,7 @@ def screen_windows(notch_power, reject_fraction=0.05):
 
 
 def power_db(power):
+    """Power in dB, with zero floored at the smallest positive float."""
     return 10 * np.log10(np.maximum(power, np.finfo(float).tiny))
 
 
@@ -707,6 +708,7 @@ def show_saved_pilot(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-dir", type=Path, default=OUTPUT_DIRECTORY)
     parser.add_argument("--data-dir", type=Path, default=DATA_DIRECTORY)

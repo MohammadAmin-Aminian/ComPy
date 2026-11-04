@@ -734,6 +734,7 @@ class CrustalModel:
         return default if i is None else theta[i]
 
     def crust_vs(self, theta):
+        """Crustal layer shear velocities in the parameter vector ``theta``."""
         i = self._index["vs_crust_1"]
         return np.asarray(theta[i : i + self.n_crust], float)
 
@@ -795,6 +796,7 @@ class CrustalModel:
         return model[np.searchsorted(tops, np.asarray(z, float), side="right") - 1, 3]
 
     def in_bounds(self, theta):
+        """True if every parameter of ``theta`` lies inside the prior bounds."""
         return bool(
             np.all(theta >= self.bounds[:, 0]) and np.all(theta <= self.bounds[:, 1])
         )
@@ -804,6 +806,7 @@ class CrustalModel:
         return rng.uniform(self.bounds[:, 0], self.bounds[:, 1])
 
     def settings(self):
+        """JSON-ready dictionary of the model settings."""
         out = {k: v for k, v in asdict(self).items() if not callable(v)}
         if self.reference is not None:
             out["reference"] = np.asarray(self.reference).tolist()
@@ -869,6 +872,7 @@ class _Target:
         self.names = names
 
     def random(self, rng):
+        """Draw parameters uniformly within the prior bounds."""
         return rng.uniform(self.bounds[:, 0], self.bounds[:, 1])
 
     def __call__(self, theta):
@@ -932,6 +936,7 @@ class _Dram:
         self.chol_inv = np.linalg.inv(self.chol)
 
     def log_post(self, loglik, rough):
+        """Tempered log posterior from the log likelihood and the roughness."""
         return self.beta * loglik - 0.5 * self.alpha * rough
 
     def step(self, it):
@@ -996,9 +1001,11 @@ class _Dram:
                               * (np.cov(recent, rowvar=False) + self.eps))  # fmt: skip
 
     def state(self):
+        """Current chain state (parameters, likelihood, roughness, prediction, alpha)."""
         return self.x, self.loglik, self.rough, self.pred, self.alpha
 
     def set_state(self, state):
+        """Restore a chain state and recompute its log posterior."""
         self.x, self.loglik, self.rough, self.pred, self.alpha = state
         self.lp = self.log_post(self.loglik, self.rough)
 

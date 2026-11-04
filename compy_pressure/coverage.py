@@ -69,6 +69,7 @@ SCOPES = ("pressure", "all-channels")
 
 
 def digest(path):
+    """SHA-256 hex digest of a file."""
     with Path(path).open("rb") as stream:
         # hashlib.file_digest needs Python 3.11; ComPy supports 3.10
         checksum = hashlib.sha256()
@@ -78,11 +79,13 @@ def digest(path):
 
 
 def json_hash(value):
+    """SHA-256 hex digest of a value as canonical JSON."""
     encoded = json.dumps(value, sort_keys=True, allow_nan=False, default=str)
     return hashlib.sha256(encoded.encode()).hexdigest()
 
 
 def utc_now():
+    """Current UTC time as a compact timestamp string."""
     return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
 
 
@@ -92,10 +95,12 @@ def fresh_name(plan_id):
 
 
 def timestamp(value):
+    """Epoch seconds of a time value."""
     return float(UTCDateTime(value).timestamp)
 
 
 def iso(seconds):
+    """ISO time string of epoch seconds."""
     return str(UTCDateTime(seconds))
 
 
@@ -109,6 +114,7 @@ def text(value):
 
 
 def merge_intervals(intervals, tolerance=0.0):
+    """Sort intervals and merge those that overlap or lie within ``tolerance``."""
     merged = []
     for start, end in sorted(intervals):
         if end <= start:
@@ -121,6 +127,7 @@ def merge_intervals(intervals, tolerance=0.0):
 
 
 def subtract_intervals(intervals, removed):
+    """Parts of ``intervals`` that are not covered by ``removed``."""
     result = []
     removed = merge_intervals(removed)
     for start, end in merge_intervals(intervals):
@@ -137,16 +144,19 @@ def subtract_intervals(intervals, removed):
 
 
 def clip_intervals(intervals, start=None, end=None):
+    """Clip intervals to a span; None leaves that side open."""
     low = -math.inf if start is None else start
     high = math.inf if end is None else end
     return [(max(s, low), min(e, high)) for s, e in intervals if e > low and s < high]
 
 
 def total_seconds(intervals):
+    """Total duration of intervals in seconds."""
     return float(sum(end - start for start, end in intervals))
 
 
 def interval_text(intervals):
+    """Intervals as pairs of ISO time strings."""
     return [[iso(start), iso(end)] for start, end in intervals]
 
 
@@ -214,6 +224,7 @@ def load_config(path=CONFIG, source_root=ROOT):
 
 
 def expand_sources(patterns):
+    """Resolve file paths and glob patterns to absolute paths."""
     paths = []
     for pattern in patterns:
         found = sorted(glob.glob(pattern)) if glob.has_magic(pattern) else [pattern]
@@ -314,6 +325,7 @@ class HeaderCache:
         self.hits = self.misses = 0
 
     def get(self, path, full=False):
+        """Header information of a waveform file, from the cache when it is still valid."""
         stat = Path(path).stat()
         cached = self.entries.get(str(path))
         if (
@@ -334,6 +346,7 @@ class HeaderCache:
         return info, stat
 
     def save(self):
+        """Write the cache to disk."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         # A concurrent read-only planner may share this cache. Its snapshot
         # can safely replace ours, but it must not steal our temporary file.
@@ -343,6 +356,7 @@ class HeaderCache:
 
 
 def identity_issue(filename_seed, header_seed, aliases):
+    """Describe a mismatch between a file name's SEED id and its header, or None."""
     if header_seed == filename_seed:
         return None
     a, b = filename_seed.split("."), header_seed.split(".")
@@ -430,6 +444,7 @@ def select_copies(files, preference, tolerance):
 
 
 def file_intervals(record):
+    """Time intervals of a scanned file record, in epoch seconds."""
     if record.get("intervals"):
         return [(timestamp(a), timestamp(b)) for a, b in record["intervals"]]
     return [(timestamp(record["start"]), timestamp(record["end"]))]
@@ -440,6 +455,7 @@ def file_intervals(record):
 
 
 def channel_class(units, code):
+    """Classify a channel as pressure, seismic or other from its units and code."""
     units = str(units or "").upper().replace(" ", "")
     if is_pressure_unit(units):
         return "pressure"
@@ -495,6 +511,7 @@ def response_signature(channel):
 
 
 def same_response(a, b, rtol=1e-6, phase_tolerance_deg=0.01):
+    """Compare two evaluated responses within tolerances; None if either is missing."""
     if a is None or b is None:
         return None
     if a["psd_units"] != b["psd_units"] or a["frequencies_hz"] != b["frequencies_hz"]:
@@ -511,6 +528,7 @@ def same_response(a, b, rtol=1e-6, phase_tolerance_deg=0.01):
 
 
 def epoch_row(network, station, channel, path, sha256):
+    """Table row describing one StationXML channel epoch."""
     sensitivity = channel.response.instrument_sensitivity if channel.response else None
     sensor = channel.sensor
     depth = (
@@ -551,6 +569,7 @@ class ResponseLibrary:
         self.files = {}
 
     def epochs(self, path):
+        """Channel epochs of a StationXML file, cached by path."""
         path = str(Path(path).resolve())
         if path not in self.files:
             sha = digest(path)
@@ -660,6 +679,7 @@ def assign_primary(epochs):
 
 
 def read_registry(path):
+    """Read a registry CSV as a list of dictionaries."""
     with Path(path).open(newline="") as stream:
         return list(csv.DictReader(stream))
 
@@ -688,6 +708,7 @@ def discover_products(config, library):
 
 
 def describe_product(npz, registry_rows, library):
+    """Describe an existing PPSD file and its registry entries."""
     npz = Path(npz)
     product = {
         "npz": str(npz),
@@ -849,20 +870,24 @@ def load_evidence(config, networks):
 
 
 def task_id(kind, payload):
+    """Stable task identifier from its kind and payload."""
     return f"{kind}-{json_hash(payload)[:16]}"
 
 
 def key_dict(row):
+    """The key columns of a row."""
     return {k: row[k] for k in KEYS}
 
 
 def epoch_bounds(row):
+    """Start and end of a row's channel epoch in epoch seconds; None when open."""
     start = timestamp(row["channel_start_time"]) if row["channel_start_time"] else None
     end = timestamp(row["channel_end_time"]) if row["channel_end_time"] else None
     return start, end
 
 
 def overlaps(a_start, a_end, b_start, b_end):
+    """True if two time spans overlap; None bounds are open."""
     low = max(a_start if a_start is not None else -math.inf, b_start or -math.inf)
     high = min(a_end if a_end is not None else math.inf, b_end or math.inf)
     return high > low
@@ -1216,10 +1241,12 @@ def verify_headers(channel, cache):
 
 
 def ppsd_row(channel):
+    """Key columns and sample rate of a channel, for a PPSD task."""
     return {k: channel[k] for k in KEYS} | {"sample_rate_hz": channel["sample_rate_hz"]}
 
 
 def file_signature(records):
+    """Real path, size and modification time of each file record."""
     return [[os.path.realpath(r["path"]), r["size"], r["mtime_ns"]] for r in records]
 
 
@@ -1385,6 +1412,7 @@ def historical_result(channel, prefix):
 
 
 def plan_spectral_checks(channel, campaign_dir, nearby_dependencies):
+    """Plan the spectral check tasks of a channel."""
     tasks = []
     channel["checks"] = {}
     decision = channel.get("ppsd_decision")
@@ -1625,6 +1653,7 @@ def evidence_relation(channel, key, own, library):
 
 
 def summarize(plan):
+    """Summary counts of a campaign plan."""
     channels = plan["channels"]
     tasks = plan["tasks"]
     count = Counter
@@ -1664,6 +1693,7 @@ def summarize(plan):
 
 
 def write_csv(path, rows, fields):
+    """Write dictionaries to a CSV file, ignoring extra keys."""
     with Path(path).open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
@@ -1781,6 +1811,7 @@ def write_plan(plan, directory):
 
 
 def summary_text(plan):
+    """Plain-text summary of a campaign plan."""
     s = plan["summary"]
     lines = [
         f"Plan {plan['plan_id']} ({plan['scope']} scope), "
@@ -1804,6 +1835,7 @@ def summary_text(plan):
 
 
 def default_campaign_dir(name):
+    """Default results folder of a named campaign."""
     return ROOT / "results/COVERAGE" / name
 
 
@@ -1822,6 +1854,7 @@ def guard_campaign_dir(campaign_dir, config):
 
 
 def add_common_arguments(parser):
+    """Add the arguments shared by the coverage commands."""
     parser.add_argument("--campaign", default="full_data_coverage_v1")
     parser.add_argument("--campaign-dir", type=Path)
     parser.add_argument("--config", type=Path, default=CONFIG)
@@ -1840,6 +1873,7 @@ def add_common_arguments(parser):
 
 
 def prepare(args):
+    """Load the configuration and check the campaign folder."""
     config = load_config(args.config, args.source_root)
     campaign_dir = guard_campaign_dir(
         args.campaign_dir or default_campaign_dir(args.campaign), config
@@ -1848,6 +1882,7 @@ def prepare(args):
 
 
 def main(argv=None):
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     plan_parser = commands.add_parser("plan", help="Read-only inventory and dry run")

@@ -121,6 +121,7 @@ class EventRejected(Exception):
 
 
 def sha256(path):
+    """SHA-256 hex digest of a file."""
     digest = hashlib.sha256()
     with open(path, "rb") as stream:
         for block in iter(lambda: stream.read(1 << 20), b""):
@@ -129,11 +130,13 @@ def sha256(path):
 
 
 def file_state(path):
+    """Path, size and modification time of a file."""
     stat = Path(path).stat()
     return {"path": str(path), "size": stat.st_size, "mtime_ns": stat.st_mtime_ns}
 
 
 def git_state():
+    """Commit and working-tree state of the code."""
     try:
         commit = subprocess.run(
             ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
@@ -198,6 +201,7 @@ def load_local_catalog(path):
 
 
 def channel_epochs(inventory_path, seed_id):
+    """StationXML epochs of a SEED id."""
     net, sta, loc, cha = seed_id.split(".")
     inventory = read_inventory(str(inventory_path))
     found = []
@@ -211,6 +215,7 @@ def channel_epochs(inventory_path, seed_id):
 
 
 def epoch_for(epochs, start, end):
+    """The epoch covering a time span."""
     covering = [
         e
         for e in epochs
@@ -225,6 +230,7 @@ def epoch_for(epochs, start, end):
 
 
 def water_depth(epoch):
+    """Water depth in metres from the channel or station elevation."""
     for item in (epoch.channel, epoch.station):
         elevation = getattr(item, "elevation", None)
         if elevation is not None and elevation < 0:
@@ -249,6 +255,7 @@ def duration_quantum(rates):
 
 
 def quantize(seconds, quantum, down=True):
+    """Round seconds down or up to a multiple of ``quantum``."""
     steps = np.floor(seconds / quantum + 1e-9) if down else np.ceil(seconds / quantum)
     return float(steps * quantum)
 
@@ -304,6 +311,7 @@ class DayFileIndex:
         return None
 
     def records(self, start, end):
+        """File records of the days overlapping a time span."""
         days, day = [], UTCDateTime(start.date) - 86400
         while day <= end:
             days.append(f"{day.year:04d}.{day.julday:03d}")
@@ -353,6 +361,8 @@ class DayFileIndex:
 
 @dataclass
 class Geometry:
+    """Source-receiver geometry of one event."""
+
     distance_km: float
     hypocentral_km: float
     back_azimuth: float
@@ -364,6 +374,7 @@ class Geometry:
 
 
 def event_geometry(model, event, latitude, longitude):
+    """Compute the geometry of an event at a station."""
     distance_m, _, back_azimuth = gps2dist_azimuth(
         event["latitude"], event["longitude"], latitude, longitude
     )
@@ -408,6 +419,7 @@ def search_half_width(geometry, event, options):
 
 
 def causal_band(data, rate, band):
+    """Causal band-pass filter; rejects the event if the band is above Nyquist."""
     high = min(band[1], 0.4 * rate)
     if band[0] >= high:
         raise EventRejected("pick_band_above_nyquist")
@@ -698,6 +710,7 @@ def analyse_event(
 
 
 def responses_for(p_epoch, v_epoch):
+    """Responses of a pressure and vertical channel pair."""
     _, p_kind = response_handling(p_epoch.channel)
     _, v_kind = response_handling(v_epoch.channel)
     if p_kind != "Pa^2/Hz":
@@ -827,6 +840,7 @@ def noise_window_start(signal_start, length, rate, earliest_p_index, gap_s):
 
 
 def screened(event_time, screening, options):
+    """Earlier event that screens this event time, or None."""
     for item in screening:
         delay = event_time - item["time"]
         hours = (
@@ -840,6 +854,7 @@ def screened(event_time, screening, options):
 
 
 def overlapping_event(event, catalog, model, latitude, longitude, start, end):
+    """Another catalogue event that overlaps this event's window, or None."""
     for other in catalog:
         if other["id"] == event["id"] or abs(other["time"] - event["time"]) > 900:
             continue
@@ -853,6 +868,7 @@ def overlapping_event(event, catalog, model, latitude, longitude, start, end):
 
 
 def process_event(event, ctx):
+    """Measure one event at a station and return its record."""
     o = ctx.options
     p_epoch = epoch_for(ctx.p_epochs, event["time"], event["time"] + 600)
     v_epoch = epoch_for(ctx.v_epochs, event["time"], event["time"] + 600)
@@ -1056,6 +1072,7 @@ def process_event(event, ctx):
 
 
 def station_summary(events, options, processed):
+    """Summarize the event measurements of a station."""
     accepted = [e for e in events if e["status"] == "accepted"]
     bands = []
     for lo, hi in options["bands_hz"]:
@@ -1166,6 +1183,7 @@ def station_summary(events, options, processed):
 
 
 def plot_station(path, events, spectra, summary, title):
+    """Save the station summary figure."""
     fig, axes = plt.subplots(3, 1, figsize=(9, 10), sharex=True)
     for key, arrays in spectra.items():
         m = arrays["valid"]
@@ -1212,6 +1230,7 @@ def plot_station(path, events, spectra, summary, title):
 
 
 def plot_event(path, event, plot, depth, options):
+    """Save the figure of one event."""
     rate = plot["rate"]
     t = plot["t0"] + np.arange(len(plot["v"])) / rate
     band = options["pick_band_hz"]
@@ -1246,6 +1265,7 @@ def plot_event(path, event, plot, depth, options):
 
 
 def flatten(event):
+    """Event record as one flat table row."""
     row = {
         k: v for k, v in event.items() if k not in {"bands", "bins_failing_in_bands"}
     }
@@ -1298,6 +1318,7 @@ def run_station(
     options=None,
     protected=PROTECTED_DEFAULTS,
 ):
+    """Run the local P check of one station and write its results."""
     o = {**DEFAULTS, **(options or {})}
     out = assert_fresh_output(results_dir, protected)
     out.mkdir(parents=True, exist_ok=True)
@@ -1550,6 +1571,7 @@ def run_station(
 
 
 def main(argv=None):
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--pressure", required=True, help="Header SEED ID, e.g. XO.LT02..HDH"

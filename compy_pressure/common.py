@@ -33,6 +33,7 @@ def complete_samples(stream, start, sample_rate, npts):
 
 
 def write_csv(path, rows, *, fieldnames=None):
+    """Write dictionaries to a CSV file."""
     if rows or fieldnames:
         with path.open("w", newline="") as stream:
             writer = csv.DictWriter(

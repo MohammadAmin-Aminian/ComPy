@@ -17,6 +17,7 @@ AUDIT_ID = "gain-band-phase-audit-v1"
 
 
 def wrap(degrees):
+    """Wrap angles to [-180, 180) degrees."""
     return (np.asarray(degrees) + 180.0) % 360.0 - 180.0
 
 

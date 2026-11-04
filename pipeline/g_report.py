@@ -27,10 +27,12 @@ DEPTHS = np.array([100.0, 300.0, 500.0, 1000.0, 2000.0, 3000.0, 4000.0, 6000.0])
 
 
 def q3(x, axis=0):
+    """5th, 50th and 95th percentile along an axis."""
     return np.quantile(x, [0.05, 0.5, 0.95], axis=axis)
 
 
 def station_record(s, c):
+    """Numbers of one station for the report."""
     summ = compliance_summary(s)
     lat, lon, depth = c[s]
     rec = dict(station=s, lat=lat, lon=lon, depth=depth, n_windows=n_windows(s))
@@ -96,6 +98,7 @@ def station_record(s, c):
 
 
 def main():
+    """Command-line entry point."""
     c = coords()
     recs = [station_record(s, c) for s in STATIONS]
     inv = [s for s, r in zip(STATIONS, recs) if r["status"].startswith("inverted")]

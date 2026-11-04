@@ -42,6 +42,7 @@ CODE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 
 def real_array(value):
+    """Real numeric array; rejects masked values."""
     if np.ma.isMaskedArray(value) and np.any(np.ma.getmaskarray(value)):
         raise ValueError("Masked values are not measurements")
     array = np.asarray(value)
@@ -141,6 +142,7 @@ def event_geometry(event, latitude, longitude, dispersion, duration=1800):
 
 
 def catalog_events(path):
+    """Read and validate events from a catalogue file."""
     doc = json.loads(Path(path).read_text())
     if any(not re.fullmatch(r"[A-Za-z0-9_-]+", x["id"]) for x in doc["features"]):
         raise ValueError("Unsafe or malformed event identifier")
@@ -398,6 +400,8 @@ def plot_paper_comparison(summary, dispersion, destination, show=False):
 
 
 class SampleAlignmentError(ValueError):
+    """Raised when channels do not share a sample grid."""
+
     def __init__(self, rows, starts, rate):
         earliest = min(starts)
         self.timing = [
@@ -544,6 +548,7 @@ def load_aligned(
     event_resample_rate=None,
     native_rate_tolerance_ppm=0,
 ):
+    """Load channels on a common sample grid."""
     if event_resample_rate is not None:
         return load_resampled(
             records,
@@ -585,6 +590,7 @@ def load_aligned(
 
 
 def corrected_fft(arrays, rows, channels, rate, frequency_min, frequency_max):
+    """Hann-tapered FFT of the channels within a frequency band, response corrected."""
     taper = hann(arrays.shape[1], sym=False)
     f = np.fft.rfftfreq(arrays.shape[1], 1 / rate)
     mask = (f >= frequency_min) & (f <= frequency_max)
@@ -614,6 +620,7 @@ def quiet_axis(arrays, rows, channels, rate):
 
 
 def require_clean_rotator():
+    """Return TiSKitPy's CleanRotator, or raise if it is not installed."""
     try:
         from tiskitpy import CleanRotator
     except ImportError as exc:
@@ -717,6 +724,7 @@ def clean_rotator_axis(stream):
 
 
 def estimate_tilt(arrays, rows, channels, rate, start, method="tiskitpy"):
+    """Estimate the tilt direction, angle and variance ratio with the chosen method."""
     if method == "local_eigen":
         direction, angle, ratio = quiet_axis(arrays, rows, channels, rate)
         return (
@@ -746,6 +754,7 @@ def estimate_tilt(arrays, rows, channels, rate, start, method="tiskitpy"):
 def event_spectra(
     arrays, rows, channels, rate, direction, segment_seconds, band, pressure_sign=1
 ):
+    """Segment-averaged spectra of one event."""
     n = round(segment_seconds * rate)
     if not np.isclose(n / rate, segment_seconds, rtol=0, atol=1e-8):
         raise ValueError("Invalid segment duration")
@@ -1748,6 +1757,7 @@ def run_calibration(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--catalog", type=Path, required=True)
     model = parser.add_mutually_exclusive_group(required=True)

@@ -62,6 +62,7 @@ QC_MARGIN_S = 300.0
 
 
 def day_files(station, channel, day):
+    """Path of one channel-day file in the SDS archive."""
     path = SDS / str(day.year) / NETWORK / station / f"{channel}.D"
     return (
         path
@@ -70,6 +71,7 @@ def day_files(station, channel, day):
 
 
 def station_days(station):
+    """Valid days with a vertical file for a station."""
     days = set()
     for year in YEARS:
         folder = SDS / str(year) / NETWORK / station / f"{Z}.D"
@@ -87,6 +89,7 @@ def station_days(station):
 
 
 def grid_ceil(t):
+    """First point of the output sample grid at or after a time."""
     return UTCDateTime(np.ceil(t.timestamp / GRID) * GRID)
 
 
@@ -163,6 +166,7 @@ def bad_spans(trace):
 
 
 def merge_spans(spans):
+    """Merge overlapping bad spans and their reasons."""
     merged = []
     for start, end, reasons in sorted(spans, key=lambda s: s[0]):
         if merged and start <= merged[-1][1]:
@@ -210,6 +214,7 @@ def decimate_segment(trace):
 
 
 def process_chunk(station, chunk_days):
+    """Process one chunk of consecutive days and write its daily files."""
     import logging
 
     logging.disable(logging.INFO)
@@ -297,6 +302,7 @@ def process_chunk(station, chunk_days):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stations", nargs="+")
     parser.add_argument("--workers", type=int, default=8)

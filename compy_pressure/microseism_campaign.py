@@ -18,6 +18,7 @@ DEFAULT_MANIFEST = (
 
 
 def sha256(path):
+    """SHA-256 hex digest of a file."""
     digest = hashlib.sha256()
     with Path(path).open("rb") as handle:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
@@ -229,6 +230,7 @@ def run_station(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--station", help="Fully qualified NETWORK.STATION")
     parser.add_argument("--list", action="store_true", help="List supported stations")

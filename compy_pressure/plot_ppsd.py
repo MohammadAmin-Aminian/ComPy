@@ -22,6 +22,7 @@ PLOT_TYPES = ("histogram", "spectrogram", "lines")
 
 
 def density_label(ppsd):
+    """Axis label of the PSD in the units of the PPSD."""
     pressure = ppsd.special_handling in {"hydrophone", "infrasound"}
     units = r"Pa$^2$/Hz" if pressure else r"m$^2$/s$^4$/Hz"
     return f"Power spectral density [dB re 1 {units}]"
@@ -72,6 +73,7 @@ def decorate_density_axis(axis, ppsd, values):
 
 
 def plot_histogram(ppsd, values):
+    """Draw a PPSD histogram over frequency."""
     frequencies = 1 / ppsd.period_bin_centers
     figure = ppsd.plot(
         show=False,
@@ -238,6 +240,7 @@ def _saved_rows(stream, network, station):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-csv", type=Path, default=MASTER_CSV)
     parser.add_argument("--network", default="YV")

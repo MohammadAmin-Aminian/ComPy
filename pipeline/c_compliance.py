@@ -49,6 +49,7 @@ PAPER_TABLE1 = {}  # published gain and band per station, if any
 
 
 def gains_for(station):
+    """Available pressure gains of a station."""
     gains = {}
     if BRUITFM_GAINS is not None and Path(BRUITFM_GAINS).exists():
         with open(BRUITFM_GAINS) as fh:
@@ -73,6 +74,7 @@ def gains_for(station):
 
 
 def load_windows(station):
+    """Cleaned 35-min windows outside event spans, and the number dropped."""
     clean = WORK / station / "clean"
     spans = json.loads((clean / "spans.json").read_text())
     bad = [
@@ -145,6 +147,7 @@ def run_gain(windows, depth, gain, fc):
 
 
 def monthly(windows, result, depth, gain):
+    """Monthly compliance stacks of the accepted windows."""
     months = {}
     accepted = {float(t) for t in result.window_starts}
     for w in windows:
@@ -163,6 +166,7 @@ def monthly(windows, result, depth, gain):
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("station")
     parser.add_argument(

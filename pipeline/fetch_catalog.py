@@ -14,6 +14,7 @@ MIN_MAGNITUDE = 5.85
 
 
 def main():
+    """Command-line entry point."""
     catalog = Client("USGS").get_events(
         starttime=UTCDateTime(CATALOG_SPAN[0]),
         endtime=UTCDateTime(CATALOG_SPAN[1]),

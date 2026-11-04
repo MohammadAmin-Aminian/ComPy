@@ -87,6 +87,7 @@ def select_epoch(row):
 
 
 def atomic_json(path, content):
+    """Write JSON to a temporary file, then replace the target."""
     temporary = path.with_suffix(".tmp")
     temporary.write_text(json.dumps(content, indent=2, allow_nan=False) + "\n")
     temporary.replace(path)
@@ -422,6 +423,7 @@ def run_processing(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--master-dir", type=Path, default=OUTPUT_DIRECTORY)

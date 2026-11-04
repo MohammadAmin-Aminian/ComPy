@@ -32,6 +32,7 @@ from compy_pressure.quality_review import (
 
 
 def quantile_curves(probability, db_edges, coverage, percentiles):
+    """Lower and upper percentile curves from a probability table."""
     if (
         len(percentiles) != 2
         or not np.isfinite(percentiles).all()
@@ -83,6 +84,7 @@ def selected_samples(ppsd, row):
 
 
 def grouping(row, group_by):
+    """Group name of a row for the chosen grouping."""
     net, _, _, channel = row["Seed_id"].split(".")
     return {
         "all": "all",
@@ -101,6 +103,7 @@ def build_noise_model(
     group_by="network_channel",
     percentiles=(5.0, 95.0),
 ):
+    """Build a noise model from a quality review."""
     if group_by not in {"all", "network", "channel", "network_channel"}:
         raise ValueError("Unknown noise grouping")
     # Validate percentile choices even in a planning run.
@@ -228,6 +231,7 @@ def build_noise_model(
 
 
 def main():
+    """Command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--review", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
