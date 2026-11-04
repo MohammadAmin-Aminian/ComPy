@@ -23,7 +23,6 @@ import argparse
 import json
 import sys
 import warnings
-from pathlib import Path
 
 import numpy as np
 from config import CATALOG, CHANNELS, COMPY, DEGLITCH, WORK, P, Z
@@ -52,6 +51,9 @@ def load_segments(station):
     for f in files:
         st += read(str(f))
     st.merge(method=0)
+    for tr in st:  # non-finite samples from response removal become gaps
+        if not np.all(np.isfinite(tr.data)):
+            tr.data = np.ma.masked_invalid(tr.data)
     intervals = None
     for channel in CHANNELS:
         parts = [
@@ -210,6 +212,7 @@ def main():
         print(
             f"  coherent-noise removal done {UTCDateTime() - clock:.0f} s", flush=True
         )
+        cleaned = cleaned.split()  # MiniSEED cannot store gaps left between cleaning windows
         for tr in cleaned:
             tr.data = tr.data.astype(np.float32)
         path = out_dir / f"{station}_seg{k:02d}.mseed"

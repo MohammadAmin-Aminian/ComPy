@@ -29,7 +29,7 @@ import json
 import sys
 import warnings
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from pathlib import Path
+from fractions import Fraction
 
 import numpy as np
 from obspy import Stream, UTCDateTime, read, read_inventory
@@ -55,6 +55,7 @@ MIN_SEGMENT_S = 2 * PAD_S
 PRE_FILT = (0.0008, 0.0015, 0.45, 0.6)
 DAY = 86400.0
 CLIP_COUNTS = 0.99 * 2**23  # 24-bit digitizer full scale
+CLIP_COUNTS_32 = 0.99 * 2**31  # 32-bit digitizers and absolute pressure gauges
 DEAD_STD_COUNTS = 5.0
 QC_BLOCK_S = 600.0
 QC_MARGIN_S = 300.0
@@ -74,8 +75,14 @@ def station_days(station):
         folder = SDS / str(year) / NETWORK / station / f"{Z}.D"
         if folder.is_dir():
             for f in folder.iterdir():
-                if not f.name.startswith("."):
-                    days.add((year, int(f.name[-3:])))
+                if f.name.startswith("."):
+                    continue
+                try:
+                    UTCDateTime(year=year, julday=int(f.name[-3:]))
+                except ValueError:  # e.g. day 366 of a non-leap year, or a partial copy
+                    print(f"SKIP invalid day file {f}", file=sys.stderr)
+                    continue
+                days.add((year, int(f.name[-3:])))
     return [UTCDateTime(year=y, julday=j) for y, j in sorted(days)]
 
 
@@ -114,17 +121,33 @@ def join_day_files(traces, tolerance=1.5):
     return segments
 
 
+def clip_threshold(data, width):
+    """Clip level in counts of one raw channel.
+
+    CLIP_COUNTS assumes 24-bit counts. A channel that exceeds 2^23 in more than
+    half of its blocks cannot be 24-bit: it comes from a 32-bit digitizer or
+    carries a large DC level (absolute pressure gauge), so CLIP_COUNTS_32 applies.
+    A 24-bit channel stuck at full scale stays at or below 2^23 and is still clipped.
+    """
+    n = data.size // width
+    if not n:
+        return CLIP_COUNTS
+    peaks = np.abs(data[: n * width]).reshape(n, width).max(axis=1)
+    return CLIP_COUNTS_32 if np.mean(peaks > 2**23) > 0.5 else CLIP_COUNTS
+
+
 def bad_spans(trace):
     """Clipped or flat QC_BLOCK_S blocks of one raw trace, widened by QC_MARGIN_S."""
     width = int(round(QC_BLOCK_S * trace.stats.sampling_rate))
     n_blocks = -(-trace.stats.npts // width)
     data = np.asarray(trace.data, dtype=np.float64)
+    limit = clip_threshold(data, width)
     spans = []
     for i in range(n_blocks):
         block = data[i * width : (i + 1) * width]
         if block.size < 2:
             continue
-        clipped = np.abs(block).max() >= CLIP_COUNTS
+        clipped = np.abs(block).max() >= limit
         dead = block.std() < DEAD_STD_COUNTS
         if not (clipped or dead):
             continue
@@ -168,7 +191,13 @@ def decimate_segment(trace):
     """Decimate one gap-free raw trace on the 0.8 s grid; returns None if too short."""
     from tiskitpy import Decimator
 
+    # Rates a few 1e-8 off nominal would give segments that obspy refuses to merge.
+    nominal = float(Fraction(trace.stats.sampling_rate).limit_denominator(100))
+    if abs(nominal - trace.stats.sampling_rate) < 1e-5 * nominal:
+        trace.stats.sampling_rate = nominal
     start = grid_ceil(trace.stats.starttime)
+    if start > trace.stats.endtime:  # a piece that ends before the next grid point
+        return None
     trace = trace.slice(start, trace.stats.endtime)
     if trace.stats.npts * trace.stats.delta < MIN_SEGMENT_S:
         return None
@@ -212,29 +241,40 @@ def process_chunk(station, chunk_days):
         / f"{station}.{chunk_days[0].year}.{chunk_days[0].julday:03d}.json"
     )
     qc_file.parent.mkdir(parents=True, exist_ok=True)
-    qc_file.write_text(json.dumps({
+    qc = {
         "days": [str(d) for d in chunk_days],
         "cut": [[str(a), str(b), sorted(r)] for a, b, r in bad],
         "cut_hours": sum(b - a for a, b, _ in bad) / 3600,
-        "rule": f"|counts| >= {CLIP_COUNTS:.0f} or std < {DEAD_STD_COUNTS} in {QC_BLOCK_S:.0f}-s blocks, "
-                f"+/- {QC_MARGIN_S:.0f} s",
-    }, indent=1))  # fmt: skip
+        "rule": f"|counts| >= {CLIP_COUNTS:.0f} (24-bit) or {CLIP_COUNTS_32:.0f} (other channels), "
+                f"or std < {DEAD_STD_COUNTS} in {QC_BLOCK_S:.0f}-s blocks, +/- {QC_MARGIN_S:.0f} s",
+    }  # fmt: skip
+    qc_file.write_text(json.dumps(qc, indent=1))
     counts, phys = Stream(), Stream()
     for trace in segments:
         out = decimate_segment(trace)
         if out is None:
             continue
         counts += out.copy()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            out.remove_response(
-                inventory=inv,
-                output="DEF" if out.stats.channel == P else "DISP",
-                pre_filt=PRE_FILT,
-                water_level=None,
-                taper=True,
-                taper_fraction=min(0.05, 600 / (out.stats.npts * GRID)),
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                out.remove_response(
+                    inventory=inv,
+                    output="DEF" if out.stats.channel == P else "DISP",
+                    pre_filt=PRE_FILT,
+                    water_level=None,
+                    taper=True,
+                    taper_fraction=min(0.05, 600 / (out.stats.npts * GRID)),
+                )
+        except ValueError as exc:
+            if "No matching response" not in str(exc):
+                raise
+            # Data outside every StationXML epoch: lose this segment, not the chunk.
+            qc.setdefault("no_response", []).append(
+                [out.stats.channel, str(out.stats.starttime), str(out.stats.endtime)]
             )
+            qc_file.write_text(json.dumps(qc, indent=1))
+            continue
         # Drop the response/FIR edge zones of every segment.
         out.trim(out.stats.starttime + PAD_S / 2, out.stats.endtime - PAD_S / 2)
         phys += out
