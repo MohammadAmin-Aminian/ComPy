@@ -218,9 +218,8 @@ def main():
         print(
             f"  coherent-noise removal done {UTCDateTime() - clock:.0f} s", flush=True
         )
-        cleaned = (
-            cleaned.split()
-        )  # MiniSEED cannot store gaps left between cleaning windows
+        # MiniSEED cannot store gaps left between cleaning windows.
+        cleaned = cleaned.split()
         for tr in cleaned:
             tr.data = tr.data.astype(np.float32)
         path = out_dir / f"{station}_seg{k:02d}.mseed"

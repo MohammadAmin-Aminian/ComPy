@@ -201,7 +201,6 @@ def plot_inversion_summary(
 
     plt.tight_layout()
 
-    np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc="lower left")
     plt.tight_layout()
 
@@ -370,7 +369,6 @@ def plot_inversion(
 
     plt.tight_layout()
 
-    np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc="lower left")
     plt.tight_layout()
 
@@ -549,7 +547,6 @@ def plot_inversion_with_start(
 
     plt.tight_layout()
 
-    np.zeros([iteration, int(np.sum(starting_model[:, 0, 0])), 1])
     plt.legend(loc="lower left")
     plt.tight_layout()
 
@@ -558,7 +555,6 @@ def plot_inversion_density(
     vs, vs0, mis_fit, Data, s, freq, sta, burnin, ncompl, iteration, mis_fit_trsh=8
 ):
     """Posterior Vs probability versus depth for one station, with the measured and predicted compliance."""
-    station_starting_model(sta) / 50
     bins = 100
     jj = 0
     vs_good = []
@@ -640,8 +636,6 @@ def plot_inversion_density(
     selected_labels = b[selected_indices]
     selected_labels = selected_labels.astype(int)
 
-    np.arange(0, 100, 1)
-
     ff = plt.imshow(
         c, aspect="auto", cmap=custom_colormap, norm=plt.Normalize(vmin=0, vmax=1)
     )
@@ -676,12 +670,6 @@ def plot_inversion_density_all(Inversion_container):
         mis_fit = Inversion_container[ii]["Misfit Fucntion"]
         sta = Inversion_container[ii]["Station"]
         mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
-
-        station_starting_model(sta) / 50
-
-        (
-            station_starting_model_mean(sta) / 50
-        )  # mean of all models,sedimental models differ from rocky models
 
         bins = 100
         jj = 0
@@ -1127,12 +1115,6 @@ def plot_inversion_all(Inversion_container):
         mis_fit = Inversion_container[ii]["Misfit Fucntion"]
         sta = Inversion_container[ii]["Station"]
         mis_fit_trsh = Inversion_container[ii]["mis_fit_trsh"]
-
-        station_starting_model(sta) / 50
-
-        (
-            station_starting_model_mean(sta) / 50
-        )  # mean of all models,sedimental models differ from rocky models
 
         bins = 100
         jj = 0

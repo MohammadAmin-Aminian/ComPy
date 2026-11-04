@@ -1189,7 +1189,6 @@ def plot_coherogram(st, nseg=2**12, tw=1):
     ]
 
     t2 = np.arange(0, len(t))
-    np.arange(0, len(t))
 
     plt.set_cmap("viridis")
     norm_z = mpl.colors.Normalize(vmin=-190, vmax=-150)
@@ -1245,16 +1244,6 @@ def plot_coherogram(st, nseg=2**12, tw=1):
     plt.ylim([0, nd])
     plt.tick_params(axis="both", which="minor", length=10, width=1)
     plt.tick_params(axis="both", which="major", length=10, width=2)
-
-    10 * np.log10(
-        (
-            plot_smooth(
-                np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1), 10, 1
-            )
-        )
-    )
-    10 * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1))
-    plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
     bad_windows = []
@@ -1560,13 +1549,8 @@ def plot_coherogram_processing_stages(st, st1, st2, st3, nseg=2**11, tw=1):
         for i in range(len(dates))
     ]
 
-    np.arange(0, len(t))
-    np.arange(0, len(t))
-
     plt.set_cmap("viridis")
 
-    mpl.colors.Normalize(vmin=-190, vmax=-150)
-    mpl.colors.Normalize(vmin=-60, vmax=50)
     norm_coh = mpl.colors.Normalize(vmin=0, vmax=1)
 
     plt.figure(
@@ -1726,23 +1710,12 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
     ]
 
     t2 = np.arange(0, len(t))
-    np.arange(0, len(t))
 
     plt.set_cmap("viridis")
 
     norm_z = mpl.colors.Normalize(vmin=-190, vmax=-150)
     norm_p = mpl.colors.Normalize(vmin=-60, vmax=50)
     norm_coh = mpl.colors.Normalize(vmin=0, vmax=1)
-
-    10 * np.log10(
-        (
-            plot_smooth(
-                np.median(Dzz[:, f1:f2] * (2 * np.pi * f[f1:f2]) ** 4, axis=1), 10, 1
-            )
-        )
-    )
-    10 * np.log10(plot_smooth(np.median(Dpp[:, f1:f2], axis=1), 10, 1))
-    plot_smooth(np.median(Czp[:, f1:f2], axis=1), 10, 1)
 
     good_windows = []
     bad_windows = []
@@ -1757,8 +1730,6 @@ def plot_coherogram_thresholds(st, nseg=2**12, tw=1):
             good_windows.append(i)
         else:
             bad_windows.append(i)
-
-    [int(i * max(0, len(Dpp) - 1) / max(1, len(dates) - 1)) for i in range(len(dates))]
 
     import matplotlib.gridspec as gridspec
 

@@ -20,6 +20,8 @@ already worked are unchanged, sample for sample.
   `plot_inversion_beta` -> `plot_inversion_with_start`,
   `plot_inversion_serpentinization1` -> `plot_inversion_serpentinization_panels`.
 - Unused variables and imports removed; mutable default argument removed.
+- Every public function and class has a docstring. `compy_pressure` checkpoints that compare
+  the package's code checksum will see new code once.
 
 ## 2.7.0 — 2026-11-02
 
