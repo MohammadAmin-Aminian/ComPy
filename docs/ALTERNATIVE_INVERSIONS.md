@@ -159,13 +159,19 @@ of 0.95. Mantle Vs is weakly constrained by these data.
 
 ```python
 from compy.inversion import (
-    Zheng2024Model, ZhaWebb2016Model, sample_literature_model,
-    crawford_thin_layers, invert_minimum_structure, crust1_column, crust1_model,
+    Zheng2024Model,
+    ZhaWebb2016Model,
+    sample_literature_model,
+    crawford_thin_layers,
+    invert_minimum_structure,
+    crust1_column,
+    crust1_model,
 )
 
 column = crust1_column(lat, lon, "path/to/crust1")
-result = sample_literature_model(Zheng2024Model(column["moho_depth"]),
-                                 depth, freqs, eta, sigma, processes=8)
+result = sample_literature_model(
+    Zheng2024Model(column["moho_depth"]), depth, freqs, eta, sigma, processes=8
+)
 print(result.summary()["max_rhat"], result.summary()["moho_jump"])
 
 grid, edges = crawford_thin_layers(crust1_model(column))
