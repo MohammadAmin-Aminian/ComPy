@@ -13,12 +13,17 @@ Every run starts from the CRUST1.0 model of the station's 1x1 degree cell
 around it by START_SPREAD of each prior width, so that R-hat still detects
 chains that have not mixed.
 
+Every variant requires Vs to increase across the Moho (MOHO_RULE).
+
 Variants:
   final     free crustal Vp/Vs in [1.7, 2.4], pressure gain sampled within the
             gain bounds, parallel tempering (8 replicas); adds a prior-only
             run (final_prior). This is the model of the YV final run.
   main      Vp/Vs 1.85 (Zha & Webb 2016) and a 5 % gain covariance term
   final_h2  final with the H2 estimator S_zz/|S_pz| (noise on the pressure)
+  final_brocher  final with Vp from Vs by Brocher (2005) in crust and mantle
+  final_crust1   final with Vp and density fixed from CRUST1.0
+                 (Crawford et al. 1991; Aminian et al. 2025)
 """
 
 import argparse
@@ -124,15 +129,25 @@ def build_model(station, **overrides):
     column = ci.crust1_column(*coordinates(station), CRUST1)
     settings = dict(moho_depth=column["moho_depth"], sediment_max=1000.0)
     settings.update(overrides)
+    if isinstance(settings.get("reference"), str):  # "crust1": the station's own column
+        settings["reference"] = ci.crust1_model(column)
     return ci.CrustalModel(**settings), column
 
 
+#: Vs must increase across the Moho (Shen et al. 2013); without this rule, up to 81 %
+#: of the YV draws had a velocity drop there.
+MOHO_RULE = dict(require_moho_jump=True)
 VARIANTS = {
-    "final": dict(model=dict(vp_vs_range=(1.7, 2.4)), data=dict(gain_rel=0.0),
+    "final": dict(model=dict(vp_vs_range=(1.7, 2.4), **MOHO_RULE), data=dict(gain_rel=0.0),
                   sampler=dict(gain=True, temperatures=TEMPERATURES)),
-    "main": dict(),
-    "final_h2": dict(model=dict(vp_vs_range=(1.7, 2.4)), data=dict(gain_rel=0.0, estimator="h2"),
+    "main": dict(model=dict(MOHO_RULE)),
+    "final_h2": dict(model=dict(vp_vs_range=(1.7, 2.4), **MOHO_RULE),
+                     data=dict(gain_rel=0.0, estimator="h2"),
                      sampler=dict(gain=True, temperatures=TEMPERATURES)),
+    "final_brocher": dict(model=dict(vp_vs=None, **MOHO_RULE), data=dict(gain_rel=0.0),
+                          sampler=dict(gain=True, temperatures=TEMPERATURES)),
+    "final_crust1": dict(model=dict(reference="crust1", **MOHO_RULE), data=dict(gain_rel=0.0),
+                         sampler=dict(gain=True, temperatures=TEMPERATURES)),
 }  # fmt: skip
 
 
