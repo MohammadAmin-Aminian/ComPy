@@ -13,6 +13,7 @@
 | Document | Content |
 |---|---|
 | [Inversion](INVERSION.md) | Parameterization, priors, sampler, forward model and its validation |
+| [Alternative inversions](ALTERNATIVE_INVERSIONS.md) | The Moho rule, published Monte Carlo setups, Crawford's minimum-structure inversion |
 | [Pressure tools](PRESSURE.md) | `compy_pressure`: QC tests, three calibration methods, noise models |
 | [Validation](VALIDATION.md) | Test coverage and scientific references |
 | [Reproducible runs](REPRODUCIBLE_RUNS.md) | Run records, array shapes and chain diagnostics |

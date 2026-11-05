@@ -394,7 +394,15 @@ def crust1_start(model, column):
             w = np.array([layer[1] for layer in rock])
             ratio = np.array([layer[2] / layer[3] for layer in rock])
             theta[model._index["vp_vs"]] = float(np.sum(w * ratio) / np.sum(w))
-    return np.clip(theta, lo, hi)
+    theta = np.clip(theta, lo, hi)
+    if model.require_moho_jump:
+        # CRUST1.0 can have a lower crust faster than its mantle, or a mantle below the prior.
+        i_last = model._index["vs_crust_1"] + model.n_crust - 1
+        i_mantle = model._index["vs_mantle"]
+        if theta[i_mantle] <= theta[i_last]:
+            theta[i_mantle] = min(theta[i_last] + 50.0, hi[i_mantle])
+            theta[i_last] = min(theta[i_last], theta[i_mantle] - 50.0)
+    return theta
 
 
 def dispersed_starts(target, start, n_chains, rng, spread=0.1, max_tries=10000):
@@ -643,6 +651,10 @@ class CrustalModel:
             ``vp_vs`` relation: the fixed-Vp choice of Crawford et al. (1991)
             and Aminian et al. (2025, with CRUST1.0). Models with Vp/Vs below
             sqrt(2) (negative Poisson ratio) are then outside the prior.
+        require_moho_jump (bool): Reject models whose mantle Vs is not above the
+            Vs of the last crustal layer: the positive velocity jump at the Moho
+            used as a hard prior by Shen et al. (2013). Off by default so that
+            published scripts repeat; ``pipeline/e_invert.py`` turns it on.
         roughness_order (int): Order of the Vs differences between crustal
             layers penalized by the smoothing prior.
         sigma_rough (tuple): Bounds [m/s] of the roughness scale; the
@@ -667,6 +679,7 @@ class CrustalModel:
     sigma_rough: tuple = (20.0, 3000.0)
     vp_vs_range: tuple | None = None
     reference: np.ndarray | None = None
+    require_moho_jump: bool = False
 
     def __post_init__(self):
         positive(self.moho_depth, "moho_depth")
@@ -880,6 +893,8 @@ class _Target:
             return None
         layers = self.model.layers(theta[: self.n_model])
         if np.any(layers[:, 2] < math.sqrt(2) * layers[:, 3]):  # Poisson ratio < 0
+            return None
+        if self.model.require_moho_jump and layers[-1, 3] <= layers[-2, 3]:
             return None
         try:
             pred = self.forward(layers)

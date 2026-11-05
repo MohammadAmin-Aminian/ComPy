@@ -39,7 +39,7 @@ from config import (  # noqa: E402
     STATIONS,
     WORK,
 )
-from e_invert import build_model, result_label  # noqa: E402,F401  (result_label re-exported)
+from e_invert import VARIANTS, build_model, result_label  # noqa: E402,F401  (result_label re-exported)
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 from obspy import UTCDateTime, read, read_inventory  # noqa: E402
 
@@ -97,8 +97,8 @@ def load_posterior(station, variant="final"):
     if not path.exists():
         return None, None
     d = np.load(path)
-    # Same model as e_invert.VARIANTS: free crustal Vp/Vs except for "main".
-    kwargs = {} if variant == "main" else dict(vp_vs_range=(1.7, 2.4))
+    # Same model as e_invert.VARIANTS; final_prior is the prior of final.
+    kwargs = VARIANTS[variant.removesuffix("_prior")].get("model", {})
     model, column = build_model(station, **kwargs)
     data = ci.ComplianceData(d["freqs"], d["eta"], float(d["depth"]), d["covariance"], station=station,
                              groups=d["groups"], group_names=tuple(d["group_names"]))  # fmt: skip

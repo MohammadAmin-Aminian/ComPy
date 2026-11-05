@@ -18,6 +18,7 @@ def invert_occam(
     order=2,
     max_iter=40,
     vs_min=50.0,
+    moho_jump=False,
 ):
     """Occam's inversion for a smooth Vs profile (Constable et al. 1987).
 
@@ -31,7 +32,11 @@ def invert_occam(
     out of reach it keeps the best-fitting one. A halving line search stops
     a step from degrading the fit. Roughness is the ``order``-th difference of
     ln(Vs) between layers. Chi-square is computed on the compliance itself,
-    ``sum(((Data - prediction) / s) ** 2)``.
+    ``sum(((Data - prediction) / s) ** 2)``. With ``moho_jump=True`` every finite
+    layer stays below the half-space Vs, so Vs increases across the Moho.
+
+    For the form in Crawford (2004), which smooths Vs itself, see
+    ``compy.inversion.minimum_structure``.
 
     Returns a dict with ``model``, ``chi2``, ``mu``, ``roughness``,
     ``iterations`` and a per-iteration ``history``.
@@ -48,6 +53,8 @@ def invert_occam(
         raise ValueError("need more finite layers than the roughness order")
     target = len(Data) if target_chi2 is None else positive(target_chi2, "target_chi2")
     lo, hi = np.log(positive(vs_min, "vs_min")), np.log(0.98 * model[:-1, 2])
+    if moho_jump:
+        hi = np.minimum(hi, np.log(model[-1, 3]) - 1e-4)
     D = np.diff(np.eye(n), n=order, axis=0)
     DtD = D.T @ D
     log_data, w = np.log(Data), Data / s  # 1 / relative uncertainty
