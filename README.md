@@ -348,6 +348,9 @@ ComPy/
 │   │   ├── dram.py          #     Bayesian DRAM inversion, CRUST1.0, serpentinization
 │   │   ├── metropolis.py    #     Metropolis sampler of the GJI paper, tempering
 │   │   ├── occam.py         #     Occam smooth-model inversion
+│   │   ├── minimum_structure.py  # minimum-structure inversion after Crawford (2004)
+│   │   ├── literature_mcmc.py    # Monte Carlo with Zha & Webb (2016), Zheng et al. (2024)
+│   │   ├── impedance.py     #     independent forward model (surface impedance)
 │   │   ├── propagator.py    #     forward model (Crawford's raydep) and kernels
 │   │   └── models.py        #     starting and reference models
 │   ├── diagnostics.py       #   R-hat, ESS, reproducible run records
@@ -379,6 +382,7 @@ ComPy/
 | [Pipeline guide](pipeline/README.md) | Running a whole network, stages and configuration |
 | [Examples](examples/README.md) | Offline synthetic examples and per-step scripts |
 | [Inversion notes](docs/INVERSION.md) | Parameterization, sampler and validation |
+| [Alternative inversions](docs/ALTERNATIVE_INVERSIONS.md) | The Moho rule, published Monte Carlo setups, Crawford's minimum-structure inversion |
 | [Pressure tools](docs/PRESSURE.md) | `compy_pressure` commands and outputs |
 | [Validation](docs/VALIDATION.md) | Test coverage and scientific references |
 | [Changelog](CHANGELOG.md) | Release history |

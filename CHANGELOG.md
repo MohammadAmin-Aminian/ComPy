@@ -1,6 +1,30 @@
 # Changelog
 
-## Unreleased
+## 2.8.0 — 2026-11-05
+
+**Stage E results change:** every variant of `pipeline/e_invert.py` now requires Vs to
+increase across the Moho. Without this rule, the last crustal layer was faster than the
+mantle in 7 to 81 % of the draws at eight YV stations. The library default is unchanged,
+so published scripts repeat.
+
+### Added
+
+- `compy.inversion.literature_mcmc`: Monte Carlo inversion with the parameterizations of
+  Zha & Webb (2016) (`ZhaWebb2016Model`) and Zheng et al. (2024) (`Zheng2024Model`), run by
+  `sample_literature_model`.
+- `compy.inversion.minimum_structure`: `invert_minimum_structure`, the minimum-structure
+  inversion of Crawford (2004), which smooths Vs itself, with `crawford_thin_layers`.
+- `compy.inversion.impedance`: a forward model by surface-impedance recursion, written
+  independently of `propagator` and tested against the exact half-space and a
+  matrix-exponential solution.
+- `pipeline/e_alternative_inversions.py` runs these on one station's stage C result.
+- Stage E variants `final_brocher` (Vp from Vs by Brocher 2005) and `final_crust1` (Vp and
+  density fixed from CRUST1.0), to compare with the free Vp/Vs of `final`.
+- `CrustalModel(require_moho_jump=True)` and `invert_occam(moho_jump=True)`, both off by
+  default.
+- `docs/ALTERNATIVE_INVERSIONS.md`, with these methods compared on eight YV stations.
+
+### Fixed
 
 Fixes from running every OBS network of the archive. Results of stations that
 already worked are unchanged, sample for sample.
