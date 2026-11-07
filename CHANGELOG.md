@@ -1,5 +1,41 @@
 # Changelog
 
+## Unreleased (branch `compy3-audit`)
+
+Audit for ComPy 3: [docs/audit_2026-11/REPORT.md](docs/audit_2026-11/REPORT.md).
+**Published results are unchanged:** the default estimator is bit-identical to 2.8.0, and
+all 61 archived compliance files are recomputed from their stacks to 2e-16.
+
+### Added
+
+- `compy.anomaly`: automatic detection and ranking of anomalies and correlations:
+  - changepoints, tidal and solar periodicity of series and of accepted windows,
+    pressure-level dependence and regimes;
+  - network common mode, synchronous steps and PSD-level outliers;
+  - epoch mixing and inversion gain pull;
+  - instrument-response models fitted to the residual Z/P phase, with the compliance bias
+    they imply;
+  - a Monte Carlo of the coherence-gate selection bias.
+- `compy.timefreq`: per-window spectra, coherence, admittance and tilt direction from
+  plain arrays.
+- `compy.results`: a loader for archived stage C and E products.
+- `compy.noise_models`: Peterson NLNM/NHNM and Webb pressure bounds, without ObsPy.
+- `compy.plotting.diagnostics`: 13 diagnostic figures (coherograms, error budget, monthly
+  stability, phase diagnostic, tidal maps, common mode, anomaly ranking and more).
+- `stacked_compliance(..., gate="exclusive")`: a per-bin coherence gate without the
+  upward selection bias of the default gate. It is opt-in, and `pipeline/c_compliance.py`
+  reads `COMPLIANCE_GATE` from the run configuration.
+- `stacked_compliance_from_spectra`: the same estimator on precomputed spectra.
+- Example scripts:
+  - `examples/compy3_diagnostics.py`, for archived results;
+  - `examples/compy3_waveform_diagnostics.py`, for cleaned MiniSEED.
+
+### Fixed
+
+- `stacked_compliance` no longer mixes windows with different frequency axes silently,
+  and counts rejection reasons of custom criteria instead of raising `KeyError`.
+- `compy.streams` imports ObsPy lazily, so `compy.compliance` works without ObsPy.
+
 ## 2.8.0 — 2026-11-05
 
 **Stage E results change:** every variant of `pipeline/e_invert.py` now requires Vs to
