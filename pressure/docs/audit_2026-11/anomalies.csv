@@ -1,0 +1,207 @@
+rank,score,station,category,kind,summary,significance,effect_pct,time,evidence
+1,40.0,1T.MOAL.00.HDH,instrument,nearby_hidden,passes the expected-level limits but sits +31.8 dB from its neighbours,10.0,3789.35,2022-03-09,{}
+2,40.0,1T.MOCJ.00.HDH,instrument,method_disagreement,microseism g = 196 vs peer_offset g = 6.02 (+30.3 dB),10.0,3155.49,2021-04-12,{'pair': 'microseism/peer_offset'}
+3,40.0,1T.MOCK.00.HDH,instrument,method_disagreement,microseism g = 170 vs peer_offset g = 6.82 (+27.9 dB),10.0,2389.73,2021-09-26,{'pair': 'microseism/peer_offset'}
+4,40.0,1T.MODL.00.HDH,instrument,nearby_hidden,passes the expected-level limits but sits +25.5 dB from its neighbours,10.0,1791.66,2022-03-09,{}
+5,40.0,2A.29..BDH,instrument,method_disagreement,microseism g = 1.71e+05 vs peer_offset g = 212 (+58.1 dB),10.0,80505.05,2001-12-02,{'pair': 'microseism/peer_offset'}
+6,40.0,7B.MM05..BDH,instrument,gain_outlier,microseism g = 46.4 is +34.6 dB from the median of 25 7B DPG channels (0.861),10.0,5291.46,2019-11-20,"{'method': 'microseism', 'group_median_g': 0.8612}"
+7,40.0,7B.MM05..BDH,instrument,method_disagreement,microseism g = 46.4 vs peer_offset g = 0.663 (+36.9 dB),10.0,6905.61,2019-11-20,{'pair': 'microseism/peer_offset'}
+8,40.0,7B.SM01..BDH,instrument,gain_outlier,microseism g = 34 is +31.9 dB from the median of 25 7B DPG channels (0.861),10.0,3842.2,2019-11-22,"{'method': 'microseism', 'group_median_g': 0.8612}"
+9,40.0,7B.SM01..BDH,instrument,method_disagreement,microseism g = 34 vs peer_offset g = 0.495 (+36.7 dB),10.0,6759.1,2019-11-22,{'pair': 'microseism/peer_offset'}
+10,40.0,7D.FS13B..HDH,instrument,gain_outlier,microseism g = 0.00573 is -38.4 dB from the median of 8 7D APG (absolute) channels (0.479),10.0,-98.8,2012-09-12,"{'method': 'microseism', 'group_median_g': 0.4789}"
+11,40.0,7D.FS13B..HDH,instrument,method_disagreement,microseism g = 0.00573 vs local_p g = 0.428 (-37.5 dB),10.0,-98.66,2012-09-12,{'pair': 'microseism/local_p'}
+12,40.0,7D.FS13B..HDH,instrument,method_disagreement,microseism g = 0.00573 vs peer_offset g = 1.27 (-46.9 dB),10.0,-99.55,2012-09-12,{'pair': 'microseism/peer_offset'}
+13,40.0,7D.G19B..BDH,instrument,gain_outlier,local_p g = 7.11 is +17.5 dB from the median of 30 7D DPG channels (0.946),9.72,651.6,2012-08-28,"{'method': 'local_p', 'group_median_g': 0.9456}"
+14,40.0,7D.G27B..BDH,instrument,method_disagreement,microseism g = 0.444 vs peer_offset g = 3.18 (-17.1 dB),10.0,-86.02,2012-09-03,{'pair': 'microseism/peer_offset'}
+15,40.0,7D.G37B..BDH,instrument,method_disagreement,microseism g = 3.38 vs local_p g = 0.834 (+12.2 dB),8.11,306.01,2012-09-05,{'pair': 'microseism/local_p'}
+16,40.0,7D.J35A..BDH,instrument,method_disagreement,microseism g = 4.45 vs local_p g = 0.94 (+13.5 dB),9.0,373.03,2011-10-19,{'pair': 'microseism/local_p'}
+17,40.0,7D.J35A..BDH,instrument,method_disagreement,microseism g = 4.45 vs peer_offset g = 0.928 (+13.6 dB),9.07,379.28,2011-10-19,{'pair': 'microseism/peer_offset'}
+18,40.0,7D.J52A..LDH,instrument,nearby_hidden,passes the expected-level limits but sits -17.8 dB from its neighbours,8.88,-87.07,2011-11-28,{}
+19,40.0,7K.AN3..HDH,instrument,method_disagreement,microseism g = 1.45 vs peer_offset g = 0.355 (+12.2 dB),8.15,308.36,2018-11-30,{'pair': 'microseism/peer_offset'}
+20,40.0,7K.AN4..HDH,instrument,method_disagreement,microseism g = 2.04 vs peer_offset g = 0.508 (+12.1 dB),8.06,302.56,2018-11-30,{'pair': 'microseism/peer_offset'}
+21,40.0,7K.AN6..HDH,instrument,method_disagreement,microseism g = 1.78 vs peer_offset g = 0.44 (+12.1 dB),8.1,304.78,2018-11-30,{'pair': 'microseism/peer_offset'}
+22,40.0,XE.EC01..BDH,instrument,method_disagreement,microseism g = 3.51 vs peer_offset g = 0.751 (+13.4 dB),8.93,367.49,2018-04-23,{'pair': 'microseism/peer_offset'}
+23,40.0,XE.EC02..BDH,instrument,gain_outlier,microseism g = 11.4 is +21.8 dB from the median of 16 XE DPG channels (0.919),10.0,1135.58,2018-04-22,"{'method': 'microseism', 'group_median_g': 0.9194}"
+24,40.0,XE.EC02..BDH,instrument,method_disagreement,microseism g = 11.4 vs peer_offset g = 0.696 (+24.3 dB),10.0,1532.88,2018-04-22,{'pair': 'microseism/peer_offset'}
+25,40.0,YD.OBS10..BDH,instrument,method_disagreement,microseism g = 1.18e+03 vs peer_offset g = 207 (+15.1 dB),10.0,472.0,2004-11-19,{'pair': 'microseism/peer_offset'}
+26,40.0,Z3.A413A.00.BDH,instrument,gain_outlier,microseism g = 619 is +45.0 dB from the median of 6 Z3 DPG channels (3.47),10.0,17701.5,2017-06-23,"{'method': 'microseism', 'group_median_g': 3.475}"
+27,40.0,Z3.A413A.00.BDH,instrument,method_disagreement,microseism g = 619 vs peer_offset g = 39.5 (+23.9 dB),10.0,1467.55,2017-06-23,{'pair': 'microseism/peer_offset'}
+28,40.0,Z3.A416A.00.BDH,instrument,method_disagreement,microseism g = 3.72 vs peer_offset g = 0.373 (+20.0 dB),10.0,897.4,2017-06-26,{'pair': 'microseism/peer_offset'}
+29,40.0,Z3.A419A.00.BDH,instrument,method_disagreement,microseism g = 3.65 vs peer_offset g = 0.578 (+16.0 dB),10.0,531.17,2017-06-25,{'pair': 'microseism/peer_offset'}
+30,40.0,Z3.A422A.00.BDH,instrument,method_disagreement,microseism g = 3.05 vs peer_offset g = 0.34 (+19.1 dB),10.0,798.03,2017-06-23,{'pair': 'microseism/peer_offset'}
+31,40.0,Z3.A425A.00.BDH,instrument,method_disagreement,microseism g = 3.31 vs peer_offset g = 0.369 (+19.1 dB),10.0,796.9,2017-06-24,{'pair': 'microseism/peer_offset'}
+32,40.0,Z3.A429A.00.BDH,instrument,method_disagreement,rayleigh g = 2.93 vs peer_offset g = 0.321 (+19.2 dB),10.0,813.13,2017-06-25,{'pair': 'rayleigh/peer_offset'}
+33,40.0,Z3.A429A.00.BDH,instrument,method_disagreement,microseism g = 3.19 vs peer_offset g = 0.321 (+19.9 dB),10.0,893.34,2017-06-25,{'pair': 'microseism/peer_offset'}
+34,40.0,Z4.CP07..BDH,instrument,gain_outlier,local_p g = 6.3e+04 is +40.5 dB from the median of 4 Z4 DPG channels (593),10.0,10539.12,2012-05-06,"{'method': 'local_p', 'group_median_g': 592.5}"
+35,39.85,7K.AN5..HDH,instrument,method_disagreement,microseism g = 1.67 vs peer_offset g = 0.422 (+12.0 dB),7.97,296.04,2018-11-30,{'pair': 'microseism/peer_offset'}
+36,39.69,7K.AN1..HDH,instrument,method_disagreement,microseism g = 1.39 vs peer_offset g = 0.354 (+11.9 dB),7.94,293.81,2018-11-30,{'pair': 'microseism/peer_offset'}
+37,36.76,XE.EC01..BDH,instrument,gain_outlier,microseism g = 3.51 is +11.6 dB from the median of 16 XE DPG channels (0.919),7.35,281.68,2018-04-23,"{'method': 'microseism', 'group_median_g': 0.9194}"
+38,36.48,7D.J52A..BXH,instrument,nearby_hidden,passes the expected-level limits but sits -14.6 dB from its neighbours,7.3,-81.36,2011-11-28,{}
+39,35.46,Z4.CP07..BDH,instrument,method_disagreement,microseism g = 3.75e+04 vs peer_offset g = 1.1e+04 (+10.6 dB),7.09,240.29,2012-05-06,{'pair': 'microseism/peer_offset'}
+40,35.16,7D.J52A..BDH,instrument,nearby_hidden,passes the expected-level limits but sits -14.1 dB from its neighbours,7.03,-80.19,2011-11-28,{}
+41,34.72,8J.UP15..BDH,instrument,gain_outlier,microseism g = 6.66 is +15.1 dB from the median of 19 8J Hydrophone channels (1.17),6.94,467.82,2021-07-23,"{'method': 'microseism', 'group_median_g': 1.173}"
+42,33.44,7D.G04B..BDH,instrument,gain_outlier,local_p g = 3.79 is +12.1 dB from the median of 30 7D DPG channels (0.946),6.69,300.48,2012-08-27,"{'method': 'local_p', 'group_median_g': 0.9456}"
+43,32.74,7D.G20B..BDH,instrument,gain_outlier,local_p g = 3.68 is +11.8 dB from the median of 30 7D DPG channels (0.946),6.55,289.02,2012-08-28,"{'method': 'local_p', 'group_median_g': 0.9456}"
+44,31.63,8J.UP12..HDH,instrument,method_disagreement,rayleigh g = 2 vs peer_offset g = 0.67 (+9.5 dB),6.33,198.14,2021-07-22,{'pair': 'rayleigh/peer_offset'}
+45,30.94,7D.J52A..LDH,instrument,gain_outlier,microseism g = 6.94 is +17.3 dB from the median of 33 7D DPG channels (0.945),6.19,634.62,2011-11-28,"{'method': 'microseism', 'group_median_g': 0.9449}"
+46,29.04,7D.G34B..HDH,instrument,method_disagreement,microseism g = 0.382 vs peer_offset g = 1.04 (-8.7 dB),5.81,-63.32,2012-09-11,{'pair': 'microseism/peer_offset'}
+47,28.85,7D.G20B..BXH,instrument,gain_outlier,local_p g = 3.13 is +10.4 dB from the median of 30 7D DPG channels (0.946),5.77,231.05,2012-08-28,"{'method': 'local_p', 'group_median_g': 0.9456}"
+48,28.09,8J.UP46..HDH,instrument,method_disagreement,rayleigh g = 2.52 vs microseism g = 0.955 (+8.4 dB),5.62,163.87,2021-08-09,{'pair': 'rayleigh/microseism'}
+49,27.73,7D.J44A..BDH,instrument,method_disagreement,microseism g = 0.412 vs peer_offset g = 1.07 (-8.3 dB),5.55,-61.63,2011-10-19,{'pair': 'microseism/peer_offset'}
+50,25.93,8J.OBS19..HDH,instrument,method_disagreement,microseism g = 2.25 vs peer_offset g = 0.919 (+7.8 dB),5.19,144.89,2021-06-19,{'pair': 'microseism/peer_offset'}
+51,25.6,8J.UP18..HDH,instrument,method_disagreement,rayleigh g = 2.26 vs peer_offset g = 0.934 (+7.7 dB),5.12,142.13,2021-07-24,{'pair': 'rayleigh/peer_offset'}
+52,25.37,7D.J55A..LDH,instrument,method_disagreement,rayleigh g = 0.801 vs peer_offset g = 0.333 (+7.6 dB),5.07,140.15,2011-11-24,{'pair': 'rayleigh/peer_offset'}
+53,25.0,7K.AN3..LDH,instrument,method_disagreement,microseism g = 1.45 vs peer_offset g = 0.612 (+7.5 dB),5.0,137.14,2018-11-30,{'pair': 'microseism/peer_offset'}
+54,24.99,7D.J55A..LDH,instrument,method_disagreement,microseism g = 0.79 vs peer_offset g = 0.333 (+7.5 dB),5.0,137.04,2011-11-24,{'pair': 'microseism/peer_offset'}
+55,24.83,7K.AN3..HDH,instrument,method_disagreement,rayleigh g = 0.837 vs peer_offset g = 0.355 (+7.4 dB),4.97,135.74,2018-11-30,{'pair': 'rayleigh/peer_offset'}
+56,24.65,YO.B02B..LDH,instrument,method_disagreement,rayleigh g = 1 vs peer_offset g = 2.35 (-7.4 dB),4.93,-57.31,2014-04-09,{'pair': 'rayleigh/peer_offset'}
+57,24.38,7K.AN2..HDH,instrument,method_disagreement,rayleigh g = 1.02 vs peer_offset g = 0.438 (+7.3 dB),4.88,132.09,2018-11-30,{'pair': 'rayleigh/peer_offset'}
+58,24.29,7K.AN5..HDH,instrument,method_disagreement,rayleigh g = 0.977 vs peer_offset g = 0.422 (+7.3 dB),4.86,131.39,2018-11-30,{'pair': 'rayleigh/peer_offset'}
+59,24.16,7K.AN1..HDH,instrument,method_disagreement,rayleigh g = 0.814 vs peer_offset g = 0.354 (+7.2 dB),4.83,130.34,2018-11-30,{'pair': 'rayleigh/peer_offset'}
+60,24.08,7K.AN6..HDH,instrument,method_disagreement,rayleigh g = 1.01 vs peer_offset g = 0.44 (+7.2 dB),4.82,129.75,2018-11-30,{'pair': 'rayleigh/peer_offset'}
+61,24.03,7D.J35A..BDH,instrument,gain_outlier,microseism g = 4.45 is +13.5 dB from the median of 33 7D DPG channels (0.945),4.81,370.63,2011-10-19,"{'method': 'microseism', 'group_median_g': 0.9449}"
+62,23.95,7D.G20B..LDH,instrument,nearby_hidden,passes the expected-level limits but sits -9.6 dB from its neighbours,4.79,-66.81,2012-08-28,{}
+63,23.91,YO.B02B..LDH,instrument,method_disagreement,microseism g = 1.03 vs peer_offset g = 2.35 (-7.2 dB),4.78,-56.21,2014-04-09,{'pair': 'microseism/peer_offset'}
+64,23.6,7D.G02B..BDH,instrument,method_disagreement,microseism g = 1.23 vs peer_offset g = 2.78 (-7.1 dB),4.72,-55.73,2012-09-03,{'pair': 'microseism/peer_offset'}
+65,23.29,8J.UP18..HDH,instrument,method_disagreement,microseism g = 2.09 vs peer_offset g = 0.934 (+7.0 dB),4.66,123.56,2021-07-24,{'pair': 'microseism/peer_offset'}
+66,23.18,7D.G11B..LDH,instrument,nearby_hidden,passes the expected-level limits but sits +9.3 dB from its neighbours,4.64,190.84,2012-08-28,{}
+67,22.98,7K.AN4..HDH,instrument,method_disagreement,rayleigh g = 1.12 vs peer_offset g = 0.508 (+6.9 dB),4.6,121.13,2018-11-30,{'pair': 'rayleigh/peer_offset'}
+68,22.84,7D.G20B..BXH,instrument,nearby_hidden,passes the expected-level limits but sits -9.1 dB from its neighbours,4.57,-65.06,2012-08-28,{}
+69,22.79,7K.AN5..LDH,instrument,method_disagreement,microseism g = 1.67 vs peer_offset g = 0.762 (+6.8 dB),4.56,119.69,2018-11-30,{'pair': 'microseism/peer_offset'}
+70,22.55,7K.AN6..LDH,instrument,method_disagreement,microseism g = 1.82 vs peer_offset g = 0.837 (+6.8 dB),4.51,117.88,2018-11-30,{'pair': 'microseism/peer_offset'}
+71,22.51,YV.RR14.00.BDH,instrument,method_disagreement,microseism g = 1.46 vs peer_offset g = 0.673 (+6.8 dB),4.5,117.58,2012-10-01,{'pair': 'microseism/peer_offset'}
+72,22.46,7D.G11B..BXH,instrument,nearby_hidden,passes the expected-level limits but sits +9.0 dB from its neighbours,4.49,181.28,2012-08-28,{}
+73,22.42,7D.G20B..BDH,instrument,nearby_hidden,passes the expected-level limits but sits -9.0 dB from its neighbours,4.48,-64.39,2012-08-28,{}
+74,22.4,8J.UP36..HDH,instrument,method_disagreement,microseism g = 1.35 vs local_p g = 2.93 (-6.7 dB),4.48,-53.87,2021-08-05,{'pair': 'microseism/local_p'}
+75,22.15,7D.G37B..BDH,instrument,method_disagreement,microseism g = 3.38 vs peer_offset g = 1.57 (+6.6 dB),4.43,114.9,2012-09-05,{'pair': 'microseism/peer_offset'}
+76,22.04,7K.AN1..LDH,instrument,method_disagreement,microseism g = 1.4 vs peer_offset g = 0.654 (+6.6 dB),4.41,114.11,2018-11-30,{'pair': 'microseism/peer_offset'}
+77,21.59,7D.G11B..BDH,instrument,nearby_hidden,passes the expected-level limits but sits +8.6 dB from its neighbours,4.32,170.24,2012-08-28,{}
+78,21.52,8J.UP11..HDH,instrument,method_disagreement,rayleigh g = 1.26 vs peer_offset g = 0.601 (+6.5 dB),4.3,110.31,2021-07-21,{'pair': 'rayleigh/peer_offset'}
+79,21.32,7D.G27B..BDH,instrument,method_disagreement,microseism g = 0.444 vs local_p g = 0.927 (-6.4 dB),4.26,-52.12,2012-09-03,{'pair': 'microseism/local_p'}
+80,21.2,7D.G12B..BXH,instrument,method_disagreement,microseism g = 0.776 vs peer_offset g = 1.61 (-6.4 dB),4.24,-51.92,2012-09-03,{'pair': 'microseism/peer_offset'}
+81,21.15,2A.48..BDH,instrument,method_disagreement,microseism g = 318 vs peer_offset g = 153 (+6.3 dB),4.23,107.62,2002-02-01,{'pair': 'microseism/peer_offset'}
+82,21.08,7D.J54A..LDH,instrument,method_disagreement,rayleigh g = 1.07 vs peer_offset g = 0.518 (+6.3 dB),4.22,107.12,2011-11-27,{'pair': 'rayleigh/peer_offset'}
+83,21.03,7D.G12B..BDH,instrument,method_disagreement,microseism g = 1.06 vs peer_offset g = 2.18 (-6.3 dB),4.21,-51.63,2012-09-03,{'pair': 'microseism/peer_offset'}
+84,21.01,8J.UP05..HDH,instrument,method_disagreement,rayleigh g = 2.25 vs microseism g = 1.09 (+6.3 dB),4.2,106.62,2021-07-19,{'pair': 'rayleigh/microseism'}
+85,20.6,7D.J61A..BXH,instrument,nearby_hidden,passes the expected-level limits but sits -8.2 dB from its neighbours,4.12,-61.28,2011-11-27,{}
+86,20.42,Z3.A406A.00.CDH,instrument,nearby_hidden,passes the expected-level limits but sits -8.2 dB from its neighbours,4.08,-60.95,2017-06-22,{}
+87,20.15,ZU.NZ21..BDH,instrument,method_disagreement,microseism g = 0.636 vs peer_offset g = 1.28 (-6.0 dB),4.03,-50.14,2009-02-08,{'pair': 'microseism/peer_offset'}
+88,20.1,8J.UP09..HDH,instrument,method_disagreement,microseism g = 2.29 vs peer_offset g = 1.14 (+6.0 dB),4.02,100.23,2021-07-21,{'pair': 'microseism/peer_offset'}
+89,19.77,7D.J61A..BDH,instrument,nearby_hidden,passes the expected-level limits but sits -7.9 dB from its neighbours,3.95,-59.77,2011-11-27,{}
+90,19.39,7D.J61A..LDH,instrument,nearby_hidden,passes the expected-level limits but sits -7.8 dB from its neighbours,3.88,-59.06,2011-11-27,{}
+91,18.08,XW.SS21A..EDH,instrument,nearby_hidden,passes the expected-level limits but sits -7.2 dB from its neighbours,3.62,-56.51,2016-11-02,{}
+92,15.83,XW.SS22..EDH,instrument,nearby_hidden,passes the expected-level limits but sits -6.3 dB from its neighbours,3.17,-51.75,2016-10-25,{}
+93,15.63,IM.H10S3..EDH,instrument,nearby_hidden,passes the expected-level limits but sits +6.3 dB from its neighbours,3.13,105.42,2004-09-14,{}
+94,8.0,1T.MOBL.00.HDH,instrument,offset_outlier,"level -87 dB from its basin's good gauges, -77 dB from its network (1T median -10 dB)",8.06,,2022-03-10,{}
+95,8.0,2A.41..BDH,noise,infragravity_outlier,Godin residual -39 dB vs +10 dB for 120 Pacific channels at 2–3 km,9.41,,2001-12-16,{}
+96,8.0,2A.41..HDH,noise,infragravity_outlier,Godin residual -33 dB vs +10 dB for 120 Pacific channels at 2–3 km,8.28,,2001-12-16,{}
+97,8.0,2D.OBS01..BDH,noise,infragravity_outlier,Godin residual -43 dB vs +10 dB for 120 Pacific channels at 2–3 km,10.0,,2010-08-15,{}
+98,8.0,2D.OBS01..BXH,noise,infragravity_outlier,Godin residual -43 dB vs +10 dB for 120 Pacific channels at 2–3 km,10.0,,2010-08-15,{}
+99,8.0,7D.FS01B..BDH,noise,infragravity_outlier,Godin residual -3118 dB vs +4 dB for 73 Pacific channels at < 1 km,10.0,,2012-09-02,{}
+100,8.0,7D.J06D..HDH,noise,infragravity_outlier,Godin residual -3113 dB vs -10 dB for 79 Pacific channels at 3–4 km,10.0,,2014-07-28,{}
+101,8.0,7D.J06D..HXH,noise,infragravity_outlier,Godin residual -3113 dB vs -10 dB for 79 Pacific channels at 3–4 km,10.0,,2014-07-28,{}
+102,8.0,7D.J37A..BDH,noise,infragravity_outlier,Godin residual -36 dB vs +10 dB for 120 Pacific channels at 2–3 km,8.76,,2011-11-28,{}
+103,8.0,7D.J37A..BXH,noise,infragravity_outlier,Godin residual -36 dB vs +10 dB for 120 Pacific channels at 2–3 km,8.81,,2011-11-28,{}
+104,8.0,7D.J37A..LDH,noise,infragravity_outlier,Godin residual -37 dB vs +10 dB for 120 Pacific channels at 2–3 km,8.99,,2011-11-28,{}
+105,8.0,7D.J37A..LDH,instrument,offset_outlier,"level -41 dB from its basin's good gauges, -41 dB from its network (7D median -0 dB)",10.0,,2011-11-28,{}
+106,8.0,8J.X25..HDH,noise,infragravity_outlier,Godin residual -25 dB vs +1 dB for 26 Atlantic channels at 2–3 km,8.45,,2021-06-20,{}
+107,8.0,XE.CC02..BDH,noise,infragravity_outlier,Godin residual -3111 dB vs +4 dB for 44 Pacific channels at 4–5 km,10.0,,2018-04-24,{}
+108,8.0,XE.EC03..BDH,instrument,offset_outlier,"level +27 dB from its basin's good gauges, +25 dB from its network (XE median +2 dB)",8.42,,2018-04-20,{}
+109,8.0,XW.SS08..EDH,instrument,offset_outlier,"level -29 dB from its basin's good gauges, -32 dB from its network (XW median +3 dB)",10.0,,2016-10-27,{}
+110,8.0,YR.S029..EDH,instrument,offset_outlier,"level +27 dB from its basin's good gauges, +29 dB from its network (YR median -2 dB)",8.89,,2021-05-26,{}
+111,8.0,YV.RR31.00.BDH,instrument,offset_outlier,"level -43 dB from its basin's good gauges, -44 dB from its network (YV median +1 dB)",10.0,,2012-11-30,{}
+112,8.0,YV.RR39.00.BDH,noise,infragravity_outlier,Godin residual -56 dB vs -2 dB for 28 Indian channels at 4–5 km,10.0,,2012-10-14,{}
+113,8.0,YV.RR57.00.BDH,instrument,offset_outlier,"level -35 dB from its basin's good gauges, -36 dB from its network (YV median +1 dB)",10.0,,2012-10-21,{}
+114,8.0,Z3.A410A.00.HDH,noise,infragravity_outlier,Godin residual -46 dB vs -3 dB for 18 Mediterranean channels at 2–3 km,10.0,,2017-05-27,{}
+115,8.0,Z3.A410A.00.HDH,instrument,offset_outlier,"level -23 dB from its basin's good gauges, -26 dB from its network (Z3 median +3 dB)",8.78,,2017-05-27,{}
+116,8.0,Z3.A413A.00.BDH,noise,infragravity_outlier,Godin residual -43 dB vs -3 dB for 18 Mediterranean channels at 2–3 km,10.0,,2017-06-23,{}
+117,8.0,Z3.A413A.00.BDH,instrument,offset_outlier,"level -32 dB from its basin's good gauges, -35 dB from its network (Z3 median +3 dB)",10.0,,2017-06-23,{}
+118,8.0,Z4.CP07..BDH,noise,infragravity_outlier,Godin residual -78 dB vs +10 dB for 120 Pacific channels at 2–3 km,10.0,,2012-05-06,{}
+119,8.0,Z4.CP08..BDH,noise,infragravity_outlier,Godin residual -43 dB vs +10 dB for 120 Pacific channels at 2–3 km,10.0,,2012-05-06,{}
+120,8.0,ZM.D41..LDH,noise,infragravity_outlier,Godin residual +16 dB vs -4 dB for 21 Atlantic channels at 4–5 km,9.32,,2005-06-05,{}
+121,7.85,YR.S028..EDH,instrument,offset_outlier,"level +24 dB from its basin's good gauges, +26 dB from its network (YR median -2 dB)",7.85,,2021-05-26,{}
+122,7.58,7D.J37A..BXH,instrument,offset_outlier,"level -31 dB from its basin's good gauges, -31 dB from its network (7D median -0 dB)",7.58,,2011-11-28,{}
+123,7.53,8J.UP21..BDH,instrument,offset_outlier,"level -24 dB from its basin's good gauges, -23 dB from its network (8J median -1 dB)",7.53,,2021-08-08,{}
+124,7.48,7D.J37A..BDH,instrument,offset_outlier,"level -31 dB from its basin's good gauges, -31 dB from its network (7D median -0 dB)",7.48,,2011-11-28,{}
+125,7.15,2A.30..BDH,noise,infragravity_outlier,Godin residual -28 dB vs +10 dB for 120 Pacific channels at 2–3 km,7.15,,2001-12-03,{}
+126,7.03,7D.J52A..LDH,noise,infragravity_outlier,Godin residual -27 dB vs +10 dB for 120 Pacific channels at 2–3 km,7.03,,2011-11-28,{}
+127,6.92,YR.S027..EDH,instrument,offset_outlier,"level +20 dB from its basin's good gauges, +23 dB from its network (YR median -2 dB)",6.92,,2021-05-26,{}
+128,6.87,YR.S025..EDH,noise,infragravity_outlier,Godin residual -26 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.87,,2021-05-26,{}
+129,6.81,YR.S023..EDH,noise,infragravity_outlier,Godin residual -26 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.81,,2021-05-26,{}
+130,6.61,7D.J52A..BDH,noise,infragravity_outlier,Godin residual -25 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.61,,2011-11-28,{}
+131,6.59,7D.J52A..BXH,noise,infragravity_outlier,Godin residual -25 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.59,,2011-11-28,{}
+132,6.56,2A.30..HDH,noise,infragravity_outlier,Godin residual -24 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.56,,2001-12-03,{}
+133,6.56,8J.UP16..CDH,noise,infragravity_outlier,Godin residual -21 dB vs -1 dB for 18 Atlantic channels at 1–2 km,6.56,,2021-07-24,{}
+134,6.47,XE.CC01..BDH,instrument,offset_outlier,"level +21 dB from its basin's good gauges, +19 dB from its network (XE median +2 dB)",6.47,,2018-04-24,{}
+135,6.44,YR.S010..EDH,noise,infragravity_outlier,Godin residual -24 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.44,,2021-05-27,{}
+136,6.34,YR.S031..EDH,noise,infragravity_outlier,Godin residual -23 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.34,,2021-05-24,{}
+137,6.32,YR.S024..EDH,noise,infragravity_outlier,Godin residual -23 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.32,,2021-05-26,{}
+138,6.21,2A.42..BDH,instrument,offset_outlier,"level -91 dB from its basin's good gauges, -44 dB from its network (2A median -47 dB)",6.21,,2001-12-16,{}
+139,6.07,YR.S009..EDH,noise,infragravity_outlier,Godin residual -22 dB vs +10 dB for 120 Pacific channels at 2–3 km,6.07,,2021-05-27,{}
+140,5.97,8J.X25..HDH,instrument,offset_outlier,"level -19 dB from its basin's good gauges, -18 dB from its network (8J median -1 dB)",5.97,,2021-06-20,{}
+141,5.9,YD.OBS14..HDH,instrument,offset_outlier,"level -70 dB from its basin's good gauges, -23 dB from its network (YD median -47 dB)",5.9,,2004-10-07,{}
+142,5.8,YR.S043..EDH,instrument,offset_outlier,"level +17 dB from its basin's good gauges, +19 dB from its network (YR median -2 dB)",5.8,,2021-05-25,{}
+143,5.74,YV.RR53.00.BDH,noise,infragravity_outlier,Godin residual -44 dB vs +0 dB for 6 Indian channels at 2–3 km,5.74,,2012-10-18,{}
+144,5.72,YR.S116..EDH,noise,infragravity_outlier,Godin residual -20 dB vs +10 dB for 120 Pacific channels at 2–3 km,5.72,,2021-06-20,{}
+145,5.64,YR.S056..EDH,instrument,offset_outlier,"level +16 dB from its basin's good gauges, +18 dB from its network (YR median -2 dB)",5.64,,2021-05-25,{}
+146,5.63,8J.UP15..BDH,instrument,offset_outlier,"level -18 dB from its basin's good gauges, -17 dB from its network (8J median -1 dB)",5.63,,2021-07-23,{}
+147,5.6,7D,instrument,polarity,"local-P polarity mixed within the network: 20 positive, 12 negative",5.6,,,{}
+148,5.59,YR.S008..EDH,noise,infragravity_outlier,Godin residual -19 dB vs +10 dB for 120 Pacific channels at 2–3 km,5.59,,2021-05-27,{}
+149,5.56,7D.FN10A..HDH,instrument,offset_outlier,"level -23 dB from its basin's good gauges, -23 dB from its network (7D median -0 dB)",5.56,,2011-07-26,{}
+150,5.51,YV.RR31.00.BDH,noise,infragravity_outlier,Godin residual -42 dB vs +0 dB for 6 Indian channels at 2–3 km,5.51,,2012-11-30,{}
+151,5.47,YR.S042..EDH,noise,infragravity_outlier,Godin residual -25 dB vs +4 dB for 73 Pacific channels at < 1 km,5.47,,2021-05-25,{}
+152,5.41,YR.S039..EDH,noise,infragravity_outlier,Godin residual -25 dB vs +4 dB for 73 Pacific channels at < 1 km,5.41,,2021-05-25,{}
+153,5.38,YR.S041..EDH,noise,infragravity_outlier,Godin residual -25 dB vs +4 dB for 73 Pacific channels at < 1 km,5.38,,2021-05-25,{}
+154,5.26,YR.S021..EDH,noise,infragravity_outlier,Godin residual -24 dB vs +4 dB for 73 Pacific channels at < 1 km,5.26,,2021-05-27,{}
+155,5.14,ZM.D29..LDH,noise,infragravity_outlier,Godin residual +16 dB vs -1 dB for 17 Atlantic channels at 3–4 km,5.14,,2005-06-05,{}
+156,5.08,YR.S020..EDH,noise,infragravity_outlier,Godin residual -23 dB vs +4 dB for 73 Pacific channels at < 1 km,5.08,,2021-05-27,{}
+157,5.06,YO.A05B..LDH,noise,infragravity_outlier,Godin residual -15 dB vs +1 dB for 26 Atlantic channels at 2–3 km,5.06,,2014-04-05,{}
+158,5.01,YR.S018..EDH,noise,infragravity_outlier,Godin residual -23 dB vs +4 dB for 73 Pacific channels at < 1 km,5.01,,2021-05-27,{}
+159,5.0,7D.FS01B..BDH,instrument,offset_invalid,peer offset -3088 dB stored as measured (class nonworking); multiplier 2.4e+154,5.0,,2012-09-02,{}
+160,5.0,7D.J06D..HDH,instrument,offset_invalid,peer offset -3088 dB stored as measured (class nonworking); multiplier 2.4e+154,5.0,,2014-07-28,{}
+161,5.0,7D.J06D..HXH,instrument,offset_invalid,peer offset -3088 dB stored as measured (class nonworking); multiplier 2.4e+154,5.0,,2014-07-28,{}
+162,5.0,XE.CC02..BDH,instrument,offset_invalid,peer offset -3088 dB stored as measured (class nonworking); multiplier 2.4e+154,5.0,,2018-04-24,{}
+163,5.0,YV.RR12.00.BDH,instrument,offset_invalid,peer offset -3085 dB stored as measured (class nonworking); multiplier 1.8e+154,5.0,,2012-09-30,{}
+164,4.97,ZM.D18..LDH,noise,infragravity_outlier,Godin residual +14 dB vs -1 dB for 18 Atlantic channels at 1–2 km,4.97,,2005-06-05,{}
+165,4.92,YD.OBS14..BDH,instrument,offset_outlier,"level -66 dB from its basin's good gauges, -19 dB from its network (YD median -47 dB)",4.92,,2004-10-08,{}
+166,4.81,8J.UP09..HDH,noise,infragravity_outlier,Godin residual -18 dB vs -1 dB for 17 Atlantic channels at 3–4 km,4.81,,2021-07-21,{}
+167,4.81,YR.S017..EDH,noise,infragravity_outlier,Godin residual -22 dB vs +4 dB for 73 Pacific channels at < 1 km,4.81,,2021-05-27,{}
+168,4.81,YO.A05B..BDH,noise,infragravity_outlier,Godin residual -14 dB vs +1 dB for 26 Atlantic channels at 2–3 km,4.81,,2014-04-05,{}
+169,4.8,YR.S004..EDH,noise,infragravity_outlier,Godin residual -22 dB vs +4 dB for 73 Pacific channels at < 1 km,4.8,,2021-05-28,{}
+170,4.79,YR.S120..EDH,noise,infragravity_outlier,Godin residual -22 dB vs +4 dB for 73 Pacific channels at < 1 km,4.79,,2021-06-20,{}
+171,4.77,ZX.BRA19..LDH,instrument,offset_outlier,"level +14 dB from its basin's good gauges, +14 dB from its network (ZX median -0 dB)",4.77,,2019-01-11,{}
+172,4.74,Z3.A406A.00.CDH,noise,infragravity_outlier,Godin residual -17 dB vs -3 dB for 18 Mediterranean channels at 2–3 km,4.74,,2017-06-22,{}
+173,4.72,YO.A05B..BXH,noise,infragravity_outlier,Godin residual -14 dB vs +1 dB for 26 Atlantic channels at 2–3 km,4.72,,2014-04-05,{}
+174,4.64,ZM.D58..LDH,noise,infragravity_outlier,Godin residual +13 dB vs -1 dB for 18 Atlantic channels at 1–2 km,4.64,,2005-06-05,{}
+175,4.47,8J.UP42..HDH,noise,infragravity_outlier,Godin residual -16 dB vs -1 dB for 17 Atlantic channels at 3–4 km,4.47,,2021-08-07,{}
+176,4.21,Z3.A406A.00.CDH,instrument,offset_outlier,"level -9 dB from its basin's good gauges, -13 dB from its network (Z3 median +3 dB)",4.21,,2017-06-22,{}
+177,4.19,XE.EC03..BDH,noise,infragravity_outlier,Godin residual +25 dB vs +4 dB for 44 Pacific channels at 4–5 km,4.19,,2018-04-20,{}
+178,4.11,1L.OBS06.00.HDH,noise,infragravity_outlier,Godin residual +18 dB vs +1 dB for 8 Arctic channels at 2–3 km,4.11,,2017-06-09,{}
+179,3.9,ZU.NZ18..BDH,instrument,offset_outlier,"level -19 dB from its basin's good gauges, -15 dB from its network (ZU median -4 dB)",3.9,,2009-02-07,{}
+180,3.88,8J.UP42..HDH,instrument,offset_outlier,"level -13 dB from its basin's good gauges, -12 dB from its network (8J median -1 dB)",3.88,,2021-08-07,{}
+181,3.74,YO.A05B..LDH,instrument,offset_outlier,"level -13 dB from its basin's good gauges, -18 dB from its network (YO median +5 dB)",3.74,,2014-04-05,{}
+182,3.72,all,network,network_gain_structure,"microseism gains fall with depth across the table (Spearman -0.28, p = 2.0e-04) but not within network × sensor groups (Spearman -0.01, p = 0.94, -0.3 dB/km): gains are network properties, not a depth effect",3.72,,,"{'n': 167, 'across_rho': -0.2841, 'across_p': 0.0001986, 'n_within': 159, 'within_rho': -0.006043, 'within_p': 0.9397, 'within_slope_db_per_km': -0.316}"
+183,3.68,7D.J52A..LDH,instrument,offset_outlier,"level -15 dB from its basin's good gauges, -15 dB from its network (7D median -0 dB)",3.68,,2011-11-28,{}
+184,3.65,7D.G19B..LDH,instrument,offset_outlier,"level -15 dB from its basin's good gauges, -15 dB from its network (7D median -0 dB)",3.65,,2012-08-28,{}
+185,3.44,ZS.S01..LDH,instrument,offset_outlier,"level -7 dB from its basin's good gauges, -15 dB from its network (ZS median +8 dB)",3.44,,2012-07-06,{}
+186,3.4,YR.S022..EDH,instrument,offset_outlier,"level +9 dB from its basin's good gauges, +11 dB from its network (YR median -2 dB)",3.4,,2021-05-27,{}
+187,3.19,YR.S001..EDH,instrument,offset_outlier,"level +8 dB from its basin's good gauges, +10 dB from its network (YR median -2 dB)",3.19,,2021-05-28,{}
+188,3.08,7D.G20B..BDH,instrument,offset_outlier,"level -13 dB from its basin's good gauges, -13 dB from its network (7D median -0 dB)",3.08,,2012-08-28,{}
+189,3.08,7D.G20B..BXH,instrument,offset_outlier,"level -13 dB from its basin's good gauges, -13 dB from its network (7D median -0 dB)",3.08,,2012-08-28,{}
+190,3.01,7D.G19B..BDH,instrument,offset_outlier,"level -12 dB from its basin's good gauges, -12 dB from its network (7D median -0 dB)",3.01,,2012-08-28,{}
+191,3.0,7D.G19B..BXH,instrument,offset_outlier,"level -12 dB from its basin's good gauges, -12 dB from its network (7D median -0 dB)",3.0,,2012-08-28,{}
+192,2.98,7D.J67C..LDH,instrument,offset_outlier,"level -12 dB from its basin's good gauges, -12 dB from its network (7D median -0 dB)",2.98,,2013-08-05,{}
+193,2.95,7D.G20B..LDH,instrument,offset_outlier,"level -12 dB from its basin's good gauges, -12 dB from its network (7D median -0 dB)",2.95,,2012-08-28,{}
+194,2.89,7D.J52A..BXH,instrument,offset_outlier,"level -12 dB from its basin's good gauges, -12 dB from its network (7D median -0 dB)",2.89,,2011-11-28,{}
+195,2.87,7D.J46A..BXH,instrument,offset_outlier,"level +12 dB from its basin's good gauges, +12 dB from its network (7D median -0 dB)",2.87,,2011-11-23,{}
+196,2.76,7D.J52A..BDH,instrument,offset_outlier,"level -11 dB from its basin's good gauges, -11 dB from its network (7D median -0 dB)",2.76,,2011-11-28,{}
+197,2.65,7D.FN06C..HDH,instrument,offset_outlier,"level -11 dB from its basin's good gauges, -11 dB from its network (7D median -0 dB)",2.65,,2013-09-01,{}
+198,2.65,7D.FN06C..HXH,instrument,offset_outlier,"level -11 dB from its basin's good gauges, -11 dB from its network (7D median -0 dB)",2.65,,2013-09-01,{}
+199,2.63,7D.J46A..BDH,instrument,offset_outlier,"level +11 dB from its basin's good gauges, +11 dB from its network (7D median -0 dB)",2.63,,2011-11-23,{}
+200,2.5,YO.B02B..LDH,instrument,offset_outlier,"level -7 dB from its basin's good gauges, -12 dB from its network (YO median +5 dB)",2.5,,2014-04-09,{}
+201,2.49,YO.A05B..BDH,instrument,offset_outlier,"level -7 dB from its basin's good gauges, -12 dB from its network (YO median +5 dB)",2.49,,2014-04-05,{}
+202,2.41,YO.A05B..BXH,instrument,offset_outlier,"level -7 dB from its basin's good gauges, -11 dB from its network (YO median +5 dB)",2.41,,2014-04-05,{}
+203,2.26,Mediterranean,network,infragravity_basin,Mediterranean infragravity levels -6.8 dB from Godin et al. (2013) Eq. 6 (median of 28 channels),2.26,,,"{'n': 28, 'median_db': -6.769, 'p10': -44.31, 'p90': -1.17}"
+204,2.19,2A.42..HDH,instrument,offset_outlier,"level -63 dB from its basin's good gauges, -16 dB from its network (2A median -47 dB)",2.19,,2001-12-16,{}
+205,2.15,IM.H10S3..EDH,instrument,offset_outlier,"level +7 dB from its basin's good gauges, +14 dB from its network (IM median -6 dB)",2.15,,2004-09-14,{}
+206,2.11,IM.H10S2..EDH,instrument,offset_outlier,"level +7 dB from its basin's good gauges, +13 dB from its network (IM median -6 dB)",2.11,,2004-09-14,{}
