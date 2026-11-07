@@ -15,6 +15,7 @@
 | [Inversion](INVERSION.md) | Parameterization, priors, sampler, forward model and its validation |
 | [Alternative inversions](ALTERNATIVE_INVERSIONS.md) | The Moho rule, published Monte Carlo setups, Crawford's minimum-structure inversion |
 | [Pressure tools](PRESSURE.md) | `compy_pressure`: QC tests, three calibration methods, noise models |
+| [Pressure-gauge audit (November 2026)](../pressure/docs/audit_2026-11/REPORT.md) | QC tests and calibrations audited, anomaly scan of the 846-channel table, physical tests, roadmap and decisions |
 | [Validation](VALIDATION.md) | Test coverage and scientific references |
 | [Reproducible runs](REPRODUCIBLE_RUNS.md) | Run records, array shapes and chain diagnostics |
 | [Compliance audit (October 2026)](AUDIT_2026-10.md) | Review of the compliance chain against the literature and the fixes it led to |

@@ -30,6 +30,28 @@ all 61 archived compliance files are recomputed from their stacks to 2e-16.
   - `examples/compy3_diagnostics.py`, for archived results;
   - `examples/compy3_waveform_diagnostics.py`, for cleaned MiniSEED.
 
+### Pressure-gauge audit (branch `pressure-audit`)
+
+[pressure/docs/audit_2026-11/REPORT.md](pressure/docs/audit_2026-11/REPORT.md). No gain,
+response, score or class changes.
+
+- `compy_pressure.water_layer` (ObsPy-free):
+  - the water-layer P/a ratio and its analytic sensitivities to sound speed, phase
+    velocity and depth;
+  - the calibration bias when the water column or crust is wrong;
+  - a log-ratio multiplier fit;
+  - the depth-mean in-situ density.
+- `compy_pressure.table_audit`: anomaly scan of the QC/calibration master table:
+  - gain outliers and method disagreement;
+  - polarity;
+  - depth confounding;
+  - Godin outliers;
+  - channels hidden from Test 1;
+  - invalid peer offsets.
+- `compy_pressure.audit_plots`: five figures.
+- `pressure/scripts/pressure_audit_2026_11.py`, with a copy of the BRUIT-FM v1.2.0 master
+  table (local paths removed).
+
 ### Fixed
 
 - `stacked_compliance` no longer mixes windows with different frequency axes silently,
