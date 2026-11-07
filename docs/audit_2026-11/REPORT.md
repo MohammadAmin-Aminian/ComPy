@@ -17,7 +17,7 @@ that would settle it.
   (`docs/INVERSION.md`, V1–V8, A1–A4) and does not repeat them.
 - **Environment:** no ObsPy, TiSKitPy or disba could be installed, and the raw waveforms
   are not in the repository.
-- **What was run:** everything that does not need ObsPy. That includes 245 existing and
+- **What was run:** everything that does not need ObsPy. That includes 268 existing and
   new tests, and the full analysis of the archived products of 31 stations
   (8 YV, 23 XE): stacked spectra, monthly stacks, per-window levels (YV), accepted-window
   times and inversion records.
@@ -353,10 +353,11 @@ not archived; `examples/compy3_waveform_diagnostics.py` produces them.
     controls;
   - figures render.
 - **Run here:**
-  - all 26 new tests pass;
-  - of the existing tests, 219 pass;
-  - the other 72 (and 8 modules that fail to import) need ObsPy, ArviZ or TiSKitPy, so
-    they fail here for that reason only and run in CI;
+  - all 26 new tests pass (the ObsPy one is skipped);
+  - existing tests: 219 passed before the changes and 242 after, because the lazy import
+    lets 23 more run without ObsPy;
+  - the remaining 49 failures and 8 modules that fail to import are all
+    `ModuleNotFoundError` for ObsPy or ArviZ (checked one by one), so they run in CI;
   - `ruff check` and `ruff format --check` pass (ruff 0.16.9, as in CI).
 - **Not validated here:** the waveform script on real MiniSEED (no data or ObsPy here),
   and a stage C rerun with `gate="exclusive"`.
