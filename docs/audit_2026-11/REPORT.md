@@ -359,6 +359,9 @@ not archived; `examples/compy3_waveform_diagnostics.py` produces them.
   - the remaining 49 failures and 8 modules that fail to import are all
     `ModuleNotFoundError` for ObsPy or ArviZ (checked one by one), so they run in CI;
   - `ruff check` and `ruff format --check` pass (ruff 0.16.9, as in CI).
+- **CI on this branch** (ObsPy, TiSKitPy, ArviZ installed): green on Python 3.10–3.13,
+  with 894 passed and 1 skipped on 3.12, including the ObsPy stream-path test, the wheel
+  build and the benchmark.
 - **Not validated here:** the waveform script on real MiniSEED (no data or ObsPy here),
   and a stage C rerun with `gate="exclusive"`.
 
