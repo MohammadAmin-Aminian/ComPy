@@ -36,23 +36,25 @@ that would settle it.
    - the Bendat & Piersol error;
    - the S_pz convention.
 2. **The main open science issue is the Z/P phase (verified).** In the compliance band,
-   28 of 30 usable stations of two networks with different operators (YV, INSU-IPGP;
-   XE, Scripps) show a residual phase of +6 to +19°. It falls with frequency (all 21 XE
-   stations have the same sign: binomial p = 10⁻⁶).
+   28 of the 29 usable stations of two networks with different operators (YV, INSU-IPGP;
+   XE, Scripps) show a residual phase of +5 to +19° at the bottom of the band. It falls
+   with frequency. All 21 usable XE stations have the same sign (binomial p = 10⁻⁶);
+   RR40 is the one negative station.
    - **Ruled out:**
-     - a timing offset (fit rms 2–5°, and the Rayleigh-band phase is 0 ± 3°);
+     - a timing offset (fit rms 2–7°, and the Rayleigh-band phase is 0 ± 3–8°);
      - a poroelastic seafloor (no correlation with sediment thickness).
    - **Fits (hypothesis):** a mismatch of the seismometer or DPG low-frequency corner
      (fit rms ≤ 1° at most stations).
    - **Why it matters:** if it is instrumental, a scalar Rayleigh gain fitted at 20–60 mHz
-     cannot remove it. The phase alone implies a compliance bias of **−1 % to −20 % at the
-     bottom of the band**, largest at the lowest frequencies, which carry the deep
-     structure.
+     cannot remove it. The phase alone implies a compliance bias of **about −1 % to −22 %
+     at the bottom of the band** (positive at RR40), largest at the lowest frequencies,
+     which carry the deep structure.
    - **Next step:** this is the highest-value item to resolve before ComPy 3 results.
 3. **Steps inside stacked periods (verified).**
    - The changepoint detector finds a synchronous +6 to +10 % |Z/P| step on 10–18
      September 2013 at RR28, RR29, RR40 and RR52. Per-event Rayleigh gains show the same
-     rise independently (+6 to +9 %), and no StationXML epoch changes.
+     rise independently (+6 to +9 %, from only 1–3 events after the step), and no
+     StationXML epoch changes.
    - RR28, RR29 and RR52 were inverted on the full period, so their stacks are high by
      +1.0, +0.9 and +0.6 %.
    - RR50's "stable" epoch still contains a +8 % step of 6 June 2013, so its stack is
@@ -97,13 +99,13 @@ Open = needs a decision or data.
 
 | # | Sev. | Where | Finding | Evidence | Effect | Status |
 |---|---|---|---|---|---|---|
-| H1 | High | Stage A responses; `compy_pressure/rayleigh_calibration.py:80` (scalar `fit_multiplier`); `compy/compliance.py:158` | **Residual Z/P phase of +6–19° falling with frequency** at 28/30 stations (§5.A). A response mismatch at low frequency is the only family of hypotheses that fits. | **Verified** phase (`anomaly.phase_models`, `numbers.json`); cause is a **hypothesis** | Compliance bias at band bottom between −1 % and −20 % (station dependent), not removed by a scalar gain fitted at 20–60 mHz | Open: D1, D2 |
+| H1 | High | Stage A responses; `compy_pressure/rayleigh_calibration.py:80` (scalar `fit_multiplier`); `compy/compliance.py:158` | **Residual Z/P phase of +5–19° falling with frequency** at 28 of 29 usable stations (§5.A). A response mismatch at low frequency is the only family of hypotheses that fits. | **Verified** phase (`anomaly.phase_models`, `numbers.json`); cause is a **hypothesis** | Compliance bias at band bottom of about −1 % to −22 % (positive at RR40; station dependent), not removed by a scalar gain fitted at 20–60 mHz | Open: D1, D2 |
 | H2 | High | `pipeline/c_compliance.py:190` (`--end`); YV inversion inputs | **Epochs mixed in the stacks:** steps on 2013-09-10…18 (RR28, RR29, RR40, RR52), on 2013-06-06 (RR50, inside its "stable" epoch) and on 2013-08-05 (RR36) | **Verified** on archived per-window levels; confirmed by per-event Rayleigh gains (`stability_steps.json`) | +0.6 to +1.0 % (RR28, RR29, RR52, full period); +2.6 % (RR50 epoch); +0.4 % (RR40 epoch) | Open: D3 |
 | H3 | High (YV) / Low (XE) | `compy/compliance.py:130` (`SelectionCriteria.check`), `stacked_compliance` | **Selection bias of the coherence gate:** the same noise sets the per-window coherence (about 3.8 Welch averages) and \|S_pz\| | **Verified** by Monte Carlo (§4.3); station values **model-based** | +0.03 to +8 % in general; about +1 to +4 % at YV, < 0.5 % at most XE stations | Option `gate="exclusive"`: D4 |
 | M1 | Med. | `compy_pressure/rayleigh_calibration.py:54, 1021–1022`; `pipeline/d_calibrate.py:60` | **Homogeneous water column (1028 kg/m³, 1500 m/s)** in the Rayleigh prediction; gain ∝ ρ | **Verified** (`water_column` in `numbers.json`) | Gain −0.6 to −1.0 % (−0.5 to −1.45 % for c = 1490–1510 m/s), so compliance +0.6 to +1.0 % at every station | Open: D5 |
-| M2 | Med. | `compy/inversion/dram.py:543–563` (`ComplianceData.build`) | **The covariance omits the systematics** H1–M1. The B&P term is diagonal, although adjacent Hann bins share ≈ 44 % of their power-estimate variance | **Verified** (error budget figures) | χ²/N < 1 at most stations while systematic offsets of 1–4 % are not represented | Open: D6, roadmap |
+| M2 | Med. | `compy/inversion/dram.py:543–563` (`ComplianceData.build`) | **The covariance omits the systematics** H1–M1. The B&P term is diagonal, although power estimates in adjacent Hann bins are correlated (ρ ≈ 0.44) | **Verified** (error budget figures) | χ²/N < 1 at most stations while systematic offsets of 1–4 % are not represented | Open: D6, roadmap |
 | M3 | Med. | `compy/compliance.py:158` docstring; `pressure/docs/rayleigh_calibration_review.md` | **Polarity:** Z/P phase ≈ 0° at every station of both networks, where an elastic seafloor gives 180° for upward Z and positive compression. This agrees with BRUIT-FM's assumed pressure sign −1 and with Doran et al. (2019), whose DPGs output a negative pulse for a pressure increase | **Verified** | None on \|η\|. Breaks any phase-aware use (phase QC, ATaCR-style Z–P correction, joint inversion) | Open: D7 |
-| M4 | Med. | Stage C acceptance | **Tidal control of window acceptance** (M2 at all YV stations, up to 50 % modulation at RR34; diurnal or S1 at several XE stations) | **Verified** (empirical and tail p) | No measurable modulation of \|Z/P\| (≤ 1 %), so \|η\| is not biased. The weighting and the selection-bias regime vary with the tide | Info |
+| M4 | Med. | Stage C acceptance | **Tidal control of window acceptance** (tidal lines at 7 of 8 YV stations, M2 up to 50 % modulation at RR34; S1 or O1 at CC11 and EE01) | **Verified** (empirical and tail p) | No measurable modulation of \|Z/P\| (≤ 1 %), so \|η\| is not biased. The weighting and the selection-bias regime vary with the tide | Info |
 | M5 | Med. | XE monthly stacks | **Network-wide drift:** the median monthly deviation falls from +0.8 % (2018-04) to −0.7 % (2019-05); Spearman −0.86, p = 7 × 10⁻⁵; inter-station common mode p = 0.002 | **Verified**; cause is a **hypothesis** (§5.D) | About 1 %/yr. The monthly-subset term treats it as random scatter | Open: test |
 | M6 | Med. | `pipeline/b_clean.py:215`; `compy/preprocessing.py:195–215` | **Silent fallback:** when TiSKitPy refuses the event spans, coherent-noise transfer functions are estimated *with* the events, and nothing is recorded unless both attempts fail | Code reading | Possible earthquake leakage into the transfer functions of affected 24-h windows | Open: D8 |
 | M7 | Med. | `compy/preprocessing.py` (24-h DataCleaner windows) | **Cleaning-window edges** (hypothesis): FFT-domain transfer functions change at window edges, which could depress coherence of 35-min windows that straddle them. S1 clustering of acceptance at several XE stations is compatible | **Hypothesis**; test in §5.C | Fewer accepted windows near boundaries; possible local bias | Open: test |
@@ -286,7 +288,7 @@ amplitude errors.
 |---|---|---|
 | StationXML epoch change | One epoch per channel for the whole deployment (BRUIT-FM `stations.csv`) | Rejected |
 | Sea-state change (non-instrumental) | A pressure-level step should come with it, and compliance is a ratio | Rejected: "no concurrent P/Z level step" at RR28, RR29, RR40, RR52 |
-| DPG sensitivity change (e.g. battery voltage late in the deployment, common hardware) | Per-event Rayleigh gains before and after; P/Z ratio only | **Supported:** Rayleigh g rises by +7.8 % (RR28), +6.1 % (RR29), +6.3 % (RR40), +8.5 % (RR52) after the step |
+| DPG sensitivity change (e.g. battery voltage late in the deployment, common hardware) | Per-event Rayleigh gains before and after; P/Z ratio only | **Supported:** Rayleigh g rises by +7.8 % (RR28), +6.1 % (RR29), +6.3 % (RR40), +8.5 % (RR52) after the step, from 1–3 events each |
 | Seismometer sensitivity change | Z-level step, as at RR50 on 2013-07-30 (+4.7 dB) | Not seen in September. RR50's July step is a vertical-channel change |
 
 To separate DPG from seismometer in September, compare the microseism-band Z level of each
@@ -384,7 +386,7 @@ Each line is a yes/no question. "Results change" means published numbers would m
 
 - **D1.** Treat the residual Z/P phase (H1) as an instrument-response problem to be
   resolved before new inversions? (Y/N) Impact: possible frequency-dependent compliance
-  bias of −1 to −20 % at the band bottom; ComPy 3 results wait for the calibration test
+  bias of about −1 to −22 % at the band bottom; ComPy 3 results wait for the calibration test
   (roadmap 1).
 - **D2.** Implement frequency-dependent DPG/seismometer response fitting (τ from tides,
   corner from low-frequency Rayleigh) and apply it in stage A or C? (Y/N) Impact: results
