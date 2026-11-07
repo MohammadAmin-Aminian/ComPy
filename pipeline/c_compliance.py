@@ -24,6 +24,7 @@ import json
 import sys
 from pathlib import Path
 
+import config
 import numpy as np
 from config import BRUITFM_GAINS, COMPY, INVENTORY, RESULTS, WORK, P, Z, seed_id
 from obspy import UTCDateTime, read, read_inventory
@@ -46,6 +47,10 @@ INITIAL_BAND_LOW = 0.007
 INITIAL_BAND_HIGH_FRACTION = 0.8
 OUTPUT_BAND = (0.002, 0.04)
 PAPER_TABLE1 = {}  # published gain and band per station, if any
+#: Coherence gate of ``stacked_compliance``: "inclusive" (Aminian et al. 2025,
+#: the default) or "exclusive" (per-bin gate without the selection bias; see
+#: docs/audit_2026-11/REPORT.md). Set COMPLIANCE_GATE in the run configuration.
+GATE = getattr(config, "COMPLIANCE_GATE", "inclusive")
 
 
 def gains_for(station):
@@ -126,7 +131,9 @@ def run_gain(windows, depth, gain, fc):
             threshold, (10.0, 50.0), (-170.0, -150.0), f"gji2025_{threshold}"
         )
         try:
-            first = stacked_compliance(windows, depth, gain, initial, criteria, NSEG)
+            first = stacked_compliance(
+                windows, depth, gain, initial, criteria, NSEG, gate=GATE
+            )
         except ValueError as exc:
             attempts[threshold] = {"error": str(exc)}
             continue
@@ -136,7 +143,7 @@ def run_gain(windows, depth, gain, fc):
             band = initial
         try:
             final = stacked_compliance(windows, depth, gain, band, criteria, NSEG,
-                                       output_band=OUTPUT_BAND)  # fmt: skip
+                                       output_band=OUTPUT_BAND, gate=GATE)  # fmt: skip
         except ValueError as exc:
             attempts[threshold] = {"error": str(exc), "band": band}
             continue
@@ -159,7 +166,7 @@ def monthly(windows, result, depth, gain):
         if len(ws) < 20:
             continue
         r = stacked_compliance(ws, depth, gain, result.band, result.criteria, NSEG,
-                               output_band=result.band)  # fmt: skip
+                               output_band=result.band, gate=GATE)  # fmt: skip
         rows[key] = {"n": r.n_windows, "compliance": r.compliance.tolist(),
                      "uncertainty": r.uncertainty.tolist()}  # fmt: skip
     return rows
@@ -199,7 +206,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     summary = {"station": station, "depth_m": depth, "f_c_hz": fc,
                "windows_total": len(windows), "windows_dropped_events": dropped,
-               "window_s": WINDOW_S, "nseg": NSEG, "gains": gains,
+               "window_s": WINDOW_S, "nseg": NSEG, "gains": gains, "gate": GATE,
                "paper_table1": PAPER_TABLE1.get(station), "results": {},
                "epoch_end": args.end}  # fmt: skip
     for label, gain in gains.items():
