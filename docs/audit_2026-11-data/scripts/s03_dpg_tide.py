@@ -169,9 +169,13 @@ def one(task):
         p_obs = tide["amp_counts"]["M2"] / abs(resp) * gain
         p_noise = tide["noise_counts"] / abs(resp) * gain
         p_mod = model_amp(float(row["lat"]), float(row["lon"]), "M2", "ocean") * RHO_G
+        # K1 is deconvolved with the response at the K1 frequency (the first version used
+        # the M2 response, which understated R_K1 by (f_M2/f_K1)^n, i.e. 5.7 or 11.4 dB).
+        f_k1 = SPEED["K1"] / 360 / 3600
+        resp_k1 = abs(r_n) * abs(analog(stages, f_k1)[0] / analog(stages, f_n)[0])
         out.update(tide_status="ok", tide_days=tide["days"], p_obs_M2=p_obs, p_noise=p_noise, p_mod_M2=p_mod,
                    snr=tide["amp_counts"]["M2"] / tide["noise_counts"], R_M2=p_obs / p_mod,
-                   R_K1=tide["amp_counts"]["K1"] / abs(resp) * gain / (model_amp(float(row["lat"]), float(row["lon"]), "K1", "ocean") * RHO_G),
+                   R_K1=tide["amp_counts"]["K1"] / resp_k1 * gain / (model_amp(float(row["lat"]), float(row["lon"]), "K1", "ocean") * RHO_G),
                    resp_M2_counts_per_pa=abs(resp))  # fmt: skip
     except Exception as exc:  # noqa: BLE001
         out["tide_status"] = f"error: {exc}"

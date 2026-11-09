@@ -61,11 +61,14 @@ The waveform figures of #21 were made on real data with
      ratio (Spearman 0.48, p = 10⁻⁹).
    - **It holds station by station within a network:** −0.67 (7B), −0.66 (XE), −0.87 (XO).
      This is unit-to-unit variation of the DPG time constant.
-   - **The model is incomplete.** A median +3.4 dB offset remains, so the true response is
-     not just a rescaled metadata pole.
-3. **Implied compliance bias (model-dependent).** After the 20–60 mHz gain:
-   - DPG stations: median −1.6 % at the band bottom (p10 −5.8 %, p90 +2.8 %);
-   - YV: −2.8 to −6.6 %, and RR40 +9.2 %.
+   - **Update ([RESEARCH.md](RESEARCH.md)):** the tide ratio is flat across O1, K1, M2
+     and S2, so the tide measures the leak corner directly. That corner predicts the
+     compliance-band phase (Spearman 0.82, n = 119). The +3.4 dB offset of the first
+     version came from the weaker phase-only corner estimate.
+3. **Implied compliance bias.** After the 20–60 mHz gain:
+   - DPG stations: median −3.0 % at the band bottom from the tide (p10 −6.4 %,
+     p90 −0.6 %), or −2.0 % from the phase;
+   - YV: −3 to −7 %, and RR40 +7 to +9 %.
 
    This is much narrower than #21's envelope of −1 to −22 %. Stage E's sampled gain does
    not absorb it (ρ = 0.00).
@@ -117,7 +120,7 @@ Severity and status follow #21:
 
 | # | Sev. | Where | Finding | Evidence | Effect | Status |
 |---|---|---|---|---|---|---|
-| A1 | High | Stage A responses of every DPG (StationXML), `pipeline/a_preprocess.py` (`remove_response`) | **The metadata DPG response is wrong at low frequency**, station by station: the true leak corner is lower than in the metadata at most stations (k < 1), higher at some (RR40, ZZ) | **Verified** by two independent observables (§5.A) | Compliance −1.6 % median at the band bottom (p10–p90: −5.8 to +2.8 %), YV −3 to −7 %, RR40 +9 %; model uncertainty at least the 3.4 dB tide offset | Open: D1, D2 |
+| A1 | High | Stage A responses of every DPG (StationXML), `pipeline/a_preprocess.py` (`remove_response`) | **The metadata DPG response is wrong at low frequency**, station by station: the true leak corner is lower than in the metadata at most stations (k < 1), higher at some (RR40, ZZ) | **Verified** by two independent observables (§5.A) | Compliance −3.0 % median at the band bottom from the tide (p10–p90: −6.4 to −0.6 %; −2.0 % from the phase), YV −3 to −7 %, RR40 +7 to +9 % | Open: D1, D2 |
 | A2 | High | `12_inversion_all_stations` inputs; stage C over the whole record | **Epochs mixed in the stacks** at stations stage D could not scan (no event gains) | **Verified**; 21 tier-1 "good" stations with a shift of at least 5 % (`numbers.json` → `epochs`) | Up to tens of per cent (7D.G19B −36 %, 7D.J68A −30 %, 8J several) | Open: D3 |
 | A3 | High (8J) | 8J hydrophones | **Network-wide drift** of \|Z/P\| (steps at about 25 stations, August 2021 – February 2022), following the event gains | **Verified** (synchronous steps; ρ = 0.71 with stage D gains) | Whole-record 8J compliance mixes sensitivities; the network-relative level test cannot see a common drift | Open: D4 |
 | A4 | Med | `compy_pressure` sign choice; stage D second pass (D36) | **Polarity differs by DPG family**; the compliance phase gives the stage D sign (107/108) at no cost | **Verified** | None on \|η\|; saves the second stage D pass; fixes the BRUIT-FM sign column | Option `response_check.pressure_sign_from_phase`: D5 |
@@ -211,19 +214,16 @@ stations and the networks):
   - scaling only the lowest pole (the leak) fits the phase better: median rms 1.4° vs 2.2°
     at the 7D LDEO/WHOI DPGs;
   - it also predicts the tide better: ρ 0.48 vs 0.37.
-- **What is not explained:**
-  - the median +3.4 dB offset of the tide over the prediction;
-  - M2 and K1 ratios whose group medians differ by 5–12 dB (for a leak far below its
-    corner they should be equal).
-
-  So the low-frequency response is not a single first-order leak with a scaled corner.
-- **Hypotheses** for the remaining shape:
-  - a second, slower leak path;
-  - temperature-dependent viscosity at tidal periods;
-  - the 34 mHz metadata pole of LDEO/WHOI DPGs, which may not belong to the sensor.
-- **Test:** fit H_true jointly to the band phase, the M2 and K1 ratios and the S2 and O1
-  ratios (four tidal points and nine phase points per station). `response_check` has the
-  pieces.
+- **Correction (research part, [RESEARCH.md](RESEARCH.md) §2):**
+  - **The K1 statement was a bug.** The first version reported M2 and K1 ratios differing
+    by 5–12 dB. `s03` had deconvolved K1 with the response at the M2 frequency. Fixed:
+    M2 − K1 = −0.8 dB (median, n = 142).
+  - **The ratio is flat.** Across O1, K1, M2 and S2 it has slope −0.11 (median), as a
+    scaled leak corner predicts.
+  - **The tide gives the corner.** The corner from the tide predicts the measured band
+    phase (Spearman 0.82, median offset −1.8°).
+  - **Where the +3.4 dB offset came from:** the phase-only corner. The phase constrains the
+    corner weakly for LDEO/WHOI DPGs, whose metadata have a second pole at 34 mHz.
 
 ### B. Steps in \|Z/P\|: which sensor, and is it real?
 
