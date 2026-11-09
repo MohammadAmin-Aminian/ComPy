@@ -105,3 +105,41 @@ def test_paz_stages_reads_poles_and_zeros_stages():
                                         ([60.0, 50.0, 40.0], None), ([np.nan, 1.0, 2.0], None)])  # fmt: skip
 def test_pressure_sign_from_phase(phase, sign):
     assert rc.pressure_sign_from_phase(phase) == sign
+
+
+def test_correct_compliance_inverts_the_bias():
+    eta = np.full(len(F), 2e-11)
+    k = 0.4
+    corrected = rc.correct_compliance(eta, SIO, F, k)
+    bias = rc.compliance_bias(SIO, F, k)
+    assert np.allclose(corrected * (1 + bias / 100), eta)
+    assert np.all(corrected > eta)  # k < 1 biases compliance low
+
+
+def test_scale_leak_poles_keeps_unit_gain_at_normalisation():
+    class PolesZerosResponseStage:
+        def __init__(self):
+            self.zeros = [0j]
+            self.poles = [-TWO_PI * 0.002 + 0j, -TWO_PI * 5.0 + 0j]
+            self.pz_transfer_function_type = "LAPLACE (RADIANS/SECOND)"
+            self.normalization_frequency = 1.0
+            self.normalization_factor = 1.0
+
+    class Response:
+        response_stages = [PolesZerosResponseStage()]
+
+    class Channel:
+        response = Response()
+
+    ch = Channel()
+    assert rc.scale_leak_poles(ch, 0.5) == 1
+    s = ch.response.response_stages[0]
+    assert s.poles[0] == pytest.approx(-TWO_PI * 0.001)
+    assert s.poles[1] == pytest.approx(-TWO_PI * 5.0)  # untouched
+    sn = 1j * TWO_PI * 1.0
+    h = (
+        s.normalization_factor
+        * np.prod([sn - z for z in s.zeros])
+        / np.prod([sn - p for p in s.poles])
+    )
+    assert abs(h) == pytest.approx(1.0)

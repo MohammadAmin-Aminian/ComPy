@@ -250,3 +250,50 @@ def pressure_sign_from_phase(phase_deg, *, max_residual=45.0):
     if not np.all(np.isfinite(res)) or np.max(np.abs(res)) > max_residual:
         return None
     return 1 if polarity == 180.0 else -1
+
+
+def correct_compliance(
+    compliance, stages, f, k, *, calibration_band=(0.02, 0.06), **kw
+):
+    """Compliance corrected for a pressure response whose low poles are scaled by ``k``.
+
+    Equivalent to deconvolving the corrected response and refitting the
+    Rayleigh gain in ``calibration_band``: compliance / (1 + bias), with the
+    bias of :func:`compliance_bias`. Apply the same factor to uncertainties.
+    """
+    bias = compliance_bias(
+        stages, np.asarray(f, float), k, calibration_band=calibration_band, **kw
+    )
+    return np.asarray(compliance, float) / (1.0 + bias / 100.0)
+
+
+def scale_leak_poles(channel, k, *, mode="lowest", leak_hz=0.05):
+    """Scale the low poles of an ObsPy channel's response in place (for stage A).
+
+    The poles scaled are those of :func:`analog_response` (``mode``). The
+    normalisation factor of each modified stage is recomputed so that the
+    stage keeps unit gain at its normalisation frequency.
+
+    Returns:
+        int: Number of poles changed.
+    """
+    stages = channel.response.response_stages
+    pz = [s for s in stages if s.__class__.__name__ == "PolesZerosResponseStage"]
+    hz = [(_pole_hz(p, "RADIANS" in s.pz_transfer_function_type.upper()), s, i)
+          for s in pz for i, p in enumerate(s.poles) if abs(p) > 0]  # fmt: skip
+    lowest = min((h for h, _, _ in hz), default=np.inf)
+    changed = 0
+    for h, s, i in hz:
+        if (mode == "lowest" and np.isclose(h, lowest)) or (
+            mode == "all" and h < leak_hz
+        ):
+            s.poles[i] = s.poles[i] * k
+            changed += 1
+            rad = "RADIANS" in s.pz_transfer_function_type.upper()
+            fn = s.normalization_frequency
+            sn = 1j * (2 * np.pi if rad else 1.0) * fn
+            h_n = np.prod([sn - z for z in s.zeros]) / np.prod(
+                [sn - p for p in s.poles]
+            )
+            s.normalization_factor = float(1.0 / abs(h_n))
+    return changed
