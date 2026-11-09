@@ -74,3 +74,62 @@ def test_compliance_ignores_a_gain_from_a_failed_calibration(runner):
         json.dumps({"gain": 0.7, "error": "bad spectra"})
     )
     assert stage.gains_for("OBS1") == {"nominal": 1.0}
+
+
+def test_compliance_window_levels_match_the_band_spectra(runner):
+    import types
+
+    import numpy as np
+    from obspy import Stream, Trace, UTCDateTime
+
+    from compy.compliance import spectra
+
+    spec = importlib.util.spec_from_file_location(
+        "c_compliance", PIPELINE / "c_compliance.py"
+    )
+    stage = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(stage)
+    assert stage.SAVE_WINDOW_LEVELS is True
+    rng = np.random.default_rng(3)
+    windows = []
+    for i in range(3):
+        t0 = UTCDateTime(2020, 1, 1) + i * stage.WINDOW_S
+        p = rng.normal(0, 1.0, 2625)
+        z = 1e-11 * p + rng.normal(0, 1e-12, 2625)
+        windows.append(Stream([
+            Trace(z, header={"channel": stage.Z, "sampling_rate": 1.25, "starttime": t0}),
+            Trace(p, header={"channel": stage.P, "sampling_rate": 1.25, "starttime": t0}),
+        ]))  # fmt: skip
+    result = types.SimpleNamespace(
+        window_starts=[windows[0][0].stats.starttime, windows[2][0].stats.starttime],
+        band=(0.007, 0.02),
+    )
+    levels = stage.window_levels(windows, result, gain=0.8)
+    assert levels.shape == (2, 4)
+    f, zz, pp, zp, _ = spectra(windows[2], stage.NSEG)
+    sel = (f >= 0.007) & (f <= 0.02)
+    expected = np.log10(np.median(np.abs(0.8 * zp[sel]) / (0.64 * pp[sel])))
+    assert levels[1, 0] == float(windows[2][0].stats.starttime)
+    assert levels[1, 1] == pytest.approx(expected)
+    assert levels[1, 2] == pytest.approx(10 * np.log10(np.mean(0.64 * pp[sel])))
+
+
+def test_calibration_sign_from_the_compliance_phase(runner):
+    import numpy as np
+
+    pytest.importorskip("compy_pressure.rayleigh_network")
+    spec = importlib.util.spec_from_file_location(
+        "d_calibrate", PIPELINE / "d_calibrate.py"
+    )
+    stage = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(stage)
+    assert stage.pressure_sign("OBS1") == (None, "compy_pressure default")
+    assert stage.pressure_sign("OBS1", 1) == (1, "config")
+    assert stage.pressure_sign("OBS1", "phase")[0] is None  # no stage C yet
+    folder = stage.RESULTS / "OBS1"
+    folder.mkdir(parents=True)
+    f = np.linspace(0.005, 0.03, 20)
+    np.savez(folder / "OBS1_compliance_nominal.npz", freqs=f, band=np.array([0.007, 0.02]),
+             phase_deg=np.full(20, 176.0))  # fmt: skip
+    sign, source = stage.pressure_sign("OBS1", "phase")
+    assert sign == 1 and "OBS1_compliance_nominal.npz" in source

@@ -8,7 +8,11 @@ and the tilt azimuth/admittance per window, over the whole deployment::
         --station RR52 --band 0.0073 0.0171 --output figures/RR52
 
 The input folder holds the stage B segments (``<STA>_seg*.mseed``) or the
-stage A ``phys/`` day files. Each segment is cut into ``--window`` second
+stage A ``phys/`` day files. For the tilt figure use ``phys/``: stage B has
+already removed the tilt from the cleaned vertical, so on cleaned data the
+remaining Z-H cross-spectrum is weak, the sign that picks between two
+azimuths 180 degrees apart is random, and the azimuth splits into two bands
+(seen on YV.RR52 in docs/audit_2026-11-data). Each segment is cut into ``--window`` second
 windows; windows with gaps are skipped, so nothing is interpolated.
 Needs ObsPy. Writes PNGs and ``<STA>_window_spectra.npz`` (band-averaged
 coherence, admittance and tilt per window) for ``compy.anomaly``.

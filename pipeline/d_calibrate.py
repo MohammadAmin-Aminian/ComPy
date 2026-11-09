@@ -37,7 +37,7 @@ from pathlib import Path
 
 import config
 import numpy as np
-from config import CATALOG, COMPY, INVENTORY, NETWORK, SDS, WORK, P, Z
+from config import CATALOG, COMPY, INVENTORY, NETWORK, RESULTS, SDS, WORK, P, Z
 from obspy import read_events
 
 sys.path.insert(0, str(COMPY))
@@ -58,6 +58,31 @@ DISPERSION = Path(
     )
 )
 DENSITY = 1028.0  # compy_pressure's default water density, kg/m^3
+#: Pressure sign of the Rayleigh calibration. None keeps compy_pressure's
+#: default (-1); -1 or +1 force it; "phase" takes it from the station's stage C
+#: Z/P phase (near 0 deg: -1, near 180 deg: +1; compy.response_check). In the
+#: whole-archive run that rule matched 107 of 108 resolved calibrations
+#: (docs/audit_2026-11-data). Stage C does not need a gain for the phase, so a
+#: nominal-gain stage C run can come first.
+PRESSURE_SIGN = getattr(config, "PRESSURE_SIGN", None)
+
+
+def pressure_sign(station, setting=None):
+    """(sign or None, source) for the calibration of ``station``."""
+    setting = PRESSURE_SIGN if setting is None else setting
+    if setting in (-1, 1):
+        return int(setting), "config"
+    if setting != "phase":
+        return None, "compy_pressure default"
+    from compy.response_check import pressure_sign_from_phase
+
+    for path in sorted((RESULTS / station).glob(f"{station}_compliance_*.npz")):
+        with np.load(path) as d:
+            band = (d["freqs"] >= d["band"][0]) & (d["freqs"] <= d["band"][1])
+            sign = pressure_sign_from_phase(d["phase_deg"][band])
+        if sign is not None:
+            return sign, f"stage C phase ({path.name})"
+    return None, "phase unavailable: compy_pressure default"
 
 
 def geojson_catalog(quakeml, destination):
@@ -152,6 +177,8 @@ def main():
             station,
             channels=(P, Z) if TILT == "none" else None,
         )
+        sign, sign_source = pressure_sign(station)
+        result.update(pressure_sign=sign, pressure_sign_source=sign_source)
         catalog = geojson_catalog(CATALOG, run / "catalog.geojson")
         files = pressure_network.scan_files(SDS, [NETWORK], [station])
         files = pressure_network.apply_location_aliases(files, set(master.Seed_id))
@@ -166,6 +193,7 @@ def main():
                 dispersion_file=str(DISPERSION),
                 band=list(BAND),
                 tilt_method=TILT,
+                **({"pressure_sign": sign} if sign is not None else {}),
             ),
         )
         # One gain per station: the pressure epoch with most accepted events.
