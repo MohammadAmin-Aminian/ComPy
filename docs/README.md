@@ -18,6 +18,7 @@
 | [Validation](VALIDATION.md) | Test coverage and scientific references |
 | [Reproducible runs](REPRODUCIBLE_RUNS.md) | Run records, array shapes and chain diagnostics |
 | [Compliance audit (October 2026)](AUDIT_2026-10.md) | Review of the compliance chain against the literature and the fixes it led to |
+| [ComPy 3 audit (November 2026)](audit_2026-11/REPORT.md) | Severity-ranked findings, diagnostic figures, ranked anomalies, physical tests, ComPy 3 roadmap and decisions |
 
 ## Results
 

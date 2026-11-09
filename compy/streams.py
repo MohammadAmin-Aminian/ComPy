@@ -1,7 +1,10 @@
-"""Sample-aligned, non-mutating ObsPy window helpers."""
+"""Sample-aligned, non-mutating ObsPy window helpers.
+
+ObsPy is imported when a function needs it, so that the array-level parts
+of ``compy.compliance`` (estimators, gates, corrections) import without it.
+"""
 
 import numpy as np
-from obspy import Stream
 
 from compy.numerics import positive
 
@@ -12,6 +15,8 @@ def validate_stream(stream):
     Requires a nonempty ObsPy Stream with unique trace IDs, one sampling rate
     and start times on a common sample grid.
     """
+    from obspy import Stream
+
     if not isinstance(stream, Stream) or not stream:
         raise ValueError("a nonempty ObsPy Stream is required")
     fs = positive(stream[0].stats.sampling_rate, "sampling rate")
@@ -75,6 +80,8 @@ def split_stream(stream, duration):
 
 def trim_streams_to_same_length(stream, channels=("BH1", "BH2", "BDH", "BHZ")):
     """Select one trace per channel in ``channels`` and trim all to their common time span."""
+    from obspy import Stream
+
     traces = []
     for channel in channels:
         matches = stream.select(channel=channel)

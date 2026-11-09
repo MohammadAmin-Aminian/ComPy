@@ -13,6 +13,7 @@ Window selection helpers (``select_coherent_windows``,
 kept with the estimator they serve. All quantities are SI: m, Pa, Hz.
 """
 
+import warnings
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -169,6 +170,9 @@ class ComplianceResult:
         all_freqs (ndarray): Full frequency axis [Hz].
         mean_coherence_all (ndarray): Mean per-window coherence, full axis.
         stack (dict): Stacked S_zz, S_pp, S_pz on the full axis (SI units).
+        gate (str): Coherence gate used ("inclusive" or "exclusive").
+        bin_counts (ndarray or None): Windows stacked in each bin of
+            ``all_freqs`` (all equal to ``n_windows`` for the inclusive gate).
     """
 
     freqs: np.ndarray
@@ -189,6 +193,187 @@ class ComplianceResult:
     all_freqs: np.ndarray = field(repr=False)
     mean_coherence_all: np.ndarray = field(repr=False)
     stack: dict = field(repr=False)
+    gate: str = "inclusive"
+    bin_counts: np.ndarray | None = field(default=None, repr=False)
+
+
+#: Coherence gates of :func:`stacked_compliance`.
+GATES = ("inclusive", "exclusive")
+
+
+def _gate_statistic(coh, band_index, n_freqs):
+    """Per-bin median coherence over band bins at least two bins away.
+
+    Hann-window Welch estimates are correlated only between neighbouring
+    bins, so the statistic of bin k does not depend on the noise at k:
+    windows are not selected for noise that happens to raise |S_pz| there.
+    Bins farther than one bin from the band get the plain band median.
+    """
+    band_coh = coh[band_index]
+    stat = np.full(n_freqs, np.median(band_coh))
+    lo, hi = band_index[0], band_index[-1]
+    for k in range(max(lo - 1, 0), min(hi + 2, n_freqs)):
+        keep = np.abs(band_index - k) >= 2
+        stat[k] = np.median(band_coh[keep]) if keep.any() else np.nan
+    return stat
+
+
+class _ComplianceStack:
+    """Streaming gate-and-stack of per-window spectra (see stacked_compliance)."""
+
+    def __init__(self, depth, gain, band, criteria, gate, gravity_correction):
+        if gate not in GATES:
+            raise ValueError(f"gate must be one of {GATES}")
+        if gate == "exclusive" and not hasattr(criteria, "min_median_coherence"):
+            raise ValueError("the exclusive gate needs criteria.min_median_coherence")
+        self.depth, self.gain, self.band = depth, gain, band
+        self.criteria, self.gate = criteria, gate
+        self.gravity_correction = gravity_correction
+        self.rejected = {"coherence": 0, "pressure_psd": 0, "acceleration_psd": 0}
+        self.f = None
+        self.zz_sum = self.pp_sum = self.zp_sum = self.coh_sum = self.counts = None
+        self.curves, self.starts, self.n_samples = [], [], None
+
+    def add(self, f, zz, pp, zp, coh, start, n_samples):
+        """Gate one window (``pp``, ``zp`` before gain) and stack it if accepted."""
+        if self.f is None:
+            self.f = f
+        elif len(f) != len(self.f) or not np.allclose(f, self.f, rtol=1e-12, atol=0):
+            raise ValueError("windows differ in sampling rate or nseg")
+        f = self.f
+        f_min, f_max = self.band
+        sel = (f >= f_min) & (f <= f_max)
+        if not sel.any():
+            raise ValueError("band contains no spectral bins; increase nseg")
+        pp, zp = pp * self.gain**2, zp * self.gain
+        if self.gate == "inclusive":
+            reason = self.criteria.check(f, zz, pp, coh, sel)
+            mask = None
+        else:
+            reason = self.criteria.check(f, zz, pp, np.ones_like(coh), sel)
+            mask = None
+            if reason is None:
+                stat = _gate_statistic(coh, np.flatnonzero(sel), len(f))
+                mask = (stat >= self.criteria.min_median_coherence).astype(float)
+                if not mask[sel].any():
+                    reason = "coherence"
+        if reason is not None:
+            self.rejected[reason] = self.rejected.get(reason, 0) + 1
+            return reason
+        if self.n_samples is None:
+            self.n_samples = n_samples
+        elif n_samples != self.n_samples:
+            raise ValueError("all windows must have the same length")
+        if self.zz_sum is None:
+            self.zz_sum, self.pp_sum = np.zeros_like(zz), np.zeros_like(pp)
+            self.zp_sum, self.coh_sum = np.zeros_like(zp), np.zeros_like(coh)
+            self.counts = np.zeros_like(zz)
+        ratio = np.zeros_like(f)
+        np.divide(np.abs(zp), pp, out=ratio, where=pp > 0)
+        curve = _compliance(f, self.depth, ratio, pp, self.gravity_correction)
+        if mask is None:
+            self.zz_sum += zz
+            self.pp_sum += pp
+            self.zp_sum += zp
+            self.coh_sum += coh
+            self.counts += 1
+        else:
+            self.zz_sum += zz * mask
+            self.pp_sum += pp * mask
+            self.zp_sum += zp * mask
+            self.coh_sum += coh * mask
+            self.counts += mask
+            curve = np.where(mask > 0, curve, np.nan)
+        self.curves.append(curve)
+        self.starts.append(start)
+        return None
+
+    def result(self, nseg, output_band):
+        """The ComplianceResult of the accepted windows."""
+        from compy.numerics import compliance_uncertainty, wavenumber
+
+        if not self.curves:
+            raise ValueError(
+                f"no windows passed compliance quality thresholds {self.rejected}"
+            )
+        f, depth, gc = self.f, self.depth, self.gravity_correction
+        n = len(self.curves)
+        if self.gate == "inclusive":
+            szz, spp, spz = self.zz_sum / n, self.pp_sum / n, self.zp_sum / n
+            coh_mean = self.coh_sum / n
+            counts = np.full(len(f), float(n))
+        else:
+            counts = self.counts
+            with np.errstate(invalid="ignore", divide="ignore"):
+                szz, spp = self.zz_sum / counts, self.pp_sum / counts
+                spz, coh_mean = self.zp_sum / counts, self.coh_sum / counts
+            szz, spp, coh_mean = (np.nan_to_num(v) for v in (szz, spp, coh_mean))
+            spz = np.nan_to_num(spz)
+        coherence = np.zeros_like(szz)
+        np.divide(np.abs(spz), np.sqrt(szz * spp), out=coherence, where=szz * spp > 0)
+        coherence = np.clip(coherence, 0, 1)
+        ratio = np.zeros_like(szz)
+        np.divide(np.abs(spz), spp, out=ratio, where=spp > 0)
+        eta = _compliance(f, depth, ratio, spp, gc)
+        per_window = welch_averages(self.n_samples, nseg)
+        lo, hi = output_band if output_band is not None else self.band
+        keep = (f >= lo) & (f <= hi)
+        omega2 = (2 * np.pi * f[keep]) ** 2
+        # Only the measured transfer function is random; gravity terms are scaled.
+        measured = (
+            wavenumber(2 * np.pi * f[keep], depth)
+            * omega2
+            * ratio[keep]
+            / (omega2 + (FREE_AIR_GRADIENT if gc else 0))
+        )
+        curves = np.asarray(self.curves)
+        if self.gate == "inclusive":
+            averages = n * per_window
+            uncertainty = compliance_uncertainty(measured, coherence[keep], averages)
+            window_mean = curves[:, keep].mean(axis=0)
+            window_std = curves[:, keep].std(axis=0, ddof=1 if n > 1 else 0)
+            n_windows = n
+        else:
+            bins = np.maximum(counts[keep], 1)
+            averages = (
+                float(
+                    np.median(
+                        counts[keep & ((f >= self.band[0]) & (f <= self.band[1]))]
+                    )
+                )
+                * per_window
+            )
+            uncertainty = np.array([
+                compliance_uncertainty(m, c, b * per_window)
+                for m, c, b in zip(measured, coherence[keep], bins)
+            ])  # fmt: skip
+            with np.errstate(invalid="ignore"), warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                window_mean = np.nanmean(curves[:, keep], axis=0)
+                window_std = np.nanstd(curves[:, keep], axis=0, ddof=1)
+            n_windows = n
+        return ComplianceResult(
+            freqs=f[keep],
+            compliance=eta[keep],
+            uncertainty=uncertainty,
+            coherence=coherence[keep],
+            phase_deg=np.degrees(np.angle(spz[keep])),
+            window_mean=window_mean,
+            window_std=window_std,
+            n_windows=n_windows,
+            n_averages=averages,
+            window_starts=self.starts,
+            rejected=self.rejected,
+            band=tuple(self.band),
+            gain=self.gain,
+            depth=depth,
+            criteria=self.criteria,
+            all_freqs=f,
+            mean_coherence_all=coh_mean,
+            stack={"S_zz": szz, "S_pp": spp, "S_pz": spz},
+            gate=self.gate,
+            bin_counts=counts,
+        )
 
 
 def stacked_compliance(
@@ -201,6 +386,7 @@ def stacked_compliance(
     *,
     output_band=None,
     gravity_correction=True,
+    gate="inclusive",
 ):
     """Compliance from cross-spectra stacked over quality-selected windows.
 
@@ -211,8 +397,18 @@ def stacked_compliance(
     & Piersol (1993) with n the effective number of independent Welch
     averages over all accepted windows (non-overlapping windows assumed).
 
+    Gates. ``"inclusive"`` (default, Aminian et al. 2025) accepts a window
+    when the median coherence over the band reaches the threshold. Because
+    the same noise sets the coherence and |S_pz|, it favours windows whose
+    noise raised |S_pz|, and biases the stacked H1 high: by 0.03–1 % for
+    realistic sea-state variability and up to several per cent when few
+    windows pass at steady noise (``compy.anomaly.simulate_gate_bias``;
+    docs/audit_2026-11/REPORT.md). ``"exclusive"`` decides per frequency
+    bin, from the median coherence of the band bins at least two bins away,
+    which removes the bias; windows then count per bin (``bin_counts``).
+
     Args:
-        windows (list of Stream): Equal-length, non-overlapping windows.
+        windows (iterable of Stream): Equal-length, non-overlapping windows.
         depth (float): Water depth [m].
         gain (float): Factor multiplying nominal pressure.
         band (tuple): (f_min, f_max) [Hz] used for the window gates.
@@ -220,89 +416,65 @@ def stacked_compliance(
         nseg (int): Welch segment length in samples.
         output_band (tuple or None): Frequency range returned; defaults to band.
         gravity_correction (bool): Apply wave-attraction and free-air terms.
+        gate (str): ``"inclusive"`` or ``"exclusive"`` (see above).
 
     Returns:
         ComplianceResult: Stacked estimate and per-window statistics.
 
     Raises:
-        ValueError: If no window passes or the band holds no frequency bins.
+        ValueError: If no window passes, the band holds no frequency bins,
+            or windows differ in length, sampling rate or nseg.
     """
-    from compy.numerics import compliance_uncertainty, wavenumber
-
     depth, gain = positive(depth, "water depth"), positive(gain, "gain factor")
     f_min, f_max = band
     if not 0 < f_min < f_max:
         raise ValueError("band must satisfy 0 < f_min < f_max")
-    rejected = {"coherence": 0, "pressure_psd": 0, "acceleration_psd": 0}
-    zz_sum = pp_sum = zp_sum = coh_sum = None
-    curves, starts, n_samples = [], [], None
+    stack = _ComplianceStack(depth, gain, (f_min, f_max), criteria, gate,
+                             gravity_correction)  # fmt: skip
     for window in windows:
         f, zz, pp, zp, coh = spectra(window, nseg)
-        sel = (f >= f_min) & (f <= f_max)
-        if not sel.any():
-            raise ValueError("band contains no spectral bins; increase nseg")
-        pp, zp = pp * gain**2, zp * gain
-        reason = criteria.check(f, zz, pp, coh, sel)
-        if reason is not None:
-            rejected[reason] += 1
-            continue
-        if n_samples is None:
-            n_samples = len(window[0])
-        elif len(window[0]) != n_samples:
-            raise ValueError("all windows must have the same length")
-        if zz_sum is None:
-            zz_sum, pp_sum = np.zeros_like(zz), np.zeros_like(pp)
-            zp_sum, coh_sum = np.zeros_like(zp), np.zeros_like(coh)
-        zz_sum += zz
-        pp_sum += pp
-        zp_sum += zp
-        coh_sum += coh
-        ratio = np.zeros_like(f)
-        np.divide(np.abs(zp), pp, out=ratio, where=pp > 0)
-        curves.append(_compliance(f, depth, ratio, pp, gravity_correction))
-        starts.append(window[0].stats.starttime)
-    if not curves:
-        raise ValueError(f"no windows passed compliance quality thresholds {rejected}")
-    n = len(curves)
-    szz, spp, spz = zz_sum / n, pp_sum / n, zp_sum / n
-    coherence = np.zeros_like(szz)
-    np.divide(np.abs(spz), np.sqrt(szz * spp), out=coherence, where=szz * spp > 0)
-    coherence = np.clip(coherence, 0, 1)
-    ratio = np.zeros_like(szz)
-    np.divide(np.abs(spz), spp, out=ratio, where=spp > 0)
-    eta = _compliance(f, depth, ratio, spp, gravity_correction)
-    averages = n * welch_averages(n_samples, nseg)
-    lo, hi = output_band if output_band is not None else band
-    keep = (f >= lo) & (f <= hi)
-    omega2 = (2 * np.pi * f[keep]) ** 2
-    # Only the measured transfer function is random; gravity terms are scaled.
-    measured = (
-        wavenumber(2 * np.pi * f[keep], depth)
-        * omega2
-        * ratio[keep]
-        / (omega2 + (FREE_AIR_GRADIENT if gravity_correction else 0))
-    )
-    curves = np.asarray(curves)
-    return ComplianceResult(
-        freqs=f[keep],
-        compliance=eta[keep],
-        uncertainty=compliance_uncertainty(measured, coherence[keep], averages),
-        coherence=coherence[keep],
-        phase_deg=np.degrees(np.angle(spz[keep])),
-        window_mean=curves[:, keep].mean(axis=0),
-        window_std=curves[:, keep].std(axis=0, ddof=1 if n > 1 else 0),
-        n_windows=n,
-        n_averages=averages,
-        window_starts=starts,
-        rejected=rejected,
-        band=(f_min, f_max),
-        gain=gain,
-        depth=depth,
-        criteria=criteria,
-        all_freqs=f,
-        mean_coherence_all=coh_sum / n,
-        stack={"S_zz": szz, "S_pp": spp, "S_pz": spz},
-    )
+        stack.add(f, zz, pp, zp, coh, window[0].stats.starttime, len(window[0]))
+    return stack.result(nseg, output_band)
+
+
+def stacked_compliance_from_spectra(
+    f,
+    windows,
+    depth,
+    gain,
+    band,
+    criteria=GJI2025,
+    nseg=1024,
+    *,
+    n_samples,
+    output_band=None,
+    gravity_correction=True,
+    gate="inclusive",
+):
+    """:func:`stacked_compliance` on precomputed per-window spectra.
+
+    Args:
+        f (array): Frequencies [Hz] shared by all windows.
+        windows (iterable): ``(start, S_zz, S_pp, S_pz, coherence)`` per
+            window, with S_pp and S_pz of nominal pressure (before gain),
+            e.g. from ``compy.timefreq.window_spectra``.
+        n_samples (int): Samples per window (for the Welch average count).
+        Other arguments: as :func:`stacked_compliance`.
+
+    Returns:
+        ComplianceResult: As :func:`stacked_compliance`.
+    """
+    depth, gain = positive(depth, "water depth"), positive(gain, "gain factor")
+    f_min, f_max = band
+    if not 0 < f_min < f_max:
+        raise ValueError("band must satisfy 0 < f_min < f_max")
+    stack = _ComplianceStack(depth, gain, (f_min, f_max), criteria, gate,
+                             gravity_correction)  # fmt: skip
+    f = np.asarray(f, float)
+    for start, zz, pp, zp, coh in windows:
+        stack.add(f, np.asarray(zz, float), np.asarray(pp, float),
+                  np.asarray(zp, complex), np.asarray(coh, float), start, n_samples)  # fmt: skip
+    return stack.result(nseg, output_band)
 
 
 def _compliance(f, depth, ratio, pp, gravity_correction):

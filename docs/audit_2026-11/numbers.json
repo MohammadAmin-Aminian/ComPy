@@ -1,0 +1,2241 @@
+{
+ "validation": {
+  "files": 61,
+  "worst_relative": 2.220446049250313e-16,
+  "worst_coherence": 0.0
+ },
+ "phase_models": {
+  "RR28": {
+   "residual_deg": [
+    16.26,
+    14.21,
+    12.48,
+    10.91,
+    9.52,
+    8.65
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 2.64,
+    "timing": 4.94,
+    "dpg_corner": 0.26,
+    "seismometer_corner": 0.27
+   },
+   "dt_s": 2.95,
+   "dpg_bias_band_bottom_pct": [
+    -10.3,
+    -4.4
+   ],
+   "seis_bias_band_bottom_pct": [
+    -13.9,
+    -7.4
+   ],
+   "rayleigh_slope_dpg": [
+    -0.007,
+    -0.002
+   ],
+   "rayleigh_slope_seis": [
+    -0.007,
+    -0.0
+   ]
+  },
+  "RR29": {
+   "residual_deg": [
+    19.33,
+    17.84,
+    16.28,
+    15.09,
+    13.86
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21
+   ],
+   "rms": {
+    "constant": 1.94,
+    "timing": 4.77,
+    "dpg_corner": 0.14,
+    "seismometer_corner": 0.4
+   },
+   "dt_s": 4.45,
+   "dpg_bias_band_bottom_pct": [
+    -18.9,
+    -11.6
+   ],
+   "seis_bias_band_bottom_pct": [
+    -17.4,
+    -16.4
+   ],
+   "rayleigh_slope_dpg": [
+    -0.016,
+    -0.008
+   ],
+   "rayleigh_slope_seis": [
+    -0.008,
+    -0.008
+   ]
+  },
+  "RR34": {
+   "residual_deg": [
+    9.21,
+    8.09,
+    7.38,
+    6.52,
+    5.5,
+    4.86
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 1.49,
+    "timing": 2.82,
+    "dpg_corner": 0.22,
+    "seismometer_corner": 0.31
+   },
+   "dt_s": 1.71,
+   "dpg_bias_band_bottom_pct": [
+    -8.9,
+    -1.4
+   ],
+   "seis_bias_band_bottom_pct": [
+    -9.9,
+    -3.6
+   ],
+   "rayleigh_slope_dpg": [
+    -0.007,
+    -0.001
+   ],
+   "rayleigh_slope_seis": [
+    -0.005,
+    -0.0
+   ]
+  },
+  "RR36": {
+   "residual_deg": [
+    8.19,
+    6.52,
+    4.88,
+    3.5,
+    2.23,
+    0.96,
+    -0.36,
+    -1.86
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65,
+    15.87
+   ],
+   "rms": {
+    "constant": 3.22,
+    "timing": 3.83,
+    "dpg_corner": 2.38,
+    "seismometer_corner": 1.47
+   },
+   "dt_s": 0.5,
+   "dpg_bias_band_bottom_pct": [
+    -8.8,
+    -0.0
+   ],
+   "seis_bias_band_bottom_pct": [
+    5.7,
+    7.2
+   ],
+   "rayleigh_slope_dpg": [
+    -0.009,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    0.006,
+    0.007
+   ]
+  },
+  "RR38": {
+   "residual_deg": [
+    4.46,
+    -0.94,
+    -5.61,
+    -10.32,
+    -16.43,
+    -22.64
+   ],
+   "freqs_mhz": [
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 9.12,
+    "timing": 7.47,
+    "dpg_corner": 9.41,
+    "seismometer_corner": 10.41
+   },
+   "dt_s": -2.37,
+   "dpg_bias_band_bottom_pct": [
+    -3.4,
+    42.3
+   ],
+   "seis_bias_band_bottom_pct": [
+    -5.9,
+    6.4
+   ],
+   "rayleigh_slope_dpg": [
+    -0.004,
+    0.072
+   ],
+   "rayleigh_slope_seis": [
+    -0.005,
+    0.007
+   ]
+  },
+  "RR40": {
+   "residual_deg": [
+    -12.61,
+    -11.66,
+    -10.45,
+    -9.35,
+    -8.44
+   ],
+   "freqs_mhz": [
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 1.51,
+    "timing": 3.12,
+    "dpg_corner": 0.18,
+    "seismometer_corner": 0.32
+   },
+   "dt_s": -2.53,
+   "dpg_bias_band_bottom_pct": [
+    2.6,
+    13.3
+   ],
+   "seis_bias_band_bottom_pct": [
+    -0.2,
+    5.9
+   ],
+   "rayleigh_slope_dpg": [
+    0.002,
+    0.013
+   ],
+   "rayleigh_slope_seis": [
+    -0.002,
+    0.003
+   ]
+  },
+  "RR50": {
+   "residual_deg": [
+    15.19,
+    13.96,
+    13.19,
+    12.13,
+    11.47,
+    10.92
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 1.47,
+    "timing": 3.96,
+    "dpg_corner": 0.15,
+    "seismometer_corner": 0.64
+   },
+   "dt_s": 3.22,
+   "dpg_bias_band_bottom_pct": [
+    -18.2,
+    -11.9
+   ],
+   "seis_bias_band_bottom_pct": [
+    -14.9,
+    -13.6
+   ],
+   "rayleigh_slope_dpg": [
+    -0.018,
+    -0.008
+   ],
+   "rayleigh_slope_seis": [
+    -0.007,
+    -0.007
+   ]
+  },
+  "RR52": {
+   "residual_deg": [
+    17.94,
+    16.29,
+    15.13,
+    14.32,
+    13.92,
+    13.67,
+    13.8,
+    14.04,
+    14.54
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65,
+    15.87,
+    17.09
+   ],
+   "rms": {
+    "constant": 1.34,
+    "timing": 4.78,
+    "dpg_corner": 1.41,
+    "seismometer_corner": 2.45
+   },
+   "dt_s": 3.11,
+   "dpg_bias_band_bottom_pct": [
+    -22.0,
+    -15.8
+   ],
+   "seis_bias_band_bottom_pct": [
+    -19.9,
+    -10.1
+   ],
+   "rayleigh_slope_dpg": [
+    -0.021,
+    -0.012
+   ],
+   "rayleigh_slope_seis": [
+    -0.009,
+    -0.0
+   ]
+  },
+  "CC01": {
+   "residual_deg": [
+    11.23,
+    8.79,
+    7.35,
+    6.23,
+    5.23,
+    4.45,
+    3.64,
+    3.04
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 2.59,
+    "timing": 4.28,
+    "dpg_corner": 0.48,
+    "seismometer_corner": 0.53
+   },
+   "dt_s": 1.52,
+   "dpg_bias_band_bottom_pct": [
+    -8.7,
+    -1.7
+   ],
+   "seis_bias_band_bottom_pct": [
+    -10.8,
+    -8.8
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "CC03": {
+   "residual_deg": [
+    12.94,
+    10.7,
+    8.97,
+    7.46,
+    6.53,
+    5.72,
+    4.84,
+    4.09,
+    3.9,
+    3.67
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65,
+    15.87
+   ],
+   "rms": {
+    "constant": 2.98,
+    "timing": 4.98,
+    "dpg_corner": 0.35,
+    "seismometer_corner": 0.32
+   },
+   "dt_s": 1.42,
+   "dpg_bias_band_bottom_pct": [
+    -9.8,
+    -2.3
+   ],
+   "seis_bias_band_bottom_pct": [
+    -12.8,
+    -10.8
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.001
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "CC04": {
+   "residual_deg": [
+    13.58,
+    11.05,
+    8.91,
+    7.38,
+    6.19,
+    5.01,
+    3.91,
+    3.02,
+    2.1
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 3.61,
+    "timing": 5.5,
+    "dpg_corner": 1.13,
+    "seismometer_corner": 1.07
+   },
+   "dt_s": 1.46,
+   "dpg_bias_band_bottom_pct": [
+    -10.0,
+    -1.7
+   ],
+   "seis_bias_band_bottom_pct": [
+    -13.2,
+    -10.0
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "CC05": {
+   "residual_deg": [
+    8.88,
+    7.19,
+    5.87,
+    4.86,
+    4.06,
+    3.08,
+    2.3,
+    1.41
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 2.36,
+    "timing": 3.63,
+    "dpg_corner": 0.78,
+    "seismometer_corner": 0.74
+   },
+   "dt_s": 1.11,
+   "dpg_bias_band_bottom_pct": [
+    -7.7,
+    -0.9
+   ],
+   "seis_bias_band_bottom_pct": [
+    -8.8,
+    -6.2
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "CC06": {
+   "residual_deg": [
+    13.76,
+    11.12,
+    9.08,
+    7.64,
+    6.5,
+    5.65,
+    4.86,
+    4.11
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 3.1,
+    "timing": 5.22,
+    "dpg_corner": 0.45,
+    "seismometer_corner": 0.54
+   },
+   "dt_s": 1.92,
+   "dpg_bias_band_bottom_pct": [
+    -9.0,
+    -2.3
+   ],
+   "seis_bias_band_bottom_pct": [
+    -13.6,
+    -11.2
+   ],
+   "rayleigh_slope_dpg": [
+    -0.002,
+    -0.001
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "CC07": {
+   "residual_deg": [
+    7.97,
+    6.51,
+    5.32,
+    4.36,
+    3.59,
+    2.95,
+    2.22,
+    1.27
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 2.1,
+    "timing": 3.25,
+    "dpg_corner": 0.67,
+    "seismometer_corner": 0.63
+   },
+   "dt_s": 1.01,
+   "dpg_bias_band_bottom_pct": [
+    -7.3,
+    -0.7
+   ],
+   "seis_bias_band_bottom_pct": [
+    -8.1,
+    -5.5
+   ],
+   "rayleigh_slope_dpg": [
+    -0.002,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "CC08": {
+   "residual_deg": [
+    11.2,
+    8.82,
+    7.19,
+    5.88,
+    5.06,
+    4.37,
+    3.78,
+    3.25,
+    2.6
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 2.66,
+    "timing": 4.27,
+    "dpg_corner": 0.51,
+    "seismometer_corner": 0.54
+   },
+   "dt_s": 1.28,
+   "dpg_bias_band_bottom_pct": [
+    -8.5,
+    -1.7
+   ],
+   "seis_bias_band_bottom_pct": [
+    -10.8,
+    -8.5
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "CC09": {
+   "residual_deg": [
+    11.94,
+    9.11,
+    7.71,
+    6.57,
+    5.83,
+    4.88,
+    3.96,
+    2.82,
+    1.93,
+    -0.93,
+    0.92
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65,
+    15.87,
+    17.09
+   ],
+   "rms": {
+    "constant": 3.6,
+    "timing": 5.03,
+    "dpg_corner": 1.63,
+    "seismometer_corner": 1.55
+   },
+   "dt_s": 0.84,
+   "dpg_bias_band_bottom_pct": [
+    -11.5,
+    -0.9
+   ],
+   "seis_bias_band_bottom_pct": [
+    -12.4,
+    2.0
+   ],
+   "rayleigh_slope_dpg": [
+    -0.005,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    0.007
+   ]
+  },
+  "CC11": {
+   "residual_deg": [
+    11.9,
+    9.12,
+    7.18,
+    5.66,
+    4.39,
+    3.29,
+    2.27,
+    1.37,
+    0.5
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 3.56,
+    "timing": 4.93,
+    "dpg_corner": 1.62,
+    "seismometer_corner": 1.16
+   },
+   "dt_s": 1.02,
+   "dpg_bias_band_bottom_pct": [
+    -10.2,
+    -0.9
+   ],
+   "seis_bias_band_bottom_pct": [
+    -10.0,
+    3.0
+   ],
+   "rayleigh_slope_dpg": [
+    -0.004,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    0.006
+   ]
+  },
+  "EC01": {
+   "residual_deg": [
+    9.98,
+    8.92,
+    7.72,
+    6.74,
+    5.9,
+    4.05,
+    2.54
+   ],
+   "freqs_mhz": [
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 2.44,
+    "timing": 3.95,
+    "dpg_corner": 0.93,
+    "seismometer_corner": 0.8
+   },
+   "dt_s": 1.59,
+   "dpg_bias_band_bottom_pct": [
+    -9.5,
+    -1.1
+   ],
+   "seis_bias_band_bottom_pct": [
+    -7.2,
+    -5.3
+   ],
+   "rayleigh_slope_dpg": [
+    -0.005,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "EC03": {
+   "residual_deg": [
+    10.2,
+    7.09,
+    5.5,
+    3.83,
+    3.78,
+    3.71
+   ],
+   "freqs_mhz": [
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21
+   ],
+   "rms": {
+    "constant": 2.36,
+    "timing": 3.5,
+    "dpg_corner": 1.06,
+    "seismometer_corner": 0.86
+   },
+   "dt_s": 1.5,
+   "dpg_bias_band_bottom_pct": [
+    -7.5,
+    -0.8
+   ],
+   "seis_bias_band_bottom_pct": [
+    -6.0,
+    6.0
+   ],
+   "rayleigh_slope_dpg": [
+    -0.004,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    0.006
+   ]
+  },
+  "EC04": {
+   "residual_deg": [
+    -65.4,
+    -101.96,
+    -68.34,
+    32.71,
+    46.71,
+    31.03
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 59.08,
+    "timing": 61.76,
+    "dpg_corner": 55.56,
+    "seismometer_corner": 55.13
+   },
+   "dt_s": -2.78,
+   "dpg_bias_band_bottom_pct": [
+    -29.8,
+    144.8
+   ],
+   "seis_bias_band_bottom_pct": [
+    -32.8,
+    9.0
+   ],
+   "rayleigh_slope_dpg": [
+    -0.028,
+    0.145
+   ],
+   "rayleigh_slope_seis": [
+    -0.015,
+    0.013
+   ]
+  },
+  "EC05": {
+   "residual_deg": [
+    11.5,
+    8.91,
+    7.18,
+    5.66,
+    4.47,
+    2.98,
+    1.29,
+    -0.34
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 3.69,
+    "timing": 5.05,
+    "dpg_corner": 1.91,
+    "seismometer_corner": 1.39
+   },
+   "dt_s": 1.13,
+   "dpg_bias_band_bottom_pct": [
+    -11.4,
+    -0.7
+   ],
+   "seis_bias_band_bottom_pct": [
+    -10.0,
+    3.5
+   ],
+   "rayleigh_slope_dpg": [
+    -0.005,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    0.006
+   ]
+  },
+  "EE01": {
+   "residual_deg": [
+    5.57,
+    4.35,
+    2.79,
+    1.63,
+    0.03
+   ],
+   "freqs_mhz": [
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 1.95,
+    "timing": 2.38,
+    "dpg_corner": 1.48,
+    "seismometer_corner": 0.87
+   },
+   "dt_s": 0.63,
+   "dpg_bias_band_bottom_pct": [
+    -5.7,
+    -0.1
+   ],
+   "seis_bias_band_bottom_pct": [
+    5.9,
+    6.2
+   ],
+   "rayleigh_slope_dpg": [
+    -0.007,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    0.006,
+    0.007
+   ]
+  },
+  "EE04": {
+   "residual_deg": [
+    6.97,
+    5.42,
+    4.2,
+    3.24,
+    2.5,
+    1.88,
+    1.03,
+    0.36
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 2.1,
+    "timing": 2.93,
+    "dpg_corner": 0.97,
+    "seismometer_corner": 0.95
+   },
+   "dt_s": 0.71,
+   "dpg_bias_band_bottom_pct": [
+    -6.1,
+    -0.4
+   ],
+   "seis_bias_band_bottom_pct": [
+    -6.6,
+    -3.7
+   ],
+   "rayleigh_slope_dpg": [
+    -0.002,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "WC01": {
+   "residual_deg": [
+    -80.57,
+    -69.27,
+    -62.07,
+    14.57,
+    44.11,
+    129.65,
+    145.23
+   ],
+   "freqs_mhz": [
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 87.08,
+    "timing": 81.5,
+    "dpg_corner": 88.28,
+    "seismometer_corner": 88.38
+   },
+   "dt_s": 8.71,
+   "dpg_bias_band_bottom_pct": [
+    -30.3,
+    144.8
+   ],
+   "seis_bias_band_bottom_pct": [
+    -41.7,
+    9.0
+   ],
+   "rayleigh_slope_dpg": [
+    -0.028,
+    0.145
+   ],
+   "rayleigh_slope_seis": [
+    -0.02,
+    0.015
+   ]
+  },
+  "WC02": {
+   "residual_deg": [
+    10.6,
+    8.22,
+    6.33,
+    5.24,
+    4.38,
+    3.55,
+    2.92,
+    2.26,
+    1.69
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 2.76,
+    "timing": 4.15,
+    "dpg_corner": 0.88,
+    "seismometer_corner": 0.86
+   },
+   "dt_s": 1.07,
+   "dpg_bias_band_bottom_pct": [
+    -8.0,
+    -0.9
+   ],
+   "seis_bias_band_bottom_pct": [
+    -10.0,
+    -6.9
+   ],
+   "rayleigh_slope_dpg": [
+    -0.002,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "WC03": {
+   "residual_deg": [
+    11.64,
+    9.32,
+    7.67,
+    6.44,
+    5.44,
+    4.64,
+    3.93,
+    3.14,
+    2.44
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 2.85,
+    "timing": 4.55,
+    "dpg_corner": 0.63,
+    "seismometer_corner": 0.61
+   },
+   "dt_s": 1.33,
+   "dpg_bias_band_bottom_pct": [
+    -8.9,
+    -1.7
+   ],
+   "seis_bias_band_bottom_pct": [
+    -11.6,
+    -8.8
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "WC04": {
+   "residual_deg": [
+    13.66,
+    11.13,
+    9.12,
+    7.58,
+    6.24,
+    5.24,
+    4.47,
+    3.56,
+    2.74
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 3.44,
+    "timing": 5.42,
+    "dpg_corner": 0.86,
+    "seismometer_corner": 0.81
+   },
+   "dt_s": 1.54,
+   "dpg_bias_band_bottom_pct": [
+    -10.0,
+    -2.3
+   ],
+   "seis_bias_band_bottom_pct": [
+    -13.6,
+    -10.4
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.001
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "WC05": {
+   "residual_deg": [
+    11.18,
+    8.84,
+    7.07,
+    5.66,
+    4.68,
+    3.79,
+    2.99,
+    2.37,
+    1.65
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65
+   ],
+   "rms": {
+    "constant": 2.99,
+    "timing": 4.46,
+    "dpg_corner": 0.98,
+    "seismometer_corner": 0.94
+   },
+   "dt_s": 1.14,
+   "dpg_bias_band_bottom_pct": [
+    -8.2,
+    -1.3
+   ],
+   "seis_bias_band_bottom_pct": [
+    -10.8,
+    -7.7
+   ],
+   "rayleigh_slope_dpg": [
+    -0.002,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  },
+  "WW01": {
+   "residual_deg": [
+    9.89,
+    8.26,
+    7.48,
+    6.68,
+    6.24,
+    6.19
+   ],
+   "freqs_mhz": [
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21
+   ],
+   "rms": {
+    "constant": 1.31,
+    "timing": 2.89,
+    "dpg_corner": 0.28,
+    "seismometer_corner": 0.63
+   },
+   "dt_s": 2.07,
+   "dpg_bias_band_bottom_pct": [
+    -11.8,
+    -1.5
+   ],
+   "seis_bias_band_bottom_pct": [
+    -13.7,
+    -5.8
+   ],
+   "rayleigh_slope_dpg": [
+    -0.007,
+    -0.001
+   ],
+   "rayleigh_slope_seis": [
+    -0.006,
+    -0.0
+   ]
+  },
+  "WW03": {
+   "residual_deg": [
+    6.81,
+    5.75,
+    4.98,
+    4.6,
+    4.19,
+    3.87,
+    3.92
+   ],
+   "freqs_mhz": [
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43
+   ],
+   "rms": {
+    "constant": 1.0,
+    "timing": 2.12,
+    "dpg_corner": 0.21,
+    "seismometer_corner": 0.48
+   },
+   "dt_s": 1.24,
+   "dpg_bias_band_bottom_pct": [
+    -8.7,
+    -0.8
+   ],
+   "seis_bias_band_bottom_pct": [
+    -11.2,
+    -3.5
+   ],
+   "rayleigh_slope_dpg": [
+    -0.007,
+    -0.0
+   ],
+   "rayleigh_slope_seis": [
+    -0.005,
+    -0.0
+   ]
+  },
+  "WW04": {
+   "residual_deg": [
+    12.62,
+    10.19,
+    8.48,
+    7.27,
+    6.37,
+    5.67,
+    5.14,
+    4.66,
+    4.13,
+    4.09
+   ],
+   "freqs_mhz": [
+    4.88,
+    6.1,
+    7.32,
+    8.54,
+    9.77,
+    10.99,
+    12.21,
+    13.43,
+    14.65,
+    15.87
+   ],
+   "rms": {
+    "constant": 2.68,
+    "timing": 4.68,
+    "dpg_corner": 0.07,
+    "seismometer_corner": 0.35
+   },
+   "dt_s": 1.44,
+   "dpg_bias_band_bottom_pct": [
+    -9.6,
+    -2.3
+   ],
+   "seis_bias_band_bottom_pct": [
+    -12.8,
+    -10.8
+   ],
+   "rayleigh_slope_dpg": [
+    -0.003,
+    -0.001
+   ],
+   "rayleigh_slope_seis": [
+    -0.0,
+    -0.0
+   ]
+  }
+ },
+ "network": {
+  "YV": {
+   "common_mode_mean_corr": 0.468,
+   "common_mode_p": 0.001996007984031936,
+   "phase_sign": [
+    7,
+    8,
+    0.0703125
+   ],
+   "phase_vs_sediment": [
+    -0.261904761904762,
+    0.530922861565801,
+    8
+   ],
+   "synchronous_steps": [
+    [
+     [
+      "2013-07-30",
+      "RR50",
+      58.2
+     ],
+     [
+      "2013-08-05",
+      "RR36",
+      7.1
+     ]
+    ],
+    [
+     [
+      "2013-09-10",
+      "RR29",
+      5.9
+     ],
+     [
+      "2013-09-16",
+      "RR40",
+      10.3
+     ],
+     [
+      "2013-09-16",
+      "RR28",
+      7.5
+     ],
+     [
+      "2013-09-18",
+      "RR52",
+      6.4
+     ]
+    ],
+    [
+     [
+      "2013-10-09",
+      "RR36",
+      3.1
+     ],
+     [
+      "2013-10-21",
+      "RR36",
+      37.9
+     ]
+    ]
+   ]
+  },
+  "XE": {
+   "common_mode_mean_corr": 0.197,
+   "common_mode_p": 0.001996007984031936,
+   "phase_sign": [
+    21,
+    21,
+    9.5367431640625e-07
+   ],
+   "phase_vs_sediment": [
+    -0.2311688311688312,
+    0.313347333132429,
+    21
+   ],
+   "synchronous_steps": []
+  }
+ },
+ "epoch_mixing": {
+  "RR28": {
+   "steps": [
+    [
+     "2013-09-16",
+     7.5,
+     10.0
+    ]
+   ],
+   "published_epoch_end": null,
+   "full_period_shift_pct": 0.98,
+   "used_period_shift_pct": 0.98,
+   "windows_after_first_step_in_used_period": 350
+  },
+  "RR29": {
+   "steps": [
+    [
+     "2013-09-10",
+     5.94,
+     10.0
+    ]
+   ],
+   "published_epoch_end": null,
+   "full_period_shift_pct": 0.87,
+   "used_period_shift_pct": 0.87,
+   "windows_after_first_step_in_used_period": 604
+  },
+  "RR34": {
+   "steps": [],
+   "published_epoch_end": null,
+   "full_period_shift_pct": 0.0,
+   "used_period_shift_pct": 0.0,
+   "windows_after_first_step_in_used_period": 0
+  },
+  "RR36": {
+   "steps": [
+    [
+     "2013-02-24",
+     -1.43,
+     6.2
+    ],
+    [
+     "2013-08-05",
+     7.11,
+     10.0
+    ],
+    [
+     "2013-10-09",
+     3.09,
+     5.2
+    ],
+    [
+     "2013-10-21",
+     37.89,
+     10.0
+    ],
+    [
+     "2013-11-03",
+     8.91,
+     5.4
+    ]
+   ],
+   "published_epoch_end": "2013-10-01",
+   "full_period_shift_pct": 2.62,
+   "used_period_shift_pct": 0.25,
+   "windows_after_first_step_in_used_period": 2926
+  },
+  "RR38": {
+   "steps": [],
+   "published_epoch_end": "2013-10-01",
+   "full_period_shift_pct": 0.0,
+   "used_period_shift_pct": 0.0,
+   "windows_after_first_step_in_used_period": 0
+  },
+  "RR40": {
+   "steps": [
+    [
+     "2013-09-16",
+     10.27,
+     10.0
+    ]
+   ],
+   "published_epoch_end": "2013-10-01",
+   "full_period_shift_pct": 1.37,
+   "used_period_shift_pct": 0.39,
+   "windows_after_first_step_in_used_period": 95
+  },
+  "RR50": {
+   "steps": [
+    [
+     "2013-06-06",
+     8.07,
+     10.0
+    ],
+    [
+     "2013-07-30",
+     58.16,
+     10.0
+    ]
+   ],
+   "published_epoch_end": "2013-08-01",
+   "full_period_shift_pct": 24.05,
+   "used_period_shift_pct": 2.59,
+   "windows_after_first_step_in_used_period": 466
+  },
+  "RR52": {
+   "steps": [
+    [
+     "2013-09-18",
+     6.43,
+     8.9
+    ]
+   ],
+   "published_epoch_end": null,
+   "full_period_shift_pct": 0.6,
+   "used_period_shift_pct": 0.6,
+   "windows_after_first_step_in_used_period": 175
+  }
+ },
+ "water_column": {
+  "RR28": {
+   "depth_m": 4550.0,
+   "column_mean_density": 1038.2,
+   "gain_change_pct_c1490": 1.33,
+   "gain_change_pct_c1500": 0.99,
+   "gain_change_pct_c1510": 0.66
+  },
+  "RR29": {
+   "depth_m": 4829.0,
+   "column_mean_density": 1038.8,
+   "gain_change_pct_c1490": 1.45,
+   "gain_change_pct_c1500": 1.05,
+   "gain_change_pct_c1510": 0.66
+  },
+  "RR34": {
+   "depth_m": 4265.0,
+   "column_mean_density": 1037.5,
+   "gain_change_pct_c1490": 1.22,
+   "gain_change_pct_c1500": 0.93,
+   "gain_change_pct_c1510": 0.64
+  },
+  "RR36": {
+   "depth_m": 3560.0,
+   "column_mean_density": 1035.9,
+   "gain_change_pct_c1490": 0.96,
+   "gain_change_pct_c1500": 0.77,
+   "gain_change_pct_c1510": 0.59
+  },
+  "RR38": {
+   "depth_m": 4560.0,
+   "column_mean_density": 1038.2,
+   "gain_change_pct_c1490": 1.34,
+   "gain_change_pct_c1500": 0.99,
+   "gain_change_pct_c1510": 0.66
+  },
+  "RR40": {
+   "depth_m": 4780.0,
+   "column_mean_density": 1038.7,
+   "gain_change_pct_c1490": 1.43,
+   "gain_change_pct_c1500": 1.04,
+   "gain_change_pct_c1510": 0.66
+  },
+  "RR50": {
+   "depth_m": 4118.0,
+   "column_mean_density": 1037.2,
+   "gain_change_pct_c1490": 1.16,
+   "gain_change_pct_c1500": 0.89,
+   "gain_change_pct_c1510": 0.63
+  },
+  "RR52": {
+   "depth_m": 2918.0,
+   "column_mean_density": 1034.5,
+   "gain_change_pct_c1490": 0.75,
+   "gain_change_pct_c1500": 0.63,
+   "gain_change_pct_c1510": 0.51
+  },
+  "CC01": {
+   "depth_m": 4768.0,
+   "column_mean_density": 1038.7,
+   "gain_change_pct_c1490": 1.43,
+   "gain_change_pct_c1500": 1.04,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC03": {
+   "depth_m": 4739.0,
+   "column_mean_density": 1038.6,
+   "gain_change_pct_c1490": 1.41,
+   "gain_change_pct_c1500": 1.03,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC04": {
+   "depth_m": 4615.0,
+   "column_mean_density": 1038.3,
+   "gain_change_pct_c1490": 1.36,
+   "gain_change_pct_c1500": 1.0,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC05": {
+   "depth_m": 4798.0,
+   "column_mean_density": 1038.7,
+   "gain_change_pct_c1490": 1.44,
+   "gain_change_pct_c1500": 1.04,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC06": {
+   "depth_m": 4824.0,
+   "column_mean_density": 1038.8,
+   "gain_change_pct_c1490": 1.45,
+   "gain_change_pct_c1500": 1.05,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC07": {
+   "depth_m": 4628.0,
+   "column_mean_density": 1038.4,
+   "gain_change_pct_c1490": 1.36,
+   "gain_change_pct_c1500": 1.01,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC08": {
+   "depth_m": 4745.0,
+   "column_mean_density": 1038.6,
+   "gain_change_pct_c1490": 1.42,
+   "gain_change_pct_c1500": 1.03,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC09": {
+   "depth_m": 4615.0,
+   "column_mean_density": 1038.3,
+   "gain_change_pct_c1490": 1.36,
+   "gain_change_pct_c1500": 1.0,
+   "gain_change_pct_c1510": 0.66
+  },
+  "CC11": {
+   "depth_m": 4636.0,
+   "column_mean_density": 1038.4,
+   "gain_change_pct_c1490": 1.37,
+   "gain_change_pct_c1500": 1.01,
+   "gain_change_pct_c1510": 0.66
+  },
+  "EC01": {
+   "depth_m": 4576.0,
+   "column_mean_density": 1038.2,
+   "gain_change_pct_c1490": 1.34,
+   "gain_change_pct_c1500": 1.0,
+   "gain_change_pct_c1510": 0.66
+  },
+  "EC03": {
+   "depth_m": 4742.3,
+   "column_mean_density": 1038.6,
+   "gain_change_pct_c1490": 1.41,
+   "gain_change_pct_c1500": 1.03,
+   "gain_change_pct_c1510": 0.66
+  },
+  "EC04": {
+   "depth_m": 4778.5,
+   "column_mean_density": 1038.7,
+   "gain_change_pct_c1490": 1.43,
+   "gain_change_pct_c1500": 1.04,
+   "gain_change_pct_c1510": 0.66
+  },
+  "EC05": {
+   "depth_m": 4587.0,
+   "column_mean_density": 1038.3,
+   "gain_change_pct_c1490": 1.35,
+   "gain_change_pct_c1500": 1.0,
+   "gain_change_pct_c1510": 0.66
+  },
+  "EE01": {
+   "depth_m": 4645.2,
+   "column_mean_density": 1038.4,
+   "gain_change_pct_c1490": 1.37,
+   "gain_change_pct_c1500": 1.01,
+   "gain_change_pct_c1510": 0.66
+  },
+  "EE04": {
+   "depth_m": 4683.0,
+   "column_mean_density": 1038.5,
+   "gain_change_pct_c1490": 1.39,
+   "gain_change_pct_c1500": 1.02,
+   "gain_change_pct_c1510": 0.66
+  },
+  "WC01": {
+   "depth_m": 4483.2,
+   "column_mean_density": 1038.0,
+   "gain_change_pct_c1490": 1.3,
+   "gain_change_pct_c1500": 0.97,
+   "gain_change_pct_c1510": 0.65
+  },
+  "WC02": {
+   "depth_m": 4618.6,
+   "column_mean_density": 1038.3,
+   "gain_change_pct_c1490": 1.36,
+   "gain_change_pct_c1500": 1.0,
+   "gain_change_pct_c1510": 0.66
+  },
+  "WC03": {
+   "depth_m": 4483.0,
+   "column_mean_density": 1038.0,
+   "gain_change_pct_c1490": 1.3,
+   "gain_change_pct_c1500": 0.97,
+   "gain_change_pct_c1510": 0.65
+  },
+  "WC04": {
+   "depth_m": 4534.0,
+   "column_mean_density": 1038.1,
+   "gain_change_pct_c1490": 1.33,
+   "gain_change_pct_c1500": 0.99,
+   "gain_change_pct_c1510": 0.66
+  },
+  "WC05": {
+   "depth_m": 4478.0,
+   "column_mean_density": 1038.0,
+   "gain_change_pct_c1490": 1.3,
+   "gain_change_pct_c1500": 0.97,
+   "gain_change_pct_c1510": 0.65
+  },
+  "WW01": {
+   "depth_m": 4534.3,
+   "column_mean_density": 1038.1,
+   "gain_change_pct_c1490": 1.33,
+   "gain_change_pct_c1500": 0.99,
+   "gain_change_pct_c1510": 0.66
+  },
+  "WW03": {
+   "depth_m": 4386.0,
+   "column_mean_density": 1037.8,
+   "gain_change_pct_c1490": 1.26,
+   "gain_change_pct_c1500": 0.95,
+   "gain_change_pct_c1510": 0.65
+  },
+  "WW04": {
+   "depth_m": 4490.7,
+   "column_mean_density": 1038.0,
+   "gain_change_pct_c1490": 1.31,
+   "gain_change_pct_c1500": 0.98,
+   "gain_change_pct_c1510": 0.65
+  }
+ },
+ "selection_bias_mc": [
+  {
+   "coherence": 0.8,
+   "seastate_sigma": 0.0,
+   "acceptance": 0.152,
+   "inclusive_bias_pct": 7.94,
+   "inclusive_sd": 0.13,
+   "exclusive_bias_pct": 0.66,
+   "exclusive_sd": 0.65
+  },
+  {
+   "coherence": 0.8,
+   "seastate_sigma": 0.5,
+   "acceptance": 0.319,
+   "inclusive_bias_pct": 0.81,
+   "inclusive_sd": 0.23,
+   "exclusive_bias_pct": -0.12,
+   "exclusive_sd": 0.22
+  },
+  {
+   "coherence": 0.8,
+   "seastate_sigma": 1.0,
+   "acceptance": 0.4,
+   "inclusive_bias_pct": 0.03,
+   "inclusive_sd": 0.11,
+   "exclusive_bias_pct": -0.05,
+   "exclusive_sd": 0.11
+  },
+  {
+   "coherence": 0.85,
+   "seastate_sigma": 0.0,
+   "acceptance": 0.4,
+   "inclusive_bias_pct": 3.85,
+   "inclusive_sd": 0.24,
+   "exclusive_bias_pct": 0.28,
+   "exclusive_sd": 0.34
+  },
+  {
+   "coherence": 0.85,
+   "seastate_sigma": 0.5,
+   "acceptance": 0.461,
+   "inclusive_bias_pct": 0.54,
+   "inclusive_sd": 0.21,
+   "exclusive_bias_pct": -0.05,
+   "exclusive_sd": 0.19
+  },
+  {
+   "coherence": 0.85,
+   "seastate_sigma": 1.0,
+   "acceptance": 0.474,
+   "inclusive_bias_pct": 0.02,
+   "inclusive_sd": 0.08,
+   "exclusive_bias_pct": -0.05,
+   "exclusive_sd": 0.09
+  },
+  {
+   "coherence": 0.9,
+   "seastate_sigma": 0.0,
+   "acceptance": 0.798,
+   "inclusive_bias_pct": 1.07,
+   "inclusive_sd": 0.16,
+   "exclusive_bias_pct": 0.13,
+   "exclusive_sd": 0.14
+  },
+  {
+   "coherence": 0.9,
+   "seastate_sigma": 0.5,
+   "acceptance": 0.632,
+   "inclusive_bias_pct": 0.32,
+   "inclusive_sd": 0.12,
+   "exclusive_bias_pct": 0.02,
+   "exclusive_sd": 0.16
+  },
+  {
+   "coherence": 0.9,
+   "seastate_sigma": 1.0,
+   "acceptance": 0.564,
+   "inclusive_bias_pct": 0.01,
+   "inclusive_sd": 0.06,
+   "exclusive_bias_pct": -0.02,
+   "exclusive_sd": 0.06
+  },
+  {
+   "coherence": 0.95,
+   "seastate_sigma": 0.0,
+   "acceptance": 0.996,
+   "inclusive_bias_pct": 0.1,
+   "inclusive_sd": 0.07,
+   "exclusive_bias_pct": 0.09,
+   "exclusive_sd": 0.08
+  },
+  {
+   "coherence": 0.95,
+   "seastate_sigma": 0.5,
+   "acceptance": 0.852,
+   "inclusive_bias_pct": 0.09,
+   "inclusive_sd": 0.09,
+   "exclusive_bias_pct": 0.01,
+   "exclusive_sd": 0.09
+  },
+  {
+   "coherence": 0.95,
+   "seastate_sigma": 1.0,
+   "acceptance": 0.708,
+   "inclusive_bias_pct": -0.0,
+   "inclusive_sd": 0.04,
+   "exclusive_bias_pct": -0.01,
+   "exclusive_sd": 0.04
+  }
+ ],
+ "station_selection_bias": {
+  "RR28": {
+   "acceptance": 0.234,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.754,
+    "bias_pct": 1.58
+   },
+   "sigma_obs": {
+    "sigma": 0.29,
+    "coherence": 0.789,
+    "bias_pct": 2.75
+   }
+  },
+  "RR29": {
+   "acceptance": 0.297,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.785,
+    "bias_pct": 1.13
+   },
+   "sigma_obs": {
+    "sigma": 0.3,
+    "coherence": 0.81,
+    "bias_pct": 2.02
+   }
+  },
+  "RR34": {
+   "acceptance": 0.189,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.719,
+    "bias_pct": 1.87
+   },
+   "sigma_obs": {
+    "sigma": 0.29,
+    "coherence": 0.772,
+    "bias_pct": 3.63
+   }
+  },
+  "RR36": {
+   "acceptance": 0.389,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.826,
+    "bias_pct": 0.78
+   },
+   "sigma_obs": {
+    "sigma": 0.27,
+    "coherence": 0.841,
+    "bias_pct": 1.63
+   }
+  },
+  "RR38": {
+   "acceptance": 0.168,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.708,
+    "bias_pct": 1.9
+   },
+   "sigma_obs": {
+    "sigma": 0.28,
+    "coherence": 0.764,
+    "bias_pct": 4.1
+   }
+  },
+  "RR40": {
+   "acceptance": 0.216,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.743,
+    "bias_pct": 1.64
+   },
+   "sigma_obs": {
+    "sigma": 0.28,
+    "coherence": 0.785,
+    "bias_pct": 3.31
+   }
+  },
+  "RR50": {
+   "acceptance": 0.217,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.743,
+    "bias_pct": 1.64
+   },
+   "sigma_obs": {
+    "sigma": 0.28,
+    "coherence": 0.783,
+    "bias_pct": 3.36
+   }
+  },
+  "RR52": {
+   "acceptance": 0.27,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.772,
+    "bias_pct": 1.4
+   },
+   "sigma_obs": {
+    "sigma": 0.29,
+    "coherence": 0.803,
+    "bias_pct": 2.37
+   }
+  },
+  "CC01": {
+   "acceptance": 0.87,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.953,
+    "bias_pct": 0.07
+   }
+  },
+  "CC03": {
+   "acceptance": 0.477,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.859,
+    "bias_pct": 0.53
+   }
+  },
+  "CC04": {
+   "acceptance": 0.836,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.946,
+    "bias_pct": 0.09
+   }
+  },
+  "CC05": {
+   "acceptance": 0.827,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.944,
+    "bias_pct": 0.1
+   }
+  },
+  "CC06": {
+   "acceptance": 0.854,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.95,
+    "bias_pct": 0.08
+   }
+  },
+  "CC07": {
+   "acceptance": 0.616,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.897,
+    "bias_pct": 0.31
+   }
+  },
+  "CC08": {
+   "acceptance": 0.505,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.868,
+    "bias_pct": 0.51
+   }
+  },
+  "CC09": {
+   "acceptance": 0.151,
+   "gate": 0.8,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.501,
+    "bias_pct": 5.25
+   }
+  },
+  "CC11": {
+   "acceptance": 0.902,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.961,
+    "bias_pct": 0.04
+   }
+  },
+  "EC01": {
+   "acceptance": 0.476,
+   "gate": 0.8,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.716,
+    "bias_pct": 1.35
+   }
+  },
+  "EC03": {
+   "acceptance": 0.535,
+   "gate": 0.8,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.748,
+    "bias_pct": 1.12
+   }
+  },
+  "EC04": {
+   "acceptance": 0.001,
+   "gate": 0.8,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.501,
+    "bias_pct": 5.25
+   }
+  },
+  "EC05": {
+   "acceptance": 0.752,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.926,
+    "bias_pct": 0.15
+   }
+  },
+  "EE01": {
+   "acceptance": 0.517,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.87,
+    "bias_pct": 0.51
+   }
+  },
+  "EE04": {
+   "acceptance": 0.826,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.944,
+    "bias_pct": 0.1
+   }
+  },
+  "WC01": {
+   "acceptance": 0.001,
+   "gate": 0.8,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.501,
+    "bias_pct": 5.25
+   }
+  },
+  "WC02": {
+   "acceptance": 0.641,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.903,
+    "bias_pct": 0.25
+   }
+  },
+  "WC03": {
+   "acceptance": 0.773,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.93,
+    "bias_pct": 0.13
+   }
+  },
+  "WC04": {
+   "acceptance": 0.715,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.919,
+    "bias_pct": 0.19
+   }
+  },
+  "WC05": {
+   "acceptance": 0.618,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.897,
+    "bias_pct": 0.31
+   }
+  },
+  "WW01": {
+   "acceptance": 0.348,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.808,
+    "bias_pct": 0.87
+   }
+  },
+  "WW03": {
+   "acceptance": 0.506,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.868,
+    "bias_pct": 0.51
+   }
+  },
+  "WW04": {
+   "acceptance": 0.634,
+   "gate": 0.9,
+   "sigma0.5": {
+    "sigma": 0.5,
+    "coherence": 0.901,
+    "bias_pct": 0.26
+   }
+  }
+ },
+ "synthetic": {
+  "true_azimuth": 70.0,
+  "median_azimuth": 72.5,
+  "step_found": [
+   [
+    "2013-01-30",
+    8.1
+   ]
+  ]
+ },
+ "n_anomalies": 120
+}

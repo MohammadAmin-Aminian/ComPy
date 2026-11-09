@@ -6,6 +6,10 @@ Processing chain, one module per step (all SI units):
 ``compy.cleaning``       transient and periodic-glitch removal
 ``compy.preprocessing``  tilt correction and coherent-noise removal
 ``compy.compliance``     spectra, window selection, stacked compliance
+``compy.timefreq``       window spectra, coherograms, tilt direction (arrays)
+``compy.anomaly``        anomaly and correlation detection, ranked tables
+``compy.results``        archived stage C/E products of processed stations
+``compy.noise_models``   Peterson NLNM/NHNM and Webb pressure references
 ``compy.inversion``      Vs inversion (DRAM, Metropolis, Occam), forward model
 ``compy.diagnostics``    convergence diagnostics and reproducible run records
 ``compy.plotting``       figures
@@ -22,14 +26,18 @@ from compy._legacy import LEGACY
 __version__ = "2.8.0"
 
 _SUBMODULES = {
+    "anomaly",
     "cleaning",
     "compliance",
     "diagnostics",
     "inversion",
+    "noise_models",
     "numerics",
     "plotting",
     "preprocessing",
+    "results",
     "streams",
+    "timefreq",
 }
 
 # Public shortcuts: name -> "module:name". Imported lazily on first access.
@@ -49,6 +57,7 @@ _PUBLIC = {
     # compliance
     "estimate_compliance": "compy.compliance:estimate_compliance",
     "stacked_compliance": "compy.compliance:stacked_compliance",
+    "stacked_compliance_from_spectra": "compy.compliance:stacked_compliance_from_spectra",
     "gravity_corrected_compliance": "compy.compliance:gravity_corrected_compliance",
     "gravitational_attraction": "compy.compliance:gravitational_attraction",
     "calculate_compliance": "compy.compliance:calculate_compliance",
