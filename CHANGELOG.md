@@ -52,6 +52,24 @@ response, score or class changes.
 - `pressure/scripts/pressure_audit_2026_11.py`, with a copy of the BRUIT-FM v1.2.0 master
   table (local paths removed).
 
+### Whole-archive audit (branch `compy3-audit-data`)
+
+[docs/audit_2026-11-data/REPORT.md](docs/audit_2026-11-data/REPORT.md): the tests of the
+two audits above, run on the whole-archive data (287 inverted stations, 17 networks).
+**No default changes:** every archived stage C result (657 files) is reproduced
+bit-for-bit through `stacked_compliance_from_spectra`.
+
+- `compy.response_check` (NumPy only, tested):
+  - fits the pressure-response corner factor to the residual Z/P phase;
+  - predicts the tidal amplitude ratio and the compliance bias it implies;
+  - fits tides in hourly counts, with gaps and a spline drift;
+  - derives the pressure sign from the compliance phase.
+- `docs/audit_2026-11-data/scripts/` (s01-s07): stage C restack (inclusive and exclusive
+  gates), phase vs instrument metadata, DPG tide test, which sensor stepped, anomaly scan
+  with stage D cross-checks, tilt vs tides, figures.
+- `examples/compy3_waveform_diagnostics.py`: the docstring says to read tilt from stage A
+  data (on cleaned data the azimuth splits into two bands).
+
 ### Fixed
 
 - `stacked_compliance` no longer mixes windows with different frequency axes silently,
