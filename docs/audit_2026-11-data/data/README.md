@@ -17,3 +17,18 @@ the script that made it. Stations are `NET.STA`; times are UTC; phases in degree
 Inputs: the whole-archive run (`00_inventory`, `01_preprocessed/*/counts`, `02_cleaned`,
 `03_tilt`, `04_ppsd`, `06_compliance*`, `12_inversion_all_stations`) and the EOT20 tide
 model (Hart-Davis et al. 2021, doi:10.17882/79489) from the pressure-atlas cache.
+
+## Research part (RESEARCH.md)
+
+| File | Script | Content |
+|---|---|---|
+| `monthly_tide.csv` | `r01_monthly_tide.py` | M2, S2, K1 amplitudes in the pressure counts, 30-day windows every 15 days |
+| `tide_at_steps.csv` | `r01_monthly_tide.py` | M2 change across every \|Z/P\| step, with a verdict (P / not P / unclear) |
+| `tide_phase_monthly.csv` | RESEARCH.md §1 | Monthly M2 vs compliance-band phase and \|Z/P\| per station |
+| `coherence_stations.csv`, `coherence_episodes.csv`, `coherence_hole.csv` | `r02_coherence_search.py` | Coherence per band per station; network-synchronous episodes; minimum coherence just above f_c |
+| `earthquake_epochs.csv` | `r03_earthquake_epochs.py` | Tilt and \|Z/P\| changes around earthquakes, with z-scores against random times |
+| `tide_constituents.csv` | `r04_tide_constituents.py` | O1, K1, M2, S2 ratios after deconvolution and the slope n of R(f) |
+| `response_bracket.csv` | `r05_response_bracket.py` | Leak-corner factor from the tide vs from the phase, predicted phase, compliance bias |
+| `dpg_leak_factors.csv` | RESEARCH.md §6 (D2) | Recommended leak-corner factor per DPG (tide where clear, else phase) |
+| `yv_corrected_inversion.csv` | `r06_corrected_inversion.py` | YV stage E with the response correction vs the published run |
+| `poor_fits.csv` | `r08_poor_fits.py` | 7D.J35A and J44A: band capped at 0.75 f_c, with and without the correction |
