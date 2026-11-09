@@ -323,7 +323,12 @@ def fig_which_sensor():
             sm = pd.Series(x[ok] - np.median(x[ok]), index=pd.DatetimeIndex(t[ok]))
             sm = sm.rolling("7D", center=True, min_periods=5).median()
             ax.plot(sm.index, sm.values, color=C[j], lw=1.3, label=lab)
-        ax.axvline(datetime.fromisoformat(day).replace(tzinfo=timezone.utc), color=dg.INK, lw=0.8, ls="--")
+        ax.axvline(
+            datetime.fromisoformat(day).replace(tzinfo=timezone.utc),
+            color=dg.INK,
+            lw=0.8,
+            ls="--",
+        )
         ax.set_ylabel(f"{sta}\nre network [dB]")
         ax.set_ylim(-8, 10)
         style(ax)
