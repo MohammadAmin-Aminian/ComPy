@@ -1,6 +1,29 @@
 # Changelog
 
-## Unreleased (branch `compy3-audit`)
+## 2.9.0 — 2026-11-09
+
+Merges PRs #21 (ComPy 3 audit), #22 (pressure-gauge audit) and #23 (whole-archive audit and
+research). **Default results are unchanged**; the only default behaviour change is a new
+stage C output file (`<STA>_window_levels.npy`).
+
+### Research on the whole-archive results (PR #23, second part)
+
+[docs/audit_2026-11-data/RESEARCH.md](docs/audit_2026-11-data/RESEARCH.md): the tide as a
+pressure-only reference, the DPG leak corner from the tide, the search for unusual
+coherence and events, stress tests, and the decision record.
+
+- `pipeline/c_compliance.py` saves `<STA>_window_levels.npy` for the accepted windows
+  (`SAVE_WINDOW_LEVELS`, default on). This adds a file only; all numbers are unchanged.
+- `pipeline/d_calibrate.py`: opt-in `PRESSURE_SIGN` (`-1`, `+1` or `"phase"`, from the
+  stage C Z/P phase). Default unchanged.
+- `compy.response_check.correct_compliance` and `scale_leak_poles`: apply a fitted
+  pressure-response correction, to the compliance or to a StationXML channel.
+- Scripts `r01–r08` and the per-station leak-factor table
+  `docs/audit_2026-11-data/data/dpg_leak_factors.csv`.
+- **Fixed:** the K1 tidal ratio of `s03_dpg_tide.py` used the response at the M2
+  frequency.
+
+### ComPy 3 audit (PR #21)
 
 Audit for ComPy 3: [docs/audit_2026-11/REPORT.md](docs/audit_2026-11/REPORT.md).
 **Published results are unchanged:** the default estimator is bit-identical to 2.8.0, and

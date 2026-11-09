@@ -23,7 +23,7 @@ Names from ComPy 2.x (``compy.Calculate_Compliance``, ``inv_compy``,
 from compy._deprecation import legacy_getattr
 from compy._legacy import LEGACY
 
-__version__ = "2.8.0"
+__version__ = "2.9.0"
 
 _SUBMODULES = {
     "anomaly",
