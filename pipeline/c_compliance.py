@@ -34,6 +34,7 @@ sys.path.insert(0, str(COMPY))
 from compy.compliance import (  # noqa: E402
     SelectionCriteria,
     coherent_band,
+    spectra,
     stacked_compliance,
 )
 from compy.numerics import GRAVITY  # noqa: E402
@@ -51,6 +52,13 @@ PAPER_TABLE1 = {}  # published gain and band per station, if any
 #: the default) or "exclusive" (per-bin gate without the selection bias; see
 #: docs/audit_2026-11/REPORT.md). Set COMPLIANCE_GATE in the run configuration.
 GATE = getattr(config, "COMPLIANCE_GATE", "inclusive")
+#: Save ``<STA>_window_levels.npy`` (per accepted window: time, log10 median
+#: |S_pz|/S_pp, pressure dB, acceleration dB in the band), which
+#: ``compy.results`` loads and ``compy.anomaly.scan_levels`` needs for steps,
+#: tides and regimes. A new file only; no result changes.
+SAVE_WINDOW_LEVELS = getattr(config, "SAVE_WINDOW_LEVELS", True)
+#: Gain label whose levels are saved, in this order of preference.
+LEVEL_LABELS = ("compy", "bruitfm", "nominal")
 
 
 def gains_for(station):
@@ -153,6 +161,29 @@ def run_gain(windows, depth, gain, fc):
     return None, None, attempts
 
 
+def window_levels(windows, result, gain):
+    """Per-window levels of the accepted windows, in ``result.band``.
+
+    Returns:
+        ndarray: Rows (POSIX start time, log10 median |S_pz|/S_pp,
+        pressure PSD dB re 1 Pa^2/Hz, acceleration PSD dB re 1 (m/s^2)^2/Hz),
+        the format of ``compy.results.StationProducts.window_levels``.
+    """
+    accepted = {float(t) for t in result.window_starts}
+    rows = []
+    for w in windows:
+        t = float(w[0].stats.starttime)
+        if t not in accepted:
+            continue
+        f, zz, pp, zp, _ = spectra(w, NSEG)
+        sel = (f >= result.band[0]) & (f <= result.band[1])
+        pp, zp = pp * gain**2, zp * gain
+        rows.append((t, float(np.log10(np.median(np.abs(zp[sel]) / pp[sel]))),
+                     float(10 * np.log10(np.mean(pp[sel]))),
+                     float(10 * np.log10(np.mean(zz[sel] * (2 * np.pi * f[sel]) ** 4)))))  # fmt: skip
+    return np.array(rows, float).reshape(-1, 4)
+
+
 def monthly(windows, result, depth, gain):
     """Monthly compliance stacks of the accepted windows."""
     months = {}
@@ -245,6 +276,12 @@ def main():
             for i, f in enumerate(result.freqs):
                 fh.write(f"{f:.6f},{result.compliance[i]:.6e},{result.uncertainty[i]:.6e},"
                          f"{result.coherence[i]:.4f},{result.phase_deg[i]:.2f},{int(in_band[i])}\n")  # fmt: skip
+        level_label = next((x for x in LEVEL_LABELS if x in gains), None)
+        if SAVE_WINDOW_LEVELS and label == level_label:
+            np.save(
+                out / f"{station}_window_levels.npy",
+                window_levels(windows, result, gain),
+            )
         print(f"{station} {label}: g={gain:.4f} thr={threshold} band={result.band} "
               f"n={result.n_windows} rej={result.rejected}", flush=True)  # fmt: skip
     (out / f"{station}_summary.json").write_text(
