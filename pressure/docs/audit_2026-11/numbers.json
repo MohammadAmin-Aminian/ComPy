@@ -1,0 +1,429 @@
+{
+ "n_channels": 846,
+ "n_with_gain": {
+  "rayleigh": 54,
+  "microseism": 167,
+  "local_p": 54,
+  "peer_offset": 816
+ },
+ "n_anomalies": 206,
+ "kinds": {
+  "gain_outlier": 14,
+  "infragravity_basin": 1,
+  "infragravity_outlier": 54,
+  "method_disagreement": 61,
+  "nearby_hidden": 18,
+  "network_gain_structure": 1,
+  "offset_invalid": 5,
+  "offset_outlier": 51,
+  "polarity": 1
+ },
+ "agreement": {
+  "rayleigh/microseism": {
+   "n": 43,
+   "median_db": 0.11,
+   "within_3db": 34,
+   "within_6db": 41
+  },
+  "rayleigh/local_p": {
+   "n": 6,
+   "median_db": 2.87,
+   "within_3db": 3,
+   "within_6db": 6
+  },
+  "microseism/local_p": {
+   "n": 16,
+   "median_db": 1.3,
+   "within_3db": 8,
+   "within_6db": 11
+  },
+  "rayleigh/peer_offset": {
+   "n": 54,
+   "median_db": 2.49,
+   "within_3db": 29,
+   "within_6db": 41
+  },
+  "microseism/peer_offset": {
+   "n": 159,
+   "median_db": 1.91,
+   "within_3db": 79,
+   "within_6db": 118
+  }
+ },
+ "gains_by_type": {
+  "rayleigh/DPG": {
+   "n": 31,
+   "median_g": 0.814,
+   "p10": 0.636,
+   "p90": 1.111
+  },
+  "rayleigh/Hydrophone": {
+   "n": 23,
+   "median_g": 1.263,
+   "p10": 1.078,
+   "p90": 2.202
+  },
+  "microseism/DPG": {
+   "n": 115,
+   "median_g": 0.97,
+   "p10": 0.692,
+   "p90": 3.69
+  },
+  "microseism/Hydrophone": {
+   "n": 44,
+   "median_g": 1.287,
+   "p10": 0.959,
+   "p90": 21192765675.19
+  },
+  "microseism/APG (absolute)": {
+   "n": 8,
+   "median_g": 0.484,
+   "p10": 0.269,
+   "p90": 1.101
+  },
+  "local_p/DPG": {
+   "n": 44,
+   "median_g": 0.946,
+   "p10": 0.726,
+   "p90": 12.81
+  },
+  "local_p/Hydrophone": {
+   "n": 8,
+   "median_g": 1.112,
+   "p10": 0.809,
+   "p90": 1.805
+  }
+ },
+ "depth": {
+  "rayleigh": {
+   "n": 54,
+   "across_rho": 0.14461872727473624,
+   "across_p": 0.2967830127129123,
+   "n_within": 48,
+   "within_rho": -0.11751295903586742,
+   "within_p": 0.4263491540024287,
+   "within_slope_db_per_km": -0.7580859811842323
+  },
+  "microseism": {
+   "n": 167,
+   "across_rho": -0.28410205737430233,
+   "across_p": 0.00019859339409148834,
+   "n_within": 159,
+   "within_rho": -0.00604255312810545,
+   "within_p": 0.9397427475755951,
+   "within_slope_db_per_km": -0.3159934999120243
+  }
+ },
+ "rolloff": {
+  "rayleigh": {
+   "n": 23,
+   "spearman": 0.3654939925441437,
+   "p": 0.08634282803084173,
+   "median_g": 1.2631622070218658,
+   "median_band_min_hz": 0.0015133255949980834
+  },
+  "microseism": {
+   "n": 37,
+   "spearman": 0.2101069145227923,
+   "p": 0.21197478229551045,
+   "median_g": 1.2275418794092072,
+   "median_band_min_hz": 0.0015133255949980834
+  }
+ },
+ "polarity": {
+  "Rayleigh sign": {
+   "7D": [
+    11,
+    0
+   ],
+   "7K": [
+    6,
+    0
+   ],
+   "8J": [
+    0,
+    18
+   ],
+   "YO": [
+    3,
+    0
+   ],
+   "YV": [
+    0,
+    13
+   ]
+  },
+  "local-P polarity": {
+   "1T": [
+    1,
+    4
+   ],
+   "7D": [
+    20,
+    12
+   ],
+   "8J": [
+    0,
+    3
+   ],
+   "YV": [
+    0,
+    3
+   ],
+   "Z4": [
+    4,
+    0
+   ],
+   "ZZ": [
+    6,
+    0
+   ]
+  }
+ },
+ "infragravity": {
+  "good/Pacific/DPG": {
+   "n": 180,
+   "median_db": 5.8,
+   "q25": 2.2,
+   "q75": 11.2
+  },
+  "good/Pacific/APG (absolute)": {
+   "n": 9,
+   "median_db": 4.9,
+   "q25": 4.0,
+   "q75": 7.2
+  },
+  "good/Pacific/all": {
+   "n": 189,
+   "median_db": 5.8,
+   "q25": 2.3,
+   "q75": 11.1
+  },
+  "good/Atlantic/DPG": {
+   "n": 28,
+   "median_db": -0.3,
+   "q25": -1.3,
+   "q75": 0.9
+  },
+  "good/Atlantic/Hydrophone": {
+   "n": 34,
+   "median_db": -2.5,
+   "q25": -3.7,
+   "q75": 1.4
+  },
+  "good/Atlantic/all": {
+   "n": 62,
+   "median_db": -1.2,
+   "q25": -3.1,
+   "q75": 1.1
+  },
+  "good/Indian/DPG": {
+   "n": 5,
+   "median_db": 5.7,
+   "q25": 3.9,
+   "q75": 7.6
+  },
+  "good/Indian/Hydrophone": {
+   "n": 28,
+   "median_db": -1.5,
+   "q25": -2.4,
+   "q75": 0.1
+  },
+  "good/Indian/all": {
+   "n": 33,
+   "median_db": -1.1,
+   "q25": -2.3,
+   "q75": 1.3
+  },
+  "good/Mediterranean/Hydrophone": {
+   "n": 11,
+   "median_db": -4.4,
+   "q25": -6.8,
+   "q75": -2.8
+  },
+  "good/Mediterranean/all": {
+   "n": 11,
+   "median_db": -4.4,
+   "q25": -6.8,
+   "q75": -2.8
+  },
+  "all/Pacific/DPG": {
+   "n": 287,
+   "median_db": 4.1,
+   "q25": -0.9,
+   "q75": 11.6
+  },
+  "all/Pacific/Hydrophone": {
+   "n": 36,
+   "median_db": -21.8,
+   "q25": -24.3,
+   "q75": -19.4
+  },
+  "all/Pacific/APG (absolute)": {
+   "n": 50,
+   "median_db": 6.0,
+   "q25": 3.9,
+   "q75": 7.2
+  },
+  "all/Pacific/all": {
+   "n": 373,
+   "median_db": 3.8,
+   "q25": -3.2,
+   "q75": 10.3
+  },
+  "all/Atlantic/DPG": {
+   "n": 48,
+   "median_db": 0.7,
+   "q25": -1.4,
+   "q75": 1.5
+  },
+  "all/Atlantic/Hydrophone": {
+   "n": 46,
+   "median_db": -3.5,
+   "q25": -5.1,
+   "q75": -1.3
+  },
+  "all/Atlantic/all": {
+   "n": 94,
+   "median_db": -1.3,
+   "q25": -3.9,
+   "q75": 1.2
+  },
+  "all/Indian/DPG": {
+   "n": 10,
+   "median_db": 7.5,
+   "q25": 4.3,
+   "q75": 7.8
+  },
+  "all/Indian/Hydrophone": {
+   "n": 33,
+   "median_db": -2.0,
+   "q25": -3.8,
+   "q75": -0.6
+  },
+  "all/Indian/all": {
+   "n": 43,
+   "median_db": -1.2,
+   "q25": -3.2,
+   "q75": 2.7
+  },
+  "all/Mediterranean/DPG": {
+   "n": 12,
+   "median_db": -38.8,
+   "q25": -43.1,
+   "q75": -2.5
+  },
+  "all/Mediterranean/Hydrophone": {
+   "n": 16,
+   "median_db": -4.8,
+   "q25": -7.8,
+   "q75": -2.8
+  },
+  "all/Mediterranean/all": {
+   "n": 28,
+   "median_db": -6.8,
+   "q25": -38.6,
+   "q75": -2.7
+  }
+ },
+ "water_layer": [
+  {
+   "depth_m": 1000,
+   "bins_kept": 17,
+   "bins": 17,
+   "max_x": 0.27,
+   "top3_weight_pct": 18.0,
+   "max_sens_sound_speed": 0.06,
+   "sound_speed_plus1_pct": 0.03,
+   "sound_speed_plus1_pct_log": 0.03,
+   "phase_velocity_minus5_pct": 0.02,
+   "phase_velocity_plus5_pct": -0.02,
+   "column_mean_density": 1030.1,
+   "density_pct": -0.2
+  },
+  {
+   "depth_m": 2000,
+   "bins_kept": 17,
+   "bins": 17,
+   "max_x": 0.54,
+   "top3_weight_pct": 19.0,
+   "max_sens_sound_speed": 0.27,
+   "sound_speed_plus1_pct": 0.14,
+   "sound_speed_plus1_pct_log": 0.13,
+   "phase_velocity_minus5_pct": 0.11,
+   "phase_velocity_plus5_pct": -0.09,
+   "column_mean_density": 1032.4,
+   "density_pct": -0.42
+  },
+  {
+   "depth_m": 3000,
+   "bins_kept": 17,
+   "bins": 17,
+   "max_x": 0.81,
+   "top3_weight_pct": 22.0,
+   "max_sens_sound_speed": 0.74,
+   "sound_speed_plus1_pct": 0.37,
+   "sound_speed_plus1_pct_log": 0.35,
+   "phase_velocity_minus5_pct": 0.29,
+   "phase_velocity_plus5_pct": -0.25,
+   "column_mean_density": 1034.6,
+   "density_pct": -0.64
+  },
+  {
+   "depth_m": 4000,
+   "bins_kept": 17,
+   "bins": 17,
+   "max_x": 1.08,
+   "top3_weight_pct": 27.0,
+   "max_sens_sound_speed": 1.9,
+   "sound_speed_plus1_pct": 0.92,
+   "sound_speed_plus1_pct_log": 0.77,
+   "phase_velocity_minus5_pct": 0.73,
+   "phase_velocity_plus5_pct": -0.63,
+   "column_mean_density": 1036.9,
+   "density_pct": -0.86
+  },
+  {
+   "depth_m": 4500,
+   "bins_kept": 17,
+   "bins": 17,
+   "max_x": 1.22,
+   "top3_weight_pct": 33.0,
+   "max_sens_sound_speed": 3.26,
+   "sound_speed_plus1_pct": 1.56,
+   "sound_speed_plus1_pct_log": 1.17,
+   "phase_velocity_minus5_pct": 1.23,
+   "phase_velocity_plus5_pct": -1.08,
+   "column_mean_density": 1038.1,
+   "density_pct": -0.97
+  },
+  {
+   "depth_m": 5000,
+   "bins_kept": 17,
+   "bins": 17,
+   "max_x": 1.36,
+   "top3_weight_pct": 44.0,
+   "max_sens_sound_speed": 6.44,
+   "sound_speed_plus1_pct": 3.12,
+   "sound_speed_plus1_pct_log": 1.87,
+   "phase_velocity_minus5_pct": 2.48,
+   "phase_velocity_plus5_pct": -2.23,
+   "column_mean_density": 1039.2,
+   "density_pct": -1.08
+  },
+  {
+   "depth_m": 5400,
+   "bins_kept": 16,
+   "bins": 17,
+   "max_x": 1.41,
+   "top3_weight_pct": 53.0,
+   "max_sens_sound_speed": 9.43,
+   "sound_speed_plus1_pct": 4.75,
+   "sound_speed_plus1_pct_log": 2.44,
+   "phase_velocity_minus5_pct": 3.78,
+   "phase_velocity_plus5_pct": -2.34,
+   "column_mean_density": 1040.1,
+   "density_pct": -1.16
+  }
+ ]
+}
