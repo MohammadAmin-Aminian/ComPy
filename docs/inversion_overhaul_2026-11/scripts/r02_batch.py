@@ -29,10 +29,24 @@ def one(sid, out, processes, tag, extra):
     if done.exists():
         return sid, "skipped", ""
     log.parent.mkdir(parents=True, exist_ok=True)
-    cmd = [sys.executable, str(HERE / "r01_run_station.py"), sid, str(out), "--processes",
-           str(processes), "--tag", tag, *extra]
-    env = dict(os.environ, OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1",
-               VECLIB_MAXIMUM_THREADS="1", MPLBACKEND="Agg")
+    cmd = [
+        sys.executable,
+        str(HERE / "r01_run_station.py"),
+        sid,
+        str(out),
+        "--processes",
+        str(processes),
+        "--tag",
+        tag,
+        *extra,
+    ]
+    env = dict(
+        os.environ,
+        OMP_NUM_THREADS="1",
+        OPENBLAS_NUM_THREADS="1",
+        VECLIB_MAXIMUM_THREADS="1",
+        MPLBACKEND="Agg",
+    )
     with open(log, "w") as fh:
         code = subprocess.call(cmd, stdout=fh, stderr=subprocess.STDOUT, env=env)
     lines = [ln for ln in log.read_text().splitlines() if ln.strip()]
@@ -56,19 +70,28 @@ def main():
     if args.stations:
         sids = args.stations
     else:
-        sids = [s for s, r in plan.items() if args.tier in (None, "all") or r["tier"] == args.tier]
+        sids = [
+            s
+            for s, r in plan.items()
+            if args.tier in (None, "all") or r["tier"] == args.tier
+        ]
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
     failed = []
     with ThreadPoolExecutor(args.parallel) as pool:
-        for sid, status, line in pool.map(lambda s: one(s, out, args.processes, args.tag, extra), sids):
+        for sid, status, line in pool.map(
+            lambda s: one(s, out, args.processes, args.tag, extra), sids
+        ):
             print(f"[{time.time() - t0:7.0f} s] {status:8s} {line or sid}", flush=True)
             if status == "failed":
                 failed.append((sid, line))
     with open(out / f"failed_{args.tag}.csv", "w", newline="") as fh:
         csv.writer(fh).writerows([("sid", "last_log_line"), *failed])
-    print(f"finished: {len(sids)} stations, {len(failed)} failed, {time.time() - t0:.0f} s", flush=True)
+    print(
+        f"finished: {len(sids)} stations, {len(failed)} failed, {time.time() - t0:.0f} s",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":

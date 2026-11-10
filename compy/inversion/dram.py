@@ -890,7 +890,9 @@ class _Target:
 
     def __init__(self, data, model, prior_only, gain_bounds=None, gain_sigma=None):
         self.data, self.model, self.prior_only = data, model, prior_only
-        self.gain_sigma = None if gain_sigma is None else positive(gain_sigma, "gain_sigma")
+        self.gain_sigma = (
+            None if gain_sigma is None else positive(gain_sigma, "gain_sigma")
+        )
         self.model_log_prior = getattr(model, "log_prior", None)
         self.forward = Forward(data.depth, data.freqs)
         self.n_model = len(model.names)

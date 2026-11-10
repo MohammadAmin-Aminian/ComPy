@@ -43,12 +43,22 @@ def gradient_truth(rng, moho_ref):
     moho = np.clip(rng.normal(moho_ref, 0.2 * moho_ref), 3000, 1.5 * moho_ref)
     v_bot = v3 + rng.uniform(0, 250)
     vm = rng.uniform(max(v_bot + 100, 4200), 4800)
-    edges = np.unique(np.concatenate([np.linspace(0, z2a, 16), np.linspace(z2a, z3, 16),
-                                      np.linspace(z3, moho, 28)]))
+    edges = np.unique(
+        np.concatenate(
+            [
+                np.linspace(0, z2a, 16),
+                np.linspace(z2a, z3, 16),
+                np.linspace(z3, moho, 28),
+            ]
+        )
+    )
     mid = 0.5 * (edges[:-1] + edges[1:])
     vs = np.interp(mid, [0, z2a, z3, moho], [v_top, v2, v3, v_bot])
-    ratio = np.interp(mid, [0, z2a, z3], [rng.uniform(1.9, 2.5), rng.uniform(1.8, 2.0),
-                                           rng.uniform(1.76, 1.9)])
+    ratio = np.interp(
+        mid,
+        [0, z2a, z3],
+        [rng.uniform(1.9, 2.5), rng.uniform(1.8, 2.0), rng.uniform(1.76, 1.9)],
+    )
     vp = ratio * vs
     rho = 1850.0 + 0.165 * vp  # Christensen & Shaw (1970), not the inversion's rule
     rows = [np.column_stack([np.diff(edges), rho, vp, vs])]
@@ -59,9 +69,16 @@ def gradient_truth(rng, moho_ref):
 
         svs = rng.uniform(0.7, 1.5) * dram.hamilton_vs(m)
         svp = dram.hamilton_vp(m) * rng.uniform(0.95, 1.05)
-        rows.insert(0, np.column_stack([np.diff(e), np.full(12, rng.uniform(1600, 2000)), svp, svs]))
+        rows.insert(
+            0,
+            np.column_stack(
+                [np.diff(e), np.full(12, rng.uniform(1600, 2000)), svp, svs]
+            ),
+        )
     rows.append(np.array([[0.0, 3300.0, 1.78 * vm, vm]]))
-    return np.vstack(rows), dict(sediment_thickness=float(h_sed), moho_depth=float(moho))
+    return np.vstack(rows), dict(
+        sediment_thickness=float(h_sed), moho_depth=float(moho)
+    )
 
 
 def vs_of(layers, z):
@@ -75,9 +92,13 @@ def replicate(job):
     from compy.inversion.errors import log_frequency_ramp
 
     t0 = time.time()
-    freqs, depth, cov_rel = (np.array(template[k]) for k in ("freqs", "depth", "cov_rel"))
+    freqs, depth, cov_rel = (
+        np.array(template[k]) for k in ("freqs", "depth", "cov_rel")
+    )
     depth = float(depth)
-    model = auto.SeafloorModel(np.array(template["reference"]), vs_sigma=template["vs_sigma"])
+    model = auto.SeafloorModel(
+        np.array(template["reference"]), vs_sigma=template["vs_sigma"]
+    )
     sigma = template["gain_sigma"]
     rng = np.random.default_rng([seed, i])
     forward = dram.Forward(depth, freqs)
@@ -100,26 +121,50 @@ def replicate(job):
     d = clean + np.linalg.cholesky(cov) @ rng.standard_normal(len(freqs))
     if tilt:
         d = d * (1 + tilt * log_frequency_ramp(freqs))
-    data = dram.ComplianceData(freqs, d, depth, cov_rel * np.outer(d, d), station=f"sbc{i}")
-    res = auto.invert(data, model, gain_sigma=sigma, seed=int(rng.integers(2**31)), processes=1,
-                      max_rounds=1, n_prior=1000, **SAMPLER)
+    data = dram.ComplianceData(
+        freqs, d, depth, cov_rel * np.outer(d, d), station=f"sbc{i}"
+    )
+    res = auto.invert(
+        data,
+        model,
+        gain_sigma=sigma,
+        seed=int(rng.integers(2**31)),
+        processes=1,
+        max_rounds=1,
+        n_prior=1000,
+        **SAMPLER,
+    )
     post = res.posterior
     flat = post.theta.reshape(-1, post.theta.shape[-1])
     sub = flat[np.linspace(0, len(flat) - 1, 400).astype(int)]
     s = post.summary()
-    out = dict(i=i, seconds=time.time() - t0, max_rhat=s["max_rhat"], min_ess=s["min_ess"],
-               chi2=s["chi2"]["median"], n_data=len(freqs), gain_true=float(g), extra=extra)
+    out = dict(
+        i=i,
+        seconds=time.time() - t0,
+        max_rhat=s["max_rhat"],
+        min_ess=s["min_ess"],
+        chi2=s["chi2"]["median"],
+        n_data=len(freqs),
+        gain_true=float(g),
+        extra=extra,
+    )
     vs_true = vs_of(layers, DEPTHS)
     vs_post = np.array([model.vs_at(t[: len(model.names)], DEPTHS) for t in sub])
-    vs_prior = np.array([model.vs_at(t[: len(model.names)], DEPTHS) for t in res.prior_theta[:400]])
+    vs_prior = np.array(
+        [model.vs_at(t[: len(model.names)], DEPTHS) for t in res.prior_theta[:400]]
+    )
     q = np.quantile(vs_post, [0.05, 0.25, 0.5, 0.75, 0.95], axis=0)
     w = np.log(np.quantile(vs_post, 0.84, 0) / np.quantile(vs_post, 0.16, 0))
     wp = np.log(np.quantile(vs_prior, 0.84, 0) / np.quantile(vs_prior, 0.16, 0))
-    out.update(vs_true=vs_true.tolist(), vs_median=q[2].tolist(),
-               vs_in50=((vs_true >= q[1]) & (vs_true <= q[3])).tolist(),
-               vs_in90=((vs_true >= q[0]) & (vs_true <= q[4])).tolist(),
-               vs_rank=(vs_post < vs_true).mean(0).tolist(), width_ratio=(w / wp).tolist(),
-               reach=float(res.reach(0.9)))
+    out.update(
+        vs_true=vs_true.tolist(),
+        vs_median=q[2].tolist(),
+        vs_in50=((vs_true >= q[1]) & (vs_true <= q[3])).tolist(),
+        vs_in90=((vs_true >= q[0]) & (vs_true <= q[4])).tolist(),
+        vs_rank=(vs_post < vs_true).mean(0).tolist(),
+        width_ratio=(w / wp).tolist(),
+        reach=float(res.reach(0.9)),
+    )
     if theta is not None:
         full = np.append(theta, g)
         out["rank"] = (sub < full).mean(0).tolist()
@@ -147,12 +192,18 @@ def main():
     from compy.inversion import auto
 
     data, column, info = archive.station_inputs(args.station)
-    template = dict(freqs=data.freqs.tolist(), depth=data.depth,
-                    cov_rel=(data.covariance / np.outer(data.eta, data.eta)).tolist(),
-                    reference=auto.reference_from_crust1(column).tolist(),
-                    vs_sigma=auto.model_from_crust1(column).vs_sigma,
-                    gain_sigma=auto.GAIN_SIGMA[info["gain_source"]])
-    jobs = [(i, template, args.truth, args.tilt, args.gain_error, args.seed) for i in range(args.n)]
+    template = dict(
+        freqs=data.freqs.tolist(),
+        depth=data.depth,
+        cov_rel=(data.covariance / np.outer(data.eta, data.eta)).tolist(),
+        reference=auto.reference_from_crust1(column).tolist(),
+        vs_sigma=auto.model_from_crust1(column).vs_sigma,
+        gain_sigma=auto.GAIN_SIGMA[info["gain_source"]],
+    )
+    jobs = [
+        (i, template, args.truth, args.tilt, args.gain_error, args.seed)
+        for i in range(args.n)
+    ]
     name = args.name or f"{args.station}_{args.truth}"
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -162,11 +213,18 @@ def main():
         for r in pool.imap_unordered(replicate, jobs):
             results.append(r)
             if len(results) % 20 == 0:
-                print(f"{name}: {len(results)}/{args.n} after {time.time() - t0:.0f} s", flush=True)
-                (out / f"{name}.json").write_text(json.dumps(dict(template=template, args=vars(args),
-                                                                    results=results)))
-    (out / f"{name}.json").write_text(json.dumps(dict(template=template, args=vars(args),
-                                                        results=results)))
+                print(
+                    f"{name}: {len(results)}/{args.n} after {time.time() - t0:.0f} s",
+                    flush=True,
+                )
+                (out / f"{name}.json").write_text(
+                    json.dumps(
+                        dict(template=template, args=vars(args), results=results)
+                    )
+                )
+    (out / f"{name}.json").write_text(
+        json.dumps(dict(template=template, args=vars(args), results=results))
+    )
     print(f"{name}: done in {time.time() - t0:.0f} s", flush=True)
 
 

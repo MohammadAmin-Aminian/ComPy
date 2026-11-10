@@ -102,11 +102,25 @@ def random_model(rng, sediment):
     if sediment:
         for _ in range(rng.integers(1, 4)):
             vs = rng.uniform(80, 900)
-            rows.append([rng.uniform(20, 500), rng.uniform(1500, 2100), rng.uniform(1500, 2400), vs])
+            rows.append(
+                [
+                    rng.uniform(20, 500),
+                    rng.uniform(1500, 2100),
+                    rng.uniform(1500, 2400),
+                    vs,
+                ]
+            )
     z = 0
     for _ in range(rng.integers(2, 7)):
         vs = rng.uniform(1200, 4200)
-        rows.append([rng.uniform(100, 3000), rng.uniform(2300, 3000), vs * rng.uniform(1.6, 2.6), vs])
+        rows.append(
+            [
+                rng.uniform(100, 3000),
+                rng.uniform(2300, 3000),
+                vs * rng.uniform(1.6, 2.6),
+                vs,
+            ]
+        )
     vs = rng.uniform(4000, 4700)
     rows.append([0, 3300, 1.8 * vs, vs])
     return np.array(rows)
@@ -127,10 +141,16 @@ def main(out):
         m = random_model(rng, sediment=i % 2 == 0)
         ref = np.abs(global_matrix_compliance(depth, freqs, m))
         sign_ok &= bool(np.all(global_matrix_compliance(depth, freqs[:1], m) > 0))
-        worst["dram"] = max(worst["dram"], float(np.max(np.abs(Forward(depth, freqs)(m) / ref - 1))))
-        worst["impedance"] = max(worst["impedance"],
-                                 float(np.max(np.abs(compliance_by_impedance(depth, freqs, m) / ref - 1))))
-    rec["random_models"] = dict(n=n_models, max_rel_diff=worst, reference_positive=sign_ok)
+        worst["dram"] = max(
+            worst["dram"], float(np.max(np.abs(Forward(depth, freqs)(m) / ref - 1)))
+        )
+        worst["impedance"] = max(
+            worst["impedance"],
+            float(np.max(np.abs(compliance_by_impedance(depth, freqs, m) / ref - 1))),
+        )
+    rec["random_models"] = dict(
+        n=n_models, max_rel_diff=worst, reference_positive=sign_ok
+    )
 
     # 2. quasi-static half-space
     depth, freqs = 4000.0, np.array([0.003, 0.006, 0.012])
@@ -153,12 +173,22 @@ def main(out):
         return np.array(rows + [[0, 2900, 6800, 3800]])
 
     ref = Forward(depth, freqs)(gradient(1024))
-    rec["gradient_convergence"] = {str(n): float(np.max(np.abs(Forward(depth, freqs)(gradient(n)) / ref - 1)))
-                                   for n in (2, 4, 8, 16, 32, 64, 128)}
+    rec["gradient_convergence"] = {
+        str(n): float(np.max(np.abs(Forward(depth, freqs)(gradient(n)) / ref - 1)))
+        for n in (2, 4, 8, 16, 32, 64, 128)
+    }
 
     # 4. same M = mu/(1-nu) profile, different Vp/Vs and density
-    base = np.array([[300, 2000, 1800, 400], [500, 2400, 4200, 2000], [1500, 2700, 5800, 3100],
-                     [4500, 2950, 6900, 3850], [0, 3300, 8000, 4500]], float)
+    base = np.array(
+        [
+            [300, 2000, 1800, 400],
+            [500, 2400, 4200, 2000],
+            [1500, 2700, 5800, 3100],
+            [4500, 2950, 6900, 3850],
+            [0, 3300, 8000, 4500],
+        ],
+        float,
+    )
 
     def big_m(m):
         mu = m[:, 1] * m[:, 3] ** 2
@@ -179,8 +209,11 @@ def main(out):
         for s in (0.9, 1.0, 1.1):
             alt = with_ratio(base, r, s)
             same_m[f"r{r}_rho{s}"] = dict(
-                max_eta_change=float(np.max(np.abs(Forward(depth, freqs)(alt) / eta0 - 1))),
-                vs_change_crust=float(alt[2, 3] / base[2, 3] - 1))
+                max_eta_change=float(
+                    np.max(np.abs(Forward(depth, freqs)(alt) / eta0 - 1))
+                ),
+                vs_change_crust=float(alt[2, 3] / base[2, 3] - 1),
+            )
     rec["same_M_different_vpvs_rho"] = same_m
     # and the converse: same Vs, different Vp/Vs
     conv = {}

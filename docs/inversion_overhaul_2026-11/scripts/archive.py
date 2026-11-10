@@ -46,7 +46,9 @@ def station_windows(net, sta, label, epoch_end=None):
                 fc=float(cache["fc"]))  # fmt: skip
 
 
-LEAK_TABLE = Path(__file__).resolve().parents[2] / "audit_2026-11-data/data/dpg_leak_factors.csv"
+LEAK_TABLE = (
+    Path(__file__).resolve().parents[2] / "audit_2026-11-data/data/dpg_leak_factors.csv"
+)
 PHASE_TABLE = ARCHIVE / "13_audit/phase/phase_metadata.csv"
 
 
@@ -69,19 +71,27 @@ def response_bias(sid, freqs):
     with open(PHASE_TABLE) as fh:
         phase = {r["sid"]: r for r in csv.DictReader(fh)}
     net, sta = sid.split(".")
-    inv = read_inventory(str(ARCHIVE / "00_inventory/stationxml" / f"{net}.xml")).select(station=sta)
+    inv = read_inventory(
+        str(ARCHIVE / "00_inventory/stationxml" / f"{net}.xml")
+    ).select(station=sta)
     chans = [c for n in inv for s in n for c in s if c.code == phase[sid]["p_channel"]]
     if not chans:
         return None, None
     k = float(leak[sid]["k_recommended"])
     bias = rc.compliance_bias(rc.paz_stages(chans[0]), np.asarray(freqs, float), k)
-    record = dict(k=k, source=leak[sid]["k_source"], channel=phase[sid]["p_channel"],
-                  bias_low_pct=float(bias[0]), bias_high_pct=float(bias[-1]))
+    record = dict(
+        k=k,
+        source=leak[sid]["k_source"],
+        channel=phase[sid]["p_channel"],
+        bias_low_pct=float(bias[0]),
+        bias_high_pct=float(bias[-1]),
+    )
     # Uncertainty of the correction: half the difference between the tide and the
     # phase estimate of the bias at the band bottom, where both exist.
     try:
-        record["tide_minus_phase_pct"] = (float(leak[sid]["bias_lo_tide_pct"])
-                                          - float(leak[sid]["bias_lo_phase_pct"]))
+        record["tide_minus_phase_pct"] = float(leak[sid]["bias_lo_tide_pct"]) - float(
+            leak[sid]["bias_lo_phase_pct"]
+        )
     except ValueError:
         record["tide_minus_phase_pct"] = None
     return bias, record
@@ -103,7 +113,11 @@ def station_inputs(sid, *, max_fraction_fc=0.8, response="auto", seed=0, **data_
     stat = stack_covariance(w["f"], w["pp"], w["zp"], w["starts"], w["depth"], gain=w["gain"],
                             seed=seed)  # fmt: skip
     keep = usable_bins(stat["sd_rel"])
-    trimmed = [float(w["f"][~keep].min()), float(w["f"][~keep].max())] if not keep.all() else None
+    trimmed = (
+        [float(w["f"][~keep].min()), float(w["f"][~keep].max())]
+        if not keep.all()
+        else None
+    )
     correction = None
     if response == "auto":
         bias, correction = response_bias(sid, w["f"])
@@ -113,7 +127,9 @@ def station_inputs(sid, *, max_fraction_fc=0.8, response="auto", seed=0, **data_
     if correction is not None and "tilt_rel" not in data_kwargs:
         diff = correction["tide_minus_phase_pct"]
         spread = 0.0 if diff is None else 0.5 * abs(diff) / 100.0
-        data_kwargs["tilt_rel"] = float(np.hypot(spread, auto.RESPONSE_TILT["corrected"]))
+        data_kwargs["tilt_rel"] = float(
+            np.hypot(spread, auto.RESPONSE_TILT["corrected"])
+        )
     data = auto.compliance_data(w["f"][keep], stat["eta"][keep], w["depth"],
                                 cov_rel=stat["cov_rel"][np.ix_(keep, keep)],
                                 max_fraction_fc=max_fraction_fc, response=response,

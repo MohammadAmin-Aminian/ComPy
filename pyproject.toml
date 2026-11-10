@@ -34,6 +34,7 @@ pressure = ["pandas>=2.2", "openpyxl>=3.1"]
 maps = ["cartopy>=0.24"]
 
 [project.scripts]
+compy-invert = "compy.inversion.cli:main"
 compy-pressure = "compy_pressure.network:main"
 compy-pressure-inventory = "compy_pressure.inventory:main"
 compy-pressure-tilt = "compy_pressure.tilt:main"

@@ -16,6 +16,7 @@ from f_figures import (
     compliance_summary,
     coords,
     load_posterior,
+    main_variant,
     n_windows,
     result_label,
     usable,
@@ -66,17 +67,25 @@ def station_record(s, c):
         rec["status"] = "compliance only (inversion pending or failed)"
         return rec
     rec["status"] = "inverted" + (" (uncalibrated gain)" if label == "nominal" else "")
-    post, column = load_posterior(s, "final")
-    prior, _ = load_posterior(s, "final_prior")
+    variant = main_variant(s)
+    post, column = load_posterior(s)
+    prior, _ = load_posterior(s, "prior")
     main, _ = load_posterior(s, "main")
-    j = json.loads((RESULTS / s / "inversion" / f"{s}_final.json").read_text())
+    j = json.loads((RESULTS / s / "inversion" / f"{s}_{variant}.json").read_text())
     flat, names = post.flat(), post.names
     vs = post.vs_draws(DEPTHS, 4000)
-    rec.update(chi2=j["chi2"]["median"], n_data=j["n_data"], rhat=j["max_rhat"], ess=j["min_ess"],
-               vp_vs=q3(flat[:, names.index("vp_vs")]).tolist(),
-               sediment=q3(flat[:, names.index("sediment_thickness")]).tolist(),
+    rec.update(inversion=variant, chi2=j["chi2"]["median"], n_data=j["n_data"],
+               rhat=j["max_rhat"], ess=j["min_ess"],
                crust1_sediment=column["sediment_thickness"], crust1_moho=column["moho_depth"],
                vs=q3(vs).tolist(), serp=q3(ci.serpentinization(vs)).tolist())  # fmt: skip
+    for key, name in (("vp_vs", "vp_vs"), ("sediment", "sediment_thickness"),
+                      ("moho", "moho_depth")):  # fmt: skip
+        if name in names:
+            rec[key] = q3(flat[:, names.index(name)]).tolist()
+    if "quality" in j:  # ComPy 3: label, resolved range and per-parameter resolution
+        rec.update(quality=j["quality"]["label"], quality_reasons=j["quality"]["reasons"],
+                   resolved_from=j.get("resolved_from_m"), resolved_to=j.get("resolved_to_m"),
+                   resolution=j.get("resolution"))  # fmt: skip
     if "gain" in names:
         rec["gain_sampled"] = (q3(flat[:, names.index("gain")]) * r["gain"]).tolist()
     if prior is not None:
@@ -106,7 +115,7 @@ def main():
     pooled = {}
     if calibrated:
         draws = np.concatenate(
-            [load_posterior(s, "final")[0].vs_draws(DEPTHS, 1500) for s in calibrated]
+            [load_posterior(s)[0].vs_draws(DEPTHS, 1500) for s in calibrated]
         )
         pooled["vs"] = q3(draws).tolist()
         pooled["serp"] = q3(ci.serpentinization(draws)).tolist()
@@ -119,7 +128,7 @@ def main():
             pooled["n_main"] = len(mains)
         crust1 = []
         for s in calibrated:
-            m = ci.crust1_model(load_posterior(s, "final")[1])
+            m = ci.crust1_model(load_posterior(s)[1])
             tops = np.concatenate([[0.0], np.cumsum(m[:-1, 0])])
             crust1.append(m[np.searchsorted(tops, DEPTHS, side="right") - 1, 3])
         pooled["crust1_vs"] = np.mean(crust1, axis=0).tolist()

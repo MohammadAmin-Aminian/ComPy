@@ -21,16 +21,33 @@ import compy  # noqa: E402
 from compy.inversion import auto  # noqa: E402
 
 
-def run(sid, out, processes=8, response="auto", quick=False, overrides=None, tag="auto",
-        max_fraction_fc=0.8, seed=0):
-    data, column, info = archive.station_inputs(sid, response=response,
-                                                max_fraction_fc=max_fraction_fc)
+def run(
+    sid,
+    out,
+    processes=8,
+    response="auto",
+    quick=False,
+    overrides=None,
+    tag="auto",
+    max_fraction_fc=0.8,
+    seed=0,
+):
+    data, column, info = archive.station_inputs(
+        sid, response=response, max_fraction_fc=max_fraction_fc
+    )
     model = auto.model_from_crust1(column, **(overrides or {}))
     sigma = auto.GAIN_SIGMA[info["gain_source"]]
     sampler = dict(n_iter=20000, n_burn=8000, max_rounds=1) if quick else {}
     t0 = time.time()
-    res = auto.invert(data, model, gain_sigma=sigma, processes=processes, seed=seed,
-                      info=dict(info, compy=compy.__file__, version=compy.__version__), **sampler)
+    res = auto.invert(
+        data,
+        model,
+        gain_sigma=sigma,
+        processes=processes,
+        seed=seed,
+        info=dict(info, compy=compy.__file__, version=compy.__version__),
+        **sampler,
+    )
     net, sta = sid.split(".")
     folder = Path(out) / net / sta
     folder.mkdir(parents=True, exist_ok=True)
@@ -54,15 +71,28 @@ if __name__ == "__main__":
     for item in args.set:
         key, value = item.split("=")
         overrides[key] = json.loads(value)
-    res = run(args.sid, args.out, args.processes, args.response, args.quick, overrides, args.tag,
-              args.max_fraction_fc)
+    res = run(
+        args.sid,
+        args.out,
+        args.processes,
+        args.response,
+        args.quick,
+        overrides,
+        args.tag,
+        args.max_fraction_fc,
+    )
     s = res.summary()
     q = s["quality"]
-    print(f"{args.sid} {args.tag}: {q['label']} chi2 {q['chi2']:.1f}/{q['n_data']} (limit {q['chi2_limit']:.1f}) "
-          f"rhat {q['max_rhat']:.3f} ess {q['min_ess']:.0f} gain {q['gain']:.3f} rounds {s['rounds']} "
-          f"reach {s['reach_m']:.0f} m resolved {s['resolved_from_m']}-{s['resolved_to_m']} m "
-          f"{res.info['seconds']:.0f} s; {'; '.join(q['reasons'])}", flush=True)
+    print(
+        f"{args.sid} {args.tag}: {q['label']} chi2 {q['chi2']:.1f}/{q['n_data']} (limit {q['chi2_limit']:.1f}) "
+        f"rhat {q['max_rhat']:.3f} ess {q['min_ess']:.0f} gain {q['gain']:.3f} rounds {s['rounds']} "
+        f"reach {s['reach_m']:.0f} m resolved {s['resolved_from_m']}-{s['resolved_to_m']} m "
+        f"{res.info['seconds']:.0f} s; {'; '.join(q['reasons'])}",
+        flush=True,
+    )
     for k, v in s["parameters"].items():
         p = s["prior"][k]
-        print(f"  {k:20s} {v['p16']:9.3f} {v['median']:9.3f} {v['p84']:9.3f}   prior {p['p16']:9.3f} "
-              f"{p['median']:9.3f} {p['p84']:9.3f}   rhat {v['rhat']:.3f}")
+        print(
+            f"  {k:20s} {v['p16']:9.3f} {v['median']:9.3f} {v['p84']:9.3f}   prior {p['p16']:9.3f} "
+            f"{p['median']:9.3f} {p['p84']:9.3f}   rhat {v['rhat']:.3f}"
+        )

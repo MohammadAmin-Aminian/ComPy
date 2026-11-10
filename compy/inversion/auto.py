@@ -81,7 +81,9 @@ def nafe_drake_density(vp):
     Coefficients from a published implementation (R package hydrogeo).
     """
     v = np.clip(np.asarray(vp, float) / 1000.0, 1.5, 8.5)
-    return 1000.0 * (1.6612 * v - 0.4721 * v**2 + 0.0671 * v**3 - 0.0043 * v**4 + 0.000106 * v**5)
+    return 1000.0 * (
+        1.6612 * v - 0.4721 * v**2 + 0.0671 * v**3 - 0.0043 * v**4 + 0.000106 * v**5
+    )
 
 
 def carlson_raskin_density(vp):
@@ -108,7 +110,9 @@ def crust_density(vp):
     2.94 km/s, so the relation is continuous.
     """
     vp = np.asarray(vp, float)
-    return np.where(vp < DENSITY_SWITCH_VP, nafe_drake_density(vp), carlson_raskin_density(vp))
+    return np.where(
+        vp < DENSITY_SWITCH_VP, nafe_drake_density(vp), carlson_raskin_density(vp)
+    )
 
 
 def plane_strain_modulus(layers):
@@ -201,7 +205,9 @@ class SeafloorModel:
     def __post_init__(self):
         ref = np.asarray(self.reference, float)
         if ref.ndim != 2 or ref.shape[1] != 4 or len(ref) < 2:
-            raise ValueError("reference must have rows [thickness, rho, vp, vs] and a half-space")
+            raise ValueError(
+                "reference must have rows [thickness, rho, vp, vs] and a half-space"
+            )
         self.reference = ref
         self.moho_depth = float(ref[:-1, 0].sum())  # of the reference
         positive(self.moho_depth, "reference crustal thickness")
@@ -213,7 +219,9 @@ class SeafloorModel:
         self.moho_prior = tuple(map(float, self.moho_prior))
         self.moho_bounds = tuple(map(float, self.moho_bounds))
         if not 0 < self.moho_bounds[0] < self.moho_bounds[1]:
-            raise ValueError("moho_bounds must be (lower, upper) with 0 < lower < upper")
+            raise ValueError(
+                "moho_bounds must be (lower, upper) with 0 < lower < upper"
+            )
         for name in ("first_layer", "vs_sigma", "vp_sigma", "density_sigma",
                      "sediment_vs_sigma", "sediment_modulus_sigma"):  # fmt: skip
             positive(getattr(self, name), name)
@@ -257,7 +265,9 @@ class SeafloorModel:
         self.bounds = np.array(bounds, float)
         self._index = {name: i for i, name in enumerate(names)}
         c = self.vs_correlation
-        corr = c ** np.abs(np.subtract.outer(np.arange(self.n_crust), np.arange(self.n_crust)))
+        corr = c ** np.abs(
+            np.subtract.outer(np.arange(self.n_crust), np.arange(self.n_crust))
+        )
         self._precision = np.linalg.inv(corr) / self.vs_sigma**2
         self._chol = np.linalg.cholesky(corr) * self.vs_sigma
 
@@ -287,13 +297,17 @@ class SeafloorModel:
         h = self._get(theta, "sediment_thickness", 0.0)
         if h <= 1.0:
             return np.empty((0, 4))
-        edges = h * (np.arange(self.sediment_sublayers + 1) / self.sediment_sublayers) ** 2
+        edges = (
+            h * (np.arange(self.sediment_sublayers + 1) / self.sediment_sublayers) ** 2
+        )
         mid = 0.5 * (edges[:-1] + edges[1:])
         vs = self._get(theta, "sediment_vs_scale", 1.0) * self.sediment_vs(mid)
         vp0 = np.asarray(self.sediment_vp(mid), float)
         rho = nafe_drake_density(vp0)
         vp = vp0 * math.sqrt(self._get(theta, "sediment_modulus", 1.0))
-        vp = np.maximum(vp, dram.brocher_vp(vs))  # stiff sediment is not slower than rock of its Vs
+        vp = np.maximum(
+            vp, dram.brocher_vp(vs)
+        )  # stiff sediment is not slower than rock of its Vs
         return np.column_stack([np.diff(edges), rho, vp, vs])
 
     def layers(self, theta):
@@ -305,7 +319,9 @@ class SeafloorModel:
         vp = oceanic_vp(vs) * np.exp(factor)
         rho = crust_density(vp) * math.exp(theta[self._index["density"]])
         moho = theta[self._index["moho_depth"]]
-        n = max(int(np.searchsorted(self._tops, moho - 1.0, side="left")), 1)  # layers above
+        n = max(
+            int(np.searchsorted(self._tops, moho - 1.0, side="left")), 1
+        )  # layers above
         thick = self.fixed[:n].copy()
         thick[-1] = moho - self._tops[n - 1]
         vsm = theta[self._index["vs_mantle"]]
@@ -328,7 +344,9 @@ class SeafloorModel:
 
     def in_bounds(self, theta):
         """True if every parameter lies inside its hard bounds."""
-        return bool(np.all(theta >= self.bounds[:, 0]) and np.all(theta <= self.bounds[:, 1]))
+        return bool(
+            np.all(theta >= self.bounds[:, 0]) and np.all(theta <= self.bounds[:, 1])
+        )
 
     def random(self, rng):
         """A draw from the prior (see ``prior_draw``)."""
@@ -348,8 +366,13 @@ class SeafloorModel:
             lp -= 0.5 * (s / self.sediment_vs_sigma) ** 2 + s
             lp -= 0.5 * (m / self.sediment_modulus_sigma) ** 2 + m
         d = np.log(self.crust_vs(theta) / self.reference_vs)
-        lp -= 0.5 * float(d @ self._precision @ d) + float(np.sum(np.log(self.crust_vs(theta))))
-        lp -= 0.5 * ((theta[ix["moho_depth"]] - self.moho_prior[0]) / self.moho_prior[1]) ** 2
+        lp -= 0.5 * float(d @ self._precision @ d) + float(
+            np.sum(np.log(self.crust_vs(theta)))
+        )
+        lp -= (
+            0.5
+            * ((theta[ix["moho_depth"]] - self.moho_prior[0]) / self.moho_prior[1]) ** 2
+        )
         lp -= 0.5 * (theta[ix["vp_upper"]] / self.vp_sigma) ** 2
         lp -= 0.5 * (theta[ix["vp_lower"]] / self.vp_sigma) ** 2
         lp -= 0.5 * (theta[ix["density"]] / self.density_sigma) ** 2
@@ -372,11 +395,17 @@ class SeafloorModel:
             theta = np.empty(len(self.names))
             if "sediment_thickness" in ix:
                 if self.sediment_prior is None:
-                    theta[ix["sediment_thickness"]] = rng.uniform(0.0, self.sediment_max)
+                    theta[ix["sediment_thickness"]] = rng.uniform(
+                        0.0, self.sediment_max
+                    )
                 else:
                     theta[ix["sediment_thickness"]] = rng.normal(*self.sediment_prior)
-                theta[ix["sediment_vs_scale"]] = math.exp(rng.normal(0, self.sediment_vs_sigma))
-                theta[ix["sediment_modulus"]] = math.exp(rng.normal(0, self.sediment_modulus_sigma))
+                theta[ix["sediment_vs_scale"]] = math.exp(
+                    rng.normal(0, self.sediment_vs_sigma)
+                )
+                theta[ix["sediment_modulus"]] = math.exp(
+                    rng.normal(0, self.sediment_modulus_sigma)
+                )
             i = ix["vs_crust_1"]
             theta[i : i + self.n_crust] = self.reference_vs * np.exp(
                 self._chol @ rng.standard_normal(self.n_crust)
@@ -418,7 +447,11 @@ class SeafloorModel:
 
     def settings(self):
         """JSON-ready dictionary of the model settings."""
-        out = {k: v for k, v in asdict(self).items() if not callable(v) and k != "reference"}
+        out = {
+            k: v
+            for k, v in asdict(self).items()
+            if not callable(v) and k != "reference"
+        }
         out.update(reference=self.reference.tolist(), names=self.names,
                    fixed_layers=self.fixed.tolist(), reference_vs=self.reference_vs.tolist(),
                    moho_depth=self.moho_depth, model="SeafloorModel",
@@ -568,7 +601,9 @@ class InversionResult:
         """Model column (1 rho, 2 Vp, 3 Vs, 'M') of draws at depths ``z``."""
         theta = self.prior_theta if prior else self.posterior.flat(max_draws, seed)
         n = len(self.model.names)
-        return np.array([self.model.column_at(t[:n], z, column) for t in theta[:max_draws]])
+        return np.array(
+            [self.model.column_at(t[:n], z, column) for t in theta[:max_draws]]
+        )
 
     def reach(self, fraction=0.9):
         """Depth [m] above which ``fraction`` of the sensitivity of the lowest frequency lies.
@@ -598,7 +633,9 @@ class InversionResult:
             b = np.quantile(self.prior_theta[:, i], [0.16, 0.84])
             if name.startswith("vs_"):
                 a, b = np.log(a), np.log(b)
-            out[name] = float((a[1] - a[0]) / (b[1] - b[0])) if b[1] > b[0] else float("nan")
+            out[name] = (
+                float((a[1] - a[0]) / (b[1] - b[0])) if b[1] > b[0] else float("nan")
+            )
         return out
 
     def profile(self, z=None, q=(0.05, 0.16, 0.5, 0.84, 0.95), resolved_ratio=0.6):
@@ -630,9 +667,15 @@ class InversionResult:
         qs, qp = np.quantile(post, q, axis=0), np.quantile(pri, q, axis=0)
         res = self.parameter_resolution()
         med = np.median(self.posterior.flat(), axis=0)
-        h = float(med[model._index["sediment_thickness"]]) if "sediment_thickness" in model._index else 0.0
+        h = (
+            float(med[model._index["sediment_thickness"]])
+            if "sediment_thickness" in model._index
+            else 0.0
+        )
         moho = h + float(med[model._index["moho_depth"]])
-        layer = np.clip(np.searchsorted(model._tops, z - h, side="right") - 1, 0, model.n_crust - 1)
+        layer = np.clip(
+            np.searchsorted(model._tops, z - h, side="right") - 1, 0, model.n_crust - 1
+        )
         ratio = np.array([res[f"vs_crust_{k + 1}"] for k in layer])
         ratio = np.where(z >= moho, res["vs_mantle"], ratio)
         if h > 0:
@@ -661,7 +704,9 @@ class InversionResult:
         resolved = bool(np.any(self.profile()["resolved"]))
         reasons = []
         if not self.converged:
-            reasons.append(f"not converged (max R-hat {s['max_rhat']:.3f}, min ESS {s['min_ess']:.0f})")
+            reasons.append(
+                f"not converged (max R-hat {s['max_rhat']:.3f}, min ESS {s['min_ess']:.0f})"
+            )
         if chi2 > limit:
             reasons.append(f"misfit: chi2 {chi2:.1f} above {limit:.1f} for {n} data")
         if pull > 2:
@@ -705,12 +750,19 @@ class InversionResult:
         self.posterior.save(path)
         with np.load(path.with_suffix(".npz")) as d:
             content = {k: d[k] for k in d.files}
-        np.savez_compressed(path.with_suffix(".npz"), prior_theta=self.prior_theta, **content)
-        path.with_suffix(".json").write_text(json.dumps(self.summary(), indent=1, default=float))
+        np.savez_compressed(
+            path.with_suffix(".npz"), prior_theta=self.prior_theta, **content
+        )
+        path.with_suffix(".json").write_text(
+            json.dumps(self.summary(), indent=1, default=float)
+        )
         prof = self.profile()
         cols = ["depth_m"] + [f"vs_p{round(100 * v):02d}" for v in prof["q"]]
         cols += [f"prior_p{round(100 * v):02d}" for v in prof["q"]]
-        cols += [f"modulus_p{round(100 * v):02d}_pa" for v in prof["q"]] + ["width_ratio", "resolved"]
+        cols += [f"modulus_p{round(100 * v):02d}_pa" for v in prof["q"]] + [
+            "width_ratio",
+            "resolved",
+        ]
         table = np.column_stack([prof["z"], prof["vs"].T, prof["vs_prior"].T, prof["modulus"].T,
                                  prof["width_ratio"], prof["resolved"].astype(float)])  # fmt: skip
         np.savetxt(path.with_name(path.name + "_profile.csv"), table, delimiter=",",
@@ -767,7 +819,9 @@ def invert(data, model, *, gain_sigma=0.05, seed=0, processes=None, max_rounds=3
         if target(theta) is not None:
             starts.append(theta)
     if len(starts) < settings["n_chains"]:
-        raise ValueError("the forward model fails on the prior draws; check the reference model")
+        raise ValueError(
+            "the forward model fails on the prior draws; check the reference model"
+        )
     post, converged, rounds = None, False, 0
     for rounds in range(1, max_rounds + 1):
         post = dram.sample(data, model, seed=seed + rounds - 1, processes=processes, starts=starts,
@@ -779,5 +833,46 @@ def invert(data, model, *, gain_sigma=0.05, seed=0, processes=None, max_rounds=3
         converged = rhat <= conv["rhat"] and ess >= conv["ess"]
         if converged:
             break
-        settings["n_iter"], settings["n_burn"] = 2 * settings["n_iter"], 2 * settings["n_burn"]
+        settings["n_iter"], settings["n_burn"] = (
+            2 * settings["n_iter"],
+            2 * settings["n_burn"],
+        )
     return InversionResult(post, prior, rounds, converged, gain_sigma, dict(info or {}))
+
+
+def load_result(path):
+    """Read an ``InversionResult`` written by ``InversionResult.save``.
+
+    ``path`` is the common stem (with or without ``.npz``). The model is
+    rebuilt from the settings in the JSON file; custom sediment profiles are
+    not stored, so a result made with them must be given the same callables
+    again through ``result.model``.
+    """
+    from dataclasses import fields
+
+    path = Path(path)
+    path = path.with_suffix("") if path.suffix in (".npz", ".json") else path
+    record = json.loads(path.with_name(path.name + ".json").read_text())
+    settings = record["model"]
+    allowed = {f.name for f in fields(SeafloorModel)} - {
+        "reference",
+        "sediment_vs",
+        "sediment_vp",
+    }
+    kwargs = {k: (tuple(v) if isinstance(v, list) else v)
+              for k, v in settings.items() if k in allowed}  # fmt: skip
+    model = SeafloorModel(np.array(settings["reference"], float), **kwargs)
+    with np.load(path.with_name(path.name + ".npz")) as d:
+        data = dram.ComplianceData(d["freqs"], d["eta"], float(d["depth"]), d["covariance"],
+                                   station=record.get("station", ""))  # fmt: skip
+        names = [str(n) for n in d["names"]]
+        post = dram.Posterior(
+            data=data, model=model, prior_only=False, theta=d["theta"], alpha=d["alpha"],
+            loglik=d["loglik"], roughness=d["roughness"], pred=d["pred"],
+            acceptance=np.array(record["acceptance"]),
+            acceptance_dr=np.array(record["acceptance_dr"]), settings=record["settings"],
+            trace_chi2=d["trace_chi2"], names_extra=names[len(model.names):],
+        )  # fmt: skip
+        prior = d["prior_theta"]
+    return InversionResult(post, prior, record["rounds"], record["converged"],
+                           record["gain_sigma"], record.get("info", {}))  # fmt: skip

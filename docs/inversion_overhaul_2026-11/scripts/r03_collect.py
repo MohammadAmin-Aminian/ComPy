@@ -15,7 +15,9 @@ from pathlib import Path
 import numpy as np
 
 DEPTHS = (100, 300, 500, 1000, 2000, 3000, 5000)
-OLD = Path.home() / "Desktop/ComPy/12_inversion_all_stations/tables/inversion_results.csv"
+OLD = (
+    Path.home() / "Desktop/ComPy/12_inversion_all_stations/tables/inversion_results.csv"
+)
 
 
 def main():
@@ -35,21 +37,49 @@ def main():
         sid = info["sid"]
         with np.load(path.with_suffix(".npz")) as d:
             chi2_min = float(-2 * d["loglik"].max())
-        prof = np.genfromtxt(path.with_name(path.stem + "_profile.csv"), delimiter=",", names=True)
+        prof = np.genfromtxt(
+            path.with_name(path.stem + "_profile.csv"), delimiter=",", names=True
+        )
         p = s["parameters"]
-        row = dict(sid=sid, tier=info["tier"], depth_m=info["depth"], latitude=info["latitude"],
-                   longitude=info["longitude"], gain_source=info["gain_source"],
-                   response=info["response"], tilt_rel=info["tilt_rel"],
-                   n_windows=info["n_windows"], n_data=info["n_data"], f_lo=info["band"][0],
-                   f_hi=info["band"][1], quality=q["label"], reasons=" | ".join(q["reasons"]),
-                   chi2_median=q["chi2"], chi2_min=chi2_min, chi2_limit=q["chi2_limit"],
-                   max_rhat=q["max_rhat"], min_ess=q["min_ess"], rounds=s["rounds"],
-                   seconds=info.get("seconds"), gain=q["gain"], gain_pull=q["gain_pull"],
-                   reach_m=s["reach_m"], resolved_from_m=s["resolved_from_m"],
-                   resolved_to_m=s["resolved_to_m"],
-                   crust1_moho=s["model"]["moho_depth"], crust1_sediment=info["crust1"]["sediment_thickness"])
-        for name in ("sediment_thickness", "sediment_vs_scale", "sediment_modulus", "moho_depth",
-                     "vs_mantle", "vp_upper", "vp_lower"):
+        row = dict(
+            sid=sid,
+            tier=info["tier"],
+            depth_m=info["depth"],
+            latitude=info["latitude"],
+            longitude=info["longitude"],
+            gain_source=info["gain_source"],
+            response=info["response"],
+            tilt_rel=info["tilt_rel"],
+            n_windows=info["n_windows"],
+            n_data=info["n_data"],
+            f_lo=info["band"][0],
+            f_hi=info["band"][1],
+            quality=q["label"],
+            reasons=" | ".join(q["reasons"]),
+            chi2_median=q["chi2"],
+            chi2_min=chi2_min,
+            chi2_limit=q["chi2_limit"],
+            max_rhat=q["max_rhat"],
+            min_ess=q["min_ess"],
+            rounds=s["rounds"],
+            seconds=info.get("seconds"),
+            gain=q["gain"],
+            gain_pull=q["gain_pull"],
+            reach_m=s["reach_m"],
+            resolved_from_m=s["resolved_from_m"],
+            resolved_to_m=s["resolved_to_m"],
+            crust1_moho=s["model"]["moho_depth"],
+            crust1_sediment=info["crust1"]["sediment_thickness"],
+        )
+        for name in (
+            "sediment_thickness",
+            "sediment_vs_scale",
+            "sediment_modulus",
+            "moho_depth",
+            "vs_mantle",
+            "vp_upper",
+            "vp_lower",
+        ):
             for key in ("p16", "median", "p84"):
                 row[f"{name}_{key}"] = p[name][key]
             row[f"{name}_prior"] = s["prior"][name]["median"]
@@ -63,8 +93,11 @@ def main():
             if sid in old and f"vs_{z}" in old[sid]:
                 row[f"old_vs_{z}"] = old[sid][f"vs_{z}"]
         if sid in old:
-            row.update(old_quality=old[sid]["quality"], old_chi2_over_n=old[sid]["chi2_over_n"],
-                       old_sediment=old[sid]["sediment_m"])
+            row.update(
+                old_quality=old[sid]["quality"],
+                old_chi2_over_n=old[sid]["chi2_over_n"],
+                old_sediment=old[sid]["sediment_m"],
+            )
         rows.append(row)
     keys = []
     for r in rows:

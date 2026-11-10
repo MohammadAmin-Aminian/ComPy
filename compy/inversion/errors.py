@@ -76,7 +76,9 @@ def compliance_from_sums(freqs, depth, zp_sum, pp_sum):
     omega2 = (2 * np.pi * f) ** 2
     k = wavenumber(2 * np.pi * f, depth)
     ratio = np.abs(zp_sum) / pp_sum
-    return k * (omega2 * ratio + attraction_ratio(f, depth)) / (omega2 + FREE_AIR_GRADIENT)
+    return (
+        k * (omega2 * ratio + attraction_ratio(f, depth)) / (omega2 + FREE_AIR_GRADIENT)
+    )
 
 
 def _level_tilt(dev, ramp):
@@ -150,8 +152,12 @@ def stack_covariance(freqs, pp, zp, starts, depth, *, gain=1.0, block_days=(30.0
         if len(np.unique(groups)) >= min_blocks:
             dev_b, n_blocks = replicate(groups)
             coef = _level_tilt(dev_b, ramp)
-            slow_level = float(np.sqrt(max(np.var(coef[0]) - np.var(coef_random[0]), 0.0)))
-            slow_tilt = float(np.sqrt(max(np.var(coef[1]) - np.var(coef_random[1]), 0.0)))
+            slow_level = float(
+                np.sqrt(max(np.var(coef[0]) - np.var(coef_random[0]), 0.0))
+            )
+            slow_tilt = float(
+                np.sqrt(max(np.var(coef[1]) - np.var(coef_random[1]), 0.0))
+            )
             used = float(days)
             break
     cov_rel = random_rel + slow_level**2 + slow_tilt**2 * np.outer(ramp, ramp)
@@ -197,7 +203,9 @@ def default_covariance(freqs, eta, sigma, *, inflate=BOOTSTRAP_OVER_BENDAT_PIERS
         if lag < n:
             corr += c * (np.eye(n, k=lag) + np.eye(n, k=-lag))
     ramp = log_frequency_ramp(f)
-    return np.outer(rel, rel) * corr + slow_level**2 + slow_tilt**2 * np.outer(ramp, ramp)
+    return (
+        np.outer(rel, rel) * corr + slow_level**2 + slow_tilt**2 * np.outer(ramp, ramp)
+    )
 
 
 def usable_bins(sd_rel, factor=2.5):

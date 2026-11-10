@@ -28,7 +28,9 @@ FREQS = np.linspace(0.007, 0.017, 9)
 def synthetic_windows(rng, n=600, slow=0.0, days=120.0):
     """Windows of P and Z spectra with a known transfer function and vertical noise."""
     f = FREQS
-    transfer = 8e-8 * (1 + 20 * f)  # |Z/P| in m/Pa: realistic size, so it outweighs the attraction
+    transfer = 8e-8 * (
+        1 + 20 * f
+    )  # |Z/P| in m/Pa: realistic size, so it outweighs the attraction
     starts = np.sort(rng.uniform(0, days * 86400, n))
     level = 1 + slow * np.sin(2 * np.pi * starts / (60 * 86400))
     pp = rng.gamma(4, 0.25, (n, len(f))) * 1e2
@@ -50,7 +52,9 @@ def test_stack_covariance_matches_scatter_of_independent_stacks():
     truth = np.std(np.array(etas) / np.mean(etas, 0), axis=0)
     assert np.all(np.linalg.eigvalsh(stat["cov_rel"]) > 0)
     assert np.allclose(stat["sd_rel"], truth, rtol=0.35)
-    assert stat["slow_level"] < 0.5 * np.median(stat["sd_rel"])  # stationary: no slow term
+    assert stat["slow_level"] < 0.5 * np.median(
+        stat["sd_rel"]
+    )  # stationary: no slow term
 
 
 def test_stack_covariance_finds_a_slow_level_change():
@@ -116,7 +120,9 @@ def test_oceanic_vp_is_continuous_and_follows_the_mafic_line():
 
 def test_density_relations():
     assert auto.carlson_raskin_density(5000.0) == pytest.approx(2742.0)
-    assert auto.carlson_raskin_density(6900.0) == pytest.approx(1000 * (3.81 - 5.99 / 6.9))
+    assert auto.carlson_raskin_density(6900.0) == pytest.approx(
+        1000 * (3.81 - 5.99 / 6.9)
+    )
     assert 1600 < auto.nafe_drake_density(1510.0) < 1700  # soft sediment, not 2000
     vp = np.linspace(1500, 8200, 2000)
     rho = auto.crust_density(vp)
@@ -147,18 +153,26 @@ def test_thin_soft_layer_acts_through_its_p_modulus():
         added[vs] = dram.forward(DEPTH, f, model) - dram.forward(DEPTH, f, rock)
     uniaxial = k * h / (rho * vp**2)
     assert added[300.0] / uniaxial == pytest.approx(1.0, abs=0.05)
-    assert added[300.0] / added[600.0] == pytest.approx(1.0, abs=0.05)  # Vs doubled: 3 %
+    assert added[300.0] / added[600.0] == pytest.approx(
+        1.0, abs=0.05
+    )  # Vs doubled: 3 %
     assert np.all(added[300.0] > 0.5 * dram.forward(DEPTH, f, rock))  # and it is large
 
 
 # -- model ------------------------------------------------------------------------
 def test_seafloor_model_layout_and_moho_cut():
     model = auto.SeafloorModel(REFERENCE)
-    assert model.names[:3] == ["sediment_thickness", "sediment_vs_scale", "sediment_modulus"]
+    assert model.names[:3] == [
+        "sediment_thickness",
+        "sediment_vs_scale",
+        "sediment_modulus",
+    ]
     assert model.names[-4:] == ["moho_depth", "vp_upper", "vp_lower", "density"]
     assert model.fixed.sum() == pytest.approx(model.moho_bounds[1])
     assert model.reference_vs[0] == pytest.approx(2540.0)
-    assert model.reference_vs[-1] == pytest.approx(3940.0)  # crust continued below the Moho
+    assert model.reference_vs[-1] == pytest.approx(
+        3940.0
+    )  # crust continued below the Moho
     theta = model.reference_theta(sediment=0.0)
     theta[model._index["moho_depth"]] = 2000.0
     layers = model.layers(theta)
@@ -170,7 +184,9 @@ def test_seafloor_model_layout_and_moho_cut():
     assert len(layers) == model.sediment_sublayers + 5 + 1
     assert model.vs_at(theta, [3000.0])[0] == theta[model._index["vs_mantle"]]
     assert model.valid(theta)
-    theta[model._index["vs_crust_5"]] = 4400.0  # last layer above the Moho, faster than the mantle
+    theta[model._index["vs_crust_5"]] = (
+        4400.0  # last layer above the Moho, faster than the mantle
+    )
     assert not model.valid(theta)
     theta[model._index["vs_crust_5"]] = 3700.0
     theta[model._index["vs_crust_7"]] = 4700.0  # below the Moho: has no effect
@@ -187,9 +203,13 @@ def test_prior_draws_follow_the_stated_prior():
     dev = np.log(draws[:, i : i + model.n_crust] / model.reference_vs)
     # shallow layers are far from the bounds and from the Moho rule
     assert np.std(dev[:, 0]) == pytest.approx(model.vs_sigma, rel=0.1)
-    assert np.corrcoef(dev[:, 0], dev[:, 1])[0, 1] == pytest.approx(model.vs_correlation, abs=0.06)
+    assert np.corrcoef(dev[:, 0], dev[:, 1])[0, 1] == pytest.approx(
+        model.vs_correlation, abs=0.06
+    )
     assert np.std(draws[:, ix["vp_upper"]]) == pytest.approx(model.vp_sigma, rel=0.1)
-    assert np.std(draws[:, ix["density"]]) == pytest.approx(model.density_sigma, rel=0.1)
+    assert np.std(draws[:, ix["density"]]) == pytest.approx(
+        model.density_sigma, rel=0.1
+    )
     lo, hi = model.bounds[:, 0], model.bounds[:, 1]
     assert np.all(draws >= lo) and np.all(draws <= hi)
 
@@ -198,7 +218,9 @@ def test_log_prior_is_the_density_of_prior_draws():
     """Metropolis sampling of log_prior alone reproduces the direct prior draws."""
     model = auto.SeafloorModel(REFERENCE, sediment_max=0.0)
     eta = dram.forward(DEPTH, FREQS, REFERENCE)
-    data = dram.ComplianceData.build(FREQS, eta, DEPTH, random=0.01 * eta, gain_rel=0, floor_rel=0)
+    data = dram.ComplianceData.build(
+        FREQS, eta, DEPTH, random=0.01 * eta, gain_rel=0, floor_rel=0
+    )
     rng = np.random.default_rng(1)
     direct = np.array([model.prior_draw(rng) for _ in range(4000)])
     starts = [np.append(t, 1.0) for t in direct[:4]]
@@ -208,7 +230,10 @@ def test_log_prior_is_the_density_of_prior_draws():
     flat = post.theta.reshape(-1, post.theta.shape[-1])
     for name in ("vs_crust_1", "vs_crust_3", "moho_depth", "vp_lower", "density"):
         j = model._index[name]
-        a, b = np.quantile(flat[:, j], [0.16, 0.5, 0.84]), np.quantile(direct[:, j], [0.16, 0.5, 0.84])
+        a, b = (
+            np.quantile(flat[:, j], [0.16, 0.5, 0.84]),
+            np.quantile(direct[:, j], [0.16, 0.5, 0.84]),
+        )
         scale = b[2] - b[0]
         assert np.all(np.abs(a - b) < 0.15 * scale), name
     assert np.std(flat[:, -1]) == pytest.approx(0.05, rel=0.12)  # Gaussian gain prior
@@ -249,7 +274,9 @@ def synthetic_result():
     theta[i : i + 4] *= [0.8, 0.8, 0.85, 0.9]  # a slower upper crust than the reference
     eta = dram.forward(DEPTH, FREQS, model.layers(theta))
     cov_rel = default_covariance(FREQS, eta, 0.0015 * eta)
-    d = eta + np.linalg.cholesky(cov_rel * np.outer(eta, eta)) @ rng.standard_normal(len(eta))
+    d = eta + np.linalg.cholesky(cov_rel * np.outer(eta, eta)) @ rng.standard_normal(
+        len(eta)
+    )
     data = auto.compliance_data(FREQS, d, DEPTH, cov_rel=cov_rel, tilt_rel=0.02)
     kwargs = dict(gain_sigma=0.05, processes=1, n_chains=4, n_iter=12000, n_burn=5000, thin=5,
                   max_rounds=1, n_prior=800, seed=3)  # fmt: skip
@@ -278,7 +305,9 @@ def test_profile_marks_resolved_depths(synthetic_result):
     assert not prof["resolved"][deep].any()
     res = res.parameter_resolution()
     best = min(res[f"vs_crust_{k}"] for k in range(1, model.n_crust + 1))
-    assert best < 0.6 < res[f"vs_crust_{model.n_crust}"]  # some layer resolved, the deepest not
+    assert (
+        best < 0.6 < res[f"vs_crust_{model.n_crust}"]
+    )  # some layer resolved, the deepest not
     assert res["sediment_thickness"] < 0.3 and res["density"] > 0.8
     assert prof["modulus"].shape == prof["vs"].shape
 
@@ -289,7 +318,10 @@ def test_invert_is_reproducible_and_saves(synthetic_result, tmp_path):
     assert np.array_equal(again.posterior.theta, res.posterior.theta)
     res.save(tmp_path / "sta_auto")
     saved = np.load(tmp_path / "sta_auto.npz")
-    assert "prior_theta" in saved.files and saved["theta"].shape == res.posterior.theta.shape
+    assert (
+        "prior_theta" in saved.files
+        and saved["theta"].shape == res.posterior.theta.shape
+    )
     table = np.genfromtxt(tmp_path / "sta_auto_profile.csv", delimiter=",", names=True)
     assert "vs_p50" in table.dtype.names and "resolved" in table.dtype.names
     import json
