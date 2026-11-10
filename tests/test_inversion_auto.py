@@ -193,6 +193,20 @@ def test_seafloor_model_layout_and_moho_cut():
     assert model.valid(theta)
 
 
+def test_compiled_layers_equal_the_reference():
+    """The compiled layer builder and the NumPy one give the same model."""
+    rng = np.random.default_rng(4)
+    for kwargs in ({}, dict(sediment_max=0.0), dict(upper_crust=300.0)):
+        model = auto.SeafloorModel(REFERENCE, **kwargs)
+        for _ in range(200):
+            theta = model.prior_draw(rng)
+            if "sediment_thickness" in model._index and rng.random() < 0.2:
+                theta[0] = rng.uniform(0, 1.0)  # no sediment rows below 1 m
+            a, b = model.layers(theta), model.layers_reference(theta)
+            assert a.shape == b.shape
+            assert np.allclose(a, b, rtol=1e-12, atol=1e-9)
+
+
 def test_prior_draws_follow_the_stated_prior():
     model = auto.SeafloorModel(REFERENCE)
     rng = np.random.default_rng(0)
