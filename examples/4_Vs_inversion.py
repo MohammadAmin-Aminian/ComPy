@@ -89,13 +89,19 @@ def main():
     for reason in quality["reasons"]:
         print("  note:", reason)
     summary = result.summary()
-    print("\nparameter               median   (16-84 %)            width/prior" +
-          ("   true" if truth is not None else ""))  # fmt: skip
+
+    def fmt(x):
+        return f"{x:.0f}" if abs(x) >= 10 else f"{x:.3f}"
+
+    header = "\nparameter               median   16 % to 84 %          width/prior"
+    print(header + ("    true" if truth is not None else ""))
     for i, name in enumerate(model.names):
         p = summary["parameters"][name]
-        line = (f"  {name:20s} {p['median']:9.3g}   ({p['p16']:.3g} to {p['p84']:.3g})".ljust(58)
-                + f"{summary['resolution'][name]:5.2f}")  # fmt: skip
-        print(line + (f"   {truth[i]:9.3g}" if truth is not None else ""))
+        line = f"  {name:20s} {fmt(p['median']):>8s}   {fmt(p['p16'])} to {fmt(p['p84'])}".ljust(
+            58
+        )
+        line += f"{summary['resolution'][name]:5.2f}"
+        print(line + (f"   {fmt(truth[i]):>8s}" if truth is not None else ""))
     profile = result.profile(np.array([100.0, 300.0, 700.0, 1500.0, 3000.0, 5000.0]))
     print("\ndepth below seafloor   Vs median (5-95 %)        resolved")
     for k, z in enumerate(profile["z"]):
