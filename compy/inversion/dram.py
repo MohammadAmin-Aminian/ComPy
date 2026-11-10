@@ -514,7 +514,8 @@ class ComplianceData:
 
     @classmethod
     def build(cls, freqs, eta, depth, *, random=None, subsets=None, shrinkage=0.5,
-              gain_rel=0.05, gain_vector=None, floor_rel=0.01, station=""):  # fmt: skip
+              gain_rel=0.05, gain_vector=None, floor_rel=0.01, station="",
+              random_cov=None, tilt_rel=0.0, smooth_rel=0.0, smooth_length=0.5):  # fmt: skip
         """Assemble the covariance from its physical sources.
 
         Args:
@@ -535,6 +536,19 @@ class ComplianceData:
             floor_rel (float): Independent relative error per frequency for
                 what the 1-D forward model and the estimator neglect.
             station (str): Label.
+            random_cov (array): Full covariance [1/Pa**2] of the stacked
+                estimate, e.g. ``compy.inversion.errors.bootstrap_covariance``;
+                it carries the correlation between neighbouring bins. Use it
+                instead of ``random`` and ``subsets``.
+            tilt_rel (float): Standard deviation of an error that is linear in
+                log frequency across the band, as a fraction of eta at one
+                band edge relative to the other (a slope error of the curve,
+                e.g. from the low-frequency response of the pressure gauge).
+            smooth_rel (float): Standard deviation, as a fraction of eta, of an
+                error that varies smoothly with frequency (what a 1-D elastic
+                model and the estimator neglect).
+            smooth_length (float): Correlation length of that error in
+                ln(frequency); 0.5 is about 0.7 octave.
         """
         freqs, eta = np.asarray(freqs, float), np.asarray(eta, float)
         n = len(eta)
@@ -561,6 +575,20 @@ class ComplianceData:
             terms["gain"] = gain_rel**2 * np.outer(v, v)
         if floor_rel:
             terms["floor"] = np.diag((floor_rel * eta) ** 2)
+        if random_cov is not None:
+            c = np.asarray(random_cov, float)
+            if c.shape != (n, n):
+                raise ValueError("random_cov must be an N x N matrix")
+            terms["random"] = terms.get("random", 0) + 0.5 * (c + c.T)
+        x = np.log(freqs)
+        if tilt_rel and n > 1:
+            ramp = (x - 0.5 * (x[0] + x[-1])) / (x[-1] - x[0])  # -0.5 ... 0.5
+            v = eta * ramp
+            terms["tilt"] = tilt_rel**2 * np.outer(v, v)
+        if smooth_rel:
+            positive(smooth_length, "smooth_length")
+            kern = np.exp(-0.5 * ((x[:, None] - x[None, :]) / smooth_length) ** 2)
+            terms["smooth"] = smooth_rel**2 * np.outer(eta, eta) * kern
         if not terms:
             raise ValueError("at least one covariance term is required")
         return cls(freqs, eta, depth, sum(terms.values()), terms, station)
@@ -860,8 +888,10 @@ class _Target:
     eta_a (``attraction_compliance``) does not depend on the gain.
     """
 
-    def __init__(self, data, model, prior_only, gain_bounds=None):
+    def __init__(self, data, model, prior_only, gain_bounds=None, gain_sigma=None):
         self.data, self.model, self.prior_only = data, model, prior_only
+        self.gain_sigma = None if gain_sigma is None else positive(gain_sigma, "gain_sigma")
+        self.model_log_prior = getattr(model, "log_prior", None)
         self.forward = Forward(data.depth, data.freqs)
         self.n_model = len(model.names)
         self.gain = gain_bounds is not None
@@ -906,6 +936,21 @@ class _Target:
         loglik = 0.0 if self.prior_only else -0.5 * self.data.chi2(pred)
         return loglik, self.model.roughness(theta[: self.n_model]), pred
 
+    def log_prior(self, theta):
+        """Log prior density beyond the uniform bounds and the roughness term.
+
+        The model's own ``log_prior`` (if it has one) plus, with ``gain_sigma``,
+        a Gaussian prior of that standard deviation about 1 on every gain factor.
+        Zero for ``CrustalModel`` with a uniform gain prior.
+        """
+        lp = 0.0
+        if self.model_log_prior is not None:
+            lp += self.model_log_prior(theta[: self.n_model])
+        if self.gain and self.gain_sigma is not None:
+            g = theta[self.n_model :]
+            lp += -0.5 * float(np.sum(((g - 1.0) / self.gain_sigma) ** 2))
+        return lp
+
 
 class _Dram:
     """One replica of the delayed-rejection adaptive Metropolis sampler.
@@ -941,18 +986,20 @@ class _Dram:
         if state is None:
             raise ValueError("theta0 lies outside the support of the target")
         self.loglik, self.rough, self.pred = state
+        self._prior = getattr(target, "log_prior", None)
+        self.logprior = 0.0 if self._prior is None else self._prior(self.x)
         lo, hi = alpha_bounds
         self.alpha = float(alpha0 if alpha0 is not None else math.sqrt(lo * hi))
-        self.lp = self.log_post(self.loglik, self.rough)
+        self.lp = self.log_post(self.loglik, self.rough, self.logprior)
 
     def _set_cov(self, cov):
         self.cov = cov
         self.chol = np.linalg.cholesky(cov)
         self.chol_inv = np.linalg.inv(self.chol)
 
-    def log_post(self, loglik, rough):
-        """Tempered log posterior from the log likelihood and the roughness."""
-        return self.beta * loglik - 0.5 * self.alpha * rough
+    def log_post(self, loglik, rough, logprior=0.0):
+        """Tempered log posterior: the likelihood is tempered, the priors are not."""
+        return self.beta * loglik - 0.5 * self.alpha * rough + logprior
 
     def step(self, it):
         """One Metropolis (and delayed-rejection) step, alpha update and adaptation."""
@@ -961,16 +1008,18 @@ class _Dram:
         s1 = self.target(y1)
         a1 = 0.0
         if s1 is not None:
-            lp1 = self.log_post(s1[0], s1[1])
+            q1 = 0.0 if self._prior is None else self._prior(y1)
+            lp1 = self.log_post(s1[0], s1[1], q1)
             a1 = 1.0 if lp1 >= self.lp else math.exp(lp1 - self.lp)
         stage = None
         if rng.random() < a1:
-            stage, new = 0, (y1, s1, lp1)
+            stage, new = 0, (y1, s1, lp1, q1)
         elif self.delayed_rejection:
             y2 = x + self.dr_scale * (self.chol @ rng.standard_normal(d))
             s2 = self.target(y2)
             if s2 is not None:
-                lp2 = self.log_post(s2[0], s2[1])
+                q2 = 0.0 if self._prior is None else self._prior(y2)
+                lp2 = self.log_post(s2[0], s2[1], q2)
                 a21 = 0.0 if s1 is None else min(1.0, math.exp(min(lp1 - lp2, 0.0)))
                 if a21 < 1.0:
                     u2 = self.chol_inv @ (y1 - y2)
@@ -978,7 +1027,7 @@ class _Dram:
                     log_a2 = (lp2 - self.lp - 0.5 * (u2 @ u2) + 0.5 * (ux @ ux)
                               + math.log1p(-a21) - math.log1p(-a1))  # fmt: skip
                     if math.log(max(rng.random(), 1e-300)) < log_a2:
-                        stage, new = 1, (y2, s2, lp2)
+                        stage, new = 1, (y2, s2, lp2, q2)
         if it >= self.n_burn:
             self.tried[0] += 1
             self.tried[1] += stage != 0 and self.delayed_rejection
@@ -990,12 +1039,13 @@ class _Dram:
                 new[1],
                 new[2],
             )
+            self.logprior = new[3]
         if self.n_rough:
             lo, hi = self.alpha_bounds
             self.alpha = truncated_gamma(
                 rng, 0.5 * self.n_rough, 0.5 * self.rough, lo, hi
             )
-            self.lp = self.log_post(self.loglik, self.rough)
+            self.lp = self.log_post(self.loglik, self.rough, self.logprior)
         if it < self.n_burn:  # adaptive proposal, frozen after burn-in
             self.history[it] = self.x
             self.window[0] += stage == 0
@@ -1016,13 +1066,13 @@ class _Dram:
                               * (np.cov(recent, rowvar=False) + self.eps))  # fmt: skip
 
     def state(self):
-        """Current chain state (parameters, likelihood, roughness, prediction, alpha)."""
-        return self.x, self.loglik, self.rough, self.pred, self.alpha
+        """Current chain state (parameters, likelihood, roughness, prediction, alpha, prior)."""
+        return self.x, self.loglik, self.rough, self.pred, self.alpha, self.logprior
 
     def set_state(self, state):
         """Restore a chain state and recompute its log posterior."""
-        self.x, self.loglik, self.rough, self.pred, self.alpha = state
-        self.lp = self.log_post(self.loglik, self.rough)
+        self.x, self.loglik, self.rough, self.pred, self.alpha, self.logprior = state
+        self.lp = self.log_post(self.loglik, self.rough, self.logprior)
 
 
 def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=0,
@@ -1123,8 +1173,8 @@ def dram_chain(target, theta0, bounds, *, n_iter, n_burn, seed, thin=1, n_rough=
 
 
 def _chain_job(job):
-    data, model, prior_only, gain_bounds, seed, theta0, kwargs = job
-    target = _Target(data, model, prior_only, gain_bounds)
+    data, model, prior_only, gain_bounds, seed, theta0, kwargs, gain_sigma = job
+    target = _Target(data, model, prior_only, gain_bounds, gain_sigma)
     lo, hi = model.sigma_rough
     return dram_chain(target, theta0, target.bounds, seed=seed, n_rough=model.n_rough,
                       alpha_bounds=(1 / hi**2, 1 / lo**2), **kwargs)  # fmt: skip
@@ -1132,7 +1182,7 @@ def _chain_job(job):
 
 def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed=0,
            prior_only=False, processes=None, starts=None, gain_bounds=None,
-           start=None, start_spread=0.1, **kwargs):  # fmt: skip
+           start=None, start_spread=0.1, gain_sigma=None, **kwargs):  # fmt: skip
     """Run independent DRAM chains and return a ``Posterior``.
 
     ``start`` is a starting model, one value per ``model.names``, e.g.
@@ -1151,10 +1201,11 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     ``gain_bounds=(lo, hi)`` samples one pressure-gain factor per data group
     (see ``_Target``) with a uniform prior, e.g. (0.95, 1.05) for the 5 %
     freedom of Aminian et al. (2025, section 4.1.5). The data covariance must
-    then exclude the gain term (``gain_rel=0``).
+    then exclude the gain term (``gain_rel=0``). ``gain_sigma`` adds a Gaussian
+    prior of that standard deviation about 1 inside ``gain_bounds``.
     """
     rng = np.random.default_rng(seed)
-    target = _Target(data, model, prior_only, gain_bounds)
+    target = _Target(data, model, prior_only, gain_bounds, gain_sigma)
     start_record = None
     if start is not None and starts is None:
         start = np.asarray(start, float)
@@ -1175,7 +1226,8 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     settings = dict(n_iter=n_iter, n_burn=n_burn, thin=thin, **kwargs)
     if "temperatures" in settings:
         settings["temperatures"] = [float(v) for v in settings["temperatures"]]
-    jobs = [(data, model, prior_only, gain_bounds, int(s), np.asarray(t, float), settings)
+    jobs = [(data, model, prior_only, gain_bounds, int(s), np.asarray(t, float), settings,
+             gain_sigma)
             for s, t in zip(seeds, starts)]  # fmt: skip
     if processes == 1 or n_chains == 1:
         chains = [_chain_job(j) for j in jobs]
@@ -1192,6 +1244,7 @@ def sample(data, model, *, n_chains=8, n_iter=60000, n_burn=20000, thin=10, seed
     settings["gain_bounds"] = (
         None if gain_bounds is None else [float(v) for v in gain_bounds]
     )
+    settings["gain_sigma"] = None if gain_sigma is None else float(gain_sigma)
     settings["start"] = start_record
     return Posterior(
         data=data, model=model, prior_only=prior_only, **stack,
