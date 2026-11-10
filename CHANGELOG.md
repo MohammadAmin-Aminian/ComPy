@@ -1,5 +1,55 @@
 # Changelog
 
+## 3.0.0 — unreleased
+
+Result of the inversion overhaul of November 2026
+([docs/inversion_overhaul_2026-11/REPORT.md](docs/inversion_overhaul_2026-11/REPORT.md)).
+**Vs results change.** Compliance estimates do not change.
+
+### New default inversion
+
+- `compy.inversion.auto`: `invert`, `SeafloorModel`, `compliance_data`,
+  `model_from_crust1`, `InversionResult` (profile with a resolved flag,
+  per-parameter resolution, quality label), `load_result`.
+- `compy.inversion.errors`: `stack_covariance` (bootstrap covariance of a stacked
+  compliance curve from its windows, with slow level and tilt terms),
+  `default_covariance`, `usable_bins`.
+- `compy-invert`: the inversion from the command line, on a stage C result or a CSV.
+- `compy.plotting.auto.station_figure`: data and fit, residuals, Vs with prior and
+  reference, and what the data constrain.
+- [docs/INVERSION.md](docs/INVERSION.md) rewritten; the 2.x note is
+  [docs/INVERSION_2x.md](docs/INVERSION_2x.md).
+
+### Changes of defaults, each with its effect
+
+| Change | Why | Effect |
+|---|---|---|
+| Stage E runs `auto` instead of `final`, `main`, `final_h2` | see the rows below | new files `<STA>_auto.*`; the 2.x variants run only when named |
+| Errors: bootstrap covariance + tilt + smooth term; no 1 % independent floor | measured scatter is 0.2-0.4 %, correlated between bins; level and slope are what is uncertain | median chi-square/N rises from about 0.4 to about 1; deep Vs intervals reflect the slope allowance |
+| Prior: ln Vs Gaussian about the reference (CRUST1.0), not flat with second-difference smoothing | the smoothing extrapolated the shallow gradient to the bounds in unresolved layers | unresolved depths return to the reference with the prior width |
+| Moho depth is sampled (30 % prior) instead of fixed at CRUST1.0 | a 1-degree Moho is a weak constraint for oceanic crust | crustal thickness carries its uncertainty |
+| Vp from the mafic line with a 7 % sampled factor, per upper and lower crust; density from Carlson & Raskin (1984) with a 3 % factor; no single free Vp/Vs | compliance measures stiffness; one Vp/Vs of 2.1 for all layers gave lower-crust Vp above 8.5 km/s | Vs at 2-5 km about 10 % higher than in 2.8 at the YV stations |
+| Sediment density from the Nafe-Drake curve instead of 2000 kg/m3; sediment P modulus sampled (15 %); thickness up to 2000 m | thin sediment acts through rho Vp^2 | sediment thickness changes; shelf and slope stations fit |
+| CRUST1.0 sediment of 500 m or more joins the reference, prior sigma 0.5 | igneous reference cannot stand for kilometres of sediment | 7D.J09B (shelf) and 7K.AN3 (slope) fit and converge |
+| Gain: Gaussian prior, 5 % (calibrated) or 20 % (nominal), instead of uniform bounds | two independent calibrations agree to 2-3 % with tails | no pile-up at the gain bounds; a pulled gain is reported |
+| Band: bins above 0.8 f_c and bins with inflated bootstrap scatter are dropped | the estimate collapses where the pressure signal no longer reaches the seafloor | 7D.J09B loses its bins above 34 mHz |
+| Convergence: sampling repeats until R-hat <= 1.05 and ESS >= 400 | no manual tuning | run time 1.5 to 10 minutes per station |
+
+### Fixed
+
+- `pipeline/c_compliance.py`: the saved curve stopped at 40 mHz (`OUTPUT_BAND`) while
+  the band and the monthly curves went on at shelf stations, so stage E lost its
+  month-to-month covariance there (7D.J09B). The saved range now reaches the band edge.
+
+### Added to existing modules (defaults unchanged)
+
+- `pipeline/c_compliance.py` saves `cov_rel`, `cov_freqs`, `cov_usable`, `slow_level`,
+  `slow_tilt` with each result (new keys only).
+- `dram.ComplianceData.build`: `random_cov`, `tilt_rel`, `smooth_rel`, `smooth_length`.
+- `dram.sample`: `gain_sigma` (Gaussian gain prior); a model may define `log_prior`.
+- `pipeline/f_figures.py`, `g_report.py` use the `auto` result when it exists and the
+  `final` result otherwise, so earlier run folders still build.
+
 ## 2.9.0 — 2026-11-09
 
 Merges PRs #21 (ComPy 3 audit), #22 (pressure-gauge audit) and #23 (whole-archive audit and

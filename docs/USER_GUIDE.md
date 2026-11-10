@@ -1,13 +1,14 @@
 # ComPy user guide
 
 Reference for the ComPy modules: input conventions, the compliance estimators,
-the Bayesian and legacy inversions, pressure-gauge QC and the plotting tools.
+the inversions, pressure-gauge QC and the plotting tools.
 The step-by-step workflow with figures is in the [README](../README.md).
 
 - [Input conventions](#input-conventions)
 - [Compliance estimators](#compliance-estimators)
 - [Module layout and ComPy 2.x names](#module-layout-and-compy-2x-names)
-- [Bayesian Vs inversion (`compy.inversion.dram`)](#bayesian-vs-inversion-compyinversiondram)
+- [Vs inversion (`compy.inversion.auto`)](#vs-inversion-compyinversionauto)
+- [The ComPy 2.x Bayesian inversion (`compy.inversion.dram`)](#the-compy-2x-bayesian-inversion-compyinversiondram)
 - [Metropolis forward model and inversion (`compy.inversion.metropolis`)](#metropolis-forward-model-and-inversion-compyinversionmetropolis)
 - [Deep-crust inversion tools](#deep-crust-inversion-tools)
 - [Pressure-gauge QC and calibration (`compy_pressure`)](#pressure-gauge-qc-and-calibration-compy_pressure)
@@ -22,7 +23,9 @@ The step-by-step workflow with figures is in the [README](../README.md).
 | `compy.cleaning` | smooth tilt rotation, periodic transients, STA/LTA event spans |
 | `compy.preprocessing` | `correct_tilt`, `remove_coherent_noise`, `estimate_tilt_angles` |
 | `compy.compliance` | spectra, window selection, `stacked_compliance`, `estimate_compliance`, `calculate_compliance*` |
-| `compy.inversion.dram` | Bayesian DRAM inversion, CRUST1.0, serpentinization |
+| `compy.inversion.auto` | default inversion: `invert`, `SeafloorModel`, `compliance_data`, `compy-invert` |
+| `compy.inversion.errors` | covariance of a stacked compliance estimate from its windows |
+| `compy.inversion.dram` | DRAM sampler, forward model, data container, CRUST1.0, the 2.x model, serpentinization |
 | `compy.inversion.metropolis` | Metropolis sampler of the paper, likelihoods, `invert_tempered`, `l_curve` |
 | `compy.inversion.occam` | `invert_occam` |
 | `compy.inversion.propagator` | forward model (`raydep`, `normalized_compliance`), kernels |
@@ -151,11 +154,80 @@ coherence γ.
 Figures of every processing step for one station are in the
 [README workflow](../README.md#workflow-step-by-step).
 
-## Bayesian Vs inversion (`compy.inversion.dram`)
+## Vs inversion (`compy.inversion.auto`)
 
-Parameterization and sampler follow Zha & Webb (2016); the CRUST1.0 Moho and the
-±5 % gain range follow Aminian et al. (2025). Method and validation:
-[INVERSION.md](INVERSION.md).
+The default since ComPy 3. Method, priors and limits: [INVERSION.md](INVERSION.md);
+tests: [inversion_overhaul_2026-11/REPORT.md](inversion_overhaul_2026-11/REPORT.md).
+
+From the command line, on a stage C result or a CSV of the curve:
+
+```bash
+compy-invert RR52_compliance_compy.npz --lat -20.4723 --lon 68.1094 \
+    --crust1 ~/crust1 --fetch-crust1          # downloads CRUST1.0 once
+compy-invert curve.csv --depth 2918 --lat -20.4723 --lon 68.1094 --crust1 ~/crust1
+```
+
+It writes `<station>_auto.npz` (draws), `.json` (summary and quality label),
+`_profile.csv` (Vs against depth with intervals, prior and a `resolved` flag) and
+`.png`. Options: `--gain nominal` for an uncalibrated gauge, `--response corrected`
+when the low-frequency pressure response was checked against the tide,
+`--sediment-prior MEAN SIGMA` for a sediment-map value, `--band`, `--seed`.
+
+In Python:
+
+```python
+import numpy as np
+from compy.inversion import auto, dram
+
+d = np.load("RR52_compliance_compy.npz")
+keep = d["cov_usable"]
+data = auto.compliance_data(
+    d["cov_freqs"][keep],
+    np.interp(d["cov_freqs"][keep], d["freqs"], d["compliance"]),
+    float(d["depth"]),
+    cov_rel=d["cov_rel"][np.ix_(keep, keep)],
+    response="unchecked",
+)
+model = auto.model_from_crust1(dram.crust1_column(-20.4723, 68.1094, "crust1"))
+result = auto.invert(data, model, gain_sigma=auto.GAIN_SIGMA["compy"])
+
+result.quality()  # label, reasons, chi-square, R-hat, gain pull
+result.parameter_resolution()  # posterior width / prior width, per parameter
+profile = result.profile()  # z, vs (quantiles), vs_prior, modulus, resolved
+result.save("RR52_auto")
+result = auto.load_result("RR52_auto")
+```
+
+- **Data.** `compliance_data` assembles the covariance: the bootstrap covariance
+  of the stack (`cov_rel`, saved by stage C; or `sigma=` for a plain list of
+  errors), a tilt term for the pressure response, and a smooth model-error term.
+  Bins above 0.8 f_c are dropped. `compy.inversion.errors.stack_covariance`
+  computes `cov_rel` from per-window spectra; `usable_bins` trims noisy band edges.
+- **Model.** `SeafloorModel`: a soft-sediment unit (thickness, Vs scale, P-modulus
+  factor), crustal layers that double in thickness with ln Vs Gaussian about a
+  reference model, a free Moho depth, Vp and density tied to Vs with sampled
+  factors, a mantle half-space, and the pressure-gain factor. `model_from_crust1`
+  builds it from CRUST1.0; pass your own `reference` (rows thickness, density,
+  Vp, Vs; last row the half-space) when a seismic model exists.
+- **No starting model.** Chains start from independent prior draws; the reference
+  is the centre of the prior and is drawn in every figure.
+- **Convergence.** Sampling repeats with twice the iterations (up to three rounds)
+  until R-hat is at most 1.05 and the effective sample size at least 400.
+- **Resolved depths.** Only depths with `resolved` true are constrained by the
+  data; elsewhere the profile is the prior.
+- **Figure.** `compy.plotting.auto.station_figure(result, "RR52_auto.png")`.
+
+Chains run in spawned processes: call `invert` from a script guarded by
+`if __name__ == "__main__":` or from a notebook, or pass `processes=1`.
+
+## The ComPy 2.x Bayesian inversion (`compy.inversion.dram`)
+
+The inversion of ComPy 2.3 to 2.8, kept to repeat earlier runs and as a check
+(`pipeline/e_invert.py STATION final`). It shares the sampler and the forward
+model with `auto`. Its flat prior with second-difference smoothing, its 1 %
+independent error floor and its single Vp/Vs for all layers are the reasons it
+is no longer the default; see [INVERSION.md](INVERSION.md) and
+[INVERSION_2x.md](INVERSION_2x.md).
 
 ```python
 from compy.inversion import dram as ci
