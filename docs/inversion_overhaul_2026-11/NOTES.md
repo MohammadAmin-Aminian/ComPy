@@ -37,3 +37,31 @@ NOT obtained (publisher and host block automated download; closed access): Crawf
 - **Sensitivities (log derivatives), bare rock under 3000 m:** summed over layers d ln eta/d ln Vs = -0.80 to -0.96, d ln eta/d ln Vp = -1.02 to -1.17, d ln eta/d ln rho = -0.99 (exact scaling). In RELATIVE terms compliance is as sensitive to Vp as to Vs. The literature's "2 to 9 times more sensitive to Vs" (Crawford 1994 eq. 2.21) is per m/s, i.e. the same thing divided by Vp/Vs. Half-space: d ln eta/d ln Vs = -2 + 2/(r^2-1), d ln eta/d ln Vp = -2/(r^2-1), r = Vp/Vs.
 - **Thin soft layers act through their P modulus.** For kh << 1 a layer of thickness h bonded to stiffer rock is in uniaxial strain and adds eta = k h/(rho Vp^2), independent of Vs. Check with the mpmath solver, 3000 m water, 100 m (Vp 1560, Vs 200) + 200 m (Vp 1750, Vs 450) of sediment on rock: the sediment adds 58 % (4 mHz) to 80 % (6 mHz) and 133 % (10 mHz) to the bare-rock compliance; added/(k h/(rho Vp^2)) = 0.97, 0.98, 1.03 at 4, 6, 10 mHz (1.25 at 15 mHz, 1.76 at 20 mHz where shear enters). Halving the sediment Vs changes eta by 1 %, 3 %, 16 % at 4, 6, 10 mHz. So at the low frequencies that carry the deep-crust information, sediment enters only through thickness/(rho Vp^2); the sediment Vs matters where kh > 0.15-0.2. The same holds for a thin layer 2A.
 - Consequences for the inversion: (a) sediment thickness and sediment P modulus trade directly with deep crustal Vs; (b) a fixed sediment Vp(z) and density are strong assumptions, not harmless ones; (c) a prior on sediment thickness from an independent map (GlobSed) is valuable; (d) statements that compliance is insensitive to Vp at high Vp/Vs hold for a half-space, not for a thin layer.
+
+## E2 error model on the archive (script `scripts/e02_error_model.py`, output `14_inversion_overhaul/e02_errors/error_model.csv`)
+
+285 of 287 stations (XO.LT02, LT15 have no band). Restack equals the archive to 1.5e-14. Tier 1 (172 stations), medians [10 %-90 %], all relative to compliance:
+
+| Quantity | Value |
+|---|---|
+| Bendat & Piersol error stored by stage C | 0.15 % [0.09-0.38] |
+| Bootstrap over windows (independent) | 0.23 % [0.10-0.55]; 1.36 x B&P |
+| Correlation of neighbouring bins (Hann, 50 % overlap) | 0.48; lag 2: 0.11 |
+| Bootstrap over 30-day blocks | 0.38 % [0.14-2.2]; 1.7 x independent; neighbouring-bin correlation 0.80 |
+| Share of the 30-day covariance that is a common level / a tilt in log f | 59 % / 11 % |
+| First half against second half of the record | level 0.67 %, tilt 0.83 %, rms 0.93 % [0.36-5.9] |
+| H2/H1 = 1/coherence^2 of the stack | 1.09 band median; 1.15 at the low edge, 1.20 at the high edge |
+| eta of the loudest fifth of windows over the quietest fifth | 0.985 [0.88-1.003] |
+
+Reading:
+- The old covariance gave about 1.2 % INDEPENDENT error per bin (1 % floor). Real scatter is 0.2-0.4 % and strongly correlated between bins. That alone explains chi2/N = 0.39.
+- What is uncertain is the LEVEL (gain) and the SLOPE of the curve, not its bin-to-bin shape. The old model was too strict on slope errors and too loose on wiggles.
+- Pressure-channel noise would make H1 rise with the pressure level. It falls slightly instead (-1.5 % median), so pressure noise is not what limits coherence, H1 is the right estimator and H2 (+9 %) is not a bracket worth carrying. The small fall with level is in the direction of the coherence-gate selection bias found in the 2.9 audit.
+- Two independent calibrations (stage D Rayleigh against BRUIT-FM microseism, 36 stations): robust scatter of the log ratio 2.0 %; all 73 pairs: 2.7 % robust, 16-84 % range -5.4 to +2.6 %, with outliers. A Gaussian gain prior of 5 % (1 sigma) is supported; uniform +-5 % is too narrow in the tails.
+
+## Design decisions taken from E1-E2 (to be tested, D49-D5x)
+
+1. Covariance = bootstrap covariance of the stack (independent windows, with its bin correlation) + slow level and tilt variance measured from 30-day blocks + a tilt term for the pressure-response shape + a smooth (correlated in log f) model-error term. No white floor. Gain sampled with a Gaussian prior.
+2. Prior: ln Vs of each crustal layer Gaussian about a reference model (CRUST1.0 or a user model), sigma 0.3, correlation 0.7 between neighbouring layers; proper, so unresolved depths return to the reference with the prior width instead of extrapolating a gradient to the bounds. The old flat prior with hierarchical second-difference smoothing stays as a sensitivity check.
+3. Vp follows Vs by a rock relation with a sampled scatter (upper and lower crust separately); density follows Vp (Carlson & Raskin 1984). Sediment: thickness, Vs scale and P-modulus factor free.
+4. Brocher's regression (eq. 9) excludes mafic rocks, gabbros and serpentinites by its own scope (secondary source: R package hydrogeo, which lists eq. 6 as "all except Ca-rich and mafic, gabbros and serpentinites" and eq. 8, the mafic line Vs = 2.88 + 0.52 (Vp - 5.25) for 5.25 <= Vp <= 7.25 km/s). The original paper was not obtained. For oceanic crust use the mafic line (Vp/Vs 1.82-1.85), which agrees with Zha & Webb's 1.85.
