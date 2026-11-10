@@ -688,10 +688,16 @@ class InversionResult:
     def quality(self):
         """Label ("good", "usable" or "poor") with the reasons.
 
-        good: converged, median chi-square at most the 95 % point of a
-        chi-square with N degrees of freedom, gain within 2 sigma of 1, and
-        some depth resolved. usable: R-hat <= 1.1 and chi-square at most twice
-        that point. poor: anything else.
+        good: converged; median chi-square at most the 95 % point of a
+        chi-square with N degrees of freedom; the gain, the Vp factors and the
+        density factor within 2 sigma of their prior means; some depth
+        resolved. usable: R-hat <= 1.1, chi-square at most twice that point,
+        those factors within 3 sigma, some depth resolved. poor: anything else.
+
+        A factor pulled far from its prior means the data cannot be fitted by
+        a plausible Earth with the given calibration: at 7D.J35A, with a
+        pressure gain of 4.4, the inversion needs a gain factor of 0.83, Vp
+        25 % above the rock relation and crustal Vs at 4.7 km/s.
         """
         from scipy.stats import chi2 as chi2_dist
 
@@ -699,8 +705,14 @@ class InversionResult:
         n = s["n_data"]
         limit = float(chi2_dist.ppf(0.95, n))
         chi2 = s["chi2"]["median"]
-        gain = s["parameters"].get("gain", {}).get("median", 1.0)
-        pull = abs(gain - 1.0) / self.gain_sigma
+        par = s["parameters"]
+        gain = par.get("gain", {}).get("median", 1.0)
+        model = self.model
+        pulls = {"gain": abs(gain - 1.0) / self.gain_sigma}
+        for name, sigma in (("vp_upper", model.vp_sigma), ("vp_lower", model.vp_sigma),
+                            ("density", model.density_sigma)):  # fmt: skip
+            pulls[name] = abs(par[name]["median"]) / sigma
+        worst = max(pulls, key=pulls.get)
         resolved = bool(np.any(self.profile()["resolved"]))
         reasons = []
         if not self.converged:
@@ -709,18 +721,32 @@ class InversionResult:
             )
         if chi2 > limit:
             reasons.append(f"misfit: chi2 {chi2:.1f} above {limit:.1f} for {n} data")
-        if pull > 2:
-            reasons.append(f"gain pulled {pull:.1f} sigma from 1 (factor {gain:.3f})")
+        for name, pull in pulls.items():
+            if pull > 2:
+                what = (
+                    f"factor {gain:.3f}"
+                    if name == "gain"
+                    else f"ln factor {par[name]['median']:+.3f}"
+                )
+                reasons.append(
+                    f"{name} pulled {pull:.1f} sigma from its prior ({what})"
+                )
         if not resolved:
             reasons.append("no depth resolved beyond the prior")
         if not reasons:
             label = "good"
-        elif s["max_rhat"] <= 1.1 and chi2 <= 2 * limit and resolved:
+        elif (
+            s["max_rhat"] <= 1.1
+            and chi2 <= 2 * limit
+            and resolved
+            and pulls[worst] <= 3
+        ):
             label = "usable"
         else:
             label = "poor"
         return dict(label=label, reasons=reasons, chi2=chi2, chi2_limit=limit, n_data=n,
-                    max_rhat=s["max_rhat"], min_ess=s["min_ess"], gain=gain, gain_pull=pull)  # fmt: skip
+                    max_rhat=s["max_rhat"], min_ess=s["min_ess"], gain=gain,
+                    gain_pull=pulls["gain"], pulls=pulls)  # fmt: skip
 
     def summary(self):
         """JSON-ready record: posterior summary, quality, resolution, prior."""
