@@ -714,6 +714,7 @@ class InversionResult:
             pulls[name] = abs(par[name]["median"]) / sigma
         worst = max(pulls, key=pulls.get)
         resolved = bool(np.any(self.profile()["resolved"]))
+        res_ratio = self.parameter_resolution()
         reasons = []
         if not self.converged:
             reasons.append(
@@ -733,6 +734,12 @@ class InversionResult:
                 )
         if not resolved:
             reasons.append("no depth resolved beyond the prior")
+        lo, hi = model.vs_bounds
+        at_bound = [name for name in model.names if name.startswith("vs_crust_")
+                    and res_ratio.get(name, 1.0) <= 0.6
+                    and not 1.05 * lo < par[name]["median"] < 0.98 * hi]  # fmt: skip
+        if at_bound:
+            reasons.append("resolved Vs at a hard bound: " + ", ".join(at_bound))
         if not reasons:
             label = "good"
         elif (
