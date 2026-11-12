@@ -93,11 +93,11 @@ def fig2():
     ax.text(1.03, 0.05, "1 % floor of ComPy 2.x", rotation=90, color=MUTED, fontsize=8, va="bottom")
     ax.set(xscale="log", xlim=(0.05, 10), xlabel="Relative error of the stacked curve (%)",
            ylabel="Share of 172 stations", title="Scatter of a stacked compliance curve")
-    ax.legend(loc="upper left")
+    ax.legend(loc="lower right")
     ax = axes[1]
     lags = ("iid_corr_adjacent", "iid_corr_lag2", "b30_corr_adjacent", "b30_corr_ends")
-    labels = ("windows,\nneighbours", "windows,\ntwo apart", "30-day blocks,\nneighbours",
-              "30-day blocks,\nband ends")
+    labels = ("windows\n1 bin apart", "windows\n2 bins apart", "blocks\n1 bin apart",
+              "blocks\nband ends")
     data = [col(n) for n in lags]
     parts = ax.boxplot(data, widths=0.5, patch_artist=True, showfliers=False,
                        medianprops=dict(color=INK, lw=1.5))
@@ -105,7 +105,8 @@ def fig2():
         patch.set(facecolor=color, alpha=0.35, edgecolor=color)
     ax.axhline(0, color=MUTED, lw=0.6)
     ax.set_xticks(range(1, 5), labels, fontsize=8)
-    ax.set(ylabel="Correlation between frequency bins", title="Errors are correlated between bins", ylim=(-0.6, 1.05))
+    ax.set(ylabel="Correlation between frequency bins",
+           title="Errors are correlated between bins\n(resampling windows, or 30-day blocks)", ylim=(-0.6, 1.05))
     ax = axes[2]
     for name, label, color in (("half_level", "level", BLUE), ("half_tilt", "tilt across the band", ORANGE)):
         v = np.sort(100 * np.abs(col(name)))
@@ -148,7 +149,7 @@ def fig3():
     x = np.linspace(-30, 30, 300)
     ax.plot(x, len(lr) * 2.5 * np.exp(-0.5 * (x / (5 * np.sqrt(2))) ** 2) / (5 * np.sqrt(2) * np.sqrt(2 * np.pi)),
             color=ORANGE, lw=2, label="two gains with 5 % error each")
-    ax.set(xlabel="Rayleigh-wave gain against microseism gain (%)", ylabel="Stations",
+    ax.set(xlabel="Rayleigh gain against microseism gain (%)", ylabel="Stations",
            title=f"Two calibrations of {len(lr)} gauges")
     ax.legend(loc="upper left")
     fig.savefig(OUT / "fig03_covariance_gain.png", dpi=170, bbox_inches="tight")
