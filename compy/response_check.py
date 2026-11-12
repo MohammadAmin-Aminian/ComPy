@@ -287,7 +287,8 @@ def scale_leak_poles(channel, k, *, mode="lowest", leak_hz=0.05):
         if (mode == "lowest" and np.isclose(h, lowest)) or (
             mode == "all" and h < leak_hz
         ):
-            s.poles[i] = s.poles[i] * k
+            # keep ObsPy's pole type: a plain complex cannot be written to StationXML
+            s.poles[i] = type(s.poles[i])(complex(s.poles[i]) * k)
             changed += 1
             rad = "RADIANS" in s.pz_transfer_function_type.upper()
             fn = s.normalization_frequency
