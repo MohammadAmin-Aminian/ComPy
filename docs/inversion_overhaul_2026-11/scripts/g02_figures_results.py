@@ -279,6 +279,19 @@ def fig6(rows):
     )
 
 
+def changed(tag, base_row):
+    """Whether the variant differs from the standard run at this station.
+
+    Stations with thick CRUST1.0 sediment already use a prior width of 0.5, and
+    stations without a response correction already have the 4 % tilt allowance.
+    """
+    if tag == "sigma05":
+        return float(base_row["crust1_sediment"]) < 500.0
+    if tag == "unchecked":
+        return base_row["response"] == "corrected"
+    return True
+
+
 def fig7(rows):
     base = {r["sid"]: r for r in rows}
     variants = (
@@ -319,6 +332,7 @@ def fig7(rows):
                 if v["sid"] in base
                 and v["quality"] != "poor"
                 and base[v["sid"]]["quality"] != "poor"
+                and changed(tag, base[v["sid"]])
             ]
             a = np.array(pairs)
             data.append(100 * (a[:, 0] / a[:, 1] - 1))
@@ -334,7 +348,7 @@ def fig7(rows):
         for patch in parts["boxes"]:
             patch.set(facecolor=BLUE, alpha=0.35, edgecolor=BLUE)
         ax.axvline(0, color=MUTED, lw=0.8)
-        ax.set_title(label, fontsize=8)
+        ax.set_title(f"{label}\n({len(data[0])} stations)", fontsize=8)
         ax.set_xlim(-25, 25)
         ax.set_xlabel("Change of median Vs (%)")
         numbers[tag] = dict(
@@ -345,6 +359,9 @@ def fig7(rows):
                 for d, x in zip(DEPTHS, data)
             },
             interval_width_ratio={str(d): w for d, w in zip(DEPTHS, width)},
+            largest_change={
+                str(d): float(np.max(np.abs(x))) for d, x in zip(DEPTHS, data)
+            },
         )
     ax0 = np.atleast_1d(axes)[0]
     ax0.set_yticks(range(1, len(DEPTHS) + 1), [f"{d / 1000:g} km" for d in DEPTHS])
@@ -395,7 +412,7 @@ def fig8():
         ax.set_title(label, fontsize=9)
         ax.set_xlabel("Intervals holding the truth (%)")
     axes[0].set_ylabel("Depth below seafloor (m)")
-    axes[0].legend(loc="lower left", fontsize=7)
+    axes[1].legend(loc="center", bbox_to_anchor=(0.5, 0.5), fontsize=7)
     fig.savefig(OUT / "fig08_calibration.png", dpi=170, bbox_inches="tight")
     plt.close(fig)
 

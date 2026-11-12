@@ -1,6 +1,6 @@
 # ComPy inversion overhaul, November 2026
 
-Audit and rebuild of the shear-velocity inversion of ComPy, against the primary literature and against tests that do not use any earlier ComPy result. Branch `inversion-overhaul`, proposed as ComPy 3.0.0. Brief: [PROMPT.md](PROMPT.md). Working notes: [NOTES.md](NOTES.md).
+Audit and rebuild of the shear-velocity inversion of ComPy, against the primary literature and against tests that do not use any earlier ComPy result. Branch `inversion-overhaul`, proposed as ComPy 3.0.0. Working notes: [NOTES.md](NOTES.md).
 
 Every statement below is marked **[test]** (verified by a script in `scripts/`, output in `~/Desktop/ComPy/14_inversion_overhaul/`), **[source]** (taken from a publication that was read) or **[inferred]**.
 
@@ -35,7 +35,7 @@ Every statement below is marked **[test]** (verified by a script in `scripts/`, 
 
 Soft-sediment thickness is 0.76 times the 2.8 value (median). At the eight stations of the 2025 paper the change is larger: Vs at 2 to 3 km rises by 4 to 16 % at six of them and falls by 9 % at RR29; at RR38, RR40, RR50 and RR52 the new medians at 2 to 5 km are 4.1 to 4.7 km/s (section 7.2). These numbers compare two ComPy versions; neither is a reference.
 
-**Confidence.** High for the diagnosis of the error model, the prior and the forward model: each rests on a test. Moderate for absolute Vs below 2 km: it depends on the Vp/Vs and density priors and on the slope allowance, whose sizes are judgements stated in section 4 and tested in sections 5 and 8. The independent sediment map agrees with the soft-sediment thickness where sediment is thin (rank correlation 0.66 over 92 stations, section 7.3).
+**Confidence.** High for the diagnosis of the error model, the prior and the forward model: each rests on a test. Moderate for absolute Vs below 2 km: it depends on the Vp/Vs and density priors and on the slope allowance, whose sizes are judgements stated in section 4 and tested in sections 5 and 8. Lower for Vs between 0.5 and 3 km where sediment is thick: there it depends on where the band is cut (section 8). The independent sediment map agrees with the soft-sediment thickness where sediment is thin (rank correlation 0.66 over 92 stations, section 7.3).
 
 **What failed or stays open** is in section 9; **decisions for the author and W. Crawford** in section 10.
 
@@ -50,7 +50,7 @@ Soft-sediment thickness is 0.76 times the 2.8 value (median). At the eight stati
 | Hulme et al. (2003, 2005); Crawford et al. (2002); Crawford (2005) | sections | 2-D effects, as a limit |
 | Mosher et al. (2021), GJI 227 | sections | Another parameterization (Bernstein polynomials, constant Vp and density) |
 | Janiszewski et al. (2019), GJI 217 | one statement | Sediment density 2.0 "following Ruan et al. (2014)" |
-| Tsekhmistrenko et al. (2026), Seismica 5(2) | sections | Instruments of network 8J (for the 8J paper) |
+| Tsekhmistrenko et al. (2026), Seismica 5(2) | sections | Instruments of network 8J |
 | Aminian et al. (2025), GJI 242; Aminian (2024) thesis | earlier audits | The method under test |
 
 **Not obtained** (publisher or host refused automated access, or closed): Crawford et al. (1991, 1998); Ruan et al. (2014); Bell et al. (2015); Doran & Laske (2019); Zheng et al. (2024); Brocher (2005), Hamilton (1976, 1979), Carlson & Raskin (1984), Christensen & Shaw (1970) in the original. Consequences: the Ruan sediment relation is not used; Brocher's relations are taken from a published implementation (R package hydrogeo) and marked so in the code; the 1998 gravity formula is taken from Zha's quotation and re-derived (section 3.1). Please check these against the originals.
@@ -161,7 +161,7 @@ Median chi-square per datum is 1.08 (tier 1), against 0.38 in the 2.8 run: the s
 
 Median Vs in km/s with the 16 to 84 % interval; the 2.8 median in brackets; "u" marks an unresolved depth.
 
-| Station | Label | Soft sediment (m) | 1 km | 2 km | 3 km | 5 km |
+| Site | Label | Soft sediment (m) | 1 km | 2 km | 3 km | 5 km |
 |---|---|---|---|---|---|---|
 | RR28 | good | 342 (242 to 555) | 2.79 u (2.25 to 3.45) [2.76] | 3.52 (3.11 to 3.99) [3.37] | 3.56 (3.17 to 4.05) [3.37] | 4.08 (3.65 to 4.51) [3.93] |
 | RR29 | good | 32 (11 to 60) | 3.51 u (3.00 to 4.11) [3.34] | 3.29 (2.98 to 3.68) [3.61] | 3.30 (3.00 to 3.72) [3.61] | 4.40 (3.95 to 4.66) [3.91] |
@@ -175,7 +175,7 @@ Median Vs in km/s with the 16 to 84 % interval; the 2.8 median in brackets; "u" 
 Three things to read from this table:
 
 - **Vs of 4.1 to 4.6 km/s between 2 and 5 km at RR38, RR40, RR50 and RR52 is faster than gabbro** (3.7 to 3.9 km/s) and close to unaltered peridotite. It is not a general feature of the method: among the 76 deep tier-1 stations of the archive the median Vs at 3 km is 3.37 km/s (16 to 84 %: 3.11 to 3.67) and only 5 % exceed 4.0 km/s. So either these sites have thin crust or shallow ultramafic rock, which is plausible on the ultraslow Southwest Indian Ridge and near the Rodrigues triple junction, or the low-frequency compliance of the YV instruments is too low by a few per cent for a reason not yet identified. A slope error of 3 % moves Vs at these depths by about 6 %. This needs the judgement of people who know the sites and the instruments. [inferred]
-- **About half of the rise against 2.8 is the Vp and density rule**, not the data: 2.8 sampled one Vp/Vs for all layers and found about 2.1, and its density followed that Vp. [test: section 8]
+- **About half of the rise against 2.8 is the Vp and density rule**, not the data: 2.8 sampled one Vp/Vs for all layers and found about 2.1, and its density followed that Vp. [inferred from the sensitivities of section 3.3]
 - **The top kilometre is mostly unresolved** at these depths of water; values there are the prior.
 
 The published profiles of the 2025 paper were not used anywhere in this work. How they compare with the table above is for the author to judge; ComPy 2.8 already differed from them (docs/INVERSION_2x.md).
@@ -190,7 +190,35 @@ GlobSed was not used by the inversion. For the 92 stations on thin sediment the 
 
 No comparison with published compliance results of other groups at the same stations was made: Ruan et al. (2014), Bell et al. (2015) and Doran & Laske (2019) could not be obtained.
 
-SENSITIVITY_PLACEHOLDER
+## 8. Sensitivity to the choices
+
+Each choice was changed alone and the 43 benchmark stations were inverted again (`scripts/r02_batch.py`, output `r02_sensitivity/`). The table gives the change of the median Vs against the standard run, over the stations where the choice differs from the standard and neither run is "poor": median, 16 to 84 % range in brackets, and the largest change of any station. [test]
+
+| Choice changed | N | 0.5 km | 1 km | 2 km | 3 km | 5 km |
+|---|---|---|---|---|---|---|
+| Prior width of ln Vs 0.5 instead of 0.3 | 17 | +0.5 % (-7 to +5), max 9 | -0.3 % (-4 to +3), max 6 | -0.1 % (-2 to +2), max 5 | +0.4 % (-2 to +2), max 5 | +0.9 % (0 to +2), max 11 |
+| Correlation between layers 0.9 instead of 0.7 | 38 | -0.4 % (-5 to +3), max 8 | -0.5 % (-5 to +5), max 34 | -0.1 % (-3 to +4), max 27 | +0.9 % (-3 to +4), max 13 | -1.5 % (-6 to 0), max 15 |
+| No response correction, slope allowance 4 % | 34 | +0.4 % (-1 to +2), max 6 | +0.3 % (-1 to +2), max 5 | -0.4 % (-3 to +1), max 6 | -0.3 % (-3 to +1), max 11 | +0.2 % (-7 to +2), max 48 |
+| Vp factor 15 % instead of 7 % | 38 | +0.1 % (-1 to +2), max 3 | +0.2 % (-1 to +2), max 8 | -0.1 % (-2 to +2), max 8 | +0.3 % (-1 to +3), max 8 | -0.7 % (-5 to +2), max 11 |
+| Band cut at 0.6 f_c instead of 0.8 | 35 | +3.5 % (-3 to +24), max 44 | +4.2 % (-1 to +21), max 71 | -0.6 % (-22 to +12), max 47 | +6.4 % (-3 to +20), max 49 | -0.9 % (-6 to +4), max 21 |
+
+![Figure 7](figures/fig07_sensitivity.png)
+
+*Figure 7. Change of the median Vs at five depths when one choice is changed, over the benchmark stations where the choice differs from the standard run (box: 25 to 75 %, whiskers: the range without outliers; the axis is cut at 25 %).*
+
+What the table shows:
+
+- **The prior width of Vs and the Vp factor do not move the medians.** The medians change by less than 1 % over the stations and stay inside the 16 to 84 % interval of the standard run at every station and depth. They change the width of the intervals: 1.2 to 1.3 times wider down to 3 km with the wider Vs prior, 1.1 times wider from 2 km down with the wider Vp factor. The widths of the intervals carry these prior choices; the medians do not.
+- **The correlation between layers** changes the median by at most 1.5 % over the stations and narrows the intervals to 0.7 to 0.9 of their width, but single stations change by up to 34 % at 1 km: a stronger correlation smooths a sharp step in the profile. The 24 benchmark stations with thick reference sediment already use a width of 0.5 and repeat the standard run exactly, which is why the first row has 17 stations.
+- **The label "resolved" is relative to the prior.** It compares the width of the posterior with that of the prior, so a wider prior marks more depths as resolved. Of the 19 thin-sediment benchmark stations, 1 km is resolved at 7 with the standard width and at 15 with 0.5; 2 and 3 km are resolved at all 19 either way. With the stronger correlation between layers, 0.5 km is resolved at 31 of 43 stations instead of 22. Stations with thick reference sediment use the wider prior, so their shallow depths are marked resolved more easily than at the other stations. Medians and intervals do not depend on this; the label does.
+- **The response correction** moves the median by less than 1 % in the median over stations and by up to 7 % at 5 km in the 16 to 84 % range. One station changes by 48 % at 5 km. Six quality labels change, four for the worse and two for the better.
+- **The upper limit of the band is the choice that matters.** Cutting at 0.6 f_c removes three data per station (median) and changes Vs somewhere between 0.5 and 3 km by 20 % or more at 14 of the 35 stations; the new median lies outside the 16 to 84 % interval of the standard run at 14 to 37 % of the stations, depending on depth (32 % is what two independent estimates would give). The largest changes are at stations with thick sediment (7K.AN2 to AN6, 7D.M11B, ZU.NZ19), where the profile between 0.5 and 3 km alternates in sign with depth. Two stations have fewer than three frequencies left and cannot be inverted. Vs at 5 km changes little.
+
+The last point has two readings, and this work does not decide between them. Either the bins between 0.6 and 0.8 f_c carry real information on the upper crust that the lower bins lack, and removing them returns those depths to the prior; or these bins are biased towards low compliance by the loss of pressure signal near f_c, beyond what the scatter trim removes, and bias the upper crust. Section 5 tests the inversion on synthetic data with the stated errors, so it does not test this. It is listed in sections 9 and 10.
+
+![Figure 8](figures/fig08_calibration.png)
+
+*Figure 8. The calibration tests of section 5: share of synthetic data sets whose 50 % and 90 % intervals of Vs contain the true value, against depth, for five cases. Shaded: the range expected by chance for the number of data sets.*
 
 ## 9. What failed, and what stays open
 
@@ -211,6 +239,8 @@ SENSITIVITY_PLACEHOLDER
 | Gain | Gaussian prior; pulled gains reported (21 stations). |
 | Wide gates and their 15 dB cut; stage D without tilt cleaning where rates differ; pressure sign | Unchanged; not examined in this work. Open. |
 | Saved curve stops at 40 mHz | Fixed in stage C. |
+| The "resolved" label (new) | Open. It is a ratio of posterior to prior width and therefore depends on the prior width (section 8). An absolute criterion would not. |
+| Upper limit of the band (new) | Open. Vs between 0.5 and 3 km depends on the bins between 0.6 and 0.8 f_c, most at thick-sediment stations (section 8). Whether those bins are biased was not tested. |
 
 Stations that remain poor and need a look at the data, not at the inversion: YV.RR38 (misfit, known pressure-channel change), 7D.J35A (BRUIT-FM gain 4.45; the inversion asks for a factor 0.83, Vp 25 % above the rock relation and Vs at 4.7 km/s), XO.LT01 (misfit 41 for 8 data in about 100 m of water), and the stations with nominal gains whose gain factor is pulled (17).
 
@@ -221,15 +251,17 @@ Not done: comparison with refraction velocities at the stations; a transdimensio
 1. **Publish ComPy 3.0.0?** The branch changes the default Vs results. It is pushed as a pull request and not merged.
 2. **The slope allowance** (2 % with a response correction, 4 % without) and **the prior widths** (ln Vs 0.3, Vp 7 %, density 3 %, Moho 30 %). These are judgements; section 8 shows what each does.
 3. **The fast lower crust at RR38, RR40, RR50 and RR52**: geology or a low-frequency bias of a few per cent? Refraction or gravity constraints at these sites would settle it.
-4. **A Vp profile per site.** Where refraction Vp exists, giving it as the reference removes most of the Vp/Vs uncertainty (Crawford 1994, 2004 did this). Should the pipeline look for one?
-5. **The corrections to the 2025 paper** now known: the sign and size of the gravity correction in the text (section 3.1), and the items of docs/INVERSION_2x.md. Whether to publish a correction.
-6. **Sources to check by hand**: Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015), Brocher (2005), Hamilton (1976, 1979), Carlson & Raskin (1984). The relations taken through secondary sources are marked in the code.
-7. **The 2.x results in the README and in docs/results/** (XE, YV) were made with ComPy 2.4 to 2.8. They are marked as superseded; rerunning those networks through the full pipeline with 3.0 is a separate job.
+4. **The upper limit of the band** (0.8 f_c). Section 8 shows that shallow Vs depends on it. A test on real data would be to compare compliance of the same site from two water depths or from a pressure gauge with a known noise floor.
+5. **The criterion for "resolved"**: a ratio to the prior width (now), or an absolute posterior width? Section 8 shows that the ratio favours stations with a wide prior.
+6. **A Vp profile per site.** Where refraction Vp exists, giving it as the reference removes most of the Vp/Vs uncertainty (Crawford 1994, 2004 did this). Should the pipeline look for one?
+7. **The corrections to the 2025 paper** now known: the sign and size of the gravity correction in the text (section 3.1), and the items of docs/INVERSION_2x.md. Whether to publish a correction.
+8. **Sources to check by hand**: Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015), Brocher (2005), Hamilton (1976, 1979), Carlson & Raskin (1984). The relations taken through secondary sources are marked in the code.
+9. **The 2.x results in the README and in docs/results/** (XE, YV) were made with ComPy 2.4 to 2.8. They are marked as superseded; rerunning those networks through the full pipeline with 3.0 is a separate job.
 
 ## 11. Files
 
 - Code: `compy/inversion/auto.py`, `errors.py`, `cli.py`, `compy/plotting/auto.py`; changes in `compy/inversion/dram.py`, `pipeline/c_compliance.py`, `e_invert.py`, `f_figures.py`, `g_report.py`; tests `tests/test_inversion_auto.py`.
 - Scripts of this report: `scripts/` (`e01` to `e04` tests, `c01` legacy identity, `r01` to `r03` archive runs, `v01` GlobSed, `g01`, `g02` figures, `archive.py` inputs).
 - Outputs: `~/Desktop/ComPy/14_inversion_overhaul/`.
-- Decisions: `~/Desktop/ComPy/DECISIONS.md`, D49 to D56.
+- Decisions: `~/Desktop/ComPy/DECISIONS.md`, D49 to D57.
 

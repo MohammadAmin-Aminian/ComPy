@@ -30,4 +30,4 @@ The forward model (4e-7 against a 50-digit solver), the gravity corrections, the
 
 ## Open (section 10 of the report)
 
-The slope allowance and prior widths are judgements; the fast lower crust at four YV stations; sources not obtained in the original (Crawford 1991/1998, Ruan 2014, Bell 2015, Brocher 2005).
+The slope allowance and prior widths are judgements (prior widths change the intervals, not the medians); Vs between 0.5 and 3 km depends on the upper limit of the band, most at thick-sediment stations; the fast lower crust at four YV stations; sources not obtained in the original (Crawford 1991/1998, Ruan 2014, Bell 2015, Brocher 2005).

@@ -92,3 +92,14 @@ Expected coverage for 144 replicates (95 % range): 0.42-0.58 for 50 % intervals,
 - **Unmodelled tilt of 4 % (twice the allowance for a corrected response), RR52:** Vs coverage stays 0.82-0.92 (90 %); bias +2 % at 3 km, +4 % at 5 km, +7 % at 7 km.
 - **Gain error of 10 % (twice the prior sigma), RR52:** Vs 90 % coverage 0.78-0.88; the gain's own coverage collapses (0.56), as it must.
 - **Legacy identity (C1):** variant `final` of ComPy 2.8 on RR52 reproduces the archived draws exactly (max difference 0.0) with the ComPy 3 sampler code.
+
+## Sensitivity runs (43 benchmark stations; `scripts/r02_batch.py`; output `14_inversion_overhaul/r02_sensitivity/`)
+
+Change of the median Vs against the standard run, stations where the choice differs and neither run is poor.
+
+- **Prior width of ln Vs 0.5 instead of 0.3 (17 stations; the 24 with thick reference sediment already use 0.5 and repeat the standard run exactly):** median change below 1 % at every depth, largest 11 % (5 km); intervals 1.2-1.3 times wider down to 3 km.
+- **Layer correlation 0.9 instead of 0.7 (38):** median change at most 1.5 %; intervals 0.7-0.9 of their width; single stations up to 34 % at 1 km.
+- **No response correction, tilt 4 % (34):** median change below 1 %; 16-84 % range -7 to +2 % at 5 km; six labels change (four worse, two better).
+- **Vp factor 15 % instead of 7 % (38):** median change below 1 %; intervals 1.1 times wider from 2 km down.
+- **Band cut at 0.6 f_c instead of 0.8 (35; two stations left with fewer than 3 bins):** three data fewer (median); median change +3.5, +4.2, -0.6, +6.4, -0.9 % at 0.5, 1, 2, 3, 5 km; 20 % or more somewhere between 0.5 and 3 km at 14 stations (7K.AN2-AN6, 7D.M11B, ZU.NZ19 largest); new median outside the standard 16-84 % interval at 14-37 % of stations.
+- **The "resolved" label depends on the prior width:** thin-sediment stations resolved at 1 km: 7 of 19 with 0.3, 15 with 0.5. With correlation 0.9, 0.5 km resolved at 31 of 43 instead of 22.

@@ -118,6 +118,8 @@ Delayed-rejection adaptive Metropolis with parallel tempering (`compy.inversion.
 - **The slope of the curve carries the deep information**, and its error allowance (2-4 %) is a judgement supported by section 3, not a measurement at each station. A 3 % slope error moves Vs at 2-5 km by about 6 %.
 - **1-D.** Ridge axes, slopes and seamounts are not 1-D (Crawford et al. 1998; Hulme et al. 2005).
 - **Not obtained for this work:** Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015), Doran & Laske (2019) and Brocher (2005) in the original. Their content is used only as quoted by sources that were read; the Ruan sediment relation is not used at all.
+- **"Resolved" is relative to the prior.** The label compares posterior and prior widths, so a wider prior (stations with thick reference sediment, or `vs_sigma` raised by hand) marks more depths as resolved. Compare intervals, not labels, between runs with different priors.
+- **Shallow Vs depends on the upper limit of the band.** On 35 benchmark stations, cutting the band at 0.6 `f_c` instead of 0.8 changed Vs between 0.5 and 3 km by 20 % or more at 14 of them, most where sediment is thick. Whether the bins near `f_c` are biased is not settled (report of November 2026, section 8).
 
 ## References
 
