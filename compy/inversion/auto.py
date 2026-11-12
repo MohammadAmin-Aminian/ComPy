@@ -722,14 +722,25 @@ class InversionResult:
     def reach(self, fraction=0.9):
         """Depth [m] above which ``fraction`` of the sensitivity of the lowest frequency lies.
 
-        From the Vs kernel (Vp/Vs fixed) of the posterior median model.
+        From the Vs kernel (Vp/Vs fixed) of the posterior median model, down
+        to 12 e-folding depths of the lowest-frequency wave (or twice the
+        deepest Moho, if that is less): below that nothing is felt, and the
+        propagator overflows in shallow water.
         """
+        from compy.numerics import wavenumber
+
         theta = np.median(self.posterior.flat(), axis=0)[: len(self.model.names)]
         layers = self.model.layers(theta)
-        zmax = 2.0 * self.model.moho_bounds[1]
-        z, kern = dram.vs_kernels(self.data.depth, self.data.freqs[:1], layers,
-                                  dz=min(100.0, zmax / 200), max_depth=zmax)  # fmt: skip
-        return dram.sensitivity_depth(z, kern[0], fraction)
+        k = float(wavenumber(2 * np.pi * self.data.freqs[0], self.data.depth))
+        zmax = min(2.0 * self.model.moho_bounds[1], 12.0 / k)
+        for _ in range(6):
+            try:
+                z, kern = dram.vs_kernels(self.data.depth, self.data.freqs[:1], layers,
+                                          dz=min(100.0, zmax / 200), max_depth=zmax)  # fmt: skip
+                return dram.sensitivity_depth(z, kern[0], fraction)
+            except ValueError:
+                zmax *= 0.6
+        return float(1.5 / k)  # a quarter wavelength, if the kernel cannot be computed
 
     def parameter_resolution(self):
         """Posterior over prior width of every parameter (16-84 % interval).
