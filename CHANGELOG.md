@@ -41,7 +41,13 @@ Result of the inversion overhaul of November 2026
   the band and the monthly curves went on at shelf stations, so stage E lost its
   month-to-month covariance there (7D.J09B). The saved range now reaches the band edge.
 
+- `compy.response_check.scale_leak_poles` replaced ObsPy's pole objects by plain complex
+  numbers, so the scaled channel could not be written to StationXML. It keeps the type now.
+
 ### Added to existing modules (defaults unchanged)
+
+- The `dev` extra installs Numba, so the test suite runs the compiled forward model
+  (the inversion tests take 1.5 minutes with it and 8 without).
 
 - `pipeline/c_compliance.py` saves `cov_rel`, `cov_freqs`, `cov_usable`, `slow_level`,
   `slow_tilt` with each result (new keys only).
