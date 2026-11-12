@@ -44,9 +44,11 @@ runs unattended on any broadband OBS network stored as an SDS archive.
 - **Rayleigh-wave DPG calibration.** Per-event gains from teleseismic Rayleigh
   waves, cross-checked against microseism and local-P estimates
   (`compy_pressure`).
-- **Bayesian inversion.** Multi-chain DRAM with parallel tempering, free Vp/Vs,
-  the pressure gain sampled within ±5 %, R-hat/ESS diagnostics and sensitivity
-  kernels; Numba-compiled forward model.
+- **Vs inversion that says what it resolves.** One command (`compy-invert`) from a
+  compliance curve to Vs with credible intervals: errors measured from the
+  station's own windows, a prior about a reference model, Vp, density, Moho depth
+  and pressure gain uncertain, sampling repeated until it converges, and each
+  depth marked as resolved by the data or not ([docs/INVERSION.md](docs/INVERSION.md)).
 - **Two networks processed.** RHUM-RUM (YV, 8 stations, Indian Ocean) and
   Pacific Array Young ORCA (XE, 30 stations, Pacific).
 - **Tested.** CI on Python 3.10–3.13 with lint, format, wheel build and an
@@ -236,40 +238,40 @@ result.compliance, result.uncertainty, result.n_windows
 <p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig07_windows.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig07_windows.png" width="800" alt="CC11 selected windows: spectra, coherence and compliance"></a></p>
 <p align="center"><sub><b>XE.CC11 selected windows</b> (150 of 7314 shown): corrected vertical acceleration, calibrated pressure, coherence and per-window compliance with the stacked estimate (red).</sub></p>
 
-### 7. Bayesian Vs inversion
+### 7. Vs inversion
 
-The model is a Hamilton sediment layer of free thickness over crustal layers of
-100, 200, 400, 800 and 1600 m and one more down to the CRUST1.0 Moho, above a
-mantle half-space. Eight DRAM chains with parallel tempering sample Vs, crustal
-Vp/Vs (1.7–2.4), the smoothing weight and the pressure gain (±5 %). The chains
-start from the CRUST1.0 model of the station's 1×1° cell: one exactly there,
-the others dispersed around it so that R-hat can detect unmixed chains.
+Since ComPy 3 the default is `compy.inversion.auto` ([docs/INVERSION.md](docs/INVERSION.md);
+tests in [docs/inversion_overhaul_2026-11/REPORT.md](docs/inversion_overhaul_2026-11/REPORT.md)).
+Compliance measures stiffness, so Vs follows only with Vp and density: both are
+tied to Vs by rock relations with sampled factors. A soft-sediment unit, crustal
+layers that double in thickness, a free Moho depth and a mantle half-space are
+sampled with a prior about the CRUST1.0 model of the station (or a model you
+give). Errors come from the bootstrap of the station's own windows plus terms for
+the slope and level of the curve. Eight chains with parallel tempering run until
+they converge.
 
-```python
-from compy.inversion import dram as ci
-
-data = ci.ComplianceData.from_npz(
-    "CC11_compliance_compy.npz", gain_rel=0.0, floor_rel=0.01
-)
-column = ci.crust1_column(-7.5368, -133.4166, "crust1.0/")  # CRUST1.0 cell of CC11
-model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
-start = ci.crust1_start(model, column)
-post = ci.sample(
-    data,
-    model,
-    n_chains=8,
-    n_iter=80000,
-    n_burn=30000,
-    gain_bounds=(0.95, 1.05),
-    start=start,
-)
-post.summary()["max_rhat"], post.vs_quantiles(depths)
+```bash
+compy-invert CC11_compliance_compy.npz --lat -7.5368 --lon -133.4166 --crust1 ~/crust1 --fetch-crust1
 ```
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/CC11_inversion.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/CC11_inversion.png" width="900" alt="CC11 data fit, misfit and Vs posterior"></a></p>
-<p align="center"><sub><b>XE.CC11 inversion.</b> (a) Measured compliance and posterior predictions. (b) Misfit of each chain; χ²/N = 3.2/9, R-hat 1.009, bulk ESS ≥ 1180. (c) Vs posterior with the median and CRUST1.0.</sub></p>
+```python
+from compy.inversion import auto, dram
+
+model = auto.model_from_crust1(dram.crust1_column(-7.5368, -133.4166, "crust1"))
+result = auto.invert(data, model, gain_sigma=0.05)  # data: auto.compliance_data(...)
+result.quality(), result.profile()  # label with reasons; Vs, prior, resolved depths
+```
+
+<p align="center"><a href="docs/inversion_overhaul_2026-11/figures/CC11_auto.png"><img src="docs/inversion_overhaul_2026-11/figures/CC11_auto.png" width="900" alt="CC11: data and fit, residuals, Vs with prior and reference, and what the data constrain"></a></p>
+<p align="center"><sub><b>XE.CC11 with ComPy 3.</b> Data and fit, residuals in units of the error, Vs with its prior and the reference, and how much the data narrowed each parameter. The black bar marks the depths the data resolve.</sub></p>
 
 ### 8. Vs profiles and serpentinization
+
+> The numbers and figures of this section and of the Results below were made with
+> ComPy 2.4 to 2.8. ComPy 3 changes Vs (by about +6 % at 2 km and +11 % at 5 km in
+> the median over 155 stations, more at the YV stations) and the sediment
+> thickness; see [docs/inversion_overhaul_2026-11/REPORT.md](docs/inversion_overhaul_2026-11/REPORT.md).
+> They are kept as the record of those runs.
 
 Posterior draws are converted to serpentinization with the Miller & Christensen
 (1997) relation used in Aminian et al. (2025, Fig. 10c): 0 % at 4.2 km/s and
@@ -345,7 +347,9 @@ ComPy/
 │   ├── preprocessing.py     #   tilt correction, coherent-noise removal
 │   ├── compliance.py        #   spectra, window selection, stacked compliance, errors
 │   ├── inversion/           #   Vs inversion
-│   │   ├── dram.py          #     Bayesian DRAM inversion, CRUST1.0, serpentinization
+│   │   ├── auto.py          #     default inversion (ComPy 3): invert, SeafloorModel, compy-invert
+│   │   ├── errors.py        #     covariance of a stacked compliance curve from its windows
+│   │   ├── dram.py          #     DRAM sampler, forward model, CRUST1.0, the 2.x model, serpentinization
 │   │   ├── metropolis.py    #     Metropolis sampler of the GJI paper, tempering
 │   │   ├── occam.py         #     Occam smooth-model inversion
 │   │   ├── minimum_structure.py  # minimum-structure inversion after Crawford (2004)
