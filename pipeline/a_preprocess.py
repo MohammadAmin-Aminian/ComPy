@@ -183,7 +183,10 @@ def cut_spans(trace, spans):
     for start, stop, _ in spans:
         if stop <= cursor or start >= end:
             continue
-        if start > cursor:
+        # Spans of different channels can start a few milliseconds apart: a gap
+        # shorter than one sample holds no piece (slicing it raised ValueError
+        # and lost the whole chunk, XE.CC10 and XE.EC05).
+        if start - trace.stats.delta > cursor:
             pieces.append(trace.slice(cursor, start - trace.stats.delta).copy())
         cursor = max(cursor, stop)
     if cursor < end:

@@ -6,8 +6,8 @@ authors:
   - family-names: Aminian
     given-names: Mohammad-Amin
     orcid: "https://orcid.org/0009-0001-9192-2734"
-version: 2.9.0
-date-released: 2026-11-09
+version: 3.0.0
+date-released: 2026-11-13
 repository-code: "https://github.com/MohammadAmin-Aminian/ComPy"
 doi: "10.5281/zenodo.13380107"
 abstract: "ComPy processes broadband ocean-bottom seismometer and differential pressure gauge records into seafloor compliance and crustal shear-velocity models: data cleaning, tilt and coherent-noise removal, Rayleigh-wave pressure calibration, stacked compliance estimation and Bayesian inversion."

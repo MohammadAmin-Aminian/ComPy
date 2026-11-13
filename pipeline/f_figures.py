@@ -91,8 +91,41 @@ def compliance_summary(station):
     return json.loads(path.read_text()) if path.exists() else None
 
 
-def load_posterior(station, variant="final"):
-    """A station's saved posterior and CRUST1.0 column, or None."""
+def main_variant(station):
+    """Inversion that figures and report use: ``auto`` (ComPy 3) if it ran, else ``final``."""
+    if (RESULTS / station / "inversion" / f"{station}_auto.json").exists():
+        return "auto"
+    return "final"
+
+
+def load_posterior(station, variant=None):
+    """A station's saved posterior and CRUST1.0 column, or None.
+
+    ``variant`` None is ``main_variant``. ``"prior"`` is the prior of that
+    inversion: the direct prior draws of ``auto``, or the ``final_prior`` run.
+    """
+    from compy.inversion import auto
+
+    main = main_variant(station)
+    if variant is None:
+        variant = main
+    if variant == "prior" and main == "final":
+        variant = "final_prior"
+    if variant in ("auto", "prior"):
+        stem = RESULTS / station / "inversion" / f"{station}_auto"
+        if not stem.with_suffix(".npz").exists():
+            return None, None
+        result = auto.load_result(stem)
+        post = result.posterior
+        if variant == "prior":
+            theta = result.prior_theta[None]
+            n = theta.shape[1]
+            post = ci.Posterior(data=post.data, model=post.model, prior_only=True, theta=theta,
+                                alpha=np.ones((1, n)), loglik=np.zeros((1, n)),
+                                roughness=np.zeros((1, n)), pred=np.zeros((1, n, len(post.data.eta))),
+                                acceptance=np.zeros(1), acceptance_dr=np.zeros(1), settings={},
+                                names_extra=post.names_extra)  # fmt: skip
+        return post, result.info.get("crust1") or build_model(station)[1]
     path = RESULTS / station / "inversion" / f"{station}_{variant}.npz"
     if not path.exists():
         return None, None
@@ -124,11 +157,17 @@ def n_windows(station):
 
 
 def usable(station):
-    """Compliance from >= 500 windows and a converged final run that fits (chi2 < 2N, R-hat < 1.1)."""
-    path = RESULTS / station / "inversion" / f"{station}_final.json"
+    """Compliance from >= 500 windows and a converged main inversion that fits.
+
+    For ``auto`` the station's own quality label must not be "poor"; for the
+    earlier ``final`` runs, chi2 < 2N and R-hat < 1.1.
+    """
+    path = RESULTS / station / "inversion" / f"{station}_{main_variant(station)}.json"
     if not path.exists() or n_windows(station) < MIN_WINDOWS:
         return False
     j = json.loads(path.read_text())
+    if "quality" in j:
+        return j["quality"]["label"] != "poor"
     return (
         j["max_rhat"] is not None
         and j["max_rhat"] < 1.1
@@ -638,9 +677,7 @@ def fig09_heatmaps(store, c):
             ax.set_ylabel("Depth [m]")
         if k >= len(names) - ncol:
             ax.set_xlabel("Shear velocity [m/s]")
-    fig.suptitle(
-        "Vs posterior (free crustal Vp/Vs, pressure gain sampled within ±5 %); rows normalized"
-    )
+    fig.suptitle("Vs posterior (pressure gain sampled); rows normalized")
     fig.tight_layout()
     fig.savefig(FIGURES / "fig09_heatmaps.png", dpi=120)
     plt.close(fig)
@@ -689,7 +726,7 @@ def fig10_profiles(store, c):
     axes[1].set(
         xlim=(0, 5000),
         xlabel="Shear velocity [m/s]",
-        title="(b) Pooled posterior (free Vp/Vs) and Vp/Vs = 1.85",
+        title="(b) Pooled posterior" + (" and Vp/Vs = 1.85" if mains else ""),
     )
     axes[1].legend(loc="lower left", fontsize=10)
     beta = ci.serpentinization(pooled)
@@ -718,7 +755,7 @@ def misfit_axis(ax, post, title_=None):
         ax.plot(it[keep], trace[keep] / n, lw=0.6, alpha=0.8)
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.axvline(30000, color="red", ls="--", lw=1.2)
+    ax.axvline(post.settings.get("n_burn", 30000), color="red", ls="--", lw=1.2)
     ax.axhline(1.0, color="red", ls=":", lw=1.2)
     ax.set_xlabel("Iteration")
     ax.set_ylabel("χ² / N")
@@ -807,7 +844,8 @@ def tables(c, store):
             row.update(gain_used=label, band_lo=r["band_hz"][0], band_hi=r["band_hz"][1], threshold=r["threshold"],
                        n_windows=r["n_windows"], coherence=r["median_coherence_in_band"],
                        months=len(r["monthly"]))  # fmt: skip
-        inv = RESULTS / s / "inversion" / f"{s}_final.json"
+        inv = RESULTS / s / "inversion" / f"{s}_{main_variant(s)}.json"
+        row["inversion"] = main_variant(s) if inv.exists() else None
         if inv.exists():
             j = json.loads(inv.read_text())
             row.update(
@@ -824,8 +862,13 @@ def tables(c, store):
             post = store[s][0]
             flat = post.flat()
             names = post.names
-            row["vp_vs"] = q3(flat[:, names.index("vp_vs")]).tolist()
-            row["sediment_m"] = q3(flat[:, names.index("sediment_thickness")]).tolist()
+            for key in ("vp_vs", "moho_depth", "vp_upper", "vp_lower"):
+                if key in names:
+                    row[key] = q3(flat[:, names.index(key)]).tolist()
+            if "sediment_thickness" in names:
+                row["sediment_m"] = q3(
+                    flat[:, names.index("sediment_thickness")]
+                ).tolist()
             if "gain" in names:
                 row["gain_sampled"] = (
                     q3(flat[:, names.index("gain")]) * (row.get("gain_compy") or 1)

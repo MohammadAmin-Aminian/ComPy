@@ -1,6 +1,24 @@
-"""Stage E: Bayesian Vs inversion of one station's compliance (ComPy 2.3/2.4).
+"""Stage E: Bayesian Vs inversion of one station's compliance.
 
 Usage: python e_invert.py STATION [VARIANT ...] [--processes N]
+
+The default variant is ``auto``, the ComPy 3 inversion (``compy.inversion.auto``,
+docs/INVERSION.md): errors measured from the station's own windows, a proper
+prior about the CRUST1.0 model of the station, free Moho depth, Vp and density
+uncertain, sampling repeated until it converges, and a result that says which
+depths the data resolve. It writes ``<STA>_auto.{npz,json}``,
+``<STA>_auto_profile.csv`` and ``<STA>_auto.png``.
+
+``auto_phase`` is the same inversion after the compliance curve has been
+corrected for the leak corner of the pressure gauge that stage C fitted to the
+Z/P phase (``response_check`` in the station summary). It is a check of how
+much the low-frequency pressure response matters at a station, not the
+default: the fitted corner is a model of the response, not a calibration.
+
+The variants below are the ComPy 2.3-2.8 inversions (``compy.inversion.dram``
+with ``CrustalModel``). They are kept to repeat earlier runs and as checks; the
+audit of 2026-11 (docs/inversion_overhaul_2026-11/REPORT.md) explains why they
+are no longer the default.
 
 Input is Stage C's compliance with the ComPy Rayleigh-wave gain ('compy',
 the method of Aminian et al. 2025, section 4.1.5). Where that calibration
@@ -31,12 +49,14 @@ import json
 import sys
 
 import numpy as np
-from config import COMPY, CRUST1, INVENTORY, RESULTS, ROOT
+from config import COMPY, CRUST1, INVENTORY, RESULTS, ROOT, P
 from obspy import read_inventory
 
 sys.path.insert(0, str(COMPY))
 
 import compy.inversion.dram as ci  # noqa: E402
+from compy.inversion import auto  # noqa: E402
+from compy.inversion.errors import default_covariance  # noqa: E402
 
 SAMPLER = dict(n_chains=8, n_iter=80000, n_burn=30000, thin=10)
 MIN_MONTH_WINDOWS = 30
@@ -151,8 +171,98 @@ VARIANTS = {
 }  # fmt: skip
 
 
+#: Pressure response of the station: "corrected" when the low-frequency response
+#: was checked against the tide (compy.response_check), else "unchecked". Set
+#: PRESSURE_RESPONSE in the run configuration; it sets the tilt term of the errors.
+RESPONSE = "unchecked"
+#: Keyword arguments for ``auto.model_from_crust1`` (e.g. a sediment-thickness prior).
+AUTO_MODEL = {}
+
+
+def leak_correction(station, check, f, eta):
+    """``eta`` corrected for the leak corner of ``check`` (stage C), or None if unusable."""
+    import config
+    from compy.response_check import correct_compliance, paz_stages
+
+    if not check or check["at_grid_edge"]:
+        return None
+    channel = read_inventory(str(INVENTORY)).select(station=station, channel=P)[0][0][0]
+    band = getattr(config, "CALIBRATION_BAND", (0.02, 0.06))
+    return correct_compliance(
+        eta, paz_stages(channel), f, check["k"], calibration_band=band
+    )
+
+
+def load_auto_data(station, phase_corrected=False):
+    """Compliance of a station with the ComPy 3 error model, and a record of the input.
+
+    ``phase_corrected`` applies ``leak_correction`` (variant ``auto_phase``).
+    """
+    import config
+
+    label, summary = gain_label(station)
+    path = RESULTS / station / f"{station}_compliance_{label}.npz"
+    d = dict(np.load(path))
+    lo, hi = d["band"]
+    if "cov_rel" in d:  # saved by stage C since ComPy 3
+        f = d["cov_freqs"]
+        keep = d["cov_usable"].astype(bool)
+        eta = np.interp(f, d["freqs"], d["compliance"])
+        cov, source = d["cov_rel"], "bootstrap of the windows"
+    else:  # result of an earlier stage C: errors from the stored uncertainties
+        sel = (d["freqs"] >= lo - 1e-12) & (d["freqs"] <= hi + 1e-12)
+        f, eta = d["freqs"][sel], d["compliance"][sel]
+        cov = default_covariance(f, eta, d["uncertainty"][sel])
+        keep, source = (
+            np.ones(len(f), bool),
+            "default structure from stored uncertainties",
+        )
+    response = getattr(config, "PRESSURE_RESPONSE", RESPONSE)
+    leak = None
+    if phase_corrected:
+        leak = summary["results"][label].get("response_check")
+        corrected = leak_correction(station, leak, f, eta)
+        if corrected is None:
+            raise SystemExit(f"{station}: no usable response check for auto_phase")
+        eta, response = corrected, "corrected"
+    data = auto.compliance_data(f[keep], eta[keep], float(d["depth"]),
+                                cov_rel=cov[np.ix_(keep, keep)], response=response,
+                                station=station)  # fmt: skip
+    info = dict(file=str(path.relative_to(ROOT)), gain_source=label, gain=float(d["gain"]),
+                band=[float(data.freqs[0]), float(data.freqs[-1])], stage_c_band=[float(lo), float(hi)],
+                n_windows=summary["results"][label]["n_windows"], covariance=source,
+                noisy_bins_cut=int((~keep).sum()), response=response,
+                leak_factor=leak["k"] if leak else None)  # fmt: skip
+    return data, info
+
+
+def run_auto(station, processes, seed=0, phase_corrected=False):
+    """The ComPy 3 inversion of a station (variants ``auto`` and ``auto_phase``)."""
+    import config
+
+    name = "auto_phase" if phase_corrected else "auto"
+    data, info = load_auto_data(station, phase_corrected)
+    column = ci.crust1_column(*coordinates(station), CRUST1)
+    model = auto.model_from_crust1(column, **getattr(config, "AUTO_MODEL", AUTO_MODEL))
+    result = auto.invert(data, model, gain_sigma=auto.GAIN_SIGMA[info["gain_source"]],
+                         processes=processes, seed=seed, info=dict(info, crust1=column))  # fmt: skip
+    out = RESULTS / station / "inversion"
+    out.mkdir(parents=True, exist_ok=True)
+    result.save(out / f"{station}_{name}")
+    from compy.plotting.auto import station_figure
+
+    station_figure(result, out / f"{station}_{name}.png")
+    q = result.quality()
+    print(f"{station} {name}: {q['label']}, chi2 {q['chi2']:.1f} / N={q['n_data']}, "
+          f"max R-hat {q['max_rhat']:.3f}, min ESS {q['min_ess']:.0f}, gain {q['gain']:.3f}"
+          + (f"; {'; '.join(q['reasons'])}" if q["reasons"] else ""), flush=True)  # fmt: skip
+    return result
+
+
 def run(station, variant, processes, seed=0):
     """Run one inversion variant of a station."""
+    if variant in ("auto", "auto_phase"):
+        return run_auto(station, processes, seed, variant == "auto_phase")
     spec = VARIANTS[variant]
     data, info = load_data(station, **spec.get("data", {}))
     model, column = build_model(station, **spec.get("model", {}))
@@ -183,7 +293,12 @@ def run(station, variant, processes, seed=0):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("station")
-    parser.add_argument("variants", nargs="*", default=["final", "main", "final_h2"])
+    parser.add_argument(
+        "variants",
+        nargs="*",
+        default=["auto"],
+        help="auto (default), auto_phase, or earlier variants: " + ", ".join(VARIANTS),
+    )
     parser.add_argument("--processes", type=int, default=8)
     args = parser.parse_args()
     for variant in args.variants:

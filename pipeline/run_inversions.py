@@ -1,8 +1,8 @@
 """Run Stage E for every station whose compliance is ready, as results arrive.
 
 A station is ready when results/<STA>/<STA>_summary.json exists and its
-c_compliance log is complete; it is inverted once (variants final, main,
-final_h2). Stations listed with --redo-dc first rerun stages D and C.
+c_compliance log is complete; it is inverted once (variant auto, the ComPy 3
+inversion, unless --variants names others). Stations listed with --redo-dc first rerun stages D and C.
 Stops when all stations in config.STATIONS are inverted or have failed, or
 after --max-hours.
 """
@@ -43,7 +43,7 @@ def main():
     parser.add_argument("--processes", type=int, default=6)
     parser.add_argument("--redo-dc", nargs="*", default=[])
     parser.add_argument("--max-hours", type=float, default=12)
-    parser.add_argument("--variants", nargs="+", default=["final", "main", "final_h2"])
+    parser.add_argument("--variants", nargs="+", default=["auto"])
     parser.add_argument(
         "--reverse", action="store_true", help="take stations from the end"
     )

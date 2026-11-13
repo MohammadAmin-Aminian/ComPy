@@ -1,212 +1,129 @@
-# Shear-velocity inversion in ComPy 2.3
+# Shear-velocity inversion in ComPy 3
 
-This note covers the inversion half of ComPy: what was wrong with the earlier
-code, what `compy.inversion.dram` does instead, how it was checked, and its limits.
-The compliance half is covered in `docs/AUDIT_2026-10.md`.
+This note describes the default inversion, `compy.inversion.auto`: what seafloor compliance measures, the errors, the model and its priors, the sampler, the outputs and their limits. The tests behind each choice are in [inversion_overhaul_2026-11/REPORT.md](inversion_overhaul_2026-11/REPORT.md). The inversions of ComPy 2.3 to 2.8 are described in [INVERSION_2x.md](INVERSION_2x.md); they still run, as checks.
 
-## 1. Audit of the earlier inversion code
+## 1. Run it
 
-Three code generations were compared with the methods sections of Aminian et
-al. (2025, GJI, §4.3), the thesis (Aminian 2024, §3.3) and the cited
-literature. The generations are:
+One command on a stage C result:
 
-- v1, the code in the repository before 2.0 (commit `7400c4e`);
-- v2, ComPy 2.0/2.1 (`inv_compy._inversion`);
-- the `inversion-improvements` branch.
-
-### v1 (the code behind the published Vs models)
-
-| # | Finding | Effect |
-|---|---|---|
-| V1 | `Roughness(vs, 2)` is `sqrt(sum(np.gradient(vs, 2)))`. The `2` is the grid *spacing*, not a derivative order, and the sum of a first derivative telescopes. The term equals √((V_bottom − V_top)/2) exactly and does not change when structure inside the profile changes. | The "roughness regularization" applied no smoothing. It only penalized a faster bottom relative to the top. |
-| V2 | `liklihood` uses `exp(-0.5 ‖r‖₂)`, the norm and not its square. | A Laplace-like, much flatter likelihood. Posterior widths are not Gaussian-error widths. |
-| V3 | Each Vs move also sets Vp = √3 Vs (Poisson 0.25) and density from Gardner. | The text says Vp and density were held at CRUST1.0 values; the code did otherwise. |
-| V4 | Out-of-bounds Vs proposals are redrawn in a loop (shallow layers) or reflected (deepest layer). | Asymmetric proposals near the bounds with no Hastings correction, so detailed balance fails there. |
-| V5 | A thickness move adds the same step to the chosen layer and to the deepest layer, and can pick the half-space row. A negative thickness is redrawn with \|r\|. | The total thickness is not conserved, and the proposal is asymmetric. |
-| V6 | Vs bounds are 0.15–1.2 × the starting model (0.9–1.1 for the deepest layer). The paper states 0 to +25 % (shallow) and −100 % to +25 % (deep). | The prior depends on the starting model and does not match the text. |
-| V7 | The data uncertainty is the standard deviation of the per-window estimates (thesis §3.3.4: 1.25e-11 at RR52, 30–60 % of η). The thesis also describes annealing it during the run, but that code is commented out. | Errors were roughly √n too large for a stacked mean. The fit hardly constrained the model, so deep Vs came from the bounds. |
-| V8 | Compliance computed before ComPy 2.0 multiplied the wave-attraction term by ω²/(ω²+c), i.e. `k·γ·ad·(pa_ratio + |Z/P|)` in `Calculate_Compliance`, so the term was effectively dropped. The same line writes the free-air constant as `3.07 * 10e-6`, which is 3.07e-5, ten times too large. | The published η is low: by up to 25–30 % at 7 mHz at RR52 from the dropped term, plus 1.4 % at 7 mHz from the constant. Both bias deep Vs high. 2.0 fixed both. |
-
-Figure code (`plot_inversion_density_all`, `final_plot`, `start_model_plot*` in `inv_compy`), both fixed in 2.4:
-
-| # | Finding | Effect |
-|---|---|---|
-| F1 | The heat maps average the 1-m Vs profile over 100 samples, so each of the 100 rows is 100 m. The y ticks put row 12 at −2000 m (167-m rows), and the CRUST1.0 reference lines are built on 167-m rows (interfaces at rows 14 and 42 = 2340 and 6900 m). | Posterior heat maps and medians in Figs. 9–10 are drawn 5/3 too deep relative to their labels, while the CRUST1.0 lines are at the right depths. A feature labelled at 3.5 km is at about 2.1 km. Check against the saved `Inversion_container`, which is not on this machine. |
-| F2 | Serpentinization is computed as (9000 − 2 Vs)/30, i.e. 0 % at 4.5 km/s and 100 % at 3.0 km/s. The Fig. 10 caption states 0 % at 4.2 km/s and 100 % at 2.2 km/s (Miller & Christensen 1997). | Fig. 10c overstates serpentinization: Vs 3.5 km/s gives 67 % in the code and 35 % with the caption's relation. |
-
-Documentation errata in the paper:
-- Eq. 13 accepts unconditionally when L(m_i) ≤ L(m_{i−1}). With L a likelihood, this is reversed; the code was correct.
-- The misfit (1/N)·√Σ(·)² is neither the χ² used in the code nor a standard one.
-- The 70–90 % acceptance target is not Roberts et al. (1997), whose optimum is 23 % (44 % in 1-D).
-
-### v2 and the `inversion-improvements` branch
-
-These fixed V1–V6:
-- a standard Gaussian log-likelihood;
-- a second-derivative roughness term;
-- symmetric proposals with rejection outside the bounds;
-- conserved thickness;
-- explicit bounds;
-- an optional data covariance, hierarchical smoothing, tempering, Occam and kernels.
-
-The forward model was checked against an independent Aki & Richards propagator.
-
-Remaining issues:
-
-- **A1.** The default `alpha=0.25` acts on Vs in m/s on a 1-m grid. A unit step has roughness 0.25, so the default is a Gaussian prior on Vs jumps with σ = 4 m/s. Unless `alpha_bounds` is used, the smoothing prior dominates any compliance data.
-- **A2.** Vp and density are fixed. As section 4 shows, this makes the posterior multimodal for real data (R-hat up to 2.3 with plain chains) and shifts Vs. It is a modelling choice, not a neutral one.
-- **A3.** No guidance on data errors. The 0.2 % Bendat & Piersol error of a stacked estimate is far smaller than the month-to-month changes (2–3 %, highly correlated across frequency) and the 5 % gain uncertainty.
-- **A4.** Single-site Metropolis moves mix slowly, and every forward call costs about 0.3 ms.
-
-The legacy functions are kept unchanged for reproducibility. The new workflow
-is a separate module.
-
-## 2. The 2.3 workflow (`compy.inversion.dram`)
-
-```python
-from compy.inversion import dram as ci
-
-column = ci.crust1_column(lat, lon, "path/to/crust1")  # CRUST1.0 cell
-data = ci.ComplianceData.from_npz(
-    "RR52_compliance_compy.npz",
-    subsets=monthly_estimates,  # (n_months, n_freqs)
-    gain_rel=0.05,
-    floor_rel=0.01,
-)
-model = ci.CrustalModel(moho_depth=column["moho_depth"], sediment_max=1000.0)
-post = ci.sample(data, model, n_chains=8, n_iter=80000, n_burn=30000, thin=10)
-prior = ci.sample(data, model, prior_only=True, n_chains=8, n_iter=80000, n_burn=30000)
-post.save("RR52_main")  # .npz draws + .json summary with R-hat/ESS
-q = post.vs_quantiles(z)  # Vs-depth credible intervals
+```bash
+compy-invert RR52_compliance_compy.npz --lat -20.47 --lon 68.11 --crust1 ~/crust1 --fetch-crust1
 ```
 
-### Data and covariance
+The same in Python:
 
-`ComplianceData.build` sums independent sources:
+```python
+import numpy as np
+from compy.inversion import auto, dram
 
-- **random**: the Bendat & Piersol error of the stacked estimate (diagonal).
-- **subsets**: the covariance of independent sub-record estimates (e.g. monthly stacks) divided by their number, and shrunk halfway towards its diagonal. This captures non-stationarity and the correlation between frequency bins.
-- **gain**: σ_g² v vᵀ, with σ_g = 5 % (Aminian et al. 2025, Table 1) and v = ∂η/∂ln(gain) = η − k·(a_w/p)/(ω² + 2g/R). The wave-attraction part does not scale with the pressure gain, and this is exact for `gravity_corrected_compliance`. A gain error shifts the whole curve together and is not counted once per frequency.
-- **floor**: 1 % per frequency for what a 1-D model and the estimator neglect (2-D structure, Crawford et al. 1998; Hulme et al. 2005).
+d = np.load("RR52_compliance_compy.npz")
+keep = d["cov_usable"]  # bins with a healthy estimate
+data = auto.compliance_data(
+    d["cov_freqs"][keep],
+    np.interp(d["cov_freqs"][keep], d["freqs"], d["compliance"]),
+    float(d["depth"]),
+    cov_rel=d["cov_rel"][np.ix_(keep, keep)],
+)
+column = dram.crust1_column(-20.47, 68.11, "crust1")
+model = auto.model_from_crust1(column)
+result = auto.invert(data, model, gain_sigma=auto.GAIN_SIGMA["compy"])
+result.save("RR52_auto")  # .npz, .json, _profile.csv
+print(result.quality())
+```
 
-The likelihood is Gaussian with this covariance (Mahalanobis χ²).
+In the pipeline, stage C saves the covariance (`cov_rel`, `cov_freqs`, `cov_usable`) and stage E (`pipeline/e_invert.py`) runs this inversion by default. A compliance curve without its windows (a CSV with `freq_hz`, `compliance`, `uncertainty`) also works; its covariance then takes the measured structure from the uncertainties (`errors.default_covariance`).
 
-### Parameterization (Zha & Webb 2016, §3.1)
+Nothing is tuned per station. A run takes 1.5 to 10 minutes on six cores.
 
-| Part | Parameters | Prior |
-|---|---|---|
-| Sediment | thickness h | uniform on [0, 1000] m. Vs(z) and Vp(z) follow Hamilton (1976, 1979) terrigenous silt-clay profiles in 8 equal sublayers, with ρ = 2000 kg/m³. Optionally a Vs multiplier in [0.5, 2] (variant `sedscale`). |
-| Crust | one Vs per layer: 100, 200, 400, 800 and 1600 m below the sediment, then one layer to the Moho | uniform on [500, 4700] m/s, plus a Gaussian prior on second differences of Vs whose scale σ ∈ [20, 3000] m/s is itself sampled (Jeffreys prior; Malinverno & Briggs 2004). |
-| Mantle | Vs of the half-space | uniform on [3800, 4700] m/s |
-| Moho | depth from CRUST1.0 at the station; optional ±1 km shift (variant `moho`, as in Aminian et al. 2025) | uniform |
+## 2. What compliance measures
 
-Vp = 1.85 Vs and ρ = 1.85 + 0.165 Vp (g/cc, km/s; Christensen & Shaw 1970) in
-the crust and mantle, as in Zha & Webb (2016). Alternatives:
-- `vp_vs=None`: Brocher (2005) Vp(Vs).
-- `reference=crust1_model(column)`: Vp and density fixed at CRUST1.0, as in Crawford et al. (1991) and Aminian et al. (2025).
+Normalized compliance is `eta = k u_z / tau_zz` at the seafloor under an infragravity wave of wavenumber `k`, with `omega^2 = g k tanh(kH)` (Crawford 2004, eqs 1 and 4). Three properties decide what an inversion can and cannot say.
 
-Sediment Vp is the larger of Hamilton's Vp and Brocher's. Models with
-Vp/Vs < √2 (negative Poisson ratio) are outside the prior.
+1. **It measures stiffness, not velocity.** For a half-space under slow loading, `eta = (lambda + 2 mu) / (2 mu (lambda + mu)) = (1 - nu) / mu` (Crawford 2004, eq. 5). Vs follows from the stiffness only with a density and a Vp/Vs. Between Vp/Vs 1.73 and 2.4 the same compliance gives Vs 11 % apart; a 10 % density error is 5 % in Vs. In relative terms compliance is as sensitive to Vp as to Vs: summed over a normal oceanic crust, `d ln eta / d ln Vs` is about -0.8 to -1.0 and `d ln eta / d ln Vp` about -1.0 to -1.2. The usual statement that it is 2 to 9 times more sensitive to Vs (Crawford 1994, eq. 2.21) is per m/s.
+2. **A thin soft layer acts through its P modulus.** A layer much thinner than `1/k`, bonded to stiffer rock, is squeezed uniaxially and adds `k h / (rho Vp^2)` to compliance whatever its Vs. Under 3000 m of water, 300 m of sediment adds 60 to 80 % to the compliance of bare rock at 4 to 6 mHz, and halving the sediment Vs changes that by 1 to 3 %. So sediment thickness and sediment P modulus trade directly with deep crustal Vs, and the sediment Vs matters only above about `kh = 0.15`.
+3. **Depth follows wavelength.** Sensitivity lies between `lambda / 2 pi` and `lambda / 4` (Crawford 2004). A deep station with a band of 7 to 17 mHz constrains broad averages between about 0.7 and 6 km below the seafloor, not the top few hundred metres and not individual thin layers.
 
-Hamilton's Vs is used instead of the Ruan et al. (2014) profile of Zha & Webb.
-The Ruan paper was not accessible, and its relation is not quoted in the
-sources read. Any profile can be passed as `sediment_vs` / `sediment_vp`.
+The forward model is the minor-vector propagator of Crawford et al. (1991) with the full equations of motion. It agrees with a global-matrix solution in 50-digit arithmetic to 4e-7 over 60 random models (`scripts/e01_forward_checks.py`). A velocity gradient needs about 16 sublayers for 0.3 %.
 
-### Sampler
+The measured ratio is corrected for the attraction of the wave and the free-air gradient: `eta = k (omega^2 |Z/P| + a_w/p) / (omega^2 + 2g/R)` with `a_w/p = (2 pi G / g) cosh(kH) exp(-kH)` (Crawford et al. 1998, as quoted by Zha et al. 2014, eq. 2; re-derived in the report). The correction raises compliance, by 18 % at 7 mHz under 2900 m of water.
 
-`dram_chain` is delayed-rejection adaptive Metropolis (Haario et al. 2001, 2006),
-the DRAM used by Zha & Webb (2016):
-- **Proposal.** A Gaussian whose covariance is that of the second half of the chain so far. A global scale is tuned by Robbins-Monro to 23 % acceptance (Andrieu & Thoms 2008; Roberts et al. 1997).
-- **Adaptation.** It stops at the end of burn-in, so retained draws come from a fixed Metropolis kernel.
-- **Delayed rejection.** A second stage, 10 times smaller, uses the Tierney & Mira (1999) acceptance.
-- **Smoothing weight.** Gibbs-sampled after every step.
-- **Tempering.** `temperatures` turns each chain into a parallel-tempering ensemble (Geyer 1991; Sambridge 2014): likelihood^(1/T), prior untempered, adjacent swaps, and only T = 1 kept.
+## 3. Data and errors
 
-Chains start from the CRUST1.0 model of the station's 1×1° cell when `sample` gets
-`start=crust1_start(model, column)`, as the pipeline does: the first chain
-exactly there and the others dispersed by `start_spread` (10 % of each prior
-width), so that R-hat still detects unmixed chains. `crust1_start` uses the
-CRUST1.0 sediment thickness, the thickness-weighted CRUST1.0 Vs over each crustal
-layer, the CRUST1.0 mantle Vs and, with free Vp/Vs, the crystalline-crust Vp/Vs.
-Without `start`, chains start from independent prior draws (the setting of the
-2026-10 YV and XE runs). `Posterior.diagnostics` gives the
-rank-normalized split R-hat and bulk ESS (Vehtari et al. 2021) of every
-parameter and of log α.
+Measured on 172 stations of the 2026 archive (`scripts/e02_error_model.py`):
 
-### Forward model and sensitivity
+| Quantity | Median |
+|---|---|
+| Bendat & Piersol error of the stack | 0.15 % |
+| Scatter when windows are resampled (bootstrap) | 0.23 %, with correlation 0.48 between neighbouring bins |
+| The same in 30-day blocks | 0.38 %; 59 % of it a common level, 11 % a tilt |
+| First half of the record against the second | level 0.7 %, tilt 0.8 % |
+| Two independent pressure calibrations of the same gauge | 2-3 % apart; 16-84 % range -5.4 to +2.6 % |
 
-`Forward` is the minor-vector propagator of `compy.inversion.propagator.raydep` (Crawford et al.
-1991, from W. C. Crawford's code), evaluated at the seafloor only. With the
-surface vector (0, −1/y₃, 0, 0), the downward pass gives v = 1 and
-σ_zz = y₅/y₃, so η = −k y₃/(ω y₅). Numba compiles it when available: 2 µs
-instead of 290 µs per call.
+The bin-to-bin shape of a stacked curve is known to a few tenths of a per cent. Its level and its slope are not. The covariance therefore has four parts (`auto.compliance_data`):
 
-`vs_kernels` gives d ln η / d ln Vs per km, with Vp/Vs fixed.
-`sensitivity_depth` gives the depth above which a fraction of the integrated
-|kernel| lies. This is a physical measure of how deep the data see, which a
-posterior/prior width ratio does not provide when the layer geometry is fixed
-(see the limits below).
+- **Stack**: the bootstrap covariance of the stack from its own windows, plus a slow level and a slow tilt from 30-day blocks (`errors.stack_covariance`).
+- **Tilt**: an error linear in log frequency across the band, for the low-frequency response of the pressure gauge: 4 % edge to edge when the response is unchecked, 2 % when it was corrected with the tide (`compy.response_check`), more where the tide and the phase estimates of that correction disagree.
+- **Smooth**: 0.5 % with a correlation length of 0.5 in ln f, for what a 1-D elastic model and the estimator leave out.
+- **Gain**: not in the covariance. The pressure gain is a sampled factor with a Gaussian prior, 5 % for a calibrated gauge and 20 % for a nominal one.
 
-### Gain as an unknown and several epochs
+There is no independent "floor" per bin. The 1 % floor of ComPy 2.x was five times the real scatter, which is why its fits had chi-square/N near 0.4, and it was too strict on slope errors.
 
-- **Sampled gain.** `sample(..., gain_bounds=(0.95, 1.05))` adds a pressure-gain factor g, the true gain over the gain used, with a uniform prior: the ±5 % of Aminian et al. (2025, §4.1.5). The predicted data are η_a + g (η − η_a), with η_a the gain-independent wave attraction. The covariance must then exclude the gain term (`gain_rel=0`). Without it, the gain enters as the covariance term above; with a Gaussian prior the two are equivalent to first order.
-- **Several epochs.** `ComplianceData.join(parts, names)` stacks estimates of one station, e.g. before and after a change in pressure sensitivity, each computed with its own Rayleigh gain. The covariance is block diagonal, and each part gets its own gain factor, while the Earth model is shared. The ratio of the factors tests whether the two calibrations agree.
+Band. Stage C chooses the band from coherence. Two further limits are automatic: bins above 0.8 of the cut-off frequency `f_c = sqrt(g / 2 pi H)` are dropped, and bins at the band edges whose bootstrap scatter exceeds 2.5 times that of the quiet half of the band are dropped (`errors.usable_bins`). The second catches the collapse of the estimate where the pressure signal no longer reaches the seafloor, which coherence alone does not: at shelf station 7D.J09B it removes everything above 34 mHz.
 
-### Estimator bias (H1 and H2)
+Estimator. H1 = |S_pz|/S_pp is right when the incoherent noise is on the vertical. Pressure noise would make H1 rise with the pressure level; it falls by 1.5 % from the quietest to the loudest fifth of windows instead (median), so H1 is kept and H2, which is 9 % higher, is not used as a bracket.
 
-Compliance uses H1 = |S_pz|/S_pp, unbiased when the noise is on the vertical. Noise on the pressure gauge biases H1 low by the squared coherence; H2 = S_zz/|S_pz| is unbiased in that case. The truth lies between the two (Bendat & Piersol 2010; Crawford & Singh 2008). With stacked coherence of 0.86–0.97, H2/H1 is 1.07–1.34 for the YV stations, largest at the lowest frequencies. Inverting H2 (variant `final_h2`) brackets this systematic error.
+## 4. Model and priors
 
-## 3. Validation (tests/test_compy_inversion.py)
+`auto.SeafloorModel`, built for a station by `auto.model_from_crust1`:
 
-- **Forward model:**
-  - `Forward` equals `raydep` for 120 random models, including slow sediments with propagating shear waves, to 2e-6 relative. The remaining difference is round-off amplified by cancellation in the propagator (condition number up to 1e7 when c ≪ Vs); the median difference is 3e-9.
-  - A uniform half-space tends to the static (λ+2μ)/(2μ(λ+μ)) as (c/Vs)².
-- **Gain sensitivity:** the gain vector equals a finite-difference derivative of `gravity_corrected_compliance`.
-- **Covariance:** the terms sum to the total; a pure gain shift costs χ² < 1.5, while the same amplitude alternating across frequency costs > 20.
-- **Sampler:**
-  - DRAM reproduces the mean and variance of a correlated, truncated 2-D Gaussian, with and without delayed rejection.
-  - The hierarchical smoothing weight reproduces the analytic marginal.
-  - The truncated Gamma draws match their analytic mean.
-  - Parallel tempering samples both modes of a target with a log-density barrier of 200 equally, where a single adaptive chain stays in one mode.
-- **Kernels:** they integrate to the response to a uniform change (3 %); lower frequencies sense deeper; sliver slices at the Moho are removed.
-- **Synthetic recovery:** an RR52-like model with realistic covariance is recovered (truth inside every 90 % interval, R-hat < 1.1).
-- **Joint data and gain:** a joint data set has a block-diagonal covariance and additive χ². The gain factor maps compliance to measured data exactly. A 3 % gain offset between two epochs is recovered to ±1 %, and the misfit trace includes burn-in.
+| Part | Parameters | Prior | Source |
+|---|---|---|---|
+| Soft sediment | thickness | uniform 0-2000 m, or Gaussian from a sediment map if given | Zha & Webb (2016) use 0-2000 m |
+| | Vs scale on the Hamilton profile | lognormal, sigma 0.3, bounds 0.4-2.5 | Hamilton (1976, 1979) as coded in ComPy 2.3; `dram.ruan_vs` (Ruan et al. 2014, the profile of Zha & Webb 2016) can be given as `sediment_vs` and lies inside this prior |
+| | P-modulus factor on Hamilton Vp | lognormal, sigma 0.15 | see point 2 of section 2 |
+| | density | Nafe-Drake curve of Vp (1.64 g/cc at the seafloor), not a constant 2.0 | Brocher (2005, eq. 1), via a published implementation |
+| Crust | Vs of each layer; layers 100 m doubling in thickness | ln Vs Gaussian about the reference, sigma 0.3, correlation 0.7 between neighbours; bounds 300-4800 m/s | layers: Zha & Webb (2016) |
+| | Vp | `oceanic_vp(Vs)` times a sampled factor, sigma 7 %, one for the top 1500 m and one below | mafic line of Brocher (2005, eq. 8), Vp/Vs 1.82-1.85 |
+| | density | Carlson & Raskin (1984) of Vp, times a sampled factor, sigma 3 % | as in Crawford (1994, eq. 6.1) |
+| Moho | depth below basement | Gaussian about the reference, sigma 30 % (at least 1.5 km) | CRUST1.0 |
+| Mantle | Vs | uniform 3900-4900 m/s, above the deepest crustal Vs | Moho rule requested by the author; Shen et al. (2013) |
+| Pressure gain | factor | Gaussian about 1, sigma 5 % or 20 % | section 3 |
 
-## 4. Results for the YV broadband stations
+The reference is the CRUST1.0 column of the station's 1-degree cell, or any layered model the user gives (`SeafloorModel(reference=...)`), for example from a refraction profile. Where CRUST1.0 has 500 m of sediment or more, its sediment layers join the reference and sigma becomes 0.5.
 
-See `docs/results/yv_inversion_2026-10-29/` (README, figures, tables, scripts).
+Why this prior. The earlier inversion used a flat prior on each layer with a hierarchical penalty on second differences. That penalty extrapolates the shallow gradient into the layers the data do not see and pushes them to the bounds. A Gaussian prior about a reference is proper: where the data say nothing the result returns to the reference with the stated width, and the figure shows it.
 
-## 5. Limits
+The reference is a prior, not a starting model. Chains start from independent draws of the prior, so the result does not depend on where they start; R-hat compares chains that began far apart.
 
-- **The data see the top few kilometres.** Half of the lowest-frequency sensitivity lies above 0.2–2.1 km (station dependent) and 90 % above 5–8 km. Below that, Vs reflects the prior and the layer geometry.
-- **Fixed layer geometries make deep posteriors look narrower than the data warrant.** A thick bottom layer averages Vs over several kilometres. Compare with the prior-only run and the kernels before interpreting deep layers.
-- **Vs depends on the Vp assumption.** Vp/Vs = 1.85, Brocher, and Vp fixed at CRUST1.0 give different absolute Vs for the same data. With fixed Vp the posterior becomes multimodal and needs tempering.
-- **Sediment and upper-crust Vs trade off.** A free sediment Vs scale (`sedscale`) changes the top kilometre at RR28 and RR34.
-- **Low-frequency bias at RR38.** None of the parameterizations with Vp/Vs coupling fits RR38 (χ² 22 for 6 data): its low-frequency compliance is too low. Pressure-channel noise biases η low (Crawford & Singh 2008), and RR38 also has the largest month-to-month scatter. Treat RR38 as unreliable.
-- The roughness-prior normalization ignores the truncation by the Vs bounds, which slightly favours smoother models when σ approaches the bound width.
-- The 1-D model ignores the 2-D/3-D structure of ridge-axis sites (Crawford et al. 1998; Hulme et al. 2005), partly covered by the 1 % floor.
+## 5. Sampling
+
+Delayed-rejection adaptive Metropolis with parallel tempering (`compy.inversion.dram`; Haario et al. 2001, 2006; ladder 1.6^0 to 1.6^5), eight chains. Sampling repeats with twice the iterations, up to three rounds, until every parameter has rank-normalized R-hat at most 1.05 and bulk effective sample size at least 400 (Vehtari et al. 2021). The prior is drawn directly, not by a chain. A seed makes a run repeat exactly.
+
+## 6. Outputs
+
+- `<stem>_profile.csv`: Vs against depth (5, 16, 50, 84, 95 %), the prior, the stiffness `M = mu / (1 - nu)`, the width ratio and a `resolved` flag.
+- `<stem>.json`: every parameter with its prior, fit, convergence, quality label with reasons, and `resolution`.
+- `<stem>.npz`: all draws, the prior draws and the data.
+- `<stem>.png`: data and fit, residuals, Vs with prior and reference, and what the data constrain (`compy.plotting.auto.station_figure`).
+
+**Resolution.** For each parameter, `resolution` is the width of the posterior over the width of the prior (16-84 %, of ln Vs for velocities). A depth is marked resolved when the ratio of the layer that holds it is at most 0.6 and the depth is above the level that holds 90 % of the sensitivity of the lowest frequency. Typical deep-ocean values: sediment thickness 0.02-0.25; top 700 m of crust 0.55-1.0; 0.7-6 km 0.15-0.7; the Vp, density and gain factors 1.0. Read unresolved depths as the prior.
+
+**Quality.** *good*: converged, chi-square within the 95 % point for N data, the gain, Vp and density factors within 2 sigma of their priors, some depth resolved, no resolved layer at a hard bound. *usable*: weaker limits (R-hat 1.1, twice the chi-square point, 3 sigma). *poor*: anything else. A pulled factor usually means a wrong calibration: at 7D.J35A (pressure gain 4.4) the inversion asks for a gain factor of 0.83, Vp 25 % above the rock relation and Vs of 4.7 km/s.
+
+## 7. Limits
+
+- **The pressure response at low frequency is allowed for, not corrected.** Stage C writes the leak corner that fits the Z/P phase and the bias it implies (`response_check` in the station summary); the variant `auto_phase` inverts the curve corrected for it. Compare the two before reading a fast lower crust as geology.
+- **Absolute Vs rests on the Vp/Vs and density priors.** Their uncertainty is in the intervals, but a site whose Vp/Vs differs from the mafic line by more than the 7 % prior (thick serpentinite, a melt body) will be biased. Give a measured Vp profile as the reference where one exists; this is what Crawford (1994, 2004) did.
+- **Sediment thickness assumes the sediment P modulus** (Hamilton Vp, Nafe-Drake density, 15 %). It is a compliance thickness of soft material, not a stratigraphic one.
+- **The top few hundred metres of basement are not resolved** at deep stations, and thin layers are never resolved one by one.
+- **The slope of the curve carries the deep information**, and its error allowance (2-4 %) is a judgement supported by section 3, not a measurement at each station. A 3 % slope error moves Vs at 2-5 km by about 6 %.
+- **1-D.** Ridge axes, slopes and seamounts are not 1-D (Crawford et al. 1998; Hulme et al. 2005).
+- **Sources.** Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015) and Zha & Webb (2016) were checked in the original in November 2026 ([docs/paper_check_2026-11/REPORT.md](paper_check_2026-11/REPORT.md)); nothing had to change. Doran & Laske (2019), Brocher (2005), Hamilton (1976, 1979) and Carlson & Raskin (1984) are still used only as quoted by sources that were read.
+- **"Resolved" is relative to the prior.** The label compares posterior and prior widths, so a wider prior (stations with thick reference sediment, or `vs_sigma` raised by hand) marks more depths as resolved. Compare intervals, not labels, between runs with different priors.
+- **Shallow Vs depends on the upper limit of the band.** On 35 benchmark stations, cutting the band at 0.6 `f_c` instead of 0.8 changed Vs between 0.5 and 3 km by 20 % or more at 14 of them, most where sediment is thick. Whether the bins near `f_c` are biased is not settled (report of November 2026, section 8).
 
 ## References
 
-- Aminian, M. A., et al. (2025). GJI 242, ggaf253.
-- Andrieu, C., & Thoms, J. (2008). Stat. Comput. 18, 343–373.
-- Brocher, T. M. (2005). BSSA 95, 2081–2092.
-- Christensen, N. I., & Shaw, G. H. (1970). Geophys. J. R. Astron. Soc. 20, 271–284.
-- Constable, S. C., Parker, R. L., & Constable, C. G. (1987). Geophysics 52, 289–300.
-- Crawford, W. C., Webb, S. C., & Hildebrand, J. A. (1991, 1998). JGR 96, 16151; 103, 9895.
-- Crawford, W. C. (2004). GJI 157, 1130–1145.
-- Crawford, W. C., & Singh, S. C. (2008). Geophys. Prospect. 56, 313–325.
-- Geyer, C. J. (1991). Computing Science and Statistics, 156–163.
-- Haario, H., Saksman, E., & Tamminen, J. (2001). Bernoulli 7, 223–242.
-- Haario, H., Laine, M., Mira, A., & Saksman, E. (2006). Stat. Comput. 16, 339–354.
-- Hamilton, E. L. (1976). Geophysics 41, 985–996.
-- Hamilton, E. L. (1979). JASA 65, 909–922; 66, 1093–1101.
-- Hulme, T., Crawford, W. C., & Singh, S. C. (2005). GJI 163, 547–558.
-- Laske, G., et al. (2013). CRUST1.0, EGU 15, 2658.
-- Malinverno, A., & Briggs, V. A. (2004). Geophysics 69, 1005–1016.
-- Mosher, S. G., et al. (2021). GJI 227, 1879–1892.
-- Roberts, G. O., Gelman, A., & Gilks, W. R. (1997). Ann. Appl. Probab. 7, 110–120.
-- Sambridge, M. (2014). GJI 196, 357–374.
-- Tierney, L., & Mira, A. (1999). Stat. Med. 18, 2507–2515.
-- Vehtari, A., et al. (2021). Bayesian Anal. 16, 667–718.
-- Zha, Y., & Webb, S. C. (2016). JGR 121, 3220–3237.
+Read in full or in the sections used: Aminian et al. (2025) GJI 242, ggaf253. Crawford (1994) PhD thesis, UCSD. Crawford (2004) GJI 157, 1130-1145. Crawford et al. (2002) EPSL. Hulme et al. (2003, 2005) GJI. Janiszewski et al. (2019) GJI 217. Mosher et al. (2021) GJI 227. Zha (2014) PhD thesis, Columbia (contains Zha et al. 2014 and Zha & Webb 2016).
+
+Used through a secondary source, named where used: Brocher (2005) BSSA 95 (R package hydrogeo). Carlson & Raskin (1984) (Crawford 1994). Christensen & Shaw (1970) (Zha 2014). Crawford et al. (1991, 1998) JGR (Crawford 1994, 2004; Zha 2014). Haario et al. (2001, 2006) (ComPy 2.3; Zha 2014). Hamilton (1976, 1979) (ComPy 2.3; Zha 2014). Shen et al. (2013) (Zha 2014). Vehtari et al. (2021) (ComPy 2.3).

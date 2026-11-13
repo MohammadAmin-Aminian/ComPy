@@ -2,8 +2,12 @@
 
 Submodules:
 
-``dram``        current Bayesian inversion (DRAM sampler, CRUST1.0 models,
-                full data covariance, posterior summaries, serpentinization)
+``auto``        the default inversion since ComPy 3: one call from a compliance
+                curve to Vs with intervals, resolved depths and a quality label
+``errors``      covariance of a stacked compliance estimate from its windows
+``cli``         the ``compy-invert`` command
+``dram``        sampler, forward model, data container and the ComPy 2.3-2.8
+                model (``CrustalModel``), kept for earlier runs and as a check
 ``metropolis``  random-walk Metropolis sampler of Aminian et al. (2025),
                 with parallel tempering and an L-curve scan
 ``occam``       smoothest-model (Occam) inversion on ln(Vs)
@@ -15,6 +19,15 @@ Submodules:
 ``models``      starting and reference models, empirical Vp/density relations
 """
 
+from compy.inversion.auto import (
+    InversionResult,
+    SeafloorModel,
+    compliance_data,
+    invert,
+    load_result,
+    model_from_crust1,
+    reference_from_crust1,
+)
 from compy.inversion.dram import (
     ComplianceData,
     CrustalModel,
@@ -49,6 +62,13 @@ from compy.inversion.occam import invert_occam
 from compy.inversion.propagator import compliance_kernels, normalized_compliance
 
 __all__ = [
+    "InversionResult",
+    "SeafloorModel",
+    "compliance_data",
+    "invert",
+    "load_result",
+    "model_from_crust1",
+    "reference_from_crust1",
     "ComplianceData",
     "CrustalModel",
     "Posterior",

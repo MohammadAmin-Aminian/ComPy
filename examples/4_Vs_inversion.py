@@ -1,39 +1,56 @@
-"""Bayesian Vs inversion of a compliance estimate with compy_inversion (ComPy 2.3).
+"""Vs inversion of a compliance curve with compy.inversion.auto (ComPy 3).
 
 Usage (repository root):
-    python examples/4_Vs_inversion.py                      # offline synthetic
+    python examples/4_Vs_inversion.py                      # offline, synthetic
     python examples/4_Vs_inversion.py RR52_compliance_compy.npz \
         --lat -20.4723 --lon 68.1094 --crust1 path/to/crust1.0
 
-The input file is the output of compy_processing.stacked_compliance saved as
-npz (keys freqs, compliance, uncertainty, band, depth). With --crust1 the
-chains start from the CRUST1.0 model of the station's cell and the Moho is
-CRUST1.0's; without it the Moho is put 7 km below the seafloor and the chains
-start from prior draws. About 15 s on 8 cores with Numba.
+Without arguments a compliance curve is computed from a known model (an oceanic
+crust slower than its reference in the top kilometre, under 120 m of sediment),
+noise with a realistic covariance is added, and the curve is inverted. The
+output shows what the data recover and what they leave to the prior.
+
+With a stage C result (``.npz``) the script does what ``compy-invert`` does:
+the covariance saved by stage C, the CRUST1.0 model of the station as the
+reference, and the default priors (docs/INVERSION.md).
+
+About 2 minutes on 8 cores for the synthetic case (shorter with --quick).
 """
 
 import argparse
 
 import numpy as np
 
-import compy.inversion.dram as ci
+from compy.inversion import auto, dram
+from compy.inversion.cli import read_compliance
+from compy.inversion.errors import default_covariance
+
+#: A normal oceanic crust: rows [thickness m, density kg/m3, Vp m/s, Vs m/s].
+REFERENCE = np.array([
+    [1170.0, 2400.0, 4700.0, 2540.0],
+    [1170.0, 2760.0, 6300.0, 3590.0],
+    [4560.0, 2960.0, 6900.0, 3940.0],
+    [0.0, 3190.0, 7730.0, 4310.0],
+])  # fmt: skip
 
 
 def synthetic():
-    depth, f = 2918.0, np.arange(6, 15) * 1.220703125e-3
-    model = ci.CrustalModel(moho_depth=6900.0)
-    truth = np.array([150.0, 1800, 2200, 2900, 3500, 3800, 3950, 4300])
-    clean = ci.forward(depth, f, model.layers(truth))
-    noise = ci.ComplianceData.build(
-        f, clean, depth, random=0.003 * clean, gain_rel=0.05, floor_rel=0.01
+    """Data from a known model, with noise drawn from the covariance used to invert."""
+    depth, freqs = 2918.0, np.arange(6, 15) * 1.220703125e-3
+    model = auto.SeafloorModel(REFERENCE)
+    truth = model.reference_theta(sediment=120.0)
+    first = model.names.index("vs_crust_1")
+    truth[first : first + 4] *= [0.75, 0.8, 0.85, 0.9]
+    clean = dram.forward(depth, freqs, model.layers(truth))
+    cov_rel = default_covariance(freqs, clean, 0.0015 * clean)
+    rng = np.random.default_rng(1)
+    observed = clean + np.linalg.cholesky(
+        cov_rel * np.outer(clean, clean)
+    ) @ rng.standard_normal(len(freqs))
+    data = auto.compliance_data(
+        freqs, observed, depth, cov_rel=cov_rel, station="synthetic"
     )
-    obs = clean + np.linalg.cholesky(noise.covariance) @ np.random.default_rng(
-        1
-    ).standard_normal(len(f))
-    data = ci.ComplianceData.build(f, obs, depth, random=0.003 * obs, gain_rel=0.05,
-                                   floor_rel=0.01, station="synthetic")  # fmt: skip
-    print("true parameters:", dict(zip(model.names, truth)))
-    return data, model
+    return data, model, truth
 
 
 def main():
@@ -43,38 +60,67 @@ def main():
     parser.add_argument("--lon", type=float)
     parser.add_argument("--crust1")
     parser.add_argument("--output", default="vs_inversion")
-    args = parser.parse_args()
-    column = None
-    if args.npz is None:
-        data, model = synthetic()
-    else:
-        data = ci.ComplianceData.from_npz(args.npz, gain_rel=0.05, floor_rel=0.01)
-        column = None
-        if args.crust1:
-            column = ci.crust1_column(args.lat, args.lon, args.crust1)
-        model = ci.CrustalModel(moho_depth=column["moho_depth"] if column else 7000.0)
-    start = ci.crust1_start(model, column) if column else None
-    post = ci.sample(
-        data,
-        model,
-        n_chains=8,
-        n_iter=60000,
-        n_burn=20000,
-        thin=10,
-        seed=0,
-        start=start,
+    parser.add_argument(
+        "--quick", action="store_true", help="short chains (for a first look)"
     )
-    s = post.summary()
-    print(f"chi2 median {s['chi2']['median']:.1f} for N={s['n_data']}, max R-hat {s['max_rhat']:.3f}, "
-          f"min ESS {s['min_ess']:.0f}")  # fmt: skip
-    for name, p in s["parameters"].items():
-        print(f"  {name:20s} {p['median']:7.0f}  (90 %: {p['p05']:.0f}-{p['p95']:.0f})")
-    z = np.array([0.1, 0.5, 1.0, 2.0, 3.0]) * 1e3
-    q = post.vs_quantiles(z, q=(0.05, 0.5, 0.95))
-    for depth, lo, med, hi in zip(z, *q):
-        print(f"  Vs at {depth / 1e3:.1f} km: {med:.0f} m/s (90 %: {lo:.0f}-{hi:.0f})")
-    post.save(args.output)
-    print(f"saved {args.output}.npz and {args.output}.json")
+    parser.add_argument("--processes", type=int, default=None)
+    args = parser.parse_args()
+    truth = None
+    if args.npz is None:
+        data, model, truth = synthetic()
+    else:
+        if args.crust1 is None or args.lat is None or args.lon is None:
+            parser.error("a real station needs --lat, --lon and --crust1")
+        freqs, eta, cov_rel, depth, _ = read_compliance(args.npz)
+        data = auto.compliance_data(
+            freqs, eta, depth, cov_rel=cov_rel, station=args.npz
+        )
+        model = auto.model_from_crust1(
+            dram.crust1_column(args.lat, args.lon, args.crust1)
+        )
+    sampler = dict(n_iter=15000, n_burn=5000, max_rounds=1) if args.quick else {}
+    result = auto.invert(
+        data, model, gain_sigma=0.05, processes=args.processes, **sampler
+    )
+
+    quality = result.quality()
+    print(f"quality: {quality['label']}; chi-square {quality['chi2']:.1f} for "
+          f"{quality['n_data']} data; max R-hat {quality['max_rhat']:.3f}")  # fmt: skip
+    for reason in quality["reasons"]:
+        print("  note:", reason)
+    summary = result.summary()
+
+    def fmt(x):
+        return f"{x:.0f}" if abs(x) >= 10 else f"{x:.3f}"
+
+    header = "\nparameter               median   16 % to 84 %          width/prior"
+    print(header + ("    true" if truth is not None else ""))
+    for i, name in enumerate(model.names):
+        p = summary["parameters"][name]
+        line = f"  {name:20s} {fmt(p['median']):>8s}   {fmt(p['p16'])} to {fmt(p['p84'])}".ljust(
+            58
+        )
+        line += f"{summary['resolution'][name]:5.2f}"
+        print(line + (f"   {fmt(truth[i]):>8s}" if truth is not None else ""))
+    profile = result.profile(np.array([100.0, 300.0, 700.0, 1500.0, 3000.0, 5000.0]))
+    print("\ndepth below seafloor   Vs median (5-95 %)        resolved")
+    for k, z in enumerate(profile["z"]):
+        print(f"  {z:6.0f} m             {profile['vs'][2, k]:5.0f} m/s ({profile['vs'][0, k]:.0f}"
+              f" to {profile['vs'][4, k]:.0f})".ljust(52) + ("yes" if profile["resolved"][k] else "no"))  # fmt: skip
+    result.save(args.output)
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        from compy.plotting.auto import station_figure
+
+        station_figure(result, args.output + ".png")
+        figure = f", {args.output}.png"
+    except ImportError:
+        figure = ""
+    print(
+        f"\nsaved {args.output}.npz, {args.output}.json, {args.output}_profile.csv{figure}"
+    )
 
 
 if __name__ == "__main__":

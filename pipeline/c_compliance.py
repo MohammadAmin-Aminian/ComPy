@@ -13,6 +13,9 @@ Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
   * Compliance from stacked spectra (k |S_pz|/S_pp, gravity corrected),
     Bendat & Piersol uncertainty, phase, per-window mean and scatter.
   * Monthly stacks with the same band and threshold test temporal stability.
+  * Covariance of the stack from its own windows (compy.inversion.errors:
+    bootstrap over windows, slow level and tilt from 30-day blocks), saved with
+    the result as cov_rel for the inversion (ComPy 3).
 
 Gains: 'bruitfm' from config.BRUITFM_GAINS; 'compy' from
 work/<STA>/calibration/compy_gain.json (Stage D). Missing gains are skipped.
@@ -37,7 +40,9 @@ from compy.compliance import (  # noqa: E402
     spectra,
     stacked_compliance,
 )
+from compy.inversion.errors import stack_covariance, usable_bins  # noqa: E402
 from compy.numerics import GRAVITY  # noqa: E402
+from compy.response_check import paz_stages  # noqa: E402
 
 WINDOW_S = 2100.0  # 35 min (paper section 4.2)
 NSEG = 1024  # 819.2 s Welch segments at 1.25 Hz, df = 1.22 mHz
@@ -46,6 +51,10 @@ THRESHOLDS = (0.9, 0.8)
 BAND_SEARCH_LOW = 0.004
 INITIAL_BAND_LOW = 0.007
 INITIAL_BAND_HIGH_FRACTION = 0.8
+#: Frequency range saved. The upper limit rises to the band's upper edge where the
+#: band goes beyond it (shelf stations): before ComPy 3 the saved curve stopped at
+#: 40 mHz while the band and the monthly curves went on, so stage E lost its
+#: month-to-month covariance there.
 OUTPUT_BAND = (0.002, 0.04)
 PAPER_TABLE1 = {}  # published gain and band per station, if any
 #: Coherence gate of ``stacked_compliance``: "inclusive" (Aminian et al. 2025,
@@ -151,7 +160,8 @@ def run_gain(windows, depth, gain, fc):
             band = initial
         try:
             final = stacked_compliance(windows, depth, gain, band, criteria, NSEG,
-                                       output_band=OUTPUT_BAND, gate=GATE)  # fmt: skip
+                                       output_band=(OUTPUT_BAND[0], max(OUTPUT_BAND[1], band[1])),
+                                       gate=GATE)  # fmt: skip
         except ValueError as exc:
             attempts[threshold] = {"error": str(exc), "band": band}
             continue
@@ -159,6 +169,29 @@ def run_gain(windows, depth, gain, fc):
         if final.n_windows >= MIN_WINDOWS or threshold == THRESHOLDS[-1]:
             return final, threshold, attempts
     return None, None, attempts
+
+
+def accepted_spectra(windows, result):
+    """Spectra of the accepted windows in ``result.band`` (pressure before gain).
+
+    Returns:
+        tuple: frequencies, start times, and S_zz, S_pp, S_pz as (windows, frequencies).
+    """
+    accepted = {float(t) for t in result.window_starts}
+    starts, zz, pp, zp = [], [], [], []
+    f_band = None
+    for w in windows:
+        t = float(w[0].stats.starttime)
+        if t not in accepted:
+            continue
+        f, a, b, x, _ = spectra(w, NSEG)
+        sel = (f >= result.band[0] - 1e-12) & (f <= result.band[1] + 1e-12)
+        f_band = f[sel]
+        starts.append(t)
+        zz.append(a[sel])
+        pp.append(b[sel])
+        zp.append(x[sel])
+    return f_band, np.array(starts), np.array(zz), np.array(pp), np.array(zp)
 
 
 def window_levels(windows, result, gain):
@@ -169,19 +202,73 @@ def window_levels(windows, result, gain):
         pressure PSD dB re 1 Pa^2/Hz, acceleration PSD dB re 1 (m/s^2)^2/Hz),
         the format of ``compy.results.StationProducts.window_levels``.
     """
-    accepted = {float(t) for t in result.window_starts}
+    return _levels(accepted_spectra(windows, result), gain)
+
+
+def _levels(spec, gain):
+    f, starts, zz, pp, zp = spec
     rows = []
-    for w in windows:
-        t = float(w[0].stats.starttime)
-        if t not in accepted:
-            continue
-        f, zz, pp, zp, _ = spectra(w, NSEG)
-        sel = (f >= result.band[0]) & (f <= result.band[1])
-        pp, zp = pp * gain**2, zp * gain
-        rows.append((t, float(np.log10(np.median(np.abs(zp[sel]) / pp[sel]))),
-                     float(10 * np.log10(np.mean(pp[sel]))),
-                     float(10 * np.log10(np.mean(zz[sel] * (2 * np.pi * f[sel]) ** 4)))))  # fmt: skip
+    for t, a, b, x in zip(starts, zz, pp * gain**2, zp * gain):
+        rows.append((t, float(np.log10(np.median(np.abs(x) / b))),
+                     float(10 * np.log10(np.mean(b))),
+                     float(10 * np.log10(np.mean(a * (2 * np.pi * f) ** 4)))))  # fmt: skip
     return np.array(rows, float).reshape(-1, 4)
+
+
+def stack_errors(spec, depth, gain):
+    """Covariance of the stacked compliance from its windows, or None with too few.
+
+    Returns:
+        dict: ``cov_freqs``, ``cov_rel`` (relative covariance over the band),
+        ``cov_usable`` (bins that ``usable_bins`` keeps), ``slow_level``,
+        ``slow_tilt`` and ``cov_block_days``, as saved with the result.
+    """
+    f, starts, _, pp, zp = spec
+    if len(starts) < 20:
+        return None
+    stat = stack_covariance(f, pp, zp, starts, depth, gain=gain)
+    return dict(cov_freqs=f, cov_rel=stat["cov_rel"], cov_usable=usable_bins(stat["sd_rel"]),
+                slow_level=stat["slow_level"], slow_tilt=stat["slow_tilt"],
+                cov_block_days=stat["block_days"] or 0.0)  # fmt: skip
+
+
+def response_check(result, stages, calibration_band=(0.02, 0.06)):
+    """Low-frequency check of the pressure response from the Z/P phase. Nothing is applied.
+
+    The Z/P phase of an elastic seafloor is 0 or 180 degrees. A differential
+    pressure gauge whose leak corner differs from the metadata leaves a residual
+    that grows towards low frequency (Bell et al. 2015, Fig. 14; Doran & Laske
+    2021, section 2.2; Webb et al. 2026 measure leak time constants of 100 to
+    300 s that change with depth and temperature). The factor ``k`` on the
+    lowest metadata pole that fits the residual, and the compliance bias it
+    implies after a gain fitted in ``calibration_band``, go to the summary so
+    that a run shows how large the effect is at each station.
+
+    Args:
+        result (ComplianceResult): Stacked compliance of the station.
+        stages (list): ``compy.response_check.paz_stages`` of the pressure channel.
+
+    Returns:
+        dict or None: None without poles-and-zeros stages or with fewer than
+        three bins in the band.
+    """
+    from compy.anomaly import residual_phase
+    from compy.response_check import _pole_hz, compliance_bias, fit_leak_factor
+
+    in_band = (result.freqs >= result.band[0]) & (result.freqs <= result.band[1])
+    poles = [_pole_hz(p, rad) for _, ps, rad in stages for p in ps if abs(p) > 0]
+    if not poles or in_band.sum() < 3:
+        return None
+    f = result.freqs[in_band]
+    residual, polarity = residual_phase(result.phase_deg[in_band])
+    fit = fit_leak_factor(stages, f, residual)
+    bias = compliance_bias(
+        stages, f[[0, -1]], fit["k"], calibration_band=calibration_band
+    )
+    return dict(fit, polarity_deg=polarity, median_residual_deg=float(np.median(residual)),
+                metadata_corner_hz=float(min(poles)), fitted_corner_hz=float(min(poles) * fit["k"]),
+                bias_percent_band_low=float(bias[0]), bias_percent_band_high=float(bias[1]),
+                applied=False)  # fmt: skip
 
 
 def monthly(windows, result, depth, gain):
@@ -214,6 +301,10 @@ def main():
     station = args.station
     inv = read_inventory(str(INVENTORY)).select(station=station)
     depth = -inv[0][0].elevation
+    pressure = inv.select(channel=P)
+    stages = (
+        paz_stages(pressure[0][0][0]) if len(pressure) and len(pressure[0][0]) else []
+    )
     fc = float(np.sqrt(GRAVITY / (2 * np.pi * depth)))
     windows, dropped = load_windows(station)
     gains = gains_for(station)
@@ -256,8 +347,15 @@ def main():
             "median_relative_uncertainty": float(np.median(
                 result.uncertainty[in_band] / result.compliance[in_band])),
             "monthly": monthly(windows, result, depth, gain),
+            "response_check": response_check(
+                result, stages, getattr(config, "CALIBRATION_BAND", (0.02, 0.06))),
         })  # fmt: skip
         summary["results"][label] = entry
+        spec = accepted_spectra(windows, result)
+        errors = stack_errors(spec, depth, gain) or {}
+        if errors:
+            entry.update(slow_level=errors["slow_level"], slow_tilt=errors["slow_tilt"],
+                         noisy_bins_cut=int((~errors["cov_usable"]).sum()))  # fmt: skip
         np.savez(
             out / f"{station}_compliance_{label}.npz",
             freqs=result.freqs, compliance=result.compliance,
@@ -268,6 +366,7 @@ def main():
             S_zz=result.stack["S_zz"], S_pp=result.stack["S_pp"],
             S_pz=result.stack["S_pz"], gain=gain, depth=depth,
             window_starts=np.array([float(t) for t in result.window_starts]),
+            **errors,
         )  # fmt: skip
         with open(out / f"{station}_compliance_{label}.csv", "w") as fh:
             fh.write(
@@ -278,10 +377,7 @@ def main():
                          f"{result.coherence[i]:.4f},{result.phase_deg[i]:.2f},{int(in_band[i])}\n")  # fmt: skip
         level_label = next((x for x in LEVEL_LABELS if x in gains), None)
         if SAVE_WINDOW_LEVELS and label == level_label:
-            np.save(
-                out / f"{station}_window_levels.npy",
-                window_levels(windows, result, gain),
-            )
+            np.save(out / f"{station}_window_levels.npy", _levels(spec, gain))
         print(f"{station} {label}: g={gain:.4f} thr={threshold} band={result.band} "
               f"n={result.n_windows} rej={result.rejected}", flush=True)  # fmt: skip
     (out / f"{station}_summary.json").write_text(
