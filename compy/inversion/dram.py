@@ -245,6 +245,21 @@ def hamilton_vs(z):
     )
 
 
+def ruan_vs(z):
+    """Vs [m/s] of marine sediment at depth ``z`` [m] below the seafloor (Ruan et al. 2014).
+
+    Their eq. 5 with the inverted parameters of their Table 2 (Juan de Fuca
+    plate): Vs = (a h**2 + b h + c v0) / (h + c) km/s with h in km, a = 0.02,
+    b = 1.27, c = 0.48 and v0 = 0.1 km/s. Zha & Webb (2016) fix the sediment
+    Vs to this profile. It is 20-30 % slower than ``hamilton_vs`` in the top
+    100 m and 10-15 % faster below 300 m, inside the prior of the sediment Vs
+    scale. An alternative for ``SeafloorModel(sediment_vs=ruan_vs)``; the
+    default stays ``hamilton_vs``.
+    """
+    h = np.asarray(z, float) / 1000.0
+    return 1000.0 * (0.02 * h**2 + 1.27 * h + 0.48 * 0.1) / (h + 0.48)
+
+
 def hamilton_vp(z):
     """Vp [m/s] of terrigenous sediment at depth ``z`` [m] (Hamilton 1979).
 

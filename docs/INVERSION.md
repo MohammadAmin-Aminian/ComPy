@@ -79,7 +79,7 @@ Estimator. H1 = |S_pz|/S_pp is right when the incoherent noise is on the vertica
 | Part | Parameters | Prior | Source |
 |---|---|---|---|
 | Soft sediment | thickness | uniform 0-2000 m, or Gaussian from a sediment map if given | Zha & Webb (2016) use 0-2000 m |
-| | Vs scale on the Hamilton profile | lognormal, sigma 0.3, bounds 0.4-2.5 | Hamilton (1976, 1979) as coded in ComPy 2.3 |
+| | Vs scale on the Hamilton profile | lognormal, sigma 0.3, bounds 0.4-2.5 | Hamilton (1976, 1979) as coded in ComPy 2.3; `dram.ruan_vs` (Ruan et al. 2014, the profile of Zha & Webb 2016) can be given as `sediment_vs` and lies inside this prior |
 | | P-modulus factor on Hamilton Vp | lognormal, sigma 0.15 | see point 2 of section 2 |
 | | density | Nafe-Drake curve of Vp (1.64 g/cc at the seafloor), not a constant 2.0 | Brocher (2005, eq. 1), via a published implementation |
 | Crust | Vs of each layer; layers 100 m doubling in thickness | ln Vs Gaussian about the reference, sigma 0.3, correlation 0.7 between neighbours; bounds 300-4800 m/s | layers: Zha & Webb (2016) |
@@ -112,12 +112,13 @@ Delayed-rejection adaptive Metropolis with parallel tempering (`compy.inversion.
 
 ## 7. Limits
 
+- **The pressure response at low frequency is allowed for, not corrected.** Stage C writes the leak corner that fits the Z/P phase and the bias it implies (`response_check` in the station summary); the variant `auto_phase` inverts the curve corrected for it. Compare the two before reading a fast lower crust as geology.
 - **Absolute Vs rests on the Vp/Vs and density priors.** Their uncertainty is in the intervals, but a site whose Vp/Vs differs from the mafic line by more than the 7 % prior (thick serpentinite, a melt body) will be biased. Give a measured Vp profile as the reference where one exists; this is what Crawford (1994, 2004) did.
 - **Sediment thickness assumes the sediment P modulus** (Hamilton Vp, Nafe-Drake density, 15 %). It is a compliance thickness of soft material, not a stratigraphic one.
 - **The top few hundred metres of basement are not resolved** at deep stations, and thin layers are never resolved one by one.
 - **The slope of the curve carries the deep information**, and its error allowance (2-4 %) is a judgement supported by section 3, not a measurement at each station. A 3 % slope error moves Vs at 2-5 km by about 6 %.
 - **1-D.** Ridge axes, slopes and seamounts are not 1-D (Crawford et al. 1998; Hulme et al. 2005).
-- **Not obtained for this work:** Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015), Doran & Laske (2019) and Brocher (2005) in the original. Their content is used only as quoted by sources that were read; the Ruan sediment relation is not used at all.
+- **Sources.** Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015) and Zha & Webb (2016) were checked in the original in November 2026 ([docs/paper_check_2026-11/REPORT.md](paper_check_2026-11/REPORT.md)); nothing had to change. Doran & Laske (2019), Brocher (2005), Hamilton (1976, 1979) and Carlson & Raskin (1984) are still used only as quoted by sources that were read.
 - **"Resolved" is relative to the prior.** The label compares posterior and prior widths, so a wider prior (stations with thick reference sediment, or `vs_sigma` raised by hand) marks more depths as resolved. Compare intervals, not labels, between runs with different priors.
 - **Shallow Vs depends on the upper limit of the band.** On 35 benchmark stations, cutting the band at 0.6 `f_c` instead of 0.8 changed Vs between 0.5 and 3 km by 20 % or more at 14 of them, most where sediment is thick. Whether the bins near `f_c` are biased is not settled (report of November 2026, section 8).
 

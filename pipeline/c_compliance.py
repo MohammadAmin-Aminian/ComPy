@@ -42,6 +42,7 @@ from compy.compliance import (  # noqa: E402
 )
 from compy.inversion.errors import stack_covariance, usable_bins  # noqa: E402
 from compy.numerics import GRAVITY  # noqa: E402
+from compy.response_check import paz_stages  # noqa: E402
 
 WINDOW_S = 2100.0  # 35 min (paper section 4.2)
 NSEG = 1024  # 819.2 s Welch segments at 1.25 Hz, df = 1.22 mHz
@@ -231,6 +232,45 @@ def stack_errors(spec, depth, gain):
                 cov_block_days=stat["block_days"] or 0.0)  # fmt: skip
 
 
+def response_check(result, stages, calibration_band=(0.02, 0.06)):
+    """Low-frequency check of the pressure response from the Z/P phase. Nothing is applied.
+
+    The Z/P phase of an elastic seafloor is 0 or 180 degrees. A differential
+    pressure gauge whose leak corner differs from the metadata leaves a residual
+    that grows towards low frequency (Bell et al. 2015, Fig. 14; Doran & Laske
+    2021, section 2.2; Webb et al. 2026 measure leak time constants of 100 to
+    300 s that change with depth and temperature). The factor ``k`` on the
+    lowest metadata pole that fits the residual, and the compliance bias it
+    implies after a gain fitted in ``calibration_band``, go to the summary so
+    that a run shows how large the effect is at each station.
+
+    Args:
+        result (ComplianceResult): Stacked compliance of the station.
+        stages (list): ``compy.response_check.paz_stages`` of the pressure channel.
+
+    Returns:
+        dict or None: None without poles-and-zeros stages or with fewer than
+        three bins in the band.
+    """
+    from compy.anomaly import residual_phase
+    from compy.response_check import _pole_hz, compliance_bias, fit_leak_factor
+
+    in_band = (result.freqs >= result.band[0]) & (result.freqs <= result.band[1])
+    poles = [_pole_hz(p, rad) for _, ps, rad in stages for p in ps if abs(p) > 0]
+    if not poles or in_band.sum() < 3:
+        return None
+    f = result.freqs[in_band]
+    residual, polarity = residual_phase(result.phase_deg[in_band])
+    fit = fit_leak_factor(stages, f, residual)
+    bias = compliance_bias(
+        stages, f[[0, -1]], fit["k"], calibration_band=calibration_band
+    )
+    return dict(fit, polarity_deg=polarity, median_residual_deg=float(np.median(residual)),
+                metadata_corner_hz=float(min(poles)), fitted_corner_hz=float(min(poles) * fit["k"]),
+                bias_percent_band_low=float(bias[0]), bias_percent_band_high=float(bias[1]),
+                applied=False)  # fmt: skip
+
+
 def monthly(windows, result, depth, gain):
     """Monthly compliance stacks of the accepted windows."""
     months = {}
@@ -261,6 +301,10 @@ def main():
     station = args.station
     inv = read_inventory(str(INVENTORY)).select(station=station)
     depth = -inv[0][0].elevation
+    pressure = inv.select(channel=P)
+    stages = (
+        paz_stages(pressure[0][0][0]) if len(pressure) and len(pressure[0][0]) else []
+    )
     fc = float(np.sqrt(GRAVITY / (2 * np.pi * depth)))
     windows, dropped = load_windows(station)
     gains = gains_for(station)
@@ -303,6 +347,8 @@ def main():
             "median_relative_uncertainty": float(np.median(
                 result.uncertainty[in_band] / result.compliance[in_band])),
             "monthly": monthly(windows, result, depth, gain),
+            "response_check": response_check(
+                result, stages, getattr(config, "CALIBRATION_BAND", (0.02, 0.06))),
         })  # fmt: skip
         summary["results"][label] = entry
         spec = accepted_spectra(windows, result)

@@ -79,8 +79,15 @@ def gravity_corrected_compliance(f, depth, displacement_per_pressure, pressure_a
 
     A seismometer measures a_d - a_w + a_e: the wave attraction a_w opposes
     the loading acceleration and the free-air term a_e follows it (Crawford et
-    al. 1998; Zha 2014, eq. 2.2). The true displacement is therefore
-    (omega² |Z/P| + a_w/p) / (omega² + FREE_AIR_GRADIENT) per pascal.
+    al. 1998, eqs 4-6; Zha & Webb 2016, section 2.4). The true displacement is
+    therefore (omega² |Z/P| + a_w/p) / (omega² + FREE_AIR_GRADIENT) per pascal.
+
+    Checked against the original of Crawford et al. (1998) in November 2026.
+    Their eqs 4-6 give the three terms as upward accelerations (a_d = -omega²
+    D, a_e = +(2g/R) D, a_w up under a crest); a sensor reads the frame
+    acceleration minus the change of gravity, which gives the signs above.
+    Their eq. 6 prints the decay of a_w as exp(-2 pi k H) with k = 2 pi/lambda;
+    the exponent is k H, as in Zha & Webb (2016) and here.
 
     Args:
         f (array): Frequencies [Hz].

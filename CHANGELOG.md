@@ -44,6 +44,24 @@ Result of the inversion overhaul of November 2026
 - `compy.response_check.scale_leak_poles` replaced ObsPy's pole objects by plain complex
   numbers, so the scaled channel could not be written to StationXML. It keeps the type now.
 
+### Checked against the papers (November 2026)
+
+[docs/paper_check_2026-11/REPORT.md](docs/paper_check_2026-11/REPORT.md): the pipeline
+compared stage by stage with Bell et al. (2015), An et al. (2017), Doran & Laske (2021),
+Mosher et al. (2021) and the originals of Crawford et al. (1991, 1998), Zha & Webb (2016),
+Ruan et al. (2014), Deng et al. (2022) and Webb et al. (2026). No formula had to change.
+**Default results are unchanged by this check.**
+
+- `pipeline/c_compliance.py` writes `response_check` to the station summary: the leak
+  corner of the pressure gauge that fits the Z/P phase, and the compliance bias it implies.
+  Nothing is applied.
+- `pipeline/e_invert.py`: variant `auto_phase`, the default inversion on the curve corrected
+  for that leak corner. A check, not the default.
+- `compy.inversion.dram.ruan_vs`: the sediment Vs profile of Ruan et al. (2014), an
+  alternative for `SeafloorModel(sediment_vs=...)`.
+- The gravity terms of `compy.compliance.gravity_corrected_compliance` are documented
+  against the original of Crawford et al. (1998).
+
 ### Added to existing modules (defaults unchanged)
 
 - The `dev` extra installs Numba, so the test suite runs the compiled forward model
