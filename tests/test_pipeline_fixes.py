@@ -33,6 +33,17 @@ def test_piece_ending_before_next_grid_point_is_skipped(stage_a):
     assert stage_a.decimate_segment(trace(np.arange(5))) is None
 
 
+def test_spans_less_than_a_sample_apart_do_not_lose_the_chunk(stage_a):
+    # XE.CC10, 8 June 2018: the bad spans of two channels were 2 ms apart, and
+    # slicing the gap between them raised ValueError for the whole 6-day chunk.
+    tr = trace(np.arange(50 * 400, dtype=float))
+    t0 = tr.stats.starttime
+    spans = [[t0 + 100, t0 + 200, {"BHZ:dead"}], [t0 + 200.002, t0 + 300, {"BDH:clip"}]]
+    pieces = stage_a.cut_spans(tr, spans)
+    assert [p.stats.npts for p in pieces] == [50 * 100, 50 * 100]
+    assert pieces[0].stats.endtime < t0 + 100 and pieces[1].stats.starttime >= t0 + 300
+
+
 def test_invalid_day_files_are_skipped(stage_a, tmp_path):
     folder = stage_a.SDS / "2013" / stage_a.NETWORK / "CC11" / f"{stage_a.Z}.D"
     folder.mkdir(parents=True)

@@ -37,6 +37,11 @@ Result of the inversion overhaul of November 2026
 
 ### Fixed
 
+- `pipeline/a_preprocess.py`: when the clipped or dead spans of two channels lay less than
+  one sample apart, cutting them raised `ValueError('startime is larger than endtime')` and the
+  whole chunk (up to six days, all channels) was lost. Found on XE.CC10 and XE.EC05; the same
+  chunk of EC05 was lost in the run of October 2026. Other chunks are unchanged.
+
 - `pipeline/c_compliance.py`: the saved curve stopped at 40 mHz (`OUTPUT_BAND`) while
   the band and the monthly curves went on at shelf stations, so stage E lost its
   month-to-month covariance there (7D.J09B). The saved range now reaches the band edge.
