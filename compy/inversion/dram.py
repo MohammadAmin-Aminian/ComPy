@@ -893,6 +893,18 @@ def truncated_gamma(rng, shape, rate, lower, upper):
     return float(np.clip(dist.ppf(lo + rng.random() * (hi - lo)), lower, upper))
 
 
+def breaks_order(vs, moho_jump=True, monotonic=False):
+    """True if a Vs profile (top to bottom, half-space last) breaks an ordering rule.
+
+    ``moho_jump``: the mantle must be faster than every layer above it, not only
+    the one directly above the Moho. ``monotonic``: Vs may not decrease with
+    depth anywhere, from the seafloor to the mantle.
+    """
+    if monotonic and np.any(vs[1:] < vs[:-1]):
+        return True
+    return bool(moho_jump and vs[-1] <= vs[:-1].max())
+
+
 class _Target:
     """Log-likelihood, roughness and prediction of one parameter vector.
 
@@ -941,7 +953,10 @@ class _Target:
         layers = self.model.layers(theta[: self.n_model])
         if np.any(layers[:, 2] < math.sqrt(2) * layers[:, 3]):  # Poisson ratio < 0
             return None
-        if self.model.require_moho_jump and layers[-1, 3] <= layers[-2, 3]:
+        order = getattr(self.model, "ordered_vs", None)  # SeafloorModel: the whole grid
+        vs = layers[:, 3] if order is None else order(theta[: self.n_model], layers)
+        if breaks_order(vs, self.model.require_moho_jump,
+                        getattr(self.model, "monotonic", False)):  # fmt: skip
             return None
         try:
             pred = self.forward(layers)

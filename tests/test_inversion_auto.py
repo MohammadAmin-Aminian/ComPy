@@ -189,8 +189,13 @@ def test_seafloor_model_layout_and_moho_cut():
     )
     assert not model.valid(theta)
     theta[model._index["vs_crust_5"]] = 3700.0
-    theta[model._index["vs_crust_7"]] = 4700.0  # below the Moho: has no effect
     assert model.valid(theta)
+    before = model.layers(theta)
+    theta[model._index["vs_crust_7"]] = (
+        4700.0  # below the Moho: no effect on the layers,
+    )
+    assert np.array_equal(model.layers(theta), before)
+    assert not model.valid(theta)  # but the ordering rules apply to the whole grid
 
 
 def test_compiled_layers_equal_the_reference():
@@ -208,7 +213,7 @@ def test_compiled_layers_equal_the_reference():
 
 
 def test_prior_draws_follow_the_stated_prior():
-    model = auto.SeafloorModel(REFERENCE)
+    model = auto.SeafloorModel(REFERENCE, monotonic=False)
     rng = np.random.default_rng(0)
     draws = np.array([model.prior_draw(rng) for _ in range(3000)])
     assert all(model.valid(t) for t in draws[:200])
@@ -226,6 +231,50 @@ def test_prior_draws_follow_the_stated_prior():
     )
     lo, hi = model.bounds[:, 0], model.bounds[:, 1]
     assert np.all(draws >= lo) and np.all(draws <= hi)
+
+
+def test_ordering_rules():
+    """Vs never decreases with depth, the mantle is faster than all above, the Moho prior is kept."""
+    assert not dram.breaks_order(np.array([1.0, 2.0, 2.0, 3.0]), True, True)
+    assert dram.breaks_order(
+        np.array([1.0, 2.0, 1.9, 3.0]), True, True
+    )  # decrease in the crust
+    assert not dram.breaks_order(np.array([1.0, 2.0, 1.9, 3.0]), True, False)
+    # a mantle slower than a shallow layer, with a slow layer directly above the Moho
+    assert dram.breaks_order(np.array([1.0, 3.5, 2.0, 3.0]), True, False)
+    assert not dram.breaks_order(np.array([1.0, 3.5, 2.0, 3.0]), False, False)
+    assert dram.breaks_order(
+        np.array([1.0, 2.0, 3.0, 3.0]), True, True
+    )  # no jump at the Moho
+    rng = np.random.default_rng(0)
+    ordered, free = (
+        auto.SeafloorModel(REFERENCE),
+        auto.SeafloorModel(REFERENCE, monotonic=False),
+    )
+    a = np.array([ordered.prior_draw(rng) for _ in range(1500)])
+    b = np.array([free.prior_draw(rng) for _ in range(1500)])
+    i = ordered._index["vs_crust_1"]
+    crust, mantle = a[:, i : i + ordered.n_crust], a[:, ordered._index["vs_mantle"]]
+    assert np.all(np.diff(crust, axis=1) >= 0) and np.all(mantle > crust.max(axis=1))
+    for theta in a[:100]:  # sediment included
+        assert np.all(np.diff(ordered.layers(theta)[:, 3]) >= 0)
+    assert np.all(
+        b[:, free._index["vs_mantle"]] > b[:, i : i + free.n_crust].max(axis=1)
+    )
+    assert (
+        np.mean(np.any(np.diff(b[:, i : i + free.n_crust], axis=1) < 0, axis=1)) > 0.5
+    )
+    # the rules do not depend on the Moho depth, so its prior is the stated Gaussian in both
+    j = ordered._index["moho_depth"]
+    qa, qb = (
+        np.quantile(a[:, j], [0.16, 0.5, 0.84]),
+        np.quantile(b[:, j], [0.16, 0.5, 0.84]),
+    )
+    assert np.all(np.abs(qa - qb) < 0.1 * ordered.moho_prior[1])
+    assert qa[1] == pytest.approx(
+        ordered.moho_prior[0], abs=0.1 * ordered.moho_prior[1]
+    )
+    assert ordered.valid(ordered.reference_theta())
 
 
 def test_log_prior_is_the_density_of_prior_draws():
@@ -311,6 +360,28 @@ def test_invert_recovers_a_synthetic_model(synthetic_result):
     assert sed["p95"] - sed["p05"] < 0.5 * 2000.0  # the data constrain the sediment
 
 
+def test_sampled_models_and_their_summary_keep_the_order(synthetic_result):
+    model, _, _, res, _ = synthetic_result
+    n = len(model.names)
+    for theta in res.posterior.flat(300, seed=1):
+        assert np.all(np.diff(model.layers(theta[:n])[:, 3]) >= 0)
+    prof = res.profile(np.arange(0.0, 9000.0, 20.0))
+    assert np.all(np.diff(prof["vs"], axis=1) >= 0)  # every quantile, at every depth
+
+
+def test_station_figure_has_a_linear_depth_axis(synthetic_result):
+    import matplotlib
+
+    matplotlib.use("Agg")
+    from compy.plotting.auto import station_figure
+
+    fig = station_figure(synthetic_result[3])
+    axis = next(a for a in fig.axes if a.get_ylabel().startswith("Depth"))
+    assert axis.get_yscale() == "linear"
+    bottom, top = axis.get_ylim()
+    assert top == 0.0 and bottom > 5000.0
+
+
 def test_profile_marks_resolved_depths(synthetic_result):
     model, _, _, res, _ = synthetic_result
     prof = res.profile()
@@ -319,9 +390,8 @@ def test_profile_marks_resolved_depths(synthetic_result):
     assert not prof["resolved"][deep].any()
     res = res.parameter_resolution()
     best = min(res[f"vs_crust_{k}"] for k in range(1, model.n_crust + 1))
-    assert (
-        best < 0.6 < res[f"vs_crust_{model.n_crust}"]
-    )  # some layer resolved, the deepest not
+    # some layer is resolved; the deepest is narrowed only through the ordering rule, less
+    assert best < 0.6 and best < res[f"vs_crust_{model.n_crust}"]
     assert res["sediment_thickness"] < 0.3 and res["density"] > 0.8
     assert prof["modulus"].shape == prof["vs"].shape
 

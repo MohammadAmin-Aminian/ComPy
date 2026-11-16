@@ -86,12 +86,22 @@ Estimator. H1 = |S_pz|/S_pp is right when the incoherent noise is on the vertica
 | | Vp | `oceanic_vp(Vs)` times a sampled factor, sigma 7 %, one for the top 1500 m and one below | mafic line of Brocher (2005, eq. 8), Vp/Vs 1.82-1.85 |
 | | density | Carlson & Raskin (1984) of Vp, times a sampled factor, sigma 3 % | as in Crawford (1994, eq. 6.1) |
 | Moho | depth below basement | Gaussian about the reference, sigma 30 % (at least 1.5 km) | CRUST1.0 |
-| Mantle | Vs | uniform 3900-4900 m/s, above the deepest crustal Vs | Moho rule requested by the author; Shen et al. (2013) |
+| Mantle | Vs | uniform 3900-4900 m/s, above the Vs of every layer of the crust and sediment | Moho rule requested by the author; Shen et al. (2013) |
+| Whole profile | order | Vs does not decrease with depth anywhere (`monotonic=True`) | off-axis oceanic crust; Mosher et al. (2021) use the same rule for sediment |
 | Pressure gain | factor | Gaussian about 1, sigma 5 % or 20 % | section 3 |
 
 The reference is the CRUST1.0 column of the station's 1-degree cell, or any layered model the user gives (`SeafloorModel(reference=...)`), for example from a refraction profile. Where CRUST1.0 has 500 m of sediment or more, its sediment layers join the reference and sigma becomes 0.5.
 
 Why this prior. The earlier inversion used a flat prior on each layer with a hierarchical penalty on second differences. That penalty extrapolates the shallow gradient into the layers the data do not see and pushes them to the bounds. A Gaussian prior about a reference is proper: where the data say nothing the result returns to the reference with the stated width, and the figure shows it.
+
+**Ordering rules (since 3.1).** Two hard rules are part of the prior, in the sense of Tarantola (2005, section 1.4.2): a model that breaks one has prior probability zero.
+
+1. *Moho rule*: the mantle is faster than every layer above it. Until 3.0 the rule compared the mantle only with the layer directly above the Moho, so a model could have a mantle slower than its own middle crust; on the Young ORCA array up to 36 % of the sampled models of a station did.
+2. *Monotonic rule*: Vs does not decrease with depth, from the seafloor to the mantle. In normal oceanic crust away from a ridge axis, cracks close and porosity falls with depth and there is no melt, so a low-velocity zone is not expected. Without the rule, 95 to 100 % of the sampled models of each Young ORCA station had a velocity decrease somewhere in the crust. The data do not ask for it at 24 of the 26 stations, where chi-square changes by less than 1 with the rule; it rises by 3.3 (9 data) at WC04 and by 10.3 (6 data) at CC02. With the Moho rule alone, the decreases stay: the median profile of 17 stations keeps a downward step of more than 20 m/s. It comes from the anticorrelation of the errors of neighbouring depths, which Mosegaard & Tarantola (1995, figure 16) describe for a gravity example: a layer that is too fast is paid for by a slow one next to it.
+
+Both rules apply to the whole layer grid, including the grid layers below the Moho, so they do not depend on the Moho depth and leave its prior as stated. Because every sampled model is ordered, every quantile of Vs against depth is ordered too: the median profile cannot show a spike or a downward step that the models do not have. The rules change the prior of Vs: three thin layers with the same reference Vs become, on average, a gradient (at Young ORCA the prior median of the top 100 m of basement falls from 2.55 to 1.73 km/s, and the posterior follows it there because the data do not resolve that layer). The prior shown in every figure and used for the resolution ratio is drawn with the rules.
+
+Set `monotonic=False` where a low-velocity zone is the target, for example a melt body under a ridge axis (Crawford et al. 1999). A station where the rule costs fit (chi-square clearly higher than with `monotonic=False`) is a station where the data ask for a velocity decrease or where the curve has a problem; compare the two before interpreting it.
 
 The reference is a prior, not a starting model. Chains start from independent draws of the prior, so the result does not depend on where they start; R-hat compares chains that began far apart.
 
@@ -104,9 +114,9 @@ Delayed-rejection adaptive Metropolis with parallel tempering (`compy.inversion.
 - `<stem>_profile.csv`: Vs against depth (5, 16, 50, 84, 95 %), the prior, the stiffness `M = mu / (1 - nu)`, the width ratio and a `resolved` flag.
 - `<stem>.json`: every parameter with its prior, fit, convergence, quality label with reasons, and `resolution`.
 - `<stem>.npz`: all draws, the prior draws and the data.
-- `<stem>.png`: data and fit, residuals, Vs with prior and reference, and what the data constrain (`compy.plotting.auto.station_figure`).
+- `<stem>.png`: data and fit, residuals, Vs with prior, reference and twelve sampled models, and what the data constrain (`compy.plotting.auto.station_figure`). Depth is on a linear scale. The solution of the inversion is the set of sampled models; the median is a summary of it and is not itself a model that was tested against the data (Tarantola 2005, section 2.2).
 
-**Resolution.** For each parameter, `resolution` is the width of the posterior over the width of the prior (16-84 %, of ln Vs for velocities). A depth is marked resolved when the ratio of the layer that holds it is at most 0.6 and the depth is above the level that holds 90 % of the sensitivity of the lowest frequency. Typical deep-ocean values: sediment thickness 0.02-0.25; top 700 m of crust 0.55-1.0; 0.7-6 km 0.15-0.7; the Vp, density and gain factors 1.0. Read unresolved depths as the prior.
+**Resolution.** For each parameter, `resolution` is the width of the posterior over the width of the prior (16-84 %, of ln Vs for velocities). A depth is marked resolved when the ratio of the layer that holds it is at most 0.6 and the depth is above the level that holds 90 % of the sensitivity of the lowest frequency. Typical deep-ocean values: sediment thickness 0.02-0.25; top 700 m of crust 0.55-1.0; 0.7-6 km 0.15-0.7; the Vp, density and gain factors 1.0. Read unresolved depths as the prior. With the ordering rules a layer can also be narrowed through its neighbours: a fast layer that the data resolve raises the lower limit of everything below it. So "resolved" means narrower than the prior, given the rules; it does not mean that the data sense that depth directly.
 
 **Quality.** *good*: converged, chi-square within the 95 % point for N data, the gain, Vp and density factors within 2 sigma of their priors, some depth resolved, no resolved layer at a hard bound. *usable*: weaker limits (R-hat 1.1, twice the chi-square point, 3 sigma). *poor*: anything else. A pulled factor usually means a wrong calibration: at 7D.J35A (pressure gain 4.4) the inversion asks for a gain factor of 0.83, Vp 25 % above the rock relation and Vs of 4.7 km/s.
 
@@ -117,6 +127,7 @@ Delayed-rejection adaptive Metropolis with parallel tempering (`compy.inversion.
 - **Sediment thickness assumes the sediment P modulus** (Hamilton Vp, Nafe-Drake density, 15 %). It is a compliance thickness of soft material, not a stratigraphic one.
 - **The top few hundred metres of basement are not resolved** at deep stations, and thin layers are never resolved one by one.
 - **The slope of the curve carries the deep information**, and its error allowance (2-4 %) is a judgement supported by section 3, not a measurement at each station. A 3 % slope error moves Vs at 2-5 km by about 6 %.
+- **No low-velocity zone by default.** The monotonic rule excludes it. Switch the rule off at ridge axes and wherever melt or a buried slow layer is possible.
 - **1-D.** Ridge axes, slopes and seamounts are not 1-D (Crawford et al. 1998; Hulme et al. 2005).
 - **Sources.** Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015) and Zha & Webb (2016) were checked in the original in November 2026 ([docs/paper_check_2026-11/REPORT.md](paper_check_2026-11/REPORT.md)); nothing had to change. Doran & Laske (2019), Brocher (2005), Hamilton (1976, 1979) and Carlson & Raskin (1984) are still used only as quoted by sources that were read.
 - **"Resolved" is relative to the prior.** The label compares posterior and prior widths, so a wider prior (stations with thick reference sediment, or `vs_sigma` raised by hand) marks more depths as resolved. Compare intervals, not labels, between runs with different priors.
@@ -124,6 +135,6 @@ Delayed-rejection adaptive Metropolis with parallel tempering (`compy.inversion.
 
 ## References
 
-Read in full or in the sections used: Aminian et al. (2025) GJI 242, ggaf253. Crawford (1994) PhD thesis, UCSD. Crawford (2004) GJI 157, 1130-1145. Crawford et al. (2002) EPSL. Hulme et al. (2003, 2005) GJI. Janiszewski et al. (2019) GJI 217. Mosher et al. (2021) GJI 227. Zha (2014) PhD thesis, Columbia (contains Zha et al. 2014 and Zha & Webb 2016).
+Read in full or in the sections used: Aminian et al. (2025) GJI 242, ggaf253. Mosegaard & Tarantola (1995) JGR 100, 12431-12447. Tarantola (2005) Inverse Problem Theory, SIAM (chapters 1 and 2). Crawford et al. (1999) JGR 104, 2923-2939. Crawford (1994) PhD thesis, UCSD. Crawford (2004) GJI 157, 1130-1145. Crawford et al. (2002) EPSL. Hulme et al. (2003, 2005) GJI. Janiszewski et al. (2019) GJI 217. Mosher et al. (2021) GJI 227. Zha (2014) PhD thesis, Columbia (contains Zha et al. 2014 and Zha & Webb 2016).
 
 Used through a secondary source, named where used: Brocher (2005) BSSA 95 (R package hydrogeo). Carlson & Raskin (1984) (Crawford 1994). Christensen & Shaw (1970) (Zha 2014). Crawford et al. (1991, 1998) JGR (Crawford 1994, 2004; Zha 2014). Haario et al. (2001, 2006) (ComPy 2.3; Zha 2014). Hamilton (1976, 1979) (ComPy 2.3; Zha 2014). Shen et al. (2013) (Zha 2014). Vehtari et al. (2021) (ComPy 2.3).
