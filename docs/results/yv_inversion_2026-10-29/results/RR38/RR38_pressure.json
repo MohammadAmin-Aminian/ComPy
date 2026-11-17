@@ -168,7 +168,7 @@
   ]
  },
  "input": {
-  "file": "compliance_yv_2026-10-28/results/RR38/epoch/RR38_compliance_bruitfm.npz",
+  "file": "compliance_yv_2026-10-28/results/RR38/epoch/RR38_compliance_pressure.npz",
   "months": 10,
   "gain": 0.636352063884827,
   "band": [

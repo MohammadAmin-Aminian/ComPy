@@ -96,7 +96,7 @@ microseism requirements must be assessed separately and stated explicitly.
 ## Reuse the saved RR52 foundation
 
 Read `docs/paired_spectra.md`, `docs/rr52_paired_validation_summary.json` and
-`src/bruitfm/paired_spectra.py` selectively. Saved production pilot:
+`compy_pressure/paired_spectra.py` selectively. Saved production pilot:
 
 ```text
 results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/

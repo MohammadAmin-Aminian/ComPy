@@ -44,7 +44,7 @@ def station_record(s, c):
     if not summ:
         rec["status"] = "no compliance (stage B: no usable segments)"
         return rec
-    rec["gain_bruitfm"] = summ.get("gains", {}).get("bruitfm")
+    rec["gain_pressure"] = summ.get("gains", {}).get("pressure")
     label = result_label(summ)
     if label is None:
         rec["status"] = "no compliance (gates)"

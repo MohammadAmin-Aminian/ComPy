@@ -99,9 +99,9 @@ DEFAULTS = {
     "event_plots": 6,
 }
 PROTECTED_DEFAULTS = (
-    Path.home() / "Desktop/Data_Bruit_FM",
-    Path.home() / "Projects/bruit-fm/exports",
-    Path.home() / "Projects/bruit-fm/results",
+    Path.home() / "Desktop/ComPy/data",
+    Path.home() / "Projects/pressure-qc/exports",
+    Path.home() / "Projects/pressure-qc/results",
     PROJECT_DIRECTORY / "exports",
 )
 VERTICAL_UNITS = {"M/S"}

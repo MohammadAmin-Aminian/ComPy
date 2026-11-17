@@ -82,7 +82,7 @@ metadata, choose new events, fit gains or start raw-data processing.
 Targeted suite: **59 passed, 24 existing/ObsPy warnings**, 14.09 seconds:
 
 ```bash
-PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python \
+PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python \
   -m pytest -q tests/test_yv_rayleigh_diagnosis.py \
   tests/test_rayleigh_calibration.py tests/test_calibration_experiment.py \
   tests/test_calibration_experiment_runner.py tests/test_rayleigh_validation.py

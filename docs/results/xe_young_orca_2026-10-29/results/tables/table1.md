@@ -1,4 +1,4 @@
-| Station | Latitude [°] | Longitude [°] | Depth [m] | Gain factor (ComPy, Rayleigh) | Events | Gain (BRUIT-FM microseism) | Frequency* [Hz] | Threshold | Windows |
+| Station | Latitude [°] | Longitude [°] | Depth [m] | Gain factor (ComPy, Rayleigh) | Events | Gain (PressureQC microseism) | Frequency* [Hz] | Threshold | Windows |
 |---|---|---|---|---|---|---|---|---|---|
 | CC01 | -4.0458 | -132.4745 | 4768 | – | – | – | 0.0049–0.0134 | 0.9 | 2781 |
 | CC03 | -4.8816 | -132.6890 | 4739 | 0.763 | 1 | 0.913 | 0.0049–0.0159 | 0.9 | 1149 |

@@ -7,15 +7,15 @@
 set -eo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 if command -v conda >/dev/null; then
-  BRUIT_PY=(conda run --no-capture-output -n bruitfm python)
+  PRESSURE_PY=(conda run --no-capture-output -n compy python)
 else
-  BRUIT_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python)
+  PRESSURE_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python)
 fi
 export PYTHONPATH="$ROOT/..:$ROOT"  # this branch's code, not the main install
 LOG="$(mktemp -t microseism_all)"
 trap 'rm -f "$LOG"' EXIT
-"${BRUIT_PY[@]}" "$ROOT/scripts/run_microseism_check.py" "$@" | tee "$LOG"
+"${PRESSURE_PY[@]}" "$ROOT/scripts/run_microseism_check.py" "$@" | tee "$LOG"
 RUN="$(tail -1 "$LOG" | sed 's/.*: //')"
-"${BRUIT_PY[@]}" "$ROOT/scripts/compare_microseism_methods.py" "$RUN"
+"${PRESSURE_PY[@]}" "$ROOT/scripts/compare_microseism_methods.py" "$RUN"
 echo "Run folder: $RUN"
 echo "Table: $RUN/method_comparison.md  Figure: $RUN/method_comparison.png"

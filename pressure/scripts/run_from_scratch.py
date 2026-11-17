@@ -51,7 +51,7 @@ UTC = timezone.utc  # datetime.UTC needs Python 3.11; ComPy supports 3.10
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "docs/from_scratch_config.json"
-SCHEMA = "bruitfm-from-scratch-v1"
+SCHEMA = "compy_pressure-from-scratch-v1"
 STAGES = (
     "preflight",
     "workspaces",

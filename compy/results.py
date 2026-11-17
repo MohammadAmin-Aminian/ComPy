@@ -22,7 +22,7 @@ from pathlib import Path
 import numpy as np
 
 #: Order in which gain labels are preferred, as in ``pipeline/e_invert.py``.
-GAIN_LABELS = ("compy", "bruitfm", "nominal")
+GAIN_LABELS = ("compy", "pressure", "nominal")
 
 
 @dataclass
@@ -31,7 +31,7 @@ class StationProducts:
 
     Attributes:
         station (str): Station code.
-        label (str): Gain label of the result ("compy", "bruitfm", "nominal").
+        label (str): Gain label of the result ("compy", "pressure", "nominal").
         depth (float): Water depth [m].
         gain (float): Pressure gain applied.
         band (tuple): Compliance band (f_min, f_max) [Hz].

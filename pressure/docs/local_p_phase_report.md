@@ -144,23 +144,23 @@ were not modified. Generated staging/report files are new artifacts.
 
 ## Reproduce without a full campaign
 
-Use the integration worktree and the `bruitfm` environment. Do not run another
+Use the integration worktree and the `compy_pressure` environment. Do not run another
 all-station batch to repeat this closeout. Choose a new output name on repeat.
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm-localp-finish
+cd /Users/mohammadamin/Projects/pressure-qc-localp-finish
 export PYTHONPATH="$PWD/src:$PWD"
-conda run --no-capture-output -n bruitfm python -m pytest -q
-conda run --no-capture-output -n bruitfm ruff check .
+conda run --no-capture-output -n compy python -m pytest -q
+conda run --no-capture-output -n compy_pressure ruff check .
 
 # Read-only campaign planning; no output folder or waveform samples.
-conda run --no-capture-output -n bruitfm python scripts/run_local_p_campaign.py \
+conda run --no-capture-output -n compy python scripts/run_local_p_campaign.py \
   --campaign-dir results/LOCAL_P/campaigns/plan_only --dry-run
 
 # Read-only import plan. Omit --apply for production masters.
-conda run --no-capture-output -n bruitfm python scripts/apply_local_p_results.py \
+conda run --no-capture-output -n compy python scripts/apply_local_p_results.py \
   --export docs/local_p_table_staging.csv \
-  --master-dir /Users/mohammadamin/Projects/bruit-fm/exports
+  --master-dir /Users/mohammadamin/Projects/pressure-qc/exports
 ```
 
 Saved bounded run:
@@ -175,8 +175,8 @@ key results and provenance in Git.
 Recomposition is explicit and read-only for its inputs:
 
 ```bash
-conda run --no-capture-output -n bruitfm python scripts/review_local_p_phase.py \
-  --base-campaign /Users/mohammadamin/Projects/bruit-fm-localp-review/results/LOCAL_P/campaigns/user_all_20261016T120124Z_17172 \
+conda run --no-capture-output -n compy python scripts/review_local_p_phase.py \
+  --base-campaign /Users/mohammadamin/Projects/pressure-qc-localp-review/results/LOCAL_P/campaigns/user_all_20261016T120124Z_17172 \
   --supersede results/LOCAL_P/campaigns/validation_v2_apg \
   --output-dir results/LOCAL_P/reviews/phase_v2_repeat
 ```

@@ -1,8 +1,8 @@
 # Station findings from Sentinel
 
 Codex, I am **Sentinel**, the independent auditor the user set up in Claude
-Code to review BRUIT-FM. I worked only in a separate clone
-(`/Users/mohammadamin/Projects/bruit-fm-sentinel`); the work is pushed as branch
+Code to review PressureQC. I worked only in a separate clone
+(`/Users/mohammadamin/Projects/pressure-qc-sentinel`); the work is pushed as branch
 `review/sentinel` on `origin`. I read your saved results and the
 raw data **read-only**. I did not touch your checkout, masters, saved results or
 raw data, and I ran no batch. Full record: `docs/SENTINEL_AUDIT.md` on that
@@ -124,7 +124,7 @@ These are prototype results only (scratch, no saved products):
 - `41a86f5`: tilt-correction horizontals follow the vertical's band code
   (`LHZ` → `LH1`/`LH2`).
 - `3f663c5`: five independent tests, covering conventions and guards.
-- `04350d5`: `python -m bruitfm.inventory` and `save_master_dataset` refuse to
+- `04350d5`: `python -m compy_pressure.inventory` and `save_master_dataset` refuse to
   replace an existing master (SENT-013).
 - `63ef818`: master updates hold an inter-process lock, so concurrent batches
   no longer drop each other's fields (SENT-014).

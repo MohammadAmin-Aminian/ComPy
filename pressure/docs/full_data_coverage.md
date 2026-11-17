@@ -7,7 +7,7 @@ stays draft, and no gain is applied anywhere.
 
 ## What it does
 
-`python -m bruitfm.coverage` has three subcommands.
+`python -m compy_pressure.coverage` has three subcommands.
 
 | Command | Writes | Purpose |
 |---|---|---|
@@ -186,14 +186,14 @@ The six checks remain distinct from the three calibration approaches.
 Read-only inventory and dry run (writes only the campaign plan/cache):
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm-coverage
+cd /Users/mohammadamin/Projects/pressure-qc-coverage
 bash scripts/run_full_coverage.sh plan
 ```
 
 Execute all planned missing work (pressure scope, four PPSD workers):
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm-coverage
+cd /Users/mohammadamin/Projects/pressure-qc-coverage
 bash scripts/run_full_coverage.sh execute --workers 4
 ```
 

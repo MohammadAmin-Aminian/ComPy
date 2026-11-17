@@ -1,4 +1,4 @@
-# Socrates initial scientific audit of BRUIT-FM
+# Socrates initial scientific audit of PressureQC
 
 | Item | Value |
 |---|---|
@@ -6,7 +6,7 @@
 | Date | 2026-10-12 |
 | Revision | 2, same day. Adds four primary sources supplied by the user: Zha & Webb (2016), Deng et al. (2022), Ruan et al. (2014) and Aminian et al. (2025). Changes are marked "Rev. 2"; §9 summarises them. |
 | Branch / baseline | `review/sentinel` at `007348e` (Sentinel handoff); Sentinel's base `faa39ff`; `main` at `4387fbe` |
-| Checkout | separate clone `~/Projects/bruit-fm-socrates`; Codex's checkout and the shared env were not modified |
+| Checkout | separate clone `~/Projects/pressure-qc-socrates`; Codex's checkout and the shared env were not modified |
 | Software checks | `pytest`: 141 passed (HOME redirected); `ruff check .` and `ruff format --check .` passed |
 | Reproduction | `PYTHONPATH=src python docs/reviews/socrates_validation.py` (read-only; prints V1–V10) |
 | Data access | No raw waveform was read. Read-only: committed docs/JSON/CSV evidence, the `Profondeur` column of the local master CSV, four GMRT point-depth queries |
@@ -87,7 +87,7 @@ on it still need:
 | Stähler, S. C., et al. (2016). Performance report of the RHUM-RUM ocean bottom seismometer network around La Réunion, western Indian Ocean. *Adv. Geosci.* 41, 43–63. doi:10.5194/adgeo-41-43-2016. Full PDF: §2–3, Table 3, Appendices A1–A3 | Instrument pools; hydrophone and DPG transfer functions (Eqs. A5–A6); INSU glitch; DPG calibration practice; depths; clock skews |
 | ObsPy 1.5.1 `obspy/signal/spectral_estimation.py` | PPSD internals: nfft, taper, dB averaging, hydrophone handling, `dtiny` floor |
 | TiSKitPy 2.3.1 package source (`Pressure_noise_model`; module list including `PeriodicTransient`) | Independent Brown et al. (2014) curves; available glitch-removal tool |
-| All BRUIT-FM modules, method documents and Sentinel's audit, handoff and evidence on this branch | Code review |
+| All PressureQC modules, method documents and Sentinel's audit, handoff and evidence on this branch | Code review |
 | Zha, Y., & Webb, S. C. (2016), Crustal shear velocity structure in the Southern Lau Basin constrained by seafloor compliance, *JGR Solid Earth* 121, 3220–3237, doi:10.1002/2015JB012688. Full text, including Table 1 and Appendix A (Rev. 2) | Eq. A5 reference; coefficient direction; band 0.04–0.10 Hz; M ≥ 7 events with P/a coherence > 0.9; Zha et al. (2014a) Lau velocity model; nominal DPG leak time constant 600–1000 s; YL sensors Güralp CMG3T + DPG; B01W "leaky valve" |
 | Deng, H., An, C., Cai, C., & Ren, H. (2022), *GRL* 49, e2021GL096952, doi:10.1029/2021GL096952. Full text (Rev. 2) | Eq. 5 is identical to Eq. A5 (q = 1/c), validated with an APG up to c₀/4h; DPG coefficients vary with frequency; body-wave calibration with q < 10 s/deg is insensitive to the Earth model; ρc₀v holds only for the first crest |
 | Ruan, Y., Forsyth, D. W., & Bell, S. W. (2014), *JGR Solid Earth* 119, 6357–6371, doi:10.1002/2014JB011162. Full text (Rev. 2) | H1-type D/P estimator; coherence > 0.95; DPG scale factor constrained below 0.1 Hz; microseism-band (0.1–0.2 Hz) D/P strongly sediment-dependent; ρ = 1030 kg/m³, α = 1.5 km/s; nonzero transfer-function phase flags response problems |
@@ -150,7 +150,7 @@ should be reviewed against SOC-001, SOC-002 and SOC-006 in the next pass.
   Earth-model-independent body-wave calibration.
 - **Rebeyrol, S., Ker, S., Duval, L., & Crawford, W. C. (2024)**, "Revisiting the OBS
   seafloor compliance signal removal with a stationarity and stacking-based approach:
-  the BRUIT-FM toolbox", *GJI* 239(1), 386–401 (Rev. 2). It carries the project's own
+  the PressureQC toolbox", *GJI* 239(1), 386–401 (Rev. 2). It carries the project's own
   name, as listed in Aminian et al. (2025); I have not read it.
 - Harmon et al. (2022), *Seismica* 1(1): the hourly tilt-rotation method used in
   Aminian et al. (2025).
@@ -326,7 +326,7 @@ scientific scope. I found nothing that contradicts them.
 - **Class / severity:** Confirmed (metadata error with demonstrated consequence) / High.
 - **Location:** source StationXML for 34 YV pressure channels (listed in
   `docs/yv_rayleigh_independent_validation.json`). The consequence appears at the
-  phase mask, `src/bruitfm/rayleigh_calibration.py:1238`. Code is not at fault.
+  phase mask, `compy_pressure/rayleigh_calibration.py:1238`. Code is not at fault.
 - **Physics:**
   - Stähler et al. (2016, Eqs. A5–A6) give the hydrophone response as an RC high-pass:
     G = S·(RC·2πif)/(1 + RC·2πif). This has a zero at 0 and a **left-half-plane**
@@ -404,8 +404,8 @@ scientific scope. I found nothing that contradicts them.
     Deen et al. (2017) stacking and subtraction.
   - In their Fig. 3e at RR52, tilt, event and glitch processing lower the median vertical
     PSD near 0.004 Hz by roughly 10–15 dB (read from the figure).
-  - BRUIT-FM therefore lacks a step the project's own published method applies.
-  - V11: for all eight INSU stations analysed in that paper, BRUIT-FM's candidate gains
+  - PressureQC therefore lacks a step the project's own published method applies.
+  - V11: for all eight INSU stations analysed in that paper, PressureQC's candidate gains
     exceed the published ones by +0.3% to +6.1% (median +3.0%).
   - That direction is what uncleaned, pressure-incoherent vertical noise predicts. Other
     method differences could also contribute: tilt method, M ≥ 6 against M > 7 events,
@@ -438,9 +438,9 @@ scientific scope. I found nothing that contradicts them.
   - Ruan et al. (2014): 1030 kg/m³.
   - Aminian et al. (2025): ρw ≈ 1040 kg/m³ in the gravity-attraction term.
   - Zha & Webb (2016): density not stated.
-  - BRUIT-FM: 1028 kg/m³.
+  - PressureQC: 1028 kg/m³.
 
-  Adopt one documented convention across BRUIT-FM's P/a and compliance work.
+  Adopt one documented convention across PressureQC's P/a and compliance work.
 - **Validation:** V1.
 
 ### SOC-004: the unweighted absolute-unit fit weights the most model-sensitive bins most heavily.
@@ -666,7 +666,7 @@ scientific scope. I found nothing that contradicts them.
 - **Post-earthquake exclusion (Rev. 2).** The quiet-training coda rule
   `max(3600, (M−5.5)·43200)` s gives 18 h after an M7. Aminian et al. (2025),
   following Deen et al. (2017), exclude (Mw − 5.85)·36 h, which is 41.4 h after an
-  M7. BRUIT-FM's rule is less conservative for the 2 h tilt-training window; justify
+  M7. PressureQC's rule is less conservative for the 2 h tilt-training window; justify
   the choice or align it.
 - **Tilt stability (Rev. 2).** Aminian et al. (2025, Fig. 4) show the RR52 tilt angle
   drifting from about 1° to 2.3° over months, with a jump on 2013-05-02. A 2 h training
@@ -692,7 +692,7 @@ deterministic; the seeds are fixed.
 | V8 | YV outcome against the metadata pole | 0 of 23 candidates for p ≥ 0.06; INSU/DEPAS gains imply 4.27 dB |
 | V9 | Brown digitisation against TiSKitPy | Up to 3.4 dB difference |
 | V10 | Depth and apparent-velocity sensitivity of T | Tabulated |
-| V11 (Rev. 2) | BRUIT-FM INSU gains against Aminian et al. (2025) Table 1 | All 8 higher, +0.3% to +6.1% (median +3.0%) |
+| V11 (Rev. 2) | PressureQC INSU gains against Aminian et al. (2025) Table 1 | All 8 higher, +0.3% to +6.1% (median +3.0%) |
 
 Checks outside the script, with their sources:
 
@@ -808,7 +808,7 @@ glitch removal as the cause of the remaining gain offset.
 | SENT-006 offset | Primary method unknown | Band, events, coherence and velocity model known. ρ, α, objective and response version remain unstated, so the offset stays unattributed. |
 | SENT-004 B01W | Physical model fitted (V3) | Corroborated by Zha & Webb's "leaky valve" note. The model reproduces their 0.19. Nominal τ is 600–1000 s, against τ ≈ 2 s fitted. |
 | SENT-001 C07W | Mechanism hypothesis based on the Trillium | YL sensors are Güralp CMG3T. Zha's 11-event coefficient matches the normal state. |
-| SOC-002 glitch | Stähler et al. only | The project's own 2025 pipeline removes it. BRUIT-FM INSU gains are +3.0% (median) above the published values, consistent in direction. |
+| SOC-002 glitch | Stähler et al. only | The project's own 2025 pipeline removes it. PressureQC INSU gains are +3.0% (median) above the published values, consistent in direction. |
 | SOC-006 scalar gain | B01W, plus Doran et al. abstract | Frequency-dependent DPG coefficients are common (Deng et al., 29 stations) |
 | SOC-012 local P | Proposed the ρα·v impedance relation | Corrected: use Deng Eq. 5 with the ray parameter. The impedance relation holds only for the first crest. |
 | New independent check | — | Near-vertical body-wave calibration (Deng et al.), nearly Earth-model-free |

@@ -1,6 +1,6 @@
 """Stage D: ComPy's teleseismic DPG gain for one station (gain 'compy').
 
-Runs the Rayleigh-wave calibration of compy_pressure (from BRUIT-FM; the same code as ``compy-pressure rayleigh``):
+Runs the Rayleigh-wave calibration of compy_pressure (from PressureQC; the same code as ``compy-pressure rayleigh``):
 
 - data: the station's native-rate SDS waveforms (config.SDS) and the network
   StationXML (config.INVENTORY);
@@ -160,7 +160,7 @@ def main():
     run.mkdir(parents=True, exist_ok=True)
     result = {
         "station": station,
-        "method": "compy_pressure Rayleigh-wave calibration (BRUIT-FM)",
+        "method": "compy_pressure Rayleigh-wave calibration (PressureQC)",
         "band_hz": list(BAND),
         "tilt_method": TILT,
         "dispersion_file": str(DISPERSION),

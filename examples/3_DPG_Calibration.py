@@ -50,7 +50,7 @@ def main():
         "--dispersion-file",
         type=Path,
         default=DISPERSION,
-        help="Rayleigh phase velocities (default: RR52, BRUIT-FM's default)",
+        help="Rayleigh phase velocities (default: RR52, PressureQC's default)",
     )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()

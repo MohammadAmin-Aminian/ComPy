@@ -1,12 +1,12 @@
 # Baseline microseism pressure–vertical comparison
 
-Explicit campaign: `/Users/mohammadamin/Projects/bruit-fm/results/DIAGNOSTICS/MICROSEISM_BASELINE_LOGS/run_20261014T170400Z/summary.tsv`.
+Explicit campaign: `/Users/mohammadamin/Projects/pressure-qc/results/DIAGNOSTICS/MICROSEISM_BASELINE_LOGS/run_20261014T170400Z/summary.tsv`.
 
 ## Result
 
 All 46 frozen-baseline stations completed. The saved P/Z diagnostics provide coherence, phase and transfer-amplitude checks, but **no independent microseism pressure gain**: `H_nominal=(g_pressure/g_vertical)*eta(f; water, structure)`. The Rayleigh multiplier is fixed and only changes the displayed transfer through `H_fixed=H_nominal/g`.
 
-Across the campaign, 37/46 stations have weekly median coherence² at least 0.8, and 30/46 contain at least one 0.1–0.2 Hz bin above the Ruan et al. 0.95 reference. The later Saikia daily reference selects 149/275 station-days across 36/46 stations. These are descriptive comparisons, not BRUIT-FM pass scores.
+Across the campaign, 37/46 stations have weekly median coherence² at least 0.8, and 30/46 contain at least one 0.1–0.2 Hz bin above the Ruan et al. 0.95 reference. The later Saikia daily reference selects 149/275 station-days across 36/46 stations. These are descriptive comparisons, not PressureQC pass scores.
 
 Highest weekly medians: YL.C05W (0.982), YL.A02W (0.979), YL.B11W (0.975), 7D.J45A (0.975), YL.C17W (0.972). Lowest: YV.RR11 (0.583), YV.RR50 (0.630), YV.RR29 (0.644), YV.RR07 (0.687), YL.C11W (0.693).
 

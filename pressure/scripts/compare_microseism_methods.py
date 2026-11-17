@@ -37,7 +37,7 @@ from scripts.summarize_yv_microseism import (
 
 ROOT = Path(__file__).resolve().parents[1]
 CODEX_CAMPAIGN = (
-    Path.home() / "Projects/bruit-fm/docs/microseism_baseline_comparison.csv"
+    Path.home() / "Projects/pressure-qc/docs/microseism_baseline_comparison.csv"
 )
 SIGN_BY_PHASE = {"nominal": -1, "reflected_pole": -1}
 SIGN_BY_PHASE |= {f"reversed_{k}": 1 for k in SIGN_BY_PHASE}

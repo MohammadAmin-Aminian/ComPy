@@ -50,9 +50,9 @@ from compy_pressure.ppsd import atomic_json, response_handling  # noqa: E402
 
 UTC = timezone.utc  # datetime.UTC needs Python 3.11; ComPy supports 3.10
 
-DATA = Path.home() / "Desktop/Data_Bruit_FM/Data"
-INVENTORIES = Path.home() / "Desktop/Data_Bruit_FM/INVENTORIES"
-MAIN = Path.home() / "Projects/bruit-fm"
+DATA = Path.home() / "Desktop/ComPy/data/Data"
+INVENTORIES = Path.home() / "Desktop/ComPy/data/INVENTORIES"
+MAIN = Path.home() / "Projects/pressure-qc"
 CATALOGS = ROOT / "results/LOCAL_P/catalogs"
 NETWORKS = {
     "YV": {

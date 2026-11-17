@@ -108,7 +108,7 @@ clipped to 0--100 and evaluated on every posterior draw.
 \section{Data set}
 Young ORCA (Gaherty et al.\ 2019; Eilon et al.\ 2022) deployed 30 Scripps broad-band OBS between
 4$^\circ$S and 8$^\circ$S, 130$^\circ$--136$^\circ$W (Fig.~\ref{fig:map}), in water <<DEPTH_MIN>>--<<DEPTH_MAX>>\,m deep.
-Each carries a Trillium 240 seismometer and a DPG, recorded at 50\,Hz. The data come from the BRUIT-FM archive
+Each carries a Trillium 240 seismometer and a DPG, recorded at 50\,Hz. The data come from the PressureQC archive
 (SDS, 587\,GB for XE), with responses from the EarthScope/IRIS DMC. Because reading the archive disk in parallel was slow,
 the raw files of most stations were first copied to local disk station by station; the processing is identical.
 
@@ -171,7 +171,7 @@ Each DPG is calibrated in situ on the Rayleigh waves of $M\geq7$ earthquakes (Zh
 pressure-to-acceleration ratio, normalized by $\rho_w H$, is fitted to its theoretical value between 0.02 and 0.06\,Hz for events
 whose magnitude-squared coherence exceeds 0.97 (Fig.~\ref{fig:cal}). Gains were obtained at <<N_CAL>> of the <<N_MEASURED>> stations with a compliance measurement,
 from <<CAL_EVENTS>> events each, and range from <<GAIN_RANGE>> with an event-to-event spread of <<GAIN_SPREAD_RANGE>>\,per\,cent.
-Where the BRUIT-FM microseism calibration exists, the ratio of the two gains is <<GAIN_RATIO>>. Gains from a single event
+Where the PressureQC microseism calibration exists, the ratio of the two gains is <<GAIN_RATIO>>. Gains from a single event
 (Table~\ref{tab:stations}) are less certain than the $\pm$5\,per\,cent prior assumes.
 <<UNCAL_TEXT>>
 
@@ -313,7 +313,7 @@ compliance-derived Vs must be combined with geological and independent geophysic
 \section*{Data and software}
 Young ORCA data (FDSN network XE, 2018--2019) are distributed by the EarthScope Consortium (IRIS DMC). ComPy
 <<COMPY_VERSION>>, including the pipeline and the scripts of this run, is at \url{https://github.com/MohammadAmin-Aminian/ComPy}.
-Run folder: \texttt{BRUIT-FM/compliance\_xe\_2026-10-29}.
+Run folder: \texttt{PressureQC/compliance\_xe\_2026-10-29}.
 
 \footnotesize
 \section*{References}

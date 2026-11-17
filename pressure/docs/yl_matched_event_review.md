@@ -9,7 +9,7 @@ spectra, fit new gains, change event acceptance or write masters.
 From the checkout, create a fresh review and open it in the browser:
 
 ```bash
-conda run --no-capture-output -n bruitfm python scripts/compare_yl_matched_events.py --show
+conda run --no-capture-output -n compy python scripts/compare_yl_matched_events.py --show
 ```
 
 Default selection includes every event with saved spectra at all three stations,

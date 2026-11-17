@@ -95,7 +95,7 @@ or lower QC to increase acceptance.
 Reproduce the three plots in a new folder:
 
 ```bash
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   scripts/review_yv_heldout_arrivals.py \
   --validation-dir results/VALIDATION/YV_HELDOUT/run_20261013T213126Z_87e24fe6
 ```

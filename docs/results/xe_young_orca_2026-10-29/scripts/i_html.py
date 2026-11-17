@@ -97,7 +97,7 @@ def main():
   <h2>Summary</h2>
   <div class="abstract"><p>{html.escape(abstract.strip())}</p></div>
   <p class="note">Below is the full report in the layout of Aminian et al. (2025, GJI). The PDF and LaTeX source are in
-  <code>BRUIT-FM/compliance_xe_2026-10-29/report/</code>, the results in <code>results/</code> and the figures in
+  <code>PressureQC/compliance_xe_2026-10-29/report/</code>, the results in <code>results/</code> and the figures in
   <code>figures/</code>.</p>
   <h2>Report</h2>
   <div class="pages">{imgs}</div>

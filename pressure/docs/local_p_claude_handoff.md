@@ -6,7 +6,7 @@ first for v2 status and numbers. The n=7/scalar=0.998 pilot paragraph and the
 open question saying the drift model is unimplemented below are historical
 inconsistencies, not current instructions. Hardware diagnoses remain hypotheses.
 
-Base: `main` at `2b4fef8`. Worktree used: `~/Projects/bruit-fm-localp`.
+Base: `main` at `2b4fef8`. Worktree used: `~/Projects/pressure-qc-localp`.
 Not merged into `main`. Codex's checkout and `claude/microseism-all` were not
 touched.
 
@@ -16,9 +16,9 @@ touched.
 |---|---|
 | `docs/local_p_method.md` | Method note: sources/pages, conventions, two regimes, applicability to local P, estimator, pre-registered settings, post-pilot revision, open questions |
 | `docs/local_p_check.md` | Data inventory, catalogue provenance, pilot results, exact commands, output fields |
-| `src/bruitfm/local_p_physics.py` | Pure relations (Deng Eq. 5, pre-multiple ρc₀/η, η bounds, poles, round trip, regime classifier), multitaper cross-spectra, AIC |
-| `src/bruitfm/local_p_reference.py` | Independent 1-D finite-difference water/half-space simulation (validation only) |
-| `src/bruitfm/local_p_check.py` | One-pair pipeline and CLI (`python -m bruitfm.local_p_check`) |
+| `compy_pressure/local_p_physics.py` | Pure relations (Deng Eq. 5, pre-multiple ρc₀/η, η bounds, poles, round trip, regime classifier), multitaper cross-spectra, AIC |
+| `compy_pressure/local_p_reference.py` | Independent 1-D finite-difference water/half-space simulation (validation only) |
+| `compy_pressure/local_p_check.py` | One-pair pipeline and CLI (`python -m compy_pressure.local_p_check`) |
 | `scripts/fetch_local_catalog.py` | USGS ComCat CSV into new files with provenance sidecar |
 | `scripts/run_local_p_campaign.py` | All-station plan, `--dry-run`, resumable run, per-pair logs, summary |
 | `scripts/export_local_p_results.py` | Read-only export keyed to master epochs, and cross-check table |
@@ -129,7 +129,7 @@ refetched catalogues differ (hashes recorded).
 
 Work in a checkout of `claude/local-p-check` (the code is not on `main`). The
 result folders below are git-ignored and live in
-`~/Projects/bruit-fm-localp/results/LOCAL_P/`; read them in place.
+`~/Projects/pressure-qc-localp/results/LOCAL_P/`; read them in place.
 
 1. `python -m pytest -q` (expect 271 passed) and `ruff check . && ruff format --check .`.
 2. Plan without reading waveforms:

@@ -29,7 +29,7 @@ from compy_pressure.local_p_io import local_p_output
 UTC = timezone.utc  # datetime.UTC needs Python 3.11; ComPy supports 3.10
 
 ROOT = Path(__file__).resolve().parents[1]
-MASTER = Path.home() / "Projects/bruit-fm/exports/master_inventory.csv"
+MASTER = Path.home() / "Projects/pressure-qc/exports/master_inventory.csv"
 RAYLEIGH = ROOT / "docs/calibration_network_summary.json"
 MICROSEISM = ROOT / "docs/microseism_baseline_comparison.csv"
 INVENTORY_MAP = ROOT / "docs/local_p_inventory_map.json"

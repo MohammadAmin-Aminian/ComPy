@@ -1,4 +1,4 @@
-# BRUIT-FM handoff
+# PressureQC handoff
 
 **Fresh chat: start with [CODEX_NEXT_CHAT.md](CODEX_NEXT_CHAT.md).** README progress
 runs through step 46. Reviewed engineering fixes and optional scientific trial
@@ -9,8 +9,8 @@ three-event normal-state subset, versus 46 preserved baseline gains.
 [Comparison](../socrates_all_station_comparison.md) ·
 [Contributions](../contributions.md). Earlier notes below are historical context.
 
-Resume this project in the local `bruit-fm` checkout.
-Python environment: conda `bruitfm` (Python 3.13, ObsPy 1.5.1).
+Resume this project in the local `pressure-qc` checkout.
+Python environment: conda `compy_pressure` (Python 3.13, ObsPy 1.5.1).
 See the [completed-step log](../research_log.md) and
 [processing details](../rr52_methods.md) for the full settings and results.
 The README lists forty-six completed steps in the original numbered format,
@@ -19,8 +19,8 @@ completed RR52 results from whole-network execution progress in `_workflow`.
 
 ## Data and current results
 
-- Waveforms on the current machine: `~/Desktop/Data_Bruit_FM/RR52`.
-- Matching StationXML: `Data_Bruit_FM/INVENTORIES/YV.xml`.
+- Waveforms on the current machine: `~/Desktop/ComPy/data/RR52`.
+- Matching StationXML: `data/INVENTORIES/YV.xml`.
 - Four channels: `YV.RR52.00.BDH` (DPG pressure), `BH1` and `BH2`
   (horizontal motion), and `BHZ` (vertical motion).
 - Master metadata: `exports/master_inventory.csv` and `.xlsx`, containing
@@ -52,26 +52,26 @@ completed RR52 results from whole-network execution progress in `_workflow`.
 
 ## Code and commands
 
-- `src/bruitfm/inventory.py`: build the StationXML master table and export it;
+- `compy_pressure/inventory.py`: build the StationXML master table and export it;
   update matching rows with processing results.
-- `src/bruitfm/archive.py`: index daily SDS MiniSEED headers and read bounded
+- `compy_pressure/archive.py`: index daily SDS MiniSEED headers and read bounded
   time intervals, preserving gaps and handling overlapping daily files.
-- `src/bruitfm/ppsd.py`: calculate response-corrected spectra, checkpoint and
+- `compy_pressure/ppsd.py`: calculate response-corrected spectra, checkpoint and
   resume, save NPZ/provenance, and update the master files.
-- `src/bruitfm/plot_ppsd.py`: plot saved distributions, time spectrograms, and
+- `compy_pressure/plot_ppsd.py`: plot saved distributions, time spectrograms, and
   all individual PSD curves. All 5,249 curves are included for each channel.
 - Seismic distributions and curve plots include Peterson NLNM/NHNM reference
   models. Pressure plots use pressure units. Spectrograms show frequency versus
   UTC window start time, with PSD amplitude represented by color.
 - Twelve PNGs (three per channel) are in `results/TEST/YV/RR52/plots/`.
-- `src/bruitfm/pressure_test.py` now compares saved BDH spectra with supplied
+- `compy_pressure/pressure_test.py` now compares saved BDH spectra with supplied
   Webb points and digitized Brown hydroacoustic curves. Run
-  `conda run -n bruitfm python -m bruitfm.pressure_test` to display/save three plots
+  `conda run -n compy python -m compy_pressure.pressure_test` to display/save three plots
   and update master diagnostics. Details are in [pressure comparison](../pressure_comparison.md).
 - Pressure-comparison CSV/JSON/PNG files are beside the NPZ under
   `pressure_expected/`. Status is `comparison_only`; no calibration score is assigned.
-- `src/bruitfm/infragravity_test.py` implements the Godin depth-dependent
-  pressure prediction. Run `python -m bruitfm.infragravity_test` in the `bruitfm`
+- `compy_pressure/infragravity_test.py` implements the Godin depth-dependent
+  pressure prediction. Run `python -m compy_pressure.infragravity_test` in the `compy_pressure`
   environment to display/save three model comparison plots.
   CSV/JSON/PNG files are under `infragravity/`, with diagnostics in master CSV/Excel.
   RR52 has two supported bins and +16.13 dB median residual under default choices;
@@ -80,20 +80,20 @@ completed RR52 results from whole-network execution progress in `_workflow`.
 From the project directory, display/save all plots:
 
 ```bash
-conda run -n bruitfm python -m bruitfm.plot_ppsd
+conda run -n compy python -m compy_pressure.plot_ppsd
 ```
 
 Select only one type, if desired:
 
 ```bash
-conda run -n bruitfm python -m bruitfm.plot_ppsd --plot-type spectrogram
+conda run -n compy python -m compy_pressure.plot_ppsd --plot-type spectrogram
 ```
 
 Resume the existing calculation with its current settings:
 
 ```bash
-conda run -n bruitfm python -m bruitfm.ppsd \
-  --data-dir ~/Desktop/Data_Bruit_FM/RR52 --workers 4
+conda run -n compy python -m compy_pressure.ppsd \
+  --data-dir ~/Desktop/ComPy/data/RR52 --workers 4
 ```
 
 Use the plotting script for viewing existing results. Running the inventory
@@ -119,7 +119,7 @@ another output directory when rebuilding inventory metadata.
 
 ## Screened full-window Godin pilot
 
-`src/bruitfm/godin_pilot.py` calculates one raw-pressure pilot near mid-recording
+`compy_pressure/godin_pilot.py` calculates one raw-pressure pilot near mid-recording
 by default. Three full 12.42-hour Hann spectra per day, screening before
 response correction in 0.05–0.06 Hz, and linear-power means follow the source
 procedure. Segment-mean removal and periodic Hann are explicit choices.
@@ -134,16 +134,16 @@ Neither diagnostic establishes instrument calibration acceptance.
 Pilot NPZ/CSV/JSON/PNG outputs are under the pressure epoch's separate
 `godin_pilot/<interval-start>__<days>days/` folder. Master CSV/Excel row 13834
 receives new `infragravity_pilot_*` fields. All old fields/scores remain intact.
-Open saved plots with `python -m bruitfm.godin_pilot --plot-only` in `bruitfm`.
+Open saved plots with `python -m compy_pressure.godin_pilot --plot-only` in `compy_pressure`.
 Calculate another interval with `--start` and `--days`. Same-interval reruns
 replace that pilot folder; different intervals get separate folders.
 See `docs/godin_pilot.md` for details.
 
 ## Whole-network workflow
 
-`python -m bruitfm.network` now runs `inventory`, `check`, `ppsd`, `plots`,
+`python -m compy_pressure.network` now runs `inventory`, `check`, `ppsd`, `plots`,
 `pressure`, `nearby`, `infragravity`, `pilot`, `view`, or `all`. Defaults discover networks
-in `~/Desktop/Data_Bruit_FM/Data`, using `~/Desktop/Data_Bruit_FM/INVENTORIES` and
+in `~/Desktop/ComPy/data/Data`, using `~/Desktop/ComPy/data/INVENTORIES` and
 the existing `exports` master. No network/station/channel list is hard-coded.
 Only actual files are processed; unmatched inventory identifiers are reported.
 
@@ -195,8 +195,8 @@ preserved; the production master was not patched by verification.
 See [method](../nearby_comparison.md) and [verification](../nearby_validation_summary.json).
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network nearby
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind nearby
 ```
 
 ## Possible next work — not yet approved or implemented

@@ -12,7 +12,7 @@ Variants (each a full run; 'main' adds a prior-only run):
   main     Zha & Webb (2016) parameterization, Vp/Vs 1.85, Hamilton sediment
   brocher  Vp from Brocher (2005) instead of Vp/Vs 1.85
   sedscale sediment Vs multiplier free in [0.5, 2]
-  bruitfm  pressure gain from gain_corrected_2026-10-28/gains.csv
+  compy_pressure  pressure gain from gain_corrected_2026-10-28/gains.csv
   full     whole record instead of the stable epoch (epoch stations only)
   moho     Moho depth free within +-1 km (as in Aminian et al. 2025)
   fixedvp  Vp and density fixed at CRUST1.0 (Aminian et al. 2025; Crawford 1991)
@@ -140,7 +140,7 @@ VARIANTS = {
     "main": dict(),
     "brocher": dict(model=dict(vp_vs=None)),
     "sedscale": dict(model=dict(sediment_scale=(0.5, 2.0))),
-    "bruitfm": dict(data=dict(gain="bruitfm")),
+    "pressure": dict(data=dict(gain="pressure")),
     "full": dict(data=dict(epoch=False)),
     "moho": dict(model=dict(moho_shift=(-1000.0, 1000.0))),
     # Fixed Vp makes the posterior multimodal: parallel tempering, 8 replicas.

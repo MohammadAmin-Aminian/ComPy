@@ -60,16 +60,16 @@ CALIBRATION_BAND = (0.02, 0.06)  # Hz
 # valid orientations; the XE StationXML gives BH1 and BH2 a dip of -90 degrees,
 # so XE uses pressure and vertical only.
 CALIBRATION_TILT = "none"  # YV: "tiskitpy"
-# Rayleigh phase velocities for the water-layer prediction (BRUIT-FM's default
+# Rayleigh phase velocities for the water-layer prediction (PressureQC's default
 # for every network; a layered model can be given with compy-pressure instead).
 CALIBRATION_DISPERSION = (
     COMPY / "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv"
 )
 
 # --- gains ----------------------------------------------------------------------
-# Optional BRUIT-FM gain table (columns Seed_id, gain_status, gain_applied),
+# Optional PressureQC gain table (columns Seed_id, gain_status, gain_applied),
 # compared with ComPy's own Rayleigh-wave calibration. None to skip.
-BRUITFM_GAINS = None
+PRESSURE_GAINS = None
 
 # --- inversion ------------------------------------------------------------------
 CRUST1 = ROOT / "metadata" / "crust1"  # crust1.bnds, .vp, .vs, .rho
@@ -83,7 +83,7 @@ GROUPS = {"WW": "West (WW)", "WC": "West-central (WC)", "CC": "Central (CC)",
 
 
 def seed_id(station, channel=P):
-    """SEED id as written in the BRUIT-FM tables."""
+    """SEED id as written in the PressureQC tables."""
     return f"{NETWORK}.{station}..{channel}"
 
 

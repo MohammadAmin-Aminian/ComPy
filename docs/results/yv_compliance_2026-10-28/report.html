@@ -67,16 +67,16 @@ figcaption { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
 </style>
 
 <main>
-  <p class="eyebrow">BRUIT-FM · ComPy 2.2 · RHUM-RUM (YV)</p>
+  <p class="eyebrow">PressureQC · ComPy 2.2 · RHUM-RUM (YV)</p>
   <h1>Seafloor compliance of the YV broadband stations</h1>
-  <p class="meta">Mohammad-Amin Aminian (IPGP). Processing and report prepared by Claude, 28 October 2026. Code: ComPy branch <code>claude/compliance-yv</code>. Outputs on the Mac: <code>~/Desktop/BRUIT-FM/compliance_yv_2026-10-28/</code>.</p>
+  <p class="meta">Mohammad-Amin Aminian (IPGP). Processing and report prepared by Claude, 28 October 2026. Code: ComPy branch <code>claude/compliance-yv</code>. Outputs on the Mac: <code>~/Desktop/ComPy/runs/compliance_yv_2026-10-28/</code>.</p>
 
   <div class="box">
     <h3>Summary</h3>
     <ul>
       <li><b>All 8 broadband stations</b> processed through the compliance function: RR28, RR29, RR34, RR36, RR38, RR40, RR50 and RR52. The request named RR32, which is not on the data drive. RR34 is the eighth broadband station of Aminian et al. (2025, Table 1), so it was processed in its place.</li>
       <li><b>ComPy audit:</b> 7 defects fixed and tested (78 tests pass) and 10 science items documented. The largest numerical fix is that the gravity term was multiplied by coherence. Its effect is 0.2–0.7 % at the coherences obtained here and larger at low coherence.</li>
-      <li><b>DPG gains:</b> ComPy's own teleseismic calibration reproduces the paper's Table 1 to within ±0.01 at every station. The BRUIT-FM <code>gains.csv</code> gains are 0–6 % higher at five stations.</li>
+      <li><b>DPG gains:</b> ComPy's own teleseismic calibration reproduces the paper's Table 1 to within ±0.01 at every station. The PressureQC <code>gains.csv</code> gains are 0–6 % higher at five stations.</li>
       <li><b>Independent check:</b> TiSKitPy, run on the same windows, agrees with the ComPy stacked compliance to within 0.2–1.5 % (median).</li>
       <li><b>New finding:</b> the pressure-to-vertical sensitivity ratio changes during the deployment, and the Rayleigh calibration confirms it independently. RR50 steps ×1.68 on 2013-08-04 and RR36 ×1.63 in November 2013. RR38 and RR40 drift by 12–25 % late in 2013. For these four stations the compliance is given for the stable epoch before the change.</li>
     </ul>
@@ -94,7 +94,7 @@ figcaption { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
     <li><b>Periodic transients</b> (B). Folding over 3596–3604 s in 15-day blocks found <b>no hourly mass-position glitch</b> above noise in the 1.25-Hz data: fold strength was 1.1–1.3, and the template was below 1 % of the data RMS. The stack-and-subtract step fired only where the seismometer channels were nearly dead (RR38 from 2012-10-30 to 2012-11-28; RR52 from 2013-10-14), on an exact 3600.0 s digital artefact.</li>
     <li><b>Tilt</b> (B). Hourly TiSKitPy <code>CleanRotator</code> angles, about 7,300 hours per station, are median smoothed over 24 h and applied per sample, so the rotation adds no hour-boundary steps.</li>
     <li><b>Coherent noise</b> (B). BH1/BH2-coherent noise is removed from BHZ only, with TiSKitPy <code>DataCleaner</code> in equal windows of at most 24 h, with transfer functions estimated outside the event spans (paper §4.1.4). The pressure channel is not modified.</li>
-    <li><b>DPG gain</b> (D). Two sources are used: (a) BRUIT-FM <code>gains.csv</code>, and (b) ComPy's <code>calculate_spectral_ratio</code> with M ≥ 7 events, 0.02–0.06 Hz and squared coherence above 0.97.</li>
+    <li><b>DPG gain</b> (D). Two sources are used: (a) PressureQC <code>gains.csv</code>, and (b) ComPy's <code>calculate_spectral_ratio</code> with M ≥ 7 events, 0.02–0.06 Hz and squared coherence above 0.97.</li>
     <li><b>Compliance</b> (C). The record is cut into non-overlapping 35-min windows that avoid events (paper §4.2). A window is kept if:
       <ul>
         <li>its median amplitude coherence is at least 0.9; 0.8 would be used only if fewer than 500 windows passed, which never happened;</li>
@@ -198,12 +198,12 @@ figcaption { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
   <div class="box flag">
     <ul>
       <li><b>Sensitivity changes</b> at RR50 (×1.68 on 2013-08-04) and RR36 (×1.63 in Nov 2013), with smaller ones at RR38 and RR40. The question for Wayne is whether these are known instrument events (gauge or seismometer). The stable epoch is my choice; the full-period results are also saved.</li>
-      <li><b>Polarity:</b> the Z/P phase is 3–16° at every station, where 180° is expected for downward displacement under positive pressure. This matches the inverted BDH sign that BRUIT-FM found for YV (<code>rayleigh_sign = −1</code>). Compliance magnitudes are unaffected, but the metadata sign needs a decision.</li>
+      <li><b>Polarity:</b> the Z/P phase is 3–16° at every station, where 180° is expected for downward displacement under positive pressure. This matches the inverted BDH sign that PressureQC found for YV (<code>rayleigh_sign = −1</code>). Compliance magnitudes are unaffected, but the metadata sign needs a decision.</li>
       <li><b>Dead seismometer intervals</b> carrying an exact 3600 s artefact: RR38 2012-10-30 to 11-28 and RR52 from 2013-10-14. The quality gates reject these windows.</li>
       <li><b>Which gain to carry forward:</b> ComPy and the paper agree within ±0.01; <code>gains.csv</code> is up to 6 % higher on 3 events.</li>
       <li><b>Coherence threshold:</b> 0.9 everywhere narrows the bands relative to the paper. Rerunning with 0.8 for wider bands is one command (<code>THRESHOLDS</code> in <code>c_compliance.py</code>).</li>
       <li><b>RR32 → RR34 substitution</b>: please confirm.</li>
-      <li>Nothing was applied to BRUIT-FM results, no frozen result was overwritten, and no one outside was contacted.</li>
+      <li>Nothing was applied to PressureQC results, no frozen result was overwritten, and no one outside was contacted.</li>
     </ul>
   </div>
 

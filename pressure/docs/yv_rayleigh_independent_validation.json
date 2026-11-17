@@ -2904,17 +2904,17 @@
       {
         "station": "RR03",
         "url": "https://service.iris.edu/fdsnws/station/1/query?net=YV&sta=RR03&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
-        "error": "Unknown format for file /private/tmp/bruitfm_authoritative_RR03.xml"
+        "error": "Unknown format for file /private/tmp/pressure_authoritative_RR03.xml"
       },
       {
         "station": "RR22",
         "url": "https://service.iris.edu/fdsnws/station/1/query?net=YV&sta=RR22&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
-        "error": "Unknown format for file /private/tmp/bruitfm_authoritative_RR22.xml"
+        "error": "Unknown format for file /private/tmp/pressure_authoritative_RR22.xml"
       },
       {
         "station": "RR52",
         "url": "https://service.iris.edu/fdsnws/station/1/query?net=YV&sta=RR52&cha=BDH&level=response&starttime=2012-10-05&endtime=2013-04-20&format=xml",
-        "error": "Unknown format for file /private/tmp/bruitfm_authoritative_RR52.xml"
+        "error": "Unknown format for file /private/tmp/pressure_authoritative_RR52.xml"
       }
     ],
     "resif_attempts": [

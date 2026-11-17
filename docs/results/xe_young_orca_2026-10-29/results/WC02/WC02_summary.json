@@ -7,12 +7,12 @@
  "window_s": 2100.0,
  "nseg": 1024,
  "gains": {
-  "bruitfm": 1.2587311186484182,
+  "pressure": 1.2587311186484182,
   "compy": 1.2415801457197329
  },
  "paper_table1": null,
  "results": {
-  "bruitfm": {
+  "pressure": {
    "gain": 1.2587311186484182,
    "attempts": {
     "0.9": {

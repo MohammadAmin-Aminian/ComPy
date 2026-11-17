@@ -75,16 +75,16 @@ def table1(recs):
             g = f"{r['gain_compy']:.3f} ({r['gain_events']})"
         else:
             g = "--"
-        gb = f"{r['gain_bruitfm']:.3f}" if r.get("gain_bruitfm") else "--"
+        gb = f"{r['gain_pressure']:.3f}" if r.get("gain_pressure") else "--"
         rows.append(f"{r['station']} & {r['lat']:.4f} & {r['lon']:.4f} & {r['depth']:.0f} & {g} & {gb} & "
                     f"{r['band'][0] * 1e3:.1f}--{r['band'][1] * 1e3:.1f} & {r['threshold']} & {r['n_windows']} & "
                     f"{r['coherence']:.3f} \\\\")  # fmt: skip
     return (
         "\\begin{table*}\n\\centering\\small\n\\caption{Stations with a compliance measurement. Gain: ComPy Rayleigh-wave "
-        "calibration (event standard deviation, number of events); BRUIT-FM: independent microseism calibration where "
+        "calibration (event standard deviation, number of events); PressureQC: independent microseism calibration where "
         "available. Frequency: compliance band. Threshold: coherence gate. Coherence: band median of the stack.}\n"
         "\\label{tab:stations}\n\\begin{tabular}{lrrrlrrrrr}\n\\toprule\n"
-        "Station & Lat. [$^\\circ$] & Lon. [$^\\circ$] & Depth [m] & Gain (ComPy) & Gain (BRUIT-FM) & Band [mHz] & "
+        "Station & Lat. [$^\\circ$] & Lon. [$^\\circ$] & Depth [m] & Gain (ComPy) & Gain (PressureQC) & Band [mHz] & "
         "Thr. & Windows & Coh. \\\\\n\\midrule\n"
         + "\n".join(rows)
         + "\n\\bottomrule\n\\end{tabular}\n\\end{table*}"
@@ -139,14 +139,14 @@ def main():
         if r.get("gain_compy_std")
     ]
     pairs = [
-        (r["station"], r["gain_compy"], r["gain_bruitfm"])
+        (r["station"], r["gain_compy"], r["gain_pressure"])
         for r in with_gain
-        if r.get("gain_bruitfm")
+        if r.get("gain_pressure")
     ]
     ratios = [a / b for _, a, b in pairs]
     agree = [x for x in ratios if 0.8 <= x <= 1.25]
     outliers = [
-        f"{n} (ComPy {a:.2f}, BRUIT-FM {b:.2f})"
+        f"{n} (ComPy {a:.2f}, PressureQC {b:.2f})"
         for n, a, b in pairs
         if not 0.8 <= a / b <= 1.25
     ]

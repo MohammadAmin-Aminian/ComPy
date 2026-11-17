@@ -63,11 +63,11 @@ week. It saves its results alongside this original diagnostic.
 From the project checkout:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.infragravity_test
+conda run --no-capture-output -n compy python -m compy_pressure.infragravity_test
 ```
 
-In VS Code, select the `bruitfm` interpreter and run
-`src/bruitfm/infragravity_test.py`. The default station is RR52. Both routes
+In VS Code, select the `compy_pressure` interpreter and run
+`compy_pressure/infragravity_test.py`. The default station is RR52. Both routes
 display and save three figures:
 
 - **Model comparison:** observed percentile spectra in blue and the Godin

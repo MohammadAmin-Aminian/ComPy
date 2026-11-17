@@ -70,17 +70,17 @@ and window settings are retained.
 
 ## Run and save
 
-From the project checkout with the `bruitfm` environment active:
+From the project checkout with the `compy_pressure` environment active:
 
 ```bash
-python -m bruitfm.pressure_test
+python -m compy_pressure.pressure_test
 ```
 
-Or select that environment in VS Code and run `src/bruitfm/pressure_test.py`.
+Or select that environment in VS Code and run `compy_pressure/pressure_test.py`.
 Both routes display and save three figures. For background use:
 
 ```bash
-conda run -n bruitfm python -m bruitfm.pressure_test --no-show
+conda run -n compy python -m compy_pressure.pressure_test --no-show
 ```
 
 Each pressure-channel output directory receives:

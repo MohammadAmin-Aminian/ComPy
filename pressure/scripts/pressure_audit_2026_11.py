@@ -1,6 +1,6 @@
 """Pressure-gauge audit (November 2026): anomaly scan, figures and numbers.
 
-ObsPy-free. Runs on the BRUIT-FM master table copied into
+ObsPy-free. Runs on the PressureQC master table copied into
 ``pressure/docs/audit_2026-11/data`` and writes the figures, the ranked
 anomaly table and ``numbers.json`` quoted in that folder's REPORT.md::
 

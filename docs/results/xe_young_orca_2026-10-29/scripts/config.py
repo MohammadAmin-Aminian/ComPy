@@ -24,7 +24,7 @@ INVENTORY = ROOT / "metadata" / "XE.xml"  # IRIS seismic + pressure responses
 Z, H1, H2, P = "BHZ", "BH1", "BH2", "BDH"
 CHANNELS = (Z, H1, H2, P)
 
-# Stations with more than 3 months of data and a working DPG (BRUIT-FM QC):
+# Stations with more than 3 months of data and a working DPG (PressureQC QC):
 # CC02 (pressure non-working), CC10 (50 d) and CC12 (17 d) are left out.
 STATIONS = (
     "CC01", "CC03", "CC04", "CC05", "CC06", "CC07", "CC08", "CC09", "CC11",
@@ -52,11 +52,11 @@ CATALOG = WORK / "catalog_usgs_M5.85_20180401_20190630.qml"
 CATALOG_SPAN = ("2018-04-01", "2019-06-30")
 
 # --- gains ------------------------------------------------------------------
-BRUITFM_GAINS = ROOT.parent / "gain_corrected_2026-10-28" / "gains.csv"
+PRESSURE_GAINS = ROOT.parent / "gain_corrected_2026-10-28" / "gains.csv"
 
 
 def seed_id(station, channel=P):
-    """SEED id as written in the BRUIT-FM tables."""
+    """SEED id as written in the PressureQC tables."""
     return f"{NETWORK}.{station}..{channel}"
 
 

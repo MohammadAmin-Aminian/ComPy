@@ -1,7 +1,7 @@
 #!/bin/bash
 # Rerun cleaning (B) and compliance (C) for stations given as arguments, in parallel.
 cd "$(dirname "$0")/.."
-PY=/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python
+PY=/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python
 export MPLBACKEND=Agg OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
 for s in "$@"; do
   (rm -rf work/$s/clean

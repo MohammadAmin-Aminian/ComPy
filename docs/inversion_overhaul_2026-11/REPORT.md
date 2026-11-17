@@ -242,7 +242,7 @@ The last point has two readings, and this work does not decide between them. Eit
 | The "resolved" label (new) | Open. It is a ratio of posterior to prior width and therefore depends on the prior width (section 8). An absolute criterion would not. |
 | Upper limit of the band (new) | Open. Vs between 0.5 and 3 km depends on the bins between 0.6 and 0.8 f_c, most at thick-sediment stations (section 8). Whether those bins are biased was not tested. |
 
-Stations that remain poor and need a look at the data, not at the inversion: YV.RR38 (misfit, known pressure-channel change), 7D.J35A (BRUIT-FM gain 4.45; the inversion asks for a factor 0.83, Vp 25 % above the rock relation and Vs at 4.7 km/s), XO.LT01 (misfit 41 for 8 data in about 100 m of water), and the stations with nominal gains whose gain factor is pulled (17).
+Stations that remain poor and need a look at the data, not at the inversion: YV.RR38 (misfit, known pressure-channel change), 7D.J35A (PressureQC gain 4.45; the inversion asks for a factor 0.83, Vp 25 % above the rock relation and Vs at 4.7 km/s), XO.LT01 (misfit 41 for 8 data in about 100 m of water), and the stations with nominal gains whose gain factor is pulled (17).
 
 Not done: comparison with refraction velocities at the stations; a transdimensional or adaptive layering; the same audit for the compliance stages A to D, which earlier audits covered and this one only read.
 

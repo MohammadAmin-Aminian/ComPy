@@ -60,7 +60,7 @@ packages = ["compy", "compy.inversion", "compy.plotting", "compy_pressure", "com
 "compy_pressure.reference_data" = ["*.csv", "*.json"]
 
 [tool.pytest.ini_options]
-# pressure/ is BRUIT-FM's project folder: its tests import its scripts/.
+# pressure/ is PressureQC's project folder: its tests import its scripts/.
 testpaths = ["tests", "pressure/tests"]
 pythonpath = [".", "pressure"]
 

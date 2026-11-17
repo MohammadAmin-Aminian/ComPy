@@ -1,6 +1,6 @@
 """Stage H: temporal stability of the Z/P transfer function per station.
 
-For every accepted window (Stage C, 'bruitfm' gain) the band median of
+For every accepted window (Stage C, 'pressure' gain) the band median of
 |S_pz|/S_pp and the band-mean Z and P levels are saved. The largest single
 step (median before vs after, at least MIN_SIDE windows each side) is
 located; a step larger than STEP_LIMIT in log10 (≈ 10 %) is reported with
@@ -31,7 +31,7 @@ def main():
     report = {}
     for station in STATIONS:
         d = dict(
-            np.load(ROOT / "results" / station / f"{station}_compliance_bruitfm.npz")
+            np.load(ROOT / "results" / station / f"{station}_compliance_pressure.npz")
         )
         band, accepted = d["band"], set(d["window_starts"].tolist())
         windows, _ = C.load_windows(station)

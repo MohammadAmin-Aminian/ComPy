@@ -14,7 +14,7 @@ Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
     Bendat & Piersol uncertainty, phase, per-window mean and scatter.
   * Monthly stacks with the same band and threshold test temporal stability.
 
-Gains: 'bruitfm' from config.BRUITFM_GAINS; 'compy' from
+Gains: 'pressure' from config.PRESSURE_GAINS; 'compy' from
 work/<STA>/calibration/compy_gain.json (Stage D). Missing gains are skipped.
 """
 
@@ -27,7 +27,7 @@ from pathlib import Path
 import numpy as np
 from obspy import UTCDateTime, read, read_inventory
 
-from config import BRUITFM_GAINS, COMPY, INVENTORY, P, RESULTS, WORK, Z, seed_id
+from config import PRESSURE_GAINS, COMPY, INVENTORY, P, RESULTS, WORK, Z, seed_id
 
 sys.path.insert(0, str(COMPY))
 
@@ -52,16 +52,16 @@ PAPER_TABLE1 = {}  # published gain and band per station, if any
 
 def gains_for(station):
     gains = {}
-    if BRUITFM_GAINS is not None and Path(BRUITFM_GAINS).exists():
-        with open(BRUITFM_GAINS) as fh:
+    if PRESSURE_GAINS is not None and Path(PRESSURE_GAINS).exists():
+        with open(PRESSURE_GAINS) as fh:
             for row in csv.DictReader(fh):
-                # Only gains BRUIT-FM actually applied (XE: microseism method);
+                # Only gains PressureQC actually applied (XE: microseism method);
                 # "uncorrected" rows carry g = 1 and are not calibrations.
                 if (
                     row["Seed_id"] == seed_id(station)
                     and row.get("gain_status") == "applied"
                 ):
-                    gains["bruitfm"] = float(row["gain_applied"])
+                    gains["pressure"] = float(row["gain_applied"])
     path = WORK / station / "calibration" / "compy_gain.json"
     if path.exists():
         info = json.loads(path.read_text())

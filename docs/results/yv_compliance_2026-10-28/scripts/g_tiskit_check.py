@@ -5,7 +5,7 @@ TiSKitPy's SpectralDensity (prolate 4π windows) and ResponseFunctions
 Compliance._zp_to_ncompl converts to normalized compliance. The same
 gravity correction as ComPy is then applied, because TiSKitPy 2.3.1 does
 not implement ``correct_gravity_terms``. Pressure is multiplied by the
-'bruitfm' gain. Three 819.2-s segments are taken in each accepted 35-min
+'pressure' gain. Three 819.2-s segments are taken in each accepted 35-min
 window (starts 0, 640, 1280.8 s).
 """
 
@@ -32,7 +32,7 @@ def main():
     logging.disable(logging.INFO)
     station = sys.argv[1]
     res = dict(
-        np.load(ROOT / "results" / station / f"{station}_compliance_bruitfm.npz")
+        np.load(ROOT / "results" / station / f"{station}_compliance_pressure.npz")
     )
     gain, depth = float(res["gain"]), float(res["depth"])
     st = read(str(ROOT / "work" / station / "clean" / f"{station}_seg*.mseed"))

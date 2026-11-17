@@ -19,7 +19,7 @@ anyone else does.
   - the compliance and inversion reports in `05_report/`;
   - its tables;
   - `13_audit/` (per-window stage C spectra and tables for every inverted station).
-- **BRUIT-FM:** its reports, and the pressure atlas (`ComPy-pressure-atlas/pressure_atlas/LOG.md`).
+- **PressureQC:** its reports, and the pressure atlas (`ComPy-pressure-atlas/pressure_atlas/LOG.md`).
 - **Data:**
   - `02_cleaned` (1.25 Hz Z, H1, H2, P);
   - `04_ppsd` (3-h windows, 1 mHz–0.6 Hz, PSDs and Z–P/Z–H cross-spectra, about 800

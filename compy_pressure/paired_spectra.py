@@ -373,7 +373,7 @@ def run_paired_spectra(
         raise ValueError("Segment duration must contain an integer number of samples")
     if records is None:
         if data_dir is None:
-            data_dir = Path.home() / "Desktop/Data_Bruit_FM/Data"
+            data_dir = Path.home() / "Desktop/ComPy/data/Data"
         records = discover_waveforms(data_dir, {row.Seed_id, vrow.Seed_id})
     pr = [r for r in records if r.seed_id == row.Seed_id]
     vr = [r for r in records if r.seed_id == vrow.Seed_id]

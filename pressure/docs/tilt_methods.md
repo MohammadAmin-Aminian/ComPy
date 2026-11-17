@@ -23,7 +23,7 @@ for a separate network comparison and viewing without master updates.
 
 The default is the actual `tiskitpy.CleanRotator` class, pinned to **2.3.1** in
 the optional `rayleigh` extra. There is no silent fallback to the local method.
-Install it in the BRUIT-FM environment with:
+Install it in the PressureQC environment with:
 
 ```bash
 python -m pip install -e '.[rayleigh]'
@@ -60,7 +60,7 @@ and [source](https://github.com/WayneCrawford/tiskitpy).
 
 ## Experimental local method
 
-`--tilt-method local_eigen` retains BRUIT-FM's earlier implementation, introduced
+`--tilt-method local_eigen` retains PressureQC's earlier implementation, introduced
 in commit `df0b449`. Every use saves `validation_status: "needs_to_be_tested"`.
 It is not the default.
 

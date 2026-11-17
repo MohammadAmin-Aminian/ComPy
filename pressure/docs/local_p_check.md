@@ -13,7 +13,7 @@ No gain is applied to any data, no master is written and no score is assigned.
 
 ## 1. Available inputs
 
-**Waveforms** (`~/Desktop/Data_Bruit_FM/Data`, read in place). Local P needs
+**Waveforms** (`~/Desktop/ComPy/data/Data`, read in place). Local P needs
 pressure and vertical well above 1 Hz.
 
 | Network | High-rate pairs on disk | Period | Local-P status |
@@ -148,14 +148,14 @@ AIC picks lock onto different arrivals despite a lag predicted to ~0.1 s.
 
 ## 3. Commands
 
-Use the `bruitfm` environment from the checkout that holds this code. The
+Use the `compy_pressure` environment from the checkout that holds this code. The
 catalogues are local (git-ignored); recreate them in a fresh checkout with the
 fetch commands in §3.4.
 
 ### 3.1 Plan only (no data read)
 
 ```bash
-conda run --no-capture-output -n bruitfm python scripts/run_local_p_campaign.py \
+conda run --no-capture-output -n compy python scripts/run_local_p_campaign.py \
   --campaign-dir results/LOCAL_P/campaigns/all_v1 --dry-run
 ```
 
@@ -165,7 +165,7 @@ Prints every pressure channel with its status: currently 66 eligible,
 ### 3.2 Full available dataset (resumable)
 
 ```bash
-conda run --no-capture-output -n bruitfm python scripts/run_local_p_campaign.py \
+conda run --no-capture-output -n compy python scripts/run_local_p_campaign.py \
   --campaign-dir results/LOCAL_P/campaigns/all_v1
 ```
 
@@ -178,7 +178,7 @@ the final table is `campaign_summary.csv` / `.json`.
 ### 3.3 Export and comparison (read-only)
 
 ```bash
-conda run --no-capture-output -n bruitfm python scripts/export_local_p_results.py \
+conda run --no-capture-output -n compy python scripts/export_local_p_results.py \
   --campaign-dir results/LOCAL_P/campaigns/all_v1 \
   --output-dir results/LOCAL_P/campaigns/all_v1_export
 ```
@@ -186,10 +186,10 @@ conda run --no-capture-output -n bruitfm python scripts/export_local_p_results.p
 ### 3.4 One pair, explicit inputs
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.local_p_check \
+conda run --no-capture-output -n compy python -m compy_pressure.local_p_check \
   --pressure XO.LT02..HDH --vertical XO.LT02..HHZ \
-  --inventory ~/Desktop/Data_Bruit_FM/INVENTORIES/XO.xml \
-  --waveform-dir ~/Desktop/Data_Bruit_FM/Data/XO/LT02 \
+  --inventory ~/Desktop/ComPy/data/INVENTORIES/XO.xml \
+  --waveform-dir ~/Desktop/ComPy/data/Data/XO/LT02 \
   --catalog results/LOCAL_P/catalogs/usgs_local_XO_20180520_20190101_m2p5.csv \
   --results-dir results/LOCAL_P/single/LT02_HDH --options-json lt02_timing.json
 ```
@@ -201,17 +201,17 @@ automatically; `--timing-lag-search S` remains for exploratory use.
 Catalogue recreation (new files only; the script refuses to overwrite):
 
 ```bash
-M=~/Projects/bruit-fm/results/NETWORKS
-conda run --no-capture-output -n bruitfm python scripts/fetch_local_catalog.py \
+M=~/Projects/pressure-qc/results/NETWORKS
+conda run --no-capture-output -n compy python scripts/fetch_local_catalog.py \
   --inventory "$M/XO_ALL_GAUGES_NO_TILT/_inputs/responses/XO.LA33,LA34,LT02,WD48,WD66,WD70.xml" \
   --stations LA33 LA34 LT02 WD66 WD70 --start 2018-05-20 --end 2019-01-01 \
   --min-magnitude 2.5 --output results/LOCAL_P/catalogs/usgs_local_XO_20180520_20190101_m2p5.csv
-conda run --no-capture-output -n bruitfm python scripts/fetch_local_catalog.py \
+conda run --no-capture-output -n compy python scripts/fetch_local_catalog.py \
   --inventory "$M/7D_ALL_NO_TILT/_inputs/responses/7D.J28A,J29A,J30A,J35A,J36A,J38A,J43A,J44A,J45A,J52A,J53A,J54A,J55A,J63A,J67A.xml" \
   --start 2011-10-19 --end 2012-01-01 --min-magnitude 2.0 \
   --output results/LOCAL_P/catalogs/usgs_local_7D_20111019_20120101_m2p0.csv
-conda run --no-capture-output -n bruitfm python scripts/fetch_local_catalog.py \
-  --inventory ~/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml \
+conda run --no-capture-output -n compy python scripts/fetch_local_catalog.py \
+  --inventory ~/Desktop/ComPy/data/INVENTORIES/YV.xml \
   --start 2012-12-31 --end 2013-11-27 --min-magnitude 2.5 \
   --output results/LOCAL_P/catalogs/usgs_local_YV_20121231_20131127_m2p5.csv
 ```

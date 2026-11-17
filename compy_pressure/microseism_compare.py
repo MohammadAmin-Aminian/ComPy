@@ -522,7 +522,7 @@ def markdown_report(rows, statistics, source_summary):
             f"The later Saikia daily reference selects {daily['selected_days']}/"
             f"{daily['available_days']} station-days across "
             f"{daily['stations_with_any']}/{len(rows)} stations. These are descriptive "
-            "comparisons, not BRUIT-FM pass scores."
+            "comparisons, not PressureQC pass scores."
         ),
         "",
         f"Highest weekly medians: {top}. Lowest: {bottom}.",
@@ -688,7 +688,7 @@ def run_comparison(
         ),
         "threshold_scope": (
             "Ruan >0.95 bin and Saikia daily mean >0.8 are literature comparison "
-            "references, not adopted BRUIT-FM scores"
+            "references, not adopted PressureQC scores"
         ),
         "statistics": statistics,
         "stations": rows,

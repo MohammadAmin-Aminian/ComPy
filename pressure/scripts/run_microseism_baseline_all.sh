@@ -4,7 +4,7 @@ set -uo pipefail
 
 cd "$(dirname "$0")/.."
 
-BRUIT_PY=(conda run --no-capture-output -n bruitfm python)
+PRESSURE_PY=(conda run --no-capture-output -n compy python)
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
 LOG_ROOT="results/DIAGNOSTICS/MICROSEISM_BASELINE_LOGS/run_${RUN_ID}"
 SUMMARY="$LOG_ROOT/summary.tsv"
@@ -15,7 +15,7 @@ STATIONS=()
 while IFS= read -r station; do
   STATIONS+=("$station")
 done < <(
-  PYTHONPATH=..:. "${BRUIT_PY[@]}" -m compy_pressure.microseism_campaign --list |
+  PYTHONPATH=..:. "${PRESSURE_PY[@]}" -m compy_pressure.microseism_campaign --list |
     awk '{print $1}'
 )
 
@@ -28,7 +28,7 @@ failures=0
 for station in "${STATIONS[@]}"; do
   log="$LOG_ROOT/${station}.log"
   printf '\n===== %s =====\n' "$station"
-  if PYTHONPATH=..:. "${BRUIT_PY[@]}" -m compy_pressure.microseism_campaign \
+  if PYTHONPATH=..:. "${PRESSURE_PY[@]}" -m compy_pressure.microseism_campaign \
     --station "$station" 2>&1 | tee "$log"; then
     status=complete
   else

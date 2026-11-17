@@ -16,7 +16,7 @@ directory) under the independent Claude method. Method:
 ## Command
 
 ```bash
-cd ~/Projects/bruit-fm-claude
+cd ~/Projects/pressure-qc-claude
 bash scripts/run_microseism_check_all.sh        # about 25–35 min, 89 stations
 ```
 
@@ -37,8 +37,8 @@ place from the main checkout:
 
 | Network | Master | Waveforms | Notes |
 | --- | --- | --- | --- |
-| YV | `exports/` | `~/Desktop/Data_Bruit_FM/Data` | 43 stations |
-| YL | `exports/` | `~/Desktop/Data_Bruit_FM/Data` | 25 stations |
+| YV | `exports/` | `~/Desktop/ComPy/data/Data` | 43 stations |
+| YL | `exports/` | `~/Desktop/ComPy/data/Data` | 25 stations |
 | 7D | `7D_ALL_NO_TILT/_master` | its `_inputs/waveforms` | 15 stations |
 | XO | `XO_ALL_GAUGES_NO_TILT/_master` | its `_inputs/waveforms` | 6 stations; audited 1 Hz working copies |
 
@@ -61,7 +61,7 @@ YL.A02W, 7D.J30A, XO.LA33 and XO.WD66.
    pressure sign each Rayleigh run assumed (YV −1, YL/7D/XO +1). Nothing is
    rerun. Use `--gain-table` to supply a regenerated table with the same
    columns.
-3. **Codex microseism diagnostic.** `bruitfm.microseism_diagnostic.run_diagnostic`
+3. **Codex microseism diagnostic.** `compy_pressure.microseism_diagnostic.run_diagnostic`
    runs on the same paired spectra: median coherence and phase over
    0.1–0.2 Hz, the Ruan > 0.95 fraction, Saikia selected days, and nominal
    amplitude. Codex's method reports no gain. The display multiplier is the
@@ -210,7 +210,7 @@ were fixed before running: stable ≤ 5%, moderate ≤ 10%, otherwise variable
 (range of weekly midpoints ÷ median).
 
 ```bash
-cd ~/Projects/bruit-fm-claude
+cd ~/Projects/pressure-qc-claude
 bash scripts/run_microseism_weeks.sh <base run folder>
 ```
 
@@ -220,7 +220,7 @@ them. Handoff for the remaining work: [microseism_claude_handoff.md](microseism_
 After all four networks:
 
 ```bash
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   scripts/combine_microseism_weeks.py <YV base> <YL base> <7D base> <XO base> \
   --docs docs
 ```
@@ -295,7 +295,7 @@ The saved 89-station Rayleigh results are already complete and reviewed; column
 a new root in the main checkout):
 
 ```bash
-cd ~/Projects/bruit-fm
-PYTHONPATH=src conda run --no-capture-output -n bruitfm python \
+cd ~/Projects/pressure-qc
+PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network all --all-stations --open-plots
 ```

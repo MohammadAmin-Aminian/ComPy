@@ -5,7 +5,7 @@ the end-to-end `pipeline/` of ComPy 2.4.
 
 - Network: 30 Scripps broadband OBS (Trillium 240 + DPG, 50 Hz), 4386–4824 m water depth, April 2018 – May 2019, on
   ~40 Ma Pacific seafloor (Eilon et al. 2022).
-- Data: the BRUIT-FM SDS archive, with responses from EarthScope (`metadata/XE.xml`).
+- Data: the PressureQC SDS archive, with responses from EarthScope (`metadata/XE.xml`).
 - Report: [`report/XE_young_orca_compliance_report.pdf`](report/XE_young_orca_compliance_report.pdf), in the layout of Aminian et al. (2025), with its
   LaTeX source.
 - Calibration: stage D of this run used `Pressure_calibration` from ComPy 2.4.0 (commit `7ad79c2`); the current
@@ -28,8 +28,8 @@ the end-to-end `pipeline/` of ComPy 2.4.
 - **No glitch removal.** No hourly glitch: the fold strength was at most 1.76, below 2.0, in 584 blocks at 6 stations
   (`config.DEGLITCH = False`).
 - **Gains.**
-  - The ComPy Rayleigh-wave gain is the one used. It agrees with the BRUIT-FM microseism gain where both exist (median ratio ≈ 0.99).
-  - BRUIT-FM's own Rayleigh calibration failed for XE (`unresolved_metadata`).
+  - The ComPy Rayleigh-wave gain is the one used. It agrees with the PressureQC microseism gain where both exist (median ratio ≈ 0.99).
+  - PressureQC's own Rayleigh calibration failed for XE (`unresolved_metadata`).
 - **Variants.** Every inverted station has the final model (Vp/Vs free, gain sampled ±5 %, tempering), a prior-only run, and the Vp/Vs = 1.85 variant (`main`). CC04 and CC05 also have the H2 bracket.
 - **Staging.** Raw files were staged to local disk station by station (`a_fast.py`), which is faster than parallel reads from
   an external archive.

@@ -8,7 +8,7 @@ below preserves Claude's original contributor checkpoint.
 
 Branch `claude/full-data-coverage`, based on main `db9b045` (still the latest
 origin/main when work started). Worktree:
-`/Users/mohammadamin/Projects/bruit-fm-coverage`. Not merged into main.
+`/Users/mohammadamin/Projects/pressure-qc-coverage`. Not merged into main.
 
 Method, decisions and current numbers: [full_data_coverage.md](full_data_coverage.md).
 Curated real dry-run outputs: [coverage/](coverage/).
@@ -17,9 +17,9 @@ Curated real dry-run outputs: [coverage/](coverage/).
 
 | File | Purpose |
 |---|---|
-| `src/bruitfm/coverage.py` | Archive/header inventory, StationXML epochs, response identity, saved-product matching, evidence joins, deterministic task plan, CLI |
-| `src/bruitfm/coverage_run.py` | Dry run / `--execute`: campaign lock, task state and logs, resume, failure isolation, symlink input view, hash-verified product views, PPSD/merge/check execution, protected-input verification |
-| `src/bruitfm/coverage_report.py` | Coverage tables; pressure probability heat maps (window-pooled and station-balanced); curated export |
+| `compy_pressure/coverage.py` | Archive/header inventory, StationXML epochs, response identity, saved-product matching, evidence joins, deterministic task plan, CLI |
+| `compy_pressure/coverage_run.py` | Dry run / `--execute`: campaign lock, task state and logs, resume, failure isolation, symlink input view, hash-verified product views, PPSD/merge/check execution, protected-input verification |
+| `compy_pressure/coverage_report.py` | Coverage tables; pressure probability heat maps (window-pooled and station-balanced); curated export |
 | `scripts/run_full_coverage.sh` | `plan`, `dry-run`, `execute`, `report` wrapper |
 | `docs/coverage_sources.json` | Explicit sources and PPSD parameters (equal to the `network ppsd` defaults) |
 | `tests/test_coverage.py` | 22 tests (below) |
@@ -40,14 +40,14 @@ code rather than re-implementing it:
 Read-only inventory and dry run:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm-coverage
+cd /Users/mohammadamin/Projects/pressure-qc-coverage
 bash scripts/run_full_coverage.sh plan
 ```
 
 Execute all planned missing work (owner runs this):
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm-coverage
+cd /Users/mohammadamin/Projects/pressure-qc-coverage
 bash scripts/run_full_coverage.sh execute --workers 4
 ```
 

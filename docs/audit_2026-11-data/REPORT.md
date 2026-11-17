@@ -77,7 +77,7 @@ The waveform figures of #21 were made on real data with
      families are mixed inside 7D. This explains #22's P7, the 20/12 local-P split in 7D.
    - **It predicts the stage D sign:** at 107 of 108 resolved stations.
    - **It matches the local-P polarity:** at 61 of 64 channels.
-   - **BRUIT-FM's `rayleigh_sign` is not a polarity:** it disagrees with the rule at 69 of
+   - **PressureQC's `rayleigh_sign` is not a polarity:** it disagrees with the rule at 69 of
      154 stations.
 5. **The coherence-gate bias is real but small (verified).** Inclusive (published) minus
    exclusive:
@@ -123,9 +123,9 @@ Severity and status follow #21:
 | A1 | High | Stage A responses of every DPG (StationXML), `pipeline/a_preprocess.py` (`remove_response`) | **The metadata DPG response is wrong at low frequency**, station by station: the true leak corner is lower than in the metadata at most stations (k < 1), higher at some (RR40, ZZ) | **Verified** by two independent observables (§5.A) | Compliance −3.0 % median at the band bottom from the tide (p10–p90: −6.4 to −0.6 %; −2.0 % from the phase), YV −3 to −7 %, RR40 +7 to +9 % | Open: D1, D2 |
 | A2 | High | `12_inversion_all_stations` inputs; stage C over the whole record | **Epochs mixed in the stacks** at stations stage D could not scan (no event gains) | **Verified**; 21 tier-1 "good" stations with a shift of at least 5 % (`numbers.json` → `epochs`) | Up to tens of per cent (7D.G19B −36 %, 7D.J68A −30 %, 8J several) | Open: D3 |
 | A3 | High (8J) | 8J hydrophones | **Network-wide drift** of \|Z/P\| (steps at about 25 stations, August 2021 – February 2022), following the event gains | **Verified** (synchronous steps; ρ = 0.71 with stage D gains) | Whole-record 8J compliance mixes sensitivities; the network-relative level test cannot see a common drift | Open: D4 |
-| A4 | Med | `compy_pressure` sign choice; stage D second pass (D36) | **Polarity differs by DPG family**; the compliance phase gives the stage D sign (107/108) at no cost | **Verified** | None on \|η\|; saves the second stage D pass; fixes the BRUIT-FM sign column | Option `response_check.pressure_sign_from_phase`: D5 |
+| A4 | Med | `compy_pressure` sign choice; stage D second pass (D36) | **Polarity differs by DPG family**; the compliance phase gives the stage D sign (107/108) at no cost | **Verified** | None on \|η\|; saves the second stage D pass; fixes the PressureQC sign column | Option `response_check.pressure_sign_from_phase`: D5 |
 | A5 | Med | `compy/compliance.py` inclusive gate | **Selection bias measured:** median +0.24 %, above 1 % at 58 stations, about 5 % at the lowest acceptances | **Verified** (s01, 280 stations) | Compliance high by that much | Option `gate="exclusive"`: D6 |
-| A6 | Med | YV.RR50, YV.RR36 (D40) | **The jumps are the seismometer**, not the DPG: Z steps +4 to +5 dB in both bands, P flat | **Verified** (relative levels, `which_sensor_yv.png`) | Stage E inputs are right (they use the stable epoch). The BRUIT-FM/atlas pressure gains of RR50 and RR36 after the jump are wrong if applied to P alone | Open: D7 (doc) |
+| A6 | Med | YV.RR50, YV.RR36 (D40) | **The jumps are the seismometer**, not the DPG: Z steps +4 to +5 dB in both bands, P flat | **Verified** (relative levels, `which_sensor_yv.png`) | Stage E inputs are right (they use the stable epoch). The PressureQC/atlas pressure gains of RR50 and RR36 after the jump are wrong if applied to P alone | Open: D7 (doc) |
 | A7 | Med | Pressure atlas `src/s03b_tide.py` (branch `analysis/pressure-atlas`) | **NaN in the running median** makes `np.median` NaN, which excludes every hour: amplitude 0, "no tidal signal" | **Verified**: 7 APGs with `obs_M2_pa = 0` | Atlas tide check reports 40 of 47; 7 more APGs were never tested | Fixed in `response_check.tidal_harmonics`; atlas: D8 |
 | A8 | Med | 7B tilt | **24-h line in the tilt angle** at 21 of 23 stations (S1), absent elsewhere | **Verified** (s06) | Possibly a daily instrument or processing cycle in the tilt correction | Open: test (§5.D) |
 | A9 | Low | `scripts/stage_c_wide.py` (archive) | `Recorder` has no `min_median_coherence`, so `gate="exclusive"` raises | Code; s01 replicates the wrapper exactly | Blocks D6 for the wide pass | Open (fix if D6) |
@@ -321,7 +321,7 @@ Each is a yes/no question. "Results change" means published or archived numbers 
   gains at 107/108 stations; saves the second stage D pass.
 - **D6.** Adopt the exclusive gate for new runs (at least below 30 % acceptance)? (Y/N)
   Impact: compliance −0.24 % median, up to −5 % at low acceptance; results change.
-- **D7.** Reword D40 and the BRUIT-FM/atlas notes: RR50 and RR36 changed **seismometer**
+- **D7.** Reword D40 and the PressureQC/atlas notes: RR50 and RR36 changed **seismometer**
   sensitivity, and their after-jump pressure gains are invalid for P alone? (Y/N) Impact:
   documentation; atlas gains of those two channels.
 - **D8.** Fix the pressure atlas tide check (NaN-safe fit) and rerun it for the 7 APGs it

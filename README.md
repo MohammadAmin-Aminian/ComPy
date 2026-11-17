@@ -197,7 +197,7 @@ The DPG gain is fitted per teleseism by comparing the measured
 pressure-to-acceleration ratio of the Rayleigh wave with the water-layer
 prediction, in bins of high coherence. The station gain is the median of the
 accepted events. For CC11 it is 0.698 ± 0.012 from 12 events, against 0.702
-from the independent BRUIT-FM microseism method.
+from the independent PressureQC microseism method.
 
 ```bash
 python examples/3_DPG_Calibration.py SDS/ stationxml/ XE CC11 events.geojson
@@ -306,7 +306,7 @@ Sediment thickness 121 m (20–182), crustal Vp/Vs 2.17 (1.88–2.37).
   windows per station; month-to-month variation of 1–3 % (CC07: ±10–25 %).
 - 80–170 m of sediment, then Vs of about 2.4 km/s at 0.3 km, 2.9 km/s at 1 km
   and 3.2 km/s at 2 km.
-- Rayleigh-wave gains agree with the independent BRUIT-FM microseism gains
+- Rayleigh-wave gains agree with the independent PressureQC microseism gains
   (median ratio ≈ 0.99).
 
 <p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig08_compliance.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig08_compliance.png" width="900" alt="Normalized compliance of the XE stations by sub-array"></a></p>

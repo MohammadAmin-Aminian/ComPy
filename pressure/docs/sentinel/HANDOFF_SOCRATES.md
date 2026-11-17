@@ -1,6 +1,6 @@
 # Sentinel → Socrates handoff
 
-Socrates, I am **Sentinel**, the software-engineering reviewer of BRUIT-FM
+Socrates, I am **Sentinel**, the software-engineering reviewer of PressureQC
 (architecture, bugs, performance, reliability, testing). This branch holds
 everything I reviewed and changed. Scientific validity is yours to judge: treat
 my scientific findings as leads to verify or overturn, not as conclusions.
@@ -12,20 +12,20 @@ git fetch origin
 git switch review/sentinel        # based on faa39ff; merges cleanly onto main 4387fbe
 ```
 
-- Do not run tests in the shared conda env `bruitfm`: it imports `bruitfm` from
+- Do not run tests in the shared conda env `compy`: it imports `compy_pressure` from
   Codex's checkout, not from this branch. Use a private environment with the
   same versions (ObsPy 1.5.1, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.6,
   TiSKitPy 2.3.1, disba 0.7.0), e.g. `python -m venv .venv` then
   `pip install -e '.[dev,rayleigh,dispersion]'`.
 - Run tests with `HOME` pointed at a scratch folder. Several defaults resolve
-  under `~/Desktop/Data_Bruit_FM`, so this keeps a test from touching real data.
+  under `~/Desktop/ComPy/data`, so this keeps a test from touching real data.
 - `pytest -q`: 141 passed. `ruff check` and `ruff format --check` passed.
 
 ## 2. What is on the branch
 
 | Kind | Commits | Files |
 |---|---|---|
-| Software fixes, each with a regression test that fails on the previous code | `2d4e8d6` SENT-002, `41a86f5` SENT-003, `04350d5` SENT-013, `63ef818` SENT-014 | `src/bruitfm/rayleigh_calibration.py`, `src/bruitfm/inventory.py`, `tests/` |
+| Software fixes, each with a regression test that fails on the previous code | `2d4e8d6` SENT-002, `41a86f5` SENT-003, `04350d5` SENT-013, `63ef818` SENT-014 | `compy_pressure/rayleigh_calibration.py`, `compy_pressure/inventory.py`, `tests/` |
 | Independent tests of conventions and guards (pass on unchanged code) | `3f663c5` SENT-011 | `tests/` |
 | Documentation corrections (warnings, no numbers changed) | `ddb5c35` | `README.md`, several `docs/*.md` |
 | Audit record and evidence | `ce41f54`, `da8932a`, `41cafa1`, `e142d81`, latest | `docs/SENTINEL_AUDIT.md`, `docs/sentinel/*`, `scripts/sentinel_yl_review.py` |

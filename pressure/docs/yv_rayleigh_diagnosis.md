@@ -122,11 +122,11 @@ Read-only inputs. Hashes were checked before use; all 210 are recorded in
 | Pole-only trial `results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/experiment.json` | `446b8e36…` (matches handoff) |
 | 43 `YV_RRxx/trial.json`, `summaries.pole_absolute` only | SHA-256 in evidence |
 | 82 per-channel response snapshots | each matches the hash recorded in its comparison |
-| Source `Desktop/Data_Bruit_FM/INVENTORIES/YV.xml` | `58afc2d6…` (matches comparisons) |
+| Source `Desktop/ComPy/data/INVENTORIES/YV.xml` | `58afc2d6…` (matches comparisons) |
 | Six-check review `results/REVIEWS/SIX_CHECKS/final_20261019/review.json` (infragravity, expected-pressure metrics) | `241e9ab1…` (matches handoff) |
-| Microseism YV run `bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23` | `summary.json` `68fede25…` (matches [yv_microseism_check.json](yv_microseism_check.json)) |
+| Microseism YV run `pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23` | `summary.json` `68fede25…` (matches [yv_microseism_check.json](yv_microseism_check.json)) |
 | Saved RR12 pressure PPSD `results/NETWORKS/TEST/YV/RR12/…BDH…/ppsd.npz` | counted only |
-| Raw folder `Desktop/Data_Bruit_FM/Data/YV/*/{BDH,BHZ}.D` | file names only, no content |
+| Raw folder `Desktop/ComPy/data/Data/YV/*/{BDH,BHZ}.D` | file names only, no content |
 | Stähler et al. (2016), publisher PDF, DOI [10.5194/adgeo-41-43-2016](https://doi.org/10.5194/adgeo-41-43-2016) | SHA-256 `7102c298…`; Table 3 (pp. 48–49), §3.1 (pp. 49–50), Appendix A (pp. 56–57) |
 
 Completed studies were read and not repeated:
@@ -566,7 +566,7 @@ No master, XML or default change.
 * **Coverage from file names only.** Day-file names do not reveal intra-day
   gaps. No waveform or raw byte was read or hashed.
 * **Microseism comparison.** It reuses one week (2013-06-10) from a run in the
-  `bruit-fm-claude` worktree; its summary hash matches the tracked record.
+  `pressure-qc-claude` worktree; its summary hash matches the tracked record.
 * **Primary source.** Stähler Table 3 gives RR45's end of record as 4 Jun 2013
   but its record length as 138 days. The XML epoch end of 2013-03-04 matches
   the 138 days.
@@ -577,14 +577,14 @@ No master, XML or default change.
 ## Reproduce (read-only; cannot start calibration or touch masters)
 
 ```bash
-M=/Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python \
+M=/Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python \
   -m scripts.diagnose_yv_rayleigh \
   --workflow $M/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
   --trial-root $M/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343 \
   --expect-trial-sha 446b8e36b94c9952736b9a2c9b2353f0dfb0c95e05e8cc3719b9cea72fcc20cf \
-  --microseism-run /Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23 \
-  --data-root /Users/mohammadamin/Desktop/Data_Bruit_FM/Data/YV \
+  --microseism-run /Users/mohammadamin/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23 \
+  --data-root /Users/mohammadamin/Desktop/ComPy/data/Data/YV \
   --output-dir <new folder>
 ```
 
@@ -596,7 +596,7 @@ PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python \
 ## Return handoff
 
 * **Branch:** `claude/yv-rayleigh-diagnosis`, worktree
-  `~/Projects/bruit-fm-yv-rayleigh`, from `2fb1fc0`. Not merged.
+  `~/Projects/pressure-qc-yv-rayleigh`, from `2fb1fc0`. Not merged.
 * **Files:** this report; `docs/yv_rayleigh_diagnosis/{evidence.json,stations.csv}`;
   `scripts/diagnose_yv_rayleigh.py`; `tests/test_yv_rayleigh_diagnosis.py`.
 * **Tests run:**

@@ -21,7 +21,7 @@ products. Existing manual master fields and scores remain.
 The complete sequence is packaged as a runner that stops on command errors:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
+cd /Users/mohammadamin/Projects/pressure-qc
 bash scripts/run_yl_all.sh
 ```
 
@@ -30,15 +30,15 @@ It does not automatically open plot windows. Use the viewer after completion.
 Run in order, stopping if a command fails:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python scripts/prepare_yl_test.py --all-stations
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python scripts/prepare_yl_test.py --all-stations
 
 YL_ALL_ARGS=()
 while IFS= read -r seed; do
   YL_ALL_ARGS+=(--seed-id "$seed")
 done < results/RAYLEIGH_REVIEW/yl_all_pressure_vertical_seeds.txt
 
-conda run --no-capture-output -n bruitfm python -m bruitfm.network check \
+conda run --no-capture-output -n compy python -m compy_pressure.network check \
   --network YL "${YL_ALL_ARGS[@]}" \
   --results-dir results/NETWORKS/YL_ALL_NO_TILT
 
@@ -48,22 +48,22 @@ while IFS= read -r seed; do
 done < results/RAYLEIGH_REVIEW/yl_all_ppsd_needed_seeds.txt
 
 if (( ${#YL_PPSD_ARGS[@]} )); then
-  conda run --no-capture-output -n bruitfm python -m bruitfm.network ppsd \
+  conda run --no-capture-output -n compy python -m compy_pressure.network ppsd \
     --network YL "${YL_PPSD_ARGS[@]}" --workers 4 \
     --results-dir results/NETWORKS/YL_ALL_PPSD
 fi
 
-conda run --no-capture-output -n bruitfm python -m bruitfm.network rayleigh \
+conda run --no-capture-output -n compy python -m compy_pressure.network rayleigh \
   --network YL "${YL_ALL_ARGS[@]}" \
   --results-dir results/NETWORKS/YL_ALL_NO_TILT \
   --rayleigh-no-master-update --rayleigh-tilt-method none \
   --rayleigh-event-sampling all \
   --rayleigh-catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_YL_ALL_20091120_20101204.json \
-  --rayleigh-dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --rayleigh-dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --rayleigh-frequency-min 0.03 --rayleigh-frequency-max 0.07 \
   --rayleigh-pressure-sign 1
 
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YL --station A02W --view-kind rayleigh \
   --view-workflow results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json
 ```

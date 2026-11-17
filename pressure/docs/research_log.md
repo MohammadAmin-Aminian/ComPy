@@ -1,7 +1,7 @@
-# BRUIT-FM: completed steps
+# PressureQC: completed steps
 
-The [README completed steps](../BRUITFM_README.md#completed-steps) lists forty completed
-steps in order. Its [YV commands](../BRUITFM_README.md#run-every-completed-stage-for-the-yv-network)
+The [README completed steps](../HISTORY_README.md#completed-steps) lists forty completed
+steps in order. Its [YV commands](../HISTORY_README.md#run-every-completed-stage-for-the-yv-network)
 show the current execution stages. This log keeps the detailed calculations
 and validation evidence.
 
@@ -144,7 +144,7 @@ The three views are:
 From the project checkout:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.pressure_test
+conda run --no-capture-output -n compy python -m compy_pressure.pressure_test
 ```
 
 Verified the plots against saved comparison values and checked that existing
@@ -284,7 +284,7 @@ or correction follows from these observations.
 ## Step 19 — teleseismic calibration source review and RR52 comparison
 
 Read the calibration/tilt sections of the thesis and manuscript, tilt milestone,
-BRUIT-FM proposals, Zha/Webb and related calibration literature, original and
+PressureQC proposals, Zha/Webb and related calibration literature, original and
 current ComPy/DPG code, both newer calibration packages and Wayne's TiSKitPy
 rotation implementation. Distinguished repaired current code from historical
 filtering/indexing/picking weaknesses and retained exact source revisions.
@@ -336,7 +336,7 @@ Added wide P/S/group-arrival/overlap plots, auditable manual-window decisions,
 UTC bounds and source/override provenance. All three curated Santa Cruz plots
 were visually inspected. Actual-library projection, preservation, provisional
 sign/gain recovery, experimental-method flag, manual exclusion and timing
-diagnostics checks pass. Full BRUIT-FM suite: **84 passed**, Ruff checks pass.
+diagnostics checks pass. Full PressureQC suite: **84 passed**, Ruff checks pass.
 Original run/plots remain available as historical comparisons.
 [Current validation](rr52_tiskitpy_validation_summary.json) ·
 [How to inspect windows and open plots](rayleigh_window_review.md).

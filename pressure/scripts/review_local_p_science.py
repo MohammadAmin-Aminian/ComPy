@@ -32,12 +32,12 @@ from scripts.fit_local_p_clock_drift import fit as fit_drift
 
 UTC = timezone.utc  # datetime.UTC needs Python 3.11; ComPy supports 3.10
 
-CAMPAIGNS = Path.home() / "Projects/bruit-fm-localp/results/LOCAL_P/campaigns"
-INVENTORY = Path.home() / "Desktop/Data_Bruit_FM/INVENTORIES/XO.xml"
-ARCHIVE = Path.home() / "Desktop/Data_Bruit_FM/Data/XO"
+CAMPAIGNS = Path.home() / "Projects/pressure-qc-localp/results/LOCAL_P/campaigns"
+INVENTORY = Path.home() / "Desktop/ComPy/data/INVENTORIES/XO.xml"
+ARCHIVE = Path.home() / "Desktop/ComPy/data/Data/XO"
 CATALOG = (
     Path.home()
-    / "Projects/bruit-fm-localp/results/LOCAL_P/catalogs"
+    / "Projects/pressure-qc-localp/results/LOCAL_P/catalogs"
     / "usgs_local_XO_20180520_20190101_m2p5.csv"
 )
 LT02 = CAMPAIGNS / "apg_timing_v2/XO.LT02/XO.LT02..HDH__XO.LT02..HHZ"

@@ -1,12 +1,12 @@
 # Pressure-gauge audit: QC tests, calibrations, anomalies and roadmap (November 2026)
 
-This audit covers the pressure-gauge studies that moved into ComPy from BRUIT-FM
+This audit covers the pressure-gauge studies that moved into ComPy from PressureQC
 (`compy_pressure/` and `pressure/`).
 
 - **Base:** branch `pressure-audit`, stacked on `compy3-audit` (PR #21), because it reuses
   `compy.anomaly` and the figure style.
 - **Inputs:**
-  - **history:** the BRUIT-FM repository at `8595452`: README, `integration/README.md`,
+  - **history:** the PressureQC repository at `8595452`: README, `integration/README.md`,
     `docs/REPORT.md` and the dated reports;
   - **code and docs:** ComPy's `compy_pressure` (40 modules, about 20 k lines) and
     `pressure/docs`;
@@ -21,7 +21,7 @@ This audit covers the pressure-gauge studies that moved into ComPy from BRUIT-FM
 
 ## 0. Where we started and what was checked
 
-BRUIT-FM is a workflow for ocean-bottom pressure channels:
+PressureQC is a workflow for ocean-bottom pressure channels:
 
 - it builds an inventory, then PPSDs;
 - it runs three QC tests: expected levels (Webb 1998 / Brown et al. 2014), nearby
@@ -48,7 +48,7 @@ The v1.2.0 campaign scored 846 channels:
 
 1. **The decisions are not in the package (verified).** Calibration scoring, the choice of
    pressure sign, the final class, the metadata-offset flags and station acceptance are
-   computed by scripts in BRUIT-FM's dated report folders:
+   computed by scripts in PressureQC's dated report folders:
    - `docs/reports/2026-10-28_seismic_calibration/final_table.py`;
    - `.../provisional_decisions/{metadata_offsets,acceptance}.py`, duplicated under
      `gain_corrected/decisions/`.
@@ -120,11 +120,11 @@ The v1.2.0 campaign scored 846 channels:
 
 | # | Sev. | Where | Finding | Evidence | Status |
 |---|---|---|---|---|---|
-| P1 | High | BRUIT-FM `docs/reports/2026-10-28_seismic_calibration/final_table.py`; `…/provisional_decisions/metadata_offsets.py:66–114`, `acceptance.py` (and their copies under `gain_corrected/decisions/`) | **Decision logic outside the package:** scoring (e = \|20 log₁₀ g\|, 1.5/6 dB), sign choice, final class, network flags and acceptance; untested and duplicated | Verified (code location); 5 offsets of −3088 dB on nonworking channels (7D.FS01B, 7D.J06D ×2, XE.CC02, YV.RR12) stored as `measured`, multiplier 2.4e154 | Open: D1 |
+| P1 | High | PressureQC `docs/reports/2026-10-28_seismic_calibration/final_table.py`; `…/provisional_decisions/metadata_offsets.py:66–114`, `acceptance.py` (and their copies under `gain_corrected/decisions/`) | **Decision logic outside the package:** scoring (e = \|20 log₁₀ g\|, 1.5/6 dB), sign choice, final class, network flags and acceptance; untested and duplicated | Verified (code location); 5 offsets of −3088 dB on nonworking channels (7D.FS01B, 7D.J06D ×2, XE.CC02, YV.RR12) stored as `measured`, multiplier 2.4e154 | Open: D1 |
 | P2 | High | `rayleigh_calibration.py:54` (`water_ratio`), `microseism_check.py:70` (`admittance_height`), `local_p_check.py:479` | **Two "independent" calibrations share their physics:** the same water-layer equation, ρ, α, and (Rayleigh) RR52's dispersion for all networks. Their agreement validates the code, not the model | Verified (code); local-P agreement weaker (+2.9 dB, n = 6; +1.3 dB, n = 16) | Open: D2, D3 |
 | P3 | Med–High | `rayleigh_calibration.py:68` (guard x < 0.9π/2), `:80–96` (`fit_multiplier`, least squares) | **Depth-dependent model bias:** the sensitivity of P/a to sound speed reaches 6–9 at 5–5.4 km inside the guard; near-resonance bins dominate the fit | Verified (`water_layer`, tests against finite differences) | Option: `water_layer.fit_gain(weights="log")`; D3, D4 |
 | P4 | Med | `pressure_test.py:378–394` (4 Webb points vs every Brown bin) | **Test 1 weighting:** the score is dominated by ≥ 0.2 Hz against in-water hydrophone references; the infragravity and notch bands barely weigh | Verified (code); 18 `nearby_hidden` channels | Open: D5 |
-| P5 | Med | BRUIT-FM `docs/REPORT.md` §1 | **IG-excess claim (+10–20 dB) not reproduced** by the per-channel Test 3 residuals (Pacific good DPG +5.8 dB) | Verified (`numbers.json`, `infragravity`) | Open: D6 (doc) |
+| P5 | Med | PressureQC `docs/REPORT.md` §1 | **IG-excess claim (+10–20 dB) not reproduced** by the per-channel Test 3 residuals (Pacific good DPG +5.8 dB) | Verified (`numbers.json`, `infragravity`) | Open: D6 (doc) |
 | P6 | Med | Test 3 scoring (`infragravity_test.py:85`) | **Metadata scored as quality:** YR hydrophones are −22 dB with a declared band to 4 mHz (22 bad, 14 questionable) | Verified (table); cause is a hypothesis (§5.B) | Open: test |
 | P7 | Med | sign selection (`final_table.py`), local-P polarity | **Polarity:** no cross-method or within-network consistency check. 7D local-P splits 20/12 while its Rayleigh sign is uniformly +1 | Verified | **Detector added**; D7 |
 | P8 | Low–Med | `rayleigh_calibration.py:1731–1733` | **Gain uncertainty** is "event scatter, not a confidence interval" and omits the model terms of P3 | Code | Open: roadmap |
@@ -276,7 +276,7 @@ nonworking or has less than about 1 % live windows.
 Each line is a yes/no question.
 
 - **D1.** Port `final_table.py`, `metadata_offsets.py` and `acceptance.py` from the
-  BRUIT-FM report folders into a tested `compy_pressure.decisions` module, with NaN for
+  PressureQC report folders into a tested `compy_pressure.decisions` module, with NaN for
   dead channels? (Y/N) Impact: reproducible decisions; the 5 invalid offsets become "not
   measurable"; no class changes expected.
 - **D2.** Stop presenting Rayleigh–microseism agreement as independent confirmation in
@@ -313,5 +313,5 @@ Each line is a yes/no question.
 - Webb, S. C. (1998). Broadband seismology and noise under the ocean. *Rev. Geophys.* 36.
 - Zha, Y. & Webb, S. C. (2016). Crustal shear velocity structure in the southern Lau
   basin constrained by seafloor compliance. *JGR* 121.
-- BRUIT-FM v1.2.0 results report (`bruit-fm/docs/REPORT.md`) and the ComPy 3 audit
+- PressureQC v1.2.0 results report (`pressure-qc/docs/REPORT.md`) and the ComPy 3 audit
   (`docs/audit_2026-11/REPORT.md`).

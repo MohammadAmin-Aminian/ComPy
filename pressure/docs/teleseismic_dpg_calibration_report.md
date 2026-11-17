@@ -13,7 +13,7 @@ at revision `7724bc5`, before further validation changes.
 - Response and archive helpers: [paired_spectra.py](../../compy_pressure/paired_spectra.py),
   [archive.py](../../compy_pressure/archive.py), [ppsd.py](../../compy_pressure/ppsd.py).
 - Scientific tests: [test_rayleigh_calibration.py](../tests/test_rayleigh_calibration.py).
-- Prepared dispersion/model: `src/bruitfm/reference_data/rr52_historical_rayleigh_*`.
+- Prepared dispersion/model: `compy_pressure/reference_data/rr52_historical_rayleigh_*`.
 - Source archive: `output/reports/teleseismic_dpg_source_7724bc5.zip`, with package
   sources, reference tables, tests, project dependencies and this report.
   External waveforms, StationXML, masters and the cached event catalogue remain local.
@@ -24,11 +24,11 @@ if you only want yesterday's saved figures. The explicit band avoids the
 standalone runner's earlier 0.02-0.06 Hz default.
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m bruitfm.rayleigh_calibration \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --network YV --station RR52 \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --frequency-min 0.03 --frequency-max 0.07 \
   --pressure-sign -1 --tilt-method tiskitpy \
   --min-events 3 --max-events 8
@@ -37,7 +37,7 @@ conda run --no-capture-output -n bruitfm python -m bruitfm.rayleigh_calibration 
 View the existing result without computing:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YV --station RR52 --view-kind rayleigh
 ```
 
@@ -101,7 +101,7 @@ sensor axes and stable tilt are assumptions. Pressure is **not** regressed out
 of Z because the Rayleigh pressure signal is the calibration target.
 [TiSKitPy's official documentation](https://tiskitpy.readthedocs.io/latest/classes/clean_rotator.html)
 describes the vertical-noise-minimizing rotation and marks `tfs()` unvalidated;
-BRUIT-FM uses `apply()`, leaving horizontal axes unrotated.
+PressureQC uses `apply()`, leaving horizontal axes unrotated.
 
 For the retained positive-frequency bins, with sampling rate $f_s$,
 $q=2/(f_s\sum_n w_n^2)$. Average the powers and complex cross-power over $K$

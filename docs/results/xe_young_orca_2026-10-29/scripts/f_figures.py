@@ -742,9 +742,9 @@ def tables(c, store):
         lat, lon, depth = c[s]
         row = dict(station=s, lat=lat, lon=lon, depth_m=depth, gain_compy=cal.get("gain"),
                    gain_compy_std=cal.get("gain_std"), gain_events=len(cal.get("events_used", [])),
-                   gain_bruitfm=(summ or {}).get("gains", {}).get("bruitfm"))  # fmt: skip
+                   gain_pressure=(summ or {}).get("gains", {}).get("pressure"))  # fmt: skip
         label = None
-        for lab in ("compy", "bruitfm", "nominal"):
+        for lab in ("compy", "pressure", "nominal"):
             if summ and "n_windows" in summ["results"].get(lab, {}):
                 label = lab
                 break
@@ -790,13 +790,13 @@ def tables(c, store):
     (TABLES / "stations.json").write_text(json.dumps(rows, indent=1, default=float))
     # Table 1 (paper style)
     lines = ["| Station | Latitude [°] | Longitude [°] | Depth [m] | Gain factor (ComPy, Rayleigh) | Events | "
-             "Gain (BRUIT-FM microseism) | Frequency* [Hz] | Threshold | Windows |",
+             "Gain (PressureQC microseism) | Frequency* [Hz] | Threshold | Windows |",
              "|---|---|---|---|---|---|---|---|---|---|"]  # fmt: skip
     for r in rows:
         g = f"{r['gain_compy']:.3f} ± {r['gain_compy_std']:.3f}" if r.get("gain_compy_std") else (
             f"{r['gain_compy']:.3f}" if r.get("gain_compy") else "–")  # fmt: skip
         band = f"{r['band_lo']:.4f}–{r['band_hi']:.4f}" if "band_lo" in r else "–"
-        gb = f"{r['gain_bruitfm']:.3f}" if r.get("gain_bruitfm") else "–"
+        gb = f"{r['gain_pressure']:.3f}" if r.get("gain_pressure") else "–"
         lines.append(f"| {r['station']} | {r['lat']:.4f} | {r['lon']:.4f} | {r['depth_m']:.0f} | {g} | "
                      f"{r['gain_events'] or '–'} | {gb} | {band} | {r.get('threshold', '–')} | "
                      f"{r.get('n_windows', '–')} |")  # fmt: skip

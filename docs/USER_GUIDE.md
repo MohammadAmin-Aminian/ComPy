@@ -395,7 +395,7 @@ that scores every pressure channel:
 - percentile noise models by ocean basin, depth, sensor type and season.
 
 Runs are parallel, checkpointed and restartable. The package comes from
-[BRUIT-FM](https://github.com/MohammadAmin-Aminian/bruit-fm), where it processed
+[PressureQC](https://github.com/MohammadAmin-Aminian/bruit-fm), where it processed
 846 pressure channels from 30 networks.
 
 ```bash

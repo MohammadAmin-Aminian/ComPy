@@ -1,6 +1,6 @@
-# Deploy the reviewed BRUIT-FM workflow
+# Deploy the reviewed PressureQC workflow
 
-BRUIT-FM is a Python research/processing workflow, not a web service. Deployment
+PressureQC is a Python research/processing workflow, not a web service. Deployment
 means installing a reviewed checkout/package and configuring the owner's local
 archive. Software readiness is not absolute calibration acceptance, a complete
 all-data campaign, approved station ratings or a finished ocean-noise model.
@@ -17,8 +17,8 @@ an existing environment or user directory):
 ```bash
 python3.13 -m venv .venv
 .venv/bin/python -m pip install -e '.[dev,rayleigh,dispersion]'
-.venv/bin/python -m bruitfm.network --help
-.venv/bin/python -m bruitfm.coverage --help
+.venv/bin/python -m compy_pressure.network --help
+.venv/bin/python -m compy_pressure.coverage --help
 ```
 
 Editable installation is intentional for source-checkout scripts and their
@@ -53,9 +53,9 @@ not a platform-wide scientific validation or a fully locked dependency build.
   explicit reconciliation; never copy task completion flags blindly.
 - Use copied/configured source definitions for the new machine. Keep historical
   result pointers/hashes intact rather than editing saved JSONs to make them fit.
-- Set `BRUITFM_PYTHON` to the new environment's Python when using shell wrappers;
+- Set `PRESSURE_PYTHON` to the new environment's Python when using shell wrappers;
   their historical default points at the owner's macOS environment. Set
-  `BRUITFM_SOURCE_ROOT` to the configured source checkout as needed.
+  `PRESSUREQC_SOURCE_ROOT` to the configured source checkout as needed.
 - A plan/dry run writes only derived plans/cache and executes no data campaign.
   Inspect missing inputs and blocked epochs before deliberately requesting any
   `--execute` stage. Deployment checks do not authorize such execution.

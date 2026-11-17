@@ -158,8 +158,8 @@ Run the latest RR52 display (creates a new timestamped folder and opens the
 four-panel comparison plus the gain-shift plot):
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python \
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python \
   scripts/plot_rr40_gain_comparison.py --station RR52 --show
 ```
 
@@ -178,7 +178,7 @@ curves. The name is historical; `--station RR40` remains available.
   RR52 four-panel plot and gain-only figure were visually inspected.
 - Preservation audit of the **353** recorded six-check inputs: **352** retain
   their saved SHA-256 hashes. The only changed entry is the authorized
-  `src/bruitfm/quality_review.py` code update adding historical-reference
+  `compy_pressure/quality_review.py` code update adding historical-reference
   warnings. No saved data, response, master, result or score input changed.
 - The historical Brown CSV is unchanged. New full-band samples remain an
   approximate manual transcription, not certified numerical reference data.

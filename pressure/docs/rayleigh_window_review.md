@@ -48,10 +48,10 @@ span at most two hours, and contain at least eight 200-second segments (1600 s).
 These are current pilot constraints, not universal scientific requirements.
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m bruitfm.rayleigh_calibration \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --network YV --station RR52 --event-id usc000f1s0 --max-events 1 \
   --window-overrides results/RAYLEIGH_REVIEW/rr52_reviewed_windows.json
 ```
@@ -85,7 +85,7 @@ This additional guard leaves previous outputs intact; see the
 ## Open the saved plots without recomputing
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
+cd /Users/mohammadamin/Projects/pressure-qc
 open docs/figures/rr52/rayleigh_tiskitpy_arrival_review.png
 open docs/figures/rr52/rayleigh_tiskitpy_comparison.png
 open docs/figures/rr52/rayleigh_tiskitpy_waveform.png

@@ -134,7 +134,7 @@ def main():
     parser.add_argument("--training-experiment", type=Path, default=TRAINING)
     parser.add_argument("--minimum-magnitude", type=float, default=6.0)
     parser.add_argument(
-        "--data-dir", type=Path, default=Path.home() / "Desktop/Data_Bruit_FM/Data/YV"
+        "--data-dir", type=Path, default=Path.home() / "Desktop/ComPy/data/Data/YV"
     )
     args = parser.parse_args()
     guard = Guard()

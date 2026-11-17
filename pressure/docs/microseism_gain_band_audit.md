@@ -150,8 +150,8 @@ analysis remains separate; its retracted single-week claim stays retracted.
 ## Reproduce the read-only audit
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m scripts.audit_microseism_gain_bands \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m scripts.audit_microseism_gain_bands \
   --review docs/microseism_weeks.json
 ```
 

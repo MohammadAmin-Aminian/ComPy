@@ -14,7 +14,7 @@ Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
     Bendat & Piersol uncertainty, phase, per-window mean and scatter.
   * Monthly stacks with the same band and threshold test temporal stability.
 
-Gains: 'bruitfm' from gain_corrected_2026-10-28/gains.csv; 'compy' from
+Gains: 'pressure' from gain_corrected_2026-10-28/gains.csv; 'compy' from
 work/<STA>/calibration/compy_gain.json (Stage D). Missing gains are skipped.
 """
 
@@ -63,7 +63,7 @@ def gains_for(station):
     with open(GAINS_CSV) as fh:
         for row in csv.DictReader(fh):
             if row["Seed_id"] == f"YV.{station}.00.BDH" and row["gain_applied"]:
-                gains["bruitfm"] = float(row["gain_applied"])
+                gains["pressure"] = float(row["gain_applied"])
     path = WORK / station / "calibration" / "compy_gain.json"
     if path.exists():
         info = json.loads(path.read_text())

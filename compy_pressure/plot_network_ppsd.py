@@ -284,7 +284,7 @@ def plot_network(
         )
     )
     output = output.expanduser().resolve()
-    raw = (Path.home() / "Desktop/Data_Bruit_FM").resolve()
+    raw = (Path.home() / "Desktop/ComPy/data").resolve()
     exports = (PROJECT_DIRECTORY / "exports").resolve()
     if any(output == p or p in output.parents for p in [raw, exports]):
         raise ValueError("Output must not be inside raw inputs or production exports")

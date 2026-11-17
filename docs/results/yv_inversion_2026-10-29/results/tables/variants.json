@@ -58,7 +58,7 @@
  },
  {
   "station": "RR28",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 3.7390477338223085,
   "n": 6,
   "max_rhat": 1.0075337631198744,
@@ -194,7 +194,7 @@
  },
  {
   "station": "RR29",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 3.853559823503107,
   "n": 5,
   "max_rhat": 1.0086549025589628,
@@ -330,7 +330,7 @@
  },
  {
   "station": "RR34",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 2.713814880076427,
   "n": 6,
   "max_rhat": 1.0187657388734133,
@@ -466,7 +466,7 @@
  },
  {
   "station": "RR36",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 3.5158736931957084,
   "n": 8,
   "max_rhat": 1.0164814948640304,
@@ -621,7 +621,7 @@
  },
  {
   "station": "RR38",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 27.83721682307926,
   "n": 6,
   "max_rhat": 1.006522797374222,
@@ -776,7 +776,7 @@
  },
  {
   "station": "RR40",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 2.5051977969947314,
   "n": 5,
   "max_rhat": 1.0153616571097461,
@@ -931,7 +931,7 @@
  },
  {
   "station": "RR50",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 2.2876057944982358,
   "n": 6,
   "max_rhat": 1.0065256851747875,
@@ -1086,7 +1086,7 @@
  },
  {
   "station": "RR52",
-  "variant": "bruitfm",
+  "variant": "pressure",
   "chi2": 3.1813277561103304,
   "n": 9,
   "max_rhat": 1.0113999648353473,

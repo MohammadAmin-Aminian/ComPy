@@ -1,9 +1,9 @@
 > **Note.** This is the development log that served as the project README up to
 > version 1.0.0. It records every step in order, with the commands used at the
-> time. For installation and current usage see the [README](../BRUITFM_README.md).
+> time. For installation and current usage see the [README](../HISTORY_README.md).
 
 
-# BRUIT-FM
+# PressureQC
 
 **Station metadata and quality assessment for ocean-bottom noise research.**
 
@@ -11,7 +11,7 @@
 ![Python](https://img.shields.io/badge/Python-3.13%2B-3776AB?logo=python&logoColor=white)
 ![ObsPy](https://img.shields.io/badge/Metadata-ObsPy%20StationXML-276749)
 
-BRUIT-FM connects StationXML inventories, daily SDS waveforms and saved
+PressureQC connects StationXML inventories, daily SDS waveforms and saved
 ocean-bottom noise spectra. The code has evolved from a metadata exporter
 into a restartable workflow for spectral processing, pressure diagnostics
 and automatically discovered networks.
@@ -573,14 +573,14 @@ Rerun stage 3 if processing was interrupted or channels need retrying.
 **0. Enter the checkout and limit numerical threads per worker.**
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
+cd /Users/mohammadamin/Projects/pressure-qc
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 ```
 
 **1. Synchronize StationXML inventories into the existing master.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network inventory
+conda run --no-capture-output -n compy python -m compy_pressure.network inventory
 ```
 
 Inventory synchronization covers the shared inventory collection. It appends
@@ -590,13 +590,13 @@ The following calculations are restricted to YV.
 **2. Check YV waveform availability and inventory matches.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network check --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network check --network YV
 ```
 
 **3. Compute/resume full-period PPSDs with four channel workers.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network ppsd --network YV --workers 4
+conda run --no-capture-output -n compy python -m compy_pressure.network ppsd --network YV --workers 4
 ```
 
 Default windows are three hours with 50% overlap. The full StationXML response
@@ -605,7 +605,7 @@ is applied once. Existing compatible checkpoints resume automatically.
 **4. Save PPSD distributions, time spectrograms and all spectral curves.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network plots --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network plots --network YV
 ```
 
 Seismic distribution/curve plots include NLNM and NHNM.
@@ -613,13 +613,13 @@ Seismic distribution/curve plots include NLNM and NHNM.
 **5. Compare pressure levels with Webb and Brown reference limits.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network pressure --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network pressure --network YV
 ```
 
 **6. Compare nearby pressure stations at similar depth.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network nearby --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network nearby --network YV
 ```
 
 Targets are restricted to YV. References can come from any network with ready
@@ -629,13 +629,13 @@ apply. Unsupported comparisons are unresolved rather than failed calibrations.
 **7. Compare saved pressure spectra with the Godin infragravity model.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network infragravity --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network infragravity --network YV
 ```
 
 **8. Compute the separate screened full-window Godin pilot.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network pilot --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network pilot --network YV
 ```
 
 Uses a seven-day interval near the middle of each pressure epoch, with full
@@ -644,17 +644,17 @@ Uses a seven-day interval near the middle of each pressure epoch, with full
 **9. Open saved figures for one station, one type at a time.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind ppsd
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind pressure
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind nearby
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind infragravity
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind pilot
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind ppsd
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind pressure
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind infragravity
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind pilot
 ```
 
 Replace `RR44` with another processed station. Each view command opens saved
 PNGs without repeating calculations or changing the master.
 
-Defaults use `~/Desktop/Data_Bruit_FM/Data`, `~/Desktop/Data_Bruit_FM/INVENTORIES`,
+Defaults use `~/Desktop/ComPy/data/Data`, `~/Desktop/ComPy/data/INVENTORIES`,
 `exports/` and `results/NETWORKS/TEST/`. Results and figure paths are saved in
 **both `exports/master_inventory.csv` and `exports/master_inventory.xlsx`**;
 backups are under `exports/backups/`. The six calibration scores stay blank
@@ -679,10 +679,10 @@ classification and combined noise models remain pending.
 > comparison with a new `--results-dir` and `--rayleigh-no-master-update`.
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network rayleigh \
+conda run --no-capture-output -n compy python -m compy_pressure.network rayleigh \
   --network YV \
   --rayleigh-catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --rayleigh-dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --rayleigh-dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --rayleigh-frequency-min 0.03 --rayleigh-frequency-max 0.07 \
   --rayleigh-pressure-sign -1 --rayleigh-min-events 3 --rayleigh-max-events 8
 ```
@@ -690,7 +690,7 @@ conda run --no-capture-output -n bruitfm python -m bruitfm.network rayleigh \
 After completion, view one station and open the master results:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YV --station RR52 --view-kind rayleigh
 open exports/master_inventory.xlsx
 ```
@@ -705,7 +705,7 @@ the eight stages above **and then `paired`**, which reads seven days of raw
 pressure/vertical waveforms per pressure epoch and appends `paired_*` master fields:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network all --network YV --workers 4
+conda run --no-capture-output -n compy python -m compy_pressure.network all --network YV --workers 4
 ```
 
 Use either the individual commands or `all`. Do not start `all` alongside an
@@ -718,7 +718,7 @@ retry the relevant command to resolve errors.
 
 `scripts/run_fresh_pressure_ppsd.sh` runs inventory, check, PPSD and plots for
 the pressure channels of a drive holding `INVENTORIES/` and `SDS/` (or `Data/`),
-writing everything to a new folder (default `~/Desktop/BRUIT-FM/fresh_run_<date>`):
+writing everything to a new folder (default `~/Desktop/ComPy/fresh_run_<date>`):
 
 ```bash
 bash scripts/run_fresh_pressure_ppsd.sh /Volumes/DATA_bruitfm inventory
@@ -742,8 +742,8 @@ whole drive is described in [the 26 October status](project_status_20261026.md).
 
 ## Quick start
 
-For whole-network processing from `~/Desktop/Data_Bruit_FM/Data`, use
-`python -m bruitfm.network` in the `bruitfm` environment.
+For whole-network processing from `~/Desktop/ComPy/data/Data`, use
+`python -m compy_pressure.network` in the `compy_pressure` environment.
 [Run each completed stage in order](network_workflow.md). The workflow
 discovers YV and subsequently added networks automatically; `--network YV`
 restricts the selection. It updates the existing master without rebuilding
@@ -756,7 +756,7 @@ python3.13 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
 
-python -m bruitfm.network inventory \
+python -m compy_pressure.network inventory \
   --inventory-dir /path/to/INVENTORIES \
   --master-dir exports
 ```
@@ -767,13 +767,13 @@ Input files are read without modification. Raw archives and generated exports
 stay local and are excluded from Git.
 
 For local convenience, the default inventory folder is
-`~/Desktop/Data_Bruit_FM/INVENTORIES`. Use `--inventory-dir` for another location.
-Run `python -m bruitfm.network --help` to see the batch options.
+`~/Desktop/ComPy/data/INVENTORIES`. Use `--inventory-dir` for another location.
+Run `python -m compy_pressure.network --help` to see the batch options.
 
 ### Use from Python or VS Code
 
 ```python
-from bruitfm.inventory import build_master_dataset, save_master_dataset
+from compy_pressure.inventory import build_master_dataset, save_master_dataset
 
 master_df = build_master_dataset("/path/to/INVENTORIES")
 save_master_dataset(master_df, "exports/new_inventory")
@@ -785,7 +785,7 @@ master_df
 Importing the module does not scan the archive or write files.
 The Python example creates a separate export. Use the network `inventory`
 command when updating a master that already contains processing results.
-`save_master_dataset` and `python -m bruitfm.inventory` refuse to replace an
+`save_master_dataset` and `python -m compy_pressure.inventory` refuse to replace an
 existing `master_inventory.csv` or `.xlsx`.
 
 ## Calculate PPSDs from RR52
@@ -796,17 +796,17 @@ or a complete SDS archive; daily filenames must follow
 `NET.STA.LOC.CHA.D.YEAR.DAY`.
 
 ```bash
-conda activate bruitfm
-python -m bruitfm.ppsd \
-  --data-dir ~/Desktop/Data_Bruit_FM/RR52 --workers 4
+conda activate compy
+python -m compy_pressure.ppsd \
+  --data-dir ~/Desktop/ComPy/data/RR52 --workers 4
 ```
 
 This processes all matching channel epochs in the supplied folder. To start
 with pressure and vertical channels only:
 
 ```bash
-python -m bruitfm.ppsd \
-  --data-dir ~/Desktop/Data_Bruit_FM/RR52 \
+python -m compy_pressure.ppsd \
+  --data-dir ~/Desktop/ComPy/data/RR52 \
   --seed-id YV.RR52.00.BDH --seed-id YV.RR52.00.BHZ
 ```
 
@@ -871,7 +871,7 @@ inventory builder again creates fresh exports, so use a different output
 directory if you want to keep existing processing results and manual scores.
 
 Use `--master-dir` and `--results-dir` for other output locations, and
-`python -m bruitfm.ppsd --help` for all processing options. Results and backups
+`python -m compy_pressure.ppsd --help` for all processing options. Results and backups
 stay local and are excluded from Git.
 
 ```python
@@ -888,24 +888,24 @@ require paired pressure/vertical cross-spectra and are not computed here.
 
 ### Plot saved RR52 results
 
-In VS Code, select the `bruitfm` Python environment, open
-`src/bruitfm/plot_ppsd.py`, and choose **Run Python File**. No arguments are needed:
+In VS Code, select the `compy_pressure` Python environment, open
+`compy_pressure/plot_ppsd.py`, and choose **Run Python File**. No arguments are needed:
 it reads the saved RR52 paths from the master CSV and displays three plots per
 channel (`BDH`, `BH1`, `BH2`, `BHZ`), for twelve figures in total. PNG copies are saved in
 `results/TEST/YV/RR52/plots/`.
 
 ```bash
-python -m bruitfm.plot_ppsd
+python -m compy_pressure.plot_ppsd
 # For a machine without a graphical display:
-python -m bruitfm.plot_ppsd --no-show
+python -m compy_pressure.plot_ppsd --no-show
 # Display only one type (repeat --plot-type to select more than one):
-python -m bruitfm.plot_ppsd --plot-type spectrogram
+python -m compy_pressure.plot_ppsd --plot-type spectrogram
 ```
 
 For a Python/VS Code interactive window:
 
 ```python
-from bruitfm.plot_ppsd import plot_station
+from compy_pressure.plot_ppsd import plot_station
 
 figures = plot_station()
 ```
@@ -928,15 +928,15 @@ processing metadata and calibration scores in the master CSV/Excel are preserved
 
 ### Compare pressure levels with expected ranges
 
-Run from the checkout with the `bruitfm` Python environment selected:
+Run from the checkout with the `compy_pressure` Python environment selected:
 
 ```bash
-python -m bruitfm.pressure_test
+python -m compy_pressure.pressure_test
 # Save results without opening a window:
-python -m bruitfm.pressure_test --no-show
+python -m compy_pressure.pressure_test --no-show
 ```
 
-VS Code can also run `src/bruitfm/pressure_test.py` directly. The default uses
+VS Code can also run `compy_pressure/pressure_test.py` directly. The default uses
 RR52's saved pressure NPZ, with no waveform reprocessing. It saves observed
 5th/50th/95th percentiles, per-frequency comparisons, JSON provenance and three PNGs
 under the channel's `pressure_expected/` directory, and records result links
@@ -959,8 +959,8 @@ RR52 results and optional frequency/score settings.
 After the network PPSD calculation finishes, run:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network nearby
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind nearby
 ```
 
 The stage reuses saved spectra, supports subsequently added networks, and saves
@@ -973,10 +973,10 @@ See [criteria, estimator and outputs](nearby_comparison.md).
 ### Compare with the Godin infragravity model
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.infragravity_test
+conda run --no-capture-output -n compy python -m compy_pressure.infragravity_test
 ```
 
-Or run `src/bruitfm/infragravity_test.py` in VS Code with the `bruitfm`
+Or run `compy_pressure/infragravity_test.py` in VS Code with the `compy_pressure`
 interpreter. It reuses saved pressure data, displays/saves **three plots**
 (percentile/model comparison, PPSD with model, and residuals), and records
 diagnostics in the master CSV/Excel. Results are beside the NPZ under
@@ -991,7 +991,7 @@ for the equation, options, results and limitations.
 ### Calculate the screened Godin pilot from raw pressure data
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.godin_pilot
+conda run --no-capture-output -n compy python -m compy_pressure.godin_pilot
 ```
 
 The default uses a week near the middle of recording coverage. It saves
@@ -1002,7 +1002,7 @@ New `infragravity_pilot_*` fields are appended to master CSV/Excel.
 View the already saved plots without waveform processing:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.godin_pilot --plot-only
+conda run --no-capture-output -n compy python -m compy_pressure.godin_pilot --plot-only
 ```
 
 Use `--start` and `--days` to select an interval, or `--no-show` for background
@@ -1078,7 +1078,7 @@ master_df = pd.read_csv(
 ## Project structure
 
 ```text
-src/bruitfm/
+compy_pressure/
   inventory.py    StationXML → master table → CSV / Excel
   archive.py      Daily SDS discovery and bounded, gap-preserving reads
   ppsd.py         Response-corrected PPSDs, checkpoints and master-file updates

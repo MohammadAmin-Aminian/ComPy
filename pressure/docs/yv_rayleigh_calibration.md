@@ -23,14 +23,14 @@ default is still `tiskitpy`; select `none` explicitly for this comparison.
 Run the available YV pressure epochs with a separate workflow and no master writes:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m bruitfm.network rayleigh \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m compy_pressure.network rayleigh \
   --network YV \
   --results-dir results/NETWORKS/YV_RAYLEIGH_NO_TILT \
   --rayleigh-no-master-update \
   --rayleigh-tilt-method none \
   --rayleigh-catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --rayleigh-dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --rayleigh-dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --rayleigh-frequency-min 0.03 --rayleigh-frequency-max 0.07 \
   --rayleigh-pressure-sign -1 --rayleigh-min-events 3 --rayleigh-max-events 8
 ```
@@ -38,7 +38,7 @@ conda run --no-capture-output -n bruitfm python -m bruitfm.network rayleigh \
 View the new RR52 plot, rather than the old master-linked tilt-corrected plot:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YV --station RR52 --view-kind rayleigh \
   --view-workflow results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json
 ```
@@ -53,10 +53,10 @@ For a first single-station comparison that shows the plot immediately and never
 writes the master:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.rayleigh_calibration \
+conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --network YV --station RR52 --tilt-method none \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --frequency-min 0.03 --frequency-max 0.07 --pressure-sign -1 \
   --min-events 3 --max-events 8 --show
 ```
@@ -87,11 +87,11 @@ Those results and their original statuses are preserved.
 > comparisons with a new `--results-dir` and `--rayleigh-no-master-update`.
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m bruitfm.network rayleigh \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m compy_pressure.network rayleigh \
   --network YV \
   --rayleigh-catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --rayleigh-dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --rayleigh-dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --rayleigh-frequency-min 0.03 --rayleigh-frequency-max 0.07 \
   --rayleigh-pressure-sign -1 --rayleigh-min-events 3 --rayleigh-max-events 8
 ```
@@ -166,7 +166,7 @@ do not rerun it simply to replace its statuses with the new guard's decisions.
 The master links are now available:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YV --station RR52 --view-kind rayleigh
 ```
 

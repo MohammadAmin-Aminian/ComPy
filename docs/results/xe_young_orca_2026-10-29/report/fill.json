@@ -37,7 +37,7 @@
  "BUMP_DB": "-158",
  "N_CAL": "18",
  "CAL_EVENTS": "1--12",
- "GAIN_RATIO": "0.986 (0.835--1.029) at 13 of 14 stations; they disagree at EC01 (ComPy 0.93, BRUIT-FM 3.51), where one of the two methods failed",
+ "GAIN_RATIO": "0.986 (0.835--1.029) at 13 of 14 stations; they disagree at EC01 (ComPy 0.93, PressureQC 3.51), where one of the two methods failed",
  "UNCAL_TEXT": "No event passed the coherence test at CC01 and CC09; these stations were kept with the nominal response and a gain sampled over 0.6--1.4, and are excluded from the pooled results.",
  "N_CAL_INV": "18",
  "COH_RANGE": "0.902--0.970",

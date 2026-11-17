@@ -50,7 +50,7 @@ and about 1.55e-11 m/s maximum group difference.
 ## Selecting a model
 
 The bundled historical layer file is
-`src/bruitfm/reference_data/rr52_historical_rayleigh_layers.csv`. It can be used
+`compy_pressure/reference_data/rr52_historical_rayleigh_layers.csv`. It can be used
 to test the generator or extend that same assumed model to 0.1 Hz. It is not a
 verified Zha/Lau model.
 
@@ -63,7 +63,7 @@ layers or a fit to the desired gains.
 
 ## Why the reported gains look different
 
-BRUIT-FM fits `g * observed_P_over_a = theoretical_P_over_a`. Zha's Figure A2
+PressureQC fits `g * observed_P_over_a = theoretical_P_over_a`. Zha's Figure A2
 describes the observed ratio being about 1.5 times the theoretical ratio. Thus
 compare the published coefficients with **1/g**, subject to confirming the same
 nominal instrument responses. The arithmetic comparison for the original YL pilot:

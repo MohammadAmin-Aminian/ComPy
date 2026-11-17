@@ -1,6 +1,6 @@
-# BRUIT-FM: reconstructed project context
+# PressureQC: reconstructed project context
 
-This note reconciles the available earlier BRUIT-FM user messages, this chat,
+This note reconciles the available earlier PressureQC user messages, this chat,
 the original four photographed WP2 instruction pages, the handoff, development
 history, scientific method notes and live workflow. Historical/pilot statements
 in older documents must be read in that context; the live workflow is authoritative
@@ -125,7 +125,7 @@ audit performed on the smaller verification subsets.
 ## Source review and scientific limits
 
 The existing review records relevant calibration/tilt sections of the thesis,
-available manuscript, tilt milestone note and BRUIT-FM material, plus Webb/Zha,
+available manuscript, tilt milestone note and PressureQC material, plus Webb/Zha,
 Ruan, Godin, Brown, Doran, TiSKitPy, disba and earlier calibration repositories.
 This does not claim every chapter/publication or private Wayne correspondence
 was read. Precise reviewed sources/revisions and local document names are in

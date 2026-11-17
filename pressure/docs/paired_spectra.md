@@ -70,7 +70,7 @@ Clock correctness, actual hardware bands and water depth remain unverified.
 A single-station pilot defaults to **no master updates**:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.paired_spectra \
+conda run --no-capture-output -n compy python -m compy_pressure.paired_spectra \
   --network YV --station RR52 --start 2013-06-10 --days 7
 ```
 
@@ -83,7 +83,7 @@ linear means, complex responses, transfer, coherence and retained start times.
 Open a saved plot without another waveform calculation:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.paired_spectra \
+conda run --no-capture-output -n compy python -m compy_pressure.paired_spectra \
   --plot-only /absolute/path/to/paired_spectra/run_ID/comparison.json
 ```
 
@@ -96,9 +96,9 @@ The network command discovers paired channels, isolates errors, saves checkpoint
 reports and **does update the master**. Start with a selected station:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network paired \
+conda run --no-capture-output -n compy python -m compy_pressure.network paired \
   --network YV --station RR52 --paired-start 2013-06-10 --paired-days 7
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YV --station RR52 --view-kind paired
 ```
 

@@ -145,7 +145,7 @@ def test_fresh_files_protect_sidecars_and_raw_roots(tmp_path):
     with pytest.raises(FileExistsError):
         fresh_file(good)
     with pytest.raises(ValueError):
-        local_p_output(Path.home() / "Desktop/Data_Bruit_FM/results/LOCAL_P/unsafe")
+        local_p_output(Path.home() / "Desktop/ComPy/data/results/LOCAL_P/unsafe")
     with pytest.raises(ValueError):
         local_p_output(tmp_path / "results/LOCAL_P/../../wrong")
 

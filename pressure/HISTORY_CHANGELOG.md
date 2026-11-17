@@ -1,15 +1,15 @@
 # Changelog
 
-All notable changes to BRUIT-FM. The project follows
+All notable changes to PressureQC. The project follows
 [Semantic Versioning](https://semver.org/): the major number changes when the
 command line, the master-table columns or saved-file formats change in an
 incompatible way.
 
 ## [1.3.0] — 2026-10-30
 
-The last BRUIT-FM release: everything moves into ComPy, which becomes the
+The last PressureQC release: everything moves into ComPy, which becomes the
 complete package; this repository is kept as a backup. `integration/` exports
-all of BRUIT-FM as ComPy's `compy_pressure` package and its `pressure/`
+all of PressureQC as ComPy's `compy_pressure` package and its `pressure/`
 project folder. Only the dated reports and the export's own tests stay here.
 Scientific results are unchanged: the reproduction check below found every
 output identical.
@@ -19,8 +19,8 @@ output identical.
   - The 40 modules go into `compy_pressure/`; `tests/`, `scripts/` and
     `docs/` go into ComPy's `pressure/`, laid out like this checkout.
     Every relative path still holds there.
-  - Lines and blocks marked `# bruitfm-only` are left out.
-  - Every `bruitfm.` mention is renamed.
+  - Lines and blocks marked `# compy_pressure-only` are left out.
+  - Every `compy_pressure.` mention is renamed.
   - References to the package's source become `../compy_pressure`, and
     package modules reach `pressure/` from their new place.
   - Markdown links are pointed at the new places, or at this release for the
@@ -38,9 +38,9 @@ output identical.
 - `tests/test_core_boundary.py` tests the export: what moves and what stays,
   the markers, the layout rules, the link rewriting, and Python 3.10 syntax
   and standard-library names in every moved file.
-- `bruitfm.common.PROJECT_DIRECTORY`: one definition for the default
+- `compy_pressure.common.PROJECT_DIRECTORY`: one definition for the default
   `exports/` and `results/` folders of the core stages. It is the current
-  directory in ComPy; BRUIT-FM still uses the checkout.
+  directory in ComPy; PressureQC still uses the checkout.
 
 ### Changed
 - All code, tests and scripts run on Python 3.10, ComPy's lowest supported
@@ -60,7 +60,7 @@ output identical.
 
 ### Reproduction check
 - 90 gain-corrected pressure epochs (YV, ZM, 1L, X9), QC tests 1–3 with the
-  28 October parameters: BRUIT-FM and the installed ComPy wheel give the same
+  28 October parameters: PressureQC and the installed ComPy wheel give the same
   output.
 - The gain-corrected noise model rebuilt by both from
   `decisions/acceptance.csv` is identical.
@@ -83,9 +83,9 @@ output identical.
 
 ### Changed before the export
 - `complete_samples` and `write_csv` moved from `godin_pilot` to the new
-  `bruitfm.common`; `station_distribution` moved from `noise_model` to
+  `compy_pressure.common`; `station_distribution` moved from `noise_model` to
   `plot_network_ppsd`. The old import paths still work.
-- `bruitfm.network` imports the Godin pilot only when the "pilot" stage runs.
+- `compy_pressure.network` imports the Godin pilot only when the "pilot" stage runs.
 - The paired-spectra provenance hashes `common.py` instead of `godin_pilot.py`.
 - Tests load the reference data through the package instead of the
   repository path, and the script-based microseism tests skip when the
@@ -113,7 +113,7 @@ output identical.
 ## [1.1.0] — 2026-10-28
 
 ### Added
-- `bruitfm.group_noise_model` (`bruitfm-group-noise-model`): station-balanced
+- `compy_pressure.group_noise_model` (`compy_pressure-group-noise-model`): station-balanced
   percentile pressure noise models (p5, p10, p50, p90, p95) from a scored
   channel table, grouped by ocean basin, sensor type, water depth and local
   season. It keeps one channel per station and sensor, uses only the usable
@@ -121,7 +121,7 @@ output identical.
 - Provisional noise model from the 352 stations classed *good*, in
   `docs/reports/2026-10-28_noise_model_provisional/` and §8 of
   `docs/REPORT.md`.
-- GPL-3.0 license (the same as ComPy, into which BRUIT-FM will be merged).
+- GPL-3.0 license (the same as ComPy, into which PressureQC will be merged).
 - The historical formula/signal-processing review (YV checks, gain plots and
   scripts) and the local-P science review, merged from their archived branches.
 - The calibration results and a worked example in `docs/REPORT.md`, with one
@@ -142,9 +142,9 @@ of every pressure channel, used for the all-network campaign described in
   (2014) limits at ≥ 0.2 Hz for Test 1. Godin et al. (2013) Eq. 6 with and
   without the tanh(kH) factor for Test 3. The nearby-station test also reports
   the RMS of daily differences (PR #10).
-- **Station maps with coastlines** through `bruitfm.maps.add_land`, with the
+- **Station maps with coastlines** through `compy_pressure.maps.add_land`, with the
   optional `maps` extra (PR #12).
-- **Tilt correction.** `bruitfm.tilt` computes ComPy (`compy.Rotate`)
+- **Tilt correction.** `compy_pressure.tilt` computes ComPy (`compy.Rotate`)
   tilt-cleaned vertical PPSDs in 6-hour windows at 1 Hz and saves the
   uncorrected and corrected PSDs side by side (PR #13).
 - **Calibration runners.** The YV all-methods runner (Rayleigh, microseism,
@@ -152,9 +152,9 @@ of every pressure channel, used for the all-network campaign described in
   choice of pressure sign (PR #4).
 - **Network figures.** Median PSD and PPSD-distribution plots by network
   (PR #3).
-- **Packaging.** Console commands (`bruitfm`, `bruitfm-inventory`,
-  `bruitfm-tilt`, `bruitfm-local-p`, `bruitfm-microseism`, `bruitfm-paired`,
-  `bruitfm-noise-model`), `bruitfm.__version__`, the `all` and `tilt` extras,
+- **Packaging.** Console commands (`compy_pressure`, `compy_pressure-inventory`,
+  `compy_pressure-tilt`, `compy_pressure-local-p`, `compy_pressure-microseism`, `compy_pressure-paired`,
+  `compy_pressure-noise-model`), `compy_pressure.__version__`, the `all` and `tilt` extras,
   project URLs, `CITATION.cff`, `CONTRIBUTING.md` and this changelog.
 - **Reports.** Dated campaign reports with the scripts that built them, in
   `docs/reports/`.

@@ -13,7 +13,7 @@ corrected in this branch unless marked open.
 
 **Scope.** I reviewed the following:
 
-* `src/bruitfm/microseism_check.py`;
+* `compy_pressure/microseism_check.py`;
 * `scripts/run_microseism_check.py`, `compare_microseism_methods.py`,
   `summarize_yv_microseism.py` and the wrapper scripts;
 * tests;
@@ -25,7 +25,7 @@ corrected in this branch unless marked open.
 
 | ID | Severity | Finding | Resolution |
 | --- | --- | --- | --- |
-| SC-1 | High | Without `PYTHONPATH`, pytest in this worktree imported Codex's installed `bruitfm` from `~/Projects/bruit-fm/src`. New modules failed to import, and **shared modules (e.g. `paired_spectra`) would silently be tested from the wrong checkout**. All earlier test runs set `PYTHONPATH=src:.`, so their results stand. | `pyproject.toml`: `pythonpath = ["src", "."]`. Verified: tests pass without `PYTHONPATH`. |
+| SC-1 | High | Without `PYTHONPATH`, pytest in this worktree imported Codex's installed `compy_pressure` from `~/Projects/pressure-qc/src`. New modules failed to import, and **shared modules (e.g. `paired_spectra`) would silently be tested from the wrong checkout**. All earlier test runs set `PYTHONPATH=src:.`, so their results stand. | `pyproject.toml`: `pythonpath = ["src", "."]`. Verified: tests pass without `PYTHONPATH`. |
 | SC-2 | Medium | Scripts have the same hazard. During this review a regeneration ran without `PYTHONPATH` and failed on import. A `\| tail` hid the failure behind exit code 0. | The wrappers already export `PYTHONPATH`. Manual commands in the docs include it. Reruns now check exit status. |
 | SC-3 | Medium | `compare_microseism_methods.py` aborted the whole comparison if one Codex diagnostic failed or one Codex campaign file was missing. | Per-station isolation (`codex_error`); missing campaign files are skipped. |
 | SC-4 | Medium | Codex's `run_diagnostic` refuses an existing folder (correctly), so a compare could not be rerun. Isolation turned this into 84 silent `codex_error` rows on the first regeneration. | A saved diagnostic is reused only if its `source_comparison` and multiplier match; otherwise an error is raised. Tested. After the fix: 0 errors, 84 Codex phases, 46/46 identical to Codex's campaign. |

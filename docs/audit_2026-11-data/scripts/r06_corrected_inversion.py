@@ -30,7 +30,7 @@ from compy import response_check as rc  # noqa: E402
 ARCHIVE = Path(os.environ.get("COMPY_ARCHIVE", Path.home() / "Desktop/ComPy"))
 OUT = ARCHIVE / "13_audit/research/inversion_corrected"
 CODE = Path(
-    os.environ.get("COMPY_STAGE_E_CODE", Path.home() / "Desktop/BRUIT-FM/ComPy")
+    os.environ.get("COMPY_STAGE_E_CODE", Path.home() / "Desktop/ComPy/code/ComPy")
 )  # v2.8.0
 STATIONS = ("RR28", "RR29", "RR34", "RR36", "RR38", "RR40", "RR50", "RR52")
 DEPTHS_M = (500, 1000, 2000, 3000, 5000)

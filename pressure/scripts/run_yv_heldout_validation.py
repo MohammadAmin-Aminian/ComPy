@@ -363,7 +363,7 @@ def main():
     parser.add_argument("--stations", nargs="+", default=STATIONS)
     parser.add_argument("--minimum-magnitude", type=float, default=6.0)
     parser.add_argument(
-        "--data-dir", type=Path, default=Path.home() / "Desktop/Data_Bruit_FM/Data/YV"
+        "--data-dir", type=Path, default=Path.home() / "Desktop/ComPy/data/Data/YV"
     )
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--dry-run", action="store_true")

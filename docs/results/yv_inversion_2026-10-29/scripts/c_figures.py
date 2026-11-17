@@ -53,7 +53,7 @@ GJI = {
     "RR52": [(0, 2100), (1000, 2100), (1500, 3800), (3000, 3800), (3500, 4250), (8000, 4250)],
 }  # fmt: skip
 VARIANT_LABELS = {"main": "Main (Vp/Vs 1.85)", "brocher": "Brocher Vp", "sedscale": "Sediment Vs free",
-                  "bruitfm": "gains.csv gain", "full": "Whole record", "moho": "Moho ±1 km",
+                  "pressure": "gains.csv gain", "full": "Whole record", "moho": "Moho ±1 km",
                   "fixedvp": "Vp, ρ fixed at CRUST1.0", "vpvs": "Crustal Vp/Vs free"}  # fmt: skip
 
 
@@ -61,7 +61,7 @@ def load(station, variant):
     """Posterior of a saved run, rebuilt with its data and model."""
     d = np.load(ROOT / "results" / station / f"{station}_{variant}.npz")
     spec = dict(main={}, prior={}, brocher=dict(vp_vs=None), sedscale=dict(sediment_scale=(0.5, 2.0)),
-                bruitfm={}, full={}, moho=dict(moho_shift=(-1000.0, 1000.0)),
+                compy_pressure={}, full={}, moho=dict(moho_shift=(-1000.0, 1000.0)),
                 fixedvp=dict(reference="crust1"), vpvs=dict(vp_vs_range=(1.7, 2.4)))[variant]  # fmt: skip
     model, column = build_model(station, **spec)
     data = ci.ComplianceData(

@@ -56,7 +56,7 @@ default, master, response snapshot or saved result.
 | Data centre | EIDA routing: `seisdata.epos-france.fr`; federator: `DATACENTER=EPOSFR` | Confirmed; single source |
 | Units, rate | Hydrophone PA→V→COUNTS; vertical M/S→V→COUNTS; 50 Hz; analogue stage LAPLACE rad/s, A0 at 1 Hz | Confirmed, identical |
 | Digitizer chain | Hydrophone 10066300 counts/V, vertical 373380 counts/V; nine FIR stages from 512 kHz to 50 Hz (the paper's count for 50 Hz), same coefficients | Confirmed identical; ADC values not independently verified (see below) |
-| Unit-case change | BRUIT-FM upper-cases units before every check (for example [ppsd.py](../../compy_pressure/ppsd.py)) | Harmless to unit checks. Fresh XML would change snapshot hashes, which the provenance guards refuse |
+| Unit-case change | PressureQC upper-cases units before every check (for example [ppsd.py](../../compy_pressure/ppsd.py)) | Harmless to unit checks. Fresh XML would change snapshot hashes, which the provenance guards refuse |
 | Hardware identity | No model, serial or calibration date in the official or local metadata | **Unknown** |
 
 Primary source: [Stähler et al. (2016)](https://doi.org/10.5194/adgeo-41-43-2016),
@@ -338,13 +338,13 @@ the snapshots and the owner's `gain_histogram.png` are unchanged.
 ## Reproduce
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm-response-confirmation
-PY=/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python
+cd /Users/mohammadamin/Projects/pressure-qc-response-confirmation
+PY=/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python
 # Only if a fresh retrieval is wanted; always into a NEW folder:
 PYTHONPATH=src:. $PY scripts/confirm_yv_responses.py fetch \
   --out docs/yv_response_confirmation/official_<UTC> --stations RR17 RR18 RR22 RR56
 PYTHONPATH=src:. $PY scripts/confirm_yv_responses.py compare \
-  --workflow /Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
+  --workflow /Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
   --workflow-sha256 cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2 \
   --official docs/yv_response_confirmation/official_20261021T113504Z \
   --out <new folder> --stations RR17 RR18 RR22 RR56
@@ -353,7 +353,7 @@ PYTHONPATH=src:. $PY scripts/confirm_yv_responses.py compare \
 Pilot (saved spectra only; seconds; always into a NEW folder):
 
 ```bash
-M=/Users/mohammadamin/Projects/bruit-fm
+M=/Users/mohammadamin/Projects/pressure-qc
 PYTHONPATH=src:. $PY scripts/run_response_pilot.py \
   --workflow $M/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
   --workflow-sha256 cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2 \

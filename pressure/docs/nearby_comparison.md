@@ -1,6 +1,6 @@
 # Compare pressure spectra with nearby stations at similar depth
 
-`src/bruitfm/nearby_test.py` implements the second spectral check in the
+`compy_pressure/nearby_test.py` implements the second spectral check in the
 master table. It reuses response-corrected pressure PPSD NPZ files and their
 saved StationXML snapshots. It reads no raw waveforms and applies no second
 response correction. The network runner discovers targets automatically;
@@ -136,27 +136,27 @@ resume it first. This guard is a workflow check, not a general file lock.
 Run from Terminal:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m bruitfm.network nearby
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m compy_pressure.network nearby
 ```
 
 This processes discovered pressure targets across all available networks.
 To process YV targets only, keeping the full registered reference pool:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network nearby --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network nearby --network YV
 ```
 
 Open one station's three saved figures:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind nearby
 ```
 
 For an interactive single-station run using saved NPZ paths directly:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.nearby_test --network YV --station RR44
+conda run --no-capture-output -n compy python -m compy_pressure.nearby_test --network YV --station RR44
 ```
 
 Use `--no-show` to save without opening figures. `--no-update-master` leaves
@@ -166,7 +166,7 @@ use an isolated export with copied NPZs for a fully isolated pilot.
 Every criterion is configurable on either processing entry point:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network nearby \
+conda run --no-capture-output -n compy python -m compy_pressure.network nearby \
   --preferred-distance-km 50 --maximum-distance-km 100 \
   --preferred-depth-fraction 0.05 --maximum-depth-fraction 0.10 \
   --minimum-common-days 30 --minimum-daily-coverage-hours 12 \

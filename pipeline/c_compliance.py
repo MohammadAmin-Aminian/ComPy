@@ -17,7 +17,7 @@ Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
     bootstrap over windows, slow level and tilt from 30-day blocks), saved with
     the result as cov_rel for the inversion (ComPy 3).
 
-Gains: 'bruitfm' from config.BRUITFM_GAINS; 'compy' from
+Gains: 'pressure' from config.PRESSURE_GAINS; 'compy' from
 work/<STA>/calibration/compy_gain.json (Stage D). Missing gains are skipped.
 """
 
@@ -29,7 +29,7 @@ from pathlib import Path
 
 import config
 import numpy as np
-from config import BRUITFM_GAINS, COMPY, INVENTORY, RESULTS, WORK, P, Z, seed_id
+from config import PRESSURE_GAINS, COMPY, INVENTORY, RESULTS, WORK, P, Z, seed_id
 from obspy import UTCDateTime, read, read_inventory
 
 sys.path.insert(0, str(COMPY))
@@ -67,22 +67,22 @@ GATE = getattr(config, "COMPLIANCE_GATE", "inclusive")
 #: tides and regimes. A new file only; no result changes.
 SAVE_WINDOW_LEVELS = getattr(config, "SAVE_WINDOW_LEVELS", True)
 #: Gain label whose levels are saved, in this order of preference.
-LEVEL_LABELS = ("compy", "bruitfm", "nominal")
+LEVEL_LABELS = ("compy", "pressure", "nominal")
 
 
 def gains_for(station):
     """Available pressure gains of a station."""
     gains = {}
-    if BRUITFM_GAINS is not None and Path(BRUITFM_GAINS).exists():
-        with open(BRUITFM_GAINS) as fh:
+    if PRESSURE_GAINS is not None and Path(PRESSURE_GAINS).exists():
+        with open(PRESSURE_GAINS) as fh:
             for row in csv.DictReader(fh):
-                # Only gains BRUIT-FM actually applied (XE: microseism method);
+                # Only gains PressureQC actually applied (XE: microseism method);
                 # "uncorrected" rows carry g = 1 and are not calibrations.
                 if (
                     row["Seed_id"] == seed_id(station)
                     and row.get("gain_status") == "applied"
                 ):
-                    gains["bruitfm"] = float(row["gain_applied"])
+                    gains["pressure"] = float(row["gain_applied"])
     path = WORK / station / "calibration" / "compy_gain.json"
     if path.exists():
         info = json.loads(path.read_text())

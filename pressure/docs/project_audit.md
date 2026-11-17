@@ -120,7 +120,7 @@ of this software audit alone.
 From the checkout, with the local products present:
 
 ```bash
-conda run --no-capture-output -n bruitfm python scripts/audit_saved_project.py
+conda run --no-capture-output -n compy python scripts/audit_saved_project.py
 ```
 
 This writes a new `results/VALIDATION/PROJECT_AUDIT/run_*/audit.json`, reads saved

@@ -8,7 +8,7 @@ and machine-readable `review_flags`; the master links these under `rayleigh_*`.
 An unresolved comparison is not an instrument failure.
 
 The method follows the thesis/manuscript pressure–acceleration fit and the
-published Zha/Webb water-column reference. BRUIT-FM recomputes from raw counts
+published Zha/Webb water-column reference. PressureQC recomputes from raw counts
 using its own archive/spectral processing and actual TiSKitPy CleanRotator.
 The historical Earth-model layers were reused from the earlier DPG code.
 Agreement with 0.67 is not independent certification. Synthetic tests inject
@@ -81,7 +81,7 @@ changing the selected band to produce a gain.
 - [x] Recover constructed gains, rotations and sign reversals from synthetic raw
   records. The synthetic generator shares the water formula; this is not a
   fully independent Earth/ocean-model test.
-- [x] Compare BRUIT-FM's projection with actual TiSKitPy `apply()` and preserve
+- [x] Compare PressureQC's projection with actual TiSKitPy `apply()` and preserve
   its input traces. This verifies integration, not complete field-noise removal.
 - [x] Rederive ratios, transfers, coherence, phase and masks from all 481 saved
   network event spectra; independently solve all 48 candidate gains and 16

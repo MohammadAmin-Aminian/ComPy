@@ -23,7 +23,7 @@ except ImportError:  # Windows
 
     fcntl = None
 
-XML_DIRECTORY = Path.home() / "Desktop/Data_Bruit_FM/INVENTORIES"
+XML_DIRECTORY = Path.home() / "Desktop/ComPy/data/INVENTORIES"
 OUTPUT_DIRECTORY = PROJECT_DIRECTORY / "exports"
 
 # The document lists six checks under "Calibration tests". Separate the three

@@ -5,7 +5,7 @@ A gain g multiplies pressure, so the PSD shifts by 20*log10(g) dB at every
 frequency. The gains were fitted in 0.03-0.07 Hz only; outside that band the
 shifted curve assumes a frequency-independent gain, which is not established.
 
-    conda run -n bruitfm python scripts/plot_median_ppsd.py --gain pole_trial --show
+    conda run -n compy python scripts/plot_median_ppsd.py --gain pole_trial --show
 """
 
 import argparse

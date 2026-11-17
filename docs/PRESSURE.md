@@ -1,10 +1,10 @@
 # Pressure gauges: QC, calibration and noise models (`compy_pressure`)
 
 ComPy 2.5 holds all of
-[BRUIT-FM](https://github.com/MohammadAmin-Aminian/bruit-fm). BRUIT-FM checks
+[PressureQC](https://github.com/MohammadAmin-Aminian/bruit-fm). PressureQC checks
 and calibrates ocean-bottom pressure gauges across a whole waveform archive.
 It starts from an SDS archive and its StationXML and ends with one master
-table that scores every pressure channel. BRUIT-FM 1.3.0 was its last
+table that scores every pressure channel. PressureQC 1.3.0 was its last
 release; that repository is kept as a backup and holds the dated reports of
 its 846-channel campaign.
 
@@ -12,9 +12,9 @@ its 846-channel campaign.
 |---|---|
 | `compy_pressure/` | the package (installed with ComPy) |
 | `pressure/tests/` | its 503 tests, run by ComPy's `pytest` |
-| `pressure/scripts/` | BRUIT-FM's run and review scripts |
-| `pressure/docs/` | BRUIT-FM's methods, validation notes, reviews, policies and their data; the results report is [`pressure/docs/REPORT.md`](../pressure/docs/REPORT.md) |
-| [`pressure/README.md`](../pressure/README.md) | the BRUIT-FM → ComPy name table |
+| `pressure/scripts/` | PressureQC's run and review scripts |
+| `pressure/docs/` | PressureQC's methods, validation notes, reviews, policies and their data; the results report is [`pressure/docs/REPORT.md`](../pressure/docs/REPORT.md) |
+| [`pressure/README.md`](../pressure/README.md) | the PressureQC → ComPy name table |
 
 `compy_pressure`'s Rayleigh-wave calibration replaces ComPy's old
 `Pressure_calibration.py`, which was removed after ComPy 2.4.0. The README section "Pressure
@@ -128,7 +128,7 @@ The method has five steps:
   StationXML, Earth model and water properties.
 
 The dispersion file gives the Rayleigh phase and group velocities; RR52's,
-from a layered model, is the BRUIT-FM default for every network.
+from a layered model, is the PressureQC default for every network.
 `--rayleigh-earth-model-file` computes them from another layered model with
 disba.
 
@@ -170,8 +170,8 @@ prior of the inversion (stage E); RR52's published gain is 0.67. Fewer RR52
 events pass than in 2.4: the method refuses records whose sample grids do not
 line up (11 events) and tilt corrections beyond 10° (10 events). The likely cause is the Rayleigh phase
 velocity behind the water-layer prediction: RR52's dispersion here, against
-the old module's own model. BRUIT-FM's microseism method gave 0.702, 0.778 and
-1.159 for these gauges. These XE gauges are BRUIT-FM's first Rayleigh-wave
+the old module's own model. PressureQC's microseism method gave 0.702, 0.778 and
+1.159 for these gauges. These XE gauges are PressureQC's first Rayleigh-wave
 results: its campaign could not pair their channels because of the wrong
 horizontal dips.
 
@@ -189,9 +189,9 @@ results/_workflow/<stage>.json         checkpoints and status counts of each sta
 Updates to the master are locked between processes, staged, and backed up in
 `master/backups/` before each write.
 
-## Running BRUIT-FM's scripts and tests
+## Running PressureQC's scripts and tests
 
-`pressure/` is laid out like BRUIT-FM's checkout. Its scripts and tests
+`pressure/` is laid out like PressureQC's checkout. Its scripts and tests
 address `docs/`, `scripts/` and `tests/` relative to it, and the package
 source as `../compy_pressure`. Run them from that folder, with ComPy and it
 on the path:
@@ -202,33 +202,33 @@ python -m pytest pressure/tests        # from the ComPy checkout
 ```
 
 The shell scripts expect the conda environment named in each file. The
-documents in `pressure/docs/` are BRUIT-FM's, unchanged apart from their
-links, and still use BRUIT-FM's names; `pressure/README.md` maps them to
+documents in `pressure/docs/` are PressureQC's, unchanged apart from their
+links, and still use PressureQC's names; `pressure/README.md` maps them to
 ComPy's.
 
 ## Origin
 
-The move was made by BRUIT-FM's `integration/export_to_compy.py` from BRUIT-FM
-1.3.0. `compy_pressure.BRUITFM_VERSION` and `compy_pressure.BRUITFM_COMMIT`
+The move was made by PressureQC's `integration/export_to_compy.py` from PressureQC
+1.3.0. `compy_pressure.SOURCE_VERSION` and `compy_pressure.SOURCE_COMMIT`
 record the source. The export:
 
-- renamed `bruitfm` to `compy_pressure`;
+- renamed `compy_pressure` to `compy_pressure`;
 - adapted the paths to this layout;
-- pointed the Markdown links at their new places, or at BRUIT-FM v1.3.0 for
+- pointed the Markdown links at their new places, or at PressureQC v1.3.0 for
   the dated reports;
 - copied data files byte for byte;
 - formatted and linted the copy with ComPy's ruff settings.
 
-ComPy is the maintained copy from now on. BRUIT-FM's
+ComPy is the maintained copy from now on. PressureQC's
 `export_to_compy.py --check` would now report ComPy's later changes (for
 example `calibration_master`) as differences.
 
-Reproduction check (29–30 October 2026): BRUIT-FM and the installed ComPy
+Reproduction check (29–30 October 2026): PressureQC and the installed ComPy
 wheel ran on the same inputs. They ran QC tests 1–3 on 90 gain-corrected
 pressure epochs (YV, ZM, 1L, X9) and rebuilt the gain-corrected noise model.
 Every output table, JSON file and array matches, and the per-epoch QC tests 1
 and 3 also match the archived campaign results. The method and numbers are
-in BRUIT-FM's `integration/README.md`.
+in PressureQC's `integration/README.md`.
 
 ## Open scientific questions
 

@@ -3,7 +3,7 @@
 The original manuscript Figure 5 (PDF p. 16) and thesis Figure 3.13 (PDF p. 79,
 printed p. 57) were rendered and inspected alongside the original
 `DPG_Calibration/Pressure_calibration.py` plotting function and ComPy styling.
-BRUIT-FM now saves `paper_figure5_comparison.png` in each Rayleigh run.
+PressureQC now saves `paper_figure5_comparison.png` in each Rayleigh run.
 
 ## Matching the original presentation
 
@@ -90,10 +90,10 @@ Previous results, masters and source data remain preserved.
 To match the original figure's fit band explicitly:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m bruitfm.rayleigh_calibration \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --network YV --station RR52 \
   --frequency-min 0.03 --frequency-max 0.07 \
   --min-events 3 --max-events 8 --show
@@ -112,7 +112,7 @@ open docs/figures/rr52/rayleigh_paper_figure5_default_band.png
 
 The fundamental-mode dispersion table was generated with **disba 0.7.0**:
 `PhaseDispersion(...)(periods, mode=0, wave="rayleigh")` for the water-column
-reference and `GroupDispersion(...)` for the packet timing. BRUIT-FM reads that
+reference and `GroupDispersion(...)` for the packet timing. PressureQC reads that
 prepared table; it does not rerun disba or require it in the runtime environment.
 [Official disba documentation](https://keurfonluu.github.io/disba/).
 The observed waveforms are actual OBS data, not synthetic Rayleigh waves.

@@ -1104,7 +1104,7 @@ def run_calibration(
     records = waveform_records
     if records is None:
         records = discover_waveforms(
-            data_dir or Path.home() / "Desktop/Data_Bruit_FM/Data",
+            data_dir or Path.home() / "Desktop/ComPy/data/Data",
             {r.Seed_id for r in rows},
         )
     output = (

@@ -1,8 +1,8 @@
-# BRUIT-FM: compact continuation handoff
+# PressureQC: compact continuation handoff
 
 ## Start here
 
-Workspace: `/Users/mohammadamin/Projects/bruit-fm`, branch `main`.
+Workspace: `/Users/mohammadamin/Projects/pressure-qc`, branch `main`.
 Repository: https://github.com/MohammadAmin-Aminian/bruit-fm.
 README progress is numbered through **68**.
 The prior integration was merged
@@ -125,7 +125,7 @@ comparison band. Numerical exclusion and provenance caveats remain unchanged.
 Focused display/pressure/gain regression: 37 passed, 5 ObsPy warnings.
 
 Latest RR52 command:
-`PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python scripts/plot_rr40_gain_comparison.py --station RR52 --show`
+`PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python scripts/plot_rr40_gain_comparison.py --station RR52 --show`
 This opens the new four-panel comparison and gain-only dB plot. It reads only
 saved evidence, creates isolated figures/manifest and verifies source hashes.
 No raw/calibration batch, master/score/result rewrite or response correction.
@@ -152,7 +152,7 @@ Owner decision (19 Oct 2026): **no ratings, thresholds, scores or approved
 noise models yet.** First inventory all local data, reuse valid products and
 run only missing PPSDs and applicable checks. This supersedes the
 acceptance-policy review below as the immediate next task. Branch
-`claude/full-data-coverage` adds `python -m bruitfm.coverage` with
+`claude/full-data-coverage` adds `python -m compy_pressure.coverage` with
 `plan`/`run --execute`/`report` and `scripts/run_full_coverage.sh`. Read
 `docs/full_data_coverage.md` and `docs/full_data_coverage_handoff.md`.
 Dry run: 89 saved pressure PPSDs reused, 15 new pressure PPSDs plus 61 × 3
@@ -168,7 +168,7 @@ plots. Read `docs/six_check_review.md` and `docs/six_check_phase_report.json`.
 The completed checkpoint is developed on `codex/six-check-integration` and
 integrated/pushed to main after verification. Contributor branches are preserved.
 
-New `python -m bruitfm.quality_review` and
+New `python -m compy_pressure.quality_review` and
 `bash scripts/run_quality_review.sh` read explicit saved sources, never newest
 folders. Real review: `results/REVIEWS/SIX_CHECKS/final_20261019/` — 89 stations,
 118 exact channel/epoch/source identities, 89 saved PPSD paths, 54 unjoined
@@ -186,7 +186,7 @@ independent-reference record, explicit nominal-response acceptance and approved
 frequency/time support. No real approvals were fabricated: accepted-channel
 export is empty, and the real noise run is a selection plan only.
 
-`python -m bruitfm.noise_model` has a tested synthetic approved path: equal
+`python -m compy_pressure.noise_model` has a tested synthetic approved path: equal
 station weighting, per-frequency coverage, complete smoothing-bin/time-window
 support, no duplicate overlapping station records, no gain application, protected
 sources and optional all/network/channel/network-channel grouping. Actual model
@@ -389,7 +389,7 @@ The sections below retain historical completion and source context.
 The user completed every job in
 `results/DIAGNOSTICS/MICROSEISM_BASELINE_LOGS/run_20261014T170400Z` with no
 failures. Read `docs/microseism_baseline_comparison.md` and its 46-row CSV/JSON
-plus figure. The new `bruitfm.microseism_compare` aggregator uses only explicit
+plus figure. The new `compy_pressure.microseism_compare` aggregator uses only explicit
 paths from that run, verifies 462 protected artifacts/paths and reproduces all
 saved spectral aggregates. It reads no new waveform and changes no response,
 master, prior result or score.
@@ -425,7 +425,7 @@ P/Z pilot does not uniquely identify pressure gain. RR52's Rayleigh
 `g=0.6787278140712512` remains fixed and was displayed only through `H/g`; it
 was not fitted or applied. No master or score changed.
 
-New analyzer: `src/bruitfm/microseism_diagnostic.py`. It verifies the five saved
+New analyzer: `compy_pressure/microseism_diagnostic.py`. It verifies the five saved
 artifacts and recorded inputs, reproduces the weekly spectra, and re-averages
 the stored 167 hourly pairs by day. Median coherence² remains 0.802142; 29/361
 bins exceed the Ruan 0.95 reference and six/seven daily band means exceed the
@@ -437,8 +437,8 @@ Full suite: 176 passed; Ruff check/format passed.
 
 Read `docs/microseism_baseline_run.md`. The scope was the 46 saved
 first-method (`previous_g`) estimates only: YV 16, YL 22, 7D 4, XO 4. The
-manifest is `src/bruitfm/reference_data/microseism_baseline_stations.csv` and
-the runner is `python -m bruitfm.microseism_campaign --station NET.STA`.
+manifest is `compy_pressure/reference_data/microseism_baseline_stations.csv` and
+the runner is `python -m compy_pressure.microseism_campaign --station NET.STA`.
 `--list` prints exact P/Z IDs and frozen gains. RR52 reuses its designated saved
 paired run; other stations write fresh products under
 `results/DIAGNOSTICS/MICROSEISM_PAIRED/` and derived diagnostics under
@@ -531,7 +531,7 @@ The user authorized validation of RR01/RR06/RR48 with RR52 as control and asked
 for code to run. New utility: `scripts/run_yv_heldout_validation.py`.
 
 ```bash
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   scripts/run_yv_heldout_validation.py --open-plots
 ```
 
@@ -585,7 +585,7 @@ step 46 prepares validation, not completed physical acceptance.
 The all-station command below is historical reproduction, not a request to rerun:
 
 ```bash
-PYTHONPATH=src conda run --no-capture-output -n bruitfm python \
+PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network all --all-stations --open-plots
 ```
 
@@ -619,7 +619,7 @@ baseline/history details; do not mistake them for requests to restart batches.
   QC can nevertheless change station gains. No XML/pole correction was applied.
   IID day-bootstrap intervals omit serial dependence; they are descriptive.
 - New review products remain in the separate integration worktree
-  `/Users/mohammadamin/Projects/bruit-fm-sentinel-review/results/REVIEWS/`.
+  `/Users/mohammadamin/Projects/pressure-qc-sentinel-review/results/REVIEWS/`.
   Preserve that worktree's untracked products. Curated reports are tracked.
 
 ## Completed work and current results
@@ -750,7 +750,7 @@ models. There is no measured whole-project completion percentage.
 
 Latest implementation checks: **167 tests passed**, Ruff check/format and Bash
 runner syntax passed. Git and all eight saved network workflows were inspected;
-no BRUIT-FM preparation/calibration process was live at the reporting checkpoint.
+no PressureQC preparation/calibration process was live at the reporting checkpoint.
 The APG changes add analytic gain/phase/alias checks, gap/overlap/epoch rejection,
 explicit rate-roundoff handling and calibration without PPSD arrays. The previous
 read-only audit checked 222 PPSD channels / 980,630 segments,
@@ -784,8 +784,8 @@ Excel styles. Keep alternatives in separate folders. Commit/push completed work.
 Code, docs and curated comparison artifacts go to GitHub; raw data, masters and
 full results remain local and excluded. Do not force-add them.
 
-Python: `/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python`.
-Data: `/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/{YV,YL,7D,XO}`.
+Python: `/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`.
+Data: `/Users/mohammadamin/Desktop/ComPy/data/Data/{YV,YL,7D,XO}`.
 YL XML: `Data/YL/<station>/inventory.xml` beside downloaded waveforms.
 Masters: `exports/master_inventory.csv` and `.xlsx`.
 All-YL preparation/run command: `bash scripts/run_yl_all.sh` (already completed).
@@ -796,7 +796,7 @@ Original project scope: `docs/project_context.md`.
 View a saved YL plot without calibration computation:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YL --station A02W --view-kind rayleigh \
   --view-workflow results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json
 ```

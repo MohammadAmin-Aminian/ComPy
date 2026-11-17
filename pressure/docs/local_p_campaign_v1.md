@@ -167,7 +167,7 @@ ran are listed; all 120 rows are in the CSV.
 ## 5. Reproduce the table
 
 ```bash
-conda run --no-capture-output -n bruitfm python scripts/summarize_local_p_campaign.py \
+conda run --no-capture-output -n compy python scripts/summarize_local_p_campaign.py \
   --campaign-dir results/LOCAL_P/campaigns/all_v1 \
   --supersede results/LOCAL_P/campaigns/apg_timing_v2 \
   --csv results/LOCAL_P/campaigns/all_v1_summary.csv \
