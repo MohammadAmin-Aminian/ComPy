@@ -90,7 +90,7 @@ dependent, as Deng et al. found at XO WD66 (Cp ≈ 0.91 at 0.02–0.03 Hz fallin
 
 ## Implementation
 
-`src/bruitfm/microseism_check.py`:
+`compy_pressure/microseism_check.py`:
 
 - validates the saved run's conventions, units and window-mean arithmetic, and
   the reference's station/epochs and optional SHA-256. It hashes every input
@@ -131,7 +131,7 @@ Tests (`tests/test_microseism_check.py`, 19 pass):
 
 ```bash
 R=results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005
-PYTHONPATH=src conda run --no-capture-output -n bruitfm python -m bruitfm.microseism_check \
+PYTHONPATH=src conda run --no-capture-output -n compy python -m compy_pressure.microseism_check \
   --paired-run $R/paired_spectra/run_bfbef17f2c13 \
   --reference-result $R/rayleigh_calibration/run_392920872d9c/comparison.json \
   --reference-sha256 0d6f7552d45fe1ad59194a6c45dd00501b3bf6ca6c54c8f8f0a324d93a5314e9

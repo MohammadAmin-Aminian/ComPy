@@ -7,7 +7,7 @@
 > See [the integration review](reviews/codex_integration_review.md) for bounded raw checks and limits.
 
 
-Independent review of BRUIT-FM. Software fixes live only on branch
+Independent review of PressureQC. Software fixes live only on branch
 `review/sentinel` (pushed to `origin`; same history as the local working branch
 `sentinel/audit-2026-10`) until the user decides on integration. Nothing here
 applies a calibration gain, edits a master, response, waveform or saved result,
@@ -24,8 +24,8 @@ see `docs/sentinel/HANDOFF_SOCRATES.md`.
 | Item | Value |
 |---|---|
 | Reviewed baseline | `faa39ff` (local `main` = `origin/main`, clean tree, last five GitHub Checks passed) |
-| Sentinel checkout | `/Users/mohammadamin/Projects/bruit-fm-sentinel`, separate clone, branch `sentinel/audit-2026-10` |
-| Environment | `.venv` in the Sentinel clone, built from the conda `bruitfm` Python 3.13.15 and pinned to the shared env's versions (ObsPy 1.5.1, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.6, TiSKitPy 2.3.1, disba 0.7.0, Numba 0.68.0, pytest 9.1.1, Ruff 0.16.9). The shared env is untouched; it imports `bruitfm` from Codex's checkout, so it was not used for tests. |
+| Sentinel checkout | `/Users/mohammadamin/Projects/pressure-qc-sentinel`, separate clone, branch `sentinel/audit-2026-10` |
+| Environment | `.venv` in the Sentinel clone, built from the conda `compy_pressure` Python 3.13.15 and pinned to the shared env's versions (ObsPy 1.5.1, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.6, TiSKitPy 2.3.1, disba 0.7.0, Numba 0.68.0, pytest 9.1.1, Ruff 0.16.9). The shared env is untouched; it imports `compy_pressure` from Codex's checkout, so it was not used for tests. |
 | Baseline checks | 130 passed; Ruff check/format and `bash -n scripts/run_yl_all.sh` passed. Tests ran with `HOME` redirected to a scratch folder; production master stats were unchanged afterwards. |
 | Upstream during review | `main` advanced to `4387fbe` (Codex: read-only C07W/C08W/C09W matched-event viewer; no core changes). `git merge-tree` of this branch onto it is conflict-free; the merged tree passes 138 tests and Ruff check/format (68 files). |
 | Current branch checks | 141 passed (about 43 s); Ruff check/format passed. Trial merge of `63ef818` onto `origin/main` `4387fbe`: conflict-free, merged tree passes 141 tests and Ruff check/format (69 files). |
@@ -38,7 +38,7 @@ see `docs/sentinel/HANDOFF_SOCRATES.md`.
 
 | Area | Depth |
 |---|---|
-| All 15 modules in `src/bruitfm/` | Full (second pass completed `network.py`, `pressure_test.py`, `infragravity_test.py`, `godin_pilot.py`, `nearby_test.py`, `plot_ppsd.py`) |
+| All 15 modules in `compy_pressure/` | Full (second pass completed `network.py`, `pressure_test.py`, `infragravity_test.py`, `godin_pilot.py`, `nearby_test.py`, `plot_ppsd.py`) |
 | All 6 scripts in `scripts/` | Full |
 | All 15 test modules | Full; each checked for whether its expected values are independent of the code under test |
 | Package data (`__init__.py`, all 5 `reference_data/` files) | Full. All 17 Brown rows recomputed from their stored pixel coordinates and axis mapping (max error 5e-11 dB, including the −120 dB conversion). RR52 layer and dispersion files match their provenance SHA-256. disba 0.7.0 regenerates the table from the layers exactly (phase) and to 1.5e-11 m/s (group). The Webb points and the Brown source raster cannot be checked against primary sources here. |
@@ -137,7 +137,7 @@ Severity and confidence are assessed separately.
 ### SENT-002: a gain-grid boundary discarded the event's spectra and its QC outcome
 
 - **Category / severity / confidence:** Confirmed defect / Medium / Confirmed.
-- **Location:** `run_calibration`, `src/bruitfm/rayleigh_calibration.py` (event fit block).
+- **Location:** `run_calibration`, `compy_pressure/rayleigh_calibration.py` (event fit block).
 - **Problem:** for a coherent event, `fit_multiplier` raising "Grid minimum lies on a boundary" escaped to the outer handler. As a result:
   - The spectra NPZ/CSV, comparison and waveform plots and grid CSV were never written.
   - An event that had already failed the phase guard (`polarity_review`) was relabelled `unresolved` with the boundary reason. The binding QC reason was hidden.
@@ -157,7 +157,7 @@ Severity and confidence are assessed separately.
 ### SENT-003: tilt correction hard-coded `.BH1`/`.BH2` horizontals
 
 - **Category / severity / confidence:** Confirmed defect / Low / Confirmed.
-- **Location:** `select_calibration_channels`, `src/bruitfm/rayleigh_calibration.py`.
+- **Location:** `select_calibration_channels`, `compy_pressure/rayleigh_calibration.py`.
 - **Problem:** with `tiskitpy` or `local_eigen` tilt correction, any station whose horizontals use another band code (YL: LH1/LH2; HH*) failed with "Expected one overlapping .BH1 epoch". The vertical and pressure are found by units, but the horizontals were found by channel letters.
 - **Evidence:** new test `test_tilt_horizontals_follow_the_paired_vertical_band` (LDH/LH1/LH2/LHZ) failed at baseline with exactly that error. After the fix TiSKitPy recovers g = 0.67.
 - **Impact:** no saved result (the YL runs used `none`). Future YL tilt runs would still need horizontal PPSD snapshots.
@@ -283,7 +283,7 @@ Severity and confidence are assessed separately.
 ### SENT-013: the full inventory export overwrote an existing master without a backup
 
 - **Category / severity / confidence:** Confirmed defect (data preservation) / High / Confirmed.
-- **Location:** `save_master_dataset` and `python -m bruitfm.inventory`, `src/bruitfm/inventory.py`.
+- **Location:** `save_master_dataset` and `python -m compy_pressure.inventory`, `compy_pressure/inventory.py`.
 - **Problem:** the module CLI defaults `--output-dir` to the repository's `exports/`, the production master location. `save_master_dataset` wrote `master_inventory.csv/.xlsx` unconditionally, so one run replaced the master with a freshly built table. All processing results, manual scores and extra sheets were lost, with no backup (`exports/` is not in Git). `load_master_dataset`'s error message even suggests "rebuild it with inventory.py".
 - **Evidence:** new test `test_full_export_refuses_to_replace_an_existing_master` (both files present; CSV only) failed at baseline: the scored master was replaced.
 - **Correction:** commit `04350d5`. Both entry points raise `FileExistsError` when either file exists and name `network inventory` (which appends and keeps every cell). New exports into new folders, and `synchronize_inventory`'s first creation, are unchanged. README note added.
@@ -293,7 +293,7 @@ Severity and confidence are assessed separately.
 ### SENT-014: concurrent batches could silently drop each other's master fields
 
 - **Category / severity / confidence:** Confirmed defect (reliability) / Medium / Confirmed.
-- **Location:** `_update_master_results` and `synchronize_inventory`, `src/bruitfm/inventory.py`.
+- **Location:** `_update_master_results` and `synchronize_inventory`, `compy_pressure/inventory.py`.
 - **Problem:** every master update reads both files, patches them and replaces them. Nothing serialized writers across processes; the only lock is per Rayleigh workflow folder, and `ensure_master_idle`/`assert_workflows_finished` are, as their docstrings say, not locks. Two batches sharing one master (YL and YV in two terminals, or a diagnostic stage beside a Rayleigh run) could both read, and the later commit erased the earlier one's fields. The docs do not warn against concurrent runs.
 - **Evidence:** two real processes on the previous code, the first slowed inside its commit: the second process's committed `rayleigh_status` column was absent afterwards. Same scenario with the fix: the second process printed "Waiting for another master update to finish", and both `ppsd_status` and `rayleigh_status` survived. New test `test_master_update_waits_for_another_writer` holds the lock and checks the update waits (fails at baseline).
 - **Correction:** commit `63ef818`. An exclusive `fcntl.flock` on `.master_inventory.lock` in the master folder is held from read to replace. A waiting writer prints a message, then proceeds. No field, selection or value changes.
@@ -339,7 +339,7 @@ Based on `faa39ff`; in order:
 | `63ef818` | SENT-014 fix and regression test (141 pass) |
 | (this commit) | Software-engineering pass, SENT-013–015, Socrates handoff |
 
-**Integration caveat:** any change to `src/bruitfm/*.py` changes the code digests in network and Rayleigh fingerprints. The next network invocation therefore recomputes rather than reuses saved stages. Use the viewers for existing results.
+**Integration caveat:** any change to `compy_pressure/*.py` changes the code digests in network and Rayleigh fingerprints. The next network invocation therefore recomputes rather than reuses saved stages. Use the viewers for existing results.
 
 ## 5. Codex-ready tasks
 

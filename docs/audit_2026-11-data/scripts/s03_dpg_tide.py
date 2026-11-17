@@ -36,7 +36,7 @@ EOT20 = Path(
     os.environ.get(
         "EOT20_DIR",
         Path.home()
-        / "Desktop/BRUIT-FM/ComPy-pressure-atlas/pressure_atlas/cache/eot20",
+        / "Desktop/ComPy/code/ComPy-pressure-atlas/pressure_atlas/cache/eot20",
     )
 )
 LEAK_HZ = 0.05

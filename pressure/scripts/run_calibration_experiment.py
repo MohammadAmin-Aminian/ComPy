@@ -535,7 +535,7 @@ def main():
         help="Every station in the selected preserved workflow(s)",
     )
     parser.add_argument(
-        "--data-root", type=Path, default=Path.home() / "Desktop/Data_Bruit_FM/Data"
+        "--data-root", type=Path, default=Path.home() / "Desktop/ComPy/data/Data"
     )
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--dry-run", action="store_true")

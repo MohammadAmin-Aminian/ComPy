@@ -24,9 +24,9 @@ done
 cd "$ROOT"
 OUT="${OUT:-$ROOT/results/REVIEWS/SIX_CHECKS/run_$(date -u +%Y%m%dT%H%M%SZ)_$RANDOM}"
 if command -v conda >/dev/null; then
-  PY=(conda run --no-capture-output -n bruitfm python)
+  PY=(conda run --no-capture-output -n compy python)
 else
-  PY=(/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python)
+  PY=(/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python)
 fi
 export PYTHONPATH="$ROOT/..:$ROOT"
 ARGS=(--sources "$SOURCES" --output-dir "$OUT")

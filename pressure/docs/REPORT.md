@@ -1,10 +1,10 @@
-# BRUIT-FM v1.2.0: results of the all-network campaign
+# PressureQC v1.2.0: results of the all-network campaign
 
 **Ocean-bottom pressure-gauge noise, quality control and calibration across 30 networks**
 
 Mohammad-Amin Aminian · Institut de Physique du Globe de Paris (IPGP) · October 2026
 
-> **Status.** All numbers are outputs of BRUIT-FM v1.2.0 with *provisional*
+> **Status.** All numbers are outputs of PressureQC v1.2.0 with *provisional*
 > thresholds. No gain or response correction has been applied to any data. The
 > thresholds, metadata corrections and station acceptance still need to be
 > agreed before the results are used to build noise models.
@@ -340,11 +340,11 @@ noise notch.
 **Tilt correction** was tested on two pilot stations (YV.RR52 and 2A.28) and then
 not run network-wide, by decision of the project owner. At RR52, ComPy cleaning
 in 6-hour windows removes about 14 dB of vertical noise at 2–10 mHz. The method
-is available as `bruitfm-tilt`.
+is available as `compy_pressure-tilt`.
 
 The full calibration report, with every figure, is in
 [`reports/2026-10-28_seismic_calibration/`](https://github.com/MohammadAmin-Aminian/bruit-fm/tree/v1.3.0/docs/reports/2026-10-28_seismic_calibration)
-([PDF](https://github.com/MohammadAmin-Aminian/bruit-fm/blob/v1.3.0/docs/reports/2026-10-28_seismic_calibration/report/BRUIT-FM_seismic_calibration_report.pdf)).
+([PDF](https://github.com/MohammadAmin-Aminian/bruit-fm/blob/v1.3.0/docs/reports/2026-10-28_seismic_calibration/report/PressureQC_seismic_calibration_report.pdf)).
 The completed table, with one row per pressure epoch and every score and
 metric, is
 [`table/pressure_qc_calibration_table.csv`](https://github.com/MohammadAmin-Aminian/bruit-fm/blob/v1.3.0/docs/reports/2026-10-28_seismic_calibration/table/pressure_qc_calibration_table.csv).
@@ -467,7 +467,7 @@ so local P is used as a diagnostic.*
 
 The full J38A report, with every figure, is in
 [`reports/2026-10-26_j38a_report/`](https://github.com/MohammadAmin-Aminian/bruit-fm/tree/v1.3.0/docs/reports/2026-10-26_j38a_report)
-([PDF](https://github.com/MohammadAmin-Aminian/bruit-fm/blob/v1.3.0/docs/reports/2026-10-26_j38a_report/BRUIT-FM_pressure_QC_report_2026-10-26.pdf)).
+([PDF](https://github.com/MohammadAmin-Aminian/bruit-fm/blob/v1.3.0/docs/reports/2026-10-26_j38a_report/PressureQC_pressure_QC_report_2026-10-26.pdf)).
 The RR40 example comes from the
 [YV pilot report](https://github.com/MohammadAmin-Aminian/bruit-fm/tree/v1.3.0/docs/reports/2026-10-26_yv_pilot).
 
@@ -479,7 +479,7 @@ stations and 1.44 million three-hour windows. It is **provisional**: the station
 list comes from the provisional policy of §9, not from an agreed acceptance, and
 the same command reruns once the stations are approved.
 
-**Method** (`bruitfm-group-noise-model`):
+**Method** (`compy_pressure-group-noise-model`):
 
 1. Keep one channel per station and sensor type, the one with the widest usable
    band.
@@ -706,7 +706,7 @@ the accepted band and time range, and the metadata offset, is
 
 ## 11. Reproducing these results
 
-The commands in the [README](../BRUITFM_README.md#quick-start) reproduce every stage.
+The commands in the [README](../HISTORY_README.md#quick-start) reproduce every stage.
 The dated reports in [`docs/reports/`](reports/) contain the exact scripts and
 logs of each run:
 

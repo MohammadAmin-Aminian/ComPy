@@ -75,13 +75,13 @@ Stage E spawns processes. Run it from these scripts, not from stdin.
 - `DEGLITCH`: on for instruments with a periodic transient (e.g. the hourly
   mass-position glitch of the INSU-IPGP BBOBS). The fold strength in
   `clean/deglitch.json` shows whether one is present.
-- **Gain source.** Stage E inverts the ComPy Rayleigh gain where it exists. Otherwise it uses the BRUIT-FM gain with a wider prior (±15 %).
+- **Gain source.** Stage E inverts the ComPy Rayleigh gain where it exists. Otherwise it uses the PressureQC gain with a wider prior (±15 %).
 - **Stage D settings** (`CALIBRATION_BAND`, `CALIBRATION_TILT`, `CALIBRATION_DISPERSION`):
   - `CALIBRATION_TILT = "tiskitpy"` removes tilt noise from the vertical but
     needs horizontals with valid StationXML orientations;
   - `"none"` uses pressure and vertical only, which XE needs (its BH1 and BH2
     have a dip of −90°);
-  - the default dispersion is RR52's, BRUIT-FM's default for every network.
+  - the default dispersion is RR52's, PressureQC's default for every network.
 
   After ComPy 2.4.0, stage D is no longer `Pressure_calibration`'s method,
   so gains of new runs can differ from those of 2.4 runs.

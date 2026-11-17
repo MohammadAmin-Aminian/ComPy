@@ -41,11 +41,11 @@ def station_record(s, c):
     if not summ:
         rec["status"] = "no compliance (stage B: no usable segments)"
         return rec
-    rec["gain_bruitfm"] = summ.get("gains", {}).get("bruitfm")
+    rec["gain_pressure"] = summ.get("gains", {}).get("pressure")
     label = next(
         (
             lab
-            for lab in ("compy", "bruitfm", "nominal")
+            for lab in ("compy", "pressure", "nominal")
             if "n_windows" in summ["results"].get(lab, {})
         ),
         None,

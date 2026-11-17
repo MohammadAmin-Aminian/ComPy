@@ -16,7 +16,7 @@ ARCHIVE = Path.home() / "Desktop/ComPy"
 CACHE = ARCHIVE / "13_audit/spectra_cache"
 STAGE_C = ARCHIVE / "06_compliance_wide"
 PLAN = ARCHIVE / "12_inversion_all_stations/tables/station_plan.csv"
-CRUST1 = Path.home() / "Desktop/BRUIT-FM/compliance_yv_2026-10-28/literature/crust1"
+CRUST1 = Path.home() / "Desktop/ComPy/runs/compliance_yv_2026-10-28/literature/crust1"
 OUT = ARCHIVE / "14_inversion_overhaul"
 
 

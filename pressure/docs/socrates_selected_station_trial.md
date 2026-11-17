@@ -7,8 +7,8 @@ trial; use its [saved comparison](socrates_all_station_comparison.md) for review
 The commands below reproduce optional experiments in new result folders.
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src conda run --no-capture-output -n bruitfm python \
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network both --open-plots
 ```
 
@@ -23,17 +23,17 @@ guards. No PPSD preparation is necessary.
 For one network only:
 
 ```bash
-PYTHONPATH=src conda run --no-capture-output -n bruitfm python \
+PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network YV --stations RR03 RR22 RR52
-PYTHONPATH=src conda run --no-capture-output -n bruitfm python \
+PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network YL --stations A02W B01W C07W C08W
 ```
 
 ## All previously tested stations
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src conda run --no-capture-output -n bruitfm python \
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network all --all-stations --open-plots
 ```
 

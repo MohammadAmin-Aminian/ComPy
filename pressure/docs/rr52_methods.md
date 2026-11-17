@@ -229,19 +229,19 @@ pending, so these results constitute a processing pilot.
 ## Reproduce the workflow
 
 Use Python 3.13 or newer and install the project with `pip install -e '.[dev]'`.
-On the current machine, the working conda environment is named `bruitfm`.
+On the current machine, the working conda environment is named `compy_pressure`.
 
 ```bash
 # Create a master inventory for a new run; keep existing scored exports separate.
-python -m bruitfm.inventory \
-  --inventory-dir /path/to/Data_Bruit_FM/INVENTORIES --output-dir exports
+python -m compy_pressure.inventory \
+  --inventory-dir /path/to/data/INVENTORIES --output-dir exports
 
 # Calculate the default full-band product.
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m bruitfm.ppsd \
-  --data-dir /path/to/Data_Bruit_FM/RR52 --workers 4
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m compy_pressure.ppsd \
+  --data-dir /path/to/data/RR52 --workers 4
 
 # Generate the twelve figures from saved spectra without opening GUI windows.
-python -m bruitfm.plot_ppsd --no-show
+python -m compy_pressure.plot_ppsd --no-show
 
 # Run automated checks.
 python -m pytest

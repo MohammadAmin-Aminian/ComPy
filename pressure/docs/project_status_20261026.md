@@ -1,4 +1,4 @@
-# BRUIT-FM project status, 26 October 2026
+# PressureQC project status, 26 October 2026
 
 Continuation guide after the move to the new computer and the first pressure
 PPSD run over the whole data drive. It extends
@@ -11,8 +11,8 @@ correction.
 * Apple M5 Pro, 15 CPU cores, 48 GB. User account `mohammad-amin` (the old one
   was `mohammadamin`), so saved products from the old computer, which record
   absolute paths, were **not** reused. Everything was recomputed.
-* Code: `~/Desktop/BRUIT-FM/bruit-fm`; environment: Homebrew Miniforge,
-  conda env `bruitfm` (Python 3.13); `conda init zsh` done.
+* Code: `~/Desktop/ComPy/code/pressure-qc-v1.3`; environment: Homebrew Miniforge,
+  conda env `compy` (Python 3.13); `conda init zsh` done.
 * Data: USB drive `/Volumes/DATA_bruitfm` (18 TB, spinning disk), with
   `INVENTORIES/` (182 StationXML files, 29 networks) and `SDS/<year>/<net>/...`
   for 2001–2026 (about 14.5 TB). The Claude Code binary needed its own Full Disk
@@ -20,7 +20,7 @@ correction.
 
 ## Run of 23–24 October (pressure channels only)
 
-Outputs: `~/Desktop/BRUIT-FM/fresh_run_2026-10-23/` (see its `README.md` and
+Outputs: `~/Desktop/ComPy/pressure_qc/fresh_run_2026-10-23/` (see its `README.md` and
 `report/`). Settings unchanged: 3 h windows, 50% overlap, 0.001 Hz to Nyquist,
 histogram −250 to 100 dB, gaps skipped, full response removed on the PSD.
 
@@ -84,7 +84,7 @@ applied; the operator should confirm.
 
 * **Constant-data windows**: 135 channels contain 3 h windows whose PSD is
   below the −250 dB floor in every bin (zero power, about −3077 dB): dead or
-  zero-filled data. `bruitfm.screening` flags them; plots now show them as gaps
+  zero-filled data. `compy_pressure.screening` flags them; plots now show them as gaps
   and scale to real data, and report medians leave them out. The saved PPSDs
   keep every window. The QC stages do not screen yet; deciding to do so is part
   of the QC step.

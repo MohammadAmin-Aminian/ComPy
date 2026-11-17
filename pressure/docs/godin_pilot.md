@@ -51,19 +51,19 @@ selected response is checked numerically against the saved PPSD snapshot.
 From the project directory, calculate, save and display the pilot:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.godin_pilot
+conda run --no-capture-output -n compy python -m compy_pressure.godin_pilot
 ```
 
 To open the already saved three plots without computing again:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.godin_pilot --plot-only
+conda run --no-capture-output -n compy python -m compy_pressure.godin_pilot --plot-only
 ```
 
 For background processing add `--no-show`. Use `--no-update-master` to leave
 the master files unchanged. Use `--help` for interval, depth and sensor-band
-options. In VS Code, select the `bruitfm` interpreter and run
-`src/bruitfm/godin_pilot.py` to calculate and display the pilot.
+options. In VS Code, select the `compy_pressure` interpreter and run
+`compy_pressure/godin_pilot.py` to calculate and display the pilot.
 
 ## Results and figures
 

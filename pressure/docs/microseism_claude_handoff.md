@@ -18,7 +18,7 @@ score, response, raw file or saved product was changed.
 
 **Code.**
 
-* `src/bruitfm/microseism_check.py`;
+* `compy_pressure/microseism_check.py`;
 * `scripts/run_microseism_check.py` (runner; `--base-run/--shift-weeks`);
 * `scripts/compare_microseism_methods.py` (four columns; `--combine`);
 * `scripts/combine_microseism_weeks.py`;
@@ -27,7 +27,7 @@ score, response, raw file or saved product was changed.
   `tests/test_microseism_weeks.py` (215 pass).
 
 **Local results.** These are gitignored and live in the Claude worktree only:
-`~/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_ALL/`.
+`~/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_ALL/`.
 
 | Network | Base run (week 0) | Shifted weeks done |
 | --- | --- | --- |
@@ -37,7 +37,7 @@ score, response, raw file or saved product was changed.
 | XO | `run_20261014T183418Z_736f654a` | none |
 
 **Inputs.** The runner always reads masters and waveforms from
-`~/Projects/bruit-fm` (`MAIN` in the runner), whichever checkout runs it. It
+`~/Projects/pressure-qc` (`MAIN` in the runner), whichever checkout runs it. It
 hashes the masters before and after.
 
 **Outputs.** Shifted runs are written beside their base run by default, which
@@ -51,9 +51,9 @@ folders under the path above. Nothing tracked changes.
 Run from any checkout of this branch:
 
 ```bash
-bash scripts/run_microseism_weeks.sh ~/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_ALL/run_20261014T183418Z_736f654a -8 -4 4 8
-bash scripts/run_microseism_weeks.sh ~/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_ALL/run_20261014T183456Z_61c4966a -2 -1 1 2
-bash scripts/run_microseism_weeks.sh ~/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_ALL/run_20261014T183508Z_1f096dca
+bash scripts/run_microseism_weeks.sh ~/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_ALL/run_20261014T183418Z_736f654a -8 -4 4 8
+bash scripts/run_microseism_weeks.sh ~/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_ALL/run_20261014T183456Z_61c4966a -2 -1 1 2
+bash scripts/run_microseism_weeks.sh ~/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_ALL/run_20261014T183508Z_1f096dca
 ```
 
 The shifts differ by network because the data coverage differs:
@@ -104,7 +104,7 @@ Implement this in `combine_microseism_weeks.py`, keeping the current output
 for comparison, and add tests. Then run:
 
 ```bash
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python scripts/combine_microseism_weeks.py <YV base> <YL base> <7D base> <XO base> --docs docs
+PYTHONPATH=src:. conda run --no-capture-output -n compy python scripts/combine_microseism_weeks.py <YV base> <YL base> <7D base> <XO base> --docs docs
 ```
 
 Update `microseism_all_networks.md` with the result. The 35-station
@@ -135,8 +135,8 @@ single-week gain set there is already marked superseded.
   saved results.** Do not rerun completed calibration batches.
 * **Import path.** pytest now imports the checkout's own `src`
   (`pyproject.toml`: `pythonpath`). Scripts still need `PYTHONPATH=src:.`
-  (the wrappers set it). The `bruitfm` conda env otherwise imports
-  `~/Projects/bruit-fm/src`.
+  (the wrappers set it). The `compy_pressure` conda env otherwise imports
+  `~/Projects/pressure-qc/src`.
 * **Hidden failures.** Do not pipe runs into `| tail` without `pipefail`; it
   hid a failed regeneration once.
 * **Codex's own diagnostic.** `run_diagnostic` refuses an existing output

@@ -17,7 +17,7 @@ import numpy as np
 import compy.inversion.dram as ci
 
 OLD = Path.home() / "Desktop/ComPy/12_inversion_all_stations/YV/results/RR52/inversion"
-CRUST1 = Path.home() / "Desktop/BRUIT-FM/compliance_yv_2026-10-28/literature/crust1"
+CRUST1 = Path.home() / "Desktop/ComPy/runs/compliance_yv_2026-10-28/literature/crust1"
 
 
 def main():

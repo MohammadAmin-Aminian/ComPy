@@ -6,50 +6,50 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
 fi
 set -Eeuo pipefail
 
-BRUIT_MAIN="$(cd "$(dirname "$0")/.." && pwd)"
-BRUIT_METHODS="${BRUIT_MICROSEISM_CHECKOUT:-${BRUIT_CLAUDE_CHECKOUT:-$BRUIT_MAIN}}"
-BRUIT_STAGE=preflight
-BRUIT_SESSION=
-trap 'BRUIT_STATUS=$?; printf "\nStopped during %s (exit %s, line %s).\nYour terminal remains open. Results/logs: %s\n" "$BRUIT_STAGE" "$BRUIT_STATUS" "$LINENO" "${BRUIT_SESSION:-not started}" >&2; exit "$BRUIT_STATUS"' ERR
+PRESSURE_MAIN="$(cd "$(dirname "$0")/.." && pwd)"
+PRESSURE_METHODS="${PRESSURE_MICROSEISM_CHECKOUT:-${PRESSURE_CLAUDE_CHECKOUT:-$PRESSURE_MAIN}}"
+PRESSURE_STAGE=preflight
+PRESSURE_SESSION=
+trap 'PRESSURE_STATUS=$?; printf "\nStopped during %s (exit %s, line %s).\nYour terminal remains open. Results/logs: %s\n" "$PRESSURE_STAGE" "$PRESSURE_STATUS" "$LINENO" "${PRESSURE_SESSION:-not started}" >&2; exit "$PRESSURE_STATUS"' ERR
 
-BRUIT_CHECK_ONLY=0
-BRUIT_RERUN_RAYLEIGH=0
-BRUIT_RAYLEIGH=
+PRESSURE_CHECK_ONLY=0
+PRESSURE_RERUN_RAYLEIGH=0
+PRESSURE_RAYLEIGH=
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --check) BRUIT_CHECK_ONLY=1; shift ;;
-    --rerun-rayleigh) BRUIT_RERUN_RAYLEIGH=1; shift ;;
+    --check) PRESSURE_CHECK_ONLY=1; shift ;;
+    --rerun-rayleigh) PRESSURE_RERUN_RAYLEIGH=1; shift ;;
     --rayleigh-run)
       [[ $# -ge 2 ]] || { printf '%s needs a directory\n' "$1" >&2; exit 2; }
-      BRUIT_RAYLEIGH="$2"; shift 2 ;;
+      PRESSURE_RAYLEIGH="$2"; shift 2 ;;
     *) printf 'Usage: bash %s [--check] [--rayleigh-run DIR | --rerun-rayleigh]\n' "$0" >&2; exit 2 ;;
   esac
 done
-if [[ -n "$BRUIT_RAYLEIGH" && "$BRUIT_RERUN_RAYLEIGH" -eq 1 ]]; then
+if [[ -n "$PRESSURE_RAYLEIGH" && "$PRESSURE_RERUN_RAYLEIGH" -eq 1 ]]; then
   printf 'Choose --rayleigh-run or --rerun-rayleigh.\n' >&2
   exit 2
 fi
 
-for BRUIT_FILE in \
-  "$BRUIT_MAIN/scripts/run_calibration_experiment.py" \
-  "$BRUIT_METHODS/scripts/run_microseism_check_all.sh" \
-  "$BRUIT_METHODS/scripts/compare_microseism_methods.py"; do
-  if [[ ! -f "$BRUIT_FILE" ]]; then
-    printf 'Required file missing: %s\n' "$BRUIT_FILE" >&2
+for PRESSURE_FILE in \
+  "$PRESSURE_MAIN/scripts/run_calibration_experiment.py" \
+  "$PRESSURE_METHODS/scripts/run_microseism_check_all.sh" \
+  "$PRESSURE_METHODS/scripts/compare_microseism_methods.py"; do
+  if [[ ! -f "$PRESSURE_FILE" ]]; then
+    printf 'Required file missing: %s\n' "$PRESSURE_FILE" >&2
     exit 2
   fi
 done
 
 if command -v conda >/dev/null; then
-  BRUIT_PY=(conda run --no-capture-output -n bruitfm python)
+  PRESSURE_PY=(conda run --no-capture-output -n compy python)
 else
-  BRUIT_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python)
+  PRESSURE_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python)
 fi
-PYTHONPATH="$BRUIT_METHODS/..:$BRUIT_METHODS" "${BRUIT_PY[@]}" -c \
+PYTHONPATH="$PRESSURE_METHODS/..:$PRESSURE_METHODS" "${PRESSURE_PY[@]}" -c \
   'import compy_pressure.microseism_check, compy_pressure.microseism_diagnostic, scripts.run_microseism_check; import disba; print("Method imports: OK")'
 
-if [[ -z "$BRUIT_RAYLEIGH" && "$BRUIT_RERUN_RAYLEIGH" -eq 0 ]]; then
-  BRUIT_RAYLEIGH="$("${BRUIT_PY[@]}" - "$BRUIT_MAIN" <<'PY'
+if [[ -z "$PRESSURE_RAYLEIGH" && "$PRESSURE_RERUN_RAYLEIGH" -eq 0 ]]; then
+  PRESSURE_RAYLEIGH="$("${PRESSURE_PY[@]}" - "$PRESSURE_MAIN" <<'PY'
 import hashlib
 import json
 import sys
@@ -63,41 +63,41 @@ print(source.parent)
 PY
 )"
 fi
-if [[ "$BRUIT_RERUN_RAYLEIGH" -eq 0 ]]; then
-  test -f "$BRUIT_RAYLEIGH/experiment.json"
-  test -f "$BRUIT_RAYLEIGH/comparison.csv"
-  printf 'Reusing saved Rayleigh results: %s\n' "$BRUIT_RAYLEIGH"
+if [[ "$PRESSURE_RERUN_RAYLEIGH" -eq 0 ]]; then
+  test -f "$PRESSURE_RAYLEIGH/experiment.json"
+  test -f "$PRESSURE_RAYLEIGH/comparison.csv"
+  printf 'Reusing saved Rayleigh results: %s\n' "$PRESSURE_RAYLEIGH"
 fi
 
-if [[ "$BRUIT_CHECK_ONLY" -eq 1 ]]; then
+if [[ "$PRESSURE_CHECK_ONLY" -eq 1 ]]; then
   printf 'Preflight passed. No analysis was run.\n'
   exit 0
 fi
 
-BRUIT_STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
-BRUIT_SESSION="$BRUIT_MAIN/results/EXPERIMENTS/THREE_METHODS/run_${BRUIT_STAMP}_$$"
-mkdir -p "$(dirname "$BRUIT_SESSION")"
-mkdir "$BRUIT_SESSION"
+PRESSURE_STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+PRESSURE_SESSION="$PRESSURE_MAIN/results/EXPERIMENTS/THREE_METHODS/run_${PRESSURE_STAMP}_$$"
+mkdir -p "$(dirname "$PRESSURE_SESSION")"
+mkdir "$PRESSURE_SESSION"
 printf 'Session: %s\nMain commit: %s\nMicroseism code commit: %s\n' \
-  "$BRUIT_SESSION" \
-  "$(git -C "$BRUIT_MAIN" rev-parse --short HEAD)" \
-  "$(git -C "$BRUIT_METHODS" rev-parse --short HEAD)" \
-  | tee "$BRUIT_SESSION/session.log"
+  "$PRESSURE_SESSION" \
+  "$(git -C "$PRESSURE_MAIN" rev-parse --short HEAD)" \
+  "$(git -C "$PRESSURE_METHODS" rev-parse --short HEAD)" \
+  | tee "$PRESSURE_SESSION/session.log"
 
-BRUIT_STAGE=Rayleigh
-if [[ "$BRUIT_RERUN_RAYLEIGH" -eq 1 ]]; then
-  BRUIT_RAYLEIGH="$BRUIT_SESSION/rayleigh"
-  PYTHONPATH="$BRUIT_MAIN/..:$BRUIT_MAIN" "${BRUIT_PY[@]}" \
-    "$BRUIT_MAIN/scripts/run_calibration_experiment.py" \
-    --network all --all-stations --output-dir "$BRUIT_RAYLEIGH" \
-    2>&1 | tee "$BRUIT_SESSION/rayleigh.log"
+PRESSURE_STAGE=Rayleigh
+if [[ "$PRESSURE_RERUN_RAYLEIGH" -eq 1 ]]; then
+  PRESSURE_RAYLEIGH="$PRESSURE_SESSION/rayleigh"
+  PYTHONPATH="$PRESSURE_MAIN/..:$PRESSURE_MAIN" "${PRESSURE_PY[@]}" \
+    "$PRESSURE_MAIN/scripts/run_calibration_experiment.py" \
+    --network all --all-stations --output-dir "$PRESSURE_RAYLEIGH" \
+    2>&1 | tee "$PRESSURE_SESSION/rayleigh.log"
 else
-  printf 'Reused: %s\n' "$BRUIT_RAYLEIGH" | tee "$BRUIT_SESSION/rayleigh.log"
+  printf 'Reused: %s\n' "$PRESSURE_RAYLEIGH" | tee "$PRESSURE_SESSION/rayleigh.log"
 fi
 
-BRUIT_STAGE=Rayleigh-comparison-table
-"${BRUIT_PY[@]}" - "$BRUIT_RAYLEIGH" "$BRUIT_SESSION/gain_table.csv" <<'PY' \
-  2>&1 | tee "$BRUIT_SESSION/gain_table.log"
+PRESSURE_STAGE=Rayleigh-comparison-table
+"${PRESSURE_PY[@]}" - "$PRESSURE_RAYLEIGH" "$PRESSURE_SESSION/gain_table.csv" <<'PY' \
+  2>&1 | tee "$PRESSURE_SESSION/gain_table.log"
 import csv
 import sys
 from pathlib import Path
@@ -142,14 +142,14 @@ with destination.open("x", newline="") as stream:
 print(f"Rayleigh comparison table: {destination}")
 PY
 
-BRUIT_STAGE=microseism-methods
-bash "$BRUIT_METHODS/scripts/run_microseism_check_all.sh" \
-  --gain-table "$BRUIT_SESSION/gain_table.csv" \
-  --output-root "$BRUIT_SESSION/microseism" \
-  2>&1 | tee "$BRUIT_SESSION/microseism.log"
+PRESSURE_STAGE=microseism-methods
+bash "$PRESSURE_METHODS/scripts/run_microseism_check_all.sh" \
+  --gain-table "$PRESSURE_SESSION/gain_table.csv" \
+  --output-root "$PRESSURE_SESSION/microseism" \
+  2>&1 | tee "$PRESSURE_SESSION/microseism.log"
 
-BRUIT_MICRO="$(sed -n 's/^Run folder: //p' "$BRUIT_SESSION/microseism.log" | tail -n 1)"
-test -n "$BRUIT_MICRO"
-test -f "$BRUIT_MICRO/method_comparison.csv"
+PRESSURE_MICRO="$(sed -n 's/^Run folder: //p' "$PRESSURE_SESSION/microseism.log" | tail -n 1)"
+test -n "$PRESSURE_MICRO"
+test -f "$PRESSURE_MICRO/method_comparison.csv"
 printf '\nFinished.\nRayleigh: %s\nComparison: %s\nLogs: %s\n' \
-  "$BRUIT_RAYLEIGH" "$BRUIT_MICRO/method_comparison.csv" "$BRUIT_SESSION"
+  "$PRESSURE_RAYLEIGH" "$PRESSURE_MICRO/method_comparison.csv" "$PRESSURE_SESSION"

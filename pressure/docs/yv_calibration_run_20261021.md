@@ -10,7 +10,7 @@ stays g = 0.6787278140712512.**
 ## Update 22 October: clean reproduction (confirmed)
 
 * The owner's uncommitted edit was saved as
-  `~/Projects/bruit-fm-uncommitted-rayleigh-guard-removal-20261021.patch`
+  `~/Projects/pressure-qc-uncommitted-rayleigh-guard-removal-20261021.patch`
   (SHA-256 `9bcd9007…`; re-applies cleanly). The committed file was then
   restored. The edit is preserved, not discarded.
 * Session `results/EXPERIMENTS/YV_ALL_METHODS/run_20261022T082359Z`: code
@@ -57,7 +57,7 @@ stays g = 0.6787278140712512.**
     16 October.
   * Two events changed outcome; the cause is not established (see below).
 * **Code provenance problem.** An uncommitted edit to
-  `src/bruitfm/rayleigh_calibration.py` appeared in the main checkout at
+  `compy_pressure/rayleigh_calibration.py` appeared in the main checkout at
   **12:33:58 UTC, during the run**. The microseism and local-P stages
   **executed the edited code**.
 
@@ -78,7 +78,7 @@ stays g = 0.6787278140712512.**
   This recorded hash does not prove what code ran.
 * **Microseism** (started 12:52) and **local P** (started about 13:00): new
   processes that executed the edited code. Both import
-  `bruitfm.rayleigh_calibration`.
+  `compy_pressure.rayleigh_calibration`.
 
 ## 2. Rayleigh: all events versus the frozen bounded selection
 
@@ -216,7 +216,7 @@ stays g = 0.6787278140712512.**
 | Session logs | `results/EXPERIMENTS/YV_ALL_METHODS/run_20261021T122108Z/` |
 | Rayleigh all-events workflow | `results/NETWORKS/YV_RAYLEIGH_NO_TILT_20261021T122108Z/_workflow/rayleigh.json` |
 | Frozen Rayleigh workflow | `results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json` |
-| Microseism today / 14 Oct | `results/EXPERIMENTS/MICROSEISM_YV/run_20261021T125204Z_b2a2ad63/`; `~/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/` |
-| Local P today / frozen | `results/LOCAL_P/campaigns/yv_20261021T122108Z/`; `~/Projects/bruit-fm-localp-review/results/LOCAL_P/campaigns/user_all_20261016T120124Z_17172/` |
+| Microseism today / 14 Oct | `results/EXPERIMENTS/MICROSEISM_YV/run_20261021T125204Z_b2a2ad63/`; `~/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23/` |
+| Local P today / frozen | `results/LOCAL_P/campaigns/yv_20261021T122108Z/`; `~/Projects/pressure-qc-localp-review/results/LOCAL_P/campaigns/user_all_20261016T120124Z_17172/` |
 
 All comparisons above were read-only and wrote nothing into `results/`.

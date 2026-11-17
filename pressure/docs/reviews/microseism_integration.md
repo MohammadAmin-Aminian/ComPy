@@ -35,7 +35,7 @@ relevant; matching dates and spectra is needed before assigning a pressure gain.
 ## Frozen rule and interpretation
 
 The exact numeric rule is recorded as `claude-frequency-v1-20261015` in
-`src/bruitfm/microseism_validation.py`. It comes from the handoff at `b603948`.
+`compy_pressure/microseism_validation.py`. It comes from the handoff at `b603948`.
 YL is the development set. Thresholds are not adjusted to improve agreement with
 Rayleigh, the publications, or the later XO results.
 

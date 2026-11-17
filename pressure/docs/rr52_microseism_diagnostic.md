@@ -28,7 +28,7 @@ eta(f) = uz(f) / deltaP(f)
        = <uz(f) deltaP*(f)> / <deltaP(f) deltaP*(f)> .
 ```
 
-This is exactly the saved BRUIT-FM transfer direction and cross-spectral
+This is exactly the saved PressureQC transfer direction and cross-spectral
 convention: `H_dp = S_dp / S_pp`, in m/Pa, with upward displacement. It is not
 the conventional long-period compliance of a seabed deforming under external
 infragravity-wave loading. In the 0.1–0.2 Hz microseism band, pressure and
@@ -101,7 +101,7 @@ The week retains 167 hourly, nonoverlapping segments. In 0.1–0.2 Hz:
 The two published coherence rules are diagnostic references only. This pilot
 does not reproduce either study's duration, windowing, event rejection, tilt
 correction or structural inversion, so their thresholds are not adopted as a
-BRUIT-FM pass rule. The weekly coherence also falls with frequency through much
+PressureQC pass rule. The weekly coherence also falls with frequency through much
 of 0.1–0.2 Hz; the result does not establish a clean fundamental-mode band over
 the full interval.
 
@@ -136,7 +136,7 @@ for this check.
 ## Reproduction and next constraint
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.microseism_diagnostic
+conda run --no-capture-output -n compy python -m compy_pressure.microseism_diagnostic
 ```
 
 Each invocation creates a fresh local result directory. The analyzer has no

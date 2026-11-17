@@ -3,7 +3,7 @@
   "rayleigh_solver": "disba 0.7.0; prepared fundamental-mode phase/group dispersion table",
   "tilt_method": "tiskitpy.CleanRotator 2.3.1",
   "pressure_sign_status": "RR52 -1; assumed_needs_confirmation",
-  "full_bruitfm_suite": 87,
+  "full_compy_pressure_suite": 87,
   "runs": {
     "original_pilot_band": {
       "status": "unresolved",
@@ -90,10 +90,10 @@
       },
       "inputs": {
         "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json": "1cd092f616724bebb8bec935e0acad7de69abca97038b6482ff8099ca76d1385",
-        "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
+        "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
       },
       "code_sha256": "e5bcaaa071a97973b565a3891bda6f92bac8bbd161e4b119d39ae562db0335ae",
-      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_17ebfff58605/comparison.json",
+      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_17ebfff58605/comparison.json",
       "curated_plot": "docs/figures/rr52/rayleigh_paper_figure5_default_band.png",
       "event_status_counts": {
         "arrival_overlap_review": 1,
@@ -195,10 +195,10 @@
       },
       "inputs": {
         "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json": "1cd092f616724bebb8bec935e0acad7de69abca97038b6482ff8099ca76d1385",
-        "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
+        "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv": "5aea69f2f3e3b3a20661a3aaed24e4cf50b81020eb8204874adba4a9986a0104"
       },
       "code_sha256": "e5bcaaa071a97973b565a3891bda6f92bac8bbd161e4b119d39ae562db0335ae",
-      "result_file": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0aaf7ced0d9/comparison.json",
+      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_f0aaf7ced0d9/comparison.json",
       "curated_plot": "docs/figures/rr52/rayleigh_paper_figure5.png",
       "event_status_counts": {
         "arrival_overlap_review": 1,

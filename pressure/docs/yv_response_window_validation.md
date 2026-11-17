@@ -72,7 +72,7 @@ remain candidates for waveform-based isolation review, not certified pure modes.
 Run the bounded audit from the project root:
 
 ```bash
-OPENBLAS_NUM_THREADS=1 /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python scripts/validate_yv_conventions.py
+OPENBLAS_NUM_THREADS=1 /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python scripts/validate_yv_conventions.py
 ```
 
 Each invocation writes a new `conventions_*` folder under

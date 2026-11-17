@@ -2,7 +2,7 @@
   "scope": "Saved spectra only, held original candidate events; not new event acceptance",
   "model": {
     "source_kind": "layer_model_disba",
-    "source_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_layers.csv",
+    "source_file": "compy_pressure/reference_data/rr52_historical_rayleigh_layers.csv",
     "source_sha256": "f6a8ac05c5c21498a1e55c4982cacb8db3b9bc7053d90ed61d91ec494e186a53",
     "disba_version": "0.7.0",
     "numba_version": "0.68.0",

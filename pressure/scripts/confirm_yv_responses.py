@@ -38,7 +38,7 @@ FEDCATALOG = "https://service.iris.edu/irisws/fedcatalog/1/query"
 # Same window as the ModuleURI recorded in the local RESIF export of YV.xml.
 QUERY_START = "2012-01-01T00:00:00"
 QUERY_END = "2014-01-01T00:00:00"
-USER_AGENT = "bruit-fm-response-confirmation/1 (read-only metadata review)"
+USER_AGENT = "compy-pressure-response-confirmation/1 (read-only metadata review)"
 KEPT_HEADERS = ("Date", "Last-Modified", "Content-Type", "Content-Length", "ETag")
 BAND_FREQUENCIES_HZ = (0.03, 0.05, 0.07)
 ROOT_RTOL = 1e-9

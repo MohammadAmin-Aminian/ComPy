@@ -1,6 +1,6 @@
 # From-scratch pipeline: recompute everything with one command
 
-`scripts/run_from_scratch.py` rebuilds every BRUIT-FM product from the raw
+`scripts/run_from_scratch.py` rebuilds every PressureQC product from the raw
 archive into one new folder. It covers all four networks (YV, YL, 7D, XO),
 PPSDs for all channels with usable responses, the three spectral checks, and
 the three calibration methods. Rayleigh runs with both event policies.
@@ -43,19 +43,19 @@ stages still run; only a failed `workspaces` or `identity` stops the run. The
 code state is checked before every stage, so an edit made during the run stops
 it.
 
-## How to run (new computer, from `~/Projects/bruit-fm`, env `bruitfm`)
+## How to run (new computer, from `~/Projects/pressure-qc`, env `compy`)
 
 If the archive lives on a separate volume (for example the 20 TB storage),
 link it once instead of changing any path. Every tool and saved path then
 resolves through the link:
 
 ```bash
-ln -s /Volumes/<volume>/Data_Bruit_FM ~/Desktop/Data_Bruit_FM
+ln -s /Volumes/<volume>/data ~/Desktop/ComPy/data
 ```
 
 ```bash
-conda activate bruitfm
-cd ~/Projects/bruit-fm
+conda activate compy
+cd ~/Projects/pressure-qc
 python scripts/check_migration.py            # must say READY
 python scripts/run_from_scratch.py --check   # preflight only; writes nothing
 ```
@@ -97,11 +97,11 @@ Other options:
 
   ```bash
   python scripts/plot_network_median_ppsd.py --master results/FROM_SCRATCH/run_<id>/registry/master_inventory.csv --network YV --channel BDH
-  python -m bruitfm.plot_network_ppsd --master-csv results/FROM_SCRATCH/run_<id>/registry/master_inventory.csv --network YV --channels BDH --probability
+  python -m compy_pressure.plot_network_ppsd --master-csv results/FROM_SCRATCH/run_<id>/registry/master_inventory.csv --network YV --channels BDH --probability
   ```
 
 * Coverage tables and heat maps:
-  `python -m bruitfm.coverage report --campaign-dir results/FROM_SCRATCH/run_<id>/coverage/campaign --config results/FROM_SCRATCH/run_<id>/coverage/coverage_sources.json`.
+  `python -m compy_pressure.coverage report --campaign-dir results/FROM_SCRATCH/run_<id>/coverage/campaign --config results/FROM_SCRATCH/run_<id>/coverage/coverage_sources.json`.
 * Repeated microseism weeks are optional. They reuse the fresh sources
   automatically:
   `bash scripts/run_microseism_weeks.sh results/FROM_SCRATCH/run_<id>/microseism/run_<…>`.

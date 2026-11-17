@@ -116,7 +116,7 @@ LHZ. WD66/WD70's 100 Hz HDH channels are also DPGs; channel code alone does not
 identify APG hardware. EDH hydrophones are not selected. Native equal-rate DPG
 pairs are preferred, and all working copies use 1 Hz (32-second padding), within
 the tested low-frequency passband. The three-station APG runner remains separate.
-For a later expanded download requiring a fresh root, set `BRUIT_XO_RUN_ROOT`
+For a later expanded download requiring a fresh root, set `PRESSURE_XO_RUN_ROOT`
 before running; existing scope/provenance mismatches remain errors.
 
 `--rayleigh-event-resample-rate 2` explicitly permits different native rates with

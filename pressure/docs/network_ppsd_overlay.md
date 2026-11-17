@@ -11,9 +11,9 @@ See [the literature review and RR52 command](pressure_reference_review.md).
 ## Pressure probability heat map (current requested view)
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
-  -m bruitfm.plot_network_ppsd --network YV --channels BDH --probability --show
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
+  -m compy_pressure.plot_network_ppsd --network YV --channels BDH --probability --show
 ```
 
 The default map is ObsPy's classic `pqlx` PPSD palette (white near zero,
@@ -51,9 +51,9 @@ remain overlaid. The new histogram NPZ is derived only; sources stay unchanged.
 ## Pressure only: every individual spectrum, one colour, no summary lines
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
-  -m bruitfm.plot_network_ppsd --network YV --channels BDH \
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
+  -m compy_pressure.plot_network_ppsd --network YV --channels BDH \
   --curves-only --single-color --show
 ```
 
@@ -72,9 +72,9 @@ data are read, no response/gain is changed, and no master/score is written.
 All 172 available YV products are registered: 43 each of BDH, BHZ, BH1 and BH2.
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
-  -m bruitfm.plot_network_ppsd --network YV --channels BDH BHZ BH1 BH2
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
+  -m compy_pressure.plot_network_ppsd --network YV --channels BDH BHZ BH1 BH2
 ```
 
 One frequency-domain PNG per channel, in a new timestamped folder under
@@ -104,7 +104,7 @@ Pa²/Hz. Current digitized support is about 0.01139-78.10 Hz; no extrapolation
 is made. The original 1-31.8 Hz transcription is preserved separately. The
 discrete user-supplied points attributed to Webb are not independently verified
 published bounds; they are displayed as Wayne-supplied reference points.
-Provenance: `src/bruitfm/reference_data/pressure_references.json` and
+Provenance: `compy_pressure/reference_data/pressure_references.json` and
 `brown_hydroacoustic.csv`, DOI `10.1007/s00024-012-0573-6`.
 
 Seismic channels use acceleration PSD, dB re 1 (m/s²)²/Hz, and ObsPy's Peterson

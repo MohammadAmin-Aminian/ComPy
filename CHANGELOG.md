@@ -2,6 +2,26 @@
 
 ## 3.1.0 — unreleased
 
+### The old project name is gone
+
+The pressure package came from a separate repository under another name (see
+`pressure/HISTORY_README.md`); that name is now removed from the code, the data
+labels and the documentation. Its GitHub links stay, because the archived
+repository keeps its name.
+
+- The gain label of the pressure-package calibration is now `pressure`
+  (`GAIN_SIGMA`, `results.GAIN_LABELS`, stage C and E). Stage C writes
+  `<STA>_compliance_pressure.*`; results saved earlier under the old label must
+  be renamed to be read.
+- `config.PRESSURE_GAINS` replaces the old gain-table setting;
+  `compy_pressure.SOURCE_VERSION` and `SOURCE_COMMIT` replace the old version
+  constants; the coverage cache schema is `compy-pressure-coverage-sources-v1`
+  (old caches are rebuilt).
+- Default data folders point to `~/Desktop/ComPy/data`; scripts use the conda
+  environment `compy`.
+- `pressure/HISTORY_README.md` and `pressure/HISTORY_CHANGELOG.md` replace the
+  old project's README and changelog; the old name in prose is now `PressureQC`.
+
 Correction of the default inversion after the Young ORCA run of 13 November 2026.
 **Vs results change** where the earlier result had a velocity decrease with depth.
 Compliance estimates do not change.
@@ -179,7 +199,7 @@ response, score or class changes.
   - channels hidden from Test 1;
   - invalid peer offsets.
 - `compy_pressure.audit_plots`: five figures.
-- `pressure/scripts/pressure_audit_2026_11.py`, with a copy of the BRUIT-FM v1.2.0 master
+- `pressure/scripts/pressure_audit_2026_11.py`, with a copy of the PressureQC v1.2.0 master
   table (local paths removed).
 
 ### Whole-archive audit (branch `compy3-audit-data`)
@@ -274,7 +294,7 @@ Results of the existing workflows are unchanged.
   - it crashed on a short record without a monthly stack (`fig06`, IndexError) or without clean windows (NameError);
   - Fig. 3 now states the gain and its source, and says "uncalibrated" for the nominal response.
 - **One rule for the gain source** (`e_invert.result_label`: Rayleigh,
-  BRUIT-FM, nominal) is now shared by stages E, F and G, which each had a copy.
+  PressureQC, nominal) is now shared by stages E, F and G, which each had a copy.
 - `plot_coherogram_daily` took every channel's sampling rate from `st[3]`.
 - `compy.compliance` no longer imports Matplotlib or the FDSN client at load
   time. They are imported only where used.
@@ -331,7 +351,7 @@ numerical results are unchanged.
 - **Pipeline stage F** crashed when the reference station had no Rayleigh-wave
   calibration (`KeyError: 'compy'`), for example when its record contains no
   M ≥ 7 event. It now uses the same gain as stages C and E (`compy`, then
-  `bruitfm`, then `nominal`; `f_figures.result_label`). It skips the window
+  `compy_pressure`, then `nominal`; `f_figures.result_label`). It skips the window
   figures when the station has no compliance at all. Regression test:
   `tests/test_pipeline_figures.py`.
 
@@ -431,7 +451,7 @@ No code or numerical changes. Update local paths as follows:
 ## 2.5.0 — 2026-10-30
 
 ComPy becomes the complete package for seafloor pressure gauges: all of
-BRUIT-FM moves in, and its calibration replaces `Pressure_calibration.py`.
+PressureQC moves in, and its calibration replaces `Pressure_calibration.py`.
 This release stays in the 2.x series at the owner's request. It includes the
 breaking calibration API change below; existing scripts must use the migration
 guide or pin ComPy 2.4.0.
@@ -452,9 +472,9 @@ guide or pin ComPy 2.4.0.
   longer assumes M ≥ 7 events or a 0 Hz first bin. New `config.py` settings:
   `CALIBRATION_BAND`, `CALIBRATION_TILT` and `CALIBRATION_DISPERSION`.
 
-### New: `compy_pressure` and `pressure/`, all of BRUIT-FM
+### New: `compy_pressure` and `pressure/`, all of PressureQC
 
-BRUIT-FM 1.3.0 (its last release; the repository is kept as a backup with
+PressureQC 1.3.0 (its last release; the repository is kept as a backup with
 its dated reports), moved by its `integration/export_to_compy.py`:
 
 - `compy_pressure/`, the package, holds all 40 modules and their reference
@@ -468,14 +488,14 @@ its dated reports), moved by its `integration/export_to_compy.py`:
   - percentile noise models;
   - maps and network figures;
   - whole-drive coverage runs and quality review.
-- `pressure/` is BRUIT-FM's project folder:
+- `pressure/` is PressureQC's project folder:
   - `tests/` (503 tests);
   - `scripts/` (59 run and review scripts);
   - `docs/` (methods, validation notes, reviews and policies; the dated
     reports are linked);
-  - BRUIT-FM's README and changelog.
+  - PressureQC's README and changelog.
 
-  It is laid out like BRUIT-FM's checkout, so its relative paths still hold.
+  It is laid out like PressureQC's checkout, so its relative paths still hold.
 - Commands: `compy-pressure` (stages `inventory` … `rayleigh`, `all`, `view`),
   `compy-pressure-inventory`, `-tilt`, `-local-p`, `-microseism`, `-paired`,
   `-noise-model` (group noise model) and `-approved-noise-model`.
@@ -497,7 +517,7 @@ its dated reports), moved by its `integration/export_to_compy.py`:
 - `pipeline/run_pipeline.py` runs A → B → D → C → E → figures/report in one
   command, saves a run manifest and stops on failed stages. Stage A now exits
   unsuccessfully if any preprocessing chunk fails.
-- Source distributions now include the pipeline and BRUIT-FM's scripts,
+- Source distributions now include the pipeline and PressureQC's scripts,
   methods and tests, so the complete workflow is available from the release
   source archive as well as a Git checkout.
 
@@ -505,7 +525,7 @@ its dated reports), moved by its `integration/export_to_compy.py`:
   PPSD folder (`<PPSD folder>/inventory.xml`) instead of the response
   snapshot. It therefore failed for a calibration without PPSDs (explicit
   snapshots, as with `calibration_master` and stage D) once tilt cleaning was
-  on. This was inherited from BRUIT-FM 1.3.0; it is now fixed, with a test.
+  on. This was inherited from PressureQC 1.3.0; it is now fixed, with a test.
 
 ### Tests
 
@@ -524,9 +544,9 @@ its dated reports), moved by its `integration/export_to_compy.py`:
   - stage D's catalogue conversion and figure arrays.
 - The wheel check also runs `compy_pressure` outside the checkout: packaged
   reference data, console scripts and `5_Pressure_QC.py`.
-- Reproduction check against BRUIT-FM (90 gain-corrected epochs, the
+- Reproduction check against PressureQC (90 gain-corrected epochs, the
   gain-corrected noise model): every output file is identical. Details are in
-  BRUIT-FM's `integration/README.md`.
+  PressureQC's `integration/README.md`.
 
 ## 2.4.0 — 2026-10-30
 

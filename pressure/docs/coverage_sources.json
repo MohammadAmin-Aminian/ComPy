@@ -1,27 +1,27 @@
 {
-  "schema": "bruitfm-coverage-sources-v1",
+  "schema": "compy-pressure-coverage-sources-v1",
   "networks": [
     "YV",
     "YL",
     "7D",
     "XO"
   ],
-  "data_directory": "~/Desktop/Data_Bruit_FM/Data",
+  "data_directory": "~/Desktop/ComPy/data/Data",
   "inventory_sources": {
     "YV": [
-      "~/Desktop/Data_Bruit_FM/INVENTORIES/YV.xml"
+      "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
     ],
     "YL": [
-      "~/Desktop/Data_Bruit_FM/Data/YL/*/inventory.xml"
+      "~/Desktop/ComPy/data/Data/YL/*/inventory.xml"
     ],
     "7D": [
       "results/NETWORKS/7D_ALL_NO_TILT/_inputs/responses/7D.J28A,J29A,J30A,J35A,J36A,J38A,J43A,J44A,J45A,J52A,J53A,J54A,J55A,J63A,J67A.xml",
       "results/NETWORKS/7D_J67A_NO_TILT/_inputs/responses/7D.J67A.xml",
-      "~/Desktop/Data_Bruit_FM/INVENTORIES/7D.xml"
+      "~/Desktop/ComPy/data/INVENTORIES/7D.xml"
     ],
     "XO": [
-      "~/Desktop/Data_Bruit_FM/INVENTORIES/XO.xml",
-      "~/Desktop/Data_Bruit_FM/Data/XO/*/inventory.xml"
+      "~/Desktop/ComPy/data/INVENTORIES/XO.xml",
+      "~/Desktop/ComPy/data/Data/XO/*/inventory.xml"
     ]
   },
   "inventory_source_note": "Per network and SEED ID, epochs of the first listed file defining that SEED ID are primary; later files are compared by response amplitude/phase and listed, never silently substituted. INVENTORIES/7D.xml has no response stages, so the full-response FDSN snapshots saved by the completed 7D runs (P/Z only) are listed first.",

@@ -1,4 +1,4 @@
-"""Read-only check that a copied BRUIT-FM workspace still supports reuse.
+"""Read-only check that a copied PressureQC workspace still supports reuse.
 
 Run it on the old computer first (baseline), then on the new computer after
 copying, before planning or computing anything. It checks:
@@ -27,7 +27,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = Path.home() / "Desktop/Data_Bruit_FM"
+DATA = Path.home() / "Desktop/ComPy/data"
 FROZEN = {
     "results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json": (
         "cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2"
@@ -172,7 +172,7 @@ def check_review_pointers(root):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     parser.add_argument("--root", default=str(ROOT), help="project checkout")
-    parser.add_argument("--data", default=str(DATA), help="Data_Bruit_FM folder")
+    parser.add_argument("--data", default=str(DATA), help="data folder")
     parser.add_argument("--json-out", help="optional new JSON report file")
     args = parser.parse_args()
     root, data = Path(args.root).resolve(), Path(args.data).expanduser()

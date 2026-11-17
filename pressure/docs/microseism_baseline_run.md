@@ -8,7 +8,7 @@ exclusions. The frozen values are copied exactly from `previous_g` in
 
 Each invocation processes one station. It selects the exact pressure and
 vertical channels from
-`src/bruitfm/reference_data/microseism_baseline_stations.csv`, writes fresh
+`compy_pressure/reference_data/microseism_baseline_stations.csv`, writes fresh
 paired spectra and a fresh diagnostic, and never requests a master update.
 RR52 is the exception: its designated saved paired spectra are reused by
 default. No command fits a microseism gain or applies the fixed Rayleigh gain to
@@ -28,13 +28,13 @@ From the repository root, define this convenience function once in `zsh`:
 
 ```bash
 ms () {
-  PYTHONPATH=src:. conda run --no-capture-output -n bruitfm \
-    python -m bruitfm.microseism_campaign --station "$1"
+  PYTHONPATH=src:. conda run --no-capture-output -n compy_pressure \
+    python -m compy_pressure.microseism_campaign --station "$1"
 }
 ```
 
 Then run stations individually. The exact channel pair and frozen multiplier
-are printed by `python -m bruitfm.microseism_campaign --list`.
+are printed by `python -m compy_pressure.microseism_campaign --list`.
 
 ## YV: `BDH / BHZ`
 

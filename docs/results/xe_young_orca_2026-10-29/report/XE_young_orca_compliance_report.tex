@@ -108,7 +108,7 @@ clipped to 0--100 and evaluated on every posterior draw.
 \section{Data set}
 Young ORCA (Gaherty et al.\ 2019; Eilon et al.\ 2022) deployed 30 Scripps broad-band OBS between
 4$^\circ$S and 8$^\circ$S, 130$^\circ$--136$^\circ$W (Fig.~\ref{fig:map}), in water 4386--4824\,m deep.
-Each carries a Trillium 240 seismometer and a DPG, recorded at 50\,Hz. The data come from the BRUIT-FM archive
+Each carries a Trillium 240 seismometer and a DPG, recorded at 50\,Hz. The data come from the PressureQC archive
 (SDS, 587\,GB for XE), with responses from the EarthScope/IRIS DMC. Because reading the archive disk in parallel was slow,
 the raw files of most stations were first copied to local disk station by station; the processing is identical.
 
@@ -171,7 +171,7 @@ Each DPG is calibrated in situ on the Rayleigh waves of $M\geq7$ earthquakes (Zh
 pressure-to-acceleration ratio, normalized by $\rho_w H$, is fitted to its theoretical value between 0.02 and 0.06\,Hz for events
 whose magnitude-squared coherence exceeds 0.97 (Fig.~\ref{fig:cal}). Gains were obtained at 18 of the 20 stations with a compliance measurement,
 from 1--12 events each, and range from 0.70--1.24 with an event-to-event spread of 0.1--3.2\,per\,cent.
-Where the BRUIT-FM microseism calibration exists, the ratio of the two gains is 0.986 (0.835--1.029) at 13 of 14 stations; they disagree at EC01 (ComPy 0.93, BRUIT-FM 3.51), where one of the two methods failed. Gains from a single event
+Where the PressureQC microseism calibration exists, the ratio of the two gains is 0.986 (0.835--1.029) at 13 of 14 stations; they disagree at EC01 (ComPy 0.93, PressureQC 3.51), where one of the two methods failed. Gains from a single event
 (Table~\ref{tab:stations}) are less certain than the $\pm$5\,per\,cent prior assumes.
 No event passed the coherence test at CC01 and CC09; these stations were kept with the nominal response and a gain sampled over 0.6--1.4, and are excluded from the pooled results.
 
@@ -238,11 +238,11 @@ Rayleigh-wave gain does not show and which therefore enters its covariance as no
 
 \begin{table*}
 \centering\small
-\caption{Stations with a compliance measurement. Gain: ComPy Rayleigh-wave calibration (event standard deviation, number of events); BRUIT-FM: independent microseism calibration where available. Frequency: compliance band. Threshold: coherence gate. Coherence: band median of the stack.}
+\caption{Stations with a compliance measurement. Gain: ComPy Rayleigh-wave calibration (event standard deviation, number of events); PressureQC: independent microseism calibration where available. Frequency: compliance band. Threshold: coherence gate. Coherence: band median of the stack.}
 \label{tab:stations}
 \begin{tabular}{lrrrlrrrrr}
 \toprule
-Station & Lat. [$^\circ$] & Lon. [$^\circ$] & Depth [m] & Gain (ComPy) & Gain (BRUIT-FM) & Band [mHz] & Thr. & Windows & Coh. \\
+Station & Lat. [$^\circ$] & Lon. [$^\circ$] & Depth [m] & Gain (ComPy) & Gain (PressureQC) & Band [mHz] & Thr. & Windows & Coh. \\
 \midrule
 CC01 & -4.0458 & -132.4745 & 4768 & -- & -- & 4.9--13.4 & 0.9 & 2781 & 0.968 \\
 CC03 & -4.8816 & -132.6890 & 4739 & 0.763 (1) & 0.913 & 4.9--15.9 & 0.9 & 1149 & 0.965 \\
@@ -373,7 +373,7 @@ compliance-derived Vs must be combined with geological and independent geophysic
 \section*{Data and software}
 Young ORCA data (FDSN network XE, 2018--2019) are distributed by the EarthScope Consortium (IRIS DMC). ComPy
 2.4.0, including the pipeline and the scripts of this run, is at \url{https://github.com/MohammadAmin-Aminian/ComPy}.
-Run folder: \texttt{BRUIT-FM/compliance\_xe\_2026-10-29}.
+Run folder: \texttt{PressureQC/compliance\_xe\_2026-10-29}.
 
 \footnotesize
 \section*{References}

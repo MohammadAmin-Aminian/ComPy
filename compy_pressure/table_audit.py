@@ -1,6 +1,6 @@
 """Anomaly and correlation scan of the pressure QC/calibration master table.
 
-ObsPy-free. Reads the one-row-per-pressure-epoch table that BRUIT-FM writes
+ObsPy-free. Reads the one-row-per-pressure-epoch table that PressureQC writes
 (``pressure_qc_calibration_table.csv``) and, optionally, the per-channel
 metadata offsets of the provisional decisions, and flags with
 ``compy.anomaly.Anomaly`` records:

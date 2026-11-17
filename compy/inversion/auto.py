@@ -656,7 +656,7 @@ def model_from_crust1(column, **overrides):
 #: Gaussian prior sigma of the pressure-gain factor by calibration source.
 #: Two independent calibrations of 73 archive stations agree to 2-3 % (robust)
 #: with a 16-84 % range of -5.4 to +2.6 %, so 5 % for a calibrated gauge.
-GAIN_SIGMA = {"compy": 0.05, "bruitfm": 0.05, "calibrated": 0.05, "nominal": 0.2}
+GAIN_SIGMA = {"compy": 0.05, "pressure": 0.05, "calibrated": 0.05, "nominal": 0.2}
 #: Tilt of the curve (relative, band edge to band edge) left by the pressure
 #: response when it has not been checked against the tide, and when it has.
 RESPONSE_TILT = {"unchecked": 0.04, "corrected": 0.02}

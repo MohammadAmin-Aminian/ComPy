@@ -38,7 +38,7 @@ def main():
     summary = json.loads(
         (ROOT / "results" / station / f"{station}_summary.json").read_text()
     )
-    gain = summary["gains"]["bruitfm"]
+    gain = summary["gains"]["pressure"]
     seg = str(ROOT / "work" / station / "clean" / f"{station}_seg*.mseed")
     out = {}
     for label, code_dir in (("v2.1", ROOT / "work" / "compy_v2.1"),

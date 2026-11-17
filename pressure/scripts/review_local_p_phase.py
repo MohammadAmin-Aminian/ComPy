@@ -156,7 +156,7 @@ def main():
     parser.add_argument(
         "--master",
         type=Path,
-        default=Path.home() / "Projects/bruit-fm/exports/master_inventory.csv",
+        default=Path.home() / "Projects/pressure-qc/exports/master_inventory.csv",
     )
     args = parser.parse_args()
     review(args.base_campaign, args.supersede, args.output_dir, args.master)

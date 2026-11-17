@@ -11,9 +11,9 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
 fi
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SOURCE_ROOT="${BRUITFM_SOURCE_ROOT:-$HOME/Projects/bruit-fm}"
-CAMPAIGN="${BRUITFM_COVERAGE_CAMPAIGN:-full_data_coverage_v1}"
-PYTHON="${BRUITFM_PYTHON:-/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python}"
+SOURCE_ROOT="${PRESSUREQC_SOURCE_ROOT:-$HOME/Projects/pressure-qc}"
+CAMPAIGN="${PRESSUREQC_COVERAGE_CAMPAIGN:-full_data_coverage_v1}"
+PYTHON="${PRESSURE_PYTHON:-/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python}"
 MODE="${1:-}"
 [[ $# -gt 0 ]] && shift
 case "$MODE" in

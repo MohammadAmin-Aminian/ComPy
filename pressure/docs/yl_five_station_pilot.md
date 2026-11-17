@@ -25,7 +25,7 @@ date limits come from these inventories. Existing catalogue files are retained.
 It does not start PPSD or calibration computations.
 
 The first user run registered all five stations and completed their vertical
-PPSDs. All five pressure jobs failed on BRUIT-FM's positive-only sensitivity
+PPSDs. All five pressure jobs failed on PressureQC's positive-only sensitivity
 guard; the following calibration stage therefore recorded five
 `unresolved_metadata` entries. This software restriction is now corrected:
 finite nonzero signed sensitivities are accepted without changing the original
@@ -43,7 +43,7 @@ YL_PRESSURE=()
 for station in A02W A06W A08W A10W A12W; do
   YL_PRESSURE+=(--seed-id "YL.${station}..LDH")
 done
-conda run --no-capture-output -n bruitfm python -m bruitfm.network ppsd \
+conda run --no-capture-output -n compy python -m compy_pressure.network ppsd \
   --network YL "${YL_PRESSURE[@]}" --workers 4 \
   --results-dir results/NETWORKS/YL_FIVE_NO_TILT
 ```
@@ -75,8 +75,8 @@ interpolation or tolerance relaxation is introduced by this preparation.
 Run these in order from the repository root, stopping if a command fails:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python scripts/prepare_yl_test.py
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python scripts/prepare_yl_test.py
 
 YL_STATIONS=(--station A02W --station A06W --station A08W --station A10W --station A12W)
 YL_SEEDS=()
@@ -84,24 +84,24 @@ for station in A02W A06W A08W A10W A12W; do
   YL_SEEDS+=(--seed-id "YL.${station}..LDH" --seed-id "YL.${station}..LHZ")
 done
 
-conda run --no-capture-output -n bruitfm python -m bruitfm.network check \
+conda run --no-capture-output -n compy python -m compy_pressure.network check \
   --network YL "${YL_STATIONS[@]}" "${YL_SEEDS[@]}" \
   --results-dir results/NETWORKS/YL_FIVE_NO_TILT
 
-conda run --no-capture-output -n bruitfm python -m bruitfm.network ppsd \
+conda run --no-capture-output -n compy python -m compy_pressure.network ppsd \
   --network YL "${YL_STATIONS[@]}" "${YL_SEEDS[@]}" --workers 4 \
   --results-dir results/NETWORKS/YL_FIVE_NO_TILT
 
-conda run --no-capture-output -n bruitfm python -m bruitfm.network rayleigh \
+conda run --no-capture-output -n compy python -m compy_pressure.network rayleigh \
   --network YL "${YL_STATIONS[@]}" "${YL_SEEDS[@]}" \
   --results-dir results/NETWORKS/YL_FIVE_NO_TILT \
   --rayleigh-no-master-update --rayleigh-tilt-method none \
   --rayleigh-catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_YL_2009_2010.json \
-  --rayleigh-dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --rayleigh-dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --rayleigh-frequency-min 0.03 --rayleigh-frequency-max 0.07 \
   --rayleigh-pressure-sign 1 --rayleigh-event-sampling all
 
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view \
+conda run --no-capture-output -n compy python -m compy_pressure.network view \
   --network YL --station A02W --view-kind rayleigh \
   --view-workflow results/NETWORKS/YL_FIVE_NO_TILT/_workflow/rayleigh.json
 ```

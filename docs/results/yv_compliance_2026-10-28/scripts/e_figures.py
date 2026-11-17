@@ -35,8 +35,11 @@ GROUPS = {
 }
 SLOTS = ("#2a78d6", "#eb6834", "#1baf7a")
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#d9d8d3"
-GAIN_LABEL = {"bruitfm": "BRUIT-FM gain (gains.csv)", "compy": "ComPy 2.2 calibration"}
-GAIN_COLOR = {"bruitfm": SLOTS[0], "compy": SLOTS[1]}
+GAIN_LABEL = {
+    "pressure": "PressureQC gain (gains.csv)",
+    "compy": "ComPy 2.2 calibration",
+}
+GAIN_COLOR = {"pressure": SLOTS[0], "compy": SLOTS[1]}
 
 plt.rcParams.update({
     "font.size": 10, "axes.edgecolor": MUTED, "axes.labelcolor": INK,
@@ -65,7 +68,7 @@ def load(station, epoch=True):
 
 
 def station_figure(station, summary, data, max_windows=300):
-    label = "bruitfm" if "bruitfm" in data else next(iter(data))
+    label = "pressure" if "pressure" in data else next(iter(data))
     d = data[label]
     starts = d["window_starts"]
     rng = np.random.default_rng(0)
@@ -156,7 +159,7 @@ def network_figure(all_data):
     )
     for ax, (group, stations) in zip(axes, GROUPS.items()):
         for color, station in zip(SLOTS, stations):
-            d = all_data.get(station, {}).get("bruitfm")
+            d = all_data.get(station, {}).get("pressure")
             if d is None:
                 continue
             sel = (d["freqs"] >= d["band"][0]) & (d["freqs"] <= d["band"][1])
@@ -168,7 +171,7 @@ def network_figure(all_data):
         ax.legend(loc="lower right")
     axes[0].set_ylabel("Normalized compliance η [1/Pa]")
     fig.suptitle(
-        "YV broadband stations, BRUIT-FM gains (cf. Aminian et al. 2025, Fig. 8)"
+        "YV broadband stations, PressureQC gains (cf. Aminian et al. 2025, Fig. 8)"
     )
     fig.savefig(FIG / "network_compliance.png")
     plt.close(fig)
@@ -178,7 +181,7 @@ def gain_figure(rows):
     stations = [r["station"] for r in rows]
     x = np.arange(len(stations))
     fig, ax = plt.subplots(figsize=(10, 4.2), constrained_layout=True)
-    series = (("bruitfm", "BRUIT-FM (gains.csv)", SLOTS[0]), ("compy", "ComPy 2.2", SLOTS[1]),
+    series = (("pressure", "PressureQC (gains.csv)", SLOTS[0]), ("compy", "ComPy 2.2", SLOTS[1]),
               ("paper", "Paper Table 1", SLOTS[2]))  # fmt: skip
     for i, (key, label, color) in enumerate(series):
         y = [r.get(f"gain_{key}") or np.nan for r in rows]
@@ -201,8 +204,8 @@ def gain_figure(rows):
 
 
 def monthly_figure(station, summary, data):
-    d = data.get("bruitfm")
-    months = summary["results"].get("bruitfm", {}).get("monthly", {})
+    d = data.get("pressure")
+    months = summary["results"].get("pressure", {}).get("monthly", {})
     if d is None or len(months) < 2:
         return
     sel = (d["freqs"] >= d["band"][0]) & (d["freqs"] <= d["band"][1])
@@ -286,7 +289,7 @@ def stability_figure():
 
 
 def map_figure(summaries):
-    from bruitfm.maps import PLATE, add_land
+    from compy_pressure.maps import PLATE, add_land
     from obspy import read_inventory
 
     inv = read_inventory(C.INVENTORY)
@@ -327,15 +330,15 @@ def main():
                    paper_band=f"{paper[1][0]}–{paper[1][1]}")  # fmt: skip
         tilt_figure(station)
         full_summary, full_data = load(station, epoch=False)
-        if full_summary and "bruitfm" in full_data:
-            d = full_data["bruitfm"]
+        if full_summary and "pressure" in full_data:
+            d = full_data["pressure"]
             sel = (d["freqs"] >= d["band"][0]) & (d["freqs"] <= d["band"][1])
-            row["full_period_bruitfm_median_eta"] = float(
+            row["full_period_compy_pressure_median_eta"] = float(
                 np.median(d["compliance"][sel])
             )
-            row["full_period_bruitfm_windows"] = full_summary["results"]["bruitfm"][
-                "n_windows"
-            ]
+            row["full_period_compy_pressure_windows"] = full_summary["results"][
+                "pressure"
+            ]["n_windows"]
         row["epoch_end"] = summary.get("epoch_end") if summary else None
         if summary is None:
             rows.append(row)
@@ -343,7 +346,7 @@ def main():
         summaries[station] = summary
         all_data[station] = data
         row["depth_m"] = summary["depth_m"]
-        row["gain_bruitfm"] = summary["gains"].get("bruitfm")
+        row["gain_pressure"] = summary["gains"].get("pressure")
         for label, res in summary["results"].items():
             if "band_hz" not in res:
                 row[f"{label}_status"] = "no windows"

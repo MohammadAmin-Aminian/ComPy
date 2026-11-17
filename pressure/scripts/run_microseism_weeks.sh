@@ -15,9 +15,9 @@ shift
 SHIFTS=("$@")
 [ ${#SHIFTS[@]} -gt 0 ] || SHIFTS=(-12 -6 6 12)
 if command -v conda >/dev/null; then
-  BRUIT_PY=(conda run --no-capture-output -n bruitfm python)
+  PRESSURE_PY=(conda run --no-capture-output -n compy python)
 else
-  BRUIT_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python)
+  PRESSURE_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python)
 fi
 export PYTHONPATH="$ROOT/..:$ROOT"  # this branch's code, not the main install
 LOG="$(mktemp -t microseism_weeks)"
@@ -28,7 +28,7 @@ for K in "${SHIFTS[@]}"; do
     exit 2
   fi
   # Resume by exact base/shift binding; completed waves/spectra are not rerun.
-  EXISTING="$("${BRUIT_PY[@]}" - "$BASE" "$K" <<'PY'
+  EXISTING="$("${PRESSURE_PY[@]}" - "$BASE" "$K" <<'PY'
 import sys
 from scripts.combine_microseism_weeks import week_runs
 
@@ -41,9 +41,9 @@ PY
     printf 'Week shift %s: reusing completed %s\n' "$K" "$EXISTING"
     continue
   fi
-  "${BRUIT_PY[@]}" "$ROOT/scripts/run_microseism_check.py" \
+  "${PRESSURE_PY[@]}" "$ROOT/scripts/run_microseism_check.py" \
     --base-run "$BASE" --shift-weeks "$K" | tee "$LOG"
   RUN="$(tail -1 "$LOG" | sed 's/.*: //')"
-  "${BRUIT_PY[@]}" "$ROOT/scripts/compare_microseism_methods.py" "$RUN"
+  "${PRESSURE_PY[@]}" "$ROOT/scripts/compare_microseism_methods.py" "$RUN"
   echo "Week shift $K: $RUN"
 done

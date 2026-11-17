@@ -7,8 +7,8 @@ def local_p_output(path):
     """Resolve an output below LOCAL_P, never inside raw data or exports."""
     path = Path(path).expanduser().resolve()
     forbidden = (
-        Path.home() / "Desktop/Data_Bruit_FM",
-        Path.home() / "Projects/bruit-fm/exports",
+        Path.home() / "Desktop/ComPy/data",
+        Path.home() / "Projects/pressure-qc/exports",
     )
     if any(path == p or p in path.parents for p in forbidden):
         raise ValueError(f"Output lies inside protected inputs: {path}")

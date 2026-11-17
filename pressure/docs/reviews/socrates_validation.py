@@ -370,7 +370,7 @@ def v10_sensitivities():
 
 
 def v11_published_insu_gains():
-    print("\nV11 BRUIT-FM INSU candidate gains vs Aminian et al. (2025) Table 1")
+    print("\nV11 PressureQC INSU candidate gains vs Aminian et al. (2025) Table 1")
     # Published DPG gain factors (multiply recorded pressure), stated +/- ~5%.
     published = {
         "RR28": 0.78,
@@ -391,7 +391,7 @@ def v11_published_insu_gains():
     for station, value in published.items():
         differences.append(100 * (ours[station] / value - 1))
         print(
-            f"  {station}: published {value:.2f}, BRUIT-FM {ours[station]:.3f} "
+            f"  {station}: published {value:.2f}, PressureQC {ours[station]:.3f} "
             f"({differences[-1]:+.1f}%)"
         )
     print(

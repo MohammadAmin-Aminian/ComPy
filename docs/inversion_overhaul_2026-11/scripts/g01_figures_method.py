@@ -237,9 +237,9 @@ def fig3():
     with open(
         Path.home() / "Desktop/ComPy/05_report/tables/compliance_results.csv"
     ) as fh:
-        rows = [r for r in csv.DictReader(fh) if r["gain_bruitfm"] and r["gain_compy"]]
+        rows = [r for r in csv.DictReader(fh) if r["gain_pressure"] and r["gain_compy"]]
     lr = np.array(
-        [100 * np.log(float(r["gain_compy"]) / float(r["gain_bruitfm"])) for r in rows]
+        [100 * np.log(float(r["gain_compy"]) / float(r["gain_pressure"])) for r in rows]
     )
     ax.hist(
         np.clip(lr, -30, 30),

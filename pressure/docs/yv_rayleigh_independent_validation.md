@@ -104,7 +104,7 @@ for the halves), while gain changes by about 0.23% at most in this test. These
 small gain changes do not certify preservation of every event's Rayleigh motion.
 
 RR07's second-half public-library projection has norm 0.999951 at a fitted angle
-of 9.86 degrees and fails BRUIT-FM's unit-projection safeguard. It was neither
+of 9.86 degrees and fails PressureQC's unit-projection safeguard. It was neither
 normalized nor used for a new gain. The unit-norm policy and TiSKitPy's two-axis
 rotation approximation need study; this is not an instrument-failure conclusion.
 Other rotation/projection rejections in the original run remain documented.
@@ -170,10 +170,10 @@ No replacement band was silently adopted or new station fit invented.
 ## How to reproduce/view this review
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-MPLBACKEND=Agg MPLCONFIGDIR=/private/tmp/bruitfm-mpl \
+cd /Users/mohammadamin/Projects/pressure-qc
+MPLBACKEND=Agg MPLCONFIGDIR=/private/tmp/compy_pressure-mpl \
   OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
-  conda run --no-capture-output -n bruitfm python scripts/validate_yv_rayleigh.py
+  conda run --no-capture-output -n compy python scripts/validate_yv_rayleigh.py
 ```
 
 The script writes a new `run_*` subfolder under `results/VALIDATION/YV_rayleigh/`;

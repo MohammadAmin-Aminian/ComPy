@@ -1,11 +1,11 @@
 # Network workflow through the screened Godin stage
 
 For the full YV command sequence, with each completed stage on its own line,
-see [the README walkthrough](../BRUITFM_README.md#run-every-completed-stage-for-the-yv-network).
+see [the README walkthrough](../HISTORY_README.md#run-every-completed-stage-for-the-yv-network).
 The commands below demonstrate automatic discovery across all networks;
 the README versions explicitly select `--network YV` for calculations.
 
-`src/bruitfm/network.py` runs the completed calculations for every channel epoch
+`compy_pressure/network.py` runs the completed calculations for every channel epoch
 with waveform files in the selected archive. It discovers network, station,
 location and channel identifiers from SDS filenames and validates actual
 MiniSEED headers during processing. No YV station list is hard-coded.
@@ -15,7 +15,7 @@ MiniSEED headers during processing. No YV station list is hard-coded.
 Defaults on this machine:
 
 ```text
-~/Desktop/Data_Bruit_FM/
+~/Desktop/ComPy/data/
   INVENTORIES/                 Matching StationXML files
   Data/                       Waveform archive
     YV/<station>/<channel>.D/ YV example; other layouts are searched recursively
@@ -65,14 +65,14 @@ manifest requires a stable source set for reliable restart.
 First enter the project and limit numerical-library threads per worker:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
+cd /Users/mohammadamin/Projects/pressure-qc
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 ```
 
 **1. Synchronize inventories without resetting existing results.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network inventory
+conda run --no-capture-output -n compy python -m compy_pressure.network inventory
 ```
 
 This creates the master if needed. Otherwise, it appends newly discovered
@@ -84,7 +84,7 @@ changes to already registered response epochs explicitly.
 **2. Check available networks, stations, channels and matching inventory rows.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network check
+conda run --no-capture-output -n compy python -m compy_pressure.network check
 ```
 
 This saves `plan.json` and prints the current counts and source size. Its
@@ -101,7 +101,7 @@ The [availability snapshot](yv_archive_plan.json) records both lists.
 **3. Calculate PPSDs for all available channels and their response epochs.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network ppsd --workers 4
+conda run --no-capture-output -n compy python -m compy_pressure.network ppsd --workers 4
 ```
 
 Uses the full available recording period by default: three-hour windows,
@@ -115,7 +115,7 @@ archive index. The existing PPSD checkpoint mechanism is retained.
 **4. Save the three PPSD plot types for every processed channel.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network plots
+conda run --no-capture-output -n compy python -m compy_pressure.network plots
 ```
 
 Creates distributions, time spectrograms and all individual PSD curves.
@@ -126,7 +126,7 @@ after saving so a batch does not accumulate plot windows or large curve arrays.
 **5. Compare pressure PPSDs with the Webb and Brown reference limits.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network pressure
+conda run --no-capture-output -n compy python -m compy_pressure.network pressure
 ```
 
 Uses only pressure-channel epochs, saves the three color-coded comparison
@@ -136,7 +136,7 @@ reference bounds and nominal response-band choices are unchanged.
 **6. Compare pressure spectra with nearby stations at similar depth.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network nearby
 ```
 
 Reuses saved pressure NPZs, compares common qualifying UTC days and appends
@@ -156,7 +156,7 @@ summary is unfinished. Diagnostics run sequentially using cached daily spectra.
 **7. Calculate the depth-dependent Godin comparison from saved pressure PPSDs.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network infragravity
+conda run --no-capture-output -n compy python -m compy_pressure.network infragravity
 ```
 
 Uses each row's own depth estimate and response band. Saves model, PPSD-overlay
@@ -168,7 +168,7 @@ error while other epochs continue.
 **8. Calculate the screened full-window Godin pilot for every pressure epoch.**
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network pilot
+conda run --no-capture-output -n compy python -m compy_pressure.network pilot
 ```
 
 Selects a seven-day interval near each epoch's middle, avoiding deployment
@@ -193,11 +193,11 @@ Network batch commands save figures without opening hundreds of windows.
 After the relevant stage, open one station's saved plots:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR01 --view-kind ppsd
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR01 --view-kind pressure
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind nearby
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR01 --view-kind infragravity
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR01 --view-kind pilot
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR01 --view-kind ppsd
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR01 --view-kind pressure
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR01 --view-kind infragravity
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR01 --view-kind pilot
 ```
 
 Replace RR01 with the desired station. `view` opens existing PNGs and changes
@@ -227,7 +227,7 @@ them. Run only one batch writer against a master pair at a time.
 After the input check, the complete sequence can also be run as one command:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network all --workers 4
+conda run --no-capture-output -n compy python -m compy_pressure.network all --workers 4
 ```
 
 This runs inventory → check → PPSDs → plots → pressure limits → nearby comparison → Godin comparison

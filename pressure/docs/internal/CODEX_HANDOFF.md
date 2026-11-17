@@ -1,4 +1,4 @@
-# BRUIT-FM — start here in a fresh Codex chat
+# PressureQC — start here in a fresh Codex chat
 
 **Read `CODEX_NEXT_CHAT.md` first.** The six-check integration in
 `docs/six_check_review.md` supersedes the old checkpoint counts below.
@@ -55,16 +55,16 @@ not the current execution status.
 
 ## Workspace, inputs and saved state
 
-- Local checkout: `/Users/mohammadamin/Projects/bruit-fm`.
+- Local checkout: `/Users/mohammadamin/Projects/pressure-qc`.
 - GitHub: <https://github.com/MohammadAmin-Aminian/bruit-fm>, branch `main`.
   Code and documentation through step 22 are in `220458b`; the compact handoff
   is a subsequent documentation change. Inspect `git log -1` for the latest identifier.
-- Environment: conda `bruitfm`, Python 3.13, ObsPy 1.5.1, NumPy/SciPy,
+- Environment: conda `compy_pressure`, Python 3.13, ObsPy 1.5.1, NumPy/SciPy,
   Matplotlib, pandas and openpyxl. Local interpreter:
-  `/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python`.
-- Whole archive: `/Users/mohammadamin/Desktop/Data_Bruit_FM/Data`.
-  Inventories: `/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES`.
-  Earlier station pilot: `/Users/mohammadamin/Desktop/Data_Bruit_FM/RR52`.
+  `/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`.
+- Whole archive: `/Users/mohammadamin/Desktop/ComPy/data/Data`.
+  Inventories: `/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES`.
+  Earlier station pilot: `/Users/mohammadamin/Desktop/ComPy/data/RR52`.
 - Shared master: `exports/master_inventory.csv` and `.xlsx`, 16,784
   channel-epoch rows across inventories. There are 227 YV inventory rows;
   172 available channel epochs were processed. Keys are `Seed_id`,
@@ -161,7 +161,7 @@ The [README](README.md#completed-steps) lists 22 completed development steps;
    response-band masks, PPSD overlays and diagnostic plots, CSV/JSON and master
    updates. Webb bounds come from supplied instructions; Brown curves are
    approximate digitizations with the µPa²/Hz conversion. See provenance in
-   `src/bruitfm/reference_data/pressure_references.json`.
+   `compy_pressure/reference_data/pressure_references.json`.
 6. `infragravity_test.py`: depth-dependent Godin prediction, matching PPSD-bin
    smoothing, masks, plots and numerical diagnostics. Figure 3 was independently
    rechecked; unsupported bins do not contribute to the result.
@@ -260,7 +260,7 @@ correction and acceptance/classification remain pending. See
    old DPG-code bugs: do not attribute old bugs to the current version.
    Catalogue is local at `results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json`;
    prepared historical disba phase/group/model CSVs and provenance are tracked in
-   `src/bruitfm/reference_data/rr52_historical_rayleigh_*`. The historical model
+   `compy_pressure/reference_data/rr52_historical_rayleigh_*`. The historical model
    is not verified bathymetry/local structure or a verbatim PREM profile.
    Production master hashes were unchanged by this review/pilot. Existing raw,
    PPSD, paired and Godin products were preserved.
@@ -339,19 +339,19 @@ calibration context, not a 50/100 km neighbor rule. Bibliography is in
 ## Run commands and implementation constraints
 
 Exact YV commands are in [README](README.md#run-every-completed-stage-for-the-yv-network).
-From the checkout, with the `bruitfm` environment:
+From the checkout, with the `compy_pressure` environment:
 
 ```bash
-conda run --no-capture-output -n bruitfm python -m bruitfm.network check --network YV
-conda run --no-capture-output -n bruitfm python -m bruitfm.network view --network YV --station RR44 --view-kind nearby
+conda run --no-capture-output -n compy python -m compy_pressure.network check --network YV
+conda run --no-capture-output -n compy python -m compy_pressure.network view --network YV --station RR44 --view-kind nearby
 ```
 
 For headless software verification:
 
 ```bash
-MPLBACKEND=Agg MPLCONFIGDIR=/private/tmp/bruitfm-mpl OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python -m pytest -q
-/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python -m ruff check .
-/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python -m ruff format --check .
+MPLBACKEND=Agg MPLCONFIGDIR=/private/tmp/compy_pressure-mpl OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python -m pytest -q
+/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python -m ruff check .
+/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python -m ruff format --check .
 ```
 
 - Preserve raw waveforms, input StationXML, saved spectra and manually entered

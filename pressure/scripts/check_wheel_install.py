@@ -25,9 +25,9 @@ CLI_MODULES = (
     "compy_pressure.local_p_check",
 )
 REQUIRED_RESOURCES = (
-    "bruitfm/reference_data/pressure_references.json",
-    "bruitfm/reference_data/brown_hydroacoustic_fullband.csv",
-    "bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+    "compy_pressure/reference_data/pressure_references.json",
+    "compy_pressure/reference_data/brown_hydroacoustic_fullband.csv",
+    "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv",
 )
 
 
@@ -39,7 +39,7 @@ def check_wheel(wheel):
         missing = set(REQUIRED_RESOURCES) - set(archive.namelist())
     if missing:
         raise ValueError(f"Wheel lacks required reference resources: {sorted(missing)}")
-    with tempfile.TemporaryDirectory(prefix="bruitfm-wheel-smoke-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="compy-pressure-wheel-smoke-") as temporary:
         root = Path(temporary)
         environment = root / "venv"
         venv.EnvBuilder(with_pip=True, system_site_packages=True).create(environment)
@@ -75,7 +75,7 @@ def check_wheel(wheel):
             "Path(sys.prefix).resolve()), "
             "'Smoke test imported the checkout rather than the installed wheel'; "
             "from importlib.resources import files; "
-            "assert files('bruitfm').joinpath("
+            "assert files('compy_pressure').joinpath("
             "'reference_data/pressure_references.json').is_file(); "
             "from compy_pressure.phase import circular_median_degrees; "
             "assert abs(abs(circular_median_degrees([179,-179])) - 180) < 1e-9"

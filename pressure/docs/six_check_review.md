@@ -18,7 +18,7 @@ copying a pressure multiplier across channels, responses or epochs.
 ## One safe command
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
+cd /Users/mohammadamin/Projects/pressure-qc
 bash scripts/run_quality_review.sh
 ```
 
@@ -162,8 +162,8 @@ nominal-response-only builder.
 Safe plan, valid even while no channel is approved:
 
 ```bash
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
-  -m bruitfm.noise_model --review PATH_TO_REVIEW/review.json \
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
+  -m compy_pressure.noise_model --review PATH_TO_REVIEW/review.json \
   --output-dir results/REVIEWS/SIX_CHECKS/new_noise_plan --plan
 ```
 

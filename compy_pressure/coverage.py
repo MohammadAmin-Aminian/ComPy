@@ -40,7 +40,7 @@ UTC = timezone.utc  # datetime.UTC needs Python 3.11; ComPy supports 3.10
 
 ROOT = Path(__file__).resolve().parents[1] / "pressure"
 CONFIG = ROOT / "docs/coverage_sources.json"
-SCHEMA = "bruitfm-coverage-sources-v1"
+SCHEMA = "compy-pressure-coverage-sources-v1"
 PLAN_VERSION = "coverage-plan-v1"
 KEYS = EPOCH_COLUMNS + ["inventory_file"]
 # Equal to the `compy_pressure.network ppsd` defaults used for every saved product.

@@ -61,7 +61,7 @@ def main():
     parser.add_argument(
         "--data-dir",
         type=Path,
-        default=Path.home() / "Desktop/Data_Bruit_FM/Data",
+        default=Path.home() / "Desktop/ComPy/data/Data",
     )
     parser.add_argument("--master-dir", type=Path, default=Path("exports"))
     parser.add_argument("--catalog-only", action="store_true")

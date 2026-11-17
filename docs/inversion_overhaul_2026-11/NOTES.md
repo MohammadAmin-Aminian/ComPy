@@ -2,7 +2,7 @@
 
 ## Literature status (10 Nov 2026)
 
-Read in full or in the relevant sections (text in `~/Desktop/BRUIT-FM/compliance_yv_2026-10-28/literature/papers/txt` and `inv2026-11/`):
+Read in full or in the relevant sections (text in `~/Desktop/ComPy/runs/compliance_yv_2026-10-28/literature/papers/txt` and `inv2026-11/`):
 
 | Source | Read | Taken from it |
 |---|---|---|
@@ -57,7 +57,7 @@ Reading:
 - The old covariance gave about 1.2 % INDEPENDENT error per bin (1 % floor). Real scatter is 0.2-0.4 % and strongly correlated between bins. That alone explains chi2/N = 0.39.
 - What is uncertain is the LEVEL (gain) and the SLOPE of the curve, not its bin-to-bin shape. The old model was too strict on slope errors and too loose on wiggles.
 - Pressure-channel noise would make H1 rise with the pressure level. It falls slightly instead (-1.5 % median), so pressure noise is not what limits coherence, H1 is the right estimator and H2 (+9 %) is not a bracket worth carrying. The small fall with level is in the direction of the coherence-gate selection bias found in the 2.9 audit.
-- Two independent calibrations (stage D Rayleigh against BRUIT-FM microseism, 36 stations): robust scatter of the log ratio 2.0 %; all 73 pairs: 2.7 % robust, 16-84 % range -5.4 to +2.6 %, with outliers. A Gaussian gain prior of 5 % (1 sigma) is supported; uniform +-5 % is too narrow in the tails.
+- Two independent calibrations (stage D Rayleigh against PressureQC microseism, 36 stations): robust scatter of the log ratio 2.0 %; all 73 pairs: 2.7 % robust, 16-84 % range -5.4 to +2.6 %, with outliers. A Gaussian gain prior of 5 % (1 sigma) is supported; uniform +-5 % is too narrow in the tails.
 
 ## Design decisions taken from E1-E2 (to be tested, D49-D5x)
 

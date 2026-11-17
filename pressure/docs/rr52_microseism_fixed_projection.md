@@ -143,8 +143,8 @@ hashes changed. Original calibration gains, scores and response XMLs remain
 unchanged.
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m scripts.review_microseism_fixed_projection \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m scripts.review_microseism_fixed_projection \
   --pilot docs/rr52_microseism_horizontal_pilot.json \
   --quiet-summary docs/rr52_tiskitpy_validation_summary.json
 ```

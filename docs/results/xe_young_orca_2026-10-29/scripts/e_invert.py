@@ -4,7 +4,7 @@ Usage: python e_invert.py STATION [VARIANT ...] [--processes N]
 
 Input is Stage C's compliance with the ComPy Rayleigh-wave gain ('compy',
 the method of Aminian et al. 2025, section 4.1.5). Where that calibration
-failed, the BRUIT-FM gain is used, or else the nominal response, and the gain
+failed, the PressureQC gain is used, or else the nominal response, and the gain
 prior is widened (see GAIN_BOUNDS). Monthly stacks give the month-to-month covariance; the Moho
 depth below the seafloor comes from CRUST1.0 at the station.
 
@@ -32,8 +32,8 @@ import compy_inversion as ci  # noqa: E402
 SAMPLER = dict(n_chains=8, n_iter=80000, n_burn=30000, thin=10)
 MIN_MONTH_WINDOWS = 30
 #: Gain prior (factor on the gain used) by gain source: the paper's +-5 % for
-#: the Rayleigh calibration, wider for the microseism (BRUIT-FM) gain.
-GAIN_BOUNDS = {"compy": (0.95, 1.05), "bruitfm": (0.85, 1.15), "nominal": (0.6, 1.4)}
+#: the Rayleigh calibration, wider for the microseism (PressureQC) gain.
+GAIN_BOUNDS = {"compy": (0.95, 1.05), "pressure": (0.85, 1.15), "nominal": (0.6, 1.4)}
 TEMPERATURES = 1.6 ** np.arange(8)
 
 
@@ -44,7 +44,7 @@ def coordinates(station):
 
 def gain_label(station):
     summary = json.loads((RESULTS / station / f"{station}_summary.json").read_text())
-    for label in ("compy", "bruitfm", "nominal"):
+    for label in ("compy", "pressure", "nominal"):
         if "n_windows" in summary["results"].get(label, {}):
             return label, summary
     raise SystemExit(f"{station}: no compliance result")

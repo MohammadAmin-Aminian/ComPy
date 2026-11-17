@@ -1,4 +1,4 @@
-# BRUIT-FM project status, 22 October 2026
+# PressureQC project status, 22 October 2026
 
 This is the current continuation guide after Claude took over from Codex on 21
 October. It summarises what was done, with the numbers, what the owner still
@@ -126,7 +126,7 @@ local full suite, at #5, gave 469 passed.
 ## Owner decisions still open
 
 1. **The uncommitted edit removing the fractional native-grid guard.** It is
-   saved as `~/Projects/bruit-fm-uncommitted-rayleigh-guard-removal-20261021.patch`
+   saved as `~/Projects/pressure-qc-uncommitted-rayleigh-guard-removal-20261021.patch`
    and is not in the checkout.
    * Recommendation: **discard it** unless there is a reviewed reason. It
      reverses a reviewed safety fix, and the clean rerun showed no YV result
@@ -156,8 +156,8 @@ almost everything. The move must preserve all three.
    3 s:
 
    ```bash
-   cd ~/Projects/bruit-fm
-   /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python scripts/check_migration.py
+   cd ~/Projects/pressure-qc
+   /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python scripts/check_migration.py
    ```
 
    On 22 October this gave **READY**: 264 saved PPSDs (YV 172, YL 50, 7D 30,
@@ -165,11 +165,11 @@ almost everything. The move must preserve all three.
    matching, and all 574 paths in the frozen review present.
 1. **Same user and same folders.** Keep the account name `mohammadamin` and
    copy to identical paths:
-   * `~/Desktop/Data_Bruit_FM/` (raw `Data/`, `INVENTORIES/`, `RR52/`);
-   * `~/Projects/bruit-fm/`, including `exports/`, `results/` and `.git`;
+   * `~/Desktop/ComPy/data/` (raw `Data/`, `INVENTORIES/`, `RR52/`);
+   * `~/Projects/pressure-qc/`, including `exports/`, `results/` and `.git`;
    * the sibling folders that the frozen review points into:
-     `~/Projects/bruit-fm-claude/`, `~/Projects/bruit-fm-localp-review/` and
-     `~/Projects/bruit-fm-localp-finish/`. Simplest: copy all of `~/Projects/`.
+     `~/Projects/pressure-qc-claude/`, `~/Projects/pressure-qc-localp-review/` and
+     `~/Projects/pressure-qc-localp-finish/`. Simplest: copy all of `~/Projects/`.
 2. **Copy, preserving timestamps.** Use Migration Assistant, or `rsync -a`;
    `-a` keeps modification times. Never overwrite existing files.
    * **Do not re-download the waveforms** that saved products were made from.
@@ -177,21 +177,21 @@ almost everything. The move must preserve all three.
    * Extra data, such as the missing YV October–December 2012 days or a fresh
      RR12, goes into a **separate folder** and is treated as new input later.
 3. **Environment.** The shell wrappers look for a conda environment named
-   `bruitfm`, or the Homebrew Miniforge path, so recreate it with the same name:
+   `compy_pressure`, or the Homebrew Miniforge path, so recreate it with the same name:
 
    ```bash
    brew install miniforge
-   conda create -n bruitfm python=3.13 && conda activate bruitfm
-   cd ~/Projects/bruit-fm && pip install -e '.[dev,rayleigh,dispersion]'
+   conda create -n compy python=3.13 && conda activate compy
+   cd ~/Projects/pressure-qc && pip install -e '.[dev,rayleigh,dispersion]'
    python -m pytest -q                      # expect all tests to pass
    conda info --base                        # expect /opt/homebrew/Caskroom/miniforge/base
    ```
 
    The coverage and YV wrappers default to
-   `/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python`, which is
+   `/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`, which is
    exactly where Homebrew's Miniforge puts this environment on an Apple-silicon
    Mac. If `conda info --base` differs, run
-   `export BRUITFM_PYTHON="$(conda run -n bruitfm which python)"` before the
+   `export PRESSURE_PYTHON="$(conda run -n compy which python)"` before the
    wrappers.
 
 4. **Check the copy** before planning anything. It must say **READY** with
@@ -236,12 +236,12 @@ almost everything. The move must preserve all three.
      control;
    * only after that, build the scoped noise model.
 
-## Plot commands (from `~/Projects/bruit-fm`)
+## Plot commands (from `~/Projects/pressure-qc`)
 
 ```bash
-PY=/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python
+PY=/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python
 PYTHONPATH=src:. $PY scripts/plot_network_median_ppsd.py --network YV --channel BDH --show
-PYTHONPATH=src:. $PY -m bruitfm.plot_network_ppsd --network YV --channels BDH --probability --show
+PYTHONPATH=src:. $PY -m compy_pressure.plot_network_ppsd --network YV --channels BDH --probability --show
 PYTHONPATH=src:. $PY scripts/plot_yv_ppsd_by_sensor.py --output-dir <new folder>
 PYTHONPATH=src:. $PY scripts/plot_station_ppsd_panels.py --station RR52 --out <new file>.png
 ```

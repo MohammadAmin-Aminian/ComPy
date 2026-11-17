@@ -12,7 +12,7 @@ that would settle it.
 ## 0. Scope and constraints
 
 - **Read:** the whole repository: package, pipeline, examples, tests, docs, the archived
-  YV and XE results, and the BRUIT-FM notes in `pressure/docs`. The audit builds on the
+  YV and XE results, and the PressureQC notes in `pressure/docs`. The audit builds on the
   October audit (`docs/AUDIT_2026-10.md`, items D1–D7, S1–S10) and the inversion notes
   (`docs/INVERSION.md`, V1–V8, A1–A4) and does not repeat them.
 - **Environment:** no ObsPy, TiSKitPy or disba could be installed, and the raw waveforms
@@ -104,7 +104,7 @@ Open = needs a decision or data.
 | H3 | High (YV) / Low (XE) | `compy/compliance.py:130` (`SelectionCriteria.check`), `stacked_compliance` | **Selection bias of the coherence gate:** the same noise sets the per-window coherence (about 3.8 Welch averages) and \|S_pz\| | **Verified** by Monte Carlo (§4.3); station values **model-based** | +0.03 to +8 % in general; about +1 to +4 % at YV, < 0.5 % at most XE stations | Option `gate="exclusive"`: D4 |
 | M1 | Med. | `compy_pressure/rayleigh_calibration.py:54, 1021–1022`; `pipeline/d_calibrate.py:60` | **Homogeneous water column (1028 kg/m³, 1500 m/s)** in the Rayleigh prediction; gain ∝ ρ | **Verified** (`water_column` in `numbers.json`) | Gain −0.6 to −1.0 % (−0.5 to −1.45 % for c = 1490–1510 m/s), so compliance +0.6 to +1.0 % at every station | Open: D5 |
 | M2 | Med. | `compy/inversion/dram.py:543–563` (`ComplianceData.build`) | **The covariance omits the systematics** H1–M1. The B&P term is diagonal, although power estimates in adjacent Hann bins are correlated (ρ ≈ 0.44) | **Verified** (error budget figures) | χ²/N < 1 at most stations while systematic offsets of 1–4 % are not represented | Open: D6, roadmap |
-| M3 | Med. | `compy/compliance.py:158` docstring; `pressure/docs/rayleigh_calibration_review.md` | **Polarity:** Z/P phase ≈ 0° at every station of both networks, where an elastic seafloor gives 180° for upward Z and positive compression. This agrees with BRUIT-FM's assumed pressure sign −1 and with Doran et al. (2019), whose DPGs output a negative pulse for a pressure increase | **Verified** | None on \|η\|. Breaks any phase-aware use (phase QC, ATaCR-style Z–P correction, joint inversion) | Open: D7 |
+| M3 | Med. | `compy/compliance.py:158` docstring; `pressure/docs/rayleigh_calibration_review.md` | **Polarity:** Z/P phase ≈ 0° at every station of both networks, where an elastic seafloor gives 180° for upward Z and positive compression. This agrees with PressureQC's assumed pressure sign −1 and with Doran et al. (2019), whose DPGs output a negative pulse for a pressure increase | **Verified** | None on \|η\|. Breaks any phase-aware use (phase QC, ATaCR-style Z–P correction, joint inversion) | Open: D7 |
 | M4 | Med. | Stage C acceptance | **Tidal control of window acceptance** (tidal lines at 7 of 8 YV stations, M2 up to 50 % modulation at RR34; S1 or O1 at CC11 and EE01) | **Verified** (empirical and tail p) | No measurable modulation of \|Z/P\| (≤ 1 %), so \|η\| is not biased. The weighting and the selection-bias regime vary with the tide | Info |
 | M5 | Med. | XE monthly stacks | **Network-wide drift:** the median monthly deviation falls from +0.8 % (2018-04) to −0.7 % (2019-05); Spearman −0.86, p = 7 × 10⁻⁵; inter-station common mode p = 0.002 | **Verified**; cause is a **hypothesis** (§5.D) | About 1 %/yr. The monthly-subset term treats it as random scatter | Open: test |
 | M6 | Med. | `pipeline/b_clean.py:215`; `compy/preprocessing.py:195–215` | **Silent fallback:** when TiSKitPy refuses the event spans, coherent-noise transfer functions are estimated *with* the events, and nothing is recorded unless both attempts fail | Code reading | Possible earthquake leakage into the transfer functions of affected 24-h windows | Open: D8 |
@@ -266,7 +266,7 @@ bottom-of-band residuals of +6 to +14°.
 
 | Hypothesis | Prediction | Test | Result |
 |---|---|---|---|
-| (a) Timing offset between Z and P | Phase = 360 f Δt, through zero, growing with f | Fit in the band; Rayleigh-band phase at 30–70 mHz | **Rejected:** rms 2–5° vs ≤ 1° for the response models; Rayleigh P/a phase rms 2.4–8.3° about 0 (BRUIT-FM `stations.csv`), where the fitted Δt of +0.5 to +4.5 s would give 10–110° |
+| (a) Timing offset between Z and P | Phase = 360 f Δt, through zero, growing with f | Fit in the band; Rayleigh-band phase at 30–70 mHz | **Rejected:** rms 2–5° vs ≤ 1° for the response models; Rayleigh P/a phase rms 2.4–8.3° about 0 (PressureQC `stations.csv`), where the fitted Δt of +0.5 to +4.5 s would give 10–110° |
 | (b) DPG leak time constant ≠ metadata (first-order high-pass) | atan(f/f_true) − atan(f/f_meta), decaying above the corners | Fit (done); tidal-band amplitude vs a tide model gives τ directly (Doran et al. 2019) | **Fits** (rms ≤ 1°). Implied f_true < f_meta, so τ_true > τ_meta. Needs the M2 test on raw pressure |
 | (c) Seismometer corner ≠ nominal 240 s | Second-order shape around 4 mHz | Fit (done); calibration pulses or step response; compare sensors of the same model | **Fits** (true period ≈ 180–220 s at most stations). Needs a calibration record |
 | (d) Poroelastic or anelastic seafloor | Phase grows with sediment thickness (drained/undrained) and is site-dependent | Spearman of residual vs posterior sediment thickness | **Not supported:** ρ = −0.26 (YV, n = 8), −0.23 (XE, n = 21); wrong sign, not significant. Same pattern on two different crusts |
@@ -286,7 +286,7 @@ amplitude errors.
 
 | Hypothesis | Test | Result |
 |---|---|---|
-| StationXML epoch change | One epoch per channel for the whole deployment (BRUIT-FM `stations.csv`) | Rejected |
+| StationXML epoch change | One epoch per channel for the whole deployment (PressureQC `stations.csv`) | Rejected |
 | Sea-state change (non-instrumental) | A pressure-level step should come with it, and compliance is a ratio | Rejected: "no concurrent P/Z level step" at RR28, RR29, RR40, RR52 |
 | DPG sensitivity change (e.g. battery voltage late in the deployment, common hardware) | Per-event Rayleigh gains before and after; P/Z ratio only | **Supported:** Rayleigh g rises by +7.8 % (RR28), +6.1 % (RR29), +6.3 % (RR40), +8.5 % (RR52) after the step, from 1–3 events each |
 | Seismometer sensitivity change | Z-level step, as at RR50 on 2013-07-30 (+4.7 dB) | Not seen in September. RR50's July step is a vertical-channel change |
@@ -378,7 +378,7 @@ Ranked by scientific impact over effort (I = impact, E = effort; 1 low, 5 high).
 | 5 | **In-situ water column in the calibration:** depth-mean ρ (compressibility) and sound speed (Mackenzie with WOA profiles) | 3 | 1 | M1, at every station |
 | 6 | **Automated QC report per station** (`compy qc`): this anomaly scan plus waveform coherograms and tilt, run after stage C | 3 | 2 | Catches failed channels and steps before inversion |
 | 7 | **CLI and config files:** `compy run config.yaml` (stages A–G) replacing `exec` of a Python config; schema-checked YAML, run manifest with config hash | 3 | 3 | Reproducibility, safety |
-| 8 | **FDSN fetch with caching** (EIDA/RESIF, IRIS) and StationXML sanity checks (unpaired poles, positive real poles, polarity) | 3 | 2 | New networks without an SDS archive; BRUIT-FM already found invalid YV responses |
+| 8 | **FDSN fetch with caching** (EIDA/RESIF, IRIS) and StationXML sanity checks (unpaired poles, positive real poles, polarity) | 3 | 2 | New networks without an SDS archive; PressureQC already found invalid YV responses |
 | 9 | **Joint observables:** compliance + Rayleigh/Scholte dispersion or receiver functions, using the existing `Forward`, `disba` and gain sampling | 4 | 4 | Breaks the Vs–Vp/Vs and sediment trade-offs |
 | 10 | **Packaging:** split `compy-core` (NumPy/SciPy only) from `compy[obspy]`; numpydoc site (Sphinx or MkDocs) with these figures as a gallery | 2 | 2 | Light install, docs |
 | 11 | **CI:** a no-ObsPy job, a weekly full-pipeline smoke test on a 3-day public dataset, and coverage | 2 | 1 | Catches import and environment drift |

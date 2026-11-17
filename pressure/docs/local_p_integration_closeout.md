@@ -76,7 +76,7 @@ Verified on code `7dde4d4`; subsequent integration edits are documentation only.
 - The all-methods `--check` preflight passed without waveform execution:
   66 local-P eligible pairs, 39 sample-rate exclusions, 15 response exclusions.
 - Fresh read-only saved-campaign composition:
-  `bruit-fm-localp-finish/results/LOCAL_P/reviews/main_closeout_20261016/`.
+  `pressure-qc-localp-finish/results/LOCAL_P/reviews/main_closeout_20261016/`.
   All 144 protected input hashes match. Its `phase_report.json` SHA-256 is
   `798eda5c2a5dcc67701476ed856cb95142755e29967436d10e1ddb93800ffe4f`,
   exactly the earlier phase report. The import plan is read-only: 66 exact
@@ -100,8 +100,8 @@ with only three v2 pairs; 63 legacy executed pairs remain explicitly flagged.
 These commands run tests/preflight only, not a data campaign:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m pytest -q
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m pytest -q
 bash scripts/run_all_calibrations.sh --check
 ```
 

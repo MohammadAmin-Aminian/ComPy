@@ -25,7 +25,7 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
 fi
 set -Eeuo pipefail
 
-MAIN="$HOME/Projects/bruit-fm"
+MAIN="$HOME/Projects/pressure-qc"
 LOCALP="$(cd "$(dirname "$0")/.." && pwd)"
 CHECK_ONLY=0
 RERUN_RAYLEIGH=0
@@ -52,9 +52,9 @@ SESSION=
 trap 'STATUS=$?; printf "\nStopped during %s (exit %s, line %s). Logs: %s\n" "$STAGE" "$STATUS" "$LINENO" "${SESSION:-not started}" >&2; exit "$STATUS"' ERR
 
 if command -v conda >/dev/null; then
-  PY=(conda run --no-capture-output -n bruitfm python)
+  PY=(conda run --no-capture-output -n compy python)
 else
-  PY=(/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python)
+  PY=(/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python)
 fi
 
 for FILE in \

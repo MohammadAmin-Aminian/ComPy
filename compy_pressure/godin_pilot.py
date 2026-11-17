@@ -35,7 +35,7 @@ from compy_pressure.pressure_test import (
     validate_pressure,
 )
 
-DATA_DIRECTORY = Path.home() / "Desktop/Data_Bruit_FM/RR52"
+DATA_DIRECTORY = Path.home() / "Desktop/ComPy/data/RR52"
 WINDOW_SECONDS = 12.42 * 3600
 DAY_SECONDS = 86400
 SAVE_MAX_HZ = 0.06

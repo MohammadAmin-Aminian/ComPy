@@ -11,8 +11,8 @@ Claude's worktree and main remain untouched. No full campaign was rerun.
 
 ## Verification
 
-Commands ran in `/Users/mohammadamin/Projects/bruit-fm-localp-review`, using
-the `bruitfm` environment and `PYTHONPATH=src:.`.
+Commands ran in `/Users/mohammadamin/Projects/pressure-qc-localp-review`, using
+the `compy_pressure` environment and `PYTHONPATH=src:.`.
 
 | Check | Result |
 | --- | --- |
@@ -56,7 +56,7 @@ P2 = correctness or safety issue to fix before routine production reuse.
 Line numbers refer to the reviewed Claude commit, not current main.
 
 1. **P1: documented noise-window safeguard is absent.**
-   `src/bruitfm/local_p_check.py:964` computes the noise window and checks
+   `compy_pressure/local_p_check.py:964` computes the noise window and checks
    array bounds, but never requires its end to precede predicted P minus
    search uncertainty, as promised by `docs/local_p_method.md:158`.
    Recomputing that boundary with `search_half_width` from saved event records
@@ -96,7 +96,7 @@ Line numbers refer to the reviewed Claude commit, not current main.
    missing files. Record relevant dependency versions for reproducibility.
 
 4. **P2: polarity summary resolves a tie as +1 and hides indeterminate votes.**
-   `src/bruitfm/local_p_check.py:1122` drops all zero classifications and uses
+   `compy_pressure/local_p_check.py:1122` drops all zero classifications and uses
    `max` without a tie check. Synthetic votes `[+1,-1]` return +1;
    `[+1,0,0]` also return +1. Actual RR52 has one negative and one
    indeterminate band vote; RR40 has 9 negative and 12 indeterminate votes,

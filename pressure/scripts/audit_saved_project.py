@@ -43,8 +43,8 @@ def main():
             ROOT / "results/NETWORKS",
             ROOT / "results/TEST",
             ROOT / "exports",
-            Path.home() / "Desktop/Data_Bruit_FM/Data/YV",
-            Path.home() / "Desktop/Data_Bruit_FM/Data/YL",
+            Path.home() / "Desktop/ComPy/data/Data/YV",
+            Path.home() / "Desktop/ComPy/data/Data/YL",
         ]
         for p in root.rglob("*")
         if p.is_file()

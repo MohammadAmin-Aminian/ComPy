@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Fresh pressure-PPSD run from a data drive into a new Desktop folder.
-#   bash scripts/run_fresh_pressure_ppsd.sh /Volumes/<drive>/Data_Bruit_FM [stage] [options]
+#   bash scripts/run_fresh_pressure_ppsd.sh /Volumes/<drive>/data [stage] [options]
 # The data folder must contain INVENTORIES/ (StationXML) and Data/ or SDS/ (waveforms).
 # Stages: inventory, check, ppsd, plots, or all (default: all, in that order).
 # Extra options go to python -m compy_pressure.network (e.g. --network YV --workers 8).
-# Raw data are only read. Outputs, by default under ~/Desktop/BRUIT-FM/fresh_run_<date>:
+# Raw data are only read. Outputs, by default under ~/Desktop/ComPy/fresh_run_<date>:
 #   master/   master_inventory.csv and .xlsx
 #   results/  <network>/<station>/<epoch>/ppsd.npz ... and <station>/plots/
 #   logs/     one log per stage
@@ -14,7 +14,7 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
 fi
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PYTHON="${BRUITFM_PYTHON:-/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python}"
+PYTHON="${PRESSURE_PYTHON:-/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python}"
 SOURCE="${1:-}"
 WAVEFORMS=""
 for name in Data SDS; do
@@ -34,7 +34,7 @@ if [[ $# -gt 0 && "$1" != --* ]]; then
   STAGE="$1"
   shift
 fi
-OUT="${BRUITFM_FRESH_DIR:-$HOME/Desktop/BRUIT-FM/fresh_run_$(date +%Y-%m-%d)}"
+OUT="${PRESSUREQC_FRESH_DIR:-$HOME/Desktop/ComPy/fresh_run_$(date +%Y-%m-%d)}"
 mkdir -p "$OUT/master" "$OUT/results" "$OUT/logs"
 cd "$ROOT"
 export PYTHONPATH="$ROOT/.."

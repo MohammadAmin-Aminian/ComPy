@@ -1,4 +1,4 @@
-# BRUIT-FM contribution and review record
+# PressureQC contribution and review record
 
 This records the people and agents responsible for the completed work through
 README step 56. Repository commit authorship is preserved; the role attribution
@@ -7,7 +7,7 @@ below documents work performed through the user's coding-agent sessions.
 | Contributor | Role and completed work |
 |---|---|
 | **Mohammad Amin Aminian — project owner** | Scientific direction and original research context; waveform/inventory acquisition; executing the YV, YL, 7D and XO runs and scientific trials; supplying published-method references; reviewing results and authorizing integration. |
-| **Codex — development and integration agent** | Original BRUIT-FM implementation with the owner; inventories, processing, diagnostics and network workflows; calibration and APG support; independent regression/raw-window checks; closing the fresh-master lock race; implementing optional scientific experiments; comparing results, maintaining numbered reports and integrating approved branches. |
+| **Codex — development and integration agent** | Original PressureQC implementation with the owner; inventories, processing, diagnostics and network workflows; calibration and APG support; independent regression/raw-window checks; closing the fresh-master lock race; implementing optional scientific experiments; comparing results, maintaining numbered reports and integrating approved branches. |
 | **Sentinel — independent Claude engineering reviewer** | Separate code/test/reliability audit; fixes retaining spectra and true QC at gain boundaries, matching tilt horizontal band codes, refusing master overwrite and serializing master updates; independent convention tests, station diagnostics and evidence preservation. |
 | **Socrates — independent Claude scientific reviewer** | Reviewing Sentinel's evidence against physics and primary publications; response-pole, periodic-glitch, estimator/model/uncertainty and response-shape analysis; read-only V1–V11 diagnostics and qualified proposals. Socrates' review supplied scientific hypotheses; it did not directly implement production corrections. |
 | **Claude — independent microseism implementation** | Water-layer admittance, RR52 pilot, modal calculations, H1/H2 conditional gains, all-network and repeated-week tools; identified the best-band selection flaw and specified the frozen frequency-consistency rule in the handoff. Its Sentinel/Socrates-style self-review is explicitly a self-review. |

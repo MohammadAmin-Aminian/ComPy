@@ -1,4 +1,4 @@
-# BRUIT-FM: project transfer from Codex to Claude
+# PressureQC: project transfer from Codex to Claude
 
 > **Status update, 22 October 2026:** the immediate task below (response
 > confirmation) and the YV reproduction are done. Read
@@ -12,7 +12,7 @@ they conflict with it. This transfer changes documentation only, not science.
 ## Repository and verified software checkpoint
 
 - Repository: <https://github.com/MohammadAmin-Aminian/bruit-fm>.
-- Main workspace: `/Users/mohammadamin/Projects/bruit-fm`.
+- Main workspace: `/Users/mohammadamin/Projects/pressure-qc`.
 - Reviewed software checkpoint: `7ac2e639e84268f1ef2317412d5e1ef4537874af`.
   This handoff is committed after that checkpoint; use the latest main.
 - [PR #1](https://github.com/MohammadAmin-Aminian/bruit-fm/pull/1) is merged and
@@ -181,10 +181,10 @@ Paths below are relative to the main workspace unless absolute:
   `results/VALIDATION/YV_HELDOUT/run_20261013T213126Z_87e24fe6/` and
   `results/VALIDATION/YV_HELDOUT/RR05_replacement_20261013T215958Z_fee6a2d2/`.
 - Additional microseism sources remain in the preserved
-  `/Users/mohammadamin/Projects/bruit-fm-claude/results/` worktree. Use explicit
+  `/Users/mohammadamin/Projects/pressure-qc-claude/results/` worktree. Use explicit
   pointers in the frozen review; never pick the newest directory by glob.
-- Raw archive: `/Users/mohammadamin/Desktop/Data_Bruit_FM/Data/`;
-  original inventories: `/Users/mohammadamin/Desktop/Data_Bruit_FM/INVENTORIES/`.
+- Raw archive: `/Users/mohammadamin/Desktop/ComPy/data/Data/`;
+  original inventories: `/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/`.
 - Primary paper: Stähler et al. (2016), *Performance report of the RHUM-RUM
   ocean bottom seismometer network around La Réunion, western Indian Ocean*,
   <https://doi.org/10.5194/adgeo-41-43-2016>. Relevant Table 3/section 3.1 and
@@ -241,17 +241,17 @@ call it complete, and do not automatically resume or promote it.
   branch. Old local-P branches must not replace main's stronger reviewed v2.
 
 Current Python:
-`/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python`.
+`/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`.
 Use `PYTHONPATH=src:.` for checkout scripts. Supported deployment is Python
 3.13 on macOS/Linux; wheel smoke is not a locked dependency or field test.
 
 Safe software verification, when relevant to actual changes:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python -m ruff check .
-PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python -m ruff format --check .
-PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MPLBACKEND=Agg /opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python -m pytest -q
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python -m ruff check .
+PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python -m ruff format --check .
+PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MPLBACKEND=Agg /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python -m pytest -q
 ```
 
 Create a new branch from current `origin/main`, e.g.

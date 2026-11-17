@@ -1,6 +1,6 @@
-# BRUIT-FM's project folder
+# PressureQC's project folder
 
-Moved from BRUIT-FM 1.3.0. This folder is laid out like BRUIT-FM's checkout,
+Moved from PressureQC 1.3.0. This folder is laid out like PressureQC's checkout,
 and the code it holds is ComPy's `compy_pressure` package (`../compy_pressure/`):
 
 - [`docs/`](docs/): methods, validation notes, reviews, policies and the data
@@ -9,28 +9,28 @@ and the code it holds is ComPy's `compy_pressure` package (`../compy_pressure/`)
 - [`tests/`](tests/): the package's tests, run by ComPy's `pytest`.
 
 The dated reports (PDFs, figures and scored tables, 136 MB) stay in
-BRUIT-FM, which is kept as a backup: [docs/reports](https://github.com/MohammadAmin-Aminian/bruit-fm/tree/v1.3.0/docs/reports).
+PressureQC, which is kept as a backup: [docs/reports](https://github.com/MohammadAmin-Aminian/bruit-fm/tree/v1.3.0/docs/reports).
 The ComPy user guide is [`docs/PRESSURE.md`](../docs/PRESSURE.md).
 
 Run the scripts from this folder with both ComPy and it on the path:
 `cd pressure && PYTHONPATH=..:. python scripts/plot_network_median_ppsd.py --help`.
 The shell scripts expect the conda environment named in each file.
 
-The documents are BRUIT-FM's, unchanged apart from their links. In ComPy the
+The documents are PressureQC's, unchanged apart from their links. In ComPy the
 names are:
 
-| BRUIT-FM | ComPy |
+| PressureQC | ComPy |
 |---|---|
-| package `bruitfm`, `src/bruitfm/` | `compy_pressure`, `../compy_pressure/` |
-| `bruitfm` | `compy-pressure` |
-| `bruitfm-inventory` | `compy-pressure-inventory` |
-| `bruitfm-tilt` | `compy-pressure-tilt` |
-| `bruitfm-local-p` | `compy-pressure-local-p` |
-| `bruitfm-microseism` | `compy-pressure-microseism` |
-| `bruitfm-paired` | `compy-pressure-paired` |
-| `bruitfm-group-noise-model` | `compy-pressure-noise-model` |
-| `bruitfm-noise-model` | `compy-pressure-approved-noise-model` |
+| package `compy_pressure`, `compy_pressure/` | `compy_pressure`, `../compy_pressure/` |
+| `compy_pressure` | `compy-pressure` |
+| `compy_pressure-inventory` | `compy-pressure-inventory` |
+| `compy_pressure-tilt` | `compy-pressure-tilt` |
+| `compy_pressure-local-p` | `compy-pressure-local-p` |
+| `compy_pressure-microseism` | `compy-pressure-microseism` |
+| `compy_pressure-paired` | `compy-pressure-paired` |
+| `compy_pressure-group-noise-model` | `compy-pressure-noise-model` |
+| `compy_pressure-noise-model` | `compy-pressure-approved-noise-model` |
 
-BRUIT-FM's README and changelog are here as
-[`BRUITFM_README.md`](BRUITFM_README.md) and
-[`BRUITFM_CHANGELOG.md`](BRUITFM_CHANGELOG.md).
+PressureQC's README and changelog are here as
+[`HISTORY_README.md`](HISTORY_README.md) and
+[`HISTORY_CHANGELOG.md`](HISTORY_CHANGELOG.md).

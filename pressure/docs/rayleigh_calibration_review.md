@@ -74,11 +74,11 @@ read; this is not a claim to have audited every chapter or publication.
 | Aminian thesis, *Quantitative Analysis of Oceanic Crust Shear Velocity Structure Using Seafloor Compliance Measurement Data* | Section 3.1.6, printed pp. 53–60; Figs. 3.11–3.13; Table 3.1; equations 3.7–3.12; preceding tilt method and station/sensor description. Calibration equation and event/table pages were visually inspected. |
 | Local *Complete manuscript file.pdf* | Section 4.1.5, Fig. 5 and Table 1; teleseismic Mw>7 selection, pressure/acceleration fitting, grid search and RR52 multiplier 0.67. It is a manuscript, not a verified byte-identical copy of the published article. |
 | Aminian tilt milestone note | Variance minimization, transfer-function correction and coherence minimization. |
-| BRUIT-FM WP2 proposal supplied locally | Separate PSD/cross-spectra measurements, calibration checks and later acceptance/classification. |
+| PressureQC WP2 proposal supplied locally | Separate PSD/cross-spectra measurements, calibration checks and later acceptance/classification. |
 | [Zha & Webb (2016)](https://doi.org/10.1002/2015JB012688) | Section 2.3, Table 1 and Appendix A: teleseismic pressure/acceleration reference and frequency-independent amplitude correction assumption. |
 | [Doran et al. (2019)](https://doi.org/10.1029/2019EA000783) | Independent in situ calibration context; event-centered Rayleigh packets and limits of scalar gain versus capillary time constant. |
 | [Ruan et al. (2014)](https://doi.org/10.1002/2014JB011162) | Distinguishes microseism and earthquake transfer measurements; tilt and wavefield/model effects prevent treating all amplitudes as calibration offsets. |
-| [Wayne Crawford's BRUIT-FM material](https://www.bruit-fm.org/crawford_noise_reduction.html), [proposal](https://www.bruit-fm.org/Documents/aapg-anr-2021-full_proposal_BRUITFM.pdf), and [TiSKitPy](https://github.com/WayneCrawford/tiskitpy) | Response validation, signal/noise separation, `CleanRotator`, event avoidance and `DataCleaner`. Current rotation implementation was inspected directly. |
+| [Wayne Crawford's PressureQC material](https://www.pressure-qc.org/crawford_noise_reduction.html), [proposal](https://www.pressure-qc.org/Documents/aapg-anr-2021-full_proposal_PRESSUREQC.pdf), and [TiSKitPy](https://github.com/WayneCrawford/tiskitpy) | Response validation, signal/noise separation, `CleanRotator`, event avoidance and `DataCleaner`. Current rotation implementation was inspected directly. |
 | [disba](https://github.com/keurfonluu/disba) | Distinct fundamental-mode `PhaseDispersion` and `GroupDispersion`, period ordering and model units. |
 
 Local originals remain outside this repository. Published article identifier:
@@ -94,7 +94,7 @@ that version distinction retained. No private Wayne correspondence was inspected
 | Current public `ComPy`, `8b1431816f7720ac15855d38b17b3e91f2610fa2` | Several older filtering, trace-length and frequency-grid problems have already been repaired. It picks the largest absolute sample within an event span; that remains a candidate locator, not proof of a fundamental Rayleigh arrival. Its full cleaning chain should not be copied into earthquake windows without checking preservation of genuine horizontal/vertical Rayleigh motion. |
 | `PressureCorrection`, `08d553c` | SAC-based phase-window and pressure-gain workflow, with manual P/S/R ranges and time-domain correlations. Inspected as a methodological precursor; not imported or executed because its file/SAC operations are unsuitable for this archive. |
 | `SeafloorCal` (`dpgPy`), `520e3d9` | Strong explicit units, polarity/phase checks, physical model, group-velocity candidate windows and event-level uncertainty. Its historical fixes/validation notes were read before testing. Focused model/guard tests: **47 passed**. Numerical water-model comparison agrees with this pilot. This is not a new full audit or field certification of SeafloorCal. |
-| `pressure-gauge-calibration-project`, `29a2db2` | Small acoustic-reference and spectral-ratio prototype. Its **10 scientific tests pass** in the BRUIT-FM environment. Useful normalization, grid, polarity and reciprocal-gain safeguards; no claimed previous field validation. |
+| `pressure-gauge-calibration-project`, `29a2db2` | Small acoustic-reference and spectral-ratio prototype. Its **10 scientific tests pass** in the PressureQC environment. Useful normalization, grid, polarity and reciprocal-gain safeguards; no claimed previous field validation. |
 | TiSKitPy source `3bb51b3eb82fa51f2e0888a063e484aa1c9ef5c3` | `CleanRotator` estimates a minimum-variance vertical axis in a low-frequency band while avoiding earthquakes. The initial pilot used a local covariance/eigenvector method. The current default runs the installed `CleanRotator` 2.3.1 class; this is not the full `DataCleaner` pipeline. |
 
 The two recent packages were useful references rather than untested replacements
@@ -201,7 +201,7 @@ SeafloorCal Python 3.12 environment. Its historical CRUST2/PREM-like layer block
 was extracted without executing the old script; the last layer is declared a
 half-space. It is a reproduction reference, not a verified local Earth model or
 a verbatim PREM profile. Model/dispersion CSVs and provenance are shipped under
-`src/bruitfm/reference_data/rr52_historical_rayleigh_*`. The BRUIT-FM environment
+`compy_pressure/reference_data/rr52_historical_rayleigh_*`. The PressureQC environment
 does not need disba to use the prepared table. The later TiSKitPy installation
 added only the optional TiSKitPy/PyYAML/xarray packages; core scientific versions
 were preserved.
@@ -254,11 +254,11 @@ the three-event scatter and must be represented before quoting total uncertainty
 On this machine the explicit catalogue snapshot is already saved locally:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-conda run --no-capture-output -n bruitfm python -m pip install -e '.[rayleigh]'
-conda run --no-capture-output -n bruitfm python -m bruitfm.rayleigh_calibration \
+cd /Users/mohammadamin/Projects/pressure-qc
+conda run --no-capture-output -n compy python -m pip install -e '.[rayleigh]'
+conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
-  --dispersion-file src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv \
+  --dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \
   --network YV --station RR52 --max-events 8
 ```
 
@@ -277,7 +277,7 @@ The ≥5.5 snapshot has 426 events for quiet-interval screening; the calibration
 selection starts at Mw>7 and can fall back to Mw≥6.5/6. Catalogue/input hashes are saved. Full raw products
 and that snapshot remain local, excluded from Git.
 
-The full BRUIT-FM suite passes **87 tests**. Checks independently integrate
+The full PressureQC suite passes **87 tests**. Checks independently integrate
 the acoustic ODE, verify grid/analytical and reciprocal gain conventions, group
 versus phase velocity, exact synthetic rotation, raw-response gain recovery,
 phase reversal, actual-library projection, provisional-sign gain recovery,

@@ -7,7 +7,7 @@ and nothing is running.
 
 | Deliverable | Result | Where |
 |---|---|---|
-| Pressure PPSDs | 846 unique pressure channel epochs, 30 networks | `~/Desktop/BRUIT-FM/fresh_run_2026-10-23/` |
+| Pressure PPSDs | 846 unique pressure channel epochs, 30 networks | `~/Desktop/ComPy/pressure_qc/fresh_run_2026-10-23/` |
 | Seismometer PPSDs | 1,345 channel epochs at 378 pressure stations | `seismic_run_2026-10-26/` |
 | QC tests 1–3 | all 846 channels; 456 good / 171 questionable / 189 bad | `qc_all_2026-10-26/`, `docs/reports/2026-10-26_all_station_qc/` |
 | Calibrations | Rayleigh 54, microseism 167 (scored), local P 54 channels; methods agree (median +0.1 dB, Rayleigh vs microseism) | `docs/reports/2026-10-28_seismic_calibration/` |
@@ -49,7 +49,7 @@ Edit the rules in `gain_corrected_2026-10-28/decisions/` (or in
 - Remote: only `main`. Tags: `v0.1.0`, `v1.0.0`, `v1.1.0`, `v1.2.0`,
   `archive/local-p-check` (its useful change is already in main).
 - The repository is private. Making it public is the owner's decision.
-- BRUIT-FM will later be merged into ComPy (both GPL-3.0).
+- PressureQC will later be merged into ComPy (both GPL-3.0).
 - The gh token lacks `workflow` scope, so `.github/workflows` cannot be pushed.
 - The data drive is `/Volumes/DATA_bruitfm`. Connect it directly with its own
   power supply; it dropped twice on a hub.

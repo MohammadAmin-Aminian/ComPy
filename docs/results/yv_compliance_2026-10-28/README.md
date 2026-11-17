@@ -6,7 +6,7 @@ This folder holds the compliance functions of the eight RHUM-RUM (YV) broadband 
 
 - `report.html`: the full report (method, audit, gains, results, open issues). Open it locally.
 - `results/<STA>/`:
-  - `<STA>_compliance_{bruitfm,compy}.csv`: frequency, normalized compliance [1/Pa],
+  - `<STA>_compliance_{compy_pressure,compy}.csv`: frequency, normalized compliance [1/Pa],
     Bendat & Piersol error, coherence, phase, and an in-band flag;
   - `.npz`: the same, plus stacked spectra and accepted window start times;
   - `<STA>_summary.json`: gates, rejected-window counts and monthly stacks;

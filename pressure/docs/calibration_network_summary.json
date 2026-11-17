@@ -20,7 +20,7 @@
         "min_events": 3,
         "max_events": 8,
         "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json",
-        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv"
+        "dispersion_file": "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv"
       },
       "station_count": 43,
       "status_counts": {
@@ -714,7 +714,7 @@
         "max_events": 8,
         "event_sampling": "all",
         "catalog": "results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_YL_ALL_20091120_20101204.json",
-        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+        "dispersion_file": "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv",
         "earth_model_file": null
       },
       "station_count": 25,
@@ -1330,7 +1330,7 @@
         "max_events": 8,
         "event_sampling": "all",
         "catalog": "results/NETWORKS/7D_ALL_NO_TILT/_inputs/catalog_usgs_m5p5.json",
-        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+        "dispersion_file": "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv",
         "earth_model_file": null
       },
       "station_count": 15,
@@ -1619,7 +1619,7 @@
         "max_events": 8,
         "event_sampling": "all",
         "catalog": "results/NETWORKS/XO_ALL_GAUGES_NO_TILT/_inputs/catalog_usgs_m5p5.json",
-        "dispersion_file": "src/bruitfm/reference_data/rr52_historical_rayleigh_dispersion.csv",
+        "dispersion_file": "compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv",
         "earth_model_file": null,
         "event_resample_rate": 1.0,
         "native_rate_tolerance_ppm": 0.1

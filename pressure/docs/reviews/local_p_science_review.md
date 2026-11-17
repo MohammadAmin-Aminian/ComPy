@@ -261,12 +261,12 @@ response-shape diagnostics.
 ## 5. Reproduce
 
 ```bash
-cd ~/Projects/bruit-fm-localp-science
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
+cd ~/Projects/pressure-qc-localp-science
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   scripts/review_local_p_science.py --output-dir results/LOCAL_P/science_review/<new>
 ```
 
-It reads the saved campaigns in `~/Projects/bruit-fm-localp/results/LOCAL_P/`
+It reads the saved campaigns in `~/Projects/pressure-qc-localp/results/LOCAL_P/`
 and nine LT02 waveform windows, and records and rechecks input hashes.
 `run1` was the first pass without the control windows; `run2` is the
 reference for every number above.

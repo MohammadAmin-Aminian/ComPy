@@ -29,7 +29,7 @@
 #   --allow-dirty  run with uncommitted code in ../compy_pressure/ or scripts/ (recorded);
 #                  by default the run refuses, and it always stops if the code
 #                  changes while it runs.
-# Set BRUITFM_PYTHON to use another interpreter and BRUITFM_SOURCE_ROOT to run
+# Set PRESSURE_PYTHON to use another interpreter and PRESSUREQC_SOURCE_ROOT to run
 # another checkout (default: this one). Run with bash; never source it.
 if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
   printf 'Run this file with bash; do not source it.\n' >&2
@@ -37,9 +37,9 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
 fi
 set -Eeuo pipefail
 
-# BRUITFM_SOURCE_ROOT selects the checkout whose code, exports and results are used.
-ROOT="${BRUITFM_SOURCE_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
-PY="${BRUITFM_PYTHON:-/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python}"
+# PRESSUREQC_SOURCE_ROOT selects the checkout whose code, exports and results are used.
+ROOT="${PRESSUREQC_SOURCE_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
+PY="${PRESSURE_PYTHON:-/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python}"
 CHECK_ONLY=0
 WEEKS=0
 POLE_TRIAL=0

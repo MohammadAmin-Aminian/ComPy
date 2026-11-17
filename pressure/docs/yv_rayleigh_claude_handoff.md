@@ -134,7 +134,7 @@ evidence that the assumed sensor response is physically correct.
 Completed checks include saved-spectrum arithmetic, selected independent raw CSD
 checks, arrival/quiet reviews and response/window sensitivities. Do not spend this
 task proving all of those again. Relevant implementation entry points:
-`src/bruitfm/rayleigh_calibration.py`, `rayleigh_network.py`,
+`compy_pressure/rayleigh_calibration.py`, `rayleigh_network.py`,
 `calibration_experiment.py`, `rayleigh_validation.py`; scripts
 `run_calibration_experiment.py`, `run_yv_heldout_validation.py`,
 `review_yv_heldout_arrivals.py`, `review_saved_calibrations.py`.
@@ -155,8 +155,8 @@ Some existing review scripts also read raw windows: inspect before running.
 
 ## Exact saved inputs and provenance
 
-Local project root: `/Users/mohammadamin/Projects/bruit-fm`.
-Python: `/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python`,
+Local project root: `/Users/mohammadamin/Projects/pressure-qc`.
+Python: `/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`,
 with `PYTHONPATH=src:.`.
 
 - `results/REVIEWS/SIX_CHECKS/final_20261019/review.json`:

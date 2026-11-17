@@ -34,8 +34,8 @@ from compy_pressure.ppsd import atomic_json, is_pressure_unit
 UTC = timezone.utc  # datetime.UTC needs Python 3.11; ComPy supports 3.10
 
 ROOT = Path(__file__).resolve().parents[1]
-MAIN = Path.home() / "Projects/bruit-fm"
-DATA = Path.home() / "Desktop/Data_Bruit_FM/Data"
+MAIN = Path.home() / "Projects/pressure-qc"
+DATA = Path.home() / "Desktop/ComPy/data/Data"
 # Masters, waveform roots and resampling as used by the completed Rayleigh runs.
 NETWORKS = {
     "YV": dict(master=MAIN / "exports", data=DATA),

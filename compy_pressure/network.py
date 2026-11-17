@@ -54,7 +54,7 @@ from compy_pressure.plot_ppsd import plot_station
 from compy_pressure.ppsd import atomic_json, is_pressure_unit, process_task
 from compy_pressure.pressure_test import run_pressure_test
 
-DATA_DIRECTORY = Path.home() / "Desktop/Data_Bruit_FM/Data"
+DATA_DIRECTORY = Path.home() / "Desktop/ComPy/data/Data"
 RESULT_DIRECTORY = PROJECT_DIRECTORY / "results/NETWORKS/TEST"
 STAGES = (
     "inventory",

@@ -1,7 +1,7 @@
 # ComPy 2.5.0 — 30 October 2026
 
-ComPy now includes BRUIT-FM 1.3.0 as `compy_pressure`, with the original
-campaign scripts, methods and tests under `pressure/`. The dated BRUIT-FM
+ComPy now includes PressureQC 1.3.0 as `compy_pressure`, with the original
+campaign scripts, methods and tests under `pressure/`. The dated PressureQC
 reports remain linked to their archived source.
 
 ## Migration and complete runs

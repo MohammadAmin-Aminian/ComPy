@@ -21,7 +21,7 @@ in the band, pressure dB, acceleration dB) for ``compy.anomaly.scan_levels``,
 and ``<STA>_window_table.npz`` (every window: time, band coherence, levels,
 band-median Z/P phase) for the acceptance and tide analyses.
 
-Usage (conda env bruitfm, from the repository root)::
+Usage (conda env compy_pressure, from the repository root)::
 
     python docs/audit_2026-11-data/scripts/s01_stage_c_restack.py --workers 10
     python docs/audit_2026-11-data/scripts/s01_stage_c_restack.py --stations YV.RR52

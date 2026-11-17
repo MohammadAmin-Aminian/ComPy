@@ -5,7 +5,7 @@ provisional station estimates; A14W/B01W/C10W remain unresolved. No gain was app
 and the calibration master was not updated. Source workflow:
 `results/NETWORKS/YL_ALL_NO_TILT/_workflow/rayleigh.json`.
 
-The comparison uses **1/g**, where BRUIT-FM fits `g * measured_P/a = predicted_P/a`.
+The comparison uses **1/g**, where PressureQC fits `g * measured_P/a = predicted_P/a`.
 Zha's Figure A2 describes scaling the theoretical ratio by the reported coefficient
 to compare with the observations; reducing pressure would use its reciprocal.
 This matches correction direction, not necessarily fit objectives or nominal

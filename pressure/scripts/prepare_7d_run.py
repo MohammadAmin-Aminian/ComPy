@@ -133,7 +133,7 @@ def main():
     parser.add_argument(
         "--data-dir",
         type=Path,
-        default=Path.home() / "Desktop/Data_Bruit_FM/Data/7D",
+        default=Path.home() / "Desktop/ComPy/data/Data/7D",
     )
     parser.add_argument("--source-master", type=Path, default=Path("exports"))
     parser.add_argument(

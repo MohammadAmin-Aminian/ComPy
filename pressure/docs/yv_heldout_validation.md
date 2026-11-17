@@ -3,8 +3,8 @@
 Run the four-station validation:
 
 ```bash
-cd /Users/mohammadamin/Projects/bruit-fm
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
+cd /Users/mohammadamin/Projects/pressure-qc
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   scripts/run_yv_heldout_validation.py --open-plots
 ```
 
@@ -16,7 +16,7 @@ validation events or applied to any waveform, XML, PPSD, master or score.
 For a metadata/selection check without reading waveform samples:
 
 ```bash
-PYTHONPATH=src:. conda run --no-capture-output -n bruitfm python \
+PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   scripts/run_yv_heldout_validation.py --dry-run
 ```
 

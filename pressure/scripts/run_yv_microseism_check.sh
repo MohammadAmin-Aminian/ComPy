@@ -5,10 +5,10 @@
 set -eo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 if command -v conda >/dev/null; then
-  BRUIT_PY=(conda run --no-capture-output -n bruitfm python)
+  PRESSURE_PY=(conda run --no-capture-output -n compy python)
 else
-  BRUIT_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/bruitfm/bin/python)
+  PRESSURE_PY=(/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python)
 fi
-PYTHONPATH="$ROOT/..:$ROOT" "${BRUIT_PY[@]}" "$ROOT/scripts/run_microseism_check.py" \
+PYTHONPATH="$ROOT/..:$ROOT" "${PRESSURE_PY[@]}" "$ROOT/scripts/run_microseism_check.py" \
   --network YV --start YV=2013-06-10 \
   --output-root "$ROOT/results/EXPERIMENTS/MICROSEISM_YV" "$@"

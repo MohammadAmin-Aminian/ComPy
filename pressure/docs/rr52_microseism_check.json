@@ -10,7 +10,7 @@
   "retained_windows": 167,
   "identifiability": "The P/Z ratio constrains g/g_z jointly with the horizontal slowness of the coherent wavefield. Below alpha/(4H) it fixes polarity and an upper bound on g without a structure model; a two-sided interval needs a minimum phase velocity, and a value needs a dispersion/mode model. Above alpha/(4H) the admissible range is unbounded.",
   "reference": {
-    "path": "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json",
+    "path": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json",
     "sha256": "0d6f7552d45fe1ad59194a6c45dd00501b3bf6ca6c54c8f8f0a324d93a5314e9",
     "pressure_multiplier": 0.6787278140712512,
     "pressure_sign": -1,
@@ -26,7 +26,7 @@
     "source": "reference settings (inventory elevation); unverified bathymetry"
   },
   "model": {
-    "layers_file": "/Users/mohammadamin/Projects/bruit-fm-claude/src/bruitfm/reference_data/rr52_historical_rayleigh_layers.csv",
+    "layers_file": "/Users/mohammadamin/Projects/pressure-qc-claude/compy_pressure/reference_data/rr52_historical_rayleigh_layers.csv",
     "layers_sha256": "f6a8ac05c5c21498a1e55c4982cacb8db3b9bc7053d90ed61d91ec494e186a53",
     "water_layer_added": true,
     "disba_version": "0.7.0",
@@ -479,37 +479,37 @@
   },
   "nominal_pressure_response_long_wave_amplitude_range": 1.0251752598109176,
   "inputs": {
-    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json": {
+    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json": {
       "sha256": "430976c5372c5e586b9551e386961f76cc247cc79390028858a082cbabc2ddc1",
       "size": 6436,
       "mtime_ns": 1791452501260847179
     },
-    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.npz": {
+    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.npz": {
       "sha256": "5ffc9082882681d1305ae7f493da531ed745efa5058345b6d5a6855046c77b62",
       "size": 9214969,
       "mtime_ns": 1791452500786608696
     },
-    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.csv": {
+    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.csv": {
       "sha256": "b45972dbf45bdadc305b21779045333e0c6e3a0d4715b81fa2c11deb82885ee8",
       "size": 379007,
       "mtime_ns": 1791452500802156232
     },
-    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/windows.csv": {
+    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/windows.csv": {
       "sha256": "42ab19863ab2ab5edd8c7bbeded528dfd85f138f49e1f990811961612b0a17a4",
       "size": 15725,
       "mtime_ns": 1791452500547461372
     },
-    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra_coherence_transfer.png": {
+    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra_coherence_transfer.png": {
       "sha256": "19a45d72e64b3c84dc5eab7c3ab231985e79a40d3954c916b001990b10d37b2d",
       "size": 245529,
       "mtime_ns": 1791452501260122596
     },
-    "/Users/mohammadamin/Projects/bruit-fm/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json": {
+    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/rayleigh_calibration/run_392920872d9c/comparison.json": {
       "sha256": "0d6f7552d45fe1ad59194a6c45dd00501b3bf6ca6c54c8f8f0a324d93a5314e9",
       "size": 22179,
       "mtime_ns": 1791535779522929161
     },
-    "/Users/mohammadamin/Projects/bruit-fm-claude/src/bruitfm/reference_data/rr52_historical_rayleigh_layers.csv": {
+    "/Users/mohammadamin/Projects/pressure-qc-claude/compy_pressure/reference_data/rr52_historical_rayleigh_layers.csv": {
       "sha256": "f6a8ac05c5c21498a1e55c4982cacb8db3b9bc7053d90ed61d91ec494e186a53",
       "size": 3543,
       "mtime_ns": 1791996270939507592
@@ -519,9 +519,9 @@
   "code_sha256": "528cb0d5e845c6f8a323b658deb1a7e7ded8795b55254455e790d5520f0f4b36",
   "numpy_version": "2.5.3",
   "files": {
-    "summary": "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check.json",
-    "bins": "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check_bins.csv",
-    "plot": "/Users/mohammadamin/Projects/bruit-fm-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check.png"
+    "summary": "/Users/mohammadamin/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check.json",
+    "bins": "/Users/mohammadamin/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check_bins.csv",
+    "plot": "/Users/mohammadamin/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM/YV.RR52/run_20261014T170510Z_26c0e962/microseism_check.png"
   },
   "gain_applied": false,
   "master_or_scores_changed": false,

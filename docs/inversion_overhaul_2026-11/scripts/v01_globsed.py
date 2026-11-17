@@ -4,7 +4,7 @@ An independent map (seismic reflection and refraction compilations), not used by
 the inversion. Bilinear interpolation of the 5-arc-minute grid; NaN outside it.
 
 Run: <python with netCDF4> -I v01_globsed.py <GlobSed-v3.nc> <out.csv>
-(e.g. ~/Desktop/BRUIT-FM/ComPy-pressure-atlas/pressure_atlas/cache/venv/bin/python)
+(e.g. ~/Desktop/ComPy/code/ComPy-pressure-atlas/pressure_atlas/cache/venv/bin/python)
 """
 
 import csv

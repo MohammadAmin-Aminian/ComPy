@@ -14,7 +14,7 @@ The reviewed v2 implementation and bounded validation are documented in
 | An, Cai, Zheng, Meng & Liu (2017), GRL 44, 10,272–10,281 | §2 Eq. 1a–6 (pp. 10,273–274); §4.1 (pp. 10,276–277); §5 (pp. 10,278–279) | Explicit z-up sign convention; incompressible limit p = ρha; validity conditions; multiplier convention; SIO polarity |
 | Zha & Webb (2016), JGR 121, 3220–3237 | §2.3 (p. 3224), Table 1; Appendix A Eq. A1–A6 (pp. 3234–3236) | Same relation with phase velocity; recorded-over-predicted gain convention; frequency-independence assumption |
 | Aminian et al. (2025), GJI 242 | §4.1.5 (pp. 7–8), Table 1 | Multiplier convention of the repository Rayleigh gains (RR52 0.67) |
-| Auger (2024), M1 internship report, 15 pp. (bruit-fm.org/Documents/Auger2024.pdf, SHA-256 `19859509…a7b342`) | Eq. 1–6 (pp. 3–8), data (p. 5), Figs 6–11 (pp. 6–10), annexes | Prior local-event attempt (Mayotte 1T, Lucky Strike 4G); its limitations |
+| Auger (2024), M1 internship report, 15 pp. (pressure-qc.org/Documents/Auger2024.pdf, SHA-256 `19859509…a7b342`) | Eq. 1–6 (pp. 3–8), data (p. 5), Figs 6–11 (pp. 6–10), annexes | Prior local-event attempt (Mayotte 1T, Lucky Strike 4G); its limitations |
 | SOC-012 Rev. 2 (`docs/reviews/socrates_initial_audit.md`) | SOC-012 and correction table | Use Deng Eq. 5 with the ray parameter; p = ρc₀v only for the first crest |
 
 The Deng et al. supporting information (Text S1 synthetics, Table S1, Figs

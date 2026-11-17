@@ -3,7 +3,7 @@
 g multiplies recorded pressure (PSD shift 20*log10 g). Published YL values are
 1/g in the Zha & Webb convention and are not plotted here.
 
-    conda run -n bruitfm python scripts/plot_gain_histogram.py --gain pole_trial --show
+    conda run -n compy python scripts/plot_gain_histogram.py --gain pole_trial --show
 """
 
 import argparse
