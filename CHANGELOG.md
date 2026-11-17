@@ -1,5 +1,33 @@
 # Changelog
 
+## 3.1.0 — unreleased
+
+Correction of the default inversion after the Young ORCA run of 13 November 2026.
+**Vs results change** where the earlier result had a velocity decrease with depth.
+Compliance estimates do not change.
+
+- **Moho rule on the whole crust.** `require_moho_jump` now rejects a model whose
+  mantle Vs is not above the Vs of every layer above it; before, only the layer
+  directly above the Moho was compared (`dram.breaks_order`). Applies to
+  `auto.SeafloorModel` and `dram.CrustalModel`.
+- **Monotonic rule**, new and on by default in `auto.SeafloorModel`
+  (`monotonic=True`): Vs does not decrease with depth between the seafloor and
+  the mantle. Set `monotonic=False` for ridge axes and melt bodies. Why and with
+  what effect: [docs/INVERSION.md](docs/INVERSION.md), section 4.
+- Both rules apply to the whole layer grid (`SeafloorModel.ordered_vs`), so the
+  prior of the Moho depth stays as stated.
+- `station_figure`: depth on a linear scale (was logarithmic); twelve sampled
+  models drawn with the median; legend moved off the profile.
+- `auto.load_result` reads results saved by 3.0.0 as `monotonic=False`.
+
+Effect on Young ORCA (26 stations, 19 interpreted): the median profiles have no
+spike near 1.5 km and no velocity drop near 6.3 km. Vs at 2-5 km changes by less
+than 2 % (median 3.76 km/s before and after). The unresolved top 300 m of
+basement follow the ordered prior and are 15-28 % slower; Vs at 0.7-1.5 km falls
+by 8 % (3.36 to 3.10 km/s). Chi-square changes by less than 1 at 24 stations and
+rises by 3.3 at WC04 and by 10.3 at CC02 (337 windows, not interpreted), where
+the earlier result had a slow lower crust.
+
 ## 3.0.0 — unreleased
 
 Result of the inversion overhaul of November 2026

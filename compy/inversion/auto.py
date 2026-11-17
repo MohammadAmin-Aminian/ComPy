@@ -235,9 +235,9 @@ class SeafloorModel:
     The crustal layers form a fixed grid below basement that reaches the
     deepest Moho the prior allows. The Moho cuts this grid: layers above it
     are crust, the mantle half-space lies below, and the Vs of grid layers
-    under the Moho has no effect (it keeps its prior). So the crustal
-    thickness is estimated together with Vs instead of being held at the
-    reference value.
+    under the Moho does not act on the data (it stays in the prior, ordered
+    between the crust above and the mantle). So the crustal thickness is
+    estimated together with Vs instead of being held at the reference value.
 
     Attributes:
         reference (array): Layered model ``[thickness, rho, vp, vs]`` of the
@@ -268,7 +268,17 @@ class SeafloorModel:
             Vp factors.
         density_sigma (float): Sigma of ln(density factor) on ``crust_density``.
         require_moho_jump (bool): Reject models whose mantle Vs is not above
-            the deepest crustal Vs.
+            the Vs of every layer of the crust and sediment.
+        monotonic (bool): Reject models in which Vs decreases with depth
+            anywhere between the seafloor and the mantle. This is prior
+            information for normal oceanic crust away from a ridge axis, where
+            cracks close and porosity falls with depth and there is no melt.
+            Without it, 96 to 100 % of the sampled models of a station have a
+            velocity decrease somewhere in the crust that the data do not
+            require: the errors of neighbouring layers are anticorrelated
+            (Mosegaard & Tarantola 1995, their figure 16). Set it to False
+            where a low-velocity zone is the target (a melt body at a ridge
+            axis, Crawford et al. 1999).
     """
 
     reference: np.ndarray
@@ -291,6 +301,7 @@ class SeafloorModel:
     upper_crust: float = 1500.0
     density_sigma: float = 0.03
     require_moho_jump: bool = True
+    monotonic: bool = True
 
     #: Interface with ``dram.sample``: no hierarchical roughness term.
     n_rough = 0
@@ -493,13 +504,29 @@ class SeafloorModel:
         return float(lp)
 
     def valid(self, theta):
-        """Inside the bounds, Poisson ratio >= 0 everywhere, and the Moho rule."""
+        """Inside the bounds, Poisson ratio >= 0 everywhere, and the ordering rules."""
         if not self.in_bounds(theta):
             return False
         layers = self.layers(theta)
         if np.any(layers[:, 2] < math.sqrt(2) * layers[:, 3]):
             return False
-        return not (self.require_moho_jump and layers[-1, 3] <= layers[-2, 3])
+        return not dram.breaks_order(self.ordered_vs(theta, layers), self.require_moho_jump,
+                                     self.monotonic)  # fmt: skip
+
+    def ordered_vs(self, theta, layers):
+        """Vs from the seafloor down that the ordering rules apply to [m/s].
+
+        The sediment sublayers of ``layers``, every layer of the crustal grid
+        and the mantle. Grid layers below the Moho are included although they
+        do not act on the data: the rules then do not depend on the Moho depth,
+        so they leave its prior as stated.
+        """
+        n_sed = (
+            self.sediment_sublayers
+            if self._get(theta, "sediment_thickness", 0.0) > 1.0
+            else 0
+        )
+        return np.concatenate([layers[:n_sed, 3], self.crust_vs(theta), layers[-1:, 3]])
 
     def prior_draw(self, rng, max_tries=100000):
         """One exact draw from the prior, including its hard constraints."""
@@ -552,6 +579,10 @@ class SeafloorModel:
         theta[ix["vs_mantle"]] = self.reference[-1, 3]
         theta[ix["moho_depth"]] = self.moho_prior[0]
         theta = np.clip(theta, self.bounds[:, 0], self.bounds[:, 1])
+        if self.monotonic:  # a reference with a velocity decrease starts without it
+            theta[i : i + self.n_crust] = np.maximum.accumulate(
+                theta[i : i + self.n_crust]
+            )
         if self.require_moho_jump:  # the reference itself may break the rule
             top = max(theta[i : i + self.n_crust].max() + 100.0, theta[ix["vs_mantle"]])
             theta[ix["vs_mantle"]] = min(top, self.vs_mantle[1])
@@ -1019,6 +1050,9 @@ def load_result(path):
     }
     kwargs = {k: (tuple(v) if isinstance(v, list) else v)
               for k, v in settings.items() if k in allowed}  # fmt: skip
+    kwargs.setdefault(
+        "monotonic", False
+    )  # results saved before ComPy 3.1 had no such rule
     model = SeafloorModel(np.array(settings["reference"], float), **kwargs)
     with np.load(path.with_name(path.name + ".npz")) as d:
         data = dram.ComplianceData(d["freqs"], d["eta"], float(d["depth"]), d["covariance"],

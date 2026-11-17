@@ -81,8 +81,7 @@ def station_figure(result, path=None, title=None, max_depth=None):
         ax2.set_ylim(-bound, bound)
 
         deepest = max_depth or model.moho_bounds[1] + 500.0
-        z = np.unique(np.concatenate([np.geomspace(5.0, 500.0, 60),
-                                      np.arange(500.0, deepest + 1.0, 25.0)]))  # fmt: skip
+        z = np.arange(0.0, deepest + 1.0, 10.0)
         prof = result.profile(z)
         q = list(np.round(prof["q"], 2))
         vs, pri = prof["vs"] / 1e3, prof["vs_prior"] / 1e3
@@ -91,6 +90,10 @@ def station_figure(result, path=None, title=None, max_depth=None):
                           lw=0, label="posterior, 5-95 %")  # fmt: skip
         axv.fill_betweenx(z, vs[q.index(0.16)], vs[q.index(0.84)], color=POSTERIOR, alpha=0.38,
                           lw=0, label="posterior, 16-84 %")  # fmt: skip
+        # The solution is the set of sampled models, not one line (Tarantola 2005, section 2.2).
+        for k, draw in enumerate(result.draws(z, max_draws=12)):
+            axv.plot(draw / 1e3, z, color=MUTED, lw=0.4, alpha=0.6,
+                     label="sampled models" if k == 0 else None)  # fmt: skip
         axv.plot(vs[q.index(0.5)], z, color=POSTERIOR, lw=1.8, label="posterior median")
         for key in (0.16, 0.84):
             axv.plot(pri[q.index(key)], z, color=PRIOR, lw=1.0, ls="--",
@@ -106,15 +109,15 @@ def station_figure(result, path=None, title=None, max_depth=None):
             axv.plot([0.02, 0.02], [z[a], z[b - 1]], transform=axv.get_yaxis_transform(),
                      color=INK, lw=4, solid_capstyle="butt",
                      label="resolved by the data" if a == edges[0] else None)  # fmt: skip
-        axv.axhline(prof["reach"], color=MUTED, lw=0.8, ls=":")
-        axv.text(0.98, prof["reach"], "90 % of sensitivity above", ha="right", va="bottom",
-                 transform=axv.get_yaxis_transform(), fontsize=7, color=MUTED)  # fmt: skip
-        axv.set_yscale("log")
-        axv.set_ylim(deepest, 5.0)
+        if prof["reach"] < deepest:
+            axv.axhline(prof["reach"], color=MUTED, lw=0.8, ls=":")
+            axv.text(0.98, prof["reach"], "90 % of sensitivity above", ha="right", va="bottom",
+                     transform=axv.get_yaxis_transform(), fontsize=7, color=MUTED)  # fmt: skip
+        axv.set_ylim(deepest, 0.0)  # depth is always drawn on a linear scale
         axv.set_xlim(0, 5.0)
         axv.set(xlabel="Shear velocity (km/s)", ylabel="Depth below seafloor (m)",
                 title="Shear velocity")  # fmt: skip
-        axv.legend(loc="upper right")
+        axv.legend(loc="lower left", bbox_to_anchor=(0.04, 0.0))
 
         axr = fig.add_subplot(grid[:, 2])
         res_p = result.parameter_resolution()
