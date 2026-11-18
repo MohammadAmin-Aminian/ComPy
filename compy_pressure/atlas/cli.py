@@ -64,7 +64,9 @@ def _native_one(task):
                         key=lambda c: c.start_date)  # fmt: skip
         if not epochs:
             raise RuntimeError("no channel epoch with a response")
-        local = [str(cdir / f"{i:06d}_{Path(f).name}") for i, f in enumerate(task["files"])]
+        local = [
+            str(cdir / f"{i:06d}_{Path(f).name}") for i, f in enumerate(task["files"])
+        ]
         day = {p: nv.file_day(p) for p in local}
         zs, parts = [], []
         for k, c in enumerate(epochs):
@@ -81,7 +83,9 @@ def _native_one(task):
         if not zs:
             raise RuntimeError("no files inside any response epoch")
         seen, rows = set(), []
-        for k, z in enumerate(zs):  # a window inside two epochs (overlap at the edges) is kept once, first epoch
+        for k, z in enumerate(
+            zs
+        ):  # a window inside two epochs (overlap at the edges) is kept once, first epoch
             for i, s in enumerate(z["starts"]):
                 if s not in seen:
                     seen.add(s)
@@ -98,18 +102,28 @@ def _native_one(task):
         os.replace(task["out"] + ".part.npz", task["out"])
         for p in parts:
             p.unlink(missing_ok=True)
+        errors = sum(z["meta"]["read_errors"] for z in zs)
+        if errors:
+            Path(task["out"]).unlink(missing_ok=True)
+            raise RuntimeError(f"{errors} day files could not be read")
         res.update(status="ok", windows=len(rows), epochs=len(zs), units=zs[0]["input_units"],
                    tried=sum(z["meta"]["windows_tried"] for z in zs), gap=sum(z["meta"]["windows_gap"] for z in zs),
                    read_errors=sum(z["meta"]["read_errors"] for z in zs))  # fmt: skip
     except Exception as e:
-        res.update(status="failed", error=f"{type(e).__name__}: {e}", trace=traceback.format_exc()[-1500:])
+        res.update(
+            status="failed",
+            error=f"{type(e).__name__}: {e}",
+            trace=traceback.format_exc()[-1500:],
+        )
     finally:
         shutil.rmtree(cdir, ignore_errors=True)
     res["seconds"] = round(time.time() - t0, 1)
     return res
 
 
-def run_native(plan, out, cache, workers=8, max_cached_gb=150.0, max_ahead=16, sds=None, log=None):
+def run_native(
+    plan, out, cache, workers=8, max_cached_gb=150.0, max_ahead=16, sds=None, log=None
+):
     """Native-rate spectra of every channel of ``plan`` (DataFrame), one reader and ``workers`` processes."""
     out, cache = Path(out), Path(cache)
     out.mkdir(parents=True, exist_ok=True)
@@ -121,35 +135,63 @@ def run_native(plan, out, cache, workers=8, max_cached_gb=150.0, max_ahead=16, s
         if isinstance(getattr(r, "files", None), str) and r.files:
             files = r.files.split(";")
         else:
-            files = sorted(glob.glob(str(Path(sds) / "*" / net / sta / f"{cha}.D" / "*"))) if sds else []
+            files = (
+                sorted(glob.glob(str(Path(sds) / "*" / net / sta / f"{cha}.D" / "*")))
+                if sds
+                else []
+            )
         o = out / net / f"{r.seed_id}.npz"
         if files and not o.exists():
             tasks.append(dict(seed_id=r.seed_id, fs=float(r.fs), xml=r.xml, files=files, out=str(o),
                               bytes=sum(os.path.getsize(f) for f in files)))  # fmt: skip
     tasks.sort(key=lambda t: -t["bytes"])
     half = (len(tasks) + 1) // 2  # alternate large and small channels to bound memory
-    tasks = [x for pair in zip(tasks[:half], tasks[::-1][: len(tasks) // 2]) for x in pair] + ([tasks[len(tasks) // 2]] if len(tasks) % 2 else [])
-    _log(log, f"native: {len(tasks)} channels to do, {sum(t['bytes'] for t in tasks) / 1e12:.2f} TB")
+    tasks = [
+        x for pair in zip(tasks[:half], tasks[::-1][: len(tasks) // 2]) for x in pair
+    ] + ([tasks[len(tasks) // 2]] if len(tasks) % 2 else [])
+    _log(
+        log,
+        f"native: {len(tasks)} channels to do, {sum(t['bytes'] for t in tasks) / 1e12:.2f} TB",
+    )
     pending, lock, futs = {}, threading.Lock(), []
     with ProcessPoolExecutor(workers) as ex:
         for t in tasks:
             while True:
                 with lock:
                     n, cached = len(pending), sum(pending.values())
-                if n == 0 or (n < max_ahead and (cached + t["bytes"]) / 1e9 < max_cached_gb):
+                if n == 0 or (
+                    n < max_ahead and (cached + t["bytes"]) / 1e9 < max_cached_gb
+                ):
                     break
                 time.sleep(5)
+            if not all(Path(f).parent.exists() for f in t["files"][:1]):
+                _log(
+                    log,
+                    f"archive not reachable ({t['files'][0]}); stopping, resume with the same command",
+                )
+                break
             cdir = cache / t["seed_id"]
-            shutil.rmtree(cdir, ignore_errors=True)
-            cdir.mkdir(parents=True)
+            cdir.mkdir(parents=True, exist_ok=True)
             tc, copied = time.time(), 0
             for i, f in enumerate(t["files"]):
+                dst = cdir / f"{i:06d}_{Path(f).name}"
                 try:
-                    shutil.copyfile(f, cdir / f"{i:06d}_{Path(f).name}")
-                    copied += os.path.getsize(f)
+                    size = os.path.getsize(f)
+                    if not (
+                        dst.exists() and dst.stat().st_size == size
+                    ):  # a copy left by an interrupted run is reused
+                        shutil.copyfile(f, dst)
+                    copied += size
                 except OSError as e:
                     _log(log, f"copy error {t['seed_id']} {f}: {e}")
-            _log(log, f"copied {t['seed_id']} {copied / 1e9:.2f} GB in {time.time() - tc:.0f} s")
+            if copied < t["bytes"]:
+                _log(log, f"incomplete copy of {t['seed_id']}; not processed")
+                shutil.rmtree(cdir, ignore_errors=True)
+                continue
+            _log(
+                log,
+                f"copied {t['seed_id']} {copied / 1e9:.2f} GB in {time.time() - tc:.0f} s",
+            )
             with lock:
                 pending[t["seed_id"]] = copied
 
@@ -162,7 +204,10 @@ def run_native(plan, out, cache, workers=8, max_cached_gb=150.0, max_ahead=16, s
                     pending.pop(seed, None)
                     with open(status, "a") as fh:
                         fh.write(json.dumps(r) + "\n")
-                _log(log, f"done {seed}: {r.get('status')} {r.get('windows', '')} {r.get('error', '')}")
+                _log(
+                    log,
+                    f"done {seed}: {r.get('status')} {r.get('windows', '')} {r.get('error', '')}",
+                )
 
             fu = ex.submit(_native_one, dict(t, cache_dir=str(cdir)))
             fu.add_done_callback(done)
@@ -176,17 +221,25 @@ def main(argv=None):
 
     from . import config as cfgmod
 
-    ap = argparse.ArgumentParser(prog="compy-pressure-atlas", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        prog="compy-pressure-atlas",
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     sub = ap.add_subparsers(dest="cmd", required=True)
     a = sub.add_parser("native", help="native-rate spectra from an SDS archive")
     a.add_argument("plan")
     a.add_argument("--out", required=True)
-    a.add_argument("--cache", required=True, help="local folder for the copied day files")
+    a.add_argument(
+        "--cache", required=True, help="local folder for the copied day files"
+    )
     a.add_argument("--sds", help="SDS root, for plan rows without a file list")
     a.add_argument("--workers", type=int, default=8)
     a.add_argument("--max-cached-gb", type=float, default=150.0)
     a.add_argument("--log")
-    b = sub.add_parser("distances", help="distance to the coastline and to the shelf break")
+    b = sub.add_parser(
+        "distances", help="distance to the coastline and to the shelf break"
+    )
     b.add_argument("table")
     b.add_argument("--out", required=True)
     c = sub.add_parser("build", help="selection, screens, models and figures")
@@ -196,10 +249,23 @@ def main(argv=None):
     c.add_argument("--workers", type=int, default=8)
     c.add_argument("--no-figures", action="store_true")
     args = ap.parse_args(argv)
-    for v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "VECLIB_MAXIMUM_THREADS", "MKL_NUM_THREADS"):
+    for v in (
+        "OMP_NUM_THREADS",
+        "OPENBLAS_NUM_THREADS",
+        "VECLIB_MAXIMUM_THREADS",
+        "MKL_NUM_THREADS",
+    ):
         os.environ.setdefault(v, "1")
     if args.cmd == "native":
-        run_native(pd.read_csv(args.plan), args.out, args.cache, args.workers, args.max_cached_gb, sds=args.sds, log=args.log)
+        run_native(
+            pd.read_csv(args.plan),
+            args.out,
+            args.cache,
+            args.workers,
+            args.max_cached_gb,
+            sds=args.sds,
+            log=args.log,
+        )
     elif args.cmd == "distances":
         from . import geography
 
@@ -211,7 +277,13 @@ def main(argv=None):
     else:
         from . import pipeline
 
-        pipeline.build(args.table, args.out, cfgmod.load(args.config), args.workers, not args.no_figures)
+        pipeline.build(
+            args.table,
+            args.out,
+            cfgmod.load(args.config),
+            args.workers,
+            not args.no_figures,
+        )
     return 0
 
 

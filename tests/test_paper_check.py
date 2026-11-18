@@ -123,9 +123,13 @@ def test_stage_c_band_search_stops_at_kh_4(stage_c, monkeypatch):
     fc = np.sqrt(GRAVITY / (2 * np.pi * depth))
     seen = {}
 
-    def fake_stack(windows, depth_, gain, band, criteria, nseg, output_band=None, gate=None):
+    def fake_stack(
+        windows, depth_, gain, band, criteria, nseg, output_band=None, gate=None
+    ):
         f = np.linspace(0.001, 0.05, 50)
-        return SimpleNamespace(all_freqs=f, mean_coherence_all=np.ones_like(f), n_windows=1000, band=band)
+        return SimpleNamespace(
+            all_freqs=f, mean_coherence_all=np.ones_like(f), n_windows=1000, band=band
+        )
 
     def fake_band(f, coh, threshold, search):
         seen["search"] = search
@@ -136,5 +140,10 @@ def test_stage_c_band_search_stops_at_kh_4(stage_c, monkeypatch):
     result, threshold, _ = stage_c.run_gain([], depth, 1.0, fc)
     assert stage_c.BAND_MAX_FRACTION_FC == 0.8
     assert seen["search"][1] == pytest.approx(0.8 * fc)
-    assert wavenumber(2 * np.pi * result.band[1], depth) * depth == pytest.approx(4.02, abs=0.01)
-    assert auto.compliance_data.__kwdefaults__["max_fraction_fc"] == stage_c.BAND_MAX_FRACTION_FC
+    assert wavenumber(2 * np.pi * result.band[1], depth) * depth == pytest.approx(
+        4.02, abs=0.01
+    )
+    assert (
+        auto.compliance_data.__kwdefaults__["max_fraction_fc"]
+        == stage_c.BAND_MAX_FRACTION_FC
+    )

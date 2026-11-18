@@ -74,8 +74,12 @@ def percentiles(P, cover, edges, pct):
             q = p / 100.0
             i = min(int(np.searchsorted(c, q)), len(c) - 1)
             prev = c[i - 1] if i > 0 else 0.0
-            out[p][j] = edges[i] + (q - prev) / max(c[i] - prev, 1e-12) * (edges[i + 1] - edges[i])
-        mode[j] = centres[int(np.argmax(np.convolve(P[j], np.ones(3) / 3, mode="same")))]
+            out[p][j] = edges[i] + (q - prev) / max(c[i] - prev, 1e-12) * (
+                edges[i + 1] - edges[i]
+            )
+        mode[j] = centres[
+            int(np.argmax(np.convolve(P[j], np.ones(3) / 3, mode="same")))
+        ]
     return out, mode
 
 
@@ -158,7 +162,9 @@ def fit_piecewise(T, y, max_rms=1.0, max_seg=20):
 
 
 def slug(s):
-    return re.sub(r"[^A-Za-z0-9]+", "_", str(s).replace("<", "lt").replace(">", "gt")).strip("_")
+    return re.sub(
+        r"[^A-Za-z0-9]+", "_", str(s).replace("<", "lt").replace(">", "gt")
+    ).strip("_")
 
 
 class Atlas:
@@ -200,7 +206,11 @@ class Atlas:
 
     def group(self, rows, months_of=None, gain=True):
         nP = self.m.shape[2]
-        Pg, cover, used = np.zeros((nP, len(self.centres))), np.zeros(nP), np.zeros(nP, int)
+        Pg, cover, used = (
+            np.zeros((nP, len(self.centres))),
+            np.zeros(nP),
+            np.zeros(nP, int),
+        )
         nets, meds, windows = [set() for _ in range(nP)], [], 0.0
         for u in rows:
             ms = months_of(u) if months_of else None
@@ -219,7 +229,14 @@ class Atlas:
             med[~full] = np.nan
             meds.append(med)
             windows += float(tot.max())
-        return Pg, cover, np.array(meds), windows, used, np.array([len(s) for s in nets])
+        return (
+            Pg,
+            cover,
+            np.array(meds),
+            windows,
+            used,
+            np.array([len(s) for s in nets]),
+        )
 
     def add(self, axis, name, rows, months_of=None, gain=True, save=True):
         """Model of one group; returns the per-period table and an index record."""
@@ -227,10 +244,21 @@ class Atlas:
         rows = [u for u in rows if self.U[u].any()]
         P, cover, meds, windows, used, nets = self.group(rows, months_of, gain)
         n_units = len(meds)
-        need = mc["min_stations"] if n_units >= mc["min_stations"] else mc["min_stations_thin"]
-        pc, mode = percentiles(P, np.where(used >= need, cover, 0), self.edges, mc["percentiles"])
+        need = (
+            mc["min_stations"]
+            if n_units >= mc["min_stations"]
+            else mc["min_stations_thin"]
+        )
+        pc, mode = percentiles(
+            P, np.where(used >= need, cover, 0), self.edges, mc["percentiles"]
+        )
         with np.errstate(all="ignore"):
-            st = {q: np.nanpercentile(meds, q, axis=0) if n_units else np.full(len(GRID), np.nan) for q in (10, 50, 90)}
+            st = {
+                q: np.nanpercentile(meds, q, axis=0)
+                if n_units
+                else np.full(len(GRID), np.nan)
+                for q in (10, 50, 90)
+            }
         tab = pd.DataFrame({"period_s": GRID, "frequency_hz": 1 / GRID, **{f"p{p}_db": pc[p] for p in mc["percentiles"]},
                             "mode_db": mode, **{f"gauge_median_p{q}_db": st[q] for q in (10, 50, 90)},
                             "gauges": used, "networks": nets})  # fmt: skip
@@ -242,12 +270,29 @@ class Atlas:
                    percentile_basis="station-balanced distribution of 3-h windows",
                    **{k: rec[k] for k in ("gauges", "networks", "window_count", "status", "single_experiment")})  # fmt: skip
         if rec["status"] == "model":
-            mask = (used >= max(mc["min_stations"], mc["fit_share"] * used.max())) & ((GRID >= 0.5) | (used >= 0.5 * used.max()))
-            for lab, col in (("low", f"p{mc['low_percentile']}_db"), ("median", "p50_db"), ("high", f"p{mc['high_percentile']}_db")):
-                f = fit_piecewise(GRID, np.where(mask, tab[col].values, np.nan), mc["fit_max_rms_db"], mc["fit_max_segments"])
+            mask = (used >= max(mc["min_stations"], mc["fit_share"] * used.max())) & (
+                (GRID >= 0.5) | (used >= 0.5 * used.max())
+            )
+            for lab, col in (
+                ("low", f"p{mc['low_percentile']}_db"),
+                ("median", "p50_db"),
+                ("high", f"p{mc['high_percentile']}_db"),
+            ):
+                f = fit_piecewise(
+                    GRID,
+                    np.where(mask, tab[col].values, np.nan),
+                    mc["fit_max_rms_db"],
+                    mc["fit_max_segments"],
+                )
                 out[lab] = f
                 if f is not None:
-                    rec.update({f"{lab}_segments": f["segments"], f"{lab}_rms_db": f["rms_db"], f"{lab}_max_db": f["max_abs_db"]})
+                    rec.update(
+                        {
+                            f"{lab}_segments": f["segments"],
+                            f"{lab}_rms_db": f["rms_db"],
+                            f"{lab}_max_db": f["max_abs_db"],
+                        }
+                    )
                     tab[f"{lab}_fit_db"] = np.interp(np.log10(GRID), np.log10(f["period_knots_s"]), f["level_knots_db"],
                                                      left=np.nan, right=np.nan)  # fmt: skip
         Pn = P / np.maximum(P.sum(1, keepdims=True), 1e-12)
@@ -276,7 +321,10 @@ class Atlas:
         for u in range(len(d)):
             if not self.U[u].any():
                 continue
-            med = {s: self.gauge_probability(u, season_months(s, d.lat[u]))[3] for s in ("winter", "summer")}
+            med = {
+                s: self.gauge_probability(u, season_months(s, d.lat[u]))[3]
+                for s in ("winter", "summer")
+            }
             x = med["winter"] - med["summer"]
             x[self.U[u] < 0.5] = np.nan
             diffs[u] = x

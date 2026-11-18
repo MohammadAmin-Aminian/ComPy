@@ -18,7 +18,14 @@ def _flat_response():
     import warnings
 
     warnings.filterwarnings("ignore", message="ObsPy can not map unit")
-    return Response.from_paz([], [], 1.0, input_units="PA", output_units="COUNTS", normalization_frequency=1.0)
+    return Response.from_paz(
+        [],
+        [],
+        1.0,
+        input_units="PA",
+        output_units="COUNTS",
+        normalization_frequency=1.0,
+    )
 
 
 def _synthetic_channel(tmp_path, fs, sigma=10.0, days=2, tide=0.0, name="t"):
@@ -26,11 +33,27 @@ def _synthetic_channel(tmp_path, fs, sigma=10.0, days=2, tide=0.0, name="t"):
     rng = np.random.default_rng(0)
     x = rng.normal(0, sigma, n) + tide * np.sin(2 * np.pi * np.arange(n) / fs / 44714.0)
     t0 = UTCDateTime(2020, 1, 1)
-    tr = Trace(x, header=dict(network="XX", station="T", location="00", channel="HDH", sampling_rate=fs, starttime=t0))
+    tr = Trace(
+        x,
+        header=dict(
+            network="XX",
+            station="T",
+            location="00",
+            channel="HDH",
+            sampling_rate=fs,
+            starttime=t0,
+        ),
+    )
 
     def reader(p):
         d = int(str(p).split(".")[-1]) - 1
-        return Stream([tr.slice(t0 + d * 86400, t0 + (d + 1) * 86400 - 1 / fs, nearest_sample=False).copy()])
+        return Stream(
+            [
+                tr.slice(
+                    t0 + d * 86400, t0 + (d + 1) * 86400 - 1 / fs, nearest_sample=False
+                ).copy()
+            ]
+        )
 
     files = [f"XX.T.00.HDH.D.2020.{d + 1:03d}" for d in range(days)]
     out = tmp_path / f"{name}.npz"
@@ -40,7 +63,9 @@ def _synthetic_channel(tmp_path, fs, sigma=10.0, days=2, tide=0.0, name="t"):
 
 def test_grid_shares_the_atlas_nodes():
     g = native.GRID
-    assert g[0] == pytest.approx(0.02098, rel=1e-3) and g[-1] == pytest.approx(1060 * 2**0.25)
+    assert g[0] == pytest.approx(0.02098, rel=1e-3) and g[-1] == pytest.approx(
+        1060 * 2**0.25
+    )
     assert np.any(np.isclose(g, 1060.0)) and np.allclose(np.diff(np.log2(g)), 1 / 8)
 
 
@@ -50,7 +75,9 @@ def test_welch_matches_scipy():
         x = np.cumsum(rng.normal(size=int(10800 * fs)))
         f1, p1 = native.welch_psd(x, fs)
         n = int(2700 * fs)
-        f2, p2 = signal.welch(x, fs, "hann", n, int(round(0.75 * n)), detrend="linear", scaling="density")
+        f2, p2 = signal.welch(
+            x, fs, "hann", n, int(round(0.75 * n)), detrend="linear", scaling="density"
+        )
         assert np.array_equal(f1, f2) and np.max(np.abs(p1 - p2) / p2) < 1e-9
 
 
@@ -98,13 +125,17 @@ def test_percentiles_of_a_known_distribution():
     edges = np.arange(0, 101, 1.0)
     P = np.ones((1, 100)) / 100
     pc, _ = models.percentiles(P, np.ones(1), edges, [5, 50, 95])
-    assert pc[50][0] == pytest.approx(50, abs=0.01) and pc[5][0] == pytest.approx(5, abs=0.01)
+    assert pc[50][0] == pytest.approx(50, abs=0.01) and pc[5][0] == pytest.approx(
+        5, abs=0.01
+    )
 
 
 def test_piecewise_fit_recovers_two_lines():
     T = np.logspace(0, 3, 40)
     k = T[20]  # knots sit on sample periods
-    y = np.where(T < k, 10 + 20 * np.log10(T), 10 + 20 * np.log10(k) - 10 * np.log10(T / k))
+    y = np.where(
+        T < k, 10 + 20 * np.log10(T), 10 + 20 * np.log10(k) - 10 * np.log10(T / k)
+    )
     f = models.fit_piecewise(T, y, 0.1, 6)
     assert f["segments"] == 2 and f["rms_db"] < 0.1
     assert f["table"][0]["B_db_per_decade"] == pytest.approx(20, abs=0.5)
@@ -112,7 +143,9 @@ def test_piecewise_fit_recovers_two_lines():
 
 def test_band_taper():
     u = models.band_taper(0.01, 1.0, periods=np.array([0.5, 1.0, 10.0, 100.0, 200.0]))
-    assert u[0] == 0 and u[2] == 1 and u[3] == pytest.approx(0.0, abs=1e-12) and u[4] == 0
+    assert (
+        u[0] == 0 and u[2] == 1 and u[3] == pytest.approx(0.0, abs=1e-12) and u[4] == 0
+    )
 
 
 def test_classification_rules():
@@ -120,15 +153,32 @@ def test_classification_rules():
     assert classify.sensor_type("Paroscientific 8B7000", "HDH") == "APG"
     assert classify.sensor_type("", "HDH") == "Hydrophone"
     assert classify.basin(-30, 60) == "Indian" and classify.basin(70, 0) == "Arctic"
-    assert classify.local_season(1, 10) == "winter" and classify.local_season(7, -10) == "winter"
+    assert (
+        classify.local_season(1, 10) == "winter"
+        and classify.local_season(7, -10) == "winter"
+    )
     assert list(classify.season_months("winter", -5)) == [5, 6, 7]
 
 
 def test_day_screen_drops_a_day_peers_do_not_see():
     days = np.arange(10)
-    daily = {k: pd.DataFrame({"sec_microseism_3_10s": 20.0 + 0.1 * np.arange(10)}, index=days) for k in "abcd"}
+    daily = {
+        k: pd.DataFrame(
+            {"sec_microseism_3_10s": 20.0 + 0.1 * np.arange(10)}, index=days
+        )
+        for k in "abcd"
+    }
     daily["a"].loc[4, "sec_microseism_3_10s"] = 60.0
-    t = pd.DataFrame(dict(key=list("abcd"), net="N", depth_bin="3-4 km", depth_m=3500.0, f_lo=0.001, f_hi=1.0))
+    t = pd.DataFrame(
+        dict(
+            key=list("abcd"),
+            net="N",
+            depth_bin="3-4 km",
+            depth_m=3500.0,
+            f_lo=0.001,
+            f_hi=1.0,
+        )
+    )
     cfg = config.load(bands={"sec_microseism_3_10s": [3.0, 10.0]})
     cfg["bands"] = {"sec_microseism_3_10s": [3.0, 10.0]}
     drops, _ = screens.day_screen(daily, t, cfg)
@@ -147,7 +197,9 @@ def test_calibration_screen_excludes_a_network():
 def test_geography_distance_to_a_line():
     from compy_pressure.atlas import geography
 
-    near = geography.NearestLine(geography._densify(np.array([[0.0, 0.0], [10.0, 0.0]]), 1.0))
+    near = geography.NearestLine(
+        geography._densify(np.array([[0.0, 0.0], [10.0, 0.0]]), 1.0)
+    )
     d, _ = near.distance_km(1.0, 5.0)
     assert d[0] == pytest.approx(111.2, abs=0.6)
 
@@ -168,13 +220,20 @@ def test_build_end_to_end(tmp_path):
             day = np.floor(z["starts"] / 86400).astype(int)
             z["levels_db"][day == day[0] + 4] += 40
         p = nd / f"N{i // 6}.S{i}.00.HDH.npz"
-        np.savez_compressed(p, **{k: v for k, v in z.items() if k != "meta"}, meta=json.dumps(z["meta"]))
+        np.savez_compressed(
+            p, **{k: v for k, v in z.items() if k != "meta"}, meta=json.dumps(z["meta"])
+        )
         rows.append(dict(seed_id=f"N{i // 6}.S{i}.00.HDH", net=f"N{i // 6}", sta=f"S{i}", cha="HDH", lat=-10.0 + i, lon=150.0,
                          depth_m=3500.0, fs=2.0, type="DPG", brand="SIO Cox-Webb DPG", product=str(p), gain_db=0.0,
                          coast_km=100.0 + 50 * i, shelf_break_km=60.0 + 40 * i))  # fmt: skip
     pd.DataFrame(rows).to_csv(tmp_path / "channels.csv", index=False)
-    cfg = config.load(population={"min_windows": 50, "level_gate_bands_s": [[2.5, 4.0]]}, windows={"edge_days": 2})
-    A = pipeline.build(tmp_path / "channels.csv", tmp_path / "atlas", cfg, workers=2, make_figures=True)
+    cfg = config.load(
+        population={"min_windows": 50, "level_gate_bands_s": [[2.5, 4.0]]},
+        windows={"edge_days": 2},
+    )
+    A = pipeline.build(
+        tmp_path / "channels.csv", tmp_path / "atlas", cfg, workers=2, make_figures=True
+    )
     pop = pd.read_csv(tmp_path / "atlas" / "tables" / "population.csv")
     assert pop.set_index("sta").drop_reason["S11"].startswith("2.5-4 s level")
     assert pop.in_atlas.sum() == 11

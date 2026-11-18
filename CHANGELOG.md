@@ -1,5 +1,42 @@
 # Changelog
 
+## 3.2.0 — unreleased
+
+### Pressure atlas in the package
+
+The global pressure-noise atlas, until now analysis scripts on the local branch `analysis/pressure-atlas`, is a
+tested package: `compy_pressure.atlas` and the command `compy-pressure-atlas` ([docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md)).
+
+- `native`: one estimator for native-rate pressure spectra from SDS day files, 0.02 to 1260 s (3-h windows,
+  2700-s Welch segments, 1/4-octave power means; long periods from a 1-Hz copy high-passed at 0.2 mHz so that the
+  tide cannot leak). Replaces the join of the ObsPy 1-octave PPSDs and the 1.25 Hz product.
+- `geography`: distance to the coastline and to the shelf break (200 m isobath) and the 1000 m isobath, Natural
+  Earth 1:10 m (the 1:50 m coastline used before misses small islands: IM.H11 950 km -> 53 km).
+- `cube`, `screens`, `models`, `figures`, `pipeline`: window screens, channel cascade with reasons, P-Z
+  calibration, day and band screens, station-balanced models with Peterson-style fits, standard figures.
+- `cli`: `native` (one sequential reader and a pool of workers, resumable; stops when the archive disappears),
+  `distances`, `build`.
+- Fixed in the line fits carried over from the atlas: a breakpoint between two samples was always placed on the
+  first; it is now placed on the better of the two, so the models need fewer segments.
+
+### Compliance band ends at kH = 4
+
+Stage C searches the band up to 0.8 f_c (kH = 4.0) instead of f_c, the limit the inversion has applied since
+3.0 ([docs/COMPLIANCE_BAND.md](docs/COMPLIANCE_BAND.md)): the papers place the limit between 0.7 and 1.4 f_c, the
+pressure of the archive leaves its infragravity plateau at kH = 4.27, and above 0.8 f_c the coherence falls from
+0.95 to 0.76 and 0.45. **Compliance changes** only at the 77 of 287 archive stations whose band ended above
+0.8 f_c: the band now ends at 0.78 f_c (median), 0.8 % more windows, and the compliance of the kept bins moves by
+-0.01 % (median). Vs does not change. `BAND_MAX_FRACTION_FC = 1.0` restores the old search.
+
+### Documentation and figures
+
+- README: the worked example and the results use the latest Young ORCA run (stages A-D of 13 November with
+  3.0, inversion of 16 November with 3.1) in [docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md);
+  a map of the whole-archive inversion; the pressure atlas.
+- `pipeline/f_figures.py` (figure 6): the side panels shared one level axis with the coherence panel, so the
+  pressure and acceleration band levels fell outside it and the panels were empty; each has its own axis now, and
+  the window times are shown as dates.
+
 ## 3.1.0 — 2026-11-18
 
 First release since 2.9.0; it also carries the changes of 3.0.0, which was merged on

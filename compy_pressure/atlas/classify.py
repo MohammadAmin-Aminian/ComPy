@@ -43,7 +43,9 @@ def brand(description, kind):
                           ("ssq", "HTI-94-SSQ hydrophone (2-30 kHz)")):  # fmt: skip
             if key in s:
                 return name
-        if any(k in s for k in ("hti", "ht1", "hitech", "hitec", "high tech", "hightech")):
+        if any(
+            k in s for k in ("hti", "ht1", "hitech", "hitec", "high tech", "hightech")
+        ):
             return "HTI hydrophone"
         return "Generic hydrophone"
     return "Q330 internal" if "q330" in s else "Other"
@@ -66,7 +68,9 @@ def basin(lat, lon):
 
 def binned(values, edges, labels):
     """Class label of each value, intervals closed on the left."""
-    return pd.cut(np.asarray(values, float), bins=edges, labels=labels, right=False).astype(object)
+    return pd.cut(
+        np.asarray(values, float), bins=edges, labels=labels, right=False
+    ).astype(object)
 
 
 SEASONS = ("winter", "spring", "summer", "autumn")
@@ -91,7 +95,11 @@ def add_classes(table, cfg):
         t["basin"] = [basin(a, b) for a, b in zip(t.lat, t.lon)]
     t["depth_bin"] = binned(t.depth_m, cfg["depth_bins_m"], cfg["depth_labels"])
     if "coast_km" in t:
-        t["distance_bin"] = binned(t.coast_km, cfg["distance_bins_km"], cfg["distance_labels"])
+        t["distance_bin"] = binned(
+            t.coast_km, cfg["distance_bins_km"], cfg["distance_labels"]
+        )
     if "shelf_break_km" in t:
-        t["shelf_bin"] = binned(t.shelf_break_km, cfg["shelf_break_bins_km"], cfg["shelf_break_labels"])
+        t["shelf_bin"] = binned(
+            t.shelf_break_km, cfg["shelf_break_bins_km"], cfg["shelf_break_labels"]
+        )
     return t

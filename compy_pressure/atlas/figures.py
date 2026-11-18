@@ -17,9 +17,18 @@ from matplotlib.colors import LogNorm
 from . import native
 
 GRID = native.GRID
-TYPE_COLOURS = {"DPG": "#1f5fa8", "APG": "#c0392b", "Hydrophone": "#2e8b57", "Other": "#7f7f7f"}
+TYPE_COLOURS = {
+    "DPG": "#1f5fa8",
+    "APG": "#c0392b",
+    "Hydrophone": "#2e8b57",
+    "Other": "#7f7f7f",
+}
 DEPTH_CMAP = "viridis_r"
-BANDS_SHADE = {"secondary microseism": (3, 10), "notch": (15, 50), "infragravity": (100, 300)}
+BANDS_SHADE = {
+    "secondary microseism": (3, 10),
+    "notch": (15, 50),
+    "infragravity": (100, 300),
+}
 
 
 def brown_2014():
@@ -44,11 +53,29 @@ def shade_bands(ax, alpha=0.06):
         ax.axvspan(a, b, color="k", alpha=alpha, lw=0)
 
 
-def density_panel(ax, density, edges, title="", curves=None, gauges=None, vmin=1e-3, vmax=0.3, brown=True):
+def density_panel(
+    ax,
+    density,
+    edges,
+    title="",
+    curves=None,
+    gauges=None,
+    vmin=1e-3,
+    vmax=0.3,
+    brown=True,
+):
     """Probability density (period x dB) with optional percentile curves {label: (y, style)}."""
     P = np.ma.masked_invalid(np.where(density > 0, density, np.nan))
     centres = 0.5 * (np.asarray(edges)[:-1] + np.asarray(edges)[1:])
-    pc = ax.pcolormesh(GRID, centres, P.T, shading="nearest", cmap="magma_r", norm=LogNorm(vmin, vmax), rasterized=True)
+    pc = ax.pcolormesh(
+        GRID,
+        centres,
+        P.T,
+        shading="nearest",
+        cmap="magma_r",
+        norm=LogNorm(vmin, vmax),
+        rasterized=True,
+    )
     for lab, (y, kw) in (curves or {}).items():
         ax.plot(GRID, y, label=lab, **kw)
     if brown:
@@ -76,7 +103,13 @@ def model_lines(ax, tables, colours, which=("p5_db", "p50_db", "p95_db"), min_ga
         thick = t.gauges.values >= min_gauges
         for col, lw in zip(which, (0.9, 2.0, 0.9)):
             y = t[col].values
-            ax.plot(GRID, np.where(thick, y, np.nan), color=c, lw=lw, label=f"{lab} ({int(t.gauges.max())})" if col == "p50_db" else None)
+            ax.plot(
+                GRID,
+                np.where(thick, y, np.nan),
+                color=c,
+                lw=lw,
+                label=f"{lab} ({int(t.gauges.max())})" if col == "p50_db" else None,
+            )
             ax.plot(GRID, np.where(~thick, y, np.nan), color=c, lw=lw * 0.8, ls="--")
     period_axis(ax)
     ax.set_ylabel("Pressure PSD (dB re 1 Pa$^2$/Hz)")

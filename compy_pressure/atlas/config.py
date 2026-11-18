@@ -59,11 +59,25 @@ DEFAULTS = {
         "long_300_1000s": [300.0, 1000.0],
     },
     "depth_bins_m": [0, 200, 1000, 2000, 3000, 4000, 5000, 100000],
-    "depth_labels": ["<200 m", "200-1000 m", "1-2 km", "2-3 km", "3-4 km", "4-5 km", ">5 km"],
+    "depth_labels": [
+        "<200 m",
+        "200-1000 m",
+        "1-2 km",
+        "2-3 km",
+        "3-4 km",
+        "4-5 km",
+        ">5 km",
+    ],
     "distance_bins_km": [0, 50, 200, 500, 100000],
     "distance_labels": ["<50 km", "50-200 km", "200-500 km", ">500 km"],
     "shelf_break_bins_km": [-1000, 0, 50, 200, 500, 100000],
-    "shelf_break_labels": ["on the shelf", "0-50 km", "50-200 km", "200-500 km", ">500 km"],
+    "shelf_break_labels": [
+        "on the shelf",
+        "0-50 km",
+        "50-200 km",
+        "200-500 km",
+        ">500 km",
+    ],
     "stats": {"seed": 20261118, "n_bootstrap": 1000},
 }
 
@@ -71,7 +85,11 @@ DEFAULTS = {
 def _merge(base, over):
     out = copy.deepcopy(base)
     for k, v in (over or {}).items():
-        out[k] = _merge(out[k], v) if isinstance(v, dict) and isinstance(out.get(k), dict) else v
+        out[k] = (
+            _merge(out[k], v)
+            if isinstance(v, dict) and isinstance(out.get(k), dict)
+            else v
+        )
     return out
 
 

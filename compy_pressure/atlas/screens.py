@@ -33,7 +33,9 @@ class Cascade:
         keep = pd.Series(keep_mask, index=self.d.index).fillna(False).astype(bool)
         out = self.live & ~keep
         self.d.loc[out, "drop_reason"] = reason
-        self.steps.append(dict(step=reason, removed=int(out.sum()), remaining=int(self.live.sum())))
+        self.steps.append(
+            dict(step=reason, removed=int(out.sum()), remaining=int(self.live.sum()))
+        )
         return out
 
     def table(self):
@@ -68,15 +70,29 @@ def calibration_screen(table, pz_offset_db, cfg):
     d = table[["key", "net", "type"]].copy()
     d["cal_offset_db"] = d.key.map(pz_offset_db)
     fails = d.cal_offset_db.abs() > s["cal_db"]
-    net = d[d.cal_offset_db.notna()].groupby(["net", "type"]).agg(n=("key", "size"), med=("cal_offset_db", "median"))
+    net = (
+        d[d.cal_offset_db.notna()]
+        .groupby(["net", "type"])
+        .agg(n=("key", "size"), med=("cal_offset_db", "median"))
+    )
     bad = set(net[(net.n >= 3) & (net.med.abs() > s["cal_db"])].index)
     net_bad = pd.Series([(a, b) in bad for a, b in zip(d.net, d.type)], index=d.index)
     d["cal_excluded"] = net_bad | fails
-    d["cal_reason"] = np.where(net_bad, "network fails P-Z level", np.where(fails, "gauge fails P-Z level", ""))
+    d["cal_reason"] = np.where(
+        net_bad, "network fails P-Z level", np.where(fails, "gauge fails P-Z level", "")
+    )
     return d.set_index("key")[["cal_offset_db", "cal_excluded", "cal_reason"]]
 
 
-def pz_level(npz_path, depth_m, gain_db=0.0, f0=0.2, min_coherence=0.7, min_windows=20, rho=1028.0):
+def pz_level(
+    npz_path,
+    depth_m,
+    gain_db=0.0,
+    f0=0.2,
+    min_coherence=0.7,
+    min_windows=20,
+    rho=1028.0,
+):
     """P-Z level R [dB] of one gauge from a ComPy stage B spectra file (``<NET>.<STA>_raw.npz``).
 
     Median over windows with squared coherence >= ``min_coherence`` at ``f0`` of
@@ -89,7 +105,11 @@ def pz_level(npz_path, depth_m, gain_db=0.0, f0=0.2, min_coherence=0.7, min_wind
     g = json.loads(str(z["settings"])).get("pressure_gain", 1.0)
     f = z["freqs"]
     j = int(np.argmin(abs(f - f0)))
-    szo, szz, soo = z["ZP_szo"][:, j], z["ZP_szz"][:, j].astype(float), z["ZP_soo"][:, j].astype(float)
+    szo, szz, soo = (
+        z["ZP_szo"][:, j],
+        z["ZP_szz"][:, j].astype(float),
+        z["ZP_soo"][:, j].astype(float),
+    )
     with np.errstate(all="ignore"):
         sel = np.abs(szo) ** 2 / (szz * soo) >= min_coherence
     if sel.sum() < min_windows:
@@ -144,10 +164,16 @@ def day_screen(daily, table, cfg):
             bad = pd.Series(False, index=x.index)
             tested = []
             for b, rng in bands.items():
-                if b not in x or not usable_band(r.f_lo, r.f_hi, rng) or x[b].isna().all():
+                if (
+                    b not in x
+                    or not usable_band(r.f_lo, r.f_hi, rng)
+                    or x[b].isna().all()
+                ):
                     continue
                 if len(others) >= s["min_peers"]:
-                    M = pd.concat([o[b] for o in others if b in o], axis=1).reindex(x.index)
+                    M = pd.concat([o[b] for o in others if b in o], axis=1).reindex(
+                        x.index
+                    )
                     ok = M.notna().sum(axis=1) >= s["min_peers"]
                     res = x[b] - M.median(axis=1)
                     a = res - res[ok].median()
@@ -179,17 +205,34 @@ def band_screen(daily, drops, table, cfg):
             continue
         med[k] = x[~x.index.isin(drops.get(k, set()))].median()
     M = pd.DataFrame(med).T.reindex(d.index).add(d.gain_db, axis=0)
-    live = d[(~d.get("cal_excluded", pd.Series(False, index=d.index)).astype(bool)) & (d.depth_m >= s["deep_m"])]
+    live = d[
+        (~d.get("cal_excluded", pd.Series(False, index=d.index)).astype(bool))
+        & (d.depth_m >= s["deep_m"])
+    ]
     rows = []
     for k, r in live.iterrows():
         for b, rng in cfg["bands"].items():
-            if b not in M or not usable_band(r.f_lo, r.f_hi, rng) or not np.isfinite(M.loc[k, b]):
+            if (
+                b not in M
+                or not usable_band(r.f_lo, r.f_hi, rng)
+                or not np.isfinite(M.loc[k, b])
+            ):
                 continue
 
             def ok(o, b=b, rng=rng):
-                return o != k and np.isfinite(M.loc[o, b]) and usable_band(d.f_lo[o], d.f_hi[o], rng)
+                return (
+                    o != k
+                    and np.isfinite(M.loc[o, b])
+                    and usable_band(d.f_lo[o], d.f_hi[o], rng)
+                )
 
-            peers = [o for o in live.index[(live.net == r.net) & (live.depth_bin == r.depth_bin)] if ok(o)]
+            peers = [
+                o
+                for o in live.index[
+                    (live.net == r.net) & (live.depth_bin == r.depth_bin)
+                ]
+                if ok(o)
+            ]
             ref = "network and depth class"
             if len(peers) < s["band_min_peers_network"]:
                 peers = [o for o in live.index[live.depth_bin == r.depth_bin] if ok(o)]
@@ -197,5 +240,16 @@ def band_screen(daily, drops, table, cfg):
             if len(peers) < s["min_peers"]:
                 continue
             off = M.loc[k, b] - M.loc[peers, b].median()
-            rows.append(dict(key=k, band=b, offset_db=off, peers=len(peers), reference=ref, removed=abs(off) > s["band_db"]))
-    return pd.DataFrame(rows, columns=["key", "band", "offset_db", "peers", "reference", "removed"])
+            rows.append(
+                dict(
+                    key=k,
+                    band=b,
+                    offset_db=off,
+                    peers=len(peers),
+                    reference=ref,
+                    removed=abs(off) > s["band_db"],
+                )
+            )
+    return pd.DataFrame(
+        rows, columns=["key", "band", "offset_db", "peers", "reference", "removed"]
+    )

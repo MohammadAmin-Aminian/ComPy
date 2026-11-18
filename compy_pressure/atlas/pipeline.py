@@ -2,6 +2,7 @@
 
 Input channel table (CSV), one row per channel. Required columns:
     seed_id, net, sta, cha, lat, lon, depth_m, fs, type, brand, product (path of the native-rate file)
+(columns named key, in_atlas or drop_reason are dropped: the pipeline writes them)
 Optional columns (a missing column disables its step):
     gauge          gauge identifier (one channel per gauge is kept: ?DH first, then the widest band)
     deployment     "seafloor" for gauges on the seafloor (others are removed)
@@ -31,7 +32,10 @@ from . import classify, cube, figures, native, screens
 from .config import db_edges
 from .models import GRID, Atlas, band_taper, slug
 
-LAT_BINS, LAT_LABELS = [0, 23.5, 40, 55, 91], ["0-23.5 (tropics)", "23.5-40", "40-55", ">55 (subpolar)"]
+LAT_BINS, LAT_LABELS = (
+    [0, 23.5, 40, 55, 91],
+    ["0-23.5 (tropics)", "23.5-40", "40-55", ">55 (subpolar)"],
+)
 
 
 def _products(args):
@@ -48,8 +52,16 @@ def channel_cubes(table, cfg, out, workers=8, drops=None, tag="kept"):
     edges = db_edges(cfg)
     (out / "cubes").mkdir(parents=True, exist_ok=True)
     shape = (len(table), 12, len(GRID), len(edges) - 1)
-    c_all = np.lib.format.open_memmap(out / "cubes" / "all.npy", mode="w+", dtype=np.float32, shape=shape) if tag == "kept" else None
-    c_kept = np.lib.format.open_memmap(out / "cubes" / f"{tag}.npy", mode="w+", dtype=np.float32, shape=shape)
+    c_all = (
+        np.lib.format.open_memmap(
+            out / "cubes" / "all.npy", mode="w+", dtype=np.float32, shape=shape
+        )
+        if tag == "kept"
+        else None
+    )
+    c_kept = np.lib.format.open_memmap(
+        out / "cubes" / f"{tag}.npy", mode="w+", dtype=np.float32, shape=shape
+    )
     rows, daily = [None] * len(table), {}
     tasks = [(i, p, cfg, (drops or {}).get(k)) for i, (p, k) in enumerate(zip(table["product"], table.seed_id))
              if isinstance(p, str) and Path(p).exists()]  # fmt: skip
@@ -78,13 +90,19 @@ def _median_level(cube_row, band, edges):
         return np.nan
     centres = 0.5 * (edges[:-1] + edges[1:])
     c = h.cumsum(axis=1)
-    return float(np.median([centres[np.searchsorted(x, 0.5 * n)] for x, n in zip(c, tot) if n > 0]))
+    return float(
+        np.median(
+            [centres[np.searchsorted(x, 0.5 * n)] for x, n in zip(c, tot) if n > 0]
+        )
+    )
 
 
 def usable_limits(t, cfg):
     """Usable frequency band of each channel [Hz]: the table's limits, the Nyquist fraction, and the 1-Hz rule."""
     p = cfg["population"]
-    f_lo = t.get("f_lo_hz", pd.Series(1.0 / GRID.max(), index=t.index)).fillna(1.0 / GRID.max())
+    f_lo = t.get("f_lo_hz", pd.Series(1.0 / GRID.max(), index=t.index)).fillna(
+        1.0 / GRID.max()
+    )
     f_hi = t.get("f_hi_hz", pd.Series(np.inf, index=t.index)).fillna(np.inf)
     f_hi = np.minimum(f_hi, p["nyquist_fraction"] * t.fs)
     f_hi = np.where(t.fs <= 1.0, np.minimum(f_hi, 1.0 / p["one_hz_min_period_s"]), f_hi)
@@ -96,7 +114,9 @@ def select(t, counts, cfg, edges, cube_kept):
     p = cfg["population"]
     c = Cascade(t)
     d = c.d
-    d["n_windows"] = counts.set_index("seed_id").n_kept.reindex(d.seed_id).fillna(0).values
+    d["n_windows"] = (
+        counts.set_index("seed_id").n_kept.reindex(d.seed_id).fillna(0).values
+    )
     c.step(counts.status.eq("ok").values, "no native-rate product")
     if "deployment" in d:
         c.step(d.deployment.eq("seafloor"), "moored or unverified deployment")
@@ -106,19 +126,35 @@ def select(t, counts, cfg, edges, cube_kept):
     if "exclude_reason" in d:
         for why in [w for w in d.exclude_reason.dropna().unique() if str(w).strip()]:
             c.step(d.exclude_reason.fillna("").ne(why), str(why))
-    c.step(d.n_windows >= p["min_windows"], f"fewer than {p['min_windows']} windows (7 days)")
+    c.step(
+        d.n_windows >= p["min_windows"],
+        f"fewer than {p['min_windows']} windows (7 days)",
+    )
     if "gauge" in d:
         d["band_oct"] = np.log2(d.f_hi / d.f_lo)
         d["is_dh"] = d.cha.str[1:].eq("DH")
-        live = d[c.live].sort_values(["gauge", "is_dh", "band_oct"], ascending=[True, False, False])
-        c.step(d.seed_id.isin(set(live.groupby("gauge").head(1).seed_id)), "second channel of the same gauge")
+        live = d[c.live].sort_values(
+            ["gauge", "is_dh", "band_oct"], ascending=[True, False, False]
+        )
+        c.step(
+            d.seed_id.isin(set(live.groupby("gauge").head(1).seed_id)),
+            "second channel of the same gauge",
+        )
     for a, b in p["level_gate_bands_s"]:
-        lev = np.array([_median_level(cube_kept[i], (a, b), edges) if c.live.iloc[i] else np.nan for i in range(len(d))])
+        lev = np.array(
+            [
+                _median_level(cube_kept[i], (a, b), edges) if c.live.iloc[i] else np.nan
+                for i in range(len(d))
+            ]
+        )
         col = f"level_{a:g}_{b:g}s_db"
         d[col] = lev + d.gain_db.values
         off, ok = screens.level_gate(d[col], d.basin, c.live, p["level_gate_db"])
         d[col.replace("_db", "_offset_db")] = off
-        c.step(ok, f"{a:g}-{b:g} s level more than {p['level_gate_db']:g} dB from basin median")
+        c.step(
+            ok,
+            f"{a:g}-{b:g} s level more than {p['level_gate_db']:g} dB from basin median",
+        )
     if "pz_level_db" in d:
         deep = d.depth_m >= cfg["screens"]["deep_m"]
         off = screens.pz_offsets(d.loc[c.live & deep].set_index("seed_id").pz_level_db,
@@ -126,7 +162,10 @@ def select(t, counts, cfg, edges, cube_kept):
         cal = screens.calibration_screen(d.rename(columns={"seed_id": "key"}), off, cfg)
         for col in cal:
             d[col] = cal[col].reindex(d.seed_id).values
-        c.step(~d.cal_excluded.fillna(False).astype(bool), f"P-Z calibration level more than {cfg['screens']['cal_db']:g} dB from same-depth DPG/APG")
+        c.step(
+            ~d.cal_excluded.fillna(False).astype(bool),
+            f"P-Z calibration level more than {cfg['screens']['cal_db']:g} dB from same-depth DPG/APG",
+        )
     d["in_atlas"] = c.live
     return d, c.table()
 
@@ -157,9 +196,19 @@ def standard_models(A):
         A.add("season", s_, allu, lambda u, s_=s_: classify.season_months(s_, d.lat[u]))
     for hemi, m in (("north", d.lat >= 0), ("south", d.lat < 0)):
         for s_ in classify.SEASONS:
-            A.add("hemisphere_season", f"{hemi}_{s_}", list(np.where(m)[0]), lambda u, s_=s_: classify.season_months(s_, d.lat[u]))
+            A.add(
+                "hemisphere_season",
+                f"{hemi}_{s_}",
+                list(np.where(m)[0]),
+                lambda u, s_=s_: classify.season_months(s_, d.lat[u]),
+            )
         for k in range(12):
-            A.add("month_" + hemi, f"{k + 1:02d}", list(np.where(m)[0]), lambda u, k=k: np.array([k]))
+            A.add(
+                "month_" + hemi,
+                f"{k + 1:02d}",
+                list(np.where(m)[0]),
+                lambda u, k=k: np.array([k]),
+            )
 
 
 def build(table_path, out, cfg, workers=8, make_figures=True):
@@ -168,6 +217,9 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     tdir = out / "tables"
     tdir.mkdir(parents=True, exist_ok=True)
     t = pd.read_csv(table_path, low_memory=False)
+    t = t.drop(
+        columns=[c for c in ("key", "in_atlas", "drop_reason") if c in t]
+    )  # the pipeline's key is seed_id
     t["gain_db"] = t.get("gain_db", pd.Series(0.0, index=t.index)).fillna(0.0)
     t = classify.add_classes(t, cfg)
     t["f_lo"], t["f_hi"] = usable_limits(t, cfg)
@@ -181,7 +233,9 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     # 3. day screen, then the histograms again without the dropped days
     a = d[d.in_atlas].rename(columns={"seed_id": "key"})
     drops, dsum = screens.day_screen({k: daily.get(k) for k in a.key}, a, cfg)
-    pd.DataFrame([(k, x) for k, s in drops.items() for x in sorted(s)], columns=["key", "day"]).to_csv(tdir / "screen_days.csv", index=False)
+    pd.DataFrame(
+        [(k, x) for k, s in drops.items() for x in sorted(s)], columns=["key", "day"]
+    ).to_csv(tdir / "screen_days.csv", index=False)
     dsum.to_csv(tdir / "screen_days_summary.csv", index=False)
     a_tab = d[d.in_atlas].reset_index(drop=True)
     cnt2, daily2 = channel_cubes(a_tab, cfg, out, workers, drops, tag="screened")
@@ -211,7 +265,9 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     standard_models(A)
     A.index_table().to_csv(tdir / "model_index.csv", index=False)
     A.season_paired().to_csv(tdir / "season_paired.csv", index=False)
-    (tdir / "settings.json").write_text(json.dumps(dict(cfg, product=native.PRODUCT_VERSION), indent=1))
+    (tdir / "settings.json").write_text(
+        json.dumps(dict(cfg, product=native.PRODUCT_VERSION), indent=1)
+    )
     if make_figures:
         standard_figures(A, out / "figures")
     return A
@@ -244,7 +300,11 @@ def standard_figures(A, fig_dir):
             if f.exists():
                 tabs[g] = pd.read_csv(f)
         cmap = plt.get_cmap("viridis", max(len(tabs), 2))
-        colours = figures.TYPE_COLOURS if axis == "sensor_type" else {g: cmap(i) for i, g in enumerate(tabs)}
+        colours = (
+            figures.TYPE_COLOURS
+            if axis == "sensor_type"
+            else {g: cmap(i) for i, g in enumerate(tabs)}
+        )
         fig, ax = plt.subplots(figsize=(9, 5.5))
         figures.model_lines(ax, tabs, colours)
         ax.legend(fontsize=8, loc="upper left", title=axis.replace("_", " "))
@@ -253,5 +313,10 @@ def standard_figures(A, fig_dir):
 
 
 def main_env_threads():
-    for v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "VECLIB_MAXIMUM_THREADS", "MKL_NUM_THREADS"):
+    for v in (
+        "OMP_NUM_THREADS",
+        "OPENBLAS_NUM_THREADS",
+        "VECLIB_MAXIMUM_THREADS",
+        "MKL_NUM_THREADS",
+    ):
         os.environ.setdefault(v, "1")

@@ -44,7 +44,9 @@ LONG_RATE_HZ = 1.0
 HIGHPASS_HZ = 2.0e-4
 HIGHPASS_ORDER = 4
 CONTEXT_S = 21600.0
-MIN_CONTEXT_S = 10800.0  # less context on a side: periods above LONG_CONTEXT_PERIOD_S are not kept
+MIN_CONTEXT_S = (
+    10800.0  # less context on a side: periods above LONG_CONTEXT_PERIOD_S are not kept
+)
 LONG_CONTEXT_PERIOD_S = 300.0
 EDGE_DECIMATION_S = 120.0  # 1-Hz samples this close to a gap are not used
 PRODUCT_VERSION = "native-1/4oct-v1"
@@ -76,7 +78,10 @@ def band_weights(freqs, periods, width_octaves=0.25):
     rows, cols, vals = [], [], []
     resolved = np.zeros(len(fc), bool)
     for i, f in enumerate(fc):
-        lo, hi = np.searchsorted(freqs, f / half, "left"), np.searchsorted(freqs, f * half, "left")
+        lo, hi = (
+            np.searchsorted(freqs, f / half, "left"),
+            np.searchsorted(freqs, f * half, "left"),
+        )
         if hi > lo:
             rows += [i] * (hi - lo)
             cols += list(range(lo, hi))
@@ -86,7 +91,9 @@ def band_weights(freqs, periods, width_octaves=0.25):
         k = int(np.searchsorted(freqs, f))
         if k <= 1 or k >= len(freqs):
             continue
-        a = (math.log(f) - math.log(freqs[k - 1])) / (math.log(freqs[k]) - math.log(freqs[k - 1]))
+        a = (math.log(f) - math.log(freqs[k - 1])) / (
+            math.log(freqs[k]) - math.log(freqs[k - 1])
+        )
         rows += [i, i]
         cols += [k - 1, k]
         vals += [1.0 - a, a]
@@ -112,7 +119,13 @@ def welch_psd(x, fs):
     if key not in _WELCH_CACHE:
         win = signal.get_window("hann", nper)
         t = np.arange(nper) - (nper - 1) / 2.0
-        _WELCH_CACHE[key] = (win, t, float(t @ t), 1.0 / (fs * float(win @ win)), np.fft.rfftfreq(nper, 1.0 / fs))
+        _WELCH_CACHE[key] = (
+            win,
+            t,
+            float(t @ t),
+            1.0 / (fs * float(win @ win)),
+            np.fft.rfftfreq(nper, 1.0 / fs),
+        )
     win, t, tt, scale, freqs = _WELCH_CACHE[key]
     seg = sliding_window_view(np.asarray(x, float), nper)[::step]
     mean = seg.mean(axis=1, keepdims=True)
@@ -127,12 +140,16 @@ def welch_psd(x, fs):
 
 def decimation_factors(fs, target=LONG_RATE_HZ):
     """Integer up/down factors that take ``fs`` to ``target`` exactly."""
-    r = Fraction(target).limit_denominator(1000) / Fraction(fs).limit_denominator(100000)
+    r = Fraction(target).limit_denominator(1000) / Fraction(fs).limit_denominator(
+        100000
+    )
     return r.numerator, r.denominator
 
 
 def highpass_sos(fs=LONG_RATE_HZ):
-    return signal.butter(HIGHPASS_ORDER, HIGHPASS_HZ, btype="highpass", fs=fs, output="sos")
+    return signal.butter(
+        HIGHPASS_ORDER, HIGHPASS_HZ, btype="highpass", fs=fs, output="sos"
+    )
 
 
 @dataclass
@@ -165,7 +182,9 @@ def response_table(response, fs):
     s = float(sens.value)
     units = str(sens.input_units or "")
     rg = power(1.0 / GRID)
-    return ResponseTable(fn, power(fn), fl, power(fl), s, units, 10 * np.log10(rg / s**2))
+    return ResponseTable(
+        fn, power(fn), fl, power(fl), s, units, 10 * np.log10(rg / s**2)
+    )
 
 
 @dataclass
@@ -208,23 +227,35 @@ class _Estimator:
         wl, self.long_resolved = band_weights(response_tab.long_freqs, GRID[~short])
         _, hp = signal.sosfreqz(self.sos, worN=response_tab.long_freqs, fs=LONG_RATE_HZ)
         with np.errstate(divide="ignore", invalid="ignore"):
-            inv_n = np.where(response_tab.native_power > 0, 1.0 / response_tab.native_power, 0.0)
+            inv_n = np.where(
+                response_tab.native_power > 0, 1.0 / response_tab.native_power, 0.0
+            )
             inv_l = np.where(response_tab.long_power * np.abs(hp) ** 2 > 0,
                              1.0 / (response_tab.long_power * np.abs(hp) ** 2), 0.0)  # fmt: skip
         # Fold the response into the band weights; bands above the native Nyquist stay NaN.
         self.wn = (wn @ sparse.diags(inv_n)).tocsr()
-        self.wn_valid = (np.asarray(wn.sum(axis=1)).ravel() > 0) & (1.0 / GRID[short] < 0.45 * fs)
+        self.wn_valid = (np.asarray(wn.sum(axis=1)).ravel() > 0) & (
+            1.0 / GRID[short] < 0.45 * fs
+        )
         self.wl = (wl @ sparse.diags(inv_l)).tocsr()
-        self.wl_valid = (np.asarray(wl.sum(axis=1)).ravel() > 0) & (1.0 / GRID[~short] < 0.4 * LONG_RATE_HZ)
+        self.wl_valid = (np.asarray(wl.sum(axis=1)).ravel() > 0) & (
+            1.0 / GRID[~short] < 0.4 * LONG_RATE_HZ
+        )
 
     def levels(self, native, long_ctx, long_off, long_ctx_ok):
         out = np.full(len(GRID), np.nan)
         if len(self.short_idx) and self.wn_valid.any():
             _, p = welch_psd(native, self.fs)
             v = self.wn @ p
-            out[self.short_idx[self.wn_valid]] = 10 * np.log10(np.maximum(v[self.wn_valid], 1e-300))
-        x = long_ctx - np.polyval(np.polyfit(np.arange(len(long_ctx)), long_ctx, 1), np.arange(len(long_ctx)))
-        y = signal.sosfiltfilt(self.sos, x, padtype="odd", padlen=min(len(x) - 1, 3 * int(1 / HIGHPASS_HZ)))
+            out[self.short_idx[self.wn_valid]] = 10 * np.log10(
+                np.maximum(v[self.wn_valid], 1e-300)
+            )
+        x = long_ctx - np.polyval(
+            np.polyfit(np.arange(len(long_ctx)), long_ctx, 1), np.arange(len(long_ctx))
+        )
+        y = signal.sosfiltfilt(
+            self.sos, x, padtype="odd", padlen=min(len(x) - 1, 3 * int(1 / HIGHPASS_HZ))
+        )
         n = int(round(WINDOW_S * LONG_RATE_HZ))
         _, p = welch_psd(y[long_off : long_off + n], LONG_RATE_HZ)
         v = self.wl @ p
@@ -245,7 +276,11 @@ def file_day(path):
     if not m:
         raise ValueError(f"not an SDS day file: {path}")
     y, d = int(m.group(1)), int(m.group(2))
-    return int((np.datetime64(f"{y}-01-01") - np.datetime64("1970-01-01")).astype(int)) + d - 1
+    return (
+        int((np.datetime64(f"{y}-01-01") - np.datetime64("1970-01-01")).astype(int))
+        + d
+        - 1
+    )
 
 
 def _contiguous(stream, fs):
@@ -257,12 +292,24 @@ def _contiguous(stream, fs):
     runs = []
     for tr in stream.split():
         if tr.stats.npts:
-            runs.append((float(tr.stats.starttime.timestamp), np.asarray(tr.data, np.float64)))
+            runs.append(
+                (float(tr.stats.starttime.timestamp), np.asarray(tr.data, np.float64))
+            )
     runs.sort(key=lambda r: r[0])
     return runs
 
 
-def process_channel(files, response, seed_id, fs, out_path, chunk_days=None, read=None, meta=None, log=None):
+def process_channel(
+    files,
+    response,
+    seed_id,
+    fs,
+    out_path,
+    chunk_days=None,
+    read=None,
+    meta=None,
+    log=None,
+):
     """Compute the native-rate levels of one channel from its day files and save them.
 
     Args:
@@ -279,7 +326,9 @@ def process_channel(files, response, seed_id, fs, out_path, chunk_days=None, rea
     if read is None:
         from obspy import read as read
     net, sta, loc, cha = seed_id.split(".")
-    if chunk_days is None:  # about 2e7 samples per chunk at most, plus one day of context on each side
+    if (
+        chunk_days is None
+    ):  # about 2e7 samples per chunk at most, plus one day of context on each side
         chunk_days = 4 if fs <= 50 else (2 if fs <= 125 else 1)
     rtab = response_table(response, fs)
     est = _Estimator(rtab, fs)
@@ -318,7 +367,9 @@ def process_channel(files, response, seed_id, fs, out_path, chunk_days=None, rea
             if est.up == 1 and est.down == 1:
                 lx, lt0 = x, t0
             else:
-                lx = signal.resample_poly(x[k0:], est.up, est.down, window=("kaiser", 8.0), padtype="line")
+                lx = signal.resample_poly(
+                    x[k0:], est.up, est.down, window=("kaiser", 8.0), padtype="line"
+                )
                 lt0 = t0 + k0 / fs
             edge = int(EDGE_DECIMATION_S * LONG_RATE_HZ)
             l_lo, l_hi = lt0 + edge, lt0 + (len(lx) - edge) / LONG_RATE_HZ
@@ -335,7 +386,9 @@ def process_channel(files, response, seed_id, fs, out_path, chunk_days=None, rea
                 la = int(round((ws - lt0) * LONG_RATE_HZ))
                 ca = max(int(round((l_lo - lt0) * LONG_RATE_HZ)), la - ctx)
                 cb = min(int(round((l_hi - lt0) * LONG_RATE_HZ)), la + n_long + ctx)
-                ok = (la - ca) >= MIN_CONTEXT_S * LONG_RATE_HZ and (cb - la - n_long) >= MIN_CONTEXT_S * LONG_RATE_HZ
+                ok = (la - ca) >= MIN_CONTEXT_S * LONG_RATE_HZ and (
+                    cb - la - n_long
+                ) >= MIN_CONTEXT_S * LONG_RATE_HZ
                 w = x[a:b]
                 lev = est.levels(w, lx[ca:cb], la - ca, ok)
                 spec.starts.append(ws)
@@ -364,6 +417,6 @@ def load(path):
     for k in ("seed_id", "input_units", "product"):
         out[k] = str(out[k])
     out["fs"] = float(out["fs"])
-    out["sensitivity"] = np.atleast_1d(out["sensitivity"]).astype(float)
+    out["sensitivity"] = np.ravel(out["sensitivity"]).astype(float)
     out["response_db"] = np.atleast_2d(out["response_db"])
     return out

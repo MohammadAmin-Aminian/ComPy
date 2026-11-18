@@ -22,7 +22,9 @@ NE_LAYERS = {"coast": ("physical", "coastline"), "shelf_break": ("physical", "ba
 
 def _unit(lat, lon):
     la, lo = np.radians(lat), np.radians(lon)
-    return np.column_stack([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
+    return np.column_stack(
+        [np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)]
+    )
 
 
 def _densify(coords, step_km):
@@ -43,8 +45,17 @@ def _densify(coords, step_km):
         if s < 1e-12:
             out.append(np.repeat(c[i + 1 : i + 2], n, axis=0))
             continue
-        p = (np.sin((1 - t) * ang)[:, None] * u[i] + np.sin(t * ang)[:, None] * u[i + 1]) / s
-        out.append(np.column_stack([np.degrees(np.arctan2(p[:, 1], p[:, 0])), np.degrees(np.arcsin(np.clip(p[:, 2], -1, 1)))]))
+        p = (
+            np.sin((1 - t) * ang)[:, None] * u[i] + np.sin(t * ang)[:, None] * u[i + 1]
+        ) / s
+        out.append(
+            np.column_stack(
+                [
+                    np.degrees(np.arctan2(p[:, 1], p[:, 0])),
+                    np.degrees(np.arcsin(np.clip(p[:, 2], -1, 1))),
+                ]
+            )
+        )
     return np.vstack(out)
 
 
@@ -94,7 +105,11 @@ def gauge_distances(lat, lon, depth_m, step_km=1.0):
     """
     lat, lon, depth = (np.asarray(x, float) for x in (lat, lon, depth_m))
     out = {}
-    for layer, iso in (("coast", None), ("shelf_break", 200.0), ("isobath_1000", 1000.0)):
+    for layer, iso in (
+        ("coast", None),
+        ("shelf_break", 200.0),
+        ("isobath_1000", 1000.0),
+    ):
         d, _ = NearestLine(line_points(layer, step_km)).distance_km(lat, lon)
         if iso is not None:
             d = np.where(depth < iso, -d, d)

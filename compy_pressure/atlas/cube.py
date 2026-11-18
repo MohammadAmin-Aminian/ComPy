@@ -49,7 +49,10 @@ def edge_days(days, level, edge_db, n_days):
     dm = np.array([np.nanmedian(level[days == x]) for x in ud])
     out = np.abs(dm - np.nanmedian(level)) > edge_db
     drop = set()
-    for seq in (np.arange(min(n_days, len(ud))), np.arange(len(ud) - 1, max(len(ud) - 1 - n_days, -1), -1)):
+    for seq in (
+        np.arange(min(n_days, len(ud))),
+        np.arange(len(ud) - 1, max(len(ud) - 1 - n_days, -1), -1),
+    ):
         hit = [k for k, q in enumerate(seq) if out[q]]
         if hit:
             drop.update(ud[seq[: hit[-1] + 1]].tolist())
