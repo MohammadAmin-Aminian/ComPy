@@ -8,7 +8,8 @@ Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
     -150 dB re 1 (m/s²)²/Hz. Threshold 0.9 if it keeps >= MIN_WINDOWS
     windows, otherwise 0.8 (as in the paper).
   * Band: widest run where the mean coherence of accepted windows reaches
-    the threshold, searched in (BAND_SEARCH_LOW, f_c) with f_c=sqrt(g/2πH);
+    the threshold, searched in (BAND_SEARCH_LOW, BAND_MAX_FRACTION_FC * f_c)
+    with f_c=sqrt(g/2πH), that is up to kH = 4.0 (ComPy 3.2; before, up to f_c);
     the gates are re-evaluated once in that band.
   * Compliance from stacked spectra (k |S_pz|/S_pp, gravity corrected),
     Bendat & Piersol uncertainty, phase, per-window mean and scatter.
@@ -51,6 +52,15 @@ THRESHOLDS = (0.9, 0.8)
 BAND_SEARCH_LOW = 0.004
 INITIAL_BAND_LOW = 0.007
 INITIAL_BAND_HIGH_FRACTION = 0.8
+#: Upper end of the band search as a fraction of f_c = sqrt(g / 2 pi H) (ComPy 3.2).
+#: 0.8 f_c is kH = 4.0 in deep water, where the pressure of the archive's 379 gauges
+#: is 20 dB below its infragravity plateau (kH = 4.27, interquartile 4.07-4.33), and
+#: the limit the inversion already applied (``auto.compliance_data``). Above it the
+#: coherence of the whole archive falls from 0.95 to 0.76 (0.8-0.9 f_c) and 0.45
+#: (0.9-1.0 f_c), and the compliance bends away from the lower bins. Papers use
+#: 0.7 f_c (Zha & Webb 2016) to about 1.1 f_c (Crawford et al. 1998); see
+#: docs/COMPLIANCE_BAND.md. Set 1.0 for the behaviour of ComPy 2.2 to 3.1.
+BAND_MAX_FRACTION_FC = getattr(config, "BAND_MAX_FRACTION_FC", 0.8)
 #: Frequency range saved. The upper limit rises to the band's upper edge where the
 #: band goes beyond it (shelf stations): before ComPy 3 the saved curve stopped at
 #: 40 mHz while the band and the monthly curves went on, so stage E lost its
@@ -155,7 +165,7 @@ def run_gain(windows, depth, gain, fc):
             attempts[threshold] = {"error": str(exc)}
             continue
         band = coherent_band(first.all_freqs, first.mean_coherence_all, threshold,
-                             (BAND_SEARCH_LOW, fc)) or initial  # fmt: skip
+                             (BAND_SEARCH_LOW, BAND_MAX_FRACTION_FC * fc)) or initial  # fmt: skip
         if band[1] - band[0] < 0.002:
             band = initial
         try:
