@@ -1,6 +1,9 @@
 # Changelog
 
-## 3.1.0 — unreleased
+## 3.1.0 — 2026-11-18
+
+First release since 2.9.0; it also carries the changes of 3.0.0, which was merged on
+13 November 2026 but not released on its own.
 
 ### The old project name is gone
 
@@ -48,7 +51,7 @@ by 8 % (3.36 to 3.10 km/s). Chi-square changes by less than 1 at 24 stations and
 rises by 3.3 at WC04 and by 10.3 at CC02 (337 windows, not interpreted), where
 the earlier result had a slow lower crust.
 
-## 3.0.0 — unreleased
+## 3.0.0 — merged 2026-11-13, released as part of 3.1.0
 
 Result of the inversion overhaul of November 2026
 ([docs/inversion_overhaul_2026-11/REPORT.md](docs/inversion_overhaul_2026-11/REPORT.md)).
