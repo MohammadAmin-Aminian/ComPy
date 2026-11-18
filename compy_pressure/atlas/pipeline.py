@@ -259,6 +259,8 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     casc.to_csv(tdir / "selection_cascade.csv", index=False)
     d.to_csv(tdir / "population.csv", index=False)
     np.save(out / "cubes" / "taper.npy", U)
+    np.save(out / "cubes" / "periods.npy", GRID)
+    np.save(out / "cubes" / "db_edges.npy", edges)
     # 5. models
     scr = np.load(out / "cubes" / "screened.npy", mmap_mode="r")
     A = Atlas(a_tab, scr, U, cfg, out / "models")
