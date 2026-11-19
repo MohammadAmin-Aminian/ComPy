@@ -75,8 +75,15 @@ def line_points(layer, step_km=1.0):
                 parts += [r.coords for r in poly.interiors]
         elif isinstance(geom, (LineString, MultiLineString)):
             parts += [g.coords for g in getattr(geom, "geoms", [geom])]
+        is_polygon = isinstance(geom, (Polygon, MultiPolygon))
         for p in parts:
-            pts.append(_densify(np.asarray(p), step_km))
+            q = _densify(np.asarray(p), step_km)
+            if is_polygon:
+                # Natural Earth polygons are cut along the antimeridian and closed along the poles; those
+                # edges are not isobaths and must not count as the shelf break.
+                q = q[(np.abs(q[:, 0]) < 179.999) & (np.abs(q[:, 1]) < 89.999)]
+            if len(q):
+                pts.append(q)
     return np.vstack(pts)
 
 

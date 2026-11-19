@@ -60,6 +60,11 @@ def _native_one(task):
     try:
         net, sta, loc, cha = seed.split(".")
         inv = read_inventory(task["xml"]).select(network=net, station=sta, channel=cha)
+        codes = {c.location_code for n in inv for s in n for c in s}
+        if (
+            len(codes) > 1
+        ):  # several sensors under one channel code: keep this one's epochs only
+            inv = inv.select(location=loc)
         epochs = sorted((c for n in inv for s in n for c in s if c.response is not None and c.response.response_stages),
                         key=lambda c: c.start_date)  # fmt: skip
         if not epochs:
@@ -68,7 +73,7 @@ def _native_one(task):
             str(cdir / f"{i:06d}_{Path(f).name}") for i, f in enumerate(task["files"])
         ]
         day = {p: nv.file_day(p) for p in local}
-        zs, parts = [], []
+        zs, parts, limits = [], [], []
         for k, c in enumerate(epochs):
             a = c.start_date.timestamp / 86400 - 1
             b = (c.end_date.timestamp / 86400 + 1) if c.end_date else 1e9
@@ -80,17 +85,19 @@ def _native_one(task):
                                meta=dict(epoch_start=str(c.start_date), epoch_end=str(c.end_date)))  # fmt: skip
             parts.append(part)
             zs.append(nv.load(part))
+            limits.append(
+                (c.start_date.timestamp, c.end_date.timestamp if c.end_date else np.inf)
+            )
         if not zs:
             raise RuntimeError("no files inside any response epoch")
-        seen, rows = set(), []
-        for k, z in enumerate(
-            zs
-        ):  # a window inside two epochs (overlap at the edges) is kept once, first epoch
-            for i, s in enumerate(z["starts"]):
-                if s not in seen:
-                    seen.add(s)
-                    rows.append((s, k, i))
-        rows.sort()
+        # The day files at an epoch limit are computed with both responses. Each window is kept once, with the
+        # response of the epoch that contains its start; a window outside every epoch keeps the first one seen.
+        rows = nv.pick_epoch_windows([z["starts"] for z in zs], limits)
+        other_rate = sum(z["meta"].get("traces_other_rate", 0) for z in zs)
+        if not rows and other_rate:
+            raise RuntimeError(
+                f"no window at {task['fs']:g} Hz: {other_rate} traces have another sampling rate"
+            )
         pick = lambda key: np.array([zs[k][key][i] for _, k, i in rows])  # noqa: E731
         np.savez_compressed(
             task["out"] + ".part.npz", periods=zs[0]["periods"], starts=np.array([r[0] for r in rows], float),
@@ -108,7 +115,7 @@ def _native_one(task):
             raise RuntimeError(f"{errors} day files could not be read")
         res.update(status="ok", windows=len(rows), epochs=len(zs), units=zs[0]["input_units"],
                    tried=sum(z["meta"]["windows_tried"] for z in zs), gap=sum(z["meta"]["windows_gap"] for z in zs),
-                   read_errors=sum(z["meta"]["read_errors"] for z in zs))  # fmt: skip
+                   read_errors=sum(z["meta"]["read_errors"] for z in zs), traces_other_rate=other_rate)  # fmt: skip
     except Exception as e:
         res.update(
             status="failed",
@@ -122,7 +129,7 @@ def _native_one(task):
 
 
 def run_native(
-    plan, out, cache, workers=8, max_cached_gb=150.0, max_ahead=16, sds=None, log=None
+    plan, out, cache, workers=4, max_cached_gb=150.0, max_ahead=16, sds=None, log=None
 ):
     """Native-rate spectra of every channel of ``plan`` (DataFrame), one reader and ``workers`` processes."""
     out, cache = Path(out), Path(cache)
@@ -234,7 +241,9 @@ def main(argv=None):
         "--cache", required=True, help="local folder for the copied day files"
     )
     a.add_argument("--sds", help="SDS root, for plan rows without a file list")
-    a.add_argument("--workers", type=int, default=8)
+    a.add_argument("--workers", type=int, default=4,
+                   help="processes; each holds up to about 4 GB on a 250 Hz channel and 2-2.5 GB at 50-125 Hz, "
+                        "so keep workers x 4 GB well below the memory of the machine")  # fmt: skip
     a.add_argument("--max-cached-gb", type=float, default=150.0)
     a.add_argument("--log")
     b = sub.add_parser(

@@ -40,8 +40,10 @@ def histogram(levels, months, edges):
 def edge_days(days, level, edge_db, n_days):
     """Days at either end of the record whose level departs from the record median by more than ``edge_db``.
 
-    Searched over the first and last ``n_days`` distinct days: the screen removes
-    every day up to the last departing one, so a descent or a recovery is cut whole.
+    Searched over the first and last ``n_days`` distinct days, and never over more than
+    a third of the record from either end: the screen removes every day up to the last
+    departing one, so a descent or a recovery is cut whole, but a loud day in the
+    middle of a short record cannot be reached from an end and take the record with it.
     """
     ud = np.unique(days)
     if not len(ud):
@@ -49,9 +51,10 @@ def edge_days(days, level, edge_db, n_days):
     dm = np.array([np.nanmedian(level[days == x]) for x in ud])
     out = np.abs(dm - np.nanmedian(level)) > edge_db
     drop = set()
+    n = min(n_days, len(ud) // 3)
     for seq in (
-        np.arange(min(n_days, len(ud))),
-        np.arange(len(ud) - 1, max(len(ud) - 1 - n_days, -1), -1),
+        np.arange(n),
+        np.arange(len(ud) - 1, len(ud) - 1 - n, -1),
     ):
         hit = [k for k, q in enumerate(seq) if out[q]]
         if hit:

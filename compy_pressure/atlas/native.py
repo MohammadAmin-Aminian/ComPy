@@ -283,11 +283,38 @@ def file_day(path):
     )
 
 
+def _one_location(stream, loc):
+    """Traces of the channel's own location code.
+
+    Data and metadata often disagree on the code of a single sensor, so a stream
+    with one location code is taken as it is. With several codes only the
+    requested one is kept: two sensors under one channel code must not be mixed.
+    """
+    codes = {tr.stats.location for tr in stream}
+    if len(codes) <= 1:
+        return stream
+    own = stream.select(location=loc)
+    if not len(own):
+        raise ValueError(
+            f"location codes {sorted(codes)} in the data and none is '{loc}'"
+        )
+    return own
+
+
 def _contiguous(stream, fs):
-    """List of (t0 [s since epoch], float64 samples) of gap-free runs, merged across files."""
-    for tr in stream:
+    """Gap-free runs as (t0 [s since epoch], float64 samples), merged across files, and the number of traces left out.
+
+    Traces whose sampling rate is not ``fs`` (beyond a clock-drift tolerance of
+    2e-5) are left out and counted: with another rate the window length and the
+    frequency axis would be wrong without any error.
+    """
+    other = 0
+    for tr in list(stream):
         if abs(tr.stats.sampling_rate - fs) / fs < 2e-5:
             tr.stats.sampling_rate = fs
+        else:
+            stream.remove(tr)
+            other += 1
     stream.merge(method=1, fill_value=None)
     runs = []
     for tr in stream.split():
@@ -296,7 +323,7 @@ def _contiguous(stream, fs):
                 (float(tr.stats.starttime.timestamp), np.asarray(tr.data, np.float64))
             )
     runs.sort(key=lambda r: r[0])
-    return runs
+    return runs, other
 
 
 def process_channel(
@@ -339,7 +366,9 @@ def process_channel(
     spec = ChannelSpectra(seed_id, fs)
     n_long = int(round(WINDOW_S * LONG_RATE_HZ))
     ctx = int(round(CONTEXT_S * LONG_RATE_HZ))
-    stats = dict(windows_tried=0, windows_gap=0, chunks=0, read_errors=0)
+    stats = dict(
+        windows_tried=0, windows_gap=0, chunks=0, read_errors=0, traces_other_rate=0
+    )
     i = 0
     while i < len(days):
         block = [d for d in days[i:] if d < days[i] + chunk_days]
@@ -356,8 +385,13 @@ def process_channel(
                 st += s.select(network=net, station=sta, channel=cha)
         if not len(st):
             continue
+        st = _one_location(st, loc)
+        runs, other = _contiguous(st, fs)
+        stats["traces_other_rate"] += other
+        if not runs:
+            continue
         stats["chunks"] += 1
-        for t0, x in _contiguous(st, fs):
+        for t0, x in runs:
             t1 = t0 + len(x) / fs
             # 1-Hz copy of this run, on whole seconds.
             off = (math.ceil(t0) - t0) * fs
@@ -407,6 +441,27 @@ def process_channel(
     spec.save(tmp, rtab, meta)
     tmp.replace(out_path)
     return meta
+
+
+def pick_epoch_windows(starts, limits):
+    """Which epoch each window comes from, when the day files at an epoch limit were computed with both responses.
+
+    Args:
+        starts: one array of window start times [s since epoch] per response epoch.
+        limits: (start, end) of each epoch [s since epoch]; ``inf`` for an open end.
+
+    Returns:
+        Sorted list of (start, epoch index, index inside that epoch). A window is
+        taken from the epoch that contains its start; a window outside every
+        epoch is taken from the first epoch that computed it.
+    """
+    best = {}
+    for k, st in enumerate(starts):
+        for i, s in enumerate(st):
+            rank = (0 if limits[k][0] <= s < limits[k][1] else 1, k)
+            if s not in best or rank < best[s][0]:
+                best[s] = (rank, k, i)
+    return sorted((s, k, i) for s, (_, k, i) in best.items())
 
 
 def load(path):

@@ -223,9 +223,25 @@ def test_build_end_to_end(tmp_path):
         np.savez_compressed(
             p, **{k: v for k, v in z.items() if k != "meta"}, meta=json.dumps(z["meta"])
         )
-        rows.append(dict(seed_id=f"N{i // 6}.S{i}.00.HDH", net=f"N{i // 6}", sta=f"S{i}", cha="HDH", lat=-10.0 + i, lon=150.0,
-                         depth_m=3500.0, fs=2.0, type="DPG", brand="SIO Cox-Webb DPG", product=str(p), gain_db=0.0,
-                         coast_km=100.0 + 50 * i, shelf_break_km=60.0 + 40 * i))  # fmt: skip
+        rows.append(
+            dict(
+                seed_id=f"N{i // 6}.S{i}.00.HDH",
+                net=f"N{i // 6}",
+                sta=f"S{i}",
+                cha="HDH",
+                lat=-10.0 + i,
+                lon=150.0,
+                depth_m=3500.0,
+                fs=2.0,
+                type="DPG",
+                brand="SIO Cox-Webb DPG",
+                product=str(p),
+                gain_db=0.0,
+                coast_km=100.0 + 50 * i,
+                shelf_break_km=60.0 + 40 * i,
+                gauge=f"g{i}" if i % 2 else None,
+            )
+        )  # fmt: skip  (half of the gauge ids are missing)
     pd.DataFrame(rows).to_csv(tmp_path / "channels.csv", index=False)
     cfg = config.load(
         population={"min_windows": 50, "level_gate_bands_s": [[2.5, 4.0]]},
@@ -244,3 +260,118 @@ def test_build_end_to_end(tmp_path):
     assert ok.sum() > 20 and tab.p50_db[ok].between(15, 25).all()
     assert (tmp_path / "atlas" / "figures" / "global_density.png").exists()
     assert len(A.index_table()) > 5
+
+
+def test_edge_days_spare_a_loud_day_inside_a_short_record():
+    days = np.repeat(np.arange(30), 8)
+    level = np.zeros(len(days))
+    level[days == 15] = 40.0
+    assert cube.edge_days(days, level, 15.0, 20) == set()
+    level[days == 0] = 40.0  # a real edge is still cut, and only that edge
+    assert cube.edge_days(days, level, 15.0, 20) == {0}
+
+
+def test_band_taper_without_lower_limit():
+    u = models.band_taper(0.0, 1.0, periods=np.array([10.0, 1000.0]))
+    assert np.all(u == 1)
+
+
+def test_usable_limits_keep_the_longest_periods_when_no_limit_is_given():
+    from compy_pressure.atlas import pipeline
+
+    t = pd.DataFrame(dict(fs=[50.0, 50.0, 50.0]))
+    for col in (None, [np.nan, 0.0, 0.0]):
+        if col is not None:
+            t["f_lo_hz"] = col
+        f_lo, f_hi = pipeline.usable_limits(t, CFG)
+        for lo, hi in zip(f_lo, f_hi):
+            assert models.band_taper(lo, hi)[np.argmax(models.GRID)] == pytest.approx(
+                1.0
+            )
+
+
+def test_piecewise_fit_keeps_the_best_fit_when_segments_run_out():
+    rng = np.random.default_rng(1)
+    T = np.logspace(0, 3, 30)
+    y = rng.normal(0, 8.0, 30)
+    few = models.fit_piecewise(T, y, 1.0, 15)
+    many = models.fit_piecewise(T, y, 1.0, 20)
+    assert many["segments"] > 1 and many["rms_db"] <= few["rms_db"] + 1e-9
+
+
+def test_window_takes_the_response_of_its_epoch():
+    first, second = np.arange(0.0, 11.0), np.arange(5.0, 16.0)
+    rows = native.pick_epoch_windows([first, second], [(0.0, 8.0), (8.0, np.inf)])
+    assert [s for s, _, _ in rows] == list(np.arange(0.0, 16.0))
+    assert all(k == (0 if s < 8 else 1) for s, k, _ in rows)
+    # a window before the first epoch is kept from the first epoch that computed it
+    rows = native.pick_epoch_windows([np.array([-3.0, 1.0])], [(0.0, 8.0)])
+    assert rows == [(-3.0, 0, 0), (1.0, 0, 1)]
+
+
+def _two_trace_reader(fs, traces):
+    t0 = UTCDateTime(2020, 1, 1)
+
+    def reader(p):
+        d = int(str(p).split(".")[-1]) - 1
+        return Stream([tr.slice(t0 + d * 86400, t0 + (d + 1) * 86400 - 1 / tr.stats.sampling_rate, nearest_sample=False).copy()
+                       for tr in traces])  # fmt: skip
+
+    return reader
+
+
+def _trace(fs, sigma, days, loc="00", seed=0):
+    x = np.random.default_rng(seed).normal(0, sigma, int(days * 86400 * fs))
+    return Trace(x, header=dict(network="XX", station="T", location=loc, channel="HDH", sampling_rate=fs,
+                                starttime=UTCDateTime(2020, 1, 1)))  # fmt: skip
+
+
+def test_traces_at_another_sampling_rate_are_left_out(tmp_path):
+    fs = 2.0
+    files = [f"XX.T.00.HDH.D.2020.{d + 1:03d}" for d in range(2)]
+    reader = _two_trace_reader(fs, [_trace(2.5, 10.0, 2)])
+    meta = native.process_channel(
+        files, _flat_response(), "XX.T.00.HDH", fs, tmp_path / "o.npz", read=reader
+    )
+    assert (
+        meta["traces_other_rate"] > 0
+        and len(native.load(tmp_path / "o.npz")["starts"]) == 0
+    )
+
+
+def test_two_location_codes_are_not_mixed(tmp_path):
+    fs = 2.0
+    files = [f"XX.T.00.HDH.D.2020.{d + 1:03d}" for d in range(2)]
+    reader = _two_trace_reader(
+        fs, [_trace(fs, 10.0, 2, "00", 0), _trace(fs, 1000.0, 2, "10", 1)]
+    )
+    native.process_channel(
+        files, _flat_response(), "XX.T.00.HDH", fs, tmp_path / "a.npz", read=reader
+    )
+    med = np.nanmedian(native.load(tmp_path / "a.npz")["levels_db"])
+    assert med == pytest.approx(10 * np.log10(2 * 10.0**2 / fs), abs=1.5)
+    with pytest.raises(ValueError):  # neither code is the channel's own
+        native.process_channel(
+            files, _flat_response(), "XX.T.20.HDH", fs, tmp_path / "b.npz", read=reader
+        )
+
+
+def test_shelf_break_ignores_polygon_cut_lines(monkeypatch):
+    import cartopy.io.shapereader as shp
+    from shapely.geometry import Polygon
+
+    from compy_pressure.atlas import geography as geo
+
+    class Reader:
+        def __init__(self, path):
+            pass
+
+        def geometries(self):
+            return [
+                Polygon([(170.0, -10.0), (180.0, -10.0), (180.0, 10.0), (170.0, 10.0)])
+            ]
+
+    monkeypatch.setattr(shp, "natural_earth", lambda **kw: "x")
+    monkeypatch.setattr(shp, "Reader", Reader)
+    pts = geo.line_points("shelf_break", step_km=50.0)
+    assert len(pts) and np.all(np.abs(pts[:, 0]) < 179.999)

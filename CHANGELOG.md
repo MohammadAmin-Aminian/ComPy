@@ -19,6 +19,25 @@ tested package: `compy_pressure.atlas` and the command `compy-pressure-atlas` ([
 - Fixed in the line fits carried over from the atlas: a breakpoint between two samples was always placed on the
   first; it is now placed on the better of the two, so the models need fewer segments.
 
+Corrected after the review of 19 November 2026, before the release:
+
+- `native`: a window keeps the response of the epoch that contains its start (the windows of up to two days
+  after an epoch change carried the response of the earlier epoch); traces at another sampling rate than the plan
+  are left out and counted instead of being cut and scaled wrongly; two location codes under one channel code are
+  no longer mixed.
+- `native` memory: a worker holds about 3.7 GB on a 250 Hz channel. The default of `--workers` is 4 (it was 8) and
+  the documentation no longer suggests 12; thirteen workers exhausted a 48 GB machine.
+- `geography`: the cut of the Natural Earth bathymetry polygons along the antimeridian and the poles counted as
+  shelf break (a gauge at 0 N, 179.5 E was 0.1 km from it).
+- Screens: the deployment-edge screen is searched over at most a third of the record from each end (one loud day
+  in the middle of a 30-day record removed all of it); a channel without a gauge id is its own gauge (it was
+  removed as a second channel); a missing or zero lower band limit means no limit (the models stopped at 891 s
+  without the column, and a gauge with a limit of 0 dropped out of every model).
+- Models: when the line fit cannot reach its misfit target it keeps the best fit found (it could fall back to one
+  straight line).
+- New option `population.level_gate_usable_band_only` (default off: the selection of the November atlas is
+  unchanged), for not judging a channel in a level-gate band outside its usable band.
+
 ### Compliance band ends at kH = 4
 
 Stage C searches the band up to 0.8 f_c (kH = 4.0) instead of f_c, the limit the inversion has applied since

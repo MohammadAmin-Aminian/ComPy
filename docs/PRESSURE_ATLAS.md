@@ -10,14 +10,19 @@ with one tested package.
 
 ```bash
 # 1. native-rate spectra of every channel (one sequential reader of the archive, N workers; resumable)
-compy-pressure-atlas native plan.csv --out native/ --cache /fast/disk/sds_cache --sds /Volumes/DATA/SDS --workers 12
+compy-pressure-atlas native plan.csv --out native/ --cache /fast/disk/sds_cache --sds /Volumes/DATA/SDS --workers 4
 
 # 2. distance of every gauge to the coastline and to the shelf break (Natural Earth 1:10 m, needs cartopy)
 compy-pressure-atlas distances channels.csv --out channels_with_distances.csv
 
 # 3. selection, screens, models and figures
-compy-pressure-atlas build channels_with_distances.csv --out atlas/ --config atlas.json --workers 10
+compy-pressure-atlas build channels_with_distances.csv --out atlas/ --config atlas.json --workers 4
 ```
+
+**Memory of `native`.** A worker holds the day files of one chunk at the native rate: about 3.7 GB on a 250 Hz
+channel (measured over 260 days), 2 to 2.5 GB at 50 to 125 Hz, 1.4 GB at 40 Hz. Choose `--workers` so that workers
+x 4 GB stays well below the memory of the machine. Thirteen workers on a 48 GB machine exhausted it when the
+250 Hz channels came together (two kernel panics on 19 November 2026); the default is 4.
 
 `plan.csv` has one row per channel: `seed_id`, `fs`, `xml` (StationXML with the response) and optionally `files`
 (day files separated by `;`; otherwise `<sds>/<year>/<NET>/<STA>/<CHA>.D/*`). The channel table of `build` is
@@ -33,6 +38,12 @@ Every channel is read at its own sampling rate. Windows of 3 h with 50 % overlap
 window with a gap is not used. The PSD of a window is the Welch average of 2700-s Hann segments with 75 % overlap
 (the ObsPy PPSD convention for that window), divided by the squared modulus of the full StationXML response and
 averaged as power over 1/4-octave bands on the 1/8-octave grid of the atlas (nodes 1060 / 2^(j/8) s).
+
+A channel with several response epochs is computed once per epoch; the day files at an epoch limit are computed
+with both responses and each window keeps the response of the epoch that contains its start. Traces whose sampling
+rate is not the rate of the plan are left out and counted (`traces_other_rate`); a channel with no window at the
+plan's rate fails with that reason. Where the day files hold several location codes under one channel code, only
+the code of the `seed_id` is read; a single code is read as it is, because data and metadata often disagree on it.
 
 Periods shorter than 4 s come from the native samples; periods of 4 s and longer from the same window decimated to
 1 Hz (zero-phase polyphase filter, flat to 0.4 Hz) and high-passed at 0.2 mHz over 6 h of context on each side,
@@ -59,10 +70,14 @@ StationXML does not describe. They are used from 4 s (`population.one_hz_min_per
    channel; input units not pressure; upstream exclusions (for example metadata known to be placeholders); fewer
    than 7 days; a second channel of the same gauge (the ?DH with the widest band is kept); a level more than 20 dB
    from the basin median at 1-2 s or 2.5-4 s (gross metadata errors); a P-Z calibration level more than 20 dB from
-   the DPGs and APGs of the same depth class, or a network and sensor type whose median fails.
+   the DPGs and APGs of the same depth class, or a network and sensor type whose median fails. The level gate
+   judges every channel in both bands, also a hydrophone whose usable band ends below 2.5 s (in the November 2026
+   archive this removes nine 1T and seven X3 hydrophone channels); `population.level_gate_usable_band_only: true`
+   skips a gate band that lies outside the usable band of the channel. A channel without a gauge id is its own
+   gauge. A missing or zero lower band limit means no limit.
 2. **Window screens**: no level, clipped (99 % of 24-bit full scale, or 32-bit where most windows exceed 24 bits),
    dead (30 dB below the channel median), deployment edges (days at either end whose 1-10 s level departs by more
-   than 15 dB).
+   than 15 dB; searched over the first and last 20 days and never over more than a third of the record).
 3. **Day screen**: day levels against the same-day median of network peers of the same depth class (20 dB after the
    gauge's usual offset); deep gauges without peers against their own median (30 dB).
 4. **Band screen**, gauges at 1000 m or deeper: a band median more than 25 dB from peers removes that band.

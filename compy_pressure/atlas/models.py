@@ -26,12 +26,17 @@ GRID = native.GRID
 
 
 def band_taper(f_lo, f_hi, periods=GRID):
-    """Weight 1 inside the usable band [f_lo, f_hi] Hz, falling as cos^2 over the outer octave, 0 outside."""
+    """Weight 1 inside the usable band [f_lo, f_hi] Hz, falling as cos^2 over the outer octave, 0 outside.
+
+    ``f_lo`` of 0 (or less) means no lower limit, as for an absolute gauge coupled
+    down to DC: no taper is applied on the long-period side.
+    """
     f = 1.0 / np.asarray(periods, float)
     u = np.ones(len(f))
-    if not (np.isfinite(f_lo) and np.isfinite(f_hi) and f_lo > 0 and f_hi > 0):
+    if not (np.isfinite(f_lo) and np.isfinite(f_hi) and f_hi > 0):
         return u * 0
-    lo, hi = np.log2(f / f_lo), np.log2(f_hi / f)
+    hi = np.log2(f_hi / f)
+    lo = np.log2(f / f_lo) if f_lo > 0 else np.full(len(f), np.inf)
     u[lo < 0] = 0
     u[hi < 0] = 0
     a = (lo >= 0) & (lo < 1)
@@ -133,6 +138,8 @@ def fit_piecewise(T, y, max_rms=1.0, max_seg=20):
                 c = D[k - 1][:j] + cost[1 : j + 1, j]
                 s = int(np.argmin(c))
                 D[k][j], B[k][j] = c[s], s
+        if not np.isfinite(D[k][n - 1]):
+            break  # more segments than the points can carry: keep the best fit found so far
         idx, j = [n - 1], n - 1
         for q in range(k, 1, -1):
             j = B[q][j]
@@ -149,8 +156,9 @@ def fit_piecewise(T, y, max_rms=1.0, max_seg=20):
                 if tr < rms:
                     knots, kx, lv, rms = trial, tx, tl, tr
         r = np.interp(x, kx, lv) - v
-        best = dict(period_knots_s=[float(10**q) for q in kx], level_knots_db=[float(q) for q in lv],
-                    rms_db=rms, max_abs_db=float(np.abs(r).max()), segments=len(knots) - 1)  # fmt: skip
+        if best is None or rms < best["rms_db"]:
+            best = dict(period_knots_s=[float(10**q) for q in kx], level_knots_db=[float(q) for q in lv],
+                        rms_db=rms, max_abs_db=float(np.abs(r).max()), segments=len(knots) - 1)  # fmt: skip
         if rms <= max_rms:
             break
     per, lev = np.array(best["period_knots_s"]), np.array(best["level_knots_db"])

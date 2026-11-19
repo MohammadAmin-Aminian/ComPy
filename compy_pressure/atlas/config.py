@@ -26,6 +26,9 @@ DEFAULTS = {
         "min_windows": 112,  # 7 days of 3-h windows at 50 % overlap
         "level_gate_db": 20.0,  # gauge level within this of its basin median, in each gate band
         "level_gate_bands_s": [[1.0, 2.0], [2.5, 4.0]],
+        # False (the rule of the 6 and 9 Nov 2026 atlas): every channel is judged in both gate bands, also a
+        # hydrophone whose usable band ends below 2.5 s. True: a gate band outside the usable band is skipped.
+        "level_gate_usable_band_only": False,
         "one_hz_min_period_s": 4.0,  # 1-Hz channels: decimation filter not in StationXML (A3, 18 Nov 2026)
         "nyquist_fraction": 0.4,  # highest usable frequency as a fraction of the sampling rate
     },

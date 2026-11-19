@@ -100,9 +100,11 @@ def _median_level(cube_row, band, edges):
 def usable_limits(t, cfg):
     """Usable frequency band of each channel [Hz]: the table's limits, the Nyquist fraction, and the 1-Hz rule."""
     p = cfg["population"]
-    f_lo = t.get("f_lo_hz", pd.Series(1.0 / GRID.max(), index=t.index)).fillna(
-        1.0 / GRID.max()
-    )
+    # No limit given (missing column, empty cell, or 0 for a gauge coupled to DC) means no taper on the
+    # long-period side: the default lies one octave beyond the longest period of the grid.
+    none = 0.5 / GRID.max()
+    f_lo = t.get("f_lo_hz", pd.Series(none, index=t.index)).fillna(none)
+    f_lo = f_lo.where(f_lo > 0, none)
     f_hi = t.get("f_hi_hz", pd.Series(np.inf, index=t.index)).fillna(np.inf)
     f_hi = np.minimum(f_hi, p["nyquist_fraction"] * t.fs)
     f_hi = np.where(t.fs <= 1.0, np.minimum(f_hi, 1.0 / p["one_hz_min_period_s"]), f_hi)
@@ -131,6 +133,9 @@ def select(t, counts, cfg, edges, cube_kept):
         f"fewer than {p['min_windows']} windows (7 days)",
     )
     if "gauge" in d:
+        d["gauge"] = d.gauge.where(
+            d.gauge.notna(), d.seed_id
+        )  # a channel without a gauge id is its own gauge
         d["band_oct"] = np.log2(d.f_hi / d.f_lo)
         d["is_dh"] = d.cha.str[1:].eq("DH")
         live = d[c.live].sort_values(
@@ -147,6 +152,12 @@ def select(t, counts, cfg, edges, cube_kept):
                 for i in range(len(d))
             ]
         )
+        if p.get("level_gate_usable_band_only", False):
+            # Optional: a channel is not judged in a gate band that lies outside its usable band.
+            inside = np.array(
+                [screens.usable_band(lo, hi, (a, b)) for lo, hi in zip(d.f_lo, d.f_hi)]
+            )
+            lev = np.where(inside, lev, np.nan)
         col = f"level_{a:g}_{b:g}s_db"
         d[col] = lev + d.gain_db.values
         off, ok = screens.level_gate(d[col], d.basin, c.live, p["level_gate_db"])
