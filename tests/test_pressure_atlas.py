@@ -356,9 +356,29 @@ def test_two_location_codes_are_not_mixed(tmp_path):
         )
 
 
+def test_polygon_cut_lines_are_dropped():
+    from compy_pressure.atlas import geography as geo
+
+    ring = np.array(
+        [
+            [170.0, -10.0],
+            [180.0, -10.0],
+            [180.0, 10.0],
+            [170.0, 10.0],
+            [-180.0, 0.0],
+            [20.0, 90.0],
+            [20.0, -90.0],
+        ]
+    )
+    kept = geo._without_cut_lines(ring)
+    assert kept.tolist() == [[170.0, -10.0], [170.0, 10.0]]
+
+
 def test_shelf_break_ignores_polygon_cut_lines(monkeypatch):
-    import cartopy.io.shapereader as shp
-    from shapely.geometry import Polygon
+    shp = pytest.importorskip(
+        "cartopy.io.shapereader"
+    )  # cartopy is an optional dependency of the distances
+    Polygon = pytest.importorskip("shapely.geometry").Polygon
 
     from compy_pressure.atlas import geography as geo
 

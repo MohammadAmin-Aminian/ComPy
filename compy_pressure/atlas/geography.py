@@ -59,6 +59,16 @@ def _densify(coords, step_km):
     return np.vstack(out)
 
 
+def _without_cut_lines(points):
+    """(lon, lat) points of a polygon outline without those on the antimeridian or at a pole.
+
+    Natural Earth polygons are cut along lon = +/-180 and closed along the poles;
+    those edges are not isobaths and must not count as the shelf break.
+    """
+    p = np.asarray(points, float)
+    return p[(np.abs(p[:, 0]) < 179.999) & (np.abs(p[:, 1]) < 89.999)]
+
+
 def line_points(layer, step_km=1.0):
     """Densified (lon, lat) points of a Natural Earth 1:10 m layer (``NE_LAYERS`` key)."""
     import cartopy.io.shapereader as shp
@@ -79,9 +89,7 @@ def line_points(layer, step_km=1.0):
         for p in parts:
             q = _densify(np.asarray(p), step_km)
             if is_polygon:
-                # Natural Earth polygons are cut along the antimeridian and closed along the poles; those
-                # edges are not isobaths and must not count as the shelf break.
-                q = q[(np.abs(q[:, 0]) < 179.999) & (np.abs(q[:, 1]) < 89.999)]
+                q = _without_cut_lines(q)
             if len(q):
                 pts.append(q)
     return np.vstack(pts)
