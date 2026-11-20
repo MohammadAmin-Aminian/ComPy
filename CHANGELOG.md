@@ -1,5 +1,64 @@
 # Changelog
 
+## 3.2.0 — 2026-11-20
+
+### Pressure atlas in the package
+
+The global pressure-noise atlas, until now analysis scripts on the local branch `analysis/pressure-atlas`, is a
+tested package: `compy_pressure.atlas` and the command `compy-pressure-atlas` ([docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md)).
+
+- `native`: one estimator for native-rate pressure spectra from SDS day files, 0.02 to 1260 s (3-h windows,
+  2700-s Welch segments, 1/4-octave power means; long periods from a 1-Hz copy high-passed at 0.2 mHz so that the
+  tide cannot leak). Replaces the join of the ObsPy 1-octave PPSDs and the 1.25 Hz product.
+- `geography`: distance to the coastline and to the shelf break (200 m isobath) and the 1000 m isobath, Natural
+  Earth 1:10 m (the 1:50 m coastline used before misses small islands: IM.H11 950 km -> 53 km).
+- `cube`, `screens`, `models`, `figures`, `pipeline`: window screens, channel cascade with reasons, P-Z
+  calibration, day and band screens, station-balanced models with Peterson-style fits, standard figures.
+- `cli`: `native` (one sequential reader and a pool of workers, resumable; stops when the archive disappears),
+  `distances`, `build`.
+- Fixed in the line fits carried over from the atlas: a breakpoint between two samples was always placed on the
+  first; it is now placed on the better of the two, so the models need fewer segments.
+
+Corrected after the review of 19 November 2026, before the release:
+
+- `native`: a window keeps the response of the epoch that contains its start (the windows of up to two days
+  after an epoch change carried the response of the earlier epoch); traces at another sampling rate than the plan
+  are left out and counted instead of being cut and scaled wrongly; two location codes under one channel code are
+  no longer mixed.
+- `native` memory: a worker holds about 3.7 GB on a 250 Hz channel. The default of `--workers` is 4 (it was 8) and
+  the documentation no longer suggests 12; thirteen workers exhausted a 48 GB machine.
+- `geography`: the cut of the Natural Earth bathymetry polygons along the antimeridian and the poles counted as
+  shelf break (a gauge at 0 N, 179.5 E was 0.1 km from it).
+- Screens: the deployment-edge screen is searched over at most a third of the record from each end (one loud day
+  in the middle of a 30-day record removed all of it); a channel without a gauge id is its own gauge (it was
+  removed as a second channel); a missing or zero lower band limit means no limit (the models stopped at 891 s
+  without the column, and a gauge with a limit of 0 dropped out of every model).
+- Models: when the line fit cannot reach its misfit target it keeps the best fit found (it could fall back to one
+  straight line).
+- New option `population.level_gate_usable_band_only` (default off: the selection of the November atlas is
+  unchanged), for not judging a channel in a level-gate band outside its usable band.
+
+### Compliance band ends at kH = 4
+
+Stage C searches the band up to 0.8 f_c (kH = 4.0) instead of f_c, the limit the inversion has applied since
+3.0 ([docs/COMPLIANCE_BAND.md](docs/COMPLIANCE_BAND.md)): the papers place the limit between 0.7 and 1.4 f_c, the
+pressure of the archive leaves its infragravity plateau at kH = 4.27, and above 0.8 f_c the coherence falls from
+0.95 to 0.76 and 0.45. **Compliance changes** only at the 77 of 287 archive stations whose band ended above
+0.8 f_c: the band now ends at 0.78 f_c (median), 0.8 % more windows, and the compliance of the kept bins moves by
+-0.01 % (median). Vs does not change. `BAND_MAX_FRACTION_FC = 1.0` restores the old search.
+
+### Documentation and figures
+
+- README: the worked example and the results use the latest Young ORCA run (stages A-D of 13 November with
+  3.0, inversion of 16 November with 3.1) in [docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md);
+  a map of the whole-archive inversion; the pressure atlas, with the figures of the native-rate build of 20
+  November 2026 (381 gauges of 21 networks) in the README and in [docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md).
+- Atlas figures: the groups of a model figure are drawn in physical order (depth classes from shallow to deep,
+  not alphabetical), and the title of the density figure gives the number of gauges of the models.
+- `pipeline/f_figures.py` (figure 6): the side panels shared one level axis with the coherence panel, so the
+  pressure and acceleration band levels fell outside it and the panels were empty; each has its own axis now, and
+  the window times are shown as dates.
+
 ## 3.1.0 — 2026-11-18
 
 First release since 2.9.0; it also carries the changes of 3.0.0, which was merged on

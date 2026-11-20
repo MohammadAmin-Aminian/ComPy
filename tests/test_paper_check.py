@@ -115,3 +115,35 @@ def test_stage_e_leak_correction_needs_a_usable_check(tmp_path, monkeypatch):
     finally:
         for name in ("config", "e_invert"):
             sys.modules.pop(name, None)
+
+
+def test_stage_c_band_search_stops_at_kh_4(stage_c, monkeypatch):
+    """ComPy 3.2: the band search ends at 0.8 f_c (kH = 4.0), the limit the inversion applies."""
+    depth = 4600.0
+    fc = np.sqrt(GRAVITY / (2 * np.pi * depth))
+    seen = {}
+
+    def fake_stack(
+        windows, depth_, gain, band, criteria, nseg, output_band=None, gate=None
+    ):
+        f = np.linspace(0.001, 0.05, 50)
+        return SimpleNamespace(
+            all_freqs=f, mean_coherence_all=np.ones_like(f), n_windows=1000, band=band
+        )
+
+    def fake_band(f, coh, threshold, search):
+        seen["search"] = search
+        return (search[0], search[1])
+
+    monkeypatch.setattr(stage_c, "stacked_compliance", fake_stack)
+    monkeypatch.setattr(stage_c, "coherent_band", fake_band)
+    result, threshold, _ = stage_c.run_gain([], depth, 1.0, fc)
+    assert stage_c.BAND_MAX_FRACTION_FC == 0.8
+    assert seen["search"][1] == pytest.approx(0.8 * fc)
+    assert wavenumber(2 * np.pi * result.band[1], depth) * depth == pytest.approx(
+        4.02, abs=0.01
+    )
+    assert (
+        auto.compliance_data.__kwdefaults__["max_fraction_fc"]
+        == stage_c.BAND_MAX_FRACTION_FC
+    )

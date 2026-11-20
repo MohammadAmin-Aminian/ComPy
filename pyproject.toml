@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "seafloor-compy"
-version = "3.1.0"
+version = "3.2.0"
 description = "Seafloor compliance, pressure-gauge QC and calibration, and layered elastic inversion"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -43,6 +43,7 @@ compy-pressure-microseism = "compy_pressure.microseism_check:main"
 compy-pressure-paired = "compy_pressure.paired_spectra:main"
 compy-pressure-noise-model = "compy_pressure.group_noise_model:main"
 compy-pressure-approved-noise-model = "compy_pressure.noise_model:main"
+compy-pressure-atlas = "compy_pressure.atlas.cli:main"
 
 [project.urls]
 Repository = "https://github.com/MohammadAmin-Aminian/ComPy"
@@ -54,7 +55,7 @@ Changelog = "https://github.com/MohammadAmin-Aminian/ComPy/blob/main/CHANGELOG.m
 # The compy package, plus ComPy 2.x module names kept as deprecated aliases.
 py-modules = ["inv_compy", "ffplot", "compy_numerics", "compy_streams", "compy_processing", "compy_diagnostics", "compy_cleaning", "compy_inversion"]
 # reference_data is listed as a (data-only) package so that setuptools ships it.
-packages = ["compy", "compy.inversion", "compy.plotting", "compy_pressure", "compy_pressure.reference_data"]
+packages = ["compy", "compy.inversion", "compy.plotting", "compy_pressure", "compy_pressure.atlas", "compy_pressure.reference_data"]
 
 [tool.setuptools.package-data]
 "compy_pressure.reference_data" = ["*.csv", "*.json"]

@@ -7,8 +7,11 @@ models and serpentinization, unattended. The method is that of Aminian et al.
 
 All network-specific values are in [`config.py`](config.py). Set
 `COMPY_RUN_DIR` to the run folder, and set `COMPY_PIPELINE_CONFIG` to a file
-that overrides any of its names. The defaults reproduce the XE (Pacific Array
-Young ORCA) run in [`docs/results/xe_young_orca_2026-10-29`](../docs/results/xe_young_orca_2026-10-29/README.md).
+that overrides any of its names. The defaults are those of the XE (Pacific Array
+Young ORCA) runs: the latest in [`docs/results/xe_young_orca_2026-11`](../docs/results/xe_young_orca_2026-11/README.md),
+the first in [`docs/results/xe_young_orca_2026-10-29`](../docs/results/xe_young_orca_2026-10-29/README.md).
+Since ComPy 3.2 stage C ends the band at 0.8 f_c (`BAND_MAX_FRACTION_FC`; see
+[docs/COMPLIANCE_BAND.md](../docs/COMPLIANCE_BAND.md)).
 
 ## Stages
 

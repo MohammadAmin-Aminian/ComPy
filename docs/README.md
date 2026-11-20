@@ -15,6 +15,8 @@
 | [Inversion](INVERSION.md) | Parameterization, priors, sampler, forward model and its validation |
 | [Alternative inversions](ALTERNATIVE_INVERSIONS.md) | The Moho rule, published Monte Carlo setups, Crawford's minimum-structure inversion |
 | [Pressure tools](PRESSURE.md) | `compy_pressure`: QC tests, three calibration methods, noise models |
+| [Pressure atlas](PRESSURE_ATLAS.md) | `compy-pressure-atlas`: native-rate spectra, screens and global noise models of seafloor pressure gauges |
+| [Compliance band](COMPLIANCE_BAND.md) | Why the band ends at 0.8 f_c (kH = 4): papers, data, effect |
 | [Pressure-gauge audit (November 2026)](../pressure/docs/audit_2026-11/REPORT.md) | QC tests and calibrations audited, anomaly scan of the 846-channel table, physical tests, roadmap and decisions |
 | [Validation](VALIDATION.md) | Test coverage and scientific references |
 | [Reproducible runs](REPRODUCIBLE_RUNS.md) | Run records, array shapes and chain diagnostics |
@@ -26,7 +28,9 @@
 
 | Folder | Content |
 |---|---|
-| [XE, Pacific Array Young ORCA](results/xe_young_orca_2026-10-29/README.md) | 30 stations: compliance, Vs, serpentinization, PDF report |
+| [XE, Pacific Array Young ORCA, November 2026](results/xe_young_orca_2026-11/README.md) | Latest run: compliance (13 Nov), gravity- and drilling-constrained Vs (16 Nov), figures and table |
+| [XE, Pacific Array Young ORCA, October 2026](results/xe_young_orca_2026-10-29/README.md) | Run of 29 Oct (ComPy 2.4-2.8): compliance, Vs, serpentinization, PDF report |
+| [Whole archive](results/whole_archive_2026-11/archive_vs_map.png) | Map of the inversion of 287 stations in 17 networks |
 | [YV compliance, RHUM-RUM](results/yv_compliance_2026-10-28/README.md) | Compliance of eight Indian Ocean stations, gains, stability |
 | [YV inversion, RHUM-RUM](results/yv_inversion_2026-10-29/README.md) | Vs posteriors, variants and paper-style figures |
 | [Synthetic benchmark](benchmark/README.md) | Settings and diagnostics of the CI inversion benchmark |

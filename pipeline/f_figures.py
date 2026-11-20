@@ -28,6 +28,7 @@ import sys
 import matplotlib
 
 matplotlib.use("Agg")
+import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from config import (  # noqa: E402
@@ -487,9 +488,14 @@ def fig06_coherogram(station, summ):
     t = np.array([r_[0] for r_ in rows])
     P, A, C = (np.array([r_[i] for r_ in rows]).T for i in (1, 2, 3))
     sel = (f >= band[0]) & (f <= band[1])
+    # The time axes of the left column are shared; each side panel has its own level axis
+    # and the window times on its vertical axis (sharing the side column's x put the
+    # pressure and acceleration levels outside the 0-1 coherence range: empty panels).
     fig, axes = plt.subplots(
-        3, 2, figsize=(16, 11), sharex="col", gridspec_kw=dict(width_ratios=[4, 1])
+        3, 2, figsize=(16, 11), gridspec_kw=dict(width_ratios=[4, 1])
     )
+    for k in (1, 2):
+        axes[k, 0].sharex(axes[0, 0])
     for k, (img, lab, lim) in enumerate(((P, "Pressure [dB re Pa²/Hz]", (0, 60)),
                                          (A, "Vertical acc. [dB re (m/s²)²/Hz]", (-190, -130)),
                                          (C, "Coherence", (0, 1)))):  # fmt: skip
@@ -505,6 +511,11 @@ def fig06_coherogram(station, summ):
         ax.set_ylabel("Frequency [Hz]")
         val = np.mean(img[sel], axis=0) if k < 2 else np.median(img[sel], axis=0)
         axes[k, 1].plot(val, t, lw=1)
+        axes[k, 1].set_ylim(t.min(), t.max())
+        axes[k, 1].yaxis_date()
+        axes[k, 1].yaxis.set_major_formatter(mdates.DateFormatter("%d %b"))
+        if k < 2:
+            axes[k, 1].set_xlim(*lim)
         if k == 2:
             axes[k, 1].axvline(r["threshold"], color="red", ls="--")
             axes[k, 1].fill_betweenx(
@@ -513,6 +524,8 @@ def fig06_coherogram(station, summ):
             axes[k, 1].set_xlim(0, 1)
         axes[k, 1].set_xlabel("band " + ("mean" if k < 2 else "median"))
     axes[2, 0].xaxis_date()
+    for k in (0, 1):
+        axes[k, 0].tick_params(labelbottom=False)
     axes[0, 0].set_title(
         f"{station}, {months[0]}: spectrograms of 35-min windows (a, c) and coherogram (e)"
     )

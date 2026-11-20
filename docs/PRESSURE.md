@@ -212,7 +212,7 @@ The move was made by PressureQC's `integration/export_to_compy.py` from Pressure
 1.3.0. `compy_pressure.SOURCE_VERSION` and `compy_pressure.SOURCE_COMMIT`
 record the source. The export:
 
-- renamed `compy_pressure` to `compy_pressure`;
+- renamed the package to `compy_pressure`;
 - adapted the paths to this layout;
 - pointed the Markdown links at their new places, or at PressureQC v1.3.0 for
   the dated reports;

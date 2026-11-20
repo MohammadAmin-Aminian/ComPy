@@ -49,8 +49,13 @@ runs unattended on any broadband OBS network stored as an SDS archive.
   station's own windows, a prior about a reference model, Vp, density, Moho depth
   and pressure gain uncertain, sampling repeated until it converges, and each
   depth marked as resolved by the data or not ([docs/INVERSION.md](docs/INVERSION.md)).
-- **Two networks processed.** RHUM-RUM (YV, 8 stations, Indian Ocean) and
-  Pacific Array Young ORCA (XE, 30 stations, Pacific).
+- **Processed at scale.** RHUM-RUM (YV, Indian Ocean), Pacific Array Young ORCA
+  (XE, 30 stations) and a whole archive of 287 stations in 17 networks.
+- **Global pressure-noise atlas.** `compy-pressure-atlas` turns an SDS archive of
+  seafloor pressure gauges (DPG, APG, hydrophone) into native-rate spectra from
+  0.02 to 1260 s, screens failing instruments and builds station-balanced noise
+  models by depth, distance to the coast and to the shelf break, sensor and season
+  ([docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md)).
 - **Tested.** CI on Python 3.10–3.13 with lint, format, wheel build and an
   offline multi-chain benchmark.
 
@@ -121,7 +126,10 @@ manifest. All network-specific values live in `pipeline/config.py`; see the
 
 The figures follow one station through the whole pipeline: **XE.CC11**
 (Pacific Array Young ORCA, 7.54°S 133.42°W, 4636 m water depth, April 2018 –
-May 2019). Steps 1 and 8 place it within the XE network.
+May 2019), from the latest run (stages A–D of 13 November 2026 with ComPy 3.0,
+inversion of 16 November 2026 with ComPy 3.1;
+[docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md)).
+Steps 1 and 8 place it within the XE network.
 
 | Step | Stage | What it does |
 |---|---|---|
@@ -131,8 +139,8 @@ May 2019). Steps 1 and 8 place it within the XE network.
 | [4. Pressure-gauge calibration](#4-pressure-gauge-calibration) | D | Rayleigh-wave gain of the DPG |
 | [5. Coherence and window selection](#5-coherence-and-window-selection) | C | Select windows with high Z–P coherence |
 | [6. Compliance](#6-compliance) | C | Stacked compliance with errors and monthly stacks |
-| [7. Bayesian Vs inversion](#7-bayesian-vs-inversion) | E | Multi-chain inversion for Vs, Vp/Vs and gain |
-| [8. Vs profiles and serpentinization](#8-vs-profiles-and-serpentinization) | F | Station values and network profiles |
+| [7. Vs inversion](#7-vs-inversion) | E | Multi-chain inversion for Vs, Vp, density, Moho and gain |
+| [8. Vs profiles of the network](#8-vs-profiles-of-the-network) | F | Station values and network profiles |
 
 ### 1. Network and data
 
@@ -146,8 +154,8 @@ python pipeline/fetch_inventory.py && python pipeline/fetch_catalog.py
 python pipeline/a_preprocess.py CC11 --workers 8
 ```
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig01_map.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig01_map.png" width="600" alt="XE broadband OBS network map with compliance status"></a></p>
-<p align="center"><sub><b>XE network.</b> Red: inverted (20 stations, including CC11); orange: compliance only; grey: not processed.</sub></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/fig01_map.png"><img src="docs/results/xe_young_orca_2026-11/figures/fig01_map.png" width="600" alt="XE broadband OBS network map with compliance status"></a></p>
+<p align="center"><sub><b>XE network.</b> Red: inverted; orange: compliance only; grey: not processed.</sub></p>
 
 ### 2. Response removal and cleaning
 
@@ -170,7 +178,7 @@ spans = tiskitpy.TimeSpans.from_eqs(
 )
 ```
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig03_psd_stages.png" width="850" alt="CC11 vertical and pressure PSDs before and after cleaning"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/fig03_psd_stages.png"><img src="docs/results/xe_young_orca_2026-11/figures/fig03_psd_stages.png" width="850" alt="CC11 vertical and pressure PSDs before and after cleaning"></a></p>
 <p align="center"><sub><b>XE.CC11 spectra.</b> (a) Vertical acceleration after response removal (blue) and after cleaning (orange), median and 10–90 %, with the Peterson noise models. (b) Calibrated pressure. Green: compliance band.</sub></p>
 
 ### 3. Tilt and coherent noise
@@ -188,7 +196,7 @@ local = cleaning.sta_lta_spans(rotated.select(component="Z")[0])
 cleaned = compy.remove_coherent_noise(rotated, 24, avoid_spans=spans, cover_all=True)
 ```
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig04_tilt.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig04_tilt.png" width="800" alt="CC11 hourly tilt azimuth and incidence angle"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/fig04_tilt.png"><img src="docs/results/xe_young_orca_2026-11/figures/fig04_tilt.png" width="800" alt="CC11 hourly tilt azimuth and incidence angle"></a></p>
 <p align="center"><sub><b>XE.CC11 tilt.</b> Hourly azimuth and incidence angle that minimize vertical variance, coloured by variance reduction.</sub></p>
 
 ### 4. Pressure-gauge calibration
@@ -196,25 +204,27 @@ cleaned = compy.remove_coherent_noise(rotated, 24, avoid_spans=spans, cover_all=
 The DPG gain is fitted per teleseism by comparing the measured
 pressure-to-acceleration ratio of the Rayleigh wave with the water-layer
 prediction, in bins of high coherence. The station gain is the median of the
-accepted events. For CC11 it is 0.698 ± 0.012 from 12 events, against 0.702
+accepted events. For CC11 it is 0.711 ± 0.011 from 14 events, against 0.702
 from the independent PressureQC microseism method.
 
 ```bash
 python examples/3_DPG_Calibration.py SDS/ stationxml/ XE CC11 events.geojson
 ```
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig05_calibration.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig05_calibration.png" width="850" alt="CC11 Rayleigh-wave DPG calibration"></a></p>
-<p align="center"><sub><b>XE.CC11 calibration.</b> (a) P–Z coherence of 12 teleseisms (M ≥ 7). (b) Measured, theoretical and corrected spectral ratios; gain g = 0.698 ± 0.012.</sub></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/fig05_calibration.png"><img src="docs/results/xe_young_orca_2026-11/figures/fig05_calibration.png" width="850" alt="CC11 Rayleigh-wave DPG calibration"></a></p>
+<p align="center"><sub><b>XE.CC11 calibration.</b> P–Z coherence of the teleseisms and measured, theoretical and corrected spectral ratios; gain g = 0.711 ± 0.011 from 14 events.</sub></p>
 
 ### 5. Coherence and window selection
 
 The cleaned record is cut into non-overlapping 35-min windows. A window is kept
 when its median Z–P coherence in the compliance band exceeds 0.9 and its
 pressure and acceleration levels lie inside the selection gates. CC11 keeps
-7314 windows over 14 months.
+7314 windows over 14 months. The band is the widest run of coherent bins below
+0.8 f_c (kH = 4), where the pressure of the infragravity waves still reaches the
+seafloor ([docs/COMPLIANCE_BAND.md](docs/COMPLIANCE_BAND.md)).
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig06_coherogram_spectra.png" width="800" alt="CC11 pressure and vertical spectrograms and Z–P coherogram"></a></p>
-<p align="center"><sub><b>XE.CC11, February 2019.</b> Pressure and vertical spectrograms and the Z–P coherogram; dashed lines bound the compliance band.</sub></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/fig06_coherogram.png"><img src="docs/results/xe_young_orca_2026-11/figures/fig06_coherogram.png" width="800" alt="CC11 pressure and vertical spectrograms and Z–P coherogram"></a></p>
+<p align="center"><sub><b>XE.CC11, February 2019.</b> Pressure and vertical spectrograms and the Z–P coherogram of 35-min windows, with the band mean (or median) of each window on the right; dashed lines bound the compliance band, red the coherence threshold.</sub></p>
 
 ### 6. Compliance
 
@@ -235,7 +245,7 @@ result = stacked_compliance(
 result.compliance, result.uncertainty, result.n_windows
 ```
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig07_windows.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig07_windows.png" width="800" alt="CC11 selected windows: spectra, coherence and compliance"></a></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/fig07_windows.png"><img src="docs/results/xe_young_orca_2026-11/figures/fig07_windows.png" width="800" alt="CC11 selected windows: spectra, coherence and compliance"></a></p>
 <p align="center"><sub><b>XE.CC11 selected windows</b> (150 of 7314 shown): corrected vertical acceleration, calibrated pressure, coherence and per-window compliance with the stacked estimate (red).</sub></p>
 
 ### 7. Vs inversion
@@ -262,58 +272,79 @@ result = auto.invert(data, model, gain_sigma=0.05)  # data: auto.compliance_data
 result.quality(), result.profile()  # label with reasons; Vs, prior, resolved depths
 ```
 
-<p align="center"><a href="docs/inversion_overhaul_2026-11/figures/CC11_auto.png"><img src="docs/inversion_overhaul_2026-11/figures/CC11_auto.png" width="900" alt="CC11: data and fit, residuals, Vs with prior and reference, and what the data constrain"></a></p>
-<p align="center"><sub><b>XE.CC11 with ComPy 3.</b> Data and fit, residuals in units of the error, Vs with its prior and the reference, and how much the data narrowed each parameter. The black bar marks the depths the data resolve.</sub></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/CC11_inversion.png"><img src="docs/results/xe_young_orca_2026-11/figures/CC11_inversion.png" width="900" alt="CC11: data and fit, residuals, Vs with prior and reference, and what the data constrain"></a></p>
+<p align="center"><sub><b>XE.CC11, final model.</b> Data and fit (chi-square 9.2 for 9 data), Vs with its prior and the CRUST1.0 reference, and how much the data narrowed each parameter. The black bar marks the depths the data resolve. The Moho prior comes from the complete Bouguer anomaly and the sediment prior from DSDP Sites 73–75.</sub></p>
 
-### 8. Vs profiles and serpentinization
+### 8. Vs profiles of the network
 
-> The numbers and figures of this section and of the Results below were made with
-> ComPy 2.4 to 2.8. ComPy 3 changes Vs (by about +6 % at 2 km and +11 % at 5 km in
-> the median over 155 stations, more at the YV stations) and the sediment
-> thickness; see [docs/inversion_overhaul_2026-11/REPORT.md](docs/inversion_overhaul_2026-11/REPORT.md).
-> They are kept as the record of those runs.
+Each station is inverted alone; the profiles are then compared along the
+lines of the array. XE.CC11, median (5–95 %):
 
-Posterior draws are converted to serpentinization with the Miller & Christensen
-(1997) relation used in Aminian et al. (2025, Fig. 10c): 0 % at 4.2 km/s and
-100 % at 2.2 km/s. The conversion attributes all of the Vs reduction to
-serpentinization, so it gives an upper bound.
+| Depth below seafloor | Vs [m/s] |
+|---|---|
+| 0.5 km | 2484 (1962–3061) |
+| 1 km | 3087 (2580–3526) |
+| 2 km | 3526 (3209–3878) |
+| 4 km | 3984 (3739–4240) |
 
-```python
-beta_q = post.serpentinization_quantiles(z)  # (5 quantiles, len(z)) in %
-```
+Sediment 86 m (39–137), Vs at 2–5 km 3.81 km/s (3.57–4.05), Moho 8.0 km below
+the seafloor (12.7 km below sea level).
 
-XE.CC11, median (5–95 %):
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/section.png"><img src="docs/results/xe_young_orca_2026-11/figures/section.png" width="900" alt="Median Vs of the interpreted XE stations from west to east"></a></p>
+<p align="center"><sub><b>XE network.</b> Median Vs of the 20 interpreted stations by line, west to east and north to south, with the Moho (white) and its gravity prior (dashed); hatched where the posterior is not narrower than the prior.</sub></p>
 
-| Depth | Vs [m/s] | Serpentinization upper bound [%] |
-|---|---|---|
-| 0.5 km | 2530 (1942–3428) | 84 (39–100) |
-| 1 km | 2848 (2387–3369) | 68 (42–91) |
-| 2 km | 3168 (2890–3482) | 52 (36–66) |
-| 4 km | 3496 (3261–3976) | 35 (11–47) |
-
-Sediment thickness 121 m (20–182), crustal Vp/Vs 2.17 (1.88–2.37).
-
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig10_profiles.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig10_profiles.png" width="900" alt="XE Vs profiles by sub-array and pooled posterior"></a></p>
-<p align="center"><sub><b>XE network.</b> (a) Median Vs by sub-array (CC11 in Central). (b) Pooled posterior with free Vp/Vs and with Vp/Vs = 1.85. (c) Serpentinization upper bound.</sub></p>
+For slow and ultraslow ridges, where mantle rock reaches the seafloor, posterior
+draws can be converted to a serpentinization upper bound with the Miller &
+Christensen (1997) relation of Aminian et al. (2025, Fig. 10c): 0 % at 4.2 km/s
+and 100 % at 2.2 km/s (`post.serpentinization_quantiles(z)`). It is not used on
+the magmatic crust of XE.
 
 ## Results
 
 ### Pacific Array Young ORCA (XE), Pacific Ocean
 
-30 stations on ~40 Ma seafloor, 20 inverted, 18 with a Rayleigh-wave gain.
+30 stations on about 40 Ma seafloor at 4.4–4.8 km depth; 26 with compliance, 20 interpreted
+(run of 13 and 16 November 2026).
 
-- Compliance at 4.9–14.6 mHz with Z–P coherence 0.93–0.97 and thousands of
-  windows per station; month-to-month variation of 1–3 % (CC07: ±10–25 %).
-- 80–170 m of sediment, then Vs of about 2.4 km/s at 0.3 km, 2.9 km/s at 1 km
-  and 3.2 km/s at 2 km.
-- Rayleigh-wave gains agree with the independent PressureQC microseism gains
-  (median ratio ≈ 0.99).
+- Compliance at 4.9–14.6 mHz with Z–P coherence up to 0.97 and thousands of
+  windows per station; month-to-month variation of 1–3 %. CC07 changes after its
+  seismometer dropped from the release arm (Eilon et al. 2021) and uses its stable period.
+- Median of the interpreted stations: **Vs 3.75 km/s at 2–5 km** below the
+  seafloor, 3.10 km/s at 0.7–1.5 km below the basement, 87 m of sediment, Moho
+  7.4 km below the seafloor (12.0 km below sea level).
+- Rayleigh-wave gains at 15 stations agree with the independent PressureQC
+  microseism gains.
 
-<p align="center"><a href="docs/results/xe_young_orca_2026-10-29/figures/fig08_compliance.png"><img src="docs/results/xe_young_orca_2026-10-29/figures/fig08_compliance.png" width="900" alt="Normalized compliance of the XE stations by sub-array"></a></p>
-<p align="center"><sub><b>XE compliance</b> by sub-array, ±1σ of the full covariance.</sub></p>
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/map_results.png"><img src="docs/results/xe_young_orca_2026-11/figures/map_results.png" width="900" alt="Maps of Vs, sediment thickness and Moho depth of the XE stations"></a></p>
+<p align="center"><sub><b>XE results.</b> Vs at 0.7–1.5 km below the basement and at 2–5 km below the seafloor, sediment thickness, and Moho depth below the seafloor with the gravity prior.</sub></p>
 
-Full report (PDF, LaTeX source and tables):
+<p align="center"><a href="docs/results/xe_young_orca_2026-11/figures/fig08_compliance.png"><img src="docs/results/xe_young_orca_2026-11/figures/fig08_compliance.png" width="900" alt="Normalized compliance of the XE stations by line"></a></p>
+<p align="center"><sub><b>XE compliance</b> by line, ±1σ of the full covariance.</sub></p>
+
+Figures, numbers and the table of every station:
+[docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md). The run of
+29 October 2026 (ComPy 2.4–2.8) stays in
 [docs/results/xe_young_orca_2026-10-29](docs/results/xe_young_orca_2026-10-29/README.md).
+
+### The whole archive, 287 stations
+
+Every OBS station of the archive with a seismometer, cleaned with ComPy 2.7 and
+inverted with ComPy 3.0 (12 November 2026): 287 stations in 17 networks, 232
+labelled good or usable, Vs at 2 km resolved at 170.
+
+<p align="center"><a href="docs/results/whole_archive_2026-11/archive_vs_map.png"><img src="docs/results/whole_archive_2026-11/archive_vs_map.png" width="900" alt="World map of Vs at 2 km below the seafloor for the whole archive"></a></p>
+<p align="center"><sub><b>Whole archive.</b> Vs at 2 km below the seafloor where the data resolve it; open circles: not interpreted or 2 km not resolved.</sub></p>
+
+### Global pressure-noise atlas, 381 gauges
+
+`compy-pressure-atlas` on the archive of November 2026: 975 pressure channels of 35
+networks recomputed from the waveforms with one estimator (3-h windows, 0.02 to
+1260 s). After the channel cascade and the screens, 381 gauges of 21 networks
+(186 DPGs, 62 APGs, 133 hydrophones; 52 to 5788 m of water) enter the models
+([docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md)).
+
+<p align="center"><a href="docs/results/pressure_atlas_2026-11/global_density.png"><img src="docs/results/pressure_atlas_2026-11/global_density.png" width="800" alt="Density of seafloor pressure spectra of 381 gauges with the 5 %, median and 95 % models"></a></p>
+<p align="center"><sub><b>Seafloor pressure noise, 381 gauges.</b> Station-balanced density of the 3-h spectra with the 5 %, median and 95 % models (white); teal: the low and high hydroacoustic noise models of the IDC (Brown et al. 2014, approximate digitization; dashed below 0.2 Hz). The microseism peak, the noise notch and the infragravity plateau; water depth sets where the plateau ends (kH = 4.4).</sub></p>
 
 ### RHUM-RUM (YV), Indian Ocean
 
@@ -362,6 +393,7 @@ ComPy/
 │   └── numerics.py          #   constants, gravity-wave dispersion, shared maths
 ├── inv_compy.py, ffplot.py, compy_*.py   # ComPy 2.x names (deprecated aliases)
 ├── compy_pressure/          # DPG QC, Rayleigh/microseism/local-P calibration, noise models
+│   └── atlas/               #   global pressure-noise atlas: native-rate spectra, screens, models (compy-pressure-atlas)
 ├── pipeline/                # end-to-end network pipeline (stages A–G)
 ├── examples/                # offline synthetic examples and per-step scripts
 ├── tests/                   # pytest suite
@@ -371,6 +403,8 @@ ComPy/
 │   ├── images/              # logos and figures used by the documentation
 │   ├── benchmark/           # CI inversion benchmark record
 │   └── results/             # processed networks: scripts, figures, tables
+│       ├── xe_young_orca_2026-11/      # latest Young ORCA run (README figures)
+│       ├── whole_archive_2026-11/
 │       ├── xe_young_orca_2026-10-29/
 │       ├── yv_compliance_2026-10-28/
 │       └── yv_inversion_2026-10-29/
@@ -388,6 +422,8 @@ ComPy/
 | [Inversion notes](docs/INVERSION.md) | Parameterization, sampler and validation |
 | [Alternative inversions](docs/ALTERNATIVE_INVERSIONS.md) | The Moho rule, published Monte Carlo setups, Crawford's minimum-structure inversion |
 | [Pressure tools](docs/PRESSURE.md) | `compy_pressure` commands and outputs |
+| [Pressure atlas](docs/PRESSURE_ATLAS.md) | `compy-pressure-atlas`: native-rate spectra, screens, global noise models |
+| [Compliance band](docs/COMPLIANCE_BAND.md) | Upper end of the band at kH = 4: papers, data, effect |
 | [Validation](docs/VALIDATION.md) | Test coverage and scientific references |
 | [Changelog](CHANGELOG.md) | Release history |
 
