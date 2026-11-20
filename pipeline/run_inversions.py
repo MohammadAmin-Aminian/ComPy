@@ -23,6 +23,7 @@ ENV = dict(os.environ, MPLBACKEND="Agg", OMP_NUM_THREADS="1", OPENBLAS_NUM_THREA
 
 def run(args, log):
     """Run a script with its output in a log file; return the exit code."""
+    (ROOT / "logs").mkdir(parents=True, exist_ok=True)
     with open(ROOT / "logs" / log, "w") as fh:
         return subprocess.run([sys.executable, *args], cwd=HERE, env=ENV, stdout=fh,
                               stderr=subprocess.STDOUT).returncode  # fmt: skip

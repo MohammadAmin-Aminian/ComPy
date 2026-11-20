@@ -2,7 +2,7 @@
 
 Writes config.CATALOG (QuakeML, M >= 5.85 over config.CATALOG_SPAN): stage B
 removes earthquake spans of 1.5 days per magnitude unit above 5.85 (Deen et
-al. 2017) and stage D uses the M >= 7 events for the DPG calibration.
+al. 2017) and stage D takes its Mw >= 6 teleseisms from it for the DPG calibration.
 """
 
 from obspy import UTCDateTime
