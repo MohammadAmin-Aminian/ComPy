@@ -1,7 +1,7 @@
 {
   "status": "diagnostic_only_not_a_tilt_estimate_or_pressure_calibration",
   "station": "YV.RR52",
-  "full_pilot_path": "/Users/mohammadamin/Projects/pressure-qc/results/REVIEWS/MICROSEISM_HORIZONTAL/run_20261015T155523Z_d3564085/pilot.json",
+  "full_pilot_path": "~/Projects/pressure-qc/results/REVIEWS/MICROSEISM_HORIZONTAL/run_20261015T155523Z_d3564085/pilot.json",
   "full_pilot_sha256": "8f73cebe9ef37211cfe24b18b13542a3b83fc0b20220ad4347f37422493da10e",
   "gain_band_audit": "docs/microseism_gain_band_audit.json",
   "channel_order": ["YV.RR52.00.BDH", "YV.RR52.00.BH1", "YV.RR52.00.BH2", "YV.RR52.00.BHZ"],

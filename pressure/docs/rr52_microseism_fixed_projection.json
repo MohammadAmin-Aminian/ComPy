@@ -793,7 +793,7 @@
     "Idealized injection does not bound arbitrary mixtures/field distortion",
     "No new gain, waveform, score or frozen-rule selection is produced"
   ],
-  "full_review_path": "/Users/mohammadamin/Projects/pressure-qc/results/REVIEWS/MICROSEISM_FIXED_PROJECTION/run_20261016T100814Z_584abbcf/review.json",
+  "full_review_path": "~/Projects/pressure-qc/results/REVIEWS/MICROSEISM_FIXED_PROJECTION/run_20261016T100814Z_584abbcf/review.json",
   "full_review_sha256": "c6f741d772e9ec89a2b599d286d79c3cf0335f3909dc8f4f970c0d024c529e3b",
   "protected_file_count": 2545
 }

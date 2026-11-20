@@ -26,7 +26,7 @@ import tiskitpy as tiskit  # noqa: E402
 
 WORK = ROOT / "work"
 CATALOG = WORK / "catalog_usgs_M5.85_20121001_20131201.qml"
-INVENTORY = "/Volumes/DATA_bruitfm/INVENTORIES/YV.xml"
+INVENTORY = "/Volumes/DATA/INVENTORIES/YV.xml"
 MIN_MAG = 7.0
 EVENT_WINDOW_S = 7200
 

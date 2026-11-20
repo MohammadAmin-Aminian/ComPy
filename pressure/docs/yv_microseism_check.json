@@ -1,7 +1,7 @@
 {
   "run": "results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23",
   "run_summary_sha256": "68fede255edc524ba05af387d199b3d1bb6b6db9e65aa9dcabbc99187f96c0da",
-  "response_flags": "/Users/mohammadamin/Projects/pressure-qc-claude/docs/yv_rayleigh_independent_validation.json",
+  "response_flags": "~/Projects/pressure-qc-claude/docs/yv_rayleigh_independent_validation.json",
   "response_flags_sha256": "3f2fe080937f2d29cec7423abc61407b70573a5a29e52ea08985b5bea9b16422",
   "coherent_bin_threshold": 0.5,
   "phase_band_hz": [

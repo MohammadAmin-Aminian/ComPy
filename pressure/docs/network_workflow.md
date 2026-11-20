@@ -65,7 +65,7 @@ manifest requires a stable source set for reliable restart.
 First enter the project and limit numerical-library threads per worker:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 ```
 

@@ -100,7 +100,7 @@ with only three v2 pairs; 63 legacy executed pairs remain explicitly flagged.
 These commands run tests/preflight only, not a data campaign:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m pytest -q
 bash scripts/run_all_calibrations.sh --check
 ```

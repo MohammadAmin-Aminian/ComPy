@@ -90,7 +90,7 @@ Previous results, masters and source data remain preserved.
 To match the original figure's fit band explicitly:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
   --dispersion-file compy_pressure/reference_data/rr52_historical_rayleigh_dispersion.csv \

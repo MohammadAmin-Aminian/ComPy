@@ -1,5 +1,65 @@
 # Changelog
 
+## 3.2.1 — unreleased
+
+Corrections from the audit of 20 and 21 November 2026 (the audit report is with the software paper;
+the tests are in `tests/test_audit_2026_11.py`). No formula changes, and no result of the runs kept in
+`docs/results` changes: none of their stations has a response that changes between two touching
+StationXML epochs, and their archives hold no day file at another rate apart from XE.EE02, which was
+already excluded.
+
+### Stage A (`pipeline/a_preprocess.py`)
+
+- **Response epochs.** A continuous segment that crossed a StationXML epoch of its channel was corrected
+  with the response valid at its start, for its whole length (obspy chooses the response from the start
+  time of the trace). On a synthetic archive whose pressure gain doubles at the boundary, the pressure after
+  it was twice too large. The segment is now split where the response changes (`epoch_boundaries`,
+  `split_at`), each part gets its own response, and the times are listed under `response_epochs` in the QC
+  file. Epochs that repeat the same response do not split the data. The stretch after the last epoch of a
+  channel, which used to be corrected with that last response, is now dropped and listed under `no_response`.
+- **Sampling rate.** A day file at another sampling rate than its neighbours was appended to them sample by
+  sample (`join_day_files` compared start times only) and decimated with the same factors, which put the
+  data on a wrong time axis without any message. Traces at different rates are no longer joined, and a trace
+  whose rate is not `OUT_RATE` times the product of `FACTORS` is left out, reported on stderr and listed under
+  `wrong_rate` (`decimate_segment` raises `WrongRate`; a driver that replaces `decimate_segment` to handle
+  several rates is not affected).
+- **No data.** A station without any day file (wrong archive path, network, year or code) printed
+  "0 days, 0 to do" and the stage ended with exit status 0; the failure appeared one stage later as
+  "no usable segments". Stage A now stops with a message that names the folder it searched.
+
+### Configuration and runners
+
+- `pipeline/config.py`: the default archive was a drive of the author's machine. It is now `<run folder>/SDS`
+  (`COMPY_SDS` and the configuration file override it as before). **Runs that relied on the old default must
+  set `COMPY_SDS` or `SDS`.**
+- `a_fast.py`, `a_download.py`, `run_inversions.py` create `logs/` in the run folder; without it they stopped
+  with `FileNotFoundError`, `a_fast.py` after having copied a whole station.
+
+### Commands
+
+- The nine `compy-pressure*` commands go through `compy_pressure._commands`. Started without the `pressure`
+  extra (pandas, openpyxl) or the `maps` extra (cartopy), a command now ends with one line that names the
+  extra to install; in 3.2.0 eight of the ten commands of a plain `pip install` ended with an import
+  traceback.
+- `compy-invert`: a CSV without the columns `freq_hz`, `compliance`, `uncertainty`, with a non-numeric or
+  non-positive value, or with fewer than three frequencies gets a message that says so (it was
+  `StopIteration` or a `ValueError` about vectors). `--gain-sigma 0` is refused; it was taken as "not given"
+  and replaced by the default prior without a word.
+
+### Documentation and messages
+
+- The deprecation warning of the ComPy 2.x names and the user guide said they "will be removed in ComPy
+  3.0"; they are still present, and the message now says "a later major version".
+- README and user guide: Numba is installed with disba, so it is not optional in practice; the speed-up of the
+  compiled forward model, measured again, is about 75 times for the default 20-layer model (4 µs against
+  330 µs), not 140 times. Installation from the wheel of a release, what the wheel contains (not the
+  pipeline, not the examples) and which commands need an extra are now stated.
+- `fetch_catalog.py` said stage D uses the M ≥ 7 events; it uses Mw ≥ 6 teleseisms.
+- `docs/README.md` and the README tree list the pressure-atlas results folder.
+- Paths of the author's machines (home folders, the data drive) removed from the pressure-gauge history notes
+  and from the archived run scripts under `docs/results`; the scripts of the October runs now show
+  `/Volumes/DATA` where the drive was named.
+
 ## 3.2.0 — 2026-11-20
 
 ### Pressure atlas in the package

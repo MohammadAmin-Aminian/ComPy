@@ -24,7 +24,7 @@ if you only want yesterday's saved figures. The explicit band avoids the
 standalone runner's earlier 0.02-0.06 Hz default.
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --network YV --station RR52 \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \

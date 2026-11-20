@@ -2,7 +2,7 @@
 
 ## Start here
 
-Workspace: `/Users/mohammadamin/Projects/pressure-qc`, branch `main`.
+Workspace: `~/Projects/pressure-qc`, branch `main`.
 Repository: https://github.com/MohammadAmin-Aminian/bruit-fm.
 README progress is numbered through **68**.
 The prior integration was merged
@@ -619,7 +619,7 @@ baseline/history details; do not mistake them for requests to restart batches.
   QC can nevertheless change station gains. No XML/pole correction was applied.
   IID day-bootstrap intervals omit serial dependence; they are descriptive.
 - New review products remain in the separate integration worktree
-  `/Users/mohammadamin/Projects/pressure-qc-sentinel-review/results/REVIEWS/`.
+  `~/Projects/pressure-qc-sentinel-review/results/REVIEWS/`.
   Preserve that worktree's untracked products. Curated reports are tracked.
 
 ## Completed work and current results
@@ -785,7 +785,7 @@ Code, docs and curated comparison artifacts go to GitHub; raw data, masters and
 full results remain local and excluded. Do not force-add them.
 
 Python: `/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`.
-Data: `/Users/mohammadamin/Desktop/ComPy/data/Data/{YV,YL,7D,XO}`.
+Data: `~/Desktop/ComPy/data/Data/{YV,YL,7D,XO}`.
 YL XML: `Data/YL/<station>/inventory.xml` beside downloaded waveforms.
 Masters: `exports/master_inventory.csv` and `.xlsx`.
 All-YL preparation/run command: `bash scripts/run_yl_all.sh` (already completed).

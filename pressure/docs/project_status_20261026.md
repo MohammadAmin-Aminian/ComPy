@@ -13,7 +13,7 @@ correction.
   absolute paths, were **not** reused. Everything was recomputed.
 * Code: `~/Desktop/ComPy/code/pressure-qc-v1.3`; environment: Homebrew Miniforge,
   conda env `compy` (Python 3.13); `conda init zsh` done.
-* Data: USB drive `/Volumes/DATA_bruitfm` (18 TB, spinning disk), with
+* Data: USB drive `/Volumes/DATA` (18 TB, spinning disk), with
   `INVENTORIES/` (182 StationXML files, 29 networks) and `SDS/<year>/<net>/...`
   for 2001–2026 (about 14.5 TB). The Claude Code binary needed its own Full Disk
   Access entry to read the drive.

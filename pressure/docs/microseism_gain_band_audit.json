@@ -1,6 +1,6 @@
 {
   "audit_id": "gain-band-phase-audit-v1",
-  "source_review": "/Users/mohammadamin/Projects/pressure-qc/docs/microseism_weeks.json",
+  "source_review": "~/Projects/pressure-qc/docs/microseism_weeks.json",
   "frozen_rule_id": "claude-frequency-v1-20261015",
   "selection_policy": "reportable stations; passing weeks; exact eligible bands",
   "thresholds": {
@@ -179,7 +179,7 @@
   "gain_applied": false,
   "master_or_scores_changed": false,
   "status": "diagnostic_only; frozen selections unchanged; tilt/model/absolute response remain open",
-  "full_audit_path": "/Users/mohammadamin/Projects/pressure-qc/results/REVIEWS/MICROSEISM_GAIN_BANDS/run_20261015T144203Z_90633bfe/audit.json",
+  "full_audit_path": "~/Projects/pressure-qc/results/REVIEWS/MICROSEISM_GAIN_BANDS/run_20261015T144203Z_90633bfe/audit.json",
   "full_audit_sha256": "6ed95183e80cdd121faedabbf5d002c966f9413cea649980ddee3152c3db7576",
   "source_review_sha256": "195707ab5988663cc3a218653a9c3f45987323ed751977d00807f4053eaeb8fe",
   "protected_file_count": 2466,

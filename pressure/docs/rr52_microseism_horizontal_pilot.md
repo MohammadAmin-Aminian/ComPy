@@ -116,11 +116,11 @@ not used in the curated result.
 The completed pilot command was:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m scripts.pilot_microseism_horizontal \
   --gain-audit docs/microseism_gain_band_audit.json \
   --master-csv exports/master_inventory.csv \
-  --data-dir /Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52 \
+  --data-dir ~/Desktop/ComPy/data/Data/YV/RR52 \
   --station YV.RR52 --start 2013-06-10 --start 2013-06-14 --hours 24 \
   --horizontal-ids YV.RR52.00.BH1 YV.RR52.00.BH2
 ```

@@ -1,5 +1,5 @@
 {
-  "source_experiment": "/Users/mohammadamin/Projects/pressure-qc/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/experiment.json",
+  "source_experiment": "~/Projects/pressure-qc/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343/experiment.json",
   "source_experiment_sha256": "446b8e36b94c9952736b9a2c9b2353f0dfb0c95e05e8cc3719b9cea72fcc20cf",
   "trial_code_commit": "e79f773",
   "distinct_stations": 89,
