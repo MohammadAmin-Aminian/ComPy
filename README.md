@@ -117,7 +117,14 @@ The wheel holds the packages and the commands. The network pipeline
 
 ## Quick start
 
-Offline synthetic inversion (seconds):
+Offline, from two synthetic time series of a known crust to compliance and a Vs
+profile with its uncertainty (about one minute, no data needed):
+
+```bash
+MPLBACKEND=Agg python examples/6_End_to_end_synthetic.py --output worked_example
+```
+
+A shorter look at the inversion alone (seconds):
 
 ```bash
 MPLBACKEND=Agg python examples/synthetic_inversion.py

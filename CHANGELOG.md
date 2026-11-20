@@ -46,6 +46,17 @@ already excluded.
   `StopIteration` or a `ValueError` about vectors). `--gain-sigma 0` is refused; it was taken as "not given"
   and replaced by the default prior without a word.
 
+### New example
+
+- `examples/6_End_to_end_synthetic.py`: fourteen days of synthetic pressure and vertical displacement of a
+  known crust go through the window selection, the band choice, the stacked compliance, the covariance from
+  the windows and the Vs inversion, and the result is compared with the known model. It needs no data and
+  runs with the public interface of 3.2.0. Its compliance part is a test
+  (`test_end_to_end_example_recovers_the_known_compliance`). It shows one property of the estimator that was
+  not documented: with 1024-sample Welch segments (1.22 mHz) the stacked compliance is high by about 0.6 %
+  (median over the band; 1.4 % at most) because the pressure spectrum falls steeply inside each frequency
+  bin; the difference is 3 % with 512 samples and 0.15 % with 2048. The default is unchanged.
+
 ### Documentation and messages
 
 - The deprecation warning of the ComPy 2.x names and the user guide said they "will be removed in ComPy

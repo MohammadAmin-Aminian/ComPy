@@ -278,3 +278,31 @@ def test_deprecation_message_does_not_name_a_version_already_released():
     announced = re.search(r"ComPy (\d+)", _deprecation.REMOVAL)
     # 3.2.0 still said "will be removed in ComPy 3.0".
     assert announced is None or int(announced.group(1)) > major
+
+
+def test_end_to_end_example_recovers_the_known_compliance():
+    """Synthetic records of a known crust through windows, gates, band and stack."""
+    import importlib.util
+
+    from compy.inversion import dram
+
+    spec = importlib.util.spec_from_file_location(
+        "end_to_end", REPO / "examples" / "6_End_to_end_synthetic.py"
+    )
+    example = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(example)
+    stream, model, truth, n_transients = example.synthetic_record(seed=1)
+    result, f_band, errors, keep, _, n_windows = example.measure_compliance(stream)
+    assert n_windows == 576 and 500 < result.n_windows < n_windows
+    assert result.rejected["acceleration_psd"] > 0  # windows with a transient
+    assert result.band[0] < 0.006 and 0.014 < result.band[1] < 0.0186
+    in_band = (result.freqs >= result.band[0] - 1e-12) & (
+        result.freqs <= result.band[1] + 1e-12
+    )
+    expected = dram.forward(example.DEPTH, result.freqs, model.layers(truth))
+    difference = result.compliance[in_band] / expected[in_band] - 1
+    # The estimate is high by about 0.6 % at this frequency resolution (1.22 mHz
+    # on a steep pressure spectrum); 2 % would be a defect.
+    assert np.max(np.abs(difference)) < 0.02
+    assert abs(np.median(difference)) < 0.012
+    assert errors["cov_rel"].shape == (len(f_band), len(f_band)) and keep.sum() >= 5
