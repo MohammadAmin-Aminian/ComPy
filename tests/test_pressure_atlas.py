@@ -395,3 +395,16 @@ def test_shelf_break_ignores_polygon_cut_lines(monkeypatch):
     monkeypatch.setattr(shp, "Reader", Reader)
     pts = geo.line_points("shelf_break", step_km=50.0)
     assert len(pts) and np.all(np.abs(pts[:, 0]) < 179.999)
+
+
+def test_figure_groups_follow_the_binned_quantity():
+    """Depth classes are drawn from shallow to deep, not in alphabetical order ('1-2 km' before '<200 m')."""
+    from compy_pressure.atlas.pipeline import ordered_groups
+
+    t = pd.DataFrame(dict(depth_bin=["1-2 km", "<200 m", "200-1000 m", ">5 km", "<200 m"], depth_m=[1500.0, 100.0, 600.0, 5200.0, 150.0],
+                          type=["DPG", "APG", "DPG", "Hydrophone", "APG"]))  # fmt: skip
+    assert ordered_groups(t, "depth_bin") == ["<200 m", "200-1000 m", "1-2 km", ">5 km"]
+    assert ordered_groups(t, "type") == ["APG", "DPG", "Hydrophone"]
+    assert ordered_groups(t.drop(columns="depth_m"), "depth_bin") == sorted(
+        t.depth_bin.unique()
+    )

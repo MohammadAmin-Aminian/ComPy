@@ -286,6 +286,23 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     return A
 
 
+GROUP_ORDER = {
+    "depth_bin": "depth_m",
+    "distance_bin": "coast_km",
+    "shelf_bin": "shelf_break_km",
+}
+
+
+def ordered_groups(table, col):
+    """Groups of a class column in physical order (by the median of the quantity they bin), else alphabetical."""
+    key = GROUP_ORDER.get(col)
+    if key in table and table[key].notna().any():
+        return list(
+            table.dropna(subset=[col]).groupby(col)[key].median().sort_values().index
+        )
+    return sorted(table[col].dropna().unique())
+
+
 def standard_figures(A, fig_dir):
     import matplotlib
 
@@ -297,7 +314,7 @@ def standard_figures(A, fig_dir):
     tab = pd.read_csv(A.out / "all" / "all.csv")
     P, used = A.densities[("all", "all")]
     fig, ax = plt.subplots(figsize=(9, 5.5))
-    figures.density_panel(ax, P, A.edges, f"All gauges ({int(used.max())})",
+    figures.density_panel(ax, P, A.edges, f"{len(A.d)} gauges (at most {int(used.max())} at one period)",
                           {"5 %": (tab.p5_db, dict(color="w", lw=1.2)), "median": (tab.p50_db, dict(color="w", lw=2)),
                            "95 %": (tab.p95_db, dict(color="w", lw=1.2))})  # fmt: skip
     ax.set_ylim(-60, 90)
@@ -306,7 +323,7 @@ def standard_figures(A, fig_dir):
                       ("shelf_break_distance", "shelf_bin")):  # fmt: skip
         if col not in A.d:
             continue
-        groups = sorted(A.d[col].dropna().unique())
+        groups = ordered_groups(A.d, col)
         tabs = {}
         for g in groups:
             f = A.out / axis / f"{slug(g)}.csv"

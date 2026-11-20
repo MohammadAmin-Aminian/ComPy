@@ -335,6 +335,17 @@ labelled good or usable, Vs at 2 km resolved at 170.
 <p align="center"><a href="docs/results/whole_archive_2026-11/archive_vs_map.png"><img src="docs/results/whole_archive_2026-11/archive_vs_map.png" width="900" alt="World map of Vs at 2 km below the seafloor for the whole archive"></a></p>
 <p align="center"><sub><b>Whole archive.</b> Vs at 2 km below the seafloor where the data resolve it; open circles: not interpreted or 2 km not resolved.</sub></p>
 
+### Global pressure-noise atlas, 381 gauges
+
+`compy-pressure-atlas` on the archive of November 2026: 975 pressure channels of 35
+networks recomputed from the waveforms with one estimator (3-h windows, 0.02 to
+1260 s). After the channel cascade and the screens, 381 gauges of 21 networks
+(186 DPGs, 62 APGs, 133 hydrophones; 52 to 5788 m of water) enter the models
+([docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md)).
+
+<p align="center"><a href="docs/results/pressure_atlas_2026-11/global_density.png"><img src="docs/results/pressure_atlas_2026-11/global_density.png" width="800" alt="Density of seafloor pressure spectra of 381 gauges with the 5 %, median and 95 % models"></a></p>
+<p align="center"><sub><b>Seafloor pressure noise, 381 gauges.</b> Station-balanced density of the 3-h spectra with the 5 %, median and 95 % models (white); teal: the low and high hydroacoustic noise models of the IDC (Brown et al. 2014, approximate digitization; dashed below 0.2 Hz). The microseism peak, the noise notch and the infragravity plateau; water depth sets where the plateau ends (kH = 4.4).</sub></p>
+
 ### RHUM-RUM (YV), Indian Ocean
 
 Eight broadband stations, 2012–2013, the network of Aminian et al. (2025).

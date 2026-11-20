@@ -95,6 +95,26 @@ and season, month by hemisphere, and the paired winter-minus-summer difference o
 
 ## Results
 
-The archive of November 2026 (975 channels, 35 networks) recomputed at native rate, with the report on what
-seafloor pressure gauges record: see the run of 18 November 2026 in the ComPy workspace
-(`runs/pressure_2026-11-18`) and the summary in the README.
+The archive of November 2026: 975 pressure channels of 35 networks, recomputed at native rate (run of 18 to 20
+November 2026, ComPy 3.2.0). The cascade and the screens leave 381 gauges of 21 networks in the models: 186
+DPGs, 62 APGs and 133 hydrophones, between 52 and 5788 m of water, with 1.6 million 3-h windows. Against the
+merged product used before (1-octave PPSDs joined to a 1.25 Hz product) the band levels of the common gauges
+differ by 0.04 to 0.22 dB at the median between 3 and 170 s, and 376 of the 379 earlier gauges are kept.
+
+![Density of the spectra of all gauges with the 5 %, median and 95 % models](results/pressure_atlas_2026-11/global_density.png)
+
+*All gauges: station-balanced density of the 3-h spectra and the 5 %, median and 95 % models (white). Teal: the
+low and high hydroacoustic noise models of the IDC (Brown et al. 2014, approximate digitization; dashed below
+0.2 Hz).*
+
+![Models by water depth](results/pressure_atlas_2026-11/models_depth.png)
+
+*Models by water depth (median thick, 5 and 95 % thin). The level of the notch and the period at which the
+infragravity plateau ends follow the depth: the pressure is 20 dB below the plateau where kH = 4.4 (quartiles
+4.0 to 4.5, 207 gauges deeper than 500 m).*
+
+![Models by sensor type](results/pressure_atlas_2026-11/models_sensor_type.png)
+
+*Models by sensor type. The floor of the notch is the noise of the gauge: it is deepest for DPGs.*
+
+The figures are the standard figures of `build` (`figures/` in the output folder).

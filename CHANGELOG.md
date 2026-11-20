@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.2.0 — unreleased
+## 3.2.0 — 2026-11-20
 
 ### Pressure atlas in the package
 
@@ -51,7 +51,10 @@ pressure of the archive leaves its infragravity plateau at kH = 4.27, and above 
 
 - README: the worked example and the results use the latest Young ORCA run (stages A-D of 13 November with
   3.0, inversion of 16 November with 3.1) in [docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md);
-  a map of the whole-archive inversion; the pressure atlas.
+  a map of the whole-archive inversion; the pressure atlas, with the figures of the native-rate build of 20
+  November 2026 (381 gauges of 21 networks) in the README and in [docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md).
+- Atlas figures: the groups of a model figure are drawn in physical order (depth classes from shallow to deep,
+  not alphabetical), and the title of the density figure gives the number of gauges of the models.
 - `pipeline/f_figures.py` (figure 6): the side panels shared one level axis with the coherence panel, so the
   pressure and acceleration band levels fell outside it and the panels were empty; each has its own axis now, and
   the window times are shown as dates.
