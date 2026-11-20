@@ -17,7 +17,7 @@ FIGURES = ROOT / "figures"
 # --- data -------------------------------------------------------------------
 NETWORK = "XE"
 # COMPY_SDS points stage A at a local copy (a_fast.py) of a slow archive.
-SDS = Path(os.environ.get("COMPY_SDS", "/Volumes/DATA_bruitfm/SDS"))
+SDS = Path(os.environ.get("COMPY_SDS", "/Volumes/DATA/SDS"))
 SDS_LOCATION = "00"  # location code in the SDS file names (traces carry "")
 YEARS = (2018, 2019)
 INVENTORY = ROOT / "metadata" / "XE.xml"  # IRIS seismic + pressure responses

@@ -7,7 +7,10 @@ models and serpentinization, unattended. The method is that of Aminian et al.
 
 All network-specific values are in [`config.py`](config.py). Set
 `COMPY_RUN_DIR` to the run folder, and set `COMPY_PIPELINE_CONFIG` to a file
-that overrides any of its names. The defaults are those of the XE (Pacific Array
+that overrides any of its names. The waveforms are read from an SDS archive:
+`<run folder>/SDS` unless `COMPY_SDS` or `SDS` in your configuration names
+another place. The pipeline is a set of scripts of the repository; a wheel
+installation does not include it. The defaults are those of the XE (Pacific Array
 Young ORCA) runs: the latest in [`docs/results/xe_young_orca_2026-11`](../docs/results/xe_young_orca_2026-11/README.md),
 the first in [`docs/results/xe_young_orca_2026-10-29`](../docs/results/xe_young_orca_2026-10-29/README.md).
 Since ComPy 3.2 stage C ends the band at 0.8 f_c (`BAND_MAX_FRACTION_FC`; see
@@ -18,7 +21,7 @@ Since ComPy 3.2 stage C ends the band at 0.8 f_c (`BAND_MAX_FRACTION_FC`; see
 | Stage | Script | What it does | Output (in the run folder) |
 |---|---|---|---|
 | 0 | `fetch_inventory.py`, `fetch_catalog.py` | StationXML with Z, 1, 2 and pressure responses; USGS catalogue M ≥ 5.85 | `metadata/<NET>.xml`, `work/catalog_*.qml` |
-| A | `a_preprocess.py` (`a_fast.py` for slow disks) | Decimation to 1.25 Hz with FIR filters. Clipped (≥ 99 % of 2²³ counts) or dead (σ < 5 counts) 10-min blocks are cut from all channels (±5 min). Responses are removed with no water level and an explicit pre-filter. | `work/<STA>/{counts,phys,qc}/` |
+| A | `a_preprocess.py` (`a_fast.py` for slow disks) | Decimation to 1.25 Hz with FIR filters. Clipped (≥ 99 % of 2²³ counts) or dead (σ < 5 counts) 10-min blocks are cut from all channels (±5 min). Responses are removed with no water level and an explicit pre-filter; a segment that crosses a response epoch is split there (`response_epochs` in the QC file). Traces at another sampling rate than `FACTORS` expects are left out (`wrong_rate`). A station without day files stops the stage. | `work/<STA>/{counts,phys,qc}/` |
 | B | `b_clean.py` | Earthquake spans (1.5 d per magnitude unit above 5.85), optional hourly-glitch removal, hourly tilt smoothed over 24 h and applied per sample, STA/LTA local events, horizontal-coherent noise removed in ≤ 24 h windows | `work/<STA>/clean/` |
 | D | `d_calibrate.py` | DPG gain from Rayleigh-wave P/a with `compy_pressure`: native-rate SDS data, Mw ≥ 6 events by magnitude level, bins with squared coherence ≥ 0.95, median of ≥ 3 event gains and their spread | `work/<STA>/calibration/` |
 | C | `c_compliance.py` | Non-overlapping 35-min windows. Gates: median coherence ≥ 0.9, or 0.8 if fewer than 500 windows pass; pressure 10–50 dB; acceleration −170 to −150 dB. Coherent band, stacked gravity-corrected compliance, B&P error, monthly stacks | `results/<STA>/<STA>_compliance_*.{npz,csv}`, `_summary.json` |

@@ -14,8 +14,10 @@ CI runs `synthetic_inversion.py`, `reproducible_inversion.py` and
 | [`deep_crust_inversion.py`](deep_crust_inversion.py) | Deep-crust test (4200 m water, 3.5–18.5 mHz; about 25 min on two cores); plot with `plot_deep_posterior.py` |
 | [`4_Vs_inversion.py`](4_Vs_inversion.py) | Bayesian Vs inversion with `compy.inversion.dram` (synthetic without arguments) |
 | [`5_Pressure_QC.py`](5_Pressure_QC.py) | Pressure-gauge QC on a generated SDS archive (synthetic without arguments, a few seconds) |
+| [`6_End_to_end_synthetic.py`](6_End_to_end_synthetic.py) | The whole chain on a synthetic record of a known crust: 35-min windows, gates, band, stacked compliance, covariance from the windows, Vs inversion, and the comparison with the known model (about one minute) |
 
 ```bash
+MPLBACKEND=Agg python examples/6_End_to_end_synthetic.py --output worked_example
 MPLBACKEND=Agg python examples/synthetic_inversion.py
 MPLBACKEND=Agg python examples/reproducible_inversion.py --output synthetic-results
 python examples/5_Pressure_QC.py --output qc-example

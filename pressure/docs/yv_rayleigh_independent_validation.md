@@ -170,7 +170,7 @@ No replacement band was silently adopted or new station fit invented.
 ## How to reproduce/view this review
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 MPLBACKEND=Agg MPLCONFIGDIR=/private/tmp/compy_pressure-mpl \
   OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
   conda run --no-capture-output -n compy python scripts/validate_yv_rayleigh.py

@@ -51,5 +51,5 @@ Edit the rules in `gain_corrected_2026-10-28/decisions/` (or in
 - The repository is private. Making it public is the owner's decision.
 - PressureQC will later be merged into ComPy (both GPL-3.0).
 - The gh token lacks `workflow` scope, so `.github/workflows` cannot be pushed.
-- The data drive is `/Volumes/DATA_bruitfm`. Connect it directly with its own
+- The data drive is `/Volumes/DATA`. Connect it directly with its own
   power supply; it dropped twice on a hub.

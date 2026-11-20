@@ -23,7 +23,7 @@ default is still `tiskitpy`; select `none` explicitly for this comparison.
 Run the available YV pressure epochs with a separate workflow and no master writes:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m compy_pressure.network rayleigh \
   --network YV \
   --results-dir results/NETWORKS/YV_RAYLEIGH_NO_TILT \
@@ -87,7 +87,7 @@ Those results and their original statuses are preserved.
 > comparisons with a new `--results-dir` and `--rayleigh-no-master-update`.
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m compy_pressure.network rayleigh \
   --network YV \
   --rayleigh-catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \

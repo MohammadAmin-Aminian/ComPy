@@ -148,7 +148,7 @@ Use the integration worktree and the `compy_pressure` environment. Do not run an
 all-station batch to repeat this closeout. Choose a new output name on repeat.
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc-localp-finish
+cd ~/Projects/pressure-qc-localp-finish
 export PYTHONPATH="$PWD/src:$PWD"
 conda run --no-capture-output -n compy python -m pytest -q
 conda run --no-capture-output -n compy_pressure ruff check .
@@ -160,7 +160,7 @@ conda run --no-capture-output -n compy python scripts/run_local_p_campaign.py \
 # Read-only import plan. Omit --apply for production masters.
 conda run --no-capture-output -n compy python scripts/apply_local_p_results.py \
   --export docs/local_p_table_staging.csv \
-  --master-dir /Users/mohammadamin/Projects/pressure-qc/exports
+  --master-dir ~/Projects/pressure-qc/exports
 ```
 
 Saved bounded run:
@@ -176,7 +176,7 @@ Recomposition is explicit and read-only for its inputs:
 
 ```bash
 conda run --no-capture-output -n compy python scripts/review_local_p_phase.py \
-  --base-campaign /Users/mohammadamin/Projects/pressure-qc-localp-review/results/LOCAL_P/campaigns/user_all_20261016T120124Z_17172 \
+  --base-campaign ~/Projects/pressure-qc-localp-review/results/LOCAL_P/campaigns/user_all_20261016T120124Z_17172 \
   --supersede results/LOCAL_P/campaigns/validation_v2_apg \
   --output-dir results/LOCAL_P/reviews/phase_v2_repeat
 ```

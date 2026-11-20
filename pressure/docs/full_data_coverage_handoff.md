@@ -8,7 +8,7 @@ below preserves Claude's original contributor checkpoint.
 
 Branch `claude/full-data-coverage`, based on main `db9b045` (still the latest
 origin/main when work started). Worktree:
-`/Users/mohammadamin/Projects/pressure-qc-coverage`. Not merged into main.
+`~/Projects/pressure-qc-coverage`. Not merged into main.
 
 Method, decisions and current numbers: [full_data_coverage.md](full_data_coverage.md).
 Curated real dry-run outputs: [coverage/](coverage/).
@@ -40,14 +40,14 @@ code rather than re-implementing it:
 Read-only inventory and dry run:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc-coverage
+cd ~/Projects/pressure-qc-coverage
 bash scripts/run_full_coverage.sh plan
 ```
 
 Execute all planned missing work (owner runs this):
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc-coverage
+cd ~/Projects/pressure-qc-coverage
 bash scripts/run_full_coverage.sh execute --workers 4
 ```
 

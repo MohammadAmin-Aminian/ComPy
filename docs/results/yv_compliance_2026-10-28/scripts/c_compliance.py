@@ -41,7 +41,7 @@ from compy_processing import (  # noqa: E402
 WORK = ROOT / "work"
 RESULTS = ROOT / "results"
 GAINS_CSV = ROOT.parent / "gain_corrected_2026-10-28" / "gains.csv"
-INVENTORY = "/Volumes/DATA_bruitfm/INVENTORIES/YV.xml"
+INVENTORY = "/Volumes/DATA/INVENTORIES/YV.xml"
 WINDOW_S = 2100.0  # 35 min (paper section 4.2)
 NSEG = 1024  # 819.2 s Welch segments at 1.25 Hz, df = 1.22 mHz
 MIN_WINDOWS = 500

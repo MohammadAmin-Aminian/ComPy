@@ -55,16 +55,16 @@ not the current execution status.
 
 ## Workspace, inputs and saved state
 
-- Local checkout: `/Users/mohammadamin/Projects/pressure-qc`.
+- Local checkout: `~/Projects/pressure-qc`.
 - GitHub: <https://github.com/MohammadAmin-Aminian/bruit-fm>, branch `main`.
   Code and documentation through step 22 are in `220458b`; the compact handoff
   is a subsequent documentation change. Inspect `git log -1` for the latest identifier.
 - Environment: conda `compy_pressure`, Python 3.13, ObsPy 1.5.1, NumPy/SciPy,
   Matplotlib, pandas and openpyxl. Local interpreter:
   `/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`.
-- Whole archive: `/Users/mohammadamin/Desktop/ComPy/data/Data`.
-  Inventories: `/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES`.
-  Earlier station pilot: `/Users/mohammadamin/Desktop/ComPy/data/RR52`.
+- Whole archive: `~/Desktop/ComPy/data/Data`.
+  Inventories: `~/Desktop/ComPy/data/INVENTORIES`.
+  Earlier station pilot: `~/Desktop/ComPy/data/RR52`.
 - Shared master: `exports/master_inventory.csv` and `.xlsx`, 16,784
   channel-epoch rows across inventories. There are 227 YV inventory rows;
   172 available channel epochs were processed. Keys are `Seed_id`,

@@ -31,6 +31,7 @@
 | [XE, Pacific Array Young ORCA, November 2026](results/xe_young_orca_2026-11/README.md) | Latest run: compliance (13 Nov), gravity- and drilling-constrained Vs (16 Nov), figures and table |
 | [XE, Pacific Array Young ORCA, October 2026](results/xe_young_orca_2026-10-29/README.md) | Run of 29 Oct (ComPy 2.4-2.8): compliance, Vs, serpentinization, PDF report |
 | [Whole archive](results/whole_archive_2026-11/archive_vs_map.png) | Map of the inversion of 287 stations in 17 networks |
+| [Pressure atlas](results/pressure_atlas_2026-11/global_density.png) | Density of the spectra of 381 gauges and the models by depth and sensor type ([PRESSURE_ATLAS.md](PRESSURE_ATLAS.md)) |
 | [YV compliance, RHUM-RUM](results/yv_compliance_2026-10-28/README.md) | Compliance of eight Indian Ocean stations, gains, stability |
 | [YV inversion, RHUM-RUM](results/yv_inversion_2026-10-29/README.md) | Vs posteriors, variants and paper-style figures |
 | [Synthetic benchmark](benchmark/README.md) | Settings and diagnostics of the CI inversion benchmark |

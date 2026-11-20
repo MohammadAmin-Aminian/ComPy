@@ -39,8 +39,8 @@
         "uncertainty_incomplete",
         "pressure_hardware_needs_confirmation"
       ],
-      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BDH__20121005T055307__58afc2d6f005/rayleigh_calibration/run_fb1ff0224e6d/comparison.json",
-      "plot_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BDH__20121005T055307__58afc2d6f005/rayleigh_calibration/run_fb1ff0224e6d/paper_figure5_comparison.png"
+      "result_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BDH__20121005T055307__58afc2d6f005/rayleigh_calibration/run_fb1ff0224e6d/comparison.json",
+      "plot_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR01/YV.RR01.00.BDH__20121005T055307__58afc2d6f005/rayleigh_calibration/run_fb1ff0224e6d/paper_figure5_comparison.png"
     },
     {
       "seed_id": "YV.RR03.00.BDH",
@@ -63,8 +63,8 @@
         "uncertainty_incomplete",
         "pressure_hardware_needs_confirmation"
       ],
-      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_5749ed2dd477/comparison.json",
-      "plot_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_5749ed2dd477/paper_figure5_comparison.png"
+      "result_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_5749ed2dd477/comparison.json",
+      "plot_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR03/YV.RR03.00.BDH__20121004T133556__58afc2d6f005/rayleigh_calibration/run_5749ed2dd477/paper_figure5_comparison.png"
     },
     {
       "seed_id": "YV.RR05.00.BDH",
@@ -87,8 +87,8 @@
         "uncertainty_incomplete",
         "pressure_hardware_needs_confirmation"
       ],
-      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BDH__20121002T160728__58afc2d6f005/rayleigh_calibration/run_a227e5a74e71/comparison.json",
-      "plot_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BDH__20121002T160728__58afc2d6f005/rayleigh_calibration/run_a227e5a74e71/paper_figure5_comparison.png"
+      "result_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BDH__20121002T160728__58afc2d6f005/rayleigh_calibration/run_a227e5a74e71/comparison.json",
+      "plot_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR05/YV.RR05.00.BDH__20121002T160728__58afc2d6f005/rayleigh_calibration/run_a227e5a74e71/paper_figure5_comparison.png"
     },
     {
       "seed_id": "YV.RR06.00.BDH",
@@ -111,8 +111,8 @@
         "uncertainty_incomplete",
         "pressure_hardware_needs_confirmation"
       ],
-      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BDH__20121002T113410__58afc2d6f005/rayleigh_calibration/run_f9ded216063f/comparison.json",
-      "plot_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BDH__20121002T113410__58afc2d6f005/rayleigh_calibration/run_f9ded216063f/paper_figure5_comparison.png"
+      "result_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BDH__20121002T113410__58afc2d6f005/rayleigh_calibration/run_f9ded216063f/comparison.json",
+      "plot_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR06/YV.RR06.00.BDH__20121002T113410__58afc2d6f005/rayleigh_calibration/run_f9ded216063f/paper_figure5_comparison.png"
     },
     {
       "seed_id": "YV.RR07.00.BDH",
@@ -135,8 +135,8 @@
         "uncertainty_incomplete",
         "pressure_hardware_needs_confirmation"
       ],
-      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_a411435db0be/comparison.json",
-      "plot_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_a411435db0be/paper_figure5_comparison.png"
+      "result_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_a411435db0be/comparison.json",
+      "plot_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR07/YV.RR07.00.BDH__20120929T104416__58afc2d6f005/rayleigh_calibration/run_a411435db0be/paper_figure5_comparison.png"
     },
     {
       "seed_id": "YV.RR08.00.BDH",
@@ -159,8 +159,8 @@
         "uncertainty_incomplete",
         "pressure_hardware_needs_confirmation"
       ],
-      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_25e0313fc030/comparison.json",
-      "plot_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_25e0313fc030/paper_figure5_comparison.png"
+      "result_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_25e0313fc030/comparison.json",
+      "plot_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR08/YV.RR08.00.BDH__20120929T130711__58afc2d6f005/rayleigh_calibration/run_25e0313fc030/paper_figure5_comparison.png"
     },
     {
       "seed_id": "YV.RR09.00.BDH",
@@ -184,11 +184,11 @@
         "pressure_hardware_needs_confirmation",
         "clock_alignment_needs_review"
       ],
-      "result_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_02a4dca97477/comparison.json",
-      "plot_file": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_02a4dca97477/paper_figure5_comparison.png"
+      "result_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_02a4dca97477/comparison.json",
+      "plot_file": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR09/YV.RR09.00.BDH__20120930T041457__58afc2d6f005/rayleigh_calibration/run_02a4dca97477/paper_figure5_comparison.png"
     }
   ],
   "limitations_document": "docs/calibration_assumptions.md",
-  "live_workflow": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/_workflow/rayleigh.json",
+  "live_workflow": "~/Projects/pressure-qc/results/NETWORKS/TEST/_workflow/rayleigh.json",
   "curated_plot": "docs/figures/yv/RR03_rayleigh_calibration.png"
 }

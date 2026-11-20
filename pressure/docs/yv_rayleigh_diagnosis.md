@@ -577,14 +577,14 @@ No master, XML or default change.
 ## Reproduce (read-only; cannot start calibration or touch masters)
 
 ```bash
-M=/Users/mohammadamin/Projects/pressure-qc
+M=~/Projects/pressure-qc
 PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python \
   -m scripts.diagnose_yv_rayleigh \
   --workflow $M/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
   --trial-root $M/results/EXPERIMENTS/SOCRATES/all_20261013T195356Z_00cf3343 \
   --expect-trial-sha 446b8e36b94c9952736b9a2c9b2353f0dfb0c95e05e8cc3719b9cea72fcc20cf \
-  --microseism-run /Users/mohammadamin/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23 \
-  --data-root /Users/mohammadamin/Desktop/ComPy/data/Data/YV \
+  --microseism-run ~/Projects/pressure-qc-claude/results/EXPERIMENTS/MICROSEISM_YV/run_20261014T175553Z_30002f23 \
+  --data-root ~/Desktop/ComPy/data/Data/YV \
   --output-dir <new folder>
 ```
 

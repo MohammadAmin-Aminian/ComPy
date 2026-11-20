@@ -3,15 +3,15 @@
     "Seed_id": "YV.RR52.00.BDH",
     "channel_start_time": "2012-10-19T09:00:00.000000Z",
     "channel_end_time": "2013-11-25T05:17:31.000000Z",
-    "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+    "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
   },
   "status": "comparison_only",
   "files": {
-    "windows": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/windows.csv",
-    "frequency_table": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra.csv",
-    "spectra": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra.npz",
-    "plot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra_coherence_transfer.png",
-    "result": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/comparison.json"
+    "windows": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/windows.csv",
+    "frequency_table": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra.csv",
+    "spectra": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra.npz",
+    "plot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/spectra_coherence_transfer.png",
+    "result": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_68eef075f78e/comparison.json"
   },
   "segment_seconds": 3600,
   "days": 7,
@@ -42,7 +42,7 @@
     "Seed_id": "YV.RR52.00.BHZ",
     "channel_start_time": "2012-10-19T09:00:00.000000Z",
     "channel_end_time": "2013-11-25T05:17:31.000000Z",
-    "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+    "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
   },
   "vertical_seed_id": "YV.RR52.00.BHZ",
   "start_utc": "2013-06-10T00:00:00.000000Z",
@@ -52,96 +52,96 @@
   "vertical_upward_sign": 1,
   "source_files": [
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.161",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.161",
       "size": 11182080,
       "mtime_ns": 1715764884000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.162",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.162",
       "size": 11001856,
       "mtime_ns": 1715764884000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.163",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.163",
       "size": 10797056,
       "mtime_ns": 1715764885000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.164",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.164",
       "size": 10842112,
       "mtime_ns": 1715764885000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.165",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.165",
       "size": 10924032,
       "mtime_ns": 1715764885000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.166",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.166",
       "size": 10825728,
       "mtime_ns": 1715764886000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.167",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.167",
       "size": 10629120,
       "mtime_ns": 1715764886000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.168",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BDH.D/YV.RR52.00.BDH.D.2013.168",
       "size": 10530816,
       "mtime_ns": 1715764886000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.161",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.161",
       "size": 6299648,
       "mtime_ns": 1715764884000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.162",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.162",
       "size": 6066176,
       "mtime_ns": 1715764884000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.163",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.163",
       "size": 6082560,
       "mtime_ns": 1715764885000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.164",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.164",
       "size": 6225920,
       "mtime_ns": 1715764885000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.165",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.165",
       "size": 6111232,
       "mtime_ns": 1715764885000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.166",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.166",
       "size": 6074368,
       "mtime_ns": 1715764886000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.167",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.167",
       "size": 6107136,
       "mtime_ns": 1715764886000000000
     },
     {
-      "path": "/Users/mohammadamin/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.168",
+      "path": "~/Desktop/ComPy/data/Data/YV/RR52/BHZ.D/YV.RR52.00.BHZ.D.2013.168",
       "size": 5943296,
       "mtime_ns": 1715764887000000000
     }
   ],
   "response_snapshots": {
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/inventory.xml": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BHZ__20121019T090000__58afc2d6f005/inventory.xml": "6bb01e8992d3dc11a729e9720f34282428805ff35dc03d47bf7f7a8339f19336"
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/inventory.xml": "3b9ae9fc37c7e55cd3b713e1e7acc65f99c0f15a3533700f2aecca9e03b7862e",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BHZ__20121019T090000__58afc2d6f005/inventory.xml": "6bb01e8992d3dc11a729e9720f34282428805ff35dc03d47bf7f7a8339f19336"
   },
   "input_units": {
     "pressure": "PA",
     "vertical": "M/S"
   },
   "inventory_sha256": {
-    "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml": "58afc2d6f0056e52cf954bdd5b9fb80e92f9572d44d067b30966a160d2044494"
+    "~/Desktop/ComPy/data/INVENTORIES/YV.xml": "58afc2d6f0056e52cf954bdd5b9fb80e92f9572d44d067b30966a160d2044494"
   },
   "requested_segments": 168,
   "retained_segments": 167,

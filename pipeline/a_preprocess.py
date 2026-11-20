@@ -22,6 +22,15 @@ Choices (documented in the report):
     every channel, widened by QC_MARGIN_S. All channels are cut there before
     decimation, so response ringing stays inside the trimmed segment edges.
     The cut spans are listed in work/<STA>/qc/<STA>.<YYYY.JJJ>.json.
+  * Raw traces whose sampling rate is not OUT_RATE times the product of
+    config.FACTORS are left out and listed under "wrong_rate" in the QC file
+    (ComPy 3.2.1; before, a day at another rate was appended to its neighbour
+    sample by sample and decimated with the same factors).
+  * A segment that crosses a StationXML epoch of its channel is split there, so
+    that each part is corrected with its own response; the times are listed
+    under "response_epochs" (ComPy 3.2.1; before, the response valid at the
+    start of the segment was applied to all of it).
+  * A station without any day file in the archive ends the run with an error.
 """
 
 import argparse
@@ -47,6 +56,13 @@ from config import (
     YEARS,
     Z,
 )
+
+#: Sampling rate [Hz] that config.FACTORS decimates to OUT_RATE.
+EXPECTED_RATE = OUT_RATE * float(np.prod(FACTORS))
+#: Relative tolerance on the rate of a raw trace (clock drift is a few 1e-8).
+RATE_TOLERANCE = 1e-3
+#: Frequencies [Hz] at which two response epochs are compared.
+EPOCH_TEST_FREQUENCIES = np.array([0.002, 0.01, 0.05, 0.2, 0.5])
 
 GRID = 1 / OUT_RATE
 CHUNK_DAYS = 6
@@ -101,7 +117,8 @@ def join_day_files(traces, tolerance=1.5):
     merge sees a one-sample conflict and masks the overlap. Here overlapping
     samples are dropped and traces whose junction is within ``tolerance``
     samples are concatenated (timing slip < 1 sample = 16 ms, removed again
-    when snapping to the 0.8 s output grid); larger gaps start a new segment.
+    when snapping to the 0.8 s output grid); larger gaps start a new segment,
+    and so does a trace with another sampling rate.
     """
     traces = sorted(traces, key=lambda tr: tr.stats.starttime)
     segments = []
@@ -117,7 +134,8 @@ def join_day_files(traces, tolerance=1.5):
             continue  # wholly inside the previous trace
         if tr.stats.starttime < expected - delta / 2:
             tr = tr.slice(expected - delta / 2, tr.stats.endtime)
-        if abs(tr.stats.starttime - expected) <= tolerance * delta:
+        same_rate = abs(tr.stats.delta - delta) <= 1e-6 * delta
+        if same_rate and abs(tr.stats.starttime - expected) <= tolerance * delta:
             prev.data = np.concatenate([prev.data, tr.data])
         else:
             segments.append(tr)
@@ -194,9 +212,102 @@ def cut_spans(trace, spans):
     return [p for p in pieces if p.stats.npts > 1]
 
 
+class WrongRate(ValueError):
+    """A raw trace whose sampling rate config.FACTORS does not bring to OUT_RATE."""
+
+
+def has_expected_rate(trace):
+    """True when ``trace`` has the sampling rate that config.FACTORS expects."""
+    return (
+        abs(trace.stats.sampling_rate - EXPECTED_RATE) <= RATE_TOLERANCE * EXPECTED_RATE
+    )
+
+
+def _response_at(inventory, trace, time):
+    """Complex response of the channel of ``trace`` at ``time``, or None outside every epoch."""
+    try:
+        response = inventory.get_response(trace.id, time)
+    except Exception:  # obspy raises a bare Exception when no epoch matches
+        return None
+    output = "DEF" if trace.stats.channel == P else "DISP"
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        return response.get_evalresp_response_for_frequencies(
+            EPOCH_TEST_FREQUENCIES, output=output
+        )
+
+
+def epoch_boundaries(inventory, trace):
+    """Times inside ``trace`` at which the response of its channel changes.
+
+    A StationXML epoch that starts or ends inside the trace counts when the
+    response differs across it, or when one side has no response at all.
+    Epochs that repeat the same response (administrative splits) do not.
+    """
+    stats = trace.stats
+    times = set()
+    for network in inventory.select(
+        network=stats.network, station=stats.station, channel=stats.channel
+    ):
+        for station in network:
+            for channel in station:
+                if channel.location_code != stats.location:
+                    continue
+                for t in (channel.start_date, channel.end_date):
+                    if t is not None and stats.starttime < t <= stats.endtime:
+                        times.add(t.timestamp)
+    changes = []
+    for timestamp in sorted(times):
+        t = UTCDateTime(timestamp)
+        before = _response_at(inventory, trace, t - stats.delta)
+        after = _response_at(inventory, trace, t + stats.delta)
+        same = (
+            before is not None
+            and after is not None
+            and np.allclose(before, after, rtol=1e-9, atol=0.0)
+        )
+        if not same:
+            changes.append(t)
+    return changes
+
+
+def split_at(trace, times):
+    """Pieces of ``trace`` between ``times``.
+
+    A sample exactly at a boundary stays in the earlier piece: where one epoch
+    ends at the instant the next starts, obspy returns the earlier response.
+    """
+    stats = trace.stats
+    edges = [0]
+    for t in times:
+        edges.append(int(np.floor((t - stats.starttime) / stats.delta + 1e-6)) + 1)
+    edges.append(stats.npts)
+    pieces = []
+    for first, last in zip(edges[:-1], edges[1:]):
+        if last <= first:
+            continue
+        piece = trace.copy()
+        piece.data = trace.data[first:last].copy()
+        piece.stats.starttime = stats.starttime + first * stats.delta
+        pieces.append(piece)
+    return pieces
+
+
 def decimate_segment(trace):
-    """Decimate one gap-free raw trace on the 0.8 s grid; returns None if too short."""
+    """Decimate one gap-free raw trace on the 0.8 s grid; returns None if too short.
+
+    Raises:
+        WrongRate: The trace is not sampled at OUT_RATE times the product of
+            config.FACTORS. A driver that decimates several rates replaces this
+            function and decides for itself.
+    """
     from tiskitpy import Decimator
+
+    if not has_expected_rate(trace):
+        raise WrongRate(
+            f"{trace.stats.sampling_rate:g} Hz, expected {EXPECTED_RATE:g} Hz "
+            f"(config.FACTORS {tuple(FACTORS)} to {OUT_RATE:g} Hz)"
+        )
 
     # Rates a few 1e-8 off nominal would give segments that obspy refuses to merge.
     nominal = float(Fraction(trace.stats.sampling_rate).limit_denominator(100))
@@ -259,33 +370,61 @@ def process_chunk(station, chunk_days):
     qc_file.write_text(json.dumps(qc, indent=1))
     counts, phys = Stream(), Stream()
     for trace in segments:
-        out = decimate_segment(trace)
-        if out is None:
-            continue
-        counts += out.copy()
         try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                out.remove_response(
-                    inventory=inv,
-                    output="DEF" if out.stats.channel == P else "DISP",
-                    pre_filt=PRE_FILT,
-                    water_level=None,
-                    taper=True,
-                    taper_fraction=min(0.05, 600 / (out.stats.npts * GRID)),
-                )
-        except ValueError as exc:
-            if "No matching response" not in str(exc):
-                raise
-            # Data outside every StationXML epoch: lose this segment, not the chunk.
-            qc.setdefault("no_response", []).append(
-                [out.stats.channel, str(out.stats.starttime), str(out.stats.endtime)]
-            )
+            decimated = decimate_segment(trace)
+        except WrongRate as exc:
+            # Leave the trace out and say so: decimating it with factors meant
+            # for another rate would write data on a wrong time axis.
+            print(f"WRONG-RATE {trace.id} {trace.stats.starttime} - "
+                  f"{trace.stats.endtime}: {exc}; left out", file=sys.stderr)  # fmt: skip
+            qc.setdefault("wrong_rate", []).append(
+                [trace.stats.channel, str(trace.stats.starttime),
+                 str(trace.stats.endtime), float(trace.stats.sampling_rate)]
+            )  # fmt: skip
+            qc["expected_rate_hz"] = EXPECTED_RATE
             qc_file.write_text(json.dumps(qc, indent=1))
             continue
-        # Drop the response/FIR edge zones of every segment.
-        out.trim(out.stats.starttime + PAD_S / 2, out.stats.endtime - PAD_S / 2)
-        phys += out
+        if decimated is None:
+            continue
+        counts += decimated.copy()
+        boundaries = epoch_boundaries(inv, decimated)
+        if boundaries:
+            # Each part gets the response of its own epoch (obspy takes the
+            # response valid at the start time of the trace it is given).
+            qc.setdefault("response_epochs", []).extend(
+                [decimated.stats.channel, str(t)] for t in boundaries
+            )
+            qc_file.write_text(json.dumps(qc, indent=1))
+        for out in split_at(decimated, boundaries):
+            if out.stats.npts * out.stats.delta < MIN_SEGMENT_S:
+                continue
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    out.remove_response(
+                        inventory=inv,
+                        output="DEF" if out.stats.channel == P else "DISP",
+                        pre_filt=PRE_FILT,
+                        water_level=None,
+                        taper=True,
+                        taper_fraction=min(0.05, 600 / (out.stats.npts * GRID)),
+                    )
+            except ValueError as exc:
+                if "No matching response" not in str(exc):
+                    raise
+                # Data outside every StationXML epoch: lose this part, not the chunk.
+                qc.setdefault("no_response", []).append(
+                    [
+                        out.stats.channel,
+                        str(out.stats.starttime),
+                        str(out.stats.endtime),
+                    ]
+                )
+                qc_file.write_text(json.dumps(qc, indent=1))
+                continue
+            # Drop the response/FIR edge zones of every segment.
+            out.trim(out.stats.starttime + PAD_S / 2, out.stats.endtime - PAD_S / 2)
+            phys += out
     written = []
     for kind, stream in (("counts", counts), ("phys", phys)):
         stream.merge(method=0)
@@ -301,6 +440,8 @@ def process_chunk(station, chunk_days):
             out.parent.mkdir(parents=True, exist_ok=True)
             part.write(str(out), format="MSEED", encoding="FLOAT32")
             written.append(str(out))
+    if not written and qc.get("wrong_rate"):
+        return station, written, "no data at the expected rate"
     return station, written, "ok"
 
 
@@ -311,8 +452,11 @@ def main():
     parser.add_argument("--workers", type=int, default=8)
     args = parser.parse_args()
     tasks = []
+    empty = []
     for station in args.stations:
         days = station_days(station)
+        if not days:
+            empty.append(station)
         todo = [
             d
             for d in days
@@ -331,6 +475,14 @@ def main():
             for i in range(0, len(run), CHUNK_DAYS):
                 tasks.append((station, run[i : i + CHUNK_DAYS]))
         print(f"{station}: {len(days)} days, {len(todo)} to do", flush=True)
+    if empty:
+        # Before 3.2.1 such a station was passed over and the run ended with exit 0.
+        folder = SDS / "<year>" / NETWORK / "<station>" / f"{Z}.D"
+        raise SystemExit(
+            f"Stage A: no day file for {', '.join(empty)} in {folder} "
+            f"(years {', '.join(str(y) for y in YEARS)}). Check config.SDS (or COMPY_SDS), "
+            "NETWORK, YEARS and the station codes."
+        )
     done = 0
     failed = 0
     with ProcessPoolExecutor(args.workers) as pool:

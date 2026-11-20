@@ -136,7 +136,7 @@ resume it first. This guard is a workflow check, not a general file lock.
 Run from Terminal:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m compy_pressure.network nearby
 ```
 

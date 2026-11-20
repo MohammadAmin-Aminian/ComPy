@@ -75,7 +75,7 @@ interpolation or tolerance relaxation is introduced by this preparation.
 Run these in order from the repository root, stopping if a command fails:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python scripts/prepare_yl_test.py
 
 YL_STATIONS=(--station A02W --station A06W --station A08W --station A10W --station A12W)

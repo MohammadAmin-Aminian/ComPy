@@ -14,7 +14,7 @@
     "doi": "10.1093/gji/ggw426",
     "url": "https://academic.oup.com/gji/article/208/3/1277/2454291",
     "download_url": "https://www.ipgp.fr/~crawford/2017_EuroOBS_workshop/Resources/Scholz%20et%20al%202017.pdf",
-    "local_pdf": "/Users/mohammadamin/Projects/pressure-qc/results/REFERENCES/scholz2017_orientation_ggw426.pdf",
+    "local_pdf": "~/Projects/pressure-qc/results/REFERENCES/scholz2017_orientation_ggw426.pdf",
     "sha256": "f42259edc281ab3c4c2f0ba7059e0895e3cdbd13c8f16d3617421b8c19625a5b",
     "method_page": 1279,
     "table": "Table 1",

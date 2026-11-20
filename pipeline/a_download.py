@@ -90,6 +90,7 @@ def process(station, workers):
     """Run stage A on the downloaded files."""
     env = dict(os.environ, COMPY_SDS=str(CACHE), OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1",
                VECLIB_MAXIMUM_THREADS="1")  # fmt: skip
+    (ROOT / "logs").mkdir(parents=True, exist_ok=True)
     with open(ROOT / "logs" / f"a_download_{station}.log", "w") as log:
         return subprocess.run([sys.executable, "a_preprocess.py", station, "--workers", str(workers)],
                               cwd=HERE, env=env, stdout=log, stderr=subprocess.STDOUT).returncode  # fmt: skip

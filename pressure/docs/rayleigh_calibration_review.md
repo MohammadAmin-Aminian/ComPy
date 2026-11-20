@@ -254,7 +254,7 @@ the three-event scatter and must be represented before quoting total uncertainty
 On this machine the explicit catalogue snapshot is already saved locally:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python -m pip install -e '.[rayleigh]'
 conda run --no-capture-output -n compy python -m compy_pressure.rayleigh_calibration \
   --catalog results/RAYLEIGH_REVIEW/catalog_usgs_m5p5_2012_2013.json \
