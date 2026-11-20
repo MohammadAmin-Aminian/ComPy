@@ -3,7 +3,8 @@
 import importlib
 import warnings
 
-REMOVAL = "ComPy 3.0"
+#: Announced as "ComPy 3.0" until 3.2.0, which still shipped the old names.
+REMOVAL = "a later major version"
 
 
 def _warn(old, new):
