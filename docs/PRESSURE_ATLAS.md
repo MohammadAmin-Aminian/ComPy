@@ -88,7 +88,7 @@ The usable band of a channel can be the one of the channel table (response 20-dB
 cut-off; the atlas of November 2026) or rule W, selected with `population.band_rule = "W"` or the command
 `compy-pressure-atlas band-rule TABLE --out TABLE_W.csv`. Rule W needs the native-rate file of each channel (column
 `product`) for its response, and gives every window a low and a high frequency with a stated reason. A bin is kept when
-its centre lies in `[f_lo, f_hi]` of its window.
+its centre lies in `[f_lo, f_hi]` of its window; in the models the band has hard edges (no taper over the outer octave).
 
 | Limit | Value | Source |
 |---|---|---|

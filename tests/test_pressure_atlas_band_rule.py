@@ -162,3 +162,21 @@ def test_config_selects_the_rule_and_defaults_keep_the_atlas_band():
     cfg = config.load()
     assert cfg["population"]["band_rule"] == "atlas"
     assert config.load(population={"band_rule": "W"})["population"]["band_rule"] == "W"
+
+
+def test_band_taper_has_hard_edges_for_rule_w_and_the_octave_taper_otherwise():
+    from compy_pressure.atlas import models
+
+    f = 1 / GRID
+    hard = models.band_taper(0.01, 1.0, GRID, edge_octaves=0.0)
+    assert set(np.unique(hard)) == {0.0, 1.0}
+    assert np.all(hard[(f >= 0.01) & (f <= 1.0)] == 1.0) and np.all(
+        hard[(f < 0.01) | (f > 1.0)] == 0.0
+    )
+    soft = models.band_taper(
+        0.01, 1.0, GRID
+    )  # default: unchanged behaviour of the November 2026 atlas
+    inside_edge = (f >= 0.01) & (f < 0.02)
+    assert np.all(soft[inside_edge] < 1.0) and np.all(
+        soft[(f >= 0.02) & (f <= 0.5)] == 1.0
+    )

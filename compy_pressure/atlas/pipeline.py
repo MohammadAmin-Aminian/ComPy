@@ -259,7 +259,15 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     a_tab = a_tab.rename(columns={"seed_id": "key"})
     bands = screens.band_screen(daily2, drops, a_tab, cfg)
     bands.to_csv(tdir / "screen_gauge_band.csv", index=False)
-    U = np.vstack([band_taper(lo, hi) for lo, hi in zip(a_tab.f_lo, a_tab.f_hi)])
+    edge = (
+        0.0 if cfg["population"].get("band_rule", "atlas") == "W" else 1.0
+    )  # rule W: hard edges
+    U = np.vstack(
+        [
+            band_taper(lo, hi, edge_octaves=edge)
+            for lo, hi in zip(a_tab.f_lo, a_tab.f_hi)
+        ]
+    )
     pos = {k: i for i, k in enumerate(a_tab.key)}
     for r in bands[bands.removed].itertuples():
         lo, hi = cfg["bands"][r.band]
