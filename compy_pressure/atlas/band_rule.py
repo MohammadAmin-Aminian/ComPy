@@ -48,6 +48,9 @@ Rule "V" (validated limits, 24 Nov 2026, after a four-reviewer review) is rule W
                   median spectrum), not a type-wide cap
     hydrophone    the cut-off validated on the pressure-vertical phase, but never beyond the period where the response correction
                   reaches ``hydrophone_max_correction_db`` (the phase is blind to a corner error once the correction is large)
+    high limit    the response cut-off is taken as ``f / 2**(1/8)``, so that the whole quarter-octave bin stays under it, like the
+                  sampling limit; a bin that straddles a steep roll-off (two 50 Hz Cascadia DPGs fall by more than 100 dB above 4 Hz)
+                  amplifies instrument noise by the correction and gave a spurious +36 dB node at the edge of the band
     each limit records its evidence class in ``band_rule_lo_evidence`` and ``band_rule_hi_evidence``
 
 A bin of a window is kept when its centre frequency lies in ``[f_lo, f_hi]``.
@@ -325,6 +328,8 @@ def channel_limits(
     f_lo, f_hi, lo_by, hi_by, lo_ev, hi_ev = [], [], [], [], [], []
     for x in db:
         r_lo, r_hi = response_band_hz(x, periods, c["response_drop_db"])
+        if rule_v and np.isfinite(r_hi):
+            r_hi = r_hi / 2.0 ** c["bin_half_octave"]  # rule V: the whole quarter-octave bin stays under the response cut-off
         cands = {
             "sampling": h1,
             "response": r_hi if np.isfinite(r_hi) else np.inf,

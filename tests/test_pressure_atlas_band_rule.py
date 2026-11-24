@@ -227,3 +227,12 @@ def test_rule_v_floor_limit_apg_depth_and_hydrophone_correction_cap():
     hp = _highpass_db(2.0)  # corner at 12.6 s: the correction reaches 10 dB at 3 x 12.6 = 38 s
     h = band_rule.channel_limits("Hydrophone", 100.0, hp, cfg=cfg, validated_pz_hz=1 / 200.0)
     assert h.lo_by == ["response correction cap"] and 30.0 < 1 / h.f_lo_hz[0] < 45.0
+
+
+def test_rule_v_response_cutoff_keeps_the_whole_bin_inside():
+    x = (1 / GRID) / 2.0  # first-order low-pass with its corner at 2 Hz
+    db = -10 * np.log10(1 + x**2)
+    w = band_rule.channel_limits("Hydrophone", 500.0, db, cfg={"rule": "W"})
+    v = band_rule.channel_limits("Hydrophone", 500.0, db, cfg={"rule": "V"})
+    assert w.hi_by == ["response"] and v.hi_by == ["response"]
+    assert v.f_hi_hz[0] == pytest.approx(w.f_hi_hz[0] / 2**0.125)
