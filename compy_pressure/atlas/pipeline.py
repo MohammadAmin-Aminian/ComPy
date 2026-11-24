@@ -130,7 +130,7 @@ def select(t, counts, cfg, edges, cube_kept):
             c.step(d.exclude_reason.fillna("").ne(why), str(why))
     c.step(
         d.n_windows >= p["min_windows"],
-        f"fewer than {p['min_windows']} windows (7 days)",
+        f"fewer than {p['min_windows']} windows ({p['min_windows'] / 16:g} day{'s' if p['min_windows'] != 16 else ''})",
     )
     if "gauge" in d:
         d["gauge"] = d.gauge.where(
@@ -233,10 +233,11 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     )  # the pipeline's key is seed_id
     t["gain_db"] = t.get("gain_db", pd.Series(0.0, index=t.index)).fillna(0.0)
     t = classify.add_classes(t, cfg)
-    if cfg["population"].get("band_rule", "atlas") == "W":
+    rule = cfg["population"].get("band_rule", "atlas")
+    if rule in ("W", "V"):
         from . import band_rule
 
-        t = band_rule.add_limits(t, cfg.get("band_rule") or None)
+        t = band_rule.add_limits(t, {**(cfg.get("band_rule") or {}), "rule": rule})
     t["f_lo"], t["f_hi"] = usable_limits(t, cfg)
     edges = db_edges(cfg)
     # 1. window screens and histograms of every channel
@@ -260,8 +261,8 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     bands = screens.band_screen(daily2, drops, a_tab, cfg)
     bands.to_csv(tdir / "screen_gauge_band.csv", index=False)
     edge = (
-        0.0 if cfg["population"].get("band_rule", "atlas") == "W" else 1.0
-    )  # rule W: hard edges
+        0.0 if cfg["population"].get("band_rule", "atlas") in ("W", "V") else 1.0
+    )  # rules W and V: hard edges
     U = np.vstack(
         [
             band_taper(lo, hi, edge_octaves=edge)
