@@ -233,6 +233,10 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     )  # the pipeline's key is seed_id
     t["gain_db"] = t.get("gain_db", pd.Series(0.0, index=t.index)).fillna(0.0)
     t = classify.add_classes(t, cfg)
+    if cfg["population"].get("band_rule", "atlas") == "W":
+        from . import band_rule
+
+        t = band_rule.add_limits(t, cfg.get("band_rule") or None)
     t["f_lo"], t["f_hi"] = usable_limits(t, cfg)
     edges = db_edges(cfg)
     # 1. window screens and histograms of every channel

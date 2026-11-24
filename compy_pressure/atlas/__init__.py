@@ -12,6 +12,7 @@ Modules:
     screens     channel cascade, level gates, P-Z calibration, day and band screens
     models      station-balanced percentiles and Peterson-style line fits
     figures     standard figures
+    band_rule   rule W: two limits per channel and window, from the instrument and the window
     pipeline    the whole build from a channel table
     cli         the ``compy-pressure-atlas`` command
     config      every threshold, with the values of the November 2026 atlas

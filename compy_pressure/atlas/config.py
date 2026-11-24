@@ -31,7 +31,12 @@ DEFAULTS = {
         "level_gate_usable_band_only": False,
         "one_hz_min_period_s": 4.0,  # 1-Hz channels: decimation filter not in StationXML (A3, 18 Nov 2026)
         "nyquist_fraction": 0.4,  # highest usable frequency as a fraction of the sampling rate
+        # "atlas": the limits of the channel table (response 20-dB limit, validated hydrophone cut-off).
+        # "W": two limits per channel and window from the response (3 dB), the sampling rate, the estimator, the
+        # sensor type and the validated pressure-vertical phase (band_rule.py); needs the native-rate file of each channel.
+        "band_rule": "atlas",
     },
+    "band_rule": {},  # overrides of band_rule.DEFAULTS, for the rule "W"
     "screens": {
         "cal_db": 20.0,  # P-Z calibration level against same-depth DPG/APG at 0.2 Hz
         "day_db": 20.0,  # day level against network peers of the same depth class
