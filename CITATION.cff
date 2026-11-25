@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use ComPy, please cite the software and the associated research article."
-title: "ComPy"
+title: "ComPy: ocean-bottom seismic and pressure data toolbox"
 type: software
 authors:
   - family-names: Aminian
@@ -10,13 +10,18 @@ version: 1.3.2.1
 date-released: 2026-11-25
 repository-code: "https://github.com/MohammadAmin-Aminian/ComPy"
 doi: "10.5281/zenodo.13380107"
-abstract: "ComPy processes broadband ocean-bottom seismometer and differential pressure gauge records into seafloor compliance and crustal shear-velocity models: data cleaning, tilt and coherent-noise removal, Rayleigh-wave pressure calibration, stacked compliance estimation and Bayesian inversion."
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24537180"
+    description: "Zenodo archive of version 1.3.2.1. The DOI above (10.5281/zenodo.13380107) always resolves to the latest version."
+abstract: "ComPy is an open Python toolbox for ocean-bottom seismic and pressure data. It turns broadband seismometer and pressure-gauge records into calibrated quantities and models: data cleaning, tilt and coherent-noise removal, pressure-gauge quality control and calibration, seafloor compliance, Bayesian shear-velocity inversion and a global atlas of seafloor pressure noise."
 keywords:
   - seafloor compliance
   - ocean-bottom seismometer
   - differential pressure gauge
   - shear velocity
   - Bayesian inversion
+  - seafloor pressure noise
 license: GPL-3.0-only
 preferred-citation:
   type: article
