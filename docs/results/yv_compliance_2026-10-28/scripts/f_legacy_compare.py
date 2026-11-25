@@ -74,7 +74,11 @@ def main():
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5), constrained_layout=True)
     axes[0].plot(
-        fc[band], old[band], "o-", color="#2a78d6", label="ComPy 1.2.1 (γ × gravity term)"
+        fc[band],
+        old[band],
+        "o-",
+        color="#2a78d6",
+        label="ComPy 1.2.1 (γ × gravity term)",
     )
     axes[0].plot(fc[band], new[band], "s-", color="#eb6834", label="ComPy 1.2.2")
     axes[0].set(xlabel="Frequency [Hz]", ylabel="Normalized compliance η [1/Pa]",
@@ -83,10 +87,14 @@ def main():
     axes[1].plot(fc[band], (new / old - 1)[band] * 100, "o-", color="#0b0b0b")
     axes[1].axhline(0, color="#9a9994", lw=1)
     axes[1].set(
-        xlabel="Frequency [Hz]", ylabel="1.2.2 / 1.2.1 − 1 [%]", title="Effect of fix D1"
+        xlabel="Frequency [Hz]",
+        ylabel="1.2.2 / 1.2.1 − 1 [%]",
+        title="Effect of fix D1",
     )
     fig.savefig(
-        ROOT / "figures" / "RR52_legacy_v1_2_1_vs_v1_2_2.png", dpi=110, bbox_inches="tight"
+        ROOT / "figures" / "RR52_legacy_v1_2_1_vs_v1_2_2.png",
+        dpi=110,
+        bbox_inches="tight",
     )
     print(json.dumps(report, indent=1))
 
