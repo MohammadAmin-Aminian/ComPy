@@ -1,14 +1,14 @@
 # XE (Pacific Array Young ORCA) compliance, Vs and serpentinization, 29–30 October 2026
 
 This is the second network processed with ComPy, after YV (RHUM-RUM; Aminian et al. 2025). It is the validation run of
-the end-to-end `pipeline/` of ComPy 2.4.
+the end-to-end `pipeline/` of ComPy 1.2.4.
 
 - Network: 30 Scripps broadband OBS (Trillium 240 + DPG, 50 Hz), 4386–4824 m water depth, April 2018 – May 2019, on
   ~40 Ma Pacific seafloor (Eilon et al. 2022).
 - Data: the PressureQC SDS archive, with responses from EarthScope (`metadata/XE.xml`).
 - Report: [`report/XE_young_orca_compliance_report.pdf`](report/XE_young_orca_compliance_report.pdf), in the layout of Aminian et al. (2025), with its
   LaTeX source.
-- Calibration: stage D of this run used `Pressure_calibration` from ComPy 2.4.0 (commit `7ad79c2`); the current
+- Calibration: stage D of this run used `Pressure_calibration` from ComPy 1.2.4.0 (commit `7ad79c2`); the current
   pipeline uses `compy_pressure` for stage D.
 
 ## Stations

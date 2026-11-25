@@ -1,4 +1,4 @@
-"""ComPy 3 audit: anomaly detectors, time-frequency helpers, references and figures."""
+"""ComPy 1.3 audit: anomaly detectors, time-frequency helpers, references and figures."""
 
 from pathlib import Path
 

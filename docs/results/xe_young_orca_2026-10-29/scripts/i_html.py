@@ -89,7 +89,7 @@ def main():
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap">
 <style>{CSS}</style>
 <div class="wrap">
-  <div class="kicker">ComPy 2.4 · second network · draft report</div>
+  <div class="kicker">ComPy 1.2.4 · second network · draft report</div>
   <h1>Shallow crustal shear velocity of ~40 Ma Pacific lithosphere from seafloor compliance at the Young ORCA array</h1>
   <div class="meta">For M.-A. Aminian · {html.escape(fill["DATE"])} · network XE (Pacific Array Young ORCA, 2018–2019) ·
    {len(nums["inverted"])} stations inverted</div>

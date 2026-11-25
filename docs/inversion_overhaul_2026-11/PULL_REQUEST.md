@@ -1,4 +1,4 @@
-# ComPy 3: a new default Vs inversion, with its audit
+# ComPy 1.3: a new default Vs inversion, with its audit
 
 **Vs results change. Compliance estimates do not.** Not for merging before the author has read `docs/inversion_overhaul_2026-11/REPORT.md` (PDF in the same folder).
 
@@ -18,7 +18,7 @@ The forward model (4e-7 against a 50-digit solver), the gravity corrections, the
 
 - `compy.inversion.auto` (`invert`, `SeafloorModel`, `compliance_data`), `compy.inversion.errors`, the `compy-invert` command, `compy.plotting.auto.station_figure`.
 - Stage C saves the bootstrap covariance of each stack; stage E runs the new inversion by default; figures and report stages read either result.
-- The 2.x inversion is unchanged and repeats an archived 2.8 run draw for draw.
+- The 1.2.x inversion is unchanged and repeats an archived 1.2.8 run draw for draw.
 - `docs/INVERSION.md` rewritten; user guide, README, example 4 and changelog updated.
 - 18 new tests; 940 pass.
 

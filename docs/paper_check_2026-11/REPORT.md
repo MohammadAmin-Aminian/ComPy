@@ -1,7 +1,7 @@
 # ComPy checked against the papers (November 2026)
 
 This note compares each stage of the ComPy pipeline with the papers it rests on. It was
-written before ComPy 3.0.0 was merged. Several of these papers could not be obtained for
+written before ComPy 1.3.0.0 was merged. Several of these papers could not be obtained for
 the inversion overhaul ([report](../inversion_overhaul_2026-11/REPORT.md), section 2); they
 were read here in the original.
 
@@ -82,7 +82,7 @@ change).
 
 ### Inversion (stage E)
 
-| Paper | ComPy 3 (`compy.inversion.auto`) | |
+| Paper | ComPy 1.3 (`compy.inversion.auto`) | |
 |---|---|---|
 | Half-space compliance `Vp^2 / (2 rho Vs^2 (Vp^2 - Vs^2))` (Crawford et al. 1991, eq. 7; Doran & Laske, eq. 4; Mosher et al., eq. 3) | the propagator gives it to 0.1-0.3 % for a uniform model (the size of the inertial term the formula leaves out) | same |
 | A linearised inversion holds for changes up to 10 % (Doran & Laske, Fig. 6) | the full forward model at every sample | not limited |

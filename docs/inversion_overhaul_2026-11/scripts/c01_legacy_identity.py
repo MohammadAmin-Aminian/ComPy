@@ -1,7 +1,7 @@
-"""C1: the ComPy 2.x stage E variant ``final`` still gives the archived draws.
+"""C1: the ComPy 1.2.x stage E variant ``final`` still gives the archived draws.
 
-Rebuilds the RR52 run of 12_inversion_all_stations (ComPy 2.8.0, variant ``final``)
-from its saved data and compares every draw. The sampler changes of ComPy 3
+Rebuilds the RR52 run of 12_inversion_all_stations (ComPy 1.2.8.0, variant ``final``)
+from its saved data and compares every draw. The sampler changes of ComPy 1.3
 (model log prior, Gaussian gain prior, new covariance terms) must not change a
 2.x run.
 
@@ -61,7 +61,7 @@ def main():
         identical=bool(same),
         max_abs_difference=diff,
         shape=list(post.theta.shape),
-        archived_version="2.8.0",
+        archived_version="1.2.8.0",
         archived_chi2=record["chi2"]["median"],
         chi2=post.summary()["chi2"]["median"],
     )

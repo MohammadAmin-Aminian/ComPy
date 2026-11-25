@@ -81,5 +81,5 @@ anyone else does.
    - stress tests;
    - the decision record (D1–D10 answered, with reasons and what was done).
 2. Scripts `docs/audit_2026-11-data/scripts/r01…`; tables in `data/`; figures in `figures/`.
-3. Tests passing, ruff clean. Small commits on `compy3-audit-data`, pushed. Add a comment
+3. Tests passing, ruff clean. Small commits on `audit-archive-data`, pushed. Add a comment
    on PR #23 that summarizes the findings and decisions.

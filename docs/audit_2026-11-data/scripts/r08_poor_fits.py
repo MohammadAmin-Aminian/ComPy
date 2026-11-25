@@ -3,7 +3,7 @@
 The inversion report flags J35A (chi2 246/13) and J44A (179/11). Their residuals
 are smooth and largest at the band top (0.82-0.91 f_c, where pressure is strongly
 attenuated) and, at J35A, at the band bottom (where the DPG response bias acts).
-Stage E (``final``, ComPy 2.8.0, fixed seeds) is rerun in new folders on:
+Stage E (``final``, ComPy 1.2.8.0, fixed seeds) is rerun in new folders on:
 
 * ``top075``: the same compliance with the band top capped at 0.75 f_c;
 * ``top075_corrected``: the same plus the DPG response correction (r06).

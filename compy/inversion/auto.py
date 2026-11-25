@@ -1,4 +1,4 @@
-"""Automatic Bayesian inversion of seafloor compliance (ComPy 3 default).
+"""Automatic Bayesian inversion of seafloor compliance (ComPy 1.3 default).
 
 One call, ``invert``, takes a compliance curve with its covariance and a
 reference Earth model at the station and returns shear velocity against depth
@@ -668,7 +668,7 @@ def compliance_data(freqs, eta, depth, *, cov_rel=None, sigma=None, band=None,
                     max_fraction_fc=0.8, response="unchecked", tilt_rel=None,
                     smooth_rel=MODEL_ERROR["smooth_rel"],
                     smooth_length=MODEL_ERROR["smooth_length"], station=""):  # fmt: skip
-    """``dram.ComplianceData`` with the default error model of ComPy 3.
+    """``dram.ComplianceData`` with the default error model of ComPy 1.3.
 
     Args:
         freqs, eta (array): Frequencies [Hz] and normalized compliance [1/Pa].
@@ -1052,7 +1052,7 @@ def load_result(path):
               for k, v in settings.items() if k in allowed}  # fmt: skip
     kwargs.setdefault(
         "monotonic", False
-    )  # results saved before ComPy 3.1 had no such rule
+    )  # results saved before ComPy 1.3.1 had no such rule
     model = SeafloorModel(np.array(settings["reference"], float), **kwargs)
     with np.load(path.with_name(path.name + ".npz")) as d:
         data = dram.ComplianceData(d["freqs"], d["eta"], float(d["depth"]), d["covariance"],

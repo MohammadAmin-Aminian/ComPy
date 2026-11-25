@@ -39,7 +39,7 @@ def _legacy_rows(depth_m):
 def _legacy_depth_ticks(max_depth_m=14000.0, step_m=2000.0):
     """Row positions and depth labels [m, negative down] for legacy heat maps.
 
-    Before 2.4 the ticks put row 12 at 2000 m (167-m rows) while each row is
+    Before 1.2.4 the ticks put row 12 at 2000 m (167-m rows) while each row is
     100 m, so features were labelled 5/3 too deep (docs/INVERSION.md, F1).
     """
     depths = np.arange(0.0, max_depth_m + step_m / 2, step_m)

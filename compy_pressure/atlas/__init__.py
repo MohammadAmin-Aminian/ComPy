@@ -1,4 +1,4 @@
-"""Global seafloor pressure-noise atlas (ComPy 3.2).
+"""Global seafloor pressure-noise atlas (ComPy 1.3.2).
 
 From an SDS archive and StationXML to station-balanced noise models of seafloor
 pressure gauges (DPG, APG, hydrophone), stratified by sensor, depth, distance to

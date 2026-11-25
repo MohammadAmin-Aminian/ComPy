@@ -132,7 +132,7 @@ The compliance stage E inverted was corrected for each station's leak-corner fac
 
 - from the tide where clear, otherwise from the phase;
 - with `compy.response_check.correct_compliance` (compliance, errors, monthly stacks);
-- stage E (variant `final`, ComPy 2.8.0, fixed seeds) rerun in
+- stage E (variant `final`, ComPy 1.2.8.0, fixed seeds) rerun in
   `13_audit/research/inversion_corrected`.
 
 | Station | k (source) | χ²/N before → after | Sediment [m] | ΔVs 0.5 km | ΔVs 1 km | ΔVs 3 km | ΔVs 5 km |
@@ -174,7 +174,7 @@ The user asked me to decide. **Implemented** = done on this branch or in the run
 | D7 | Reword D40 | **Yes** | RR36: vertical. RR50: vertical step plus a DPG change inside the stable epoch | Archive D48 |
 | D8 | Fix the atlas tide check | **Yes** | 7 APGs lost to a NaN | Atlas branch commit `94ba4e2`: 47 of 54 within 1 dB |
 | D9 | Save per-window levels in stage C | **Yes**, on by default (new file only) | The anomaly scan needs them | `pipeline/c_compliance.py` + test; bit-identical to the s01 levels on RR52 |
-| D10 | Merge #21–#23 as 2.9.0 | **Yes** | Defaults unchanged, CI green, 3 stacked PRs | Merged and tagged after this push |
+| D10 | Merge #21–#23 as 1.2.9.0 | **Yes** | Defaults unchanged, CI green, 3 stacked PRs | Merged and tagged after this push |
 
 ## 7. Still open
 

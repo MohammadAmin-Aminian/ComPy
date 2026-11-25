@@ -1,8 +1,8 @@
-"""Stage A: Bayesian Vs inversion of the YV broadband compliance (ComPy 2.3).
+"""Stage A: Bayesian Vs inversion of the YV broadband compliance (ComPy 1.2.3).
 
 Usage: python a_invert.py STATION [VARIANT ...]
 
-Input is the ComPy 2.2 compliance of 2026-10-28 (gain 'compy', which matches
+Input is the ComPy 1.2.2 compliance of 2026-10-28 (gain 'compy', which matches
 Aminian et al. 2025, Table 1). RR36, RR38, RR40 and RR50 use the stable
 epoch before their pressure/vertical sensitivity step. Monthly stacks give
 the month-to-month covariance. The Moho depth below the seafloor comes from

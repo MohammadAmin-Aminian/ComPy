@@ -1,10 +1,10 @@
-# Upper end of the compliance band (ComPy 3.2)
+# Upper end of the compliance band (ComPy 1.3.2)
 
 **Decision.** Stage C searches the compliance band up to **0.8 f_c**, where f_c = √(g / 2πH) is the frequency at
 which the water wavelength equals the depth (kH = 2π). In deep water 0.8 f_c is **kH = 4.0** (wavelength 1.57 H).
-The inversion has dropped bins above 0.8 f_c since ComPy 3.0 (`auto.compliance_data(max_fraction_fc=0.8)`); stage C
+The inversion has dropped bins above 0.8 f_c since ComPy 1.3.0 (`auto.compliance_data(max_fraction_fc=0.8)`); stage C
 now uses the same limit, so the windows are selected on the band that is inverted.
-Setting: `BAND_MAX_FRACTION_FC` in `pipeline/c_compliance.py` (1.0 restores ComPy 2.2-3.1).
+Setting: `BAND_MAX_FRACTION_FC` in `pipeline/c_compliance.py` (1.0 restores ComPy 1.2.2-1.3.1).
 
 ## What the papers do
 
@@ -38,7 +38,7 @@ place it between 0.7 and 1.4 f_c. The upper values come from shallow sites or fr
   the growth stops (+0.7 %, interquartile -5.0 to +3.4 %); at 0.9-1.0 f_c it collapses for a quarter of the stations
   (-2.7 %, interquartile -27 to +6 %). Where the pressure signal fades, noise on the pressure biases S_pp up and
   the compliance down.
-- **Band ends of ComPy 3.1.** Median 0.75 f_c (kH 3.5); 77 of 287 stations ended above 0.8 f_c, none above f_c.
+- **Band ends of ComPy 1.3.1.** Median 0.75 f_c (kH 3.5); 77 of 287 stations ended above 0.8 f_c, none above f_c.
 
 ## Effect of the change
 
