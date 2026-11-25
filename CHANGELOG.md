@@ -71,6 +71,16 @@ already excluded.
   and from the archived run scripts under `docs/results`; the scripts of the October runs now show
   `/Volumes/DATA` where the drive was named.
 
+### Pressure atlas: rule W, two limits per window
+
+- New `compy_pressure.atlas.band_rule` and option `population.band_rule = "W"` (default `"atlas"`: the band of the
+  channel table, so the November 2026 atlas is unchanged). Every window gets a low and a high frequency from the
+  instrument and from the window: sampling rate, StationXML response (3 dB), a self-noise cap by sensor type taken from
+  the gauges (APG 0.745 Hz, DPG 13 Hz), the Welch resolution of the estimator (468 s), the context of the window
+  (300 s), the pressure-vertical phase cut-off of the hydrophones and the DPG time constant (300 s).
+  `compy-pressure-atlas band-rule` writes a channel table with the limits and what set each of them
+  ([docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md)). Tests in `tests/test_pressure_atlas_band_rule.py`.
+
 ## 1.3.2.0 — 2026-11-20
 
 ### Pressure atlas in the package

@@ -251,6 +251,13 @@ def main(argv=None):
     )
     b.add_argument("table")
     b.add_argument("--out", required=True)
+    r = sub.add_parser(
+        "band-rule",
+        help="rule W: two limits per channel (and window) from the response, sampling, sensor type and phase",
+    )
+    r.add_argument("table")
+    r.add_argument("--out", required=True)
+    r.add_argument("--config")
     c = sub.add_parser("build", help="selection, screens, models and figures")
     c.add_argument("table")
     c.add_argument("--out", required=True)
@@ -283,6 +290,20 @@ def main(argv=None):
         for k, v in d.items():
             t[k] = v.round(2)
         t.to_csv(args.out, index=False)
+    elif args.cmd == "band-rule":
+        from . import band_rule
+
+        t = band_rule.add_limits(
+            pd.read_csv(args.table, low_memory=False),
+            cfgmod.load(args.config).get("band_rule") or None,
+        )
+        t.to_csv(args.out, index=False)
+        print(
+            t.groupby("type")[["f_lo_hz", "f_hi_hz"]].median().to_string(),
+            t.groupby(["type", "band_rule_lo_by"]).size().to_string(),
+            t.groupby(["type", "band_rule_hi_by"]).size().to_string(),
+            sep="\n",
+        )
     else:
         from . import pipeline
 

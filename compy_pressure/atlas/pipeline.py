@@ -233,6 +233,10 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     )  # the pipeline's key is seed_id
     t["gain_db"] = t.get("gain_db", pd.Series(0.0, index=t.index)).fillna(0.0)
     t = classify.add_classes(t, cfg)
+    if cfg["population"].get("band_rule", "atlas") == "W":
+        from . import band_rule
+
+        t = band_rule.add_limits(t, cfg.get("band_rule") or None)
     t["f_lo"], t["f_hi"] = usable_limits(t, cfg)
     edges = db_edges(cfg)
     # 1. window screens and histograms of every channel
@@ -255,7 +259,15 @@ def build(table_path, out, cfg, workers=8, make_figures=True):
     a_tab = a_tab.rename(columns={"seed_id": "key"})
     bands = screens.band_screen(daily2, drops, a_tab, cfg)
     bands.to_csv(tdir / "screen_gauge_band.csv", index=False)
-    U = np.vstack([band_taper(lo, hi) for lo, hi in zip(a_tab.f_lo, a_tab.f_hi)])
+    edge = (
+        0.0 if cfg["population"].get("band_rule", "atlas") == "W" else 1.0
+    )  # rule W: hard edges
+    U = np.vstack(
+        [
+            band_taper(lo, hi, edge_octaves=edge)
+            for lo, hi in zip(a_tab.f_lo, a_tab.f_hi)
+        ]
+    )
     pos = {k: i for i, k in enumerate(a_tab.key)}
     for r in bands[bands.removed].itertuples():
         lo, hi = cfg["bands"][r.band]

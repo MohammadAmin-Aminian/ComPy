@@ -82,6 +82,35 @@ StationXML does not describe. They are used from 4 s (`population.one_hz_min_per
    gauge's usual offset); deep gauges without peers against their own median (30 dB).
 4. **Band screen**, gauges at 1000 m or deeper: a band median more than 25 dB from peers removes that band.
 
+## Two limits per window (`band_rule`, rule W)
+
+The usable band of a channel can be the one of the channel table (response 20-dB limit and validated hydrophone
+cut-off; the atlas of November 2026) or rule W, selected with `population.band_rule = "W"` or the command
+`compy-pressure-atlas band-rule TABLE --out TABLE_W.csv`. Rule W needs the native-rate file of each channel (column
+`product`) for its response, and gives every window a low and a high frequency with a stated reason. A bin is kept when
+its centre lies in `[f_lo, f_hi]` of its window; in the models the band has hard edges (no taper over the outer octave).
+
+| Limit | Value | Source |
+|---|---|---|
+| high | `0.4 fs / 2^(1/8)` | sampling rate: the 1/4-octave bin stays under 0.8 Nyquist |
+| high | frequency where the response of the epoch of the window is 3 dB under the nominal sensitivity | StationXML |
+| high | self-noise cap by sensor type: highest frequency where the median of the type stays within 6 dB of the hydrophones (gauges deeper than 1000 m): APG 0.745 Hz, DPG 13 Hz, hydrophone none | the gauges (`empirical_caps`) |
+| low | the 1/4-octave band holds one Welch bin of the 2700-s segment: a period of 468 s | estimator |
+| low | a window without 6 h of context on each side has no level beyond 300 s | window |
+| low | hydrophone: the cut-off validated on the pressure-vertical phase, else the response (-3 dB) | phase, StationXML |
+| low | DPG: the response (-3 dB) and a period of at most 300 s (time constant implied by the data 241 s against 80 s in the metadata) | StationXML, gauges |
+| low | APG: none | flat to DC |
+
+The high limit is the lowest, the low limit the highest of its rows. The quantisation floor of the digitiser,
+`-10 log10(6 fs) - 10 log10 |R|^2`, was checked and is at least 30 dB under the levels of every channel of the archive,
+so it is not part of the rule. `empirical_caps` recomputes the self-noise caps from the median spectra of a new archive.
+
+On the 381 gauges of the November 2026 archive the median spectrum moves by less than 0.5 dB between 0.3 and 20 s; the
+gauges that cover 3-10 s stay 325, those that cover 15-50 s fall from 292 to 210, 100-170 s from 270 to 175 (networks
+from 15 to 10), and no gauge covers 300-1000 s (the longest period kept is 468 s, for the APGs). Below 0.2 s only the
+hydrophones remain, and the 95 % curve of the model falls by up to 30 dB there (the noise of the APGs and DPGs).
+DPGs of other brands than SIO keep less: INSU 117 s, generic 78 s, LDEO 30 s (their responses fall 3 dB there).
+
 ## Models
 
 Each gauge counts once. Its histogram of window levels, shifted by its gain, is normalised at each period and
