@@ -363,8 +363,11 @@ networks recomputed from the waveforms with one estimator (3-h windows, 0.02 to
 (186 DPGs, 62 APGs, 133 hydrophones; 52 to 5788 m of water) enter the models
 ([docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md)).
 
-<p align="center"><a href="docs/results/pressure_atlas_2026-11/global_density.png"><img src="docs/results/pressure_atlas_2026-11/global_density.png" width="800" alt="Density of seafloor pressure spectra of 381 gauges with the 5 %, median and 95 % models"></a></p>
-<p align="center"><sub><b>Seafloor pressure noise, 381 gauges.</b> Station-balanced density of the 3-h spectra with the 5 %, median and 95 % models (white); teal: the low and high hydroacoustic noise models of the IDC (Brown et al. 2014, approximate digitization; dashed below 0.2 Hz). The microseism peak, the noise notch and the infragravity plateau; water depth sets where the plateau ends (kH = 4.4).</sub></p>
+<p align="center"><a href="docs/results/pressure_atlas_2026-11/atlas_map_gauges.png"><img src="docs/results/pressure_atlas_2026-11/atlas_map_gauges.png" width="760" alt="Map of the 381 gauges of the noise models, depth by sensor type, gauges per network"></a></p>
+<p align="center"><sub><b>The gauges of the atlas.</b> (a) 381 gauges of 21 networks: differential pressure gauges (DPG), absolute pressure gauges (APG) and hydrophones. (b) Water depth by sensor type. (c) Gauges per network.</sub></p>
+
+<p align="center"><a href="docs/results/pressure_atlas_2026-11/atlas_global_model.png"><img src="docs/results/pressure_atlas_2026-11/atlas_global_model.png" width="760" alt="Density of seafloor pressure spectra with the 5 %, median and 95 % models and published reference curves"></a></p>
+<p align="center"><sub><b>Seafloor pressure noise, deep-ocean model.</b> Density of the 3-h spectra of the gauges deeper than 200 m (each gauge counts once), with the 5 %, median and 95 % models (black) and the published curves: moored hydrophones (Brown et al. 2014), the ranges of Webb (1998) and the infragravity model of Godin et al. (2013).</sub></p>
 
 ### RHUM-RUM (YV), Indian Ocean
 
