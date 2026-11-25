@@ -1,4 +1,4 @@
-"""Vs inversion of a compliance curve with compy.inversion.auto (ComPy 3).
+"""Vs inversion of a compliance curve with compy.inversion.auto (ComPy 1.3).
 
 Usage (repository root):
     python examples/4_Vs_inversion.py                      # offline, synthetic

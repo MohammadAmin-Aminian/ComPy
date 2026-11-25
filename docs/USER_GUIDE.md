@@ -6,16 +6,16 @@ The step-by-step workflow with figures is in the [README](../README.md).
 
 - [Input conventions](#input-conventions)
 - [Compliance estimators](#compliance-estimators)
-- [Module layout and ComPy 2.x names](#module-layout-and-compy-2x-names)
+- [Module layout and ComPy 1.2.x names](#module-layout-and-compy-2x-names)
 - [Vs inversion (`compy.inversion.auto`)](#vs-inversion-compyinversionauto)
-- [The ComPy 2.x Bayesian inversion (`compy.inversion.dram`)](#the-compy-2x-bayesian-inversion-compyinversiondram)
+- [The ComPy 1.2.x Bayesian inversion (`compy.inversion.dram`)](#the-compy-2x-bayesian-inversion-compyinversiondram)
 - [Metropolis forward model and inversion (`compy.inversion.metropolis`)](#metropolis-forward-model-and-inversion-compyinversionmetropolis)
 - [Deep-crust inversion tools](#deep-crust-inversion-tools)
 - [Pressure-gauge QC and calibration (`compy_pressure`)](#pressure-gauge-qc-and-calibration-compy_pressure)
 - [Plotting](#plotting)
 - [Testing and reproducible runs](#testing-and-reproducible-runs)
 
-## Module layout and ComPy 2.x names
+## Module layout and ComPy 1.2.x names
 
 | Module | Contents |
 |---|---|
@@ -34,14 +34,14 @@ The step-by-step workflow with figures is in the [README](../README.md).
 | `compy.plotting` | `style`, `spectra`, `inversion`, `qc` figures |
 | `compy.numerics` | constants, dispersion relation, shared maths |
 
-Scripts written for ComPy 2.x keep running: `inv_compy`, `ffplot`,
+Scripts written for ComPy 1.2.x keep running: `inv_compy`, `ffplot`,
 `compy_processing`, `compy_inversion`, `compy_numerics`, `compy_streams`,
 `compy_cleaning`, `compy_diagnostics` and the old names on `compy`
 (`compy.Calculate_Compliance`, `compy.Rotate`, ...) all resolve, with a
 `DeprecationWarning` naming the replacement. They will be removed in ComPy
-3.0. Main renames:
+1.3.0. Main renames:
 
-| ComPy 2.x | Now |
+| ComPy 1.2.x | Now |
 |---|---|
 | `compy.Calculate_Compliance`, `Calculate_Compliance_beta` | `compy.compliance.calculate_compliance`, `calculate_compliance_gated` |
 | `compy.Rotate`, `Rotate_angles` | `compy.preprocessing.correct_tilt`, `estimate_tilt_angles` |
@@ -156,7 +156,7 @@ Figures of every processing step for one station are in the
 
 ## Vs inversion (`compy.inversion.auto`)
 
-The default since ComPy 3. Method, priors and limits: [INVERSION.md](INVERSION.md);
+The default since ComPy 1.3. Method, priors and limits: [INVERSION.md](INVERSION.md);
 tests: [inversion_overhaul_2026-11/REPORT.md](inversion_overhaul_2026-11/REPORT.md).
 
 From the command line, on a stage C result or a CSV of the curve:
@@ -220,14 +220,14 @@ result = auto.load_result("RR52_auto")
 Chains run in spawned processes: call `invert` from a script guarded by
 `if __name__ == "__main__":` or from a notebook, or pass `processes=1`.
 
-## The ComPy 2.x Bayesian inversion (`compy.inversion.dram`)
+## The ComPy 1.2.x Bayesian inversion (`compy.inversion.dram`)
 
-The inversion of ComPy 2.3 to 2.8, kept to repeat earlier runs and as a check
+The inversion of ComPy 1.2.3 to 1.2.8, kept to repeat earlier runs and as a check
 (`pipeline/e_invert.py STATION final`). It shares the sampler and the forward
 model with `auto`. Its flat prior with second-difference smoothing, its 1 %
 independent error floor and its single Vp/Vs for all layers are the reasons it
 is no longer the default; see [INVERSION.md](INVERSION.md) and
-[INVERSION_2x.md](INVERSION_2x.md).
+[INVERSION_1_2x.md](INVERSION_1_2x.md).
 
 ```python
 from compy.inversion import dram as ci
@@ -372,7 +372,7 @@ The propagator agrees with an independent Aki & Richards solver to about 1e-6.
 Compliance senses structure to roughly λmax/6 of the longest water wave
 (Crawford et al. 1991): about 9 km at 4.2 km water depth and 3.5 mHz. Compare
 posterior and prior-only widths to see which depths the data resolve.
-Compliance measured with ComPy before 2.0 lacks the wave-attraction term; apply
+Compliance measured with ComPy before 1.2.0 lacks the wave-attraction term; apply
 `compy.numerics.legacy_wave_attraction_correction` before inverting it.
 
 ```bash
@@ -410,7 +410,7 @@ compy-pressure pressure --data-dir $SDS --inventory-dir $XML --master-dir run/ma
 
 Commands, outputs and the Python interface: [PRESSURE.md](PRESSURE.md).
 
-### Migrating from `Pressure_calibration` (ComPy ≤ 2.4.0)
+### Migrating from `Pressure_calibration` (ComPy ≤ 1.2.4.0)
 
 | `calculate_spectral_ratio` | `compy_pressure` |
 |---|---|
@@ -423,7 +423,7 @@ Commands, outputs and the Python interface: [PRESSURE.md](PRESSURE.md).
 | `water_density` | `density` (1028 kg/m³); depth from the StationXML elevation |
 | `return_details=True` | `comparison.json`: per-event gains, median and scatter |
 
-Scripts that import `Pressure_calibration` run with ComPy 2.4.0 (commit `7ad79c2`).
+Scripts that import `Pressure_calibration` run with ComPy 1.2.4.0 (commit `7ad79c2`).
 
 ## Plotting
 

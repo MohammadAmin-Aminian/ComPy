@@ -1,4 +1,4 @@
-# ComPy 2.1 validation record
+# ComPy 1.2.1 validation record
 
 ## Scope
 
@@ -80,7 +80,7 @@ CI also installs the built wheel into an isolated virtual environment and runs
 the synthetic inversion outside the checkout. This catches packaging defects
 that editable-install tests can miss.
 
-## Version 2.1 workflow checks
+## Version 1.2.1 workflow checks
 
 Diagnostics use ArviZ rather than a new implementation of Rhat or ESS. Tests
 check responses to shifted locations, different scales, serial correlation,

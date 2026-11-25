@@ -1,4 +1,4 @@
-# ComPy 2.5.0 — 30 October 2026
+# ComPy 1.2.5.0 — 30 October 2026
 
 ComPy now includes PressureQC 1.3.0 as `compy_pressure`, with the original
 campaign scripts, methods and tests under `pressure/`. The dated PressureQC
@@ -8,7 +8,7 @@ reports remain linked to their archived source.
 
 `Pressure_calibration.py` has been removed. Use the
 [calibration migration table](USER_GUIDE.md#pressure-gauge-qc-and-calibration-compy_pressure). The tag
-`v2.4.0` preserves commit `7ad79c2`, including the old calibration module
+`v1.2.4.0` preserves commit `7ad79c2`, including the old calibration module
 needed by the historical YV/XE scripts. The release stays in the 2.x series
 at the owner's request despite this documented API removal.
 
@@ -35,7 +35,7 @@ the complete pipeline, examples and `pressure/` project folder.
 - Ruff lint, formatting and `git diff --check` pass.
 - The source archive and universal wheel build successfully.
 - The wheel was installed in separate environments outside the checkout
-  on Python 3.10 and 3.13. Both verify version 2.5.0, installed import paths,
+  on Python 3.10 and 3.13. Both verify version 1.2.5.0, installed import paths,
   packaged reference data and all eight console commands, and run the
   offline synthetic inversion and pressure-QC workflow.
 - Regression coverage includes calibration station/channel/source changes,

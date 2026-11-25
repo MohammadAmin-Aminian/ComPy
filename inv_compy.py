@@ -1,4 +1,4 @@
-"""Deprecated: ComPy 2.x module, split into compy.inversion (and compy.plotting.inversion).
+"""Deprecated: ComPy 1.2.x module, split into compy.inversion (and compy.plotting.inversion).
 
 Every old name still resolves to its new home; renamed ones warn with the new
 name. See ``compy._legacy.LEGACY["inv_compy"]`` for the full table.

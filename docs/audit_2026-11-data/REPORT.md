@@ -1,9 +1,9 @@
-# Whole-archive audit: the open tests of the ComPy 3 and pressure audits, run on the data (November 2026)
+# Whole-archive audit: the open tests of the ComPy 1.3 and pressure audits, run on the data (November 2026)
 
-Branch `compy3-audit-data`, stacked on `pressure-audit` (PR #22), which is stacked on
-`compy3-audit` (PR #21). Those two audits ran without ObsPy or waveforms and left their
+Branch `audit-archive-data`, stacked on `pressure-audit` (PR #22), which is stacked on
+`audit-diagnostics` (PR #21). Those two audits ran without ObsPy or waveforms and left their
 discriminating tests "for the IPGP machine". This branch runs them on the whole-archive
-run (`~/Desktop/ComPy`, ComPy 2.7–2.8, November 2026):
+run (`~/Desktop/ComPy`, ComPy 1.2.7–1.2.8, November 2026):
 
 - **287 inverted stations** (at least 100 windows), in 17 networks;
 - cleaned 1.25 Hz data, raw counts, hourly tilt, 3-h PPSDs with cross-spectra;
@@ -30,7 +30,7 @@ Everything that would change a number is a question under [Decisions](#9-decisio
 | `s07_figures.py` | Figures and `numbers.json` | — |
 
 The waveform figures of #21 were made on real data with
-`examples/compy3_waveform_diagnostics.py` (`figures/waveform/`). Every number below is in
+`examples/audit_waveform_diagnostics.py` (`figures/waveform/`). Every number below is in
 [`numbers.json`](numbers.json) or in the tables of [`data/`](data/README.md).
 
 **Not run:**
@@ -132,7 +132,7 @@ Severity and status follow #21:
 | A10 | Low | `00_inventory/stationxml/XO.xml` (`build_stationxml.py`) | Station epochs do not cover the channel epochs: `select(time=…)` returns nothing at 36 XO stations | **Verified** | Any time-based selection fails silently | Open |
 | A11 | Low | ObsPy `get_evalresp_response_for_frequencies` | Returns 0 at 22 µHz for some responses (XE); scaled from 0.1 Hz with the analog part instead | **Verified** | Tide checks | Handled in s03 |
 | A12 | Low | `compy.anomaly.Anomaly.score` | Saturates at 40 (σ ≤ 8, effect ≤ 20 %), so hundreds of records tie and sort alphabetically | **Verified** | Ranking | Tie-break in s05; roadmap |
-| A13 | Low | `examples/compy3_waveform_diagnostics.py` | On cleaned data the tilt azimuth splits into two bands 180° apart (tilt already removed, sign random) | **Verified** (RR52) | Misleading figure | **Fixed** (docstring) |
+| A13 | Low | `examples/audit_waveform_diagnostics.py` | On cleaned data the tilt azimuth splits into two bands 180° apart (tilt already removed, sign random) | **Verified** (RR52) | Misleading figure | **Fixed** (docstring) |
 
 **Informational:**
 
@@ -286,7 +286,7 @@ The archive run folder gets `13_audit/` (cache, restacks, tables) and decision D
   - the corrected response itself (only its consistency with the tide);
   - the 8J and YV sensor attribution (§5.B).
 
-## 8. Roadmap update (ComPy 3)
+## 8. Roadmap update (ComPy 1.3)
 
 #21's ranking stands, with these changes (I = impact, E = effort, 1–5):
 
@@ -328,7 +328,7 @@ Each is a yes/no question. "Results change" means published or archived numbers 
   lost? (Y/N) Impact: atlas numbers (40/47 → up to 47/54).
 - **D9.** Save per-window levels in stage C by default (new file, no number changes)?
   (Y/N)
-- **D10.** Merge this branch with #21 and #22 as ComPy 2.9.0 (new modules, defaults
+- **D10.** Merge this branch with #21 and #22 as ComPy 1.2.9.0 (new modules, defaults
   unchanged)? (Y/N)
 
 ## References

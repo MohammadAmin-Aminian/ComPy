@@ -1,7 +1,7 @@
 """Run Stage E for every station whose compliance is ready, as results arrive.
 
 A station is ready when results/<STA>/<STA>_summary.json exists and its
-c_compliance log is complete; it is inverted once (variant auto, the ComPy 3
+c_compliance log is complete; it is inverted once (variant auto, the ComPy 1.3
 inversion, unless --variants names others). Stations listed with --redo-dc first rerun stages D and C.
 Stops when all stations in config.STATIONS are inverted or have failed, or
 after --max-hours.

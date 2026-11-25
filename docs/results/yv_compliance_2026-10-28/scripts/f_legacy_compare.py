@@ -1,4 +1,4 @@
-"""Stage F: ComPy 2.1 vs 2.2 legacy estimator on identical cleaned RR52 data.
+"""Stage F: ComPy 1.2.1 vs 1.2.2 legacy estimator on identical cleaned RR52 data.
 
 Both versions run ``estimate(..., beta=True)`` (the historical beta gates,
 2-h windows stepped by 5 min, nseg=4096) on the same Stage B output and the
@@ -41,30 +41,30 @@ def main():
     gain = summary["gains"]["pressure"]
     seg = str(ROOT / "work" / station / "clean" / f"{station}_seg*.mseed")
     out = {}
-    for label, code_dir in (("v2.1", ROOT / "work" / "compy_v2.1"),
-                            ("v2.2", ROOT.parent / "ComPy")):  # fmt: skip
+    for label, code_dir in (("v1.2.1", ROOT / "work" / "compy_v1.2.1"),
+                            ("v1.2.2", ROOT.parent / "ComPy")):  # fmt: skip
         path = ROOT / "results" / station / f"legacy_beta_{label}.json"
         subprocess.run([PY, "-c", CODE, str(code_dir), seg, str(depth), str(gain), str(path)],
                        check=True)  # fmt: skip
         out[label] = json.loads(path.read_text())
-    fc = np.array(out["v2.1"]["fc"])
-    old, new = np.array(out["v2.1"]["mean"]), np.array(out["v2.2"]["mean"])
+    fc = np.array(out["v1.2.1"]["fc"])
+    old, new = np.array(out["v1.2.1"]["mean"]), np.array(out["v1.2.2"]["mean"])
     band = (fc >= 0.007) & (fc <= 0.019)
     report = {
-        "windows": out["v2.2"]["n"],
+        "windows": out["v1.2.2"]["n"],
         "median_change_percent_in_band": float(np.median((new / old - 1)[band] * 100)),
         "max_change_percent_in_band": float(np.max(np.abs(new / old - 1)[band] * 100)),
         "change_percent_by_freq": {
             f"{f:.4f}": float(c) for f, c in zip(fc[band], (new / old - 1)[band] * 100)
         },  # fmt: skip
-        "theory_v2.1_median_rel": float(
-            np.median((np.array(out["v2.1"]["theory"]) / old)[band])
+        "theory_v1.2.1_median_rel": float(
+            np.median((np.array(out["v1.2.1"]["theory"]) / old)[band])
         ),
-        "theory_v2.2_median_rel": float(
-            np.median((np.array(out["v2.2"]["theory"]) / new)[band])
+        "theory_v1.2.2_median_rel": float(
+            np.median((np.array(out["v1.2.2"]["theory"]) / new)[band])
         ),
     }
-    (ROOT / "results" / station / "legacy_v21_vs_v22.json").write_text(
+    (ROOT / "results" / station / "legacy_v1_2_1_vs_v1_2_2.json").write_text(
         json.dumps(report, indent=1)
     )
     import matplotlib
@@ -74,19 +74,27 @@ def main():
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5), constrained_layout=True)
     axes[0].plot(
-        fc[band], old[band], "o-", color="#2a78d6", label="ComPy 2.1 (γ × gravity term)"
+        fc[band],
+        old[band],
+        "o-",
+        color="#2a78d6",
+        label="ComPy 1.2.1 (γ × gravity term)",
     )
-    axes[0].plot(fc[band], new[band], "s-", color="#eb6834", label="ComPy 2.2")
+    axes[0].plot(fc[band], new[band], "s-", color="#eb6834", label="ComPy 1.2.2")
     axes[0].set(xlabel="Frequency [Hz]", ylabel="Normalized compliance η [1/Pa]",
                 title=f"RR52 legacy beta estimator, {report['windows']} windows")  # fmt: skip
     axes[0].legend(frameon=False)
     axes[1].plot(fc[band], (new / old - 1)[band] * 100, "o-", color="#0b0b0b")
     axes[1].axhline(0, color="#9a9994", lw=1)
     axes[1].set(
-        xlabel="Frequency [Hz]", ylabel="2.2 / 2.1 − 1 [%]", title="Effect of fix D1"
+        xlabel="Frequency [Hz]",
+        ylabel="1.2.2 / 1.2.1 − 1 [%]",
+        title="Effect of fix D1",
     )
     fig.savefig(
-        ROOT / "figures" / "RR52_legacy_v21_vs_v22.png", dpi=110, bbox_inches="tight"
+        ROOT / "figures" / "RR52_legacy_v1_2_1_vs_v1_2_2.png",
+        dpi=110,
+        bbox_inches="tight",
     )
     print(json.dumps(report, indent=1))
 

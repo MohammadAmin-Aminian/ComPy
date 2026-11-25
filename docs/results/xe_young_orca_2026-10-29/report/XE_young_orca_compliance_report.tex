@@ -19,7 +19,7 @@
 \begin{document}
 \twocolumn[{
 \begin{center}
-{\small Draft report, 30 October 2026 \hfill ComPy 2.4.0}\\[10pt]
+{\small Draft report, 30 October 2026 \hfill ComPy 1.2.4.0}\\[10pt]
 {\LARGE\bfseries Shallow crustal shear velocity of $\sim$40\,Ma Pacific lithosphere\\[3pt]
 from seafloor compliance at the Young ORCA array}\\[12pt]
 {\large M.\,A. Aminian}\\[2pt]
@@ -28,7 +28,7 @@ prepared with Claude Code from the ComPy pipeline; to be checked by the author.}
 \begin{minipage}{0.86\textwidth}
 \small
 \textbf{SUMMARY}\\
-We apply the compliance method of Aminian et al.\ (2025), now implemented end to end in ComPy 2.4.0,
+We apply the compliance method of Aminian et al.\ (2025), now implemented end to end in ComPy 1.2.4.0,
 to a second broad-band ocean-bottom network: the 30-station Young ORCA array (FDSN code XE, 2018--2019)
 on $\sim$40\,Ma Pacific seafloor formed at the fast-spreading Pacific--Farallon ridge, at water depths of
 4386--4824\,m. The stations carry Nanometrics Trillium 240 seismometers and differential pressure gauges,
@@ -66,9 +66,9 @@ the same analysis give on crust that is \emph{not} expected to contain serpentin
 $\sim$40\,Ma Pacific lithosphere, formed at the fast-spreading Pacific--Farallon ridge, a setting where the crust is
 fully magmatic and layered in the classical way (e.g.\ Christeson et al.\ 2019).
 
-This report applies ComPy 2.4.0, which now runs from the raw archive to compliance, Vs and
+This report applies ComPy 1.2.4.0, which now runs from the raw archive to compliance, Vs and
 serpentinization unattended, to the whole network, using the method of Aminian et al.\ (2025) with the corrections
-of ComPy 2.2--2.4 (Section~4). We present the compliance functions, the Vs models and their resolution, and
+of ComPy 1.2.2--1.2.4 (Section~4). We present the compliance functions, the Vs models and their resolution, and
 discuss what they imply for the serpentinization interpretation.
 
 \section{Theory}
@@ -82,7 +82,7 @@ where $\hat S_{pz}$ and $\hat S_{pp}$ are the cross- and pressure spectra stacke
 $a_w/p = 2\pi (G/g)\,e^{-kH}\cosh kH$ is the gravitational attraction of the passing water mass per unit pressure, and $2g/R$
 the free-air gradient (Crawford et al.\ 1998). The ratio $|\hat S_{pz}|/\hat S_{pp}$ equals the coherence times
 $\sqrt{\hat S_{zz}/\hat S_{pp}}$ used in the paper's eq.~(6). The wave-attraction term is deterministic and is not
-multiplied by the coherence: earlier ComPy versions did so (2.0--2.1) or dropped it (before 2.0), which biased $\eta$
+multiplied by the coherence: earlier ComPy versions did so (1.2.0--1.2.1) or dropped it (before 1.2.0), which biased $\eta$
 low at the lowest frequencies. The random error follows Bendat \& Piersol (1993),
 \begin{equation}
 \epsilon[\hat\eta] = \frac{\sqrt{1-\hat\gamma^2}}{|\hat\gamma|\sqrt{2n_d}}\,|\hat\eta|,
@@ -210,7 +210,7 @@ windows, coherogram (c), and their band averages (right). Dashed lines: complian
 \end{figure*}
 
 \subsection{Shear-velocity inversion}
-The inversion follows the parameterization of Zha \& Webb (2016) as implemented in ComPy 2.3. A sediment layer of free thickness
+The inversion follows the parameterization of Zha \& Webb (2016) as implemented in ComPy 1.2.3. A sediment layer of free thickness
 (0--1000\,m) has Hamilton (1976, 1979) Vs and Vp profiles. Below it, crustal layers 100, 200, 400, 800 and 1600\,m thick reach
 the CRUST1.0 Moho at the station, above a mantle half-space. Crustal Vs is uniform on 0.5--4.7\,km\,s$^{-1}$ with a hierarchical
 second-difference smoothing prior. Crustal Vp/Vs is free on 1.7--2.4 with density from Christensen \& Shaw (1970), and the
@@ -347,7 +347,7 @@ the steep gradient at the top of the crust.
 \textit{What this means for serpentinization.} Fed through the Miller \& Christensen (1997) relation, the upper-crustal
 velocities at Young ORCA would read as 63\,per\,cent serpentinization at 1\,km, comparable with the values now
 obtained beneath the SWIR stations of RHUM-RUM (30--55\,per\,cent at 2\,km with the corrected relation and models;
-ComPy 2.4 report). Serpentinite is not expected in this magmatic crust; the low Vs is the porosity of the extrusives.
+ComPy 1.2.4 report). Serpentinite is not expected in this magmatic crust; the low Vs is the porosity of the extrusives.
 Vs from compliance alone therefore cannot distinguish serpentinized peridotite from porous basalt. The SWIR interpretation
 has to rest on the geological setting (exhumed mantle in oblique, magma-poor sections; Sauter \& Cannat 2010) and, where possible,
 on independent constraints: Vp/Vs, which is high in serpentinite ($\geq$2.0; Christensen 2004) but is poorly resolved by
@@ -362,7 +362,7 @@ calibration event. (iii) A 1-D model ignores the abyssal-hill topography, partly
 1\,per\,cent covariance floor (Hulme et al.\ 2005). (iv) Stations with long clipped spans have short records.
 
 \section{Conclusions}
-ComPy 2.4.0 processed a second broad-band OBS network from the raw archive to compliance, shear velocity and
+ComPy 1.2.4.0 processed a second broad-band OBS network from the raw archive to compliance, shear velocity and
 serpentinization without manual intervention, after adding the removal of clipped data that this network required. At
 20 Young ORCA stations it measures compliance with coherence above 0.9 over 4.9--14.0\,mHz, and its
 Rayleigh-wave DPG calibration agrees with an independent microseism calibration. The inverted crust of $\sim$40\,Ma Pacific
@@ -372,7 +372,7 @@ compliance-derived Vs must be combined with geological and independent geophysic
 
 \section*{Data and software}
 Young ORCA data (FDSN network XE, 2018--2019) are distributed by the EarthScope Consortium (IRIS DMC). ComPy
-2.4.0, including the pipeline and the scripts of this run, is at \url{https://github.com/MohammadAmin-Aminian/ComPy}.
+1.2.4.0, including the pipeline and the scripts of this run, is at \url{https://github.com/MohammadAmin-Aminian/ComPy}.
 Run folder: \texttt{PressureQC/compliance\_xe\_2026-10-29}.
 
 \footnotesize

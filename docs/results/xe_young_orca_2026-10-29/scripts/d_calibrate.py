@@ -1,6 +1,6 @@
 """Stage D: ComPy's own teleseismic DPG gain for one station (gain 'compy').
 
-Runs Pressure_calibration.calculate_spectral_ratio (ComPy 2.2, defaults:
+Runs Pressure_calibration.calculate_spectral_ratio (ComPy 1.2.2, defaults:
 M >= 7 events, 0.02–0.06 Hz, magnitude-squared coherence median and mean
 > 0.97, 512-sample Welch segments) on the decimated raw counts (1.25 Hz)
 with the network StationXML responses. Event start times come from the saved

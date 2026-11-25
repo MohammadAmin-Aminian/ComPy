@@ -129,7 +129,7 @@ def fig2():
     ax.text(
         1.03,
         0.05,
-        "1 % floor of ComPy 2.x",
+        "1 % floor of ComPy 1.2.x",
         rotation=90,
         color=MUTED,
         fontsize=8,
@@ -197,8 +197,8 @@ def fig3():
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.2), gridspec_kw=dict(wspace=0.32))
     ax = axes[0]
     for d, label, color in (
-        (old, "ComPy 2.8 (1 % independent floor)", ORANGE),
-        (new, "ComPy 3 (measured + tilt + smooth)", BLUE),
+        (old, "ComPy 1.2.8 (1 % independent floor)", ORANGE),
+        (new, "ComPy 1.3 (measured + tilt + smooth)", BLUE),
     ):
         sig = np.sqrt(np.diag(d["covariance"])) / d["eta"]
         ax.plot(1e3 * d["freqs"], 100 * sig, "o-", color=color, lw=2, ms=4, label=label)
@@ -210,7 +210,7 @@ def fig3():
     )
     ax.legend(loc="lower left")
     ax = axes[1]
-    for d, label, color in ((old, "ComPy 2.8", ORANGE), (new, "ComPy 3", BLUE)):
+    for d, label, color in ((old, "ComPy 1.2.8", ORANGE), (new, "ComPy 1.3", BLUE)):
         c = d["covariance"]
         sd = np.sqrt(np.diag(c))
         corr = c / np.outer(sd, sd)

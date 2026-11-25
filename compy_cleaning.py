@@ -1,4 +1,4 @@
-"""Deprecated alias of :mod:`compy.cleaning` (ComPy 2.x module name)."""
+"""Deprecated alias of :mod:`compy.cleaning` (ComPy 1.2.x module name)."""
 
 import sys
 

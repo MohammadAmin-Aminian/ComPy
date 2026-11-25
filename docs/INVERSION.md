@@ -1,6 +1,6 @@
-# Shear-velocity inversion in ComPy 3
+# Shear-velocity inversion in ComPy 1.3
 
-This note describes the default inversion, `compy.inversion.auto`: what seafloor compliance measures, the errors, the model and its priors, the sampler, the outputs and their limits. The tests behind each choice are in [inversion_overhaul_2026-11/REPORT.md](inversion_overhaul_2026-11/REPORT.md). The inversions of ComPy 2.3 to 2.8 are described in [INVERSION_2x.md](INVERSION_2x.md); they still run, as checks.
+This note describes the default inversion, `compy.inversion.auto`: what seafloor compliance measures, the errors, the model and its priors, the sampler, the outputs and their limits. The tests behind each choice are in [inversion_overhaul_2026-11/REPORT.md](inversion_overhaul_2026-11/REPORT.md). The inversions of ComPy 1.2.3 to 1.2.8 are described in [INVERSION_1_2x.md](INVERSION_1_2x.md); they still run, as checks.
 
 ## 1. Run it
 
@@ -66,7 +66,7 @@ The bin-to-bin shape of a stacked curve is known to a few tenths of a per cent. 
 - **Smooth**: 0.5 % with a correlation length of 0.5 in ln f, for what a 1-D elastic model and the estimator leave out.
 - **Gain**: not in the covariance. The pressure gain is a sampled factor with a Gaussian prior, 5 % for a calibrated gauge and 20 % for a nominal one.
 
-There is no independent "floor" per bin. The 1 % floor of ComPy 2.x was five times the real scatter, which is why its fits had chi-square/N near 0.4, and it was too strict on slope errors.
+There is no independent "floor" per bin. The 1 % floor of ComPy 1.2.x was five times the real scatter, which is why its fits had chi-square/N near 0.4, and it was too strict on slope errors.
 
 Band. Stage C chooses the band from coherence. Two further limits are automatic: bins above 0.8 of the cut-off frequency `f_c = sqrt(g / 2 pi H)` are dropped, and bins at the band edges whose bootstrap scatter exceeds 2.5 times that of the quiet half of the band are dropped (`errors.usable_bins`). The second catches the collapse of the estimate where the pressure signal no longer reaches the seafloor, which coherence alone does not: at shelf station 7D.J09B it removes everything above 34 mHz.
 
@@ -79,7 +79,7 @@ Estimator. H1 = |S_pz|/S_pp is right when the incoherent noise is on the vertica
 | Part | Parameters | Prior | Source |
 |---|---|---|---|
 | Soft sediment | thickness | uniform 0-2000 m, or Gaussian from a sediment map if given | Zha & Webb (2016) use 0-2000 m |
-| | Vs scale on the Hamilton profile | lognormal, sigma 0.3, bounds 0.4-2.5 | Hamilton (1976, 1979) as coded in ComPy 2.3; `dram.ruan_vs` (Ruan et al. 2014, the profile of Zha & Webb 2016) can be given as `sediment_vs` and lies inside this prior |
+| | Vs scale on the Hamilton profile | lognormal, sigma 0.3, bounds 0.4-2.5 | Hamilton (1976, 1979) as coded in ComPy 1.2.3; `dram.ruan_vs` (Ruan et al. 2014, the profile of Zha & Webb 2016) can be given as `sediment_vs` and lies inside this prior |
 | | P-modulus factor on Hamilton Vp | lognormal, sigma 0.15 | see point 2 of section 2 |
 | | density | Nafe-Drake curve of Vp (1.64 g/cc at the seafloor), not a constant 2.0 | Brocher (2005, eq. 1), via a published implementation |
 | Crust | Vs of each layer; layers 100 m doubling in thickness | ln Vs Gaussian about the reference, sigma 0.3, correlation 0.7 between neighbours; bounds 300-4800 m/s | layers: Zha & Webb (2016) |
@@ -94,9 +94,9 @@ The reference is the CRUST1.0 column of the station's 1-degree cell, or any laye
 
 Why this prior. The earlier inversion used a flat prior on each layer with a hierarchical penalty on second differences. That penalty extrapolates the shallow gradient into the layers the data do not see and pushes them to the bounds. A Gaussian prior about a reference is proper: where the data say nothing the result returns to the reference with the stated width, and the figure shows it.
 
-**Ordering rules (since 3.1).** Two hard rules are part of the prior, in the sense of Tarantola (2005, section 1.4.2): a model that breaks one has prior probability zero.
+**Ordering rules (since 1.3.1).** Two hard rules are part of the prior, in the sense of Tarantola (2005, section 1.4.2): a model that breaks one has prior probability zero.
 
-1. *Moho rule*: the mantle is faster than every layer above it. Until 3.0 the rule compared the mantle only with the layer directly above the Moho, so a model could have a mantle slower than its own middle crust; on the Young ORCA array up to 36 % of the sampled models of a station did.
+1. *Moho rule*: the mantle is faster than every layer above it. Until 1.3.0 the rule compared the mantle only with the layer directly above the Moho, so a model could have a mantle slower than its own middle crust; on the Young ORCA array up to 36 % of the sampled models of a station did.
 2. *Monotonic rule*: Vs does not decrease with depth, from the seafloor to the mantle. In normal oceanic crust away from a ridge axis, cracks close and porosity falls with depth and there is no melt, so a low-velocity zone is not expected. Without the rule, 95 to 100 % of the sampled models of each Young ORCA station had a velocity decrease somewhere in the crust. The data do not ask for it at 24 of the 26 stations, where chi-square changes by less than 1 with the rule; it rises by 3.3 (9 data) at WC04 and by 10.3 (6 data) at CC02. With the Moho rule alone, the decreases stay: the median profile of 17 stations keeps a downward step of more than 20 m/s. It comes from the anticorrelation of the errors of neighbouring depths, which Mosegaard & Tarantola (1995, figure 16) describe for a gravity example: a layer that is too fast is paid for by a slow one next to it.
 
 Both rules apply to the whole layer grid, including the grid layers below the Moho, so they do not depend on the Moho depth and leave its prior as stated. Because every sampled model is ordered, every quantile of Vs against depth is ordered too: the median profile cannot show a spike or a downward step that the models do not have. The rules change the prior of Vs: three thin layers with the same reference Vs become, on average, a gradient (at Young ORCA the prior median of the top 100 m of basement falls from 2.55 to 1.73 km/s, and the posterior follows it there because the data do not resolve that layer). The prior shown in every figure and used for the resolution ratio is drawn with the rules.
@@ -137,4 +137,4 @@ Delayed-rejection adaptive Metropolis with parallel tempering (`compy.inversion.
 
 Read in full or in the sections used: Aminian et al. (2025) GJI 242, ggaf253. Mosegaard & Tarantola (1995) JGR 100, 12431-12447. Tarantola (2005) Inverse Problem Theory, SIAM (chapters 1 and 2). Crawford et al. (1999) JGR 104, 2923-2939. Crawford (1994) PhD thesis, UCSD. Crawford (2004) GJI 157, 1130-1145. Crawford et al. (2002) EPSL. Hulme et al. (2003, 2005) GJI. Janiszewski et al. (2019) GJI 217. Mosher et al. (2021) GJI 227. Zha (2014) PhD thesis, Columbia (contains Zha et al. 2014 and Zha & Webb 2016).
 
-Used through a secondary source, named where used: Brocher (2005) BSSA 95 (R package hydrogeo). Carlson & Raskin (1984) (Crawford 1994). Christensen & Shaw (1970) (Zha 2014). Crawford et al. (1991, 1998) JGR (Crawford 1994, 2004; Zha 2014). Haario et al. (2001, 2006) (ComPy 2.3; Zha 2014). Hamilton (1976, 1979) (ComPy 2.3; Zha 2014). Shen et al. (2013) (Zha 2014). Vehtari et al. (2021) (ComPy 2.3).
+Used through a secondary source, named where used: Brocher (2005) BSSA 95 (R package hydrogeo). Carlson & Raskin (1984) (Crawford 1994). Christensen & Shaw (1970) (Zha 2014). Crawford et al. (1991, 1998) JGR (Crawford 1994, 2004; Zha 2014). Haario et al. (2001, 2006) (ComPy 1.2.3; Zha 2014). Hamilton (1976, 1979) (ComPy 1.2.3; Zha 2014). Shen et al. (2013) (Zha 2014). Vehtari et al. (2021) (ComPy 1.2.3).
