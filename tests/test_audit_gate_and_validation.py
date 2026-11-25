@@ -1,6 +1,6 @@
-"""ComPy 3 audit: the stacked estimator is unchanged, the new gate removes its bias.
+"""ComPy 1.3 audit: the stacked estimator is unchanged, the new gate removes its bias.
 
-The reference below is the 2.8.0 body of ``stacked_compliance`` applied to
+The reference below is the 1.2.8.0 body of ``stacked_compliance`` applied to
 precomputed spectra, frozen here so that any change to the default path is
 caught bit for bit. The archive test recomputes every published compliance
 in ``docs/results`` from its stored stack.
@@ -33,7 +33,7 @@ FS, N, NSEG, DEPTH = 1.25, 2625, 1024, 4000.0
 def _reference_stack(
     f, windows, depth, gain, band, criteria, nseg, n_samples, output_band
 ):
-    """ComPy 2.8.0 ``stacked_compliance`` loop, on (start, zz, pp, zp, coh) tuples."""
+    """ComPy 1.2.8.0 ``stacked_compliance`` loop, on (start, zz, pp, zp, coh) tuples."""
     f_min, f_max = band
     rejected = {"coherence": 0, "pressure_psd": 0, "acceleration_psd": 0}
     zz_sum = pp_sum = zp_sum = coh_sum = None

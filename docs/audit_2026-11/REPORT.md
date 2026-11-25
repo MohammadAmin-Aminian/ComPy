@@ -1,6 +1,6 @@
-# ComPy 3 audit: correctness, diagnostics, anomalies and roadmap (November 2026)
+# ComPy 1.3 audit: correctness, diagnostics, anomalies and roadmap (November 2026)
 
-Branch `compy3-audit`, based on `main` at `cd41b4d` (ComPy 2.8.0). Nothing here changes a
+Branch `audit-diagnostics`, based on `main` at `cd41b4d` (ComPy 1.2.8.0). Nothing here changes a
 published number by default; every proposed change that would is listed under
 [Decisions](#9-decisions).
 
@@ -23,7 +23,7 @@ that would settle it.
   times and inversion records.
 - **What was not run here:** the ObsPy-dependent tests run in CI on this PR. The waveform
   figures are implemented and tested on synthetic records. For the real deployment, run
-  `examples/compy3_waveform_diagnostics.py` on the IPGP machine.
+  `examples/audit_waveform_diagnostics.py` on the IPGP machine.
 
 ## 1. Executive summary
 
@@ -49,7 +49,7 @@ that would settle it.
      cannot remove it. The phase alone implies a compliance bias of **about −1 % to −22 %
      at the bottom of the band** (positive at RR40), largest at the lowest frequencies,
      which carry the deep structure.
-   - **Next step:** this is the highest-value item to resolve before ComPy 3 results.
+   - **Next step:** this is the highest-value item to resolve before ComPy 1.3 results.
 3. **Steps inside stacked periods (verified).**
    - The changepoint detector finds a synchronous +6 to +10 % |Z/P| step on 10–18
      September 2013 at RR28, RR29, RR40 and RR52. Per-event Rayleigh gains show the same
@@ -109,7 +109,7 @@ Open = needs a decision or data.
 | M5 | Med. | XE monthly stacks | **Network-wide drift:** the median monthly deviation falls from +0.8 % (2018-04) to −0.7 % (2019-05); Spearman −0.86, p = 7 × 10⁻⁵; inter-station common mode p = 0.002 | **Verified**; cause is a **hypothesis** (§5.D) | About 1 %/yr. The monthly-subset term treats it as random scatter | Open: test |
 | M6 | Med. | `pipeline/b_clean.py:215`; `compy/preprocessing.py:195–215` | **Silent fallback:** when TiSKitPy refuses the event spans, coherent-noise transfer functions are estimated *with* the events, and nothing is recorded unless both attempts fail | Code reading | Possible earthquake leakage into the transfer functions of affected 24-h windows | Open: D8 |
 | M7 | Med. | `compy/preprocessing.py` (24-h DataCleaner windows) | **Cleaning-window edges** (hypothesis): FFT-domain transfer functions change at window edges, which could depress coherence of 35-min windows that straddle them. S1 clustering of acceptance at several XE stations is compatible | **Hypothesis**; test in §5.C | Fewer accepted windows near boundaries; possible local bias | Open: test |
-| L1 | Low | `compy/compliance.py` (2.8.0 `stacked_compliance`) | The frequency axis came from the last window, so windows of different sampling rate were mixed silently; custom rejection reasons raised `KeyError` | Code reading, test | Silent corruption on mixed inputs | **Fixed** |
+| L1 | Low | `compy/compliance.py` (1.2.8.0 `stacked_compliance`) | The frequency axis came from the last window, so windows of different sampling rate were mixed silently; custom rejection reasons raised `KeyError` | Code reading, test | Silent corruption on mixed inputs | **Fixed** |
 | L2 | Low | `compy/streams.py:4` | ObsPy imported at module load, so array-level compliance needed ObsPy | Verified | Testability | **Fixed** |
 | L3 | Low | `compy/cleaning.py:170, 184–187` | `rotate_smoothly` median-filters over `smooth_hours` *samples*: skipped earthquake hours stretch the 24-h window. Coefficients are evaluated at integer knots but placed at float knots | Code reading | Negligible (smoothing semantics) | Open (doc) |
 | L4 | Low | `compy/cleaning.py:53` | Fold index can equal `n_bins` through rounding | Code reading | Harmless | Open |
@@ -137,8 +137,8 @@ coherence then sets the band.
 All figures live in `compy/plotting/diagnostics.py`. They take arrays or
 `compy.results.StationProducts`, need no ObsPy, and use a fixed categorical palette, one
 blue ramp for magnitude and blue–grey–red for signed deviations. The examples were made
-by `examples/compy3_diagnostics.py`, except the waveform rows, which were made by
-`examples/compy3_waveform_diagnostics.py` on real data or by the synthetic demo here.
+by `examples/audit_diagnostics.py`, except the waveform rows, which were made by
+`examples/audit_waveform_diagnostics.py` on real data or by the synthetic demo here.
 
 | Figure (function) | Purpose | Anomaly it reveals | Example |
 |---|---|---|---|
@@ -293,7 +293,7 @@ amplitude errors.
 
 To separate DPG from seismometer in September, compare the microseism-band Z level of each
 station with its neighbours before and after the step. Per-window microseism levels are
-not archived; `examples/compy3_waveform_diagnostics.py` produces them.
+not archived; `examples/audit_waveform_diagnostics.py` produces them.
 
 ### C. Tidal control of acceptance (M4)
 
@@ -334,7 +334,7 @@ not archived; `examples/compy3_waveform_diagnostics.py` produces them.
 | `Add array-level time-frequency helpers…` | `compy.timefreq`, `compy.noise_models`, `compy.results` | No |
 | `Add an anomaly and correlation detection module` | `compy.anomaly` | No |
 | `Add diagnostic figures and tests…` | `compy.plotting.diagnostics`, two test files (26 tests) | No |
-| `Add ComPy 3 audit scripts and outputs` | `examples/compy3_diagnostics.py`, `examples/compy3_waveform_diagnostics.py`, this folder | No |
+| `Add ComPy 1.3 audit scripts and outputs` | `examples/audit_diagnostics.py`, `examples/audit_waveform_diagnostics.py`, this folder | No |
 
 ## 7. Validation (before/after)
 
@@ -342,7 +342,7 @@ not archived; `examples/compy3_waveform_diagnostics.py` produces them.
   - `test_every_published_compliance_is_reproduced_from_its_stored_stack` recomputes all
     61 archived files: max relative difference 2.2 × 10⁻¹⁶, coherence identical;
   - `test_default_gate_reproduces_the_280_estimator_bit_for_bit` compares every output
-    field of the refactored estimator with a frozen copy of the 2.8.0 loop using
+    field of the refactored estimator with a frozen copy of the 1.2.8.0 loop using
     `np.array_equal`, with and without an output band;
   - `test_stacked_compliance_on_streams_matches_the_array_path` does the same through
     ObsPy streams (runs in CI).
@@ -365,7 +365,7 @@ not archived; `examples/compy3_waveform_diagnostics.py` produces them.
 - **Not validated here:** the waveform script on real MiniSEED (no data or ObsPy here),
   and a stage C rerun with `gate="exclusive"`.
 
-## 8. ComPy 3 roadmap
+## 8. ComPy 1.3 roadmap
 
 Ranked by scientific impact over effort (I = impact, E = effort; 1 low, 5 high).
 
@@ -390,7 +390,7 @@ Each line is a yes/no question. "Results change" means published numbers would m
 
 - **D1.** Treat the residual Z/P phase (H1) as an instrument-response problem to be
   resolved before new inversions? (Y/N) Impact: possible frequency-dependent compliance
-  bias of about −1 to −22 % at the band bottom; ComPy 3 results wait for the calibration test
+  bias of about −1 to −22 % at the band bottom; ComPy 1.3 results wait for the calibration test
   (roadmap 1).
 - **D2.** Implement frequency-dependent DPG/seismometer response fitting (τ from tides,
   corner from low-frequency Rayleigh) and apply it in stage A or C? (Y/N) Impact: results
@@ -415,8 +415,8 @@ Each line is a yes/no question. "Results change" means published numbers would m
 - **D9.** Add `compy.anomaly.scan_station` as an automatic QC step after stage C, failing
   the run on "phase_inconsistent" or level outliers? (Y/N) Impact: stations like EC04 and
   WC01 are stopped before inversion.
-- **D10.** Merge this branch as ComPy 2.9.0 (new modules, defaults unchanged) before the
-  ComPy 3 work? (Y/N)
+- **D10.** Merge this branch as ComPy 1.2.9.0 (new modules, defaults unchanged) before the
+  ComPy 1.3 work? (Y/N)
 
 ## References
 

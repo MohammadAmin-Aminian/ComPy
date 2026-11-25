@@ -16,14 +16,14 @@ Processing chain, one module per step (all SI units):
 ``compy.numerics``       constants and shared numerical primitives
 
 The most used functions are also available here, e.g. ``compy.correct_tilt``.
-Names from ComPy 2.x (``compy.Calculate_Compliance``, ``inv_compy``,
+Names from ComPy 1.2.x (``compy.Calculate_Compliance``, ``inv_compy``,
 ``ffplot``...) still work and emit a ``DeprecationWarning`` with the new name.
 """
 
 from compy._deprecation import legacy_getattr
 from compy._legacy import LEGACY
 
-__version__ = "3.2.1"
+__version__ = "1.3.2.1"
 
 _SUBMODULES = {
     "anomaly",

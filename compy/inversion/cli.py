@@ -47,7 +47,7 @@ def fetch_crust1(directory):
 def read_compliance(path, depth=None, band=None):
     """Frequencies, compliance, relative covariance, depth and a record from a file.
 
-    A stage C ``.npz`` of ComPy 3 carries the measured covariance; an earlier
+    A stage C ``.npz`` of ComPy 1.3 carries the measured covariance; an earlier
     one, or a CSV, gets ``errors.default_covariance`` from its uncertainties.
     """
     path = Path(path)

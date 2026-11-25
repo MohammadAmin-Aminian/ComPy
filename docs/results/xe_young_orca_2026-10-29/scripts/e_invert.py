@@ -1,4 +1,4 @@
-"""Stage E: Bayesian Vs inversion of one station's compliance (ComPy 2.3/2.4).
+"""Stage E: Bayesian Vs inversion of one station's compliance (ComPy 1.2.3/1.2.4).
 
 Usage: python e_invert.py STATION [VARIANT ...] [--processes N]
 

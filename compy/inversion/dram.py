@@ -631,7 +631,7 @@ class ComplianceData:
 
     @classmethod
     def from_npz(cls, path, *, band=None, subsets=None, **kwargs):
-        """Load a ComPy 2.2 compliance file (``stacked_compliance`` output).
+        """Load a ComPy 1.2.2 compliance file (``stacked_compliance`` output).
 
         Uses the keys ``freqs``, ``compliance``, ``uncertainty``, ``band``
         and ``depth``. Frequencies outside ``band`` (default: the stored band)

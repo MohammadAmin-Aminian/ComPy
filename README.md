@@ -96,7 +96,7 @@ python -m pytest -q
 ```
 
 The distribution is `seafloor-compy`; it installs the `compy` package and
-the `compy_pressure` package. The ComPy 2.x module names (`inv_compy`,
+the `compy_pressure` package. The ComPy 1.2.x module names (`inv_compy`,
 `ffplot`, `compy_processing`, ...) still import, with a deprecation warning
 that names the new location. Dependencies: NumPy, SciPy, Matplotlib, ObsPy,
 TiSKitPy 2.3 or 2.4 and disba. Numba comes with disba and compiles the forward
@@ -109,7 +109,7 @@ To install a release without cloning, take the wheel of the
 [release page](https://github.com/MohammadAmin-Aminian/ComPy/releases):
 
 ```bash
-python -m pip install "seafloor-compy[pressure] @ https://github.com/MohammadAmin-Aminian/ComPy/releases/download/v3.2.0/seafloor_compy-3.2.0-py3-none-any.whl"
+python -m pip install "seafloor-compy[pressure] @ https://github.com/MohammadAmin-Aminian/ComPy/releases/download/v1.3.2.0/seafloor_compy-1.3.2.0-py3-none-any.whl"
 ```
 
 The wheel holds the packages and the commands. The network pipeline
@@ -146,8 +146,8 @@ manifest. All network-specific values live in `pipeline/config.py`; see the
 
 The figures follow one station through the whole pipeline: **XE.CC11**
 (Pacific Array Young ORCA, 7.54°S 133.42°W, 4636 m water depth, April 2018 –
-May 2019), from the latest run (stages A–D of 13 November 2026 with ComPy 3.0,
-inversion of 16 November 2026 with ComPy 3.1;
+May 2019), from the latest run (stages A–D of 13 November 2026 with ComPy 1.3.0,
+inversion of 16 November 2026 with ComPy 1.3.1;
 [docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md)).
 Steps 1 and 8 place it within the XE network.
 
@@ -270,7 +270,7 @@ result.compliance, result.uncertainty, result.n_windows
 
 ### 7. Vs inversion
 
-Since ComPy 3 the default is `compy.inversion.auto` ([docs/INVERSION.md](docs/INVERSION.md);
+Since ComPy 1.3 the default is `compy.inversion.auto` ([docs/INVERSION.md](docs/INVERSION.md);
 tests in [docs/inversion_overhaul_2026-11/REPORT.md](docs/inversion_overhaul_2026-11/REPORT.md)).
 Compliance measures stiffness, so Vs follows only with Vp and density: both are
 tied to Vs by rock relations with sampled factors. A soft-sediment unit, crustal
@@ -343,13 +343,13 @@ the magmatic crust of XE.
 
 Figures, numbers and the table of every station:
 [docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md). The run of
-29 October 2026 (ComPy 2.4–2.8) stays in
+29 October 2026 (ComPy 1.2.4–1.2.8) stays in
 [docs/results/xe_young_orca_2026-10-29](docs/results/xe_young_orca_2026-10-29/README.md).
 
 ### The whole archive, 287 stations
 
-Every OBS station of the archive with a seismometer, cleaned with ComPy 2.7 and
-inverted with ComPy 3.0 (12 November 2026): 287 stations in 17 networks, 232
+Every OBS station of the archive with a seismometer, cleaned with ComPy 1.2.7 and
+inverted with ComPy 1.3.0 (12 November 2026): 287 stations in 17 networks, 232
 labelled good or usable, Vs at 2 km resolved at 170.
 
 <p align="center"><a href="docs/results/whole_archive_2026-11/archive_vs_map.png"><img src="docs/results/whole_archive_2026-11/archive_vs_map.png" width="900" alt="World map of Vs at 2 km below the seafloor for the whole archive"></a></p>
@@ -398,7 +398,7 @@ ComPy/
 │   ├── preprocessing.py     #   tilt correction, coherent-noise removal
 │   ├── compliance.py        #   spectra, window selection, stacked compliance, errors
 │   ├── inversion/           #   Vs inversion
-│   │   ├── auto.py          #     default inversion (ComPy 3): invert, SeafloorModel, compy-invert
+│   │   ├── auto.py          #     default inversion (ComPy 1.3): invert, SeafloorModel, compy-invert
 │   │   ├── errors.py        #     covariance of a stacked compliance curve from its windows
 │   │   ├── dram.py          #     DRAM sampler, forward model, CRUST1.0, the 2.x model, serpentinization
 │   │   ├── metropolis.py    #     Metropolis sampler of the GJI paper, tempering
@@ -411,7 +411,7 @@ ComPy/
 │   ├── diagnostics.py       #   R-hat, ESS, reproducible run records
 │   ├── plotting/            #   style, spectra, inversion and QC figures
 │   └── numerics.py          #   constants, gravity-wave dispersion, shared maths
-├── inv_compy.py, ffplot.py, compy_*.py   # ComPy 2.x names (deprecated aliases)
+├── inv_compy.py, ffplot.py, compy_*.py   # ComPy 1.2.x names (deprecated aliases)
 ├── compy_pressure/          # DPG QC, Rayleigh/microseism/local-P calibration, noise models
 │   └── atlas/               #   global pressure-noise atlas: native-rate spectra, screens, models (compy-pressure-atlas)
 ├── pipeline/                # end-to-end network pipeline (stages A–G)

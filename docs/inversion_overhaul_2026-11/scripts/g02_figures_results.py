@@ -1,6 +1,6 @@
-"""Report figures 4-8: results of the archive run with ComPy 3.
+"""Report figures 4-8: results of the archive run with ComPy 1.3.
 
-Fig. 4  The eight YV stations: new Vs with its prior, and the ComPy 2.8 values.
+Fig. 4  The eight YV stations: new Vs with its prior, and the ComPy 1.2.8 values.
 Fig. 5  Archive: misfit, change of Vs against 2.8, share of stations resolved with depth.
 Fig. 6  Sediment thickness from compliance against GlobSed.
 Fig. 7  Sensitivity runs on the benchmark set.
@@ -84,7 +84,7 @@ def fig4(rows):
             z[keep],
             color=BLUE,
             lw=1.8,
-            label="ComPy 3: median, 16-84 %, 5-95 %",
+            label="ComPy 1.3: median, 16-84 %, 5-95 %",
         )
         for key in ("prior_p16", "prior_p84"):
             ax.plot(
@@ -98,7 +98,7 @@ def fig4(rows):
         r = by[sid]
         zs = np.array(DEPTHS, float)
         old = np.array([float(r[f"old_vs_{d}"]) for d in DEPTHS]) / 1e3
-        ax.plot(old, zs, "s", color=INK, ms=5, label="ComPy 2.8 median")
+        ax.plot(old, zs, "s", color=INK, ms=5, label="ComPy 1.2.8 median")
         res = p["resolved"] > 0
         if res.any():
             ax.plot(
@@ -147,7 +147,7 @@ def fig5(rows):
         bins,
         color=ORANGE,
         alpha=0.6,
-        label="ComPy 2.8",
+        label="ComPy 1.2.8",
         edgecolor="white",
     )
     ax.hist(
@@ -155,7 +155,7 @@ def fig5(rows):
         bins,
         color=BLUE,
         alpha=0.6,
-        label="ComPy 3",
+        label="ComPy 1.3",
         edgecolor="white",
     )
     ax.axvline(1, color=MUTED, lw=0.8, ls=":")
@@ -184,7 +184,7 @@ def fig5(rows):
     ax.set_xticks(range(1, len(DEPTHS) + 1), [f"{d / 1000:g}" for d in DEPTHS])
     ax.set(
         xlabel="Depth below seafloor (km)",
-        ylabel="Vs of ComPy 3 against ComPy 2.8 (%)",
+        ylabel="Vs of ComPy 1.3 against ComPy 1.2.8 (%)",
         title=f"Change of the median Vs ({len(ok)} stations)",
     )
     ax = axes[2]

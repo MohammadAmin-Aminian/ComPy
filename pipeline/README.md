@@ -2,7 +2,7 @@
 
 From a broadband OBS network in an SDS archive to compliance, shear-velocity
 models and serpentinization, unattended. The method is that of Aminian et al.
-(2025, GJI, Fig. 2), with the corrections of ComPy 2.2–2.4 (`docs/AUDIT_2026-10.md`,
+(2025, GJI, Fig. 2), with the corrections of ComPy 1.2.2–1.2.4 (`docs/AUDIT_2026-10.md`,
 `docs/INVERSION.md`).
 
 All network-specific values are in [`config.py`](config.py). Set
@@ -13,7 +13,7 @@ another place. The pipeline is a set of scripts of the repository; a wheel
 installation does not include it. The defaults are those of the XE (Pacific Array
 Young ORCA) runs: the latest in [`docs/results/xe_young_orca_2026-11`](../docs/results/xe_young_orca_2026-11/README.md),
 the first in [`docs/results/xe_young_orca_2026-10-29`](../docs/results/xe_young_orca_2026-10-29/README.md).
-Since ComPy 3.2 stage C ends the band at 0.8 f_c (`BAND_MAX_FRACTION_FC`; see
+Since ComPy 1.3.2 stage C ends the band at 0.8 f_c (`BAND_MAX_FRACTION_FC`; see
 [docs/COMPLIANCE_BAND.md](../docs/COMPLIANCE_BAND.md)).
 
 ## Stages
@@ -25,7 +25,7 @@ Since ComPy 3.2 stage C ends the band at 0.8 f_c (`BAND_MAX_FRACTION_FC`; see
 | B | `b_clean.py` | Earthquake spans (1.5 d per magnitude unit above 5.85), optional hourly-glitch removal, hourly tilt smoothed over 24 h and applied per sample, STA/LTA local events, horizontal-coherent noise removed in ≤ 24 h windows | `work/<STA>/clean/` |
 | D | `d_calibrate.py` | DPG gain from Rayleigh-wave P/a with `compy_pressure`: native-rate SDS data, Mw ≥ 6 events by magnitude level, bins with squared coherence ≥ 0.95, median of ≥ 3 event gains and their spread | `work/<STA>/calibration/` |
 | C | `c_compliance.py` | Non-overlapping 35-min windows. Gates: median coherence ≥ 0.9, or 0.8 if fewer than 500 windows pass; pressure 10–50 dB; acceleration −170 to −150 dB. Coherent band, stacked gravity-corrected compliance, B&P error, monthly stacks | `results/<STA>/<STA>_compliance_*.{npz,csv}`, `_summary.json` |
-| E | `e_invert.py` | Bayesian Vs inversion `auto` (ComPy 3, [docs/INVERSION.md](../docs/INVERSION.md)): errors from the station's own windows, a prior about the CRUST1.0 model of the station, free Moho depth, Vp and density uncertain, gain sampled, repeated until it converges. `auto_phase` repeats it on the curve corrected for the pressure-gauge leak corner of stage C's `response_check`. The 2.x variants (`final`, `main`, `final_h2`) run only when named | `results/<STA>/inversion/` |
+| E | `e_invert.py` | Bayesian Vs inversion `auto` (ComPy 1.3, [docs/INVERSION.md](../docs/INVERSION.md)): errors from the station's own windows, a prior about the CRUST1.0 model of the station, free Moho depth, Vp and density uncertain, gain sampled, repeated until it converges. `auto_phase` repeats it on the curve corrected for the pressure-gauge leak corner of stage C's `response_check`. The 2.x variants (`final`, `main`, `final_h2`) run only when named | `results/<STA>/inversion/` |
 
 `run_bdc.py` starts B, D and C for each station as soon as its stage A is
 done, and `run_inversions.py` runs E as compliance results arrive. Several
@@ -89,7 +89,7 @@ Stage E spawns processes. Run it from these scripts, not from stdin.
     have a dip of −90°);
   - the default dispersion is RR52's, PressureQC's default for every network.
 
-  After ComPy 2.4.0, stage D is no longer `Pressure_calibration`'s method,
+  After ComPy 1.2.4.0, stage D is no longer `Pressure_calibration`'s method,
   so gains of new runs can differ from those of 2.4 runs.
 - **Clipping thresholds** (`a_preprocess.CLIP_COUNTS`, `DEAD_STD_COUNTS`) assume 24-bit digitizers.
 - **Stations without any calibration** are computed with the nominal response (`nominal`), and stage E samples the gain over 0.6–1.4. Report them separately.

@@ -1,7 +1,7 @@
 """Pressure-gauge gain from teleseismic Rayleigh waves, for one station.
 
 The Rayleigh-wave calibration of compy_pressure, which replaces
-Pressure_calibration.calculate_spectral_ratio (removed after ComPy 2.4.0):
+Pressure_calibration.calculate_spectral_ratio (removed after ComPy 1.2.4.0):
 
     python examples/3_DPG_Calibration.py SDS STATIONXML YV RR52 events.geojson
 

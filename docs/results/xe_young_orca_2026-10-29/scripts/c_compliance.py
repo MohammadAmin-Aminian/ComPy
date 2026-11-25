@@ -1,4 +1,4 @@
-"""Stage C: compliance function of one station for each DPG gain (ComPy 2.2).
+"""Stage C: compliance function of one station for each DPG gain (ComPy 1.2.2).
 
 Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
   * Non-overlapping WINDOW_S windows of cleaned BHZ [m] and BDH [Pa] that do

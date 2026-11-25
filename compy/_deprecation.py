@@ -3,7 +3,7 @@
 import importlib
 import warnings
 
-#: Announced as "ComPy 3.0" until 3.2.0, which still shipped the old names.
+#: Announced as "ComPy 1.3.0" until 1.3.2.0, which still shipped the old names.
 REMOVAL = "a later major version"
 
 

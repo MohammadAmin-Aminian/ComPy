@@ -67,7 +67,7 @@ figcaption { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
 </style>
 
 <main>
-  <p class="eyebrow">PressureQC · ComPy 2.2 · RHUM-RUM (YV)</p>
+  <p class="eyebrow">PressureQC · ComPy 1.2.2 · RHUM-RUM (YV)</p>
   <h1>Seafloor compliance of the YV broadband stations</h1>
   <p class="meta">Mohammad-Amin Aminian (IPGP). Processing and report prepared by Claude, 28 October 2026. Code: ComPy branch <code>claude/compliance-yv</code>. Outputs on the Mac: <code>~/Desktop/ComPy/runs/compliance_yv_2026-10-28/</code>.</p>
 
@@ -130,12 +130,12 @@ figcaption { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
     <li><b>S9, error after selection:</b> after coherence selection the Bendat &amp; Piersol error is optimistic.</li>
     <li><b>S10, transients:</b> example 1 needs interactive transient picking; an unattended detector was added.</li>
   </ul>
-  <p>A before/after comparison of the legacy beta estimator (2.1 vs 2.2) on the cleaned RR52 year was not informative. The historical beta gates accepted only 2 of the 2-h windows, and at γ ≈ 1 fix D1 changes compliance by less than 0.02 %. The D1 bias quoted above is evaluated for each station at its real coherence.</p>
+  <p>A before/after comparison of the legacy beta estimator (1.2.1 vs 1.2.2) on the cleaned RR52 year was not informative. The historical beta gates accepted only 2 of the 2-h windows, and at γ ≈ 1 fix D1 changes compliance by less than 0.02 %. The D1 bias quoted above is evaluated for each station at its real coherence.</p>
 
   <h2>4. Pressure-gauge gains</h2>
-  <figure><img src="figures/gain_comparison.png" alt="DPG gains per station from gains.csv, ComPy 2.2 and the paper"><figcaption>Figure 2. Gain g (pressure × g). ComPy error bars are the per-event standard deviation; paper error bars are ±5 %. RR36 and RR50 have large per-event scatter because of the late-deployment sensitivity changes (section 6).</figcaption></figure>
+  <figure><img src="figures/gain_comparison.png" alt="DPG gains per station from gains.csv, ComPy 1.2.2 and the paper"><figcaption>Figure 2. Gain g (pressure × g). ComPy error bars are the per-event standard deviation; paper error bars are ±5 %. RR36 and RR50 have large per-event scatter because of the late-deployment sensitivity changes (section 6).</figcaption></figure>
   <div class="tablewrap"><table>
-    <tr><th>Station</th><th class="n">Depth [m]</th><th class="n">gains.csv</th><th class="n">ComPy 2.2</th><th class="n">σ (events)</th><th class="n">Events</th><th class="n">Paper</th></tr>
+    <tr><th>Station</th><th class="n">Depth [m]</th><th class="n">gains.csv</th><th class="n">ComPy 1.2.2</th><th class="n">σ (events)</th><th class="n">Events</th><th class="n">Paper</th></tr>
     <tr><td>RR28</td><td class="n">4550</td><td class="n">0.779</td><td class="n">0.780</td><td class="n">0.030</td><td class="n">16</td><td class="n">0.78</td></tr>
     <tr><td>RR29</td><td class="n">4829</td><td class="n">0.730</td><td class="n">0.693</td><td class="n">0.029</td><td class="n">17</td><td class="n">0.70</td></tr>
     <tr><td>RR34</td><td class="n">4265</td><td class="n">0.585</td><td class="n">0.573</td><td class="n">0.012</td><td class="n">9</td><td class="n">0.58</td></tr>
@@ -217,7 +217,7 @@ figcaption { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
         <li><code>e_figures.py</code>, <code>g_tiskit_check.py</code>, <code>h_stability.py</code>, <code>f_legacy_compare.py</code>.</li>
       </ul>
       The whole run takes about 1.5 h on the M5 Pro.</li>
-    <li><b>Code:</b> ComPy branch <code>claude/compliance-yv</code> (draft PR, not merged), version 2.2.0.</li>
+    <li><b>Code:</b> ComPy branch <code>claude/compliance-yv</code> (draft PR, not merged), version 1.2.2.0.</li>
     <li><b>Literature read:</b> Aminian et al. 2025 (GJI); Aminian 2024 thesis (HAL tel-05393939); Crawford 1994 thesis and 2004 (GJI); Crawford &amp; Webb 2002 (EPSL); Hulme et al. 2005; Zha 2014 thesis and Zha et al. 2014 (JGR); Webb 1998. Crawford et al. 1991 and 1998 were not downloadable (server 403); their gravity-term content was checked through the Crawford and Zha theses.</li>
   </ul>
 </main>

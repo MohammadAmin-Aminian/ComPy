@@ -2,7 +2,7 @@
 
 Usage: python e_invert.py STATION [VARIANT ...] [--processes N]
 
-The default variant is ``auto``, the ComPy 3 inversion (``compy.inversion.auto``,
+The default variant is ``auto``, the ComPy 1.3 inversion (``compy.inversion.auto``,
 docs/INVERSION.md): errors measured from the station's own windows, a proper
 prior about the CRUST1.0 model of the station, free Moho depth, Vp and density
 uncertain, sampling repeated until it converges, and a result that says which
@@ -15,7 +15,7 @@ Z/P phase (``response_check`` in the station summary). It is a check of how
 much the low-frequency pressure response matters at a station, not the
 default: the fitted corner is a model of the response, not a calibration.
 
-The variants below are the ComPy 2.3-2.8 inversions (``compy.inversion.dram``
+The variants below are the ComPy 1.2.3-1.2.8 inversions (``compy.inversion.dram``
 with ``CrustalModel``). They are kept to repeat earlier runs and as checks; the
 audit of 2026-11 (docs/inversion_overhaul_2026-11/REPORT.md) explains why they
 are no longer the default.
@@ -194,7 +194,7 @@ def leak_correction(station, check, f, eta):
 
 
 def load_auto_data(station, phase_corrected=False):
-    """Compliance of a station with the ComPy 3 error model, and a record of the input.
+    """Compliance of a station with the ComPy 1.3 error model, and a record of the input.
 
     ``phase_corrected`` applies ``leak_correction`` (variant ``auto_phase``).
     """
@@ -204,7 +204,7 @@ def load_auto_data(station, phase_corrected=False):
     path = RESULTS / station / f"{station}_compliance_{label}.npz"
     d = dict(np.load(path))
     lo, hi = d["band"]
-    if "cov_rel" in d:  # saved by stage C since ComPy 3
+    if "cov_rel" in d:  # saved by stage C since ComPy 1.3
         f = d["cov_freqs"]
         keep = d["cov_usable"].astype(bool)
         eta = np.interp(f, d["freqs"], d["compliance"])
@@ -237,7 +237,7 @@ def load_auto_data(station, phase_corrected=False):
 
 
 def run_auto(station, processes, seed=0, phase_corrected=False):
-    """The ComPy 3 inversion of a station (variants ``auto`` and ``auto_phase``)."""
+    """The ComPy 1.3 inversion of a station (variants ``auto`` and ``auto_phase``)."""
     import config
 
     name = "auto_phase" if phase_corrected else "auto"

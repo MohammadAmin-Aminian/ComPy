@@ -1,4 +1,4 @@
-"""Defects found by the audit of 20 and 21 November 2026 (ComPy 3.2.1).
+"""Defects found by the audit of 20 and 21 November 2026 (ComPy 1.3.2.1).
 
 Each test fails on 3.2.0. Stage A runs here on a small archive sampled at
 2.5 Hz (one FIR stage to 1.25 Hz), so that whole days stay cheap.
@@ -276,7 +276,7 @@ def test_deprecation_message_does_not_name_a_version_already_released():
 
     major = int(compy.__version__.split(".")[0])
     announced = re.search(r"ComPy (\d+)", _deprecation.REMOVAL)
-    # 3.2.0 still said "will be removed in ComPy 3.0".
+    # 1.3.2.0 still said "will be removed in ComPy 1.3.0".
     assert announced is None or int(announced.group(1)) > major
 
 

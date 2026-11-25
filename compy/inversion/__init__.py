@@ -2,11 +2,11 @@
 
 Submodules:
 
-``auto``        the default inversion since ComPy 3: one call from a compliance
+``auto``        the default inversion since ComPy 1.3: one call from a compliance
                 curve to Vs with intervals, resolved depths and a quality label
 ``errors``      covariance of a stacked compliance estimate from its windows
 ``cli``         the ``compy-invert`` command
-``dram``        sampler, forward model, data container and the ComPy 2.3-2.8
+``dram``        sampler, forward model, data container and the ComPy 1.2.3-1.2.8
                 model (``CrustalModel``), kept for earlier runs and as a check
 ``metropolis``  random-walk Metropolis sampler of Aminian et al. (2025),
                 with parallel tempering and an L-curve scan

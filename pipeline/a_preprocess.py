@@ -24,11 +24,11 @@ Choices (documented in the report):
     The cut spans are listed in work/<STA>/qc/<STA>.<YYYY.JJJ>.json.
   * Raw traces whose sampling rate is not OUT_RATE times the product of
     config.FACTORS are left out and listed under "wrong_rate" in the QC file
-    (ComPy 3.2.1; before, a day at another rate was appended to its neighbour
+    (ComPy 1.3.2.1; before, a day at another rate was appended to its neighbour
     sample by sample and decimated with the same factors).
   * A segment that crosses a StationXML epoch of its channel is split there, so
     that each part is corrected with its own response; the times are listed
-    under "response_epochs" (ComPy 3.2.1; before, the response valid at the
+    under "response_epochs" (ComPy 1.3.2.1; before, the response valid at the
     start of the segment was applied to all of it).
   * A station without any day file in the archive ends the run with an error.
 """

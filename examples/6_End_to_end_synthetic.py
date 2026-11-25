@@ -1,6 +1,6 @@
 """From two time series to a shear-velocity profile, without any data file.
 
-Usage (any folder; ComPy 3.2 or later installed):
+Usage (any folder; ComPy 1.3.2 or later installed):
     python 6_End_to_end_synthetic.py --output worked_example
 
 The script makes fourteen days of seafloor pressure and vertical displacement

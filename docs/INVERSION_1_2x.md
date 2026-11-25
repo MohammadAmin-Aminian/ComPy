@@ -1,4 +1,4 @@
-# Shear-velocity inversion in ComPy 2.3
+# Shear-velocity inversion in ComPy 1.2.3
 
 This note covers the inversion half of ComPy: what was wrong with the earlier
 code, what `compy.inversion.dram` does instead, how it was checked, and its limits.
@@ -10,8 +10,8 @@ Three code generations were compared with the methods sections of Aminian et
 al. (2025, GJI, §4.3), the thesis (Aminian 2024, §3.3) and the cited
 literature. The generations are:
 
-- v1, the code in the repository before 2.0 (commit `7400c4e`);
-- v2, ComPy 2.0/2.1 (`inv_compy._inversion`);
+- v1, the code in the repository before 1.2.0 (commit `7400c4e`);
+- v2, ComPy 1.2.0/1.2.1 (`inv_compy._inversion`);
 - the `inversion-improvements` branch.
 
 ### v1 (the code behind the published Vs models)
@@ -25,9 +25,9 @@ literature. The generations are:
 | V5 | A thickness move adds the same step to the chosen layer and to the deepest layer, and can pick the half-space row. A negative thickness is redrawn with \|r\|. | The total thickness is not conserved, and the proposal is asymmetric. |
 | V6 | Vs bounds are 0.15–1.2 × the starting model (0.9–1.1 for the deepest layer). The paper states 0 to +25 % (shallow) and −100 % to +25 % (deep). | The prior depends on the starting model and does not match the text. |
 | V7 | The data uncertainty is the standard deviation of the per-window estimates (thesis §3.3.4: 1.25e-11 at RR52, 30–60 % of η). The thesis also describes annealing it during the run, but that code is commented out. | Errors were roughly √n too large for a stacked mean. The fit hardly constrained the model, so deep Vs came from the bounds. |
-| V8 | Compliance computed before ComPy 2.0 multiplied the wave-attraction term by ω²/(ω²+c), i.e. `k·γ·ad·(pa_ratio + |Z/P|)` in `Calculate_Compliance`, so the term was effectively dropped. The same line writes the free-air constant as `3.07 * 10e-6`, which is 3.07e-5, ten times too large. | The published η is low: by up to 25–30 % at 7 mHz at RR52 from the dropped term, plus 1.4 % at 7 mHz from the constant. Both bias deep Vs high. 2.0 fixed both. |
+| V8 | Compliance computed before ComPy 1.2.0 multiplied the wave-attraction term by ω²/(ω²+c), i.e. `k·γ·ad·(pa_ratio + |Z/P|)` in `Calculate_Compliance`, so the term was effectively dropped. The same line writes the free-air constant as `3.07 * 10e-6`, which is 3.07e-5, ten times too large. | The published η is low: by up to 25–30 % at 7 mHz at RR52 from the dropped term, plus 1.4 % at 7 mHz from the constant. Both bias deep Vs high. 2.0 fixed both. |
 
-Figure code (`plot_inversion_density_all`, `final_plot`, `start_model_plot*` in `inv_compy`), both fixed in 2.4:
+Figure code (`plot_inversion_density_all`, `final_plot`, `start_model_plot*` in `inv_compy`), both fixed in 1.2.4:
 
 | # | Finding | Effect |
 |---|---|---|
@@ -61,7 +61,7 @@ Remaining issues:
 The legacy functions are kept unchanged for reproducibility. The new workflow
 is a separate module.
 
-## 2. The 2.3 workflow (`compy.inversion.dram`)
+## 2. The 1.2.3 workflow (`compy.inversion.dram`)
 
 ```python
 from compy.inversion import dram as ci
