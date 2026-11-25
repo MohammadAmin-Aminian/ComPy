@@ -25,11 +25,13 @@ from .config import db_edges
 GRID = native.GRID
 
 
-def band_taper(f_lo, f_hi, periods=GRID):
+def band_taper(f_lo, f_hi, periods=GRID, edge_octaves=1.0):
     """Weight 1 inside the usable band [f_lo, f_hi] Hz, falling as cos^2 over the outer octave, 0 outside.
 
     ``f_lo`` of 0 (or less) means no lower limit, as for an absolute gauge coupled
-    down to DC: no taper is applied on the long-period side.
+    down to DC: no taper is applied on the long-period side. ``edge_octaves`` is the
+    width of the taper inside each edge; 0 gives hard edges (rule W: a limit is the
+    frequency up to which the level is trusted, so there is no taper).
     """
     f = 1.0 / np.asarray(periods, float)
     u = np.ones(len(f))
@@ -39,10 +41,11 @@ def band_taper(f_lo, f_hi, periods=GRID):
     lo = np.log2(f / f_lo) if f_lo > 0 else np.full(len(f), np.inf)
     u[lo < 0] = 0
     u[hi < 0] = 0
-    a = (lo >= 0) & (lo < 1)
-    u[a] *= np.sin(0.5 * np.pi * lo[a]) ** 2
-    b = (hi >= 0) & (hi < 1)
-    u[b] *= np.sin(0.5 * np.pi * hi[b]) ** 2
+    if edge_octaves > 0:
+        a = (lo >= 0) & (lo < edge_octaves)
+        u[a] *= np.sin(0.5 * np.pi * lo[a] / edge_octaves) ** 2
+        b = (hi >= 0) & (hi < edge_octaves)
+        u[b] *= np.sin(0.5 * np.pi * hi[b] / edge_octaves) ** 2
     return u
 
 
