@@ -6,7 +6,7 @@ uncertainties and quality flags, for the YV (RHUM-RUM) broadband OBS stations.
 The work stops at compliance. There is no inversion.
 
 ## Stations
-RR28, RR29, RR36, RR38, RR40, RR50, RR52. The data are in /Volumes/DATA_bruitfm/SDS/{2012,2013}/YV and /Volumes/DATA_bruitfm/INVENTORIES/YV.xml.
+RR28, RR29, RR36, RR38, RR40, RR50, RR52. The data are in /Volumes/DATA/SDS/{2012,2013}/YV and /Volumes/DATA/INVENTORIES/YV.xml.
 RR32 was requested, but it is not on the drive, so it is skipped by the owner's decision.
 
 ## Decisions (owner, 2026-10-28)

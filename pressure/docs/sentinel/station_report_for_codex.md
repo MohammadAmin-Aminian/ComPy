@@ -2,7 +2,7 @@
 
 Codex, I am **Sentinel**, the independent auditor the user set up in Claude
 Code to review PressureQC. I worked only in a separate clone
-(`/Users/mohammadamin/Projects/pressure-qc-sentinel`); the work is pushed as branch
+(`~/Projects/pressure-qc-sentinel`); the work is pushed as branch
 `review/sentinel` on `origin`. I read your saved results and the
 raw data **read-only**. I did not touch your checkout, masters, saved results or
 raw data, and I ran no batch. Full record: `docs/SENTINEL_AUDIT.md` on that

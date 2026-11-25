@@ -24,7 +24,7 @@ see `docs/sentinel/HANDOFF_SOCRATES.md`.
 | Item | Value |
 |---|---|
 | Reviewed baseline | `faa39ff` (local `main` = `origin/main`, clean tree, last five GitHub Checks passed) |
-| Sentinel checkout | `/Users/mohammadamin/Projects/pressure-qc-sentinel`, separate clone, branch `sentinel/audit-2026-10` |
+| Sentinel checkout | `~/Projects/pressure-qc-sentinel`, separate clone, branch `sentinel/audit-2026-10` |
 | Environment | `.venv` in the Sentinel clone, built from the conda `compy_pressure` Python 3.13.15 and pinned to the shared env's versions (ObsPy 1.5.1, NumPy 2.5.3, SciPy 1.18.1, pandas 3.0.6, TiSKitPy 2.3.1, disba 0.7.0, Numba 0.68.0, pytest 9.1.1, Ruff 0.16.9). The shared env is untouched; it imports `compy_pressure` from Codex's checkout, so it was not used for tests. |
 | Baseline checks | 130 passed; Ruff check/format and `bash -n scripts/run_yl_all.sh` passed. Tests ran with `HOME` redirected to a scratch folder; production master stats were unchanged afterwards. |
 | Upstream during review | `main` advanced to `4387fbe` (Codex: read-only C07W/C08W/C09W matched-event viewer; no core changes). `git merge-tree` of this branch onto it is conflict-free; the merged tree passes 138 tests and Ruff check/format (68 files). |

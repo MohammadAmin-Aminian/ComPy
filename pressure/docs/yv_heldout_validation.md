@@ -3,7 +3,7 @@
 Run the four-station validation:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   scripts/run_yv_heldout_validation.py --open-plots
 ```

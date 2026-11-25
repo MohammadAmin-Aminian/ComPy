@@ -69,11 +69,23 @@ def read_compliance(path, depth=None, band=None):
         sel = (d["freqs"] >= lo - 1e-12) & (d["freqs"] <= hi + 1e-12)
         f, eta, sigma = d["freqs"][sel], d["compliance"][sel], d["uncertainty"][sel]
     else:
-        table = np.genfromtxt(path, delimiter=",", names=True)
-        names = table.dtype.names
-        col = {key: next(n for n in names if n.startswith(key)) for key in
+        table = np.atleast_1d(np.genfromtxt(path, delimiter=",", names=True))
+        names = table.dtype.names or ()
+        col = {key: next((n for n in names if n.startswith(key)), None) for key in
                ("freq", "compliance", "uncertainty")}  # fmt: skip
+        missing = [key for key, name in col.items() if name is None]
+        if missing:
+            raise SystemExit(
+                f"{path}: no column starting with {', '.join(missing)}. A CSV needs a header "
+                "line and the columns freq_hz, compliance and uncertainty (Hz and 1/Pa)."
+            )
         f, eta, sigma = (table[col[k]] for k in ("freq", "compliance", "uncertainty"))
+        bad = ~(np.isfinite(f) & np.isfinite(eta) & np.isfinite(sigma))
+        if bad.any() or (sigma <= 0).any() or (eta <= 0).any():
+            raise SystemExit(
+                f"{path}: frequency, compliance and uncertainty must be numbers, with "
+                "compliance and uncertainty above zero, on every line."
+            )
         if "in_band" in names and band is None:
             sel = table["in_band"] > 0
             f, eta, sigma = f[sel], eta[sel], sigma[sel]
@@ -82,6 +94,10 @@ def read_compliance(path, depth=None, band=None):
             f, eta, sigma = f[sel], eta[sel], sigma[sel]
         if depth is None:
             raise SystemExit("--depth is required for a CSV file")
+    if len(f) < 3:
+        raise SystemExit(
+            f"{path}: {len(f)} frequencies in the band; an inversion needs at least three."
+        )
     return (
         f,
         eta,
@@ -129,6 +145,8 @@ def main(argv=None):
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--no-figure", action="store_true")
     args = parser.parse_args(argv)
+    if args.gain_sigma is not None and not args.gain_sigma > 0:
+        parser.error("--gain-sigma must be above zero")
 
     crust1 = (
         fetch_crust1(args.crust1)
@@ -146,7 +164,7 @@ def main(argv=None):
     if args.sediment_prior:
         overrides["sediment_prior"] = tuple(args.sediment_prior)
     model = auto.model_from_crust1(column, **overrides)
-    sigma = args.gain_sigma or auto.GAIN_SIGMA[args.gain]
+    sigma = auto.GAIN_SIGMA[args.gain] if args.gain_sigma is None else args.gain_sigma
     info = dict(file=str(args.compliance), latitude=args.lat, longitude=args.lon,
                 covariance=source, response=args.response, crust1=column)  # fmt: skip
     result = auto.invert(data, model, gain_sigma=sigma, processes=args.processes, seed=args.seed,

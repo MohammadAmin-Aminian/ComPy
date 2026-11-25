@@ -134,30 +134,30 @@
     "literature_roots_relative": 0.0001
   },
   "input_sha256": {
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json": "cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2",
+    "~/Projects/pressure-qc/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json": "cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2",
     "docs/yv_response_confirmation/official_20261021T113504Z/eida_routing.json": "1d9a5e9d69a725b78e3ceeb0f63c57f5afd68e1e5ec29daa9c510f176376535f",
     "docs/yv_response_confirmation/official_20261021T113504Z/fedcatalog.txt": "6534ae7c471a73cc050257d14fbf3bfe8254e9e319c75ba692e29ab62131c79a",
     "docs/yv_response_confirmation/official_20261021T113504Z/YV.RR17.response.xml": "000fe5eab0c64e9c0e57cb5064f5f1802fafcffd8b1490a753ece6f808573590",
     "docs/yv_response_confirmation/official_20261021T113504Z/YV.RR18.response.xml": "ae47590a8fcda0345277f8ec5f14d182e78747cd258e2338dfd290a5dc726103",
     "docs/yv_response_confirmation/official_20261021T113504Z/YV.RR22.response.xml": "8475a409ea18a74575b551a7e89a4dcb9c33d712555bd7a29c0ddd029bc96111",
     "docs/yv_response_confirmation/official_20261021T113504Z/YV.RR56.response.xml": "a9c5372e98a341fd8cad61ca10fcae07082860f4fca33100526e0ca8fa5116b0",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/rayleigh_calibration/run_4f84bae01f9f/comparison.json": "5f9065d1177a13d299e5947149ec591ad61d2743115d16a76d48fca8d771edd5",
-    "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml": "58afc2d6f0056e52cf954bdd5b9fb80e92f9572d44d067b30966a160d2044494",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/inventory.xml": "718d0fdb7e3429a9c30421a13604e07a138a8087f99365bfd883e8977f8cf7d9",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BHZ__20121002T155020__58afc2d6f005/inventory.xml": "e5a4f5840639be3ec65f5f5f49b8c42ec6e81d83fd7d2d490d7df6b50adfd54c",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/rayleigh_calibration/run_483529232689/comparison.json": "028dca0e2684f3355bdab512a9c6ce7dd17631d7e87dee074c9902f5aab225c8",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/inventory.xml": "69766b79952ecc14cec75774255b72e54853a5560c336176cf49bdbbaf22842a",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BHZ__20121005T060729__58afc2d6f005/inventory.xml": "c7000e4717f2794e29fe85c7fe01cf493e3c97906330f3ff284079a1717de505",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/rayleigh_calibration/run_15757e4983e5/comparison.json": "9f280f20117c4ec2b8c4550a5fc443c3c9f1c7a4acbd1d2059c59f01d2e6e2f4",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/inventory.xml": "f319da7555af5d3e62a7e2bf55422b5da00d9a3fc8a40339a5a01802fbd1bbf6",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BHZ__20121008T154942__58afc2d6f005/inventory.xml": "d49f570155a77011096cf74776d5a8f14b68208e29044f2eb4952d11aabb8f91",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/rayleigh_calibration/run_701e1afcb0e1/comparison.json": "566bdf041f502d974cfdb0a06b3123f718f24cff96fb5cb579a57bdb6c495aca",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/inventory.xml": "18f5bca1896c86c063073b9e11506f976e2805648d45bb3d9f50badde2482207",
-    "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BHZ__20121020T182745__58afc2d6f005/inventory.xml": "4254394d344fb5e794ebe6cb46d7a3433a0574b81a8f125eb88cc1489b821355"
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/rayleigh_calibration/run_4f84bae01f9f/comparison.json": "5f9065d1177a13d299e5947149ec591ad61d2743115d16a76d48fca8d771edd5",
+    "~/Desktop/ComPy/data/INVENTORIES/YV.xml": "58afc2d6f0056e52cf954bdd5b9fb80e92f9572d44d067b30966a160d2044494",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/inventory.xml": "718d0fdb7e3429a9c30421a13604e07a138a8087f99365bfd883e8977f8cf7d9",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BHZ__20121002T155020__58afc2d6f005/inventory.xml": "e5a4f5840639be3ec65f5f5f49b8c42ec6e81d83fd7d2d490d7df6b50adfd54c",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/rayleigh_calibration/run_483529232689/comparison.json": "028dca0e2684f3355bdab512a9c6ce7dd17631d7e87dee074c9902f5aab225c8",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/inventory.xml": "69766b79952ecc14cec75774255b72e54853a5560c336176cf49bdbbaf22842a",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BHZ__20121005T060729__58afc2d6f005/inventory.xml": "c7000e4717f2794e29fe85c7fe01cf493e3c97906330f3ff284079a1717de505",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/rayleigh_calibration/run_15757e4983e5/comparison.json": "9f280f20117c4ec2b8c4550a5fc443c3c9f1c7a4acbd1d2059c59f01d2e6e2f4",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/inventory.xml": "f319da7555af5d3e62a7e2bf55422b5da00d9a3fc8a40339a5a01802fbd1bbf6",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BHZ__20121008T154942__58afc2d6f005/inventory.xml": "d49f570155a77011096cf74776d5a8f14b68208e29044f2eb4952d11aabb8f91",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/rayleigh_calibration/run_701e1afcb0e1/comparison.json": "566bdf041f502d974cfdb0a06b3123f718f24cff96fb5cb579a57bdb6c495aca",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/inventory.xml": "18f5bca1896c86c063073b9e11506f976e2805648d45bb3d9f50badde2482207",
+    "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BHZ__20121020T182745__58afc2d6f005/inventory.xml": "4254394d344fb5e794ebe6cb46d7a3433a0574b81a8f125eb88cc1489b821355"
   },
   "stations": {
     "RR17": {
-      "comparison": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/rayleigh_calibration/run_4f84bae01f9f/comparison.json",
+      "comparison": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/rayleigh_calibration/run_4f84bae01f9f/comparison.json",
       "channels": {
         "YV.RR17.00.BDH": {
           "seed_id": "YV.RR17.00.BDH",
@@ -165,9 +165,9 @@
             "Seed_id": "YV.RR17.00.BDH",
             "channel_start_time": "2012-10-02T15:50:20.000000Z",
             "channel_end_time": "2013-10-23T15:41:08.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BDH__20121002T155020__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "718d0fdb7e3429a9c30421a13604e07a138a8087f99365bfd883e8977f8cf7d9",
           "local": {
             "start": "2012-10-02T15:50:20.000000Z",
@@ -846,9 +846,9 @@
             "Seed_id": "YV.RR17.00.BHZ",
             "channel_start_time": "2012-10-02T15:50:20.000000Z",
             "channel_end_time": "2013-10-23T15:41:08.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BHZ__20121002T155020__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR17/YV.RR17.00.BHZ__20121002T155020__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "e5a4f5840639be3ec65f5f5f49b8c42ec6e81d83fd7d2d490d7df6b50adfd54c",
           "local": {
             "start": "2012-10-02T15:50:20.000000Z",
@@ -1601,7 +1601,7 @@
       }
     },
     "RR18": {
-      "comparison": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/rayleigh_calibration/run_483529232689/comparison.json",
+      "comparison": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/rayleigh_calibration/run_483529232689/comparison.json",
       "channels": {
         "YV.RR18.00.BDH": {
           "seed_id": "YV.RR18.00.BDH",
@@ -1609,9 +1609,9 @@
             "Seed_id": "YV.RR18.00.BDH",
             "channel_start_time": "2012-10-05T06:07:29.000000Z",
             "channel_end_time": "2013-10-29T16:25:04.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BDH__20121005T060729__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "69766b79952ecc14cec75774255b72e54853a5560c336176cf49bdbbaf22842a",
           "local": {
             "start": "2012-10-05T06:07:29.000000Z",
@@ -2290,9 +2290,9 @@
             "Seed_id": "YV.RR18.00.BHZ",
             "channel_start_time": "2012-10-05T06:07:29.000000Z",
             "channel_end_time": "2013-10-29T16:25:04.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BHZ__20121005T060729__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR18/YV.RR18.00.BHZ__20121005T060729__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "c7000e4717f2794e29fe85c7fe01cf493e3c97906330f3ff284079a1717de505",
           "local": {
             "start": "2012-10-05T06:07:29.000000Z",
@@ -3045,7 +3045,7 @@
       }
     },
     "RR22": {
-      "comparison": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/rayleigh_calibration/run_15757e4983e5/comparison.json",
+      "comparison": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/rayleigh_calibration/run_15757e4983e5/comparison.json",
       "channels": {
         "YV.RR22.00.BDH": {
           "seed_id": "YV.RR22.00.BDH",
@@ -3053,9 +3053,9 @@
             "Seed_id": "YV.RR22.00.BDH",
             "channel_start_time": "2012-10-08T15:49:42.000000Z",
             "channel_end_time": "2013-11-01T13:56:08.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BDH__20121008T154942__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "f319da7555af5d3e62a7e2bf55422b5da00d9a3fc8a40339a5a01802fbd1bbf6",
           "local": {
             "start": "2012-10-08T15:49:42.000000Z",
@@ -3734,9 +3734,9 @@
             "Seed_id": "YV.RR22.00.BHZ",
             "channel_start_time": "2012-10-08T15:49:42.000000Z",
             "channel_end_time": "2013-11-01T13:56:08.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BHZ__20121008T154942__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR22/YV.RR22.00.BHZ__20121008T154942__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "d49f570155a77011096cf74776d5a8f14b68208e29044f2eb4952d11aabb8f91",
           "local": {
             "start": "2012-10-08T15:49:42.000000Z",
@@ -4529,7 +4529,7 @@
       }
     },
     "RR56": {
-      "comparison": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/rayleigh_calibration/run_701e1afcb0e1/comparison.json",
+      "comparison": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/rayleigh_calibration/run_701e1afcb0e1/comparison.json",
       "channels": {
         "YV.RR56.00.BDH": {
           "seed_id": "YV.RR56.00.BDH",
@@ -4537,9 +4537,9 @@
             "Seed_id": "YV.RR56.00.BDH",
             "channel_start_time": "2012-10-20T18:27:45.000000Z",
             "channel_end_time": "2013-06-29T20:55:33.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BDH__20121020T182745__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "18f5bca1896c86c063073b9e11506f976e2805648d45bb3d9f50badde2482207",
           "local": {
             "start": "2012-10-20T18:27:45.000000Z",
@@ -5215,9 +5215,9 @@
             "Seed_id": "YV.RR56.00.BHZ",
             "channel_start_time": "2012-10-20T18:27:45.000000Z",
             "channel_end_time": "2013-06-29T20:55:33.000000Z",
-            "inventory_file": "/Users/mohammadamin/Desktop/ComPy/data/INVENTORIES/YV.xml"
+            "inventory_file": "~/Desktop/ComPy/data/INVENTORIES/YV.xml"
           },
-          "snapshot": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BHZ__20121020T182745__58afc2d6f005/inventory.xml",
+          "snapshot": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR56/YV.RR56.00.BHZ__20121020T182745__58afc2d6f005/inventory.xml",
           "snapshot_sha256": "4254394d344fb5e794ebe6cb46d7a3433a0574b81a8f125eb88cc1489b821355",
           "local": {
             "start": "2012-10-20T18:27:45.000000Z",

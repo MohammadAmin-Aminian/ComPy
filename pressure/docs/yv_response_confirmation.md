@@ -338,13 +338,13 @@ the snapshots and the owner's `gain_histogram.png` are unchanged.
 ## Reproduce
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc-response-confirmation
+cd ~/Projects/pressure-qc-response-confirmation
 PY=/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python
 # Only if a fresh retrieval is wanted; always into a NEW folder:
 PYTHONPATH=src:. $PY scripts/confirm_yv_responses.py fetch \
   --out docs/yv_response_confirmation/official_<UTC> --stations RR17 RR18 RR22 RR56
 PYTHONPATH=src:. $PY scripts/confirm_yv_responses.py compare \
-  --workflow /Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
+  --workflow ~/Projects/pressure-qc/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
   --workflow-sha256 cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2 \
   --official docs/yv_response_confirmation/official_20261021T113504Z \
   --out <new folder> --stations RR17 RR18 RR22 RR56
@@ -353,7 +353,7 @@ PYTHONPATH=src:. $PY scripts/confirm_yv_responses.py compare \
 Pilot (saved spectra only; seconds; always into a NEW folder):
 
 ```bash
-M=/Users/mohammadamin/Projects/pressure-qc
+M=~/Projects/pressure-qc
 PYTHONPATH=src:. $PY scripts/run_response_pilot.py \
   --workflow $M/results/NETWORKS/YV_RAYLEIGH_NO_TILT/_workflow/rayleigh.json \
   --workflow-sha256 cbe5af4ae7782903d96ea5f6eeff3c07ca3c57e85b44f4f3d55c68f9f85486d2 \

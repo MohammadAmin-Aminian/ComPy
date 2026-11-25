@@ -38,8 +38,9 @@ Scripts written for ComPy 1.2.x keep running: `inv_compy`, `ffplot`,
 `compy_processing`, `compy_inversion`, `compy_numerics`, `compy_streams`,
 `compy_cleaning`, `compy_diagnostics` and the old names on `compy`
 (`compy.Calculate_Compliance`, `compy.Rotate`, ...) all resolve, with a
-`DeprecationWarning` naming the replacement. They will be removed in ComPy
-1.3.0. Main renames:
+`DeprecationWarning` naming the replacement. Their removal was announced for
+ComPy 1.3.0; they are still present in ComPy 1.3 and will go in a later major
+version. Main renames:
 
 | ComPy 1.2.x | Now |
 |---|---|
@@ -281,7 +282,10 @@ post.save("RR52_final")  # .npz draws and .json summary
   relation (0 % at 4.2 km/s, 100 % at 2.2 km/s) to every posterior draw.
 
 The forward model is the `raydep` propagator, compiled with Numba when it is
-installed (about 140 times faster). Chains run in spawned processes: call
+installed (it is, with disba). One evaluation of the default 20-layer model at
+nine frequencies takes 4 µs compiled and 330 µs as plain Python, measured on an
+Apple M-series laptop in November 2026 (about 75 times; the 2.x model gave about
+140 times). Chains run in spawned processes: call
 `sample` from a script guarded by `if __name__ == "__main__":` or from a
 notebook, or pass `processes=1`.
 

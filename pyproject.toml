@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "seafloor-compy"
-version = "1.3.2.0"
+version = "1.3.2.1"
 description = "Seafloor compliance, pressure-gauge QC and calibration, and layered elastic inversion"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -35,15 +35,15 @@ maps = ["cartopy>=0.24"]
 
 [project.scripts]
 compy-invert = "compy.inversion.cli:main"
-compy-pressure = "compy_pressure.network:main"
-compy-pressure-inventory = "compy_pressure.inventory:main"
-compy-pressure-tilt = "compy_pressure.tilt:main"
-compy-pressure-local-p = "compy_pressure.local_p_check:main"
-compy-pressure-microseism = "compy_pressure.microseism_check:main"
-compy-pressure-paired = "compy_pressure.paired_spectra:main"
-compy-pressure-noise-model = "compy_pressure.group_noise_model:main"
-compy-pressure-approved-noise-model = "compy_pressure.noise_model:main"
-compy-pressure-atlas = "compy_pressure.atlas.cli:main"
+compy-pressure = "compy_pressure._commands:network"
+compy-pressure-inventory = "compy_pressure._commands:inventory"
+compy-pressure-tilt = "compy_pressure._commands:tilt"
+compy-pressure-local-p = "compy_pressure._commands:local_p"
+compy-pressure-microseism = "compy_pressure._commands:microseism"
+compy-pressure-paired = "compy_pressure._commands:paired"
+compy-pressure-noise-model = "compy_pressure._commands:noise_model"
+compy-pressure-approved-noise-model = "compy_pressure._commands:approved_noise_model"
+compy-pressure-atlas = "compy_pressure._commands:atlas"
 
 [project.urls]
 Repository = "https://github.com/MohammadAmin-Aminian/ComPy"

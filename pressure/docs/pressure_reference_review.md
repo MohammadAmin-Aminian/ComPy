@@ -158,7 +158,7 @@ Run the latest RR52 display (creates a new timestamped folder and opens the
 four-panel comparison plus the gain-shift plot):
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 PYTHONPATH=src:. /opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python \
   scripts/plot_rr40_gain_comparison.py --station RR52 --show
 ```

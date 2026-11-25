@@ -11,7 +11,7 @@ See [the literature review and RR52 command](pressure_reference_review.md).
 ## Pressure probability heat map (current requested view)
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   -m compy_pressure.plot_network_ppsd --network YV --channels BDH --probability --show
 ```
@@ -51,7 +51,7 @@ remain overlaid. The new histogram NPZ is derived only; sources stay unchanged.
 ## Pressure only: every individual spectrum, one colour, no summary lines
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   -m compy_pressure.plot_network_ppsd --network YV --channels BDH \
   --curves-only --single-color --show
@@ -72,7 +72,7 @@ data are read, no response/gain is changed, and no master/score is written.
 All 172 available YV products are registered: 43 each of BDH, BHZ, BH1 and BH2.
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 PYTHONPATH=src:. conda run --no-capture-output -n compy python \
   -m compy_pressure.plot_network_ppsd --network YV --channels BDH BHZ BH1 BH2
 ```

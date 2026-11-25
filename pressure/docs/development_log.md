@@ -573,7 +573,7 @@ Rerun stage 3 if processing was interrupted or channels need retrying.
 **0. Enter the checkout and limit numerical threads per worker.**
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 ```
 
@@ -721,9 +721,9 @@ the pressure channels of a drive holding `INVENTORIES/` and `SDS/` (or `Data/`),
 writing everything to a new folder (default `~/Desktop/ComPy/fresh_run_<date>`):
 
 ```bash
-bash scripts/run_fresh_pressure_ppsd.sh /Volumes/DATA_bruitfm inventory
-bash scripts/run_fresh_pressure_ppsd.sh /Volumes/DATA_bruitfm check --network 7D
-bash scripts/run_fresh_pressure_ppsd.sh /Volumes/DATA_bruitfm all --network YV
+bash scripts/run_fresh_pressure_ppsd.sh /Volumes/DATA inventory
+bash scripts/run_fresh_pressure_ppsd.sh /Volumes/DATA check --network 7D
+bash scripts/run_fresh_pressure_ppsd.sh /Volumes/DATA all --network YV
 ```
 
 The network options it uses are also available directly:

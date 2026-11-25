@@ -7,7 +7,7 @@ trial; use its [saved comparison](socrates_all_station_comparison.md) for review
 The commands below reproduce optional experiments in new result folders.
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network both --open-plots
 ```
@@ -32,7 +32,7 @@ PYTHONPATH=src conda run --no-capture-output -n compy python \
 ## All previously tested stations
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 PYTHONPATH=src conda run --no-capture-output -n compy python \
   scripts/run_calibration_experiment.py --network all --all-stations --open-plots
 ```

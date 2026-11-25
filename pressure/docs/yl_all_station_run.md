@@ -21,7 +21,7 @@ products. Existing manual master fields and scores remain.
 The complete sequence is packaged as a runner that stops on command errors:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 bash scripts/run_yl_all.sh
 ```
 
@@ -30,7 +30,7 @@ It does not automatically open plot windows. Use the viewer after completion.
 Run in order, stopping if a command fails:
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 conda run --no-capture-output -n compy python scripts/prepare_yl_test.py --all-stations
 
 YL_ALL_ARGS=()

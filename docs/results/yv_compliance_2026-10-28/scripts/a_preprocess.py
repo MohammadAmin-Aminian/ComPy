@@ -26,8 +26,8 @@ from pathlib import Path
 import numpy as np
 from obspy import Stream, UTCDateTime, read, read_inventory
 
-SDS = Path("/Volumes/DATA_bruitfm/SDS")
-INVENTORY = Path("/Volumes/DATA_bruitfm/INVENTORIES/YV.xml")
+SDS = Path("/Volumes/DATA/SDS")
+INVENTORY = Path("/Volumes/DATA/INVENTORIES/YV.xml")
 WORK = Path(__file__).resolve().parents[1] / "work"
 CHANNELS = ("BHZ", "BH1", "BH2", "BDH")
 FACTORS = (5, 5, 2)

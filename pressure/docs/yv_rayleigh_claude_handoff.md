@@ -155,7 +155,7 @@ Some existing review scripts also read raw windows: inspect before running.
 
 ## Exact saved inputs and provenance
 
-Local project root: `/Users/mohammadamin/Projects/pressure-qc`.
+Local project root: `~/Projects/pressure-qc`.
 Python: `/opt/homebrew/Caskroom/miniforge/base/envs/compy/bin/python`,
 with `PYTHONPATH=src:.`.
 

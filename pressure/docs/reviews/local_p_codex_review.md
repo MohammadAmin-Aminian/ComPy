@@ -11,7 +11,7 @@ Claude's worktree and main remain untouched. No full campaign was rerun.
 
 ## Verification
 
-Commands ran in `/Users/mohammadamin/Projects/pressure-qc-localp-review`, using
+Commands ran in `~/Projects/pressure-qc-localp-review`, using
 the `compy_pressure` environment and `PYTHONPATH=src:.`.
 
 | Check | Result |

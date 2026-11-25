@@ -1,6 +1,6 @@
 # Baseline microseism pressure–vertical comparison
 
-Explicit campaign: `/Users/mohammadamin/Projects/pressure-qc/results/DIAGNOSTICS/MICROSEISM_BASELINE_LOGS/run_20261014T170400Z/summary.tsv`.
+Explicit campaign: `~/Projects/pressure-qc/results/DIAGNOSTICS/MICROSEISM_BASELINE_LOGS/run_20261014T170400Z/summary.tsv`.
 
 ## Result
 

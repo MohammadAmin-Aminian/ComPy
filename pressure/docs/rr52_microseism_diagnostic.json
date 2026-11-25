@@ -1,7 +1,7 @@
 {
   "status": "diagnostic_only",
   "station": "YV.RR52",
-  "source_comparison": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json",
+  "source_comparison": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json",
   "pressure_seed_id": "YV.RR52.00.BDH",
   "vertical_seed_id": "YV.RR52.00.BHZ",
   "input_interval_utc": [
@@ -160,23 +160,23 @@
   "provenance": {
     "saved_input_artifacts": {
       "comparison": {
-        "path": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json",
+        "path": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/comparison.json",
         "sha256": "430976c5372c5e586b9551e386961f76cc247cc79390028858a082cbabc2ddc1"
       },
       "spectra": {
-        "path": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.npz",
+        "path": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.npz",
         "sha256": "5ffc9082882681d1305ae7f493da531ed745efa5058345b6d5a6855046c77b62"
       },
       "frequency_table": {
-        "path": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.csv",
+        "path": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra.csv",
         "sha256": "b45972dbf45bdadc305b21779045333e0c6e3a0d4715b81fa2c11deb82885ee8"
       },
       "windows": {
-        "path": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/windows.csv",
+        "path": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/windows.csv",
         "sha256": "42ab19863ab2ab5edd8c7bbeded528dfd85f138f49e1f990811961612b0a17a4"
       },
       "plot": {
-        "path": "/Users/mohammadamin/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra_coherence_transfer.png",
+        "path": "~/Projects/pressure-qc/results/NETWORKS/TEST/YV/RR52/YV.RR52.00.BDH__20121019T090000__58afc2d6f005/paired_spectra/run_bfbef17f2c13/spectra_coherence_transfer.png",
         "sha256": "19a45d72e64b3c84dc5eab7c3ab231985e79a40d3954c916b001990b10d37b2d"
       }
     },
@@ -185,15 +185,15 @@
   },
   "output_files": {
     "frequency_table": {
-      "path": "/Users/mohammadamin/Projects/pressure-qc/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/frequency_diagnostic.csv",
+      "path": "~/Projects/pressure-qc/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/frequency_diagnostic.csv",
       "sha256": "9dda929234ae59fdab719b66f86d0ece102ae601c6e9b2753a888fabe01b4b95"
     },
     "daily_table": {
-      "path": "/Users/mohammadamin/Projects/pressure-qc/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/daily_diagnostic.csv",
+      "path": "~/Projects/pressure-qc/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/daily_diagnostic.csv",
       "sha256": "cf974146fccca1e24a577dc77907aed48d4f7e4151f9d12a1a1320af324206fa"
     },
     "plot": {
-      "path": "/Users/mohammadamin/Projects/pressure-qc/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/microseism_pressure_vertical_diagnostic.png",
+      "path": "~/Projects/pressure-qc/results/DIAGNOSTICS/RR52_MICROSEISM/run_28de4707b751/microseism_pressure_vertical_diagnostic.png",
       "sha256": "aed2186aca7ad2b02e531ab634b48a61aae151bfb22b3e231bd0f78509939a5e"
     }
   }

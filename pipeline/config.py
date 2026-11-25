@@ -24,8 +24,9 @@ FIGURES = ROOT / "figures"
 
 # --- data -------------------------------------------------------------------
 NETWORK = "XE"  # YV
-# SDS archive; COMPY_SDS points stage A at a local copy (a_fast.py).
-SDS = Path(os.environ.get("COMPY_SDS", "/Volumes/DATA_bruitfm/SDS"))
+# SDS archive: <run folder>/SDS unless COMPY_SDS or the configuration file names
+# another place (a_fast.py points COMPY_SDS at its local copy).
+SDS = Path(os.environ.get("COMPY_SDS", ROOT / "SDS"))
 SDS_LOCATION = "00"  # location code in the SDS file names
 YEARS = (2018, 2019)  # YV: (2012, 2013)
 INVENTORY = ROOT / "metadata" / f"{NETWORK}.xml"  # seismometer and DPG responses

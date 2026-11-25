@@ -99,12 +99,32 @@ The distribution is `seafloor-compy`; it installs the `compy` package and
 the `compy_pressure` package. The ComPy 1.2.x module names (`inv_compy`,
 `ffplot`, `compy_processing`, ...) still import, with a deprecation warning
 that names the new location. Dependencies: NumPy, SciPy, Matplotlib, ObsPy,
-TiSKitPy 2.3 and disba; Numba is optional and speeds up the inversion about
-140×.
+TiSKitPy 2.3 or 2.4 and disba. Numba comes with disba and compiles the forward
+model, which is then about 75 times faster for the default model (the code
+also runs without it). Eight of the ten commands (`compy-pressure ...`) need the
+`pressure` extra, and the maps need `maps`; a command started without its extra
+says which one to install.
+
+To install a release without cloning, take the wheel of the
+[release page](https://github.com/MohammadAmin-Aminian/ComPy/releases):
+
+```bash
+python -m pip install "seafloor-compy[pressure] @ https://github.com/MohammadAmin-Aminian/ComPy/releases/download/v1.3.2.0/seafloor_compy-1.3.2.0-py3-none-any.whl"
+```
+
+The wheel holds the packages and the commands. The network pipeline
+(`pipeline/`) and the examples are scripts of the repository and need the clone.
 
 ## Quick start
 
-Offline synthetic inversion (seconds):
+Offline, from two synthetic time series of a known crust to compliance and a Vs
+profile with its uncertainty (about one minute, no data needed):
+
+```bash
+MPLBACKEND=Agg python examples/6_End_to_end_synthetic.py --output worked_example
+```
+
+A shorter look at the inversion alone (seconds):
 
 ```bash
 MPLBACKEND=Agg python examples/synthetic_inversion.py
@@ -405,6 +425,7 @@ ComPy/
 │   └── results/             # processed networks: scripts, figures, tables
 │       ├── xe_young_orca_2026-11/      # latest Young ORCA run (README figures)
 │       ├── whole_archive_2026-11/
+│       ├── pressure_atlas_2026-11/
 │       ├── xe_young_orca_2026-10-29/
 │       ├── yv_compliance_2026-10-28/
 │       └── yv_inversion_2026-10-29/

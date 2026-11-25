@@ -18,7 +18,7 @@ copying a pressure multiplier across channels, responses or epochs.
 ## One safe command
 
 ```bash
-cd /Users/mohammadamin/Projects/pressure-qc
+cd ~/Projects/pressure-qc
 bash scripts/run_quality_review.sh
 ```
 
