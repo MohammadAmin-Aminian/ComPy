@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "seafloor-compy"
-version = "1.3.2.1"
+version = "1.3.3.0"
 description = "Toolbox for ocean-bottom seismic and pressure data: compliance, pressure-gauge calibration and noise, Bayesian inversion"
 readme = "README.md"
 requires-python = ">=3.10"

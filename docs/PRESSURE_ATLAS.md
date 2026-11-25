@@ -111,6 +111,17 @@ from 15 to 10), and no gauge covers 300-1000 s (the longest period kept is 468 s
 hydrophones remain, and the 95 % curve of the model falls by up to 30 dB there (the noise of the APGs and DPGs).
 DPGs of other brands than SIO keep less: INSU 117 s, generic 78 s, LDEO 30 s (their responses fall 3 dB there).
 
+### Rule V (validated limits)
+
+`population.band_rule = "V"` keeps the structure of rule W and changes what the evidence supports; the module docstring of
+`compy_pressure.atlas.band_rule` lists each change and its evidence. In short: the estimator limit stays 468 s; the SIO DPGs of
+the networks whose response was checked against absolute gauges (table column `dpg_validated`) are divided out to 468 s (poles by
+`dpg_poles_s`, tolerance by `tolerance_period_s`), other DPGs keep rule W; the DPG high limit comes from the gauge's own noise floor
+(column `f_hi_data_hz`); a hydrophone cut-off validated on the phase is never taken beyond 10 dB of response correction;
+`band_rule_lo_evidence` and `band_rule_hi_evidence` say which kind of evidence stands behind each limit (physical bound, metadata,
+intercomparison, phase, data). Records shorter than `population.min_windows` are dropped; 28 windows (42 h) is advised and such
+gauges should be flagged as short records.
+
 ## Models
 
 Each gauge counts once. Its histogram of window levels, shifted by its gain, is normalised at each period and

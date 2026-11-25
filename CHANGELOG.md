@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.3.3.0 — 2026-11-25
+
+### Pressure atlas: rule V, validated limits
+
+- `population.band_rule = "V"`: rule W changed by what a review of the evidence supports (four independent reviewers, 24 Nov 2026).
+  DPG responses are fitted by first-order high-pass poles (`dpg_poles_s`) and divided out within a stated tolerance
+  (`tolerance_period_s`) only for the response family verified against absolute gauges (table column `dpg_validated`: the
+  Cascadia SIO type, 468 s instead of 30 s); other DPGs keep rule W. The DPG high limit is the level 6 dB above the gauge's own
+  noise floor (column `f_hi_data_hz`), not a type-wide cap (13 Hz was wrong). Hydrophone cut-offs validated on the phase are
+  never taken beyond 10 dB of response correction. Each limit carries its evidence class (`band_rule_lo_evidence`,
+  `band_rule_hi_evidence`). The estimator limit stays 468 s (a 900 s option for deep absolute gauges, `apg_deep_depth_m`, is off:
+  bias +1 to +2 dB on steep spectra). The first-bin minimum record is `population.min_windows`; 28 windows (42 h) is the advised value.
+  Tests in `tests/test_pressure_atlas_band_rule.py`.
+
+### Documentation
+
+- README: the atlas figures are the map of the 381 gauges and the global noise model with the published reference curves.
+- Citation: title of the toolbox and the Zenodo DOI of the archive (see CITATION.cff).
+
 ## 1.3.2.1 — 2026-11-25
 
 Corrections from the audit of 20 and 21 November 2026 (the audit report is with the software paper;

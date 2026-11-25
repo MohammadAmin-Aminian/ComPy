@@ -34,6 +34,8 @@ DEFAULTS = {
         # "atlas": the limits of the channel table (response 20-dB limit, validated hydrophone cut-off).
         # "W": two limits per channel and window from the response (3 dB), the sampling rate, the estimator, the
         # sensor type and the validated pressure-vertical phase (band_rule.py); needs the native-rate file of each channel.
+        # "V": rule W with the evidence-based widening of 25 Nov 2026 (DPG response divided out within a stated
+        # tolerance, estimator limit at the third Welch bin; see band_rule.py).
         "band_rule": "atlas",
     },
     "band_rule": {},  # overrides of band_rule.DEFAULTS, for the rule "W"

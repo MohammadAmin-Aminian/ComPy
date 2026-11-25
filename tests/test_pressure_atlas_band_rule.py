@@ -180,3 +180,59 @@ def test_band_taper_has_hard_edges_for_rule_w_and_the_octave_taper_otherwise():
     assert np.all(soft[inside_edge] < 1.0) and np.all(
         soft[(f >= 0.02) & (f <= 0.5)] == 1.0
     )
+
+
+# ---------------------------------------------------------------------------------------------- rule V
+def _two_pole_db(t_short, t_long):
+    return -(band_rule.correction_db(GRID, t_short) + band_rule.correction_db(GRID, t_long))
+
+
+def test_dpg_poles_find_one_and_two_poles():
+    one = band_rule.dpg_poles_s(_highpass_db(80.0))
+    assert one[0] == pytest.approx(2 * np.pi * 80.0, rel=0.1) and np.isnan(one[1])
+    ts, tl = band_rule.dpg_poles_s(_two_pole_db(30.0, 600.0))
+    assert ts == pytest.approx(30.0, rel=0.15) and tl == pytest.approx(600.0, rel=0.25)
+
+
+def test_tolerance_period_grows_with_the_corner_and_is_infinite_for_small_errors():
+    t3 = band_rule.tolerance_period_s(500.0, 2.5, 3.0)
+    assert 450.0 < t3 < 600.0  # about the corner: the error is 2.5 dB there for k = 3
+    assert band_rule.tolerance_period_s(30.0, 2.5, 3.0) < 35.0
+    assert np.isinf(band_rule.tolerance_period_s(30.0, 2.5, 1.2, two_sided=True))  # 20 log10 1.2 = 1.6 dB < 2.5 dB
+
+
+def test_rule_v_dpg_limits_verified_and_unverified():
+    cfg = {"rule": "V"}
+    db = _two_pole_db(29.5, 595.0)[None, :]
+    plain = band_rule.channel_limits("DPG", 40.0, db, cfg=cfg)
+    assert 1 / plain.f_lo_hz[0] < 40.0 and plain.lo_by == ["response"]  # a 30 s corner nobody checked: its -3 dB point, as in rule W
+    ok = band_rule.channel_limits("DPG", 40.0, db, cfg=cfg, dpg_validated=True)
+    assert 1 / ok.f_lo_hz[0] == pytest.approx(468.5, abs=1.0) and ok.lo_by == ["estimator"]  # verified: up to the estimator limit
+    slow = band_rule.channel_limits("DPG", 40.0, _highpass_db(80.0), cfg=cfg)
+    assert 1 / slow.f_lo_hz[0] == pytest.approx(300.0, abs=1.0)  # 80 s time constant: unverified, 300 s as in rule W
+
+
+def test_rule_v_floor_limit_apg_depth_and_hydrophone_correction_cap():
+    cfg = {"rule": "V"}
+    flat = np.zeros(len(GRID))
+    d = band_rule.channel_limits("DPG", 62.5, flat, cfg=cfg, f_hi_data_hz=3.0)
+    assert d.f_hi_hz[0] == pytest.approx(3.0) and d.hi_by == ["noise floor"]
+    assert band_rule.channel_limits("DPG", 62.5, flat, cfg=cfg).hi_by == ["sampling"]  # no 13 Hz type cap in rule V
+    shallow = band_rule.channel_limits("APG", 125.0, flat, cfg=cfg, depth_m=175.0)
+    deep = band_rule.channel_limits("APG", 125.0, flat, cfg=cfg, depth_m=3000.0)
+    assert 1 / shallow.f_lo_hz[0] == pytest.approx(468.5, abs=1.0) and 1 / deep.f_lo_hz[0] == pytest.approx(468.5, abs=1.0)  # the 900 s option is off
+    opt = band_rule.channel_limits("APG", 125.0, flat, cfg={"rule": "V", "apg_deep_depth_m": 1500.0}, depth_m=3000.0)
+    assert 1 / opt.f_lo_hz[0] == pytest.approx(900.0, abs=1.0)
+    # a hydrophone whose validated cut-off (200 s) lies beyond the period where the correction reaches 10 dB is cut there
+    hp = _highpass_db(2.0)  # corner at 12.6 s: the correction reaches 10 dB at 3 x 12.6 = 38 s
+    h = band_rule.channel_limits("Hydrophone", 100.0, hp, cfg=cfg, validated_pz_hz=1 / 200.0)
+    assert h.lo_by == ["response correction cap"] and 30.0 < 1 / h.f_lo_hz[0] < 45.0
+
+
+def test_rule_v_response_cutoff_keeps_the_whole_bin_inside():
+    x = (1 / GRID) / 2.0  # first-order low-pass with its corner at 2 Hz
+    db = -10 * np.log10(1 + x**2)
+    w = band_rule.channel_limits("Hydrophone", 500.0, db, cfg={"rule": "W"})
+    v = band_rule.channel_limits("Hydrophone", 500.0, db, cfg={"rule": "V"})
+    assert w.hi_by == ["response"] and v.hi_by == ["response"]
+    assert v.f_hi_hz[0] == pytest.approx(w.f_hi_hz[0] / 2**0.125)
