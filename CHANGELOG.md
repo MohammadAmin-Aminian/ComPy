@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.2.1 — unreleased
+## 1.3.2.1 — 2026-11-25
 
 Corrections from the audit of 20 and 21 November 2026 (the audit report is with the software paper;
 the tests are in `tests/test_audit_2026_11.py`). No formula changes, and no result of the runs kept in
