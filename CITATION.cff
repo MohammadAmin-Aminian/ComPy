@@ -6,7 +6,7 @@ authors:
   - family-names: Aminian
     given-names: Mohammad-Amin
     orcid: "https://orcid.org/0009-0001-9192-2734"
-version: 1.3.2.1
+version: 1.3.3.0
 date-released: 2026-11-25
 repository-code: "https://github.com/MohammadAmin-Aminian/ComPy"
 doi: "10.5281/zenodo.13380107"
