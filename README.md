@@ -2,7 +2,7 @@
 
 <h1 align="center">ComPy</h1>
 
-<p align="center"><b>Seafloor compliance, pressure-gauge calibration and Bayesian shear-velocity inversion for broadband ocean-bottom seismometers.</b></p>
+<p align="center"><b>Toolbox for ocean-bottom seismic and pressure data: seafloor compliance, pressure-gauge calibration and noise, Bayesian shear-velocity inversion.</b></p>
 
 <p align="center">
 <a href="https://github.com/MohammadAmin-Aminian/ComPy/actions/workflows/tests.yml"><img src="https://github.com/MohammadAmin-Aminian/ComPy/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
@@ -451,7 +451,7 @@ ComPy/
 ## Citation
 
 If you use ComPy, please cite the article and the software version you used
-([CITATION.cff](CITATION.cff), [Zenodo](https://zenodo.org/doi/10.5281/zenodo.13380107)).
+([CITATION.cff](CITATION.cff)). The software is archived on Zenodo: [10.5281/zenodo.13380107](https://doi.org/10.5281/zenodo.13380107) always points to the latest version; version 1.3.2.1 is [10.5281/zenodo.24537180](https://doi.org/10.5281/zenodo.24537180).
 
 ```bibtex
 @article{aminian2025shallow,
