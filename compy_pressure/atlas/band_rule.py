@@ -243,7 +243,9 @@ def tolerance_period_s(corner_s, tol_db=2.5, k=3.0, two_sided=False):
     T = corner_s * np.logspace(-1.0, 3.0, 4001)
     err = correction_db(T, corner_s) - correction_db(T, k * corner_s)
     if two_sided:
-        err = np.maximum(err, np.abs(correction_db(T, corner_s) - correction_db(T, corner_s / k)))
+        err = np.maximum(
+            err, np.abs(correction_db(T, corner_s) - correction_db(T, corner_s / k))
+        )
     bad = np.where(err > tol_db)[0]
     if not len(bad):
         return np.inf
@@ -254,7 +256,9 @@ def tolerance_period_s(corner_s, tol_db=2.5, k=3.0, two_sided=False):
     return float(np.exp(np.log(T[i - 1]) + t * (np.log(T[i]) - np.log(T[i - 1]))))
 
 
-def dpg_tolerance_limit_hz(response_db, periods=None, tol_db=2.5, k=3.0, k_short=None, fit_from_s=3.0):
+def dpg_tolerance_limit_hz(
+    response_db, periods=None, tol_db=2.5, k=3.0, k_short=None, fit_from_s=3.0
+):
     """Lowest frequency [Hz] at which every pole of a DPG response is divided out within ``tol_db``; 0 when there is no limit.
 
     ``k`` applies to every pole (one-sided); ``k_short`` (two-sided) replaces it for the short-period pole of a two-pole response
@@ -265,7 +269,11 @@ def dpg_tolerance_limit_hz(response_db, periods=None, tol_db=2.5, k=3.0, k_short
         return 0.0, np.nan, np.nan
     lims = []
     if np.isfinite(t_long):
-        lims.append(tolerance_period_s(t_short, tol_db, k_short or k, two_sided=k_short is not None))
+        lims.append(
+            tolerance_period_s(
+                t_short, tol_db, k_short or k, two_sided=k_short is not None
+            )
+        )
         lims.append(tolerance_period_s(t_long, tol_db, k))
     else:
         lims.append(tolerance_period_s(t_short, tol_db, k))
@@ -276,13 +284,19 @@ def dpg_tolerance_limit_hz(response_db, periods=None, tol_db=2.5, k=3.0, k_short
 class Limits:
     """Limits of one channel for each response epoch [Hz], and what sets them."""
 
-    def __init__(self, f_lo_hz, f_hi_hz, lo_by, hi_by, lo_evidence=None, hi_evidence=None):
+    def __init__(
+        self, f_lo_hz, f_hi_hz, lo_by, hi_by, lo_evidence=None, hi_evidence=None
+    ):
         self.f_lo_hz = np.asarray(f_lo_hz, float)
         self.f_hi_hz = np.asarray(f_hi_hz, float)
         self.lo_by = list(lo_by)
         self.hi_by = list(hi_by)
-        self.lo_evidence = list(lo_evidence) if lo_evidence is not None else [""] * len(self.lo_by)
-        self.hi_evidence = list(hi_evidence) if hi_evidence is not None else [""] * len(self.hi_by)
+        self.lo_evidence = (
+            list(lo_evidence) if lo_evidence is not None else [""] * len(self.lo_by)
+        )
+        self.hi_evidence = (
+            list(hi_evidence) if hi_evidence is not None else [""] * len(self.hi_by)
+        )
 
 
 def channel_limits(
@@ -323,13 +337,21 @@ def channel_limits(
     welch = welch_limit_hz(half_octave=c["bin_half_octave"])
     if rule_v and c["estimator_period_s"]:
         welch = 1.0 / float(c["estimator_period_s"])
-    if rule_v and sensor_type == "APG" and c["apg_deep_depth_m"] and np.isfinite(depth_m) and depth_m >= c["apg_deep_depth_m"]:
+    if (
+        rule_v
+        and sensor_type == "APG"
+        and c["apg_deep_depth_m"]
+        and np.isfinite(depth_m)
+        and depth_m >= c["apg_deep_depth_m"]
+    ):
         welch = 1.0 / float(c["apg_deep_period_s"])
     f_lo, f_hi, lo_by, hi_by, lo_ev, hi_ev = [], [], [], [], [], []
     for x in db:
         r_lo, r_hi = response_band_hz(x, periods, c["response_drop_db"])
         if rule_v and np.isfinite(r_hi):
-            r_hi = r_hi / 2.0 ** c["bin_half_octave"]  # rule V: the whole quarter-octave bin stays under the response cut-off
+            r_hi = (
+                r_hi / 2.0 ** c["bin_half_octave"]
+            )  # rule V: the whole quarter-octave bin stays under the response cut-off
         cands = {
             "sampling": h1,
             "response": r_hi if np.isfinite(r_hi) else np.inf,
@@ -352,16 +374,31 @@ def channel_limits(
         ev = "metadata"
         if sensor_type == "Hydrophone":
             if np.isfinite(validated_pz_hz):
-                inst, why, ev = float(validated_pz_hz), "validated P-Z phase", "P-Z phase"
+                inst, why, ev = (
+                    float(validated_pz_hz),
+                    "validated P-Z phase",
+                    "P-Z phase",
+                )
                 if rule_v:
-                    f_c, _ = response_band_hz(x, periods, c["hydrophone_max_correction_db"])
+                    f_c, _ = response_band_hz(
+                        x, periods, c["hydrophone_max_correction_db"]
+                    )
                     if np.isfinite(f_c) and f_c > inst:
-                        inst, why, ev = f_c, "response correction cap", "metadata (10 dB correction cap)"
+                        inst, why, ev = (
+                            f_c,
+                            "response correction cap",
+                            "metadata (10 dB correction cap)",
+                        )
             else:
                 inst, why, ev = r_lo, "response", "metadata (-3 dB)"
         elif sensor_type == "DPG" and rule_v and dpg_validated:
             inst, _t_s, _t_l = dpg_tolerance_limit_hz(
-                x, periods, c["dpg_tol_db"], c["dpg_k_unvalidated"], c["dpg_k_validated"], c["dpg_fit_from_period_s"]
+                x,
+                periods,
+                c["dpg_tol_db"],
+                c["dpg_k_unvalidated"],
+                c["dpg_k_validated"],
+                c["dpg_fit_from_period_s"],
             )
             why, ev = "DPG response, verified", "APG intercomparison + tolerance"
         elif sensor_type == "DPG":
