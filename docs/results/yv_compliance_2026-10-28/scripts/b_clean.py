@@ -1,4 +1,4 @@
-"""Stage B: clean one station's 1.25 Hz data for compliance (ComPy 2.2).
+"""Stage B: clean one station's 1.25 Hz data for compliance (ComPy 1.2.2).
 
 Order (Aminian et al. 2025, Fig. 2, adapted for unattended processing):
   1. Common coverage of BHZ/BH1/BH2/BDH; segments shorter than MIN_SEGMENT_H

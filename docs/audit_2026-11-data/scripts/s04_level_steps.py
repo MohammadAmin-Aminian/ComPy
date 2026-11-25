@@ -33,7 +33,7 @@ OUT = Path(os.environ.get("COMPY_AUDIT_OUT", ARCHIVE / "13_audit")) / "level_ste
 BANDS = {"ms": (0.1, 0.3), "ig": (0.007, 0.015)}
 BIN_S = 6 * 3600
 HALF_DAYS = 20
-#: Steps reported by the ComPy 3 audit (PR #21) to test here.
+#: Steps reported by the ComPy 1.3 audit (PR #21) to test here.
 DATED = {
     "YV": {"2013-09-14": ("RR28", "RR29", "RR40", "RR52"), "2013-06-06": ("RR50",),
            "2013-07-30": ("RR50",), "2013-08-05": ("RR36",), "2013-10-21": ("RR36",)},

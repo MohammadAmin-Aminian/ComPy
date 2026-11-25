@@ -182,7 +182,7 @@ def main():
              "so at that depth the ridge stations are not distinguishable from normal crust by Vs alone.")  # fmt: skip
     fill = {
         "DATE": time.strftime("%d %B %Y"),
-        "COMPY_VERSION": "2.4.0",
+        "COMPY_VERSION": "1.2.4.0",
         "NSTA_TOTAL": str(len(inv[0])),
         "DEPTH_MIN": f"{min(all_depths):.0f}",
         "DEPTH_MAX": f"{max(all_depths):.0f}",

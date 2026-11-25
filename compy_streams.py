@@ -1,4 +1,4 @@
-"""Deprecated alias of :mod:`compy.streams` (ComPy 2.x module name)."""
+"""Deprecated alias of :mod:`compy.streams` (ComPy 1.2.x module name)."""
 
 import sys
 

@@ -2,12 +2,12 @@
 
 30 Scripps broadband OBS (Trillium 240 and Cox-Webb DPG at 50 Hz), 4386-4824 m of water on about 40 Ma Pacific
 seafloor, April 2018 to May 2019. These results replace the run of 29 October 2026
-([xe_young_orca_2026-10-29](../xe_young_orca_2026-10-29/README.md), kept as the record of ComPy 2.4-2.8).
+([xe_young_orca_2026-10-29](../xe_young_orca_2026-10-29/README.md), kept as the record of ComPy 1.2.4-1.2.8).
 
 | Step | Run | Code |
 |---|---|---|
-| Stages A-D (cleaning, tilt, Rayleigh-wave gain, compliance) | 13 November 2026, from raw data | ComPy 3.0 |
-| Stage E (Vs inversion), final model `geo` | 16 November 2026 | ComPy 3.1 (`auto`, ordered Vs, Moho rule on the whole crust) |
+| Stages A-D (cleaning, tilt, Rayleigh-wave gain, compliance) | 13 November 2026, from raw data | ComPy 1.3.0 |
+| Stage E (Vs inversion), final model `geo` | 16 November 2026 | ComPy 1.3.1 (`auto`, ordered Vs, Moho rule on the whole crust) |
 
 The final inversion adds two priors to the default: the Moho from the complete Bouguer anomaly (crust 6.5 ± 1 km
 where the anomaly is above 320 mGal, 7.5 ± 1 km below), and the sediment thickness from DSDP Sites 73-75 (σ 50 %).

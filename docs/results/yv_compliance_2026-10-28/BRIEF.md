@@ -1,7 +1,7 @@
 # Task brief: YV broadband seafloor compliance with ComPy (2026-10-28)
 
 ## Goal
-Audit and correct ComPy 2.1, then compute the seafloor compliance function, with
+Audit and correct ComPy 1.2.1, then compute the seafloor compliance function, with
 uncertainties and quality flags, for the YV (RHUM-RUM) broadband OBS stations.
 The work stops at compliance. There is no inversion.
 

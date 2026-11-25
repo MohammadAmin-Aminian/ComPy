@@ -1,6 +1,6 @@
 # Alternative inversions
 
-ComPy 2.8 adds inversions that are separate from the main Bayesian workflow in
+ComPy 1.2.8 adds inversions that are separate from the main Bayesian workflow in
 `compy.inversion.dram`, to test how much a Vs model depends on the method. They have their
 own forward model and do not call `dram`, `propagator` or `occam`. Stage E stays the
 main result: these are checks.
@@ -28,7 +28,7 @@ limit.
 | `invert_minimum_structure` | On by default: every layer stays at least 1 m/s below the fixed half-space |
 | `invert_occam(moho_jump=True)` | Off by default; same bound |
 
-**Stage E results therefore change compared with ComPy 2.7.**
+**Stage E results therefore change compared with ComPy 1.2.7.**
 
 ## Forward model
 

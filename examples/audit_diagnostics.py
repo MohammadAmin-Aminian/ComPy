@@ -1,10 +1,10 @@
-"""ComPy 3 audit: diagnostics, anomaly ranking and checks on archived results.
+"""ComPy 1.3 audit: diagnostics, anomaly ranking and checks on archived results.
 
 Runs on the stage C/E products committed in ``docs/results`` (no waveforms,
 no ObsPy) and writes figures, the ranked anomaly table and the numbers
 quoted in ``docs/audit_2026-11/REPORT.md``::
 
-    MPLBACKEND=Agg python examples/compy3_diagnostics.py --output docs/audit_2026-11
+    MPLBACKEND=Agg python examples/audit_diagnostics.py --output docs/audit_2026-11
 
 Sections (each writes into ``<output>/figures`` and ``<output>/numbers.json``):
 
@@ -15,7 +15,7 @@ Sections (each writes into ``<output>/figures`` and ``<output>/numbers.json``):
 5. coherence-gate selection bias (Monte Carlo);
 6. water-column assumptions of the Rayleigh-wave calibration;
 7. time-frequency figures on a synthetic record (the waveforms are not in
-   the repository; ``examples/compy3_waveform_diagnostics.py`` makes the
+   the repository; ``examples/audit_waveform_diagnostics.py`` makes the
    same figures from cleaned MiniSEED).
 """
 

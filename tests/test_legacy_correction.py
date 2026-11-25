@@ -1,4 +1,4 @@
-"""The pre-2.0 compliance estimator dropped the wave-attraction term."""
+"""The pre-1.2.0 compliance estimator dropped the wave-attraction term."""
 
 import numpy as np
 import pytest
@@ -7,13 +7,13 @@ from compy.numerics import legacy_wave_attraction_correction, wavenumber
 
 
 def _estimators(f, depth, ratio, gamma):
-    """Old (pre-2.0) and new (2.0) compliance from the same spectra."""
+    """Old (pre-1.2.0) and new (1.2.0) compliance from the same spectra."""
     w2 = (2 * np.pi * f) ** 2
     k = wavenumber(2 * np.pi * f, depth)
     kh = k * depth
     pa = 2 * np.pi * (6.6743e-11 / 9.8) * (1 + np.exp(-2 * kh)) / 2
-    old = k * gamma * w2 / (w2 + 3.07e-6) * (pa + ratio)  # compy.py before 2.0
-    new = k * gamma * (w2 * ratio + pa) / (w2 + 3.07e-6)  # compy_processing 2.0
+    old = k * gamma * w2 / (w2 + 3.07e-6) * (pa + ratio)  # compy.py before 1.2.0
+    new = k * gamma * (w2 * ratio + pa) / (w2 + 3.07e-6)  # compy_processing 1.2.0
     return old, new
 
 

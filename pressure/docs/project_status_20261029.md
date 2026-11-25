@@ -17,7 +17,7 @@ the supervisor:
 - All tests pass on Python 3.10 and 3.13.
 - In the reproduction check, every QC and noise-model output matches
   PressureQC and the archived 28 October results.
-- What remains (commit, rebase onto ComPy 2.4, PR, the supervisor's answers):
+- What remains (commit, rebase onto ComPy 1.2.4, PR, the supervisor's answers):
   `integration/README.md`.
 
 Nothing is running.
@@ -50,6 +50,6 @@ kept as sent.
    them in PressureQC, export again, rerun the reproduction check, then release
    v2.0.0 as the frozen campaign record.
 2. The owner's go-ahead to commit both repositories and rebase the ComPy
-   branch onto `main` after the 2.4 merge.
+   branch onto `main` after the 1.2.4 merge.
 
 Earlier status: [`project_status_20261028.md`](project_status_20261028.md).

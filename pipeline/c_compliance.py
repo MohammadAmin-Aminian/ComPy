@@ -1,4 +1,4 @@
-"""Stage C: compliance function of one station for each DPG gain (ComPy 2.2).
+"""Stage C: compliance function of one station for each DPG gain (ComPy 1.2.2).
 
 Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
   * Non-overlapping WINDOW_S windows of cleaned BHZ [m] and BDH [Pa] that do
@@ -9,14 +9,14 @@ Method (Aminian et al. 2025, section 4.2, with the 2.2 stacked estimator):
     windows, otherwise 0.8 (as in the paper).
   * Band: widest run where the mean coherence of accepted windows reaches
     the threshold, searched in (BAND_SEARCH_LOW, BAND_MAX_FRACTION_FC * f_c)
-    with f_c=sqrt(g/2πH), that is up to kH = 4.0 (ComPy 3.2; before, up to f_c);
+    with f_c=sqrt(g/2πH), that is up to kH = 4.0 (ComPy 1.3.2; before, up to f_c);
     the gates are re-evaluated once in that band.
   * Compliance from stacked spectra (k |S_pz|/S_pp, gravity corrected),
     Bendat & Piersol uncertainty, phase, per-window mean and scatter.
   * Monthly stacks with the same band and threshold test temporal stability.
   * Covariance of the stack from its own windows (compy.inversion.errors:
     bootstrap over windows, slow level and tilt from 30-day blocks), saved with
-    the result as cov_rel for the inversion (ComPy 3).
+    the result as cov_rel for the inversion (ComPy 1.3).
 
 Gains: 'pressure' from config.PRESSURE_GAINS; 'compy' from
 work/<STA>/calibration/compy_gain.json (Stage D). Missing gains are skipped.
@@ -52,17 +52,17 @@ THRESHOLDS = (0.9, 0.8)
 BAND_SEARCH_LOW = 0.004
 INITIAL_BAND_LOW = 0.007
 INITIAL_BAND_HIGH_FRACTION = 0.8
-#: Upper end of the band search as a fraction of f_c = sqrt(g / 2 pi H) (ComPy 3.2).
+#: Upper end of the band search as a fraction of f_c = sqrt(g / 2 pi H) (ComPy 1.3.2).
 #: 0.8 f_c is kH = 4.0 in deep water, where the pressure of the archive's 379 gauges
 #: is 20 dB below its infragravity plateau (kH = 4.27, interquartile 4.07-4.33), and
 #: the limit the inversion already applied (``auto.compliance_data``). Above it the
 #: coherence of the whole archive falls from 0.95 to 0.76 (0.8-0.9 f_c) and 0.45
 #: (0.9-1.0 f_c), and the compliance bends away from the lower bins. Papers use
 #: 0.7 f_c (Zha & Webb 2016) to about 1.1 f_c (Crawford et al. 1998); see
-#: docs/COMPLIANCE_BAND.md. Set 1.0 for the behaviour of ComPy 2.2 to 3.1.
+#: docs/COMPLIANCE_BAND.md. Set 1.0 for the behaviour of ComPy 1.2.2 to 1.3.1.
 BAND_MAX_FRACTION_FC = getattr(config, "BAND_MAX_FRACTION_FC", 0.8)
 #: Frequency range saved. The upper limit rises to the band's upper edge where the
-#: band goes beyond it (shelf stations): before ComPy 3 the saved curve stopped at
+#: band goes beyond it (shelf stations): before ComPy 1.3 the saved curve stopped at
 #: 40 mHz while the band and the monthly curves went on, so stage E lost its
 #: month-to-month covariance there.
 OUTPUT_BAND = (0.002, 0.04)

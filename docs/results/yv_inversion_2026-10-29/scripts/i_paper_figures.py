@@ -125,7 +125,7 @@ def fig9(store):
             ax.set_ylabel("Depth [m]")
         if k >= 4:
             ax.set_xlabel("Shear Velocity [m/s]")
-    fig.suptitle("Vs posterior (ComPy 2.3, free crustal Vp/Vs, gain sampled; * stable and after-jump epochs "
+    fig.suptitle("Vs posterior (ComPy 1.2.3, free crustal Vp/Vs, gain sampled; * stable and after-jump epochs "
                  "inverted together)", fontsize=13)  # fmt: skip
     fig.tight_layout()
     fig.savefig(ROOT / "figures" / "paper_fig9_heatmaps.png", dpi=150)

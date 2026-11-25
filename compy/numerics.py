@@ -189,16 +189,16 @@ def plot_smooth(data, window_length, polyorder, **kwargs):
 
 
 def legacy_wave_attraction_correction(freq, depth, coherence=1.0):
-    """Compliance missing from estimates made with ComPy before 2.0 (1/Pa).
+    """Compliance missing from estimates made with ComPy before 1.2.0 (1/Pa).
 
-    Before 2.0, the wave-attraction term (gravitational acceleration of the
+    Before 1.2.0, the wave-attraction term (gravitational acceleration of the
     passing water mass per unit pressure, 2*pi*(G/g)*exp(-kH)*cosh(kH)) was
     added to the displacement/pressure ratio before the free-air factor
     omega**2/(omega**2 + 2g/R) was applied, so it entered multiplied by
-    omega**2 and was effectively dropped. Version 2.0 adds it in
+    omega**2 and was effectively dropped. Version 1.2.0 adds it in
     acceleration/pressure units. The difference is largest at low frequency
     (tens of per cent near 7 mHz at 3 km water depth). Add the returned value
-    to a pre-2.0 normalized compliance to obtain the 2.0 estimator; pass the
+    to a pre-1.2.0 normalized compliance to obtain the 1.2.0 estimator; pass the
     amplitude coherence used in that estimate (scalar or per frequency).
 
     The 2.0 estimator still multiplied the wave-attraction term by the
