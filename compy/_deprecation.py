@@ -3,7 +3,7 @@
 import importlib
 import warnings
 
-REMOVAL = "ComPy 3.0"
+REMOVAL = "ComPy 1.3.0"
 
 
 def _warn(old, new):

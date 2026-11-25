@@ -118,7 +118,7 @@ def test_stage_e_leak_correction_needs_a_usable_check(tmp_path, monkeypatch):
 
 
 def test_stage_c_band_search_stops_at_kh_4(stage_c, monkeypatch):
-    """ComPy 3.2: the band search ends at 0.8 f_c (kH = 4.0), the limit the inversion applies."""
+    """ComPy 1.3.2: the band search ends at 0.8 f_c (kH = 4.0), the limit the inversion applies."""
     depth = 4600.0
     fc = np.sqrt(GRAVITY / (2 * np.pi * depth))
     seen = {}

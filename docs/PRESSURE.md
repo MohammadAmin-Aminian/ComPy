@@ -1,6 +1,6 @@
 # Pressure gauges: QC, calibration and noise models (`compy_pressure`)
 
-ComPy 2.5 holds all of
+ComPy 1.2.5 holds all of
 [PressureQC](https://github.com/MohammadAmin-Aminian/bruit-fm). PressureQC checks
 and calibrates ocean-bottom pressure gauges across a whole waveform archive.
 It starts from an SDS archive and its StationXML and ends with one master
@@ -17,7 +17,7 @@ its 846-channel campaign.
 | [`pressure/README.md`](../pressure/README.md) | the PressureQC → ComPy name table |
 
 `compy_pressure`'s Rayleigh-wave calibration replaces ComPy's old
-`Pressure_calibration.py`, which was removed after ComPy 2.4.0. The README section "Pressure
+`Pressure_calibration.py`, which was removed after ComPy 1.2.4.0. The README section "Pressure
 calibration" has a migration table.
 
 ## Installation
@@ -154,11 +154,11 @@ control it:
 
 The full run is in `work/<STA>/calibration/compy_pressure/`.
 
-Check against the 2.4 stage D (`Pressure_calibration`), 30 October 2026. The
+Check against the 1.2.4 stage D (`Pressure_calibration`), 30 October 2026. The
 new stage D ran on the original SDS data and StationXML of the XE and YV runs,
 in separate folders:
 
-| Station | New stage D (`compy_pressure`) | 2.4 stage D | Difference |
+| Station | New stage D (`compy_pressure`) | 1.2.4 stage D | Difference |
 |---|---|---|---|
 | XE.CC11 | 0.711 ± 0.011 (14 events) | 0.698 ± 0.012 (12) | +1.9 % |
 | XE.WC03 | 0.790 ± 0.010 (9) | 0.779 ± 0.008 (9) | +1.4 % |

@@ -254,10 +254,10 @@ a:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
 </style>
 <main>
 <header class="prose" style="display:grid;gap:10px">
-  <p class="eyebrow">ComPy 2.3 · RHUM-RUM network YV · 29 October 2026</p>
+  <p class="eyebrow">ComPy 1.2.3 · RHUM-RUM network YV · 29 October 2026</p>
   <h1>Shear velocity beneath the YV broadband stations</h1>
   <p class="meta">Updated: second round with a sampled gain, the after-jump epochs and figures in the style of the paper.</p>
-  <p class="meta">Bayesian inversion of the 2.2 compliance results with the new <code>compy_inversion</code> module.
+  <p class="meta">Bayesian inversion of the 1.2.2 compliance results with the new <code>compy_inversion</code> module.
   Branch <code>claude/inversion-2026-10-29</code>, draft <a href="https://github.com/MohammadAmin-Aminian/ComPy/pull/7">PR #7</a>. All 124 tests pass.</p>
 </header>
 
@@ -341,7 +341,7 @@ a:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
     <li><b>v1 bounds</b> were 0.15–1.2 × the start (0.9–1.1 for the deepest layer), not those stated in the paper.</li>
     <li><b>v1 errors</b> were the standard deviation of single-window estimates (about 30–60 % of η). That is
       roughly √n too large for a mean of several thousand windows.</li>
-    <li><b>Pre-2.0 compliance</b> multiplied the wave-attraction term by ω²/(ω²+c), effectively dropping it. It
+    <li><b>Pre-1.2.0 compliance</b> multiplied the wave-attraction term by ω²/(ω²+c), effectively dropping it. It
       also used a free-air constant of <code>3.07*10e-6</code> = 3.07e-5. Both lowered η and made deep Vs too high.</li>
     <li><b>The v2 default alpha = 0.25</b> on a 1-m grid in m/s is a Gaussian prior on Vs jumps with σ = 4 m/s.</li>
     <li><b>Paper errata.</b> Eq. 13 has the acceptance inequality reversed, the misfit (1/N)√Σ is non-standard,

@@ -1,12 +1,12 @@
 # ComPy inversion overhaul, November 2026
 
-Audit and rebuild of the shear-velocity inversion of ComPy, against the primary literature and against tests that do not use any earlier ComPy result. Branch `inversion-overhaul`, proposed as ComPy 3.0.0. Working notes: [NOTES.md](NOTES.md).
+Audit and rebuild of the shear-velocity inversion of ComPy, against the primary literature and against tests that do not use any earlier ComPy result. Branch `inversion-overhaul`, proposed as ComPy 1.3.0.0. Working notes: [NOTES.md](NOTES.md).
 
 Every statement below is marked **[test]** (verified by a script in `scripts/`, output in `~/Desktop/ComPy/14_inversion_overhaul/`), **[source]** (taken from a publication that was read) or **[inferred]**.
 
 ## 1. Summary
 
-**What was wrong in the inversion of ComPy 2.3 to 2.8**
+**What was wrong in the inversion of ComPy 1.2.3 to 1.2.8**
 
 1. **The error model.** Each frequency bin carried an independent 1 % error. The real scatter of a stacked compliance curve is 0.2 to 0.4 % and strongly correlated between bins; what is uncertain is the level of the curve (pressure gain) and its slope (pressure response at low frequency). The old model was five times too loose on the shape of the curve, which explains chi-square/N near 0.4, and too strict on its slope, which is what carries the information about the deep crust. [test]
 2. **The prior.** Layers had a flat prior with a penalty on second differences. In the layers the data do not see, that penalty continues the shallow gradient and drives Vs to its bounds. This is the "deep layers press against their limits" of the earlier reports. [test]
@@ -15,7 +15,7 @@ Every statement below is marked **[test]** (verified by a script in `scripts/`, 
 5. **Fixed Moho** from a 1-degree model, and **uniform gain bounds** of 5 %, where two independent calibrations of the same gauges differ by more than that in one case out of six. [test]
 6. **Band.** At shelf stations the estimate collapses above the frequency where the pressure signal still reaches the seafloor; the coherence gate does not detect it, and the saved curve was also cut at 40 mHz. Shelf station 7D.J09B never fitted for these reasons. [test]
 
-**What was right.** The forward model (agreement with an independent 50-digit solution to 4e-7), the gravity corrections of the data (re-derived; the 2025 paper states their sign and size wrongly, the code is right), the sampler (acceptance rules read and tested; a ComPy 2.8 run repeats draw for draw), and the H1 estimator. [test]
+**What was right.** The forward model (agreement with an independent 50-digit solution to 4e-7), the gravity corrections of the data (re-derived; the 2025 paper states their sign and size wrongly, the code is right), the sampler (acceptance rules read and tested; a ComPy 1.2.8 run repeats draw for draw), and the H1 estimator. [test]
 
 **What changed.** A new default inversion, `compy.inversion.auto`, with errors measured from each station's own windows, a proper prior about a reference model, free Moho depth, Vp and density uncertain, sediment with its P modulus, a Gaussian gain prior, automatic band limits, sampling that repeats until it converges, and a result that marks the depths the data resolve. One command: `compy-invert`. Method: [../INVERSION.md](../INVERSION.md).
 
@@ -23,7 +23,7 @@ Every statement below is marked **[test]** (verified by a script in `scripts/`, 
 
 **What the data resolve.** At a deep-ocean station: the thickness of soft sediment, and broad averages of Vs between about 0.7 and 6 km. Not the top few hundred metres of basement, not thin layers, and nothing about Vp/Vs or density. [test]
 
-**How much the Vs models moved** (archive rerun, 155 tier-1 stations that are not "poor"; ComPy 3 against ComPy 2.8, median and 16 to 84 % range):
+**How much the Vs models moved** (archive rerun, 155 tier-1 stations that are not "poor"; ComPy 1.3 against ComPy 1.2.8, median and 16 to 84 % range):
 
 | Depth | Change of median Vs | Stations with this depth resolved |
 |---|---|---|
@@ -33,7 +33,7 @@ Every statement below is marked **[test]** (verified by a script in `scripts/`, 
 | 3 km | +7 % (-5 to +17) | 86 % |
 | 5 km | +11 % (-1 to +20) | 56 % |
 
-Soft-sediment thickness is 0.76 times the 2.8 value (median). At the eight stations of the 2025 paper the change is larger: Vs at 2 to 3 km rises by 4 to 16 % at six of them and falls by 9 % at RR29; at RR38, RR40, RR50 and RR52 the new medians at 2 to 5 km are 4.1 to 4.7 km/s (section 7.2). These numbers compare two ComPy versions; neither is a reference.
+Soft-sediment thickness is 0.76 times the 1.2.8 value (median). At the eight stations of the 2025 paper the change is larger: Vs at 2 to 3 km rises by 4 to 16 % at six of them and falls by 9 % at RR29; at RR38, RR40, RR50 and RR52 the new medians at 2 to 5 km are 4.1 to 4.7 km/s (section 7.2). These numbers compare two ComPy versions; neither is a reference.
 
 **Confidence.** High for the diagnosis of the error model, the prior and the forward model: each rests on a test. Moderate for absolute Vs below 2 km: it depends on the Vp/Vs and density priors and on the slope allowance, whose sizes are judgements stated in section 4 and tested in sections 5 and 8. Lower for Vs between 0.5 and 3 km where sediment is thick: there it depends on where the band is cut (section 8). The independent sediment map agrees with the soft-sediment thickness where sediment is thin (rank correlation 0.66 over 92 stations, section 7.3).
 
@@ -84,7 +84,7 @@ A global-matrix solver written for this audit (all layer amplitudes in one linea
 
 ![Figure 2](figures/fig02_errors.png)
 
-*Figure 2. 172 stations of the archive. Left: share of stations whose stacked curve has at most the given relative error, by three measures; the dotted line is the 1 % floor of ComPy 2.x. Middle: correlation of the errors between frequency bins. Right: change of the level and of the tilt of the curve between the two halves of the record.*
+*Figure 2. 172 stations of the archive. Left: share of stations whose stacked curve has at most the given relative error, by three measures; the dotted line is the 1 % floor of ComPy 1.2.x. Middle: correlation of the errors between frequency bins. Right: change of the level and of the tilt of the curve between the two halves of the record.*
 
 | Quantity (172 stations) | Median [10 % to 90 %] |
 |---|---|
@@ -105,7 +105,7 @@ A global-matrix solver written for this audit (all layer amplitudes in one linea
 
 ![Figure 3](figures/fig03_covariance_gain.png)
 
-*Figure 3. Left and middle: the errors given to the inversion at YV.RR52 by ComPy 2.8 and by ComPy 3: their size, and their correlation between bins. Right: difference between two independent pressure calibrations; the curve is what two gains with 5 % error each would give.*
+*Figure 3. Left and middle: the errors given to the inversion at YV.RR52 by ComPy 1.2.8 and by ComPy 1.3: their size, and their correlation between bins. Right: difference between two independent pressure calibrations; the curve is what two gains with 5 % error each would give.*
 
 ## 5. Calibration of the new inversion
 
@@ -132,7 +132,7 @@ Reading:
 
 ## 6. The earlier sampler still repeats
 
-Variant `final` of ComPy 2.8 at YV.RR52, run with the ComPy 3 code, gives the archived draws exactly (maximum difference 0.0 over 8 x 5000 x 10 values). The additions to the sampler do not change a 2.x run. [test: `c01_legacy_identity.py`]
+Variant `final` of ComPy 1.2.8 at YV.RR52, run with the ComPy 1.3 code, gives the archived draws exactly (maximum difference 0.0 over 8 x 5000 x 10 values). The additions to the sampler do not change a 2.x run. [test: `c01_legacy_identity.py`]
 
 ## 7. Rerun of the archive
 
@@ -145,7 +145,7 @@ All 287 stations with at least 100 compliance windows, with the wide-gate stage 
 | Tier 1 (172, for interpretation) | 135 | 20 | 17 |
 | Tier 2 (115, nominal or doubtful gains, shallow water) | 57 | 20 | 38 |
 
-Reasons given for the 95 stations that are not "good" (a station can have several): misfit 63; no depth resolved 29; gain pulled more than 2 sigma 21 (17 of them nominal gains); not converged after three rounds 17; a Vp factor pulled 17; a resolved layer at a bound 6; density factor pulled 3. Of the 154 tier-1 stations that ComPy 2.8 called good, 127 are good, 19 usable and 8 poor now.
+Reasons given for the 95 stations that are not "good" (a station can have several): misfit 63; no depth resolved 29; gain pulled more than 2 sigma 21 (17 of them nominal gains); not converged after three rounds 17; a Vp factor pulled 17; a resolved layer at a bound 6; density factor pulled 3. Of the 154 tier-1 stations that ComPy 1.2.8 called good, 127 are good, 19 usable and 8 poor now.
 
 Median chi-square per datum is 1.08 (tier 1), against 0.38 in the 2.8 run: the stated errors now match the misfit.
 
@@ -157,7 +157,7 @@ Median chi-square per datum is 1.08 (tier 1), against 0.38 in the 2.8 run: the s
 
 ![Figure 4](figures/fig04_yv_profiles.png)
 
-*Figure 4. Vs against depth (logarithmic) at the YV stations. Blue: ComPy 3 posterior. Orange dashed: its prior. Black squares: medians of ComPy 2.8 at 0.5, 1, 2, 3 and 5 km. Black bar: depths resolved by the data. Where the bar is absent the blue band is the prior.*
+*Figure 4. Vs against depth (logarithmic) at the YV stations. Blue: ComPy 1.3 posterior. Orange dashed: its prior. Black squares: medians of ComPy 1.2.8 at 0.5, 1, 2, 3 and 5 km. Black bar: depths resolved by the data. Where the bar is absent the blue band is the prior.*
 
 Median Vs in km/s with the 16 to 84 % interval; the 2.8 median in brackets; "u" marks an unresolved depth.
 
@@ -178,7 +178,7 @@ Three things to read from this table:
 - **About half of the rise against 2.8 is the Vp and density rule**, not the data: 2.8 sampled one Vp/Vs for all layers and found about 2.1, and its density followed that Vp. [inferred from the sensitivities of section 3.3]
 - **The top kilometre is mostly unresolved** at these depths of water; values there are the prior.
 
-The published profiles of the 2025 paper were not used anywhere in this work. How they compare with the table above is for the author to judge; ComPy 2.8 already differed from them (docs/INVERSION_2x.md).
+The published profiles of the 2025 paper were not used anywhere in this work. How they compare with the table above is for the author to judge; ComPy 1.2.8 already differed from them (docs/INVERSION_1_2x.md).
 
 ### 7.3 Sediment against an independent map
 
@@ -232,7 +232,7 @@ The last point has two readings, and this work does not decide between them. Eit
 | Fixed layer geometry narrows deep posteriors | The prior width is now explicit per layer and the Moho is free; resolution is reported per parameter. The layering itself is still fixed. |
 | Moho from CRUST1.0 | Now a prior of 30 %. Posterior medians are 0.88 of CRUST1.0 (median, tier 1), but the Moho is weakly resolved (width ratio 0.5 to 0.9). |
 | Sediment: Hamilton, density 2000, limit 1000 m; Ruan relation | Density from the Nafe-Drake curve, P modulus sampled, limit 2000 m. Ruan relation still not obtained and not used. |
-| The paper's Metropolis sampler | Not changed. It stays as legacy code; its defects are listed in docs/INVERSION_2x.md. |
+| The paper's Metropolis sampler | Not changed. It stays as legacy code; its defects are listed in docs/INVERSION_1_2x.md. |
 | H1 against H2 | H1 kept, with evidence (section 4). |
 | Pressure-response correction | Applied in the archive rerun where a leak factor exists (168 stations). |
 | Band near the cut-off (7D.J44A) | Cap at 0.8 f_c plus the scatter trim; J44A is good (10.6 for 10). |
@@ -248,15 +248,15 @@ Not done: comparison with refraction velocities at the stations; a transdimensio
 
 ## 10. Decisions for the author and W. Crawford
 
-1. **Publish ComPy 3.0.0?** The branch changes the default Vs results. It is pushed as a pull request and not merged.
+1. **Publish ComPy 1.3.0.0?** The branch changes the default Vs results. It is pushed as a pull request and not merged.
 2. **The slope allowance** (2 % with a response correction, 4 % without) and **the prior widths** (ln Vs 0.3, Vp 7 %, density 3 %, Moho 30 %). These are judgements; section 8 shows what each does.
 3. **The fast lower crust at RR38, RR40, RR50 and RR52**: geology or a low-frequency bias of a few per cent? Refraction or gravity constraints at these sites would settle it.
 4. **The upper limit of the band** (0.8 f_c). Section 8 shows that shallow Vs depends on it. A test on real data would be to compare compliance of the same site from two water depths or from a pressure gauge with a known noise floor.
 5. **The criterion for "resolved"**: a ratio to the prior width (now), or an absolute posterior width? Section 8 shows that the ratio favours stations with a wide prior.
 6. **A Vp profile per site.** Where refraction Vp exists, giving it as the reference removes most of the Vp/Vs uncertainty (Crawford 1994, 2004 did this). Should the pipeline look for one?
-7. **The corrections to the 2025 paper** now known: the sign and size of the gravity correction in the text (section 3.1), and the items of docs/INVERSION_2x.md. Whether to publish a correction.
+7. **The corrections to the 2025 paper** now known: the sign and size of the gravity correction in the text (section 3.1), and the items of docs/INVERSION_1_2x.md. Whether to publish a correction.
 8. **Sources to check by hand**: Crawford et al. (1991, 1998), Ruan et al. (2014), Bell et al. (2015), Brocher (2005), Hamilton (1976, 1979), Carlson & Raskin (1984). The relations taken through secondary sources are marked in the code.
-9. **The 2.x results in the README and in docs/results/** (XE, YV) were made with ComPy 2.4 to 2.8. They are marked as superseded; rerunning those networks through the full pipeline with 3.0 is a separate job.
+9. **The 1.2.x results in the README and in docs/results/** (XE, YV) were made with ComPy 1.2.4 to 1.2.8. They are marked as superseded; rerunning those networks through the full pipeline with 3.0 is a separate job.
 
 ## 11. Files
 

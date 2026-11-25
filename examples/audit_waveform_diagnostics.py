@@ -4,7 +4,7 @@ The figures of ``compy.plotting.diagnostics`` that need waveforms:
 spectrograms of Z, P, H1 and H2, coherograms (Z-P, Z-H1, Z-H2, P-H1, P-H2)
 and the tilt azimuth/admittance per window, over the whole deployment::
 
-    python examples/compy3_waveform_diagnostics.py ~/runs/yv/work/RR52/clean \\
+    python examples/audit_waveform_diagnostics.py ~/runs/yv/work/RR52/clean \\
         --station RR52 --band 0.0073 0.0171 --output figures/RR52
 
 The input folder holds the stage B segments (``<STA>_seg*.mseed``) or the

@@ -1,4 +1,4 @@
-"""Diagnostic and insight figures for compliance QC (ComPy 3 audit).
+"""Diagnostic and insight figures for compliance QC (ComPy 1.3 audit).
 
 Every function takes plain arrays or ``compy.results.StationProducts`` and
 returns a Matplotlib Figure; nothing here needs ObsPy. What each figure is

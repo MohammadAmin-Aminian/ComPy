@@ -3,7 +3,7 @@
 This audit covers the pressure-gauge studies that moved into ComPy from PressureQC
 (`compy_pressure/` and `pressure/`).
 
-- **Base:** branch `pressure-audit`, stacked on `compy3-audit` (PR #21), because it reuses
+- **Base:** branch `pressure-audit`, stacked on `audit-diagnostics` (PR #21), because it reuses
   `compy.anomaly` and the figure style.
 - **Inputs:**
   - **history:** the PressureQC repository at `8595452`: README, `integration/README.md`,
@@ -14,7 +14,7 @@ This audit covers the pressure-gauge studies that moved into ComPy from Pressure
 - **Defaults:** no gain, response or score changes. Every proposed change is listed under
   [Decisions](#9-decisions).
 
-**Evidence labels**, as in the ComPy 3 audit:
+**Evidence labels**, as in the ComPy 1.3 audit:
 
 - **Verified:** computed here from code or the archived table, with the script named.
 - **Hypothesis:** consistent with the evidence, with a test that would settle it.
@@ -113,7 +113,7 @@ The v1.2.0 campaign scored 846 channels:
    - `compy_pressure.table_audit`: 11 detectors, 206 ranked anomalies;
    - `compy_pressure.audit_plots`: 5 figures, plus the ranking;
    - a script, the data copy and 10 tests;
-   - the ComPy 3 waveform diagnostics (coherograms including P–H) apply unchanged to
+   - the ComPy 1.3 waveform diagnostics (coherograms including P–H) apply unchanged to
      pressure stations.
 
 ## 2. Audit findings (severity-ranked)
@@ -133,7 +133,7 @@ The v1.2.0 campaign scored 846 channels:
 | P11 | Low | APG microseism | 7D APGs give a median microseism g of 0.48 (n = 8). Quartz APGs are absolutely calibrated, so the method (shallow swell in 0.03–0.1 Hz) is the suspect | Verified | Info |
 | P12 | Low | `group_noise_model.py:55, 94–128` | Checked: the local-season mapping (DJF winter north, JJA south), station balancing and the 30 dB dead-window rule are correct as described | Verified | — |
 
-The ComPy 3 audit items M1 (homogeneous water column in the calibration) and M3
+The ComPy 1.3 audit items M1 (homogeneous water column in the calibration) and M3
 (pressure polarity) are the compliance-side view of P3 and P7.
 
 ## 3. New diagnostic plots
@@ -151,7 +151,7 @@ The plots live in `compy_pressure/audit_plots.py`; the examples are in `figures/
 
 **Waveform figures for pressure stations.** These need PPSD or waveform data:
 
-- `examples/compy3_waveform_diagnostics.py` on any P + Z (+ H1, H2) station gives
+- `examples/audit_waveform_diagnostics.py` on any P + Z (+ H1, H2) station gives
   spectrograms, P–Z and P–H coherograms and tilt.
 - A sustained P–H coherence is the signature of a pressure channel picking up instrument
   motion. This is the test for the "5 Hz floor 20 dB high" seen at 1T.
@@ -244,7 +244,7 @@ nonworking or has less than about 1 % live windows.
 
 ## 7. Validation
 
-- **No existing module changed.** The ComPy 3 default estimator remains bit-identical
+- **No existing module changed.** The ComPy 1.3 default estimator remains bit-identical
   (PR #21), and every pressure result is untouched.
 - **`water_layer.ratio`:**
   - equals the Zha & Webb expression on both branches (rtol 10⁻¹²);
@@ -257,7 +257,7 @@ nonworking or has less than about 1 % live windows.
 - **Tests:** 9 passed and 1 skipped here (the ObsPy check); ruff check and format are
   clean.
 
-## 8. Roadmap (pressure part of ComPy 3)
+## 8. Roadmap (pressure part of ComPy 1.3)
 
 | Rank | Item | Impact | Effort |
 |---|---|---|---|
@@ -313,5 +313,5 @@ Each line is a yes/no question.
 - Webb, S. C. (1998). Broadband seismology and noise under the ocean. *Rev. Geophys.* 36.
 - Zha, Y. & Webb, S. C. (2016). Crustal shear velocity structure in the southern Lau
   basin constrained by seafloor compliance. *JGR* 121.
-- PressureQC v1.2.0 results report (`pressure-qc/docs/REPORT.md`) and the ComPy 3 audit
+- PressureQC v1.2.0 results report (`pressure-qc/docs/REPORT.md`) and the ComPy 1.3 audit
   (`docs/audit_2026-11/REPORT.md`).

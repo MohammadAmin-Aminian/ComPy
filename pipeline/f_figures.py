@@ -93,7 +93,7 @@ def compliance_summary(station):
 
 
 def main_variant(station):
-    """Inversion that figures and report use: ``auto`` (ComPy 3) if it ran, else ``final``."""
+    """Inversion that figures and report use: ``auto`` (ComPy 1.3) if it ran, else ``final``."""
     if (RESULTS / station / "inversion" / f"{station}_auto.json").exists():
         return "auto"
     return "final"

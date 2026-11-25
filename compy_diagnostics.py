@@ -1,4 +1,4 @@
-"""Deprecated alias of :mod:`compy.diagnostics` (ComPy 2.x module name)."""
+"""Deprecated alias of :mod:`compy.diagnostics` (ComPy 1.2.x module name)."""
 
 import sys
 

@@ -24,7 +24,7 @@
   bias +1 to +2 dB on steep spectra). The first-bin minimum record is `population.min_windows`; 28 windows (42 h) is the advised value.
   Tests in `tests/test_pressure_atlas_band_rule.py`.
 
-## 3.2.0 — 2026-11-20
+## 1.3.2.0 — 2026-11-20
 
 ### Pressure atlas in the package
 
@@ -65,7 +65,7 @@ Corrected after the review of 19 November 2026, before the release:
 ### Compliance band ends at kH = 4
 
 Stage C searches the band up to 0.8 f_c (kH = 4.0) instead of f_c, the limit the inversion has applied since
-3.0 ([docs/COMPLIANCE_BAND.md](docs/COMPLIANCE_BAND.md)): the papers place the limit between 0.7 and 1.4 f_c, the
+1.3.0 ([docs/COMPLIANCE_BAND.md](docs/COMPLIANCE_BAND.md)): the papers place the limit between 0.7 and 1.4 f_c, the
 pressure of the archive leaves its infragravity plateau at kH = 4.27, and above 0.8 f_c the coherence falls from
 0.95 to 0.76 and 0.45. **Compliance changes** only at the 77 of 287 archive stations whose band ended above
 0.8 f_c: the band now ends at 0.78 f_c (median), 0.8 % more windows, and the compliance of the kept bins moves by
@@ -74,7 +74,7 @@ pressure of the archive leaves its infragravity plateau at kH = 4.27, and above 
 ### Documentation and figures
 
 - README: the worked example and the results use the latest Young ORCA run (stages A-D of 13 November with
-  3.0, inversion of 16 November with 3.1) in [docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md);
+  1.3.0, inversion of 16 November with 1.3.1) in [docs/results/xe_young_orca_2026-11](docs/results/xe_young_orca_2026-11/README.md);
   a map of the whole-archive inversion; the pressure atlas, with the figures of the native-rate build of 20
   November 2026 (381 gauges of 21 networks) in the README and in [docs/PRESSURE_ATLAS.md](docs/PRESSURE_ATLAS.md).
 - Atlas figures: the groups of a model figure are drawn in physical order (depth classes from shallow to deep,
@@ -83,9 +83,9 @@ pressure of the archive leaves its infragravity plateau at kH = 4.27, and above 
   pressure and acceleration band levels fell outside it and the panels were empty; each has its own axis now, and
   the window times are shown as dates.
 
-## 3.1.0 — 2026-11-18
+## 1.3.1.0 — 2026-11-18
 
-First release since 2.9.0; it also carries the changes of 3.0.0, which was merged on
+First release since 1.2.9.0; it also carries the changes of 1.3.0.0, which was merged on
 13 November 2026 but not released on its own.
 
 ### The old project name is gone
@@ -124,7 +124,7 @@ Compliance estimates do not change.
   prior of the Moho depth stays as stated.
 - `station_figure`: depth on a linear scale (was logarithmic); twelve sampled
   models drawn with the median; legend moved off the profile.
-- `auto.load_result` reads results saved by 3.0.0 as `monotonic=False`.
+- `auto.load_result` reads results saved by 1.3.0.0 as `monotonic=False`.
 
 Effect on Young ORCA (26 stations, 19 interpreted): the median profiles have no
 spike near 1.5 km and no velocity drop near 6.3 km. Vs at 2-5 km changes by less
@@ -134,7 +134,7 @@ by 8 % (3.36 to 3.10 km/s). Chi-square changes by less than 1 at 24 stations and
 rises by 3.3 at WC04 and by 10.3 at CC02 (337 windows, not interpreted), where
 the earlier result had a slow lower crust.
 
-## 3.0.0 — merged 2026-11-13, released as part of 3.1.0
+## 1.3.0.0 — merged 2026-11-13, released as part of 1.3.1.0
 
 Result of the inversion overhaul of November 2026
 ([docs/inversion_overhaul_2026-11/REPORT.md](docs/inversion_overhaul_2026-11/REPORT.md)).
@@ -152,7 +152,7 @@ Result of the inversion overhaul of November 2026
 - `compy.plotting.auto.station_figure`: data and fit, residuals, Vs with prior and
   reference, and what the data constrain.
 - [docs/INVERSION.md](docs/INVERSION.md) rewritten; the 2.x note is
-  [docs/INVERSION_2x.md](docs/INVERSION_2x.md).
+  [docs/INVERSION_1_2x.md](docs/INVERSION_1_2x.md).
 
 ### Changes of defaults, each with its effect
 
@@ -162,7 +162,7 @@ Result of the inversion overhaul of November 2026
 | Errors: bootstrap covariance + tilt + smooth term; no 1 % independent floor | measured scatter is 0.2-0.4 %, correlated between bins; level and slope are what is uncertain | median chi-square/N rises from about 0.4 to about 1; deep Vs intervals reflect the slope allowance |
 | Prior: ln Vs Gaussian about the reference (CRUST1.0), not flat with second-difference smoothing | the smoothing extrapolated the shallow gradient to the bounds in unresolved layers | unresolved depths return to the reference with the prior width |
 | Moho depth is sampled (30 % prior) instead of fixed at CRUST1.0 | a 1-degree Moho is a weak constraint for oceanic crust | crustal thickness carries its uncertainty |
-| Vp from the mafic line with a 7 % sampled factor, per upper and lower crust; density from Carlson & Raskin (1984) with a 3 % factor; no single free Vp/Vs | compliance measures stiffness; one Vp/Vs of 2.1 for all layers gave lower-crust Vp above 8.5 km/s | Vs at 2-5 km about 10 % higher than in 2.8 at the YV stations |
+| Vp from the mafic line with a 7 % sampled factor, per upper and lower crust; density from Carlson & Raskin (1984) with a 3 % factor; no single free Vp/Vs | compliance measures stiffness; one Vp/Vs of 2.1 for all layers gave lower-crust Vp above 8.5 km/s | Vs at 2-5 km about 10 % higher than in 1.2.8 at the YV stations |
 | Sediment density from the Nafe-Drake curve instead of 2000 kg/m3; sediment P modulus sampled (15 %); thickness up to 2000 m | thin sediment acts through rho Vp^2 | sediment thickness changes; shelf and slope stations fit |
 | CRUST1.0 sediment of 500 m or more joins the reference, prior sigma 0.5 | igneous reference cannot stand for kilometres of sediment | 7D.J09B (shelf) and 7K.AN3 (slope) fit and converge |
 | Gain: Gaussian prior, 5 % (calibrated) or 20 % (nominal), instead of uniform bounds | two independent calibrations agree to 2-3 % with tails | no pile-up at the gain bounds; a pulled gain is reported |
@@ -213,9 +213,9 @@ Ruan et al. (2014), Deng et al. (2022) and Webb et al. (2026). No formula had to
 - `pipeline/f_figures.py`, `g_report.py` use the `auto` result when it exists and the
   `final` result otherwise, so earlier run folders still build.
 
-## 2.9.0 — 2026-11-09
+## 1.2.9.0 — 2026-11-09
 
-Merges PRs #21 (ComPy 3 audit), #22 (pressure-gauge audit) and #23 (whole-archive audit and
+Merges PRs #21 (ComPy 1.3 audit), #22 (pressure-gauge audit) and #23 (whole-archive audit and
 research). **Default results are unchanged**; the only default behaviour change is a new
 stage C output file (`<STA>_window_levels.npy`).
 
@@ -236,10 +236,10 @@ coherence and events, stress tests, and the decision record.
 - **Fixed:** the K1 tidal ratio of `s03_dpg_tide.py` used the response at the M2
   frequency.
 
-### ComPy 3 audit (PR #21)
+### ComPy 1.3 audit (PR #21)
 
-Audit for ComPy 3: [docs/audit_2026-11/REPORT.md](docs/audit_2026-11/REPORT.md).
-**Published results are unchanged:** the default estimator is bit-identical to 2.8.0, and
+Audit for ComPy 1.3: [docs/audit_2026-11/REPORT.md](docs/audit_2026-11/REPORT.md).
+**Published results are unchanged:** the default estimator is bit-identical to 1.2.8.0, and
 all 61 archived compliance files are recomputed from their stacks to 2e-16.
 
 ### Added
@@ -263,8 +263,8 @@ all 61 archived compliance files are recomputed from their stacks to 2e-16.
   reads `COMPLIANCE_GATE` from the run configuration.
 - `stacked_compliance_from_spectra`: the same estimator on precomputed spectra.
 - Example scripts:
-  - `examples/compy3_diagnostics.py`, for archived results;
-  - `examples/compy3_waveform_diagnostics.py`, for cleaned MiniSEED.
+  - `examples/audit_diagnostics.py`, for archived results;
+  - `examples/audit_waveform_diagnostics.py`, for cleaned MiniSEED.
 
 ### Pressure-gauge audit (branch `pressure-audit`)
 
@@ -288,7 +288,7 @@ response, score or class changes.
 - `pressure/scripts/pressure_audit_2026_11.py`, with a copy of the PressureQC v1.2.0 master
   table (local paths removed).
 
-### Whole-archive audit (branch `compy3-audit-data`)
+### Whole-archive audit (branch `audit-archive-data`)
 
 [docs/audit_2026-11-data/REPORT.md](docs/audit_2026-11-data/REPORT.md): the tests of the
 two audits above, run on the whole-archive data (287 inverted stations, 17 networks).
@@ -303,7 +303,7 @@ bit-for-bit through `stacked_compliance_from_spectra`.
 - `docs/audit_2026-11-data/scripts/` (s01-s07): stage C restack (inclusive and exclusive
   gates), phase vs instrument metadata, DPG tide test, which sensor stepped, anomaly scan
   with stage D cross-checks, tilt vs tides, figures.
-- `examples/compy3_waveform_diagnostics.py`: the docstring says to read tilt from stage A
+- `examples/audit_waveform_diagnostics.py`: the docstring says to read tilt from stage A
   data (on cleaned data the azimuth splits into two bands).
 
 ### Fixed
@@ -312,7 +312,7 @@ bit-for-bit through `stacked_compliance_from_spectra`.
   and counts rejection reasons of custom criteria instead of raising `KeyError`.
 - `compy.streams` imports ObsPy lazily, so `compy.compliance` works without ObsPy.
 
-## 2.8.0 — 2026-11-05
+## 1.2.8.0 — 2026-11-05
 
 **Stage E results change:** every variant of `pipeline/e_invert.py` now requires Vs to
 increase across the Moho. Without this rule, the last crustal layer was faster than the
@@ -359,7 +359,7 @@ already worked are unchanged, sample for sample.
 - Every public function and class has a docstring. `compy_pressure` checkpoints that compare
   the package's code checksum will see new code once.
 
-## 2.7.0 — 2026-11-02
+## 1.2.7.0 — 2026-11-02
 
 A correctness pass before full-data reprocessing: a code review of the
 package, a test of every real-data example, and a pipeline run from raw data.
@@ -412,16 +412,16 @@ Results of the existing workflows are unchanged.
   - calibration (CC11; correctly unresolved with one usable event).
 - `run_pipeline.py --fetch` was run from raw SDS (CC11) through stages 0–G.
 
-## 2.6.0 — 2026-11-02
+## 1.2.6.0 — 2026-11-02
 
 One `compy` package with consistent names, inversions started from CRUST1.0,
 a reorganised repository, and an end-to-end check of the pipeline from raw
-data. Every ComPy 2.x import keeps working, with a deprecation warning, and
+data. Every ComPy 1.2.x import keeps working, with a deprecation warning, and
 numerical results are unchanged.
 
 ### Verified for this release
 
-- The PR #16 restructure gives bit-identical results to 2.5 on XE CC11. Compared were:
+- The PR #16 restructure gives bit-identical results to 1.2.5 on XE CC11. Compared were:
   - stacked compliance and its errors;
   - the data covariance and forward model;
   - a seeded DRAM run;
@@ -471,11 +471,11 @@ numerical results are unchanged.
   removed. No equation, default or order of operations changed: a seeded run
   of the Metropolis and DRAM samplers, the propagator and the kernels gives
   bit-identical arrays before and after.
-- Compatibility: every ComPy 2.x import keeps working (`import inv_compy`,
+- Compatibility: every ComPy 1.2.x import keeps working (`import inv_compy`,
   `from compy_processing import estimate`, `compy.Calculate_Compliance`, ...)
   and warns with the new location. `compy_numerics` and the other one-to-one
   modules are the new module objects, so private names and monkeypatching
-  still work. The aliases will be removed in 3.0.
+  still work. The aliases will be removed in 1.3.0.
 - `save_run` records the SHA-256 of every file in the package, keyed by path
   (`compy/diagnostics.py`, ...).
 
@@ -534,24 +534,24 @@ No code or numerical changes. Update local paths as follows:
   Markdown, and the lint result should not change with each ruff release.
 - The session handoff note `docs/HANDOFF_2026-10-29.md` is removed.
 
-## 2.5.0 — 2026-10-30
+## 1.2.5.0 — 2026-10-30
 
 ComPy becomes the complete package for seafloor pressure gauges: all of
 PressureQC moves in, and its calibration replaces `Pressure_calibration.py`.
 This release stays in the 2.x series at the owner's request. It includes the
 breaking calibration API change below; existing scripts must use the migration
-guide or pin ComPy 2.4.0.
+guide or pin ComPy 1.2.4.0.
 
 ### Breaking changes
 
 - **`Pressure_calibration.py` is removed.** Use the Rayleigh-wave calibration
   of `compy_pressure` instead (README, "Pressure calibration", has a
-  migration table). Scripts that import the old module need ComPy 2.4.0
+  migration table). Scripts that import the old module need ComPy 1.2.4.0
   (commit `7ad79c2`), the last version that has it:
   - `docs/yv_compliance_2026-10-28/scripts/d_calibrate.py`;
   - `docs/xe_young_orca_2026-10-29/scripts/d_calibrate.py`.
 - **Pipeline stage D (`pipeline/d_calibrate.py`) now uses `compy_pressure`.**
-  New runs can give gains that differ from 2.4 runs: on XE CC11, WC03 and
+  New runs can give gains that differ from 1.2.4 runs: on XE CC11, WC03 and
   EE04 and YV RR52 they are 1.4–1.9 % higher (`docs/PRESSURE.md`). Its outputs keep their
   names and keys (`compy_gain.json`, `<STA>_compy_calibration.npz` and
   `.png`), so stages C and G are unchanged. Stage F's calibration figure no
@@ -634,7 +634,7 @@ its dated reports), moved by its `integration/export_to_compy.py`:
   gain-corrected noise model): every output file is identical. Details are in
   PressureQC's `integration/README.md`.
 
-## 2.4.0 — 2026-10-30
+## 1.2.4.0 — 2026-10-30
 
 Integration release: every open pull request and branch is merged, the
 inversion is carried through to serpentinization, and an end-to-end pipeline
@@ -642,10 +642,10 @@ is validated on a second network.
 
 ### Merged
 
-- PR #6 (2.2, compliance-chain audit and YV compliance) and PR #7 (2.3,
+- PR #6 (1.2.2, compliance-chain audit and YV compliance) and PR #7 (1.2.3,
   Bayesian Vs inversion), including the `inversion-improvements` branch.
 - PR #5 (W. Crawford, `Pressure_calibration.py` and README). It was written
-  against the pre-2.0 code; its conventions are ported onto the 2.x function:
+  against the pre-1.2.0 code; its conventions are ported onto the 1.2.x function:
   - explicit `zchan`/`pchan` channel codes;
   - `filt_freq1`/`filt_freq2` pre-filter arguments checked against the band;
   - Google-style docstrings;
@@ -654,7 +654,7 @@ is validated on a second network.
 - `refactor/professionalize-compy` (PR #4, closed on 2026-10-07 as superseded)
   was re-checked and is not merged. Its packaging metadata is older than main
   (version 0.2.0, Python ≥ 3.9), and its tests target the legacy
-  `Roughness`/`liklihood` behaviour found defective in the 2.3 audit (V1, V2).
+  `Roughness`/`liklihood` behaviour found defective in the 1.2.3 audit (V1, V2).
 
 ### Added
 
@@ -684,17 +684,17 @@ is validated on a second network.
 
 - **F2.** The legacy serpentinization plots used (9000 − 2 Vs)/30, i.e. 0 % at 4.5 km/s and 100 % at 3.0 km/s. They now use the published caption relation: Vs = 3.5 km/s gives 35 %, not 67 %.
 - **F1.** The legacy heat-map depth ticks assumed 167-m rows for profiles averaged into 100-m rows, which labelled depths 5/3 too deep. The ticks now come from `LEGACY_HEATMAP_ROW_M`, and the CRUST1.0 reference arrays keep their own row depth.
-- CI was failing on the 2.3 branch:
+- CI was failing on the 1.2.3 branch:
   - the YV report script used Python 3.12 f-string syntax;
-  - files added since 2.2 were not `ruff format`-ed.
-- `compy.__version__` was 2.2.0 while the package said 2.3.0.
+  - files added since 1.2.2 were not `ruff format`-ed.
+- `compy.__version__` was 1.2.2.0 while the package said 1.2.3.0.
 - Docstrings:
   - `remove_coherent_noise`: the sequential, conditioned removal does not depend on the channel order;
-  - `legacy_wave_attraction_correction`: it gives the 2.0 estimator, not 2.2.
+  - `legacy_wave_attraction_correction`: it gives the 1.2.0 estimator, not 1.2.2.
 
-## 2.3.0 — 2026-10-29
+## 1.2.3.0 — 2026-10-29
 
-Shear-velocity inversion, audited and rebuilt on top of the 2.2 compliance
+Shear-velocity inversion, audited and rebuilt on top of the 1.2.2 compliance
 chain and the `inversion-improvements` branch. Details, audit table and
 validation: `docs/INVERSION.md`.
 
@@ -707,7 +707,7 @@ validation: `docs/INVERSION.md`.
   they were fixed.
 - v1 proposals near the bounds and thickness moves were asymmetric, and the thickness
   moves did not conserve total depth.
-- Pre-2.0 compliance also used a free-air constant of `3.07 * 10e-6` (3.07e-5).
+- Pre-1.2.0 compliance also used a free-air constant of `3.07 * 10e-6` (3.07e-5).
 - In v2, the default `alpha=0.25` is a 4 m/s Vs-jump prior, far stiffer than the data. This is now
   documented in the README.
 
@@ -755,7 +755,7 @@ parsing, the fixed-Vp option and synthetic recovery.
 
 ## Inversion work (branch inversion-improvements, 2026-10-25/26)
 
-- Sampler tuning (opt-in; defaults reproduce 2.1 chains draw for draw):
+- Sampler tuning (opt-in; defaults reproduce 1.2.1 chains draw for draw):
   per-layer `sigma_v`/`sigma_h`, Robbins-Monro step-size adaptation frozen after
   `adapt_until`, `initial_state` for over-dispersed chain starts that keep the
   prior of `starting_model`, and a `diagnostics` dict with tuned steps and
@@ -782,7 +782,7 @@ parsing, the fixed-Vp option and synthetic recovery.
 - `brocher_elastic` and `elastic_from_vs`: optionally tie Vp and density to Vs
   (Brocher 2005), as in Zheng et al. (2024); Zha & Webb (2016) used a regional relation.
 - `legacy_wave_attraction_correction`: converts compliance estimated with ComPy before
-  2.0 to the 2.0 estimator. The legacy code added the wave-attraction term
+  1.2.0 to the 1.2.0 estimator. The legacy code added the wave-attraction term
   (acceleration/pressure) to displacement/pressure before the free-air factor, so the
   term was effectively dropped; published values are low by up to ~25-30 % near 7 mHz
   at 2.9 km water depth (RR52) and ~11 % at 4.1 km (RR50), decreasing with frequency.
@@ -790,7 +790,7 @@ parsing, the fixed-Vp option and synthetic recovery.
   independent ensembles for R-hat. For posteriors where single chains do not mix between
   equally good shallow layerings when the top kilometre is below resolution.
 
-## 2.2.0 — 2026-10-28
+## 1.2.2.0 — 2026-10-28
 
 Audit of the chain up to the compliance function. The full list is in
 `docs/AUDIT_2026-10.md`.
@@ -849,7 +849,7 @@ Legacy function signatures and default gates are unchanged. With the gravity
 term no longer multiplied by coherence, and with the error computed over all
 windows, the legacy outputs change slightly.
 
-## 2.1.0
+## 1.2.1.0
 
 - Add optional ArviZ multiple-chain diagnostics: rank-normalized folded split-Rhat,
   bulk/tail ESS, retained-sample quantiles and explicit warnings.
@@ -859,11 +859,11 @@ windows, the legacy outputs change slightly.
   starting model and diagnostic plots. Existing sampler return tuples are unchanged.
 
 
-## 2.0.1
+## 1.2.0.1
 
 Fixed short-record date labels and pressure PSD dB scaling; the download example now updates and attaches decimation response stages.
 
-## 2.0.0 — 2026-10-07
+## 1.2.0.0 — 2026-10-07
 
 ### Numerical and scientific corrections
 

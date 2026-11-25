@@ -37,7 +37,7 @@ SLOTS = ("#2a78d6", "#eb6834", "#1baf7a")
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#d9d8d3"
 GAIN_LABEL = {
     "pressure": "PressureQC gain (gains.csv)",
-    "compy": "ComPy 2.2 calibration",
+    "compy": "ComPy 1.2.2 calibration",
 }
 GAIN_COLOR = {"pressure": SLOTS[0], "compy": SLOTS[1]}
 
@@ -181,7 +181,7 @@ def gain_figure(rows):
     stations = [r["station"] for r in rows]
     x = np.arange(len(stations))
     fig, ax = plt.subplots(figsize=(10, 4.2), constrained_layout=True)
-    series = (("pressure", "PressureQC (gains.csv)", SLOTS[0]), ("compy", "ComPy 2.2", SLOTS[1]),
+    series = (("pressure", "PressureQC (gains.csv)", SLOTS[0]), ("compy", "ComPy 1.2.2", SLOTS[1]),
               ("paper", "Paper Table 1", SLOTS[2]))  # fmt: skip
     for i, (key, label, color) in enumerate(series):
         y = [r.get(f"gain_{key}") or np.nan for r in rows]

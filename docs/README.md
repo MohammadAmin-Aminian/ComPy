@@ -21,7 +21,7 @@
 | [Validation](VALIDATION.md) | Test coverage and scientific references |
 | [Reproducible runs](REPRODUCIBLE_RUNS.md) | Run records, array shapes and chain diagnostics |
 | [Compliance audit (October 2026)](AUDIT_2026-10.md) | Review of the compliance chain against the literature and the fixes it led to |
-| [ComPy 3 audit (November 2026)](audit_2026-11/REPORT.md) | Severity-ranked findings, diagnostic figures, ranked anomalies, physical tests, ComPy 3 roadmap and decisions |
+| [ComPy 1.3 audit (November 2026)](audit_2026-11/REPORT.md) | Severity-ranked findings, diagnostic figures, ranked anomalies, physical tests, ComPy 1.3 roadmap and decisions |
 | [Whole-archive audit (November 2026)](audit_2026-11-data/REPORT.md) | The two audits' open tests run on 287 stations: the DPG response (phase and tide), polarity, measured gate bias, which sensor stepped, ranked anomalies, decisions |
 
 ## Results
@@ -29,7 +29,7 @@
 | Folder | Content |
 |---|---|
 | [XE, Pacific Array Young ORCA, November 2026](results/xe_young_orca_2026-11/README.md) | Latest run: compliance (13 Nov), gravity- and drilling-constrained Vs (16 Nov), figures and table |
-| [XE, Pacific Array Young ORCA, October 2026](results/xe_young_orca_2026-10-29/README.md) | Run of 29 Oct (ComPy 2.4-2.8): compliance, Vs, serpentinization, PDF report |
+| [XE, Pacific Array Young ORCA, October 2026](results/xe_young_orca_2026-10-29/README.md) | Run of 29 Oct (ComPy 1.2.4-1.2.8): compliance, Vs, serpentinization, PDF report |
 | [Whole archive](results/whole_archive_2026-11/archive_vs_map.png) | Map of the inversion of 287 stations in 17 networks |
 | [YV compliance, RHUM-RUM](results/yv_compliance_2026-10-28/README.md) | Compliance of eight Indian Ocean stations, gains, stability |
 | [YV inversion, RHUM-RUM](results/yv_inversion_2026-10-29/README.md) | Vs posteriors, variants and paper-style figures |
@@ -42,4 +42,4 @@ distributed.
 ## Releases
 
 - [Changelog](../CHANGELOG.md)
-- [Release notes 2.5](RELEASE_2_5.md)
+- [Release notes 1.2.5](RELEASE_1_2_5.md)

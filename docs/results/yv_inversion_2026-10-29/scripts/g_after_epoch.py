@@ -6,7 +6,7 @@ the stable epoch. Here the windows after the jump date are stacked with the
 median Rayleigh-wave gain of the events after the jump (ComPy calibration,
 Stage D), using the stable epoch's band and the 0.9 coherence threshold so
 the two epochs can be compared and inverted together. Output goes to
-compliance_after/<STA>/ in the same format as the 2.2 compliance files.
+compliance_after/<STA>/ in the same format as the 1.2.2 compliance files.
 """
 
 import json

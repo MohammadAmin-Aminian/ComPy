@@ -1,4 +1,4 @@
-"""Tests of the ComPy 3 automatic inversion (compy.inversion.auto, .errors).
+"""Tests of the ComPy 1.3 automatic inversion (compy.inversion.auto, .errors).
 
 Each test states the finding of docs/inversion_overhaul_2026-11 that it protects.
 """

@@ -82,7 +82,7 @@ def station_record(s, c):
                       ("moho", "moho_depth")):  # fmt: skip
         if name in names:
             rec[key] = q3(flat[:, names.index(name)]).tolist()
-    if "quality" in j:  # ComPy 3: label, resolved range and per-parameter resolution
+    if "quality" in j:  # ComPy 1.3: label, resolved range and per-parameter resolution
         rec.update(quality=j["quality"]["label"], quality_reasons=j["quality"]["reasons"],
                    resolved_from=j.get("resolved_from_m"), resolved_to=j.get("resolved_to_m"),
                    resolution=j.get("resolution"))  # fmt: skip

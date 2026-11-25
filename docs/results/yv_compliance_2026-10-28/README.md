@@ -1,7 +1,7 @@
 # YV broadband seafloor compliance, 28 October 2026
 
 This folder holds the compliance functions of the eight RHUM-RUM (YV) broadband OBS stations
-(RR28, RR29, RR34, RR36, RR38, RR40, RR50, RR52), computed with ComPy 2.2. The inversion of these functions is in
+(RR28, RR29, RR34, RR36, RR38, RR40, RR50, RR52), computed with ComPy 1.2.2. The inversion of these functions is in
 [`../yv_inversion_2026-10-29`](../yv_inversion_2026-10-29/README.md).
 
 - `report.html`: the full report (method, audit, gains, results, open issues). Open it locally.
@@ -17,7 +17,7 @@ This folder holds the compliance functions of the eight RHUM-RUM (YV) broadband 
 - `scripts/`: the full chain (set the data paths for your archive).
   1. `a_preprocess.py`: decimation and responses.
   2. `b_clean.py`: events, transients, tilt and coherent noise.
-  3. `d_calibrate.py`: ComPy gain (uses `Pressure_calibration` from ComPy 2.4.0, commit `7ad79c2`;
+  3. `d_calibrate.py`: ComPy gain (uses `Pressure_calibration` from ComPy 1.2.4.0, commit `7ad79c2`;
      the current pipeline uses `compy_pressure`).
   4. `c_compliance.py [--end]`: compliance; `--end` keeps only data before a date (stable epoch).
   5. Checks and figures: `e_figures.py`, `g_tiskit_check.py`, `h_stability.py`,

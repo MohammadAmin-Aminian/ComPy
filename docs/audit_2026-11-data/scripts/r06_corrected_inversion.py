@@ -5,7 +5,7 @@ corrected for the leak-corner factor k of each station (k from the M2 tide, r05,
 where the tide is clear; otherwise from the phase, s03) with
 ``compy.response_check.correct_compliance``: compliance, uncertainty, per-window
 statistics and monthly stacks are divided by (1 + bias(f)). Stage E variant
-``final`` of ComPy 2.8.0 (the code of 12_inversion_all_stations, fixed seeds) is
+``final`` of ComPy 1.2.8.0 (the code of 12_inversion_all_stations, fixed seeds) is
 then run on a new folder, so any change in Vs comes from the correction alone.
 
 Output: ``13_audit/research/inversion_corrected/YV/results/<STA>/`` and
@@ -31,7 +31,7 @@ ARCHIVE = Path(os.environ.get("COMPY_ARCHIVE", Path.home() / "Desktop/ComPy"))
 OUT = ARCHIVE / "13_audit/research/inversion_corrected"
 CODE = Path(
     os.environ.get("COMPY_STAGE_E_CODE", Path.home() / "Desktop/ComPy/code/ComPy")
-)  # v2.8.0
+)  # v1.2.8.0
 STATIONS = ("RR28", "RR29", "RR34", "RR36", "RR38", "RR40", "RR50", "RR52")
 DEPTHS_M = (500, 1000, 2000, 3000, 5000)
 

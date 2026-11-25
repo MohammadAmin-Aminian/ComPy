@@ -136,7 +136,7 @@ and season, month by hemisphere, and the paired winter-minus-summer difference o
 ## Results
 
 The archive of November 2026: 975 pressure channels of 35 networks, recomputed at native rate (run of 18 to 20
-November 2026, ComPy 3.2.0). The cascade and the screens leave 381 gauges of 21 networks in the models: 186
+November 2026, ComPy 1.3.2.0). The cascade and the screens leave 381 gauges of 21 networks in the models: 186
 DPGs, 62 APGs and 133 hydrophones, between 52 and 5788 m of water, with 1.6 million 3-h windows. Against the
 merged product used before (1-octave PPSDs joined to a 1.25 Hz product) the band levels of the common gauges
 differ by 0.04 to 0.22 dB at the median between 3 and 170 s, and 376 of the 379 earlier gauges are kept.

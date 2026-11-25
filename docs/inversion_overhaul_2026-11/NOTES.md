@@ -91,7 +91,7 @@ Expected coverage for 144 replicates (95 % range): 0.42-0.58 for 50 % intervals,
 - **Truth the model cannot represent (smooth gradients on 60 layers, Vp/Vs 1.76-2.5 varying with depth, Christensen-Shaw density, own sediment and Moho), RR52 and NN04:** below 700 m the 90 % intervals contain the truth 97-100 % of the time and the 50 % intervals 51-79 % (conservative), median error 2-9 %, bias -5 to +8 %. In the top 300 m Vs is overestimated by 16-26 % (median) and 90 % coverage falls to 0.66-0.83 at 50-150 m: the truths have a slow layer 2A (0.9-2.6 km/s at the seafloor), the CRUST1.0 reference has 2.54 km/s, and the data do not resolve those depths. This is the regime the result flags as unresolved.
 - **Unmodelled tilt of 4 % (twice the allowance for a corrected response), RR52:** Vs coverage stays 0.82-0.92 (90 %); bias +2 % at 3 km, +4 % at 5 km, +7 % at 7 km.
 - **Gain error of 10 % (twice the prior sigma), RR52:** Vs 90 % coverage 0.78-0.88; the gain's own coverage collapses (0.56), as it must.
-- **Legacy identity (C1):** variant `final` of ComPy 2.8 on RR52 reproduces the archived draws exactly (max difference 0.0) with the ComPy 3 sampler code.
+- **Legacy identity (C1):** variant `final` of ComPy 1.2.8 on RR52 reproduces the archived draws exactly (max difference 0.0) with the ComPy 1.3 sampler code.
 
 ## Sensitivity runs (43 benchmark stations; `scripts/r02_batch.py`; output `14_inversion_overhaul/r02_sensitivity/`)
 

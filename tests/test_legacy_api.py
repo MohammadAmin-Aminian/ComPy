@@ -1,4 +1,4 @@
-"""ComPy 2.x names keep working after the move to the compy package."""
+"""ComPy 1.2.x names keep working after the move to the compy package."""
 
 import importlib
 import warnings
